@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IRI.Ket.ShapefileFormat.MapStatistics">
+    <Position X="25.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MapStatistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.ShapeConstants">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>+BAAAIAABAiAAECAAAAACAAAAAUMACACAEAQACEAAAA=</HashCode>
+      <FileName>ShapeConstants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.EsriType.ShapeCollection&lt;T&gt;" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAABAACAAAAAAAAAAACAAAAAAAAAAAACA=</HashCode>
+      <FileName>ShapeTypes\Collections\ShapeCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.MeasuresReader&lt;T&gt;">
+    <Position X="7.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShpReader\MeasuresReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.MultiPointMReader">
+    <Position X="2.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\MultiPointMReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.MultiPointReader">
+    <Position X="2.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\MultiPointReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.MultiPointZReader">
+    <Position X="2.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\MultiPointZReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PointMReader">
+    <Position X="4.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PointMReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PointReader">
+    <Position X="2.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PointReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PointsReader&lt;T&gt;">
+    <Position X="7.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShpReader\PointsReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PointZReader">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PointZReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolygonMReader">
+    <Position X="6" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolygonMReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolygonReader">
+    <Position X="6" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolygonReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolygonZReader">
+    <Position X="6" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolygonZReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolyLineMReader">
+    <Position X="4.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolyLineMReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolyLineReader">
+    <Position X="4.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolyLineReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.PolyLineZReader">
+    <Position X="4.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>ShpReader\PolyLineZReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.ShpReader&lt;T&gt;">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAIAAAACABAQAAAAAAAAAAAAAAAAAAAQAAAAADA=</HashCode>
+      <FileName>ShpReader\ShpReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.zReader&lt;T&gt;">
+    <Position X="7.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShpReader\zReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Reader.ShxReader">
+    <Position X="23.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAKABAAAAAAAAAAAAAAAAAAAAAAQAAAAAgAAAAACA=</HashCode>
+      <FileName>ShxReader\ShxReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Writer.ShpWriter">
+    <Position X="20" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAgAAAAAAAACAQAAAAAAAAAAAAAAAEEAAAA=</HashCode>
+      <FileName>ShpWriter\ShpWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Writer.ShxWriter">
+    <Position X="21.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>ShxWriter\ShxWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.ShapefileFormat.Shapefile">
+    <Position X="11.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACwQACAAAAAAAAAAB0AAAQgAAAAAIAAAAAIAAAAAAQ=</HashCode>
+      <FileName>Shapefile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="IRI.Ket.ShapefileFormat.MainFileHeader">
+    <Position X="27" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAYCgAAIQAMAAAHAACIgQAAQABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MainFileHeader.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.MultiPoint" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAABAAkAgAAFBAAAAAAAAACDAiAQAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\MultiPoint.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.MultiPointM" BaseTypeListCollapsed="true">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIgACAAJAAkAgAAFBAEAAAABAACDAiAQAAAAACAAA=</HashCode>
+      <FileName>ShapeTypes\MultiPointM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.MultiPointZ" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEIIgADAANAAkAhAAFBAEAAAABAACDAiAQAAAEACAAA=</HashCode>
+      <FileName>ShapeTypes\MultiPointZ.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.Polygon" BaseTypeListCollapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAABAAkAgAAFBAAAAAAAAACDAiAQAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\Polygon.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.PolygonM" BaseTypeListCollapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIgACAAJAAkAgAAFBAEAAAABAACDAiAQAAAAACAAA=</HashCode>
+      <FileName>ShapeTypes\PolygonM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.PolygonZ" BaseTypeListCollapsed="true">
+    <Position X="20" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEIIgADAANAAkAhAAFBAEAAAABAACDAiAQAAAEACAAA=</HashCode>
+      <FileName>ShapeTypes\PolygonZ.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.PolyLine" BaseTypeListCollapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAABAAkAgAAFBAAAAAAAAACDAiAQAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\PolyLine.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.PolyLineM" BaseTypeListCollapsed="true">
+    <Position X="23.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIgACAAJAAkAgAAFBAEAAAABAACDAiAQAAAAACAAA=</HashCode>
+      <FileName>ShapeTypes\PolyLineM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Struct Name="IRI.Ket.ShapefileFormat.EsriType.PolyLineZ" BaseTypeListCollapsed="true">
+    <Position X="25.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QEIIgADAANAAkAhAAFBAEAAAABAACDAiAQAAAEACAAA=</HashCode>
+      <FileName>ShapeTypes\PolyLineZ.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Interface Name="IRI.Ket.ShapefileFormat.EsriType.IShape">
+    <Position X="9.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAABAAEAgAAEAAAAAAAAAACBAAAQAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\IShape.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IRI.Ket.ShapefileFormat.EsriType.IShapeCollection">
+    <Position X="16.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAQAAAAACAAAAAAAAAAAACA=</HashCode>
+      <FileName>ShapeTypes\Collections\IShapeCollection.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="System.Collections.Generic.IEnumerable&lt;T&gt;">
+    <Position X="16.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="IRI.Ket.ShapefileFormat.EsriType.ISimplePoints">
+    <Position X="11" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAABBAAAAAAAAAACACAAAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\ISimplePoints.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IRI.Ket.ShapefileFormat.EsriType.IPointsWithMeasure">
+    <Position X="13" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAABAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ShapeTypes\IPointsWithMeasure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IRI.Ket.ShapefileFormat.EsriType.IPointsWithZ">
+    <Position X="14.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAABAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ShapeTypes\IPointsWithZ.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="IRI.Ket.ShapefileFormat.EsriType.ShapeType">
+    <Position X="0.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAACAAAAAAAEhAAAIAAAAAABAAAACAAAAAAAAAACACA=</HashCode>
+      <FileName>ShapeTypes\ShapeType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

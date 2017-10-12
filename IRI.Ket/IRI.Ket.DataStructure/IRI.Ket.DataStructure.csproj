@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F420034F-75C8-448D-B11B-B8CBF26C8946}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.Ket.DataStructure</RootNamespace>
+    <AssemblyName>IRI.Ket.DataStructure</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdvancedStructures\BalancedKdTree.cs" />
+    <Compile Include="AdvancedStructures\BalancedKdTreeNode.cs" />
+    <Compile Include="AdvancedStructures\KdTree.cs" />
+    <Compile Include="AdvancedStructures\KdTreeNode.cs" />
+    <Compile Include="BinaryHeap\BinaryHeap.cs" />
+    <Compile Include="BinaryHeap\IBinaryHeap.cs" />
+    <Compile Include="BinaryHeap\MinBinaryHeap.cs" />
+    <Compile Include="BinaryHeap\MaxBinaryHeap.cs" />
+    <Compile Include="DisjointSet\DisjointSetLinkedList.cs" />
+    <Compile Include="Graph\Clustring\GreedyClustring.cs" />
+    <Compile Include="Graph\GraphRepresentation\AdjacencyList.cs" />
+    <Compile Include="Graph\GraphRepresentation\Connection.cs" />
+    <Compile Include="Graph\GraphRepresentation\DirectedAcyclicGraph.cs" />
+    <Compile Include="Graph\GraphRepresentation\Edge.cs" />
+    <Compile Include="Graph\GraphRepresentation\Graph.cs" />
+    <Compile Include="Graph\MinCut\MinimumCut.cs" />
+    <Compile Include="Graph\MinimumSpanningTree\MinimumSpanningTree.cs" />
+    <Compile Include="Graph\MinimumSpanningTree\PrimAlgorithm.cs" />
+    <Compile Include="Graph\Search\BreadthFirstSearch.cs" />
+    <Compile Include="Graph\Search\BreadthFirstSearchNode.cs" />
+    <Compile Include="Graph\Search\DepthFirstSearch.cs" />
+    <Compile Include="Graph\Search\FastDepthFirstSearch.cs" />
+    <Compile Include="Graph\Search\FastDepthFirstSearchNode.cs" />
+    <Compile Include="Graph\Search\NodeStatus.cs" />
+    <Compile Include="Graph\Search\SortType.cs" />
+    <Compile Include="Graph\ShortestPaths\AllPairs\FloydWarshallProblem.cs" />
+    <Compile Include="Graph\ShortestPaths\ShortestPathAlgorithm.cs" />
+    <Compile Include="Graph\ShortestPaths\SingleSource\DijkstraProblem.cs" />
+    <Compile Include="MyStructures\IndexValue.cs" />
+    <Compile Include="MyStructures\IndexValueCollection.cs" />
+    <Compile Include="MyStructures\NullablePair.cs" />
+    <Compile Include="MyStructures\Pair.cs" />
+    <Compile Include="MyStructures\Triple.cs" />
+    <Compile Include="MyStructures\UniquePairs.cs" />
+    <Compile Include="Optimization\KnapsackProblem.cs" />
+    <Compile Include="SortAlgorithm\SortAlgorithm.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortAlgorithm\SortDirection.cs" />
+    <Compile Include="Trees\BinarySearchTree.cs" />
+    <Compile Include="Trees\BinarySearchNode.cs" />
+    <Compile Include="Trees\BTree.cs" />
+    <Compile Include="Trees\BTreeNode.cs" />
+    <Compile Include="Trees\IntervalTree.cs" />
+    <Compile Include="Trees\IntervalTreeNode.cs" />
+    <Compile Include="Trees\NodeColor.cs" />
+    <Compile Include="Trees\OrderStatisticNode.cs" />
+    <Compile Include="Trees\OrderStatisticTree.cs" />
+    <Compile Include="Trees\RedBlackTree.cs" />
+    <Compile Include="Trees\RedBlackNode.cs" />
+    <Compile Include="Trees\TreeOperation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="HosseinNarimaniRad.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Graph\MaximumFlow\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

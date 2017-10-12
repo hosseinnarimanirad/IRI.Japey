@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0FC0B719-D540-4309-8BA1-7EF976963EAB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.MainProject</RootNamespace>
+    <AssemblyName>IRI.MainProject</AssemblyName>
+    <StartupObject>MainProject.Program</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SqlServer.Types, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Spatial, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\General.cs" />
+    <Compile Include="Forms\AboutMe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutMe.Designer.cs">
+      <DependentUpon>AboutMe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GSM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GSM.Designer.cs">
+      <DependentUpon>GSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Image.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Image.Designer.cs">
+      <DependentUpon>Image.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TestDbf.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TestDbf.Designer.cs">
+      <DependentUpon>TestDbf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TSP.cs" />
+    <Compile Include="TwoSat.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\AboutMe.resx">
+      <DependentUpon>AboutMe.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GSM.resx">
+      <DependentUpon>GSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Image.resx">
+      <DependentUpon>Image.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TestDbf.resx">
+      <DependentUpon>TestDbf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="HosseinNarimaniRad.pfx" />
+    <None Include="packages.config" />
+    <None Include="Resources\Graphic12.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MapObjects2">
+      <Guid>{9BD6A640-CE75-11D1-AF04-204C4F4F5020}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Jab\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
+      <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
+      <Name>IRI.Jab.Cartography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
+      <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
+      <Name>IRI.Jab.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
+      <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
+      <Name>IRI.Ket.DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
+      <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>
+      <Name>IRI.Ket.DataStructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.DigitalImageProcessing\IRI.Ket.DigitalImageProcessing.csproj">
+      <Project>{0662a1b4-12de-4e31-8bd3-db61baaf7d8d}</Project>
+      <Name>IRI.Ket.DigitalImageProcessing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.DigitalTerrainModeling\IRI.Ket.DigitalTerrainModeling.csproj">
+      <Project>{5a81c277-6530-40c1-9223-219c07ae24fb}</Project>
+      <Name>IRI.Ket.DigitalTerrainModeling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.Geometry\IRI.Ket.Geometry.csproj">
+      <Project>{1c455c56-2478-40c0-b505-153ce88ff68a}</Project>
+      <Name>IRI.Ket.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.GsmGprsCommunication\IRI.Ket.GsmGprsCommunication.csproj">
+      <Project>{55a2c809-c017-4fda-bf9c-dabe23c06e2b}</Project>
+      <Name>IRI.Ket.GsmGprsCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.KmlFormat\IRI.Ket.KmlFormat.csproj">
+      <Project>{1aa883d8-142e-4afb-aaaa-d094dcfdf607}</Project>
+      <Name>IRI.Ket.KmlFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
+      <Name>IRI.Ket.ShapefileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.Spatial\IRI.Ket.Spatial.csproj">
+      <Project>{33a18f35-0320-4fa9-b3c2-69f9ce337688}</Project>
+      <Name>IRI.Ket.Spatial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
+      <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
+      <Name>IRI.Ket.SqlServerSpatialExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
+      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
+      <Name>IRI.Std.OGC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

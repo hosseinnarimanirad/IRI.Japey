@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BDA8CB8C-3871-4565-A766-8C3F641074EB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.Ket.ShapefileFormat</RootNamespace>
+    <AssemblyName>IRI.Ket.ShapefileFormat</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Hnr.ShapefileFormat.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Hnr.ShapefileFormat.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BoundingBox.cs" />
+    <Compile Include="Dbf\DbfColumnType.cs" />
+    <Compile Include="Dbf\DbfFieldDescriptor.cs" />
+    <Compile Include="Dbf\DbfFieldDescriptors.cs" />
+    <Compile Include="Dbf\DbfFile.cs" />
+    <Compile Include="Dbf\DbfHeader.cs" />
+    <Compile Include="Dbf\FoxProCodePages.cs" />
+    <Compile Include="Dbf\FoxProCodePage.cs" />
+    <Compile Include="Indexing\IndexIO.cs" />
+    <Compile Include="Indexing\ShpIndex.cs" />
+    <Compile Include="MainFileHeader.cs" />
+    <Compile Include="MapStatistics.cs" />
+    <Compile Include="OgcKmlMapFunctions.cs" />
+    <Compile Include="OgcWkbMapFunctions.cs" />
+    <Compile Include="Prj\CoordinateSystemExtensions.cs" />
+    <Compile Include="Prj\EsriPrjParameterType.cs" />
+    <Compile Include="Prj\EsriSrType.cs" />
+    <Compile Include="Prj\PrjFile.cs" />
+    <Compile Include="Prj\PrjTree.cs" />
+    <Compile Include="ShapeConstants.cs" />
+    <Compile Include="Shapefile.cs" />
+    <Compile Include="ShapeHelper.cs" />
+    <Compile Include="ShapeTypes\ISimplePoints.cs" />
+    <Compile Include="ShapeTypes\IPointsWithMeasure.cs" />
+    <Compile Include="ShapeTypes\IPointsWithZ.cs" />
+    <Compile Include="ShapeTypes\Collections\IShapeCollection.cs" />
+    <Compile Include="ShapeTypes\Collections\ShapeCollection.cs" />
+    <Compile Include="ShpReader\ShpBinaryReader.cs" />
+    <Compile Include="SqlServerWktMapFunctions.cs" />
+    <Compile Include="ShpReader\MultiPointMReader.cs" />
+    <Compile Include="ShpReader\MultiPointReader.cs" />
+    <Compile Include="ShpReader\MultiPointZReader.cs" />
+    <Compile Include="ShpReader\PointMReader.cs" />
+    <Compile Include="ShpReader\PointReader.cs" />
+    <Compile Include="ShpReader\PointsReader.cs" />
+    <Compile Include="ShpReader\PointZReader.cs" />
+    <Compile Include="ShpReader\PolygonMReader.cs" />
+    <Compile Include="ShpReader\PolygonReader.cs" />
+    <Compile Include="ShpReader\PolygonZReader.cs" />
+    <Compile Include="ShpReader\PolyLineMReader.cs" />
+    <Compile Include="ShpReader\PolyLineReader.cs" />
+    <Compile Include="ShpReader\MeasuresReader.cs" />
+    <Compile Include="ShpReader\PolyLineZReader.cs" />
+    <Compile Include="ShpReader\ShpReader.cs" />
+    <Compile Include="ShpReader\zReader.cs" />
+    <Compile Include="ShapeTypes\IShape.cs" />
+    <Compile Include="ShapeTypes\MultiPoint.cs" />
+    <Compile Include="ShapeTypes\MultiPointM.cs" />
+    <Compile Include="ShapeTypes\MultiPointZ.cs" />
+    <Compile Include="ShapeTypes\EsriPointM.cs" />
+    <Compile Include="ShapeTypes\EsriPointZ.cs" />
+    <Compile Include="ShapeTypes\Polygon.cs" />
+    <Compile Include="ShapeTypes\PolygonM.cs" />
+    <Compile Include="ShapeTypes\PolygonZ.cs" />
+    <Compile Include="ShapeTypes\PolyLine.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShapeTypes\EsriPoint.cs" />
+    <Compile Include="ShapeTypes\PolyLineM.cs" />
+    <Compile Include="ShapeTypes\PolyLineZ.cs" />
+    <Compile Include="ShapeTypes\ShapeType.cs" />
+    <Compile Include="ShpWriter\ShpWriter.cs" />
+    <Compile Include="ShxReader\ShxReader.cs" />
+    <Compile Include="ShxWriter\ShxWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Info\Info.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket.KmlFormat\IRI.Ket.KmlFormat.csproj">
+      <Project>{1AA883D8-142E-4AFB-AAAA-D094DCFDF607}</Project>
+      <Name>IRI.Ket.KmlFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
+      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
+      <Name>IRI.Std.OGC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="HosseinNarimaniRad.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IRI.Ket.DigitalImageProcessing.Conversion">
+    <Position X="6" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQQAIAAAAAAACAAAQAEAAIAgAgAAAgCAgAAAQABAA=</HashCode>
+      <FileName>Conversion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.ImageMatrix" Collapsed="true">
+    <Position X="4.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYiQAAAIIAQggAE6BkDAKABAQAAAIQAAEIAAAAAAjA=</HashCode>
+      <FileName>ImageMatrix.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.GaussianConvolution" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAABAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpatialDomainEnhancement\GaussianConvolution.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.117" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.GeometricEnhancement" Collapsed="true">
+    <Position X="0.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAABAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpatialDomainEnhancement\GeometricEnhancement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.ImageMatching.QusiImage" Collapsed="true">
+    <Position X="0.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAIAAABAAAACAACAIAAGAAEBAAgAAAAAAAAAAAIAA=</HashCode>
+      <FileName>ImageMatching\SIFT\QusiImage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.Processing.PrincipalComponentTrasnformation" Collapsed="true">
+    <Position X="3" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>RemoteSensing\PrincipalComponentTrasnformation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.DigitalImageProcessing.SpatialDomainEnhancement.RadiometricEnhancement">
+    <Position X="8.5" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAQAAAgAAAAAAAACAAAAACCQAAAAAAA=</HashCode>
+      <FileName>SpatialDomainEnhancement\RadiometricEnhancement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="IRI.Ket.DigitalImageProcessing.ArgbValues" Collapsed="true">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAACAAAADAABAgQAQACAAEFAAEAEABAAAAAAEBBAAQA=</HashCode>
+      <FileName>ArgbValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IRI.Ket.DigitalImageProcessing.ByteArgbValues" Collapsed="true">
+    <Position X="2.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAACAAAADAABAgQAQACAAEFAAEAEABAAAAAAEBBAAQA=</HashCode>
+      <FileName>ByteArgbValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IRI.Ket.DigitalImageProcessing.ByteRgbValues" Collapsed="true">
+    <Position X="4.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAADAAAAgQAQACAAEFAAEAEAAAAAAAAEBBAAAA=</HashCode>
+      <FileName>ByteRgbValues.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="IRI.Ket.DigitalImageProcessing.IConvolution" Collapsed="true">
+    <Position X="0.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SpatialDomainEnhancement\IConvolution.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

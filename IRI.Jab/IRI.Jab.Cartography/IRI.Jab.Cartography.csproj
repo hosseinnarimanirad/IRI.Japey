@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31FE8012-FCC2-4B3D-8B8B-A9191B8D8505}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.Jab.Cartography</RootNamespace>
+    <AssemblyName>IRI.Jab.Cartography</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Deploy\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Deploy\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.Wpf">
+      <HintPath>..\IRI.Deploy\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Converters\TileTypeToBoolConverter.cs" />
+    <Compile Include="Layers\BaseLayer.cs" />
+    <Compile Include="Layers\ClusteredPointLayer.cs" />
+    <Compile Include="Layers\PolyBezierLayer.cs" />
+    <Compile Include="Layers\SpecialLineLayer.cs" />
+    <Compile Include="Model\BezierItem.cs" />
+    <Compile Include="Presenter\BasePresenter.cs" />
+    <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToGdiBitmap.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToOpenTKBitmap.cs" />
+    <Compile Include="Layers\DrawingLayer.cs" />
+    <Compile Include="Extensions\GeometryExtensions.cs" />
+    <Compile Include="Extensions\SqlGeometryExtensions.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToDrawingVisual.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToStreamGeometry.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToWriteableBitmap.cs" />
+    <Compile Include="Extensions\TileInfoExtensions.cs" />
+    <Compile Include="Layers\ILayer.cs" />
+    <Compile Include="Model\AncherFunctionHandler.cs" />
+    <Compile Include="Model\AncherFunctionHandlers.cs" />
+    <Compile Include="Model\DataStructure\RecursiveCollection.cs" />
+    <Compile Include="Model\Common\DrawMode.cs" />
+    <Compile Include="Model\GeometryLabelPair.cs" />
+    <Compile Include="Model\Common\LayerTag.cs" />
+    <Compile Include="Model\Legend\LegendItem.cs" />
+    <Compile Include="Model\Legend\LegendItemEventArgs.cs" />
+    <Compile Include="Model\MoveableItem.cs" />
+    <Compile Include="Model\Common\RasterizationApproach.cs" />
+    <Compile Include="Model\Symbol\ISymbol.cs" />
+    <Compile Include="Model\Symbol\SimpleLineSymbol.cs" />
+    <Compile Include="Model\Symbol\SimpleMarkerSymbol.cs" />
+    <Compile Include="Model\Symbol\SimplePolygonSymbol.cs" />
+    <Compile Include="Model\TileManager.cs" />
+    <Compile Include="Model\Common\LabelParameters.cs" />
+    <Compile Include="Model\Locateable.cs" />
+    <Compile Include="Model\Tile.cs" />
+    <Compile Include="Layers\EditableFeatureLayer.cs" />
+    <Compile Include="Presenter\LegendPresenter.cs" />
+    <Compile Include="Presenter\Map\MapPresenter.cs" />
+    <Compile Include="Layers\RasterLayer.cs" />
+    <Compile Include="Model\Common\RenderingApproach.cs" />
+    <Compile Include="Model\Common\ScaleInterval.cs" />
+    <Compile Include="Layers\SpecialPointLayer.cs" />
+    <Compile Include="Layers\TileServiceLayer.cs" />
+    <Compile Include="TileServices\CacheSource.cs" />
+    <Compile Include="TileServices\MapProviderType.cs" />
+    <Compile Include="TileServices\TileCacheAddress.cs" />
+    <Compile Include="TileServices\TileType.cs" />
+    <Compile Include="Utility\Legend\TocManager.cs" />
+    <Compile Include="Layers\VectorLayer.cs" />
+    <Compile Include="Model\Common\VisualParameters.cs" />
+    <Compile Include="Model\Common\VisualParametersStaticValues.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="HosseinNarimaniRad.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
+      <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
+      <Name>IRI.Ket.DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
+      <Project>{032A00AE-A479-4B2D-8133-5094E323F5F4}</Project>
+      <Name>IRI.Ket.SqlServerSpatialExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Jab.Common\IRI.Jab.Common.csproj">
+      <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
+      <Name>IRI.Jab.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Geometries\" />
+    <Folder Include="Deploy\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\imageNotFound.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Assets\IRI.Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

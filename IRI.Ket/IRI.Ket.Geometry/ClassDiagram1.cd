@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IRI.Ket.Geometry.ComputationalGeometry">
+    <Position X="8.25" Y="3.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>EgAAAAAgABCAAAAAAIAAAAAEAEAIABAAAIAAAAAgAAA=</HashCode>
+      <FileName>Computational\ComputationalGeometry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.DelaunayTriangulation" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ADBAFQCAgAABAAKAAgAQAQogKAAIAACARMAAAiAhAAA=</HashCode>
+      <FileName>Computational\DelaunayTriangulation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.PointCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MGIAIACwAAAAABAACQFAFAQAAAAAAAAACAABAAAQAAA=</HashCode>
+      <FileName>PrimitiveTypes\Point\PointCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.Geometry.VoronoiPoint" Collapsed="true">
+    <Position X="4" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEgAACAAAAAAAAAKAAQAAAAAAAYAA=</HashCode>
+      <FileName>PrimitiveTypes\Point\VoronoiPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.VoronoiPointCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACIAAACQAAAAABQACQAAAAQAAAACAAAACAAAAAAABAE=</HashCode>
+      <FileName>PrimitiveTypes\Point\VoronoiPointCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.Geometry.ConvexPolygon" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAQAAEAAEgAAEgAQAAAAAAIEAAAICAAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\ConvexPolygon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiPolygon" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACEgAAAAAQAAAAAAIEAAAAAAAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\QuasiPolygon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiPolygonCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAQAAAAABAACQAAAAQAAAECAAAACCAAAAAAAAE=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\QuasiPolygonCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiVoronoiCell" Collapsed="true">
+    <Position X="2.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEEAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\QuasiVoronoiCell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiVoronoiCellCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QCIAAAAQAAAAABAACQAAAAQAAAECAAAACAAAAAAAAAE=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\QuasiVoronoiCellCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.Geometry.VoronoiCell" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEEgAAAAAAAAAAAAIAAAAAAIAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Polygon\VoronoiCell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiTriangle" Collapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAABEAAABAQAEQAEhgEAAAIAJEBAAICAAgAAAAIBAQE=</HashCode>
+      <FileName>PrimitiveTypes\Triangle\QuasiTriangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IRI.Ket.Geometry.QuasiTriangleCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACIAAQAQAAAAABAACQBAEQQAAAACAAAACAAAAAAQAAE=</HashCode>
+      <FileName>PrimitiveTypes\Triangle\QuasiTriangleCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="IRI.Ket.Geometry.Triangle" Collapsed="true">
+    <Position X="4" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAABAQAABkEgAABEAAABEFBAIABAwIBCAJBAAM=</HashCode>
+      <FileName>PrimitiveTypes\Triangle\Triangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="IRI.Ket.Geometry.QuasiEdge" Collapsed="true">
+    <Position X="2.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAgEAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Line\QuasiEdge.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="IRI.Ket.Geometry.Point" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAUEgAAAAAAAYAAAAIAAEAAAAAAAYiA=</HashCode>
+      <FileName>PrimitiveTypes\Point\Point.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.1" Collapsed="true" />
+  </Struct>
+  <Interface Name="IRI.Ket.Geometry.IPoint" Collapsed="true">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAA=</HashCode>
+      <FileName>PrimitiveTypes\Point\IPoint.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="IRI.Ket.Geometry.PointComparisonPriority" Collapsed="true">
+    <Position X="5.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PrimitiveTypes\Point\PointComparisonPriority.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.LineLineRelation" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAEAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Relation\LineLineRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.LineLineSegmentRelation" Collapsed="true">
+    <Position X="2.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAACAAAAAEAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Relation\LineLineSegmentRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.PointCircleRelation" Collapsed="true">
+    <Position X="4" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKA=</HashCode>
+      <FileName>Relation\PointCircleRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.PointLineSegementRelation" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Relation\PointLineSegementRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.PointPolygonRelation" Collapsed="true">
+    <Position X="2.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKA=</HashCode>
+      <FileName>Relation\PointPolygonRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.PoinTriangleRelation" Collapsed="true">
+    <Position X="4" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAABAAACIAQAAABAEAACBEAAAAQBAgASA=</HashCode>
+      <FileName>Relation\PoinTriangleRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.PointVectorRelation" Collapsed="true">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAQAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Relation\PointVectorRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="IRI.Ket.Geometry.TriangleRelation" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAACAABAAAAAAAgAAAAAAAAAAAAAAAAAAEAAIJAAA=</HashCode>
+      <FileName>Relation\TriangleRelation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

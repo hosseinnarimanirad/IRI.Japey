@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EDB6898C-02C2-4335-B3C0-308D619FAB4E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.Jab.Common</RootNamespace>
+    <AssemblyName>IRI.Jab.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Stateless, Version=2.5.11.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Deploy\Stateless.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WriteableBitmapEx.Wpf">
+      <HintPath>Deploy\WriteableBitmapEx.Wpf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Animations\GridLengthAnimation.cs" />
+    <Compile Include="Assets\Commands\RelayCommand.cs" />
+    <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
+    <Compile Include="Assets\Converters\BoolToBoldFontConverter.cs" />
+    <Compile Include="Assets\Converters\BoolToGeometryConverter.cs" />
+    <Compile Include="Assets\Converters\BoolToVisivilityConverter.cs" />
+    <Compile Include="Assets\Converters\DoubleInverseConverter.cs" />
+    <Compile Include="Assets\Converters\FlowDocumentXmlToStringConverter.cs" />
+    <Compile Include="Assets\Converters\IntGreaterThanIntParameterToIsEnabledConverter.cs" />
+    <Compile Include="Assets\Converters\IntGreaterThanIntParameterToVisibilityConverter.cs" />
+    <Compile Include="Assets\Converters\CountLessThanOneToBoolConverter.cs" />
+    <Compile Include="Assets\Converters\IntLessThanIntParameterToIsEnabledConverter.cs" />
+    <Compile Include="Assets\Converters\IsAuthorizedToBool.cs" />
+    <Compile Include="Assets\Converters\IsAuthorizedToVisibility.cs" />
+    <Compile Include="Assets\Converters\LatinDigitsToFarsiDigitsConverter.cs" />
+    <Compile Include="Assets\Converters\MapStatusToVisibilityConverter.cs" />
+    <Compile Include="Assets\Converters\NotConverter.cs" />
+    <Compile Include="Assets\Converters\NotNullToBoolConverter.cs" />
+    <Compile Include="Assets\Converters\ScaleToGoogleScaleConverter.cs" />
+    <Compile Include="Assets\Converters\SolidColorBrushToColorConverter.cs" />
+    <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
+    <Compile Include="Assets\ShapeStrings\Appbar.cs" />
+    <Compile Include="Assets\ShapeStrings\CustomShapes.cs" />
+    <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
+    <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
+    <Compile Include="Event\CallbackEventArgs.cs" />
+    <Compile Include="Event\ChangeEventArgs.cs" />
+    <Compile Include="Event\CustomEventArgs.cs" />
+    <Compile Include="Event\GeometryEventArgs.cs" />
+    <Compile Include="Event\MapActionEventArgs.cs" />
+    <Compile Include="Event\MapStatusEventArgs.cs" />
+    <Compile Include="Event\PointArrayEventArgs.cs" />
+    <Compile Include="Event\MapOptionsEventArgs.cs" />
+    <Compile Include="Event\TcsEventArgs.cs" />
+    <Compile Include="Event\ZoomToPointEventArgs.cs" />
+    <Compile Include="Extensions\AnimationHelper.cs" />
+    <Compile Include="Extensions\BoundingBoxExtensions.cs" />
+    <Compile Include="Extensions\BrushExtensions.cs" />
+    <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\EventHandlerExtensions.cs" />
+    <Compile Include="Extensions\PenExtensions.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
+    <Compile Include="Extensions\SpatialBaseExtensions.cs" />
+    <Compile Include="Helpers\ImageUtility.cs" />
+    <Compile Include="Helpers\RichTextBoxHelper.cs" />
+    <Compile Include="Helpers\WorldfilePyramid.cs" />
+    <Compile Include="Model\EditableItem.cs" />
+    <Compile Include="Model\LayerType.cs" />
+    <Compile Include="Model\GoogleScale.cs" />
+    <Compile Include="Model\MapAction.cs" />
+    <Compile Include="Model\MapStatus.cs" />
+    <Compile Include="Notifier.cs" />
+    <Compile Include="Event\PanEventArgs.cs" />
+    <Compile Include="Event\PointEventArgs.cs" />
+    <Compile Include="Presenters\MapMarkerPresenter.cs" />
+    <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
+    <Compile Include="Presenters\PagedResultPresenter.cs" />
+    <Compile Include="Presenters\Security\LoginPresenter.cs" />
+    <Compile Include="Presenters\ViewModelBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Event\ZoomEventArgs.cs" />
+    <Compile Include="StateMachine\StateMachineExtensions.cs" />
+    <Compile Include="View\MapMarkers\Circle.xaml.cs">
+      <DependentUpon>Circle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\CircleImageMarker.xaml.cs">
+      <DependentUpon>CircleImageMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\CountableShapeMarker.xaml.cs">
+      <DependentUpon>CountableShapeMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\PhotoMarker.xaml.cs">
+      <DependentUpon>PhotoMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\ImageMarker.xaml.cs">
+      <DependentUpon>ImageMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\CountableImageMarker.xaml.cs">
+      <DependentUpon>CountableImageMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\MapMarker.xaml.cs">
+      <DependentUpon>MapMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\RectangeMarker.xaml.cs">
+      <DependentUpon>RectangeMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\ShapeWithLabelMarker.xaml.cs">
+      <DependentUpon>ShapeWithLabelMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapOptions\MapFiveOptions.xaml.cs">
+      <DependentUpon>MapFiveOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapOptions\MapFourOptions.xaml.cs">
+      <DependentUpon>MapFourOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapOptions\MapThreeOptions.xaml.cs">
+      <DependentUpon>MapThreeOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapOptions\MapTwoOptions.xaml.cs">
+      <DependentUpon>MapTwoOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapMarkers\PointMarker.xaml.cs">
+      <DependentUpon>PointMarker.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Fonts\BYekan.ttf" />
+    <None Include="HosseinNarimaniRad.pfx" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Assets\IRI.Animations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\IRI.Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Assets\IRI.Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\IRI.Fonts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\Appbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\PointedIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\Foundation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Styles\CircleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\Circle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\CircleImageMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\CountableShapeMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\PhotoMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\ImageMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\CountableImageMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\MapMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MapMarkers\RectangeMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\ShapeWithLabelMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapOptions\MapFiveOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapOptions\MapFourOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapOptions\MapThreeOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapOptions\MapTwoOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapMarkers\PointMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\appbar.add.png" />
+    <Resource Include="Assets\Images\appbar.check.png" />
+    <Resource Include="Assets\Images\appbar.climacons.cloud.sun.png" />
+    <Resource Include="Assets\Images\appbar.close.png" />
+    <Resource Include="Assets\Images\appbar.crosshair.png" />
+    <Resource Include="Assets\Images\appbar.edit.png" />
+    <Resource Include="Assets\Images\appbar.information.png" />
+    <Resource Include="Assets\Images\appbar.magnify.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\appbar.globe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Images\SNAG-0013.bmp" />
+    <Content Include="Deploy\Stateless.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669E46-2465-40FF-88BA-BA6ABCA548AA}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

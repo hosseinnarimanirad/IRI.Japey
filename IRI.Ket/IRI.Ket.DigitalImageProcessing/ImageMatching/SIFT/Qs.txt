@@ -1,0 +1,37 @@
+﻿In the name of ALLAH
+Allahomma ajjel le'valiyek al'faraj
+
+*************
+
+1. ضرایب فرمول های مشتقات اول و دوم چرا به صورت نیم و بیست و پنج صدم است؟
+2. لزوم انتقال محاسبات به یک سیستم دست راستی
+3. حد آستانه ی سه صدم برای حذف نقاط با کنتراست پایین
+4. حدود جابجایی اکسترمم زمان تعیین دقیق آن
+5. معنی جمله ی دوم از خط دوم از پاراگراف دوم صفحه 13 مقاله سال 2004 آقای لو؟
+اکسترمم ها از روی عکس های تفاضلی انتخاب می شوند اما هنگام تخصیص جهت هیستوگرام از روی عکس ها کانولو شده بدست می آید
+
+6. Lowe2004:p11: {We assume image pixel values in the range [0,1]
+	مقادیر پیکسل برای عکس های کانولو شده یا عکس های تفاضلی بین صفر و یک است؟
+
+7. حدودا چند درصد نقاط طی مرحله حذف نقاطه لبه ای، حذف می شوند
+2746-->2733-->139
+
+8. مقاله 1999 آقای لو
+	Robustness to illuminationchange is enhanced by thresholding
+	the gradient magnitudes at a value of 0.1 times the maximum 
+	possible gradient value.
+	منظور از حد آستانه گذاشتن روی مقادیر چیست؟
+	
+9.سایز پنجره دایره ای مورد استفاده در تخصیص جهت به کی پوینت ها
+	سیگما در این مرحله چیه؟1.5 یا 3.0
+	در مقاله 1999 مقدار 3 و در مقاله 2004 مقدار 1.5 آمده
+
+10. lowe 1999. Descriptors:
+	For our experiments we used 8 orientation planes, each sampled over a 4 * 4 grid of locations, with a sample
+	spacing 4 times that of the pixel spacing used for gradient	detection.
+	
+11.  به هنگام مقایسه کی پوینت ها باید وزندهی متفاوت برای آن ها قائل شد
+	the SIFT key samples generated at the larger scale are given
+	twice the weight of those at the smaller scale.
+
+

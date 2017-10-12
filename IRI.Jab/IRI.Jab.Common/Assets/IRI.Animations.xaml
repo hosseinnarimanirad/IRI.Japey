@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Duration x:Key="mapMarkerAnimationDuration">00:00:0.1</Duration>
+
+    <Storyboard x:Key="mapMarkerExpandOnMouseEnter">
+        <!--<DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="{StaticResource mapMarkerAnimationDuration}" />-->
+        <DoubleAnimation Storyboard.TargetProperty="(UserControl.RenderTransform).Children[0].(ScaleTransform.ScaleX)" 
+                     To="1.2" Duration="{StaticResource mapMarkerAnimationDuration}" FillBehavior="HoldEnd" >
+            <DoubleAnimation.EasingFunction>
+                <BackEase EasingMode="EaseIn" />
+                <!--<ElasticEase EasingMode="EaseIn"  Oscillations="1"/>-->
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+        <DoubleAnimation Storyboard.TargetProperty="(UserControl.RenderTransform).Children[0].(ScaleTransform.ScaleY)" 
+                     To="1.2" Duration="{StaticResource mapMarkerAnimationDuration}" FillBehavior="HoldEnd">
+            <DoubleAnimation.EasingFunction>
+                <BackEase EasingMode="EaseIn" />
+                <!--<ElasticEase EasingMode="EaseIn"  Oscillations="1"/>-->
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <Storyboard x:Key="mapMarkerResetOnMouseLeave">
+        <!--<DoubleAnimation Storyboard.TargetProperty="Opacity" To=".9" Duration="{StaticResource mapMarkerAnimationDuration}" />-->
+        <DoubleAnimation Storyboard.TargetProperty="(UserControl.RenderTransform).Children[0].(ScaleTransform.ScaleX)" 
+                     To="1" Duration="{StaticResource mapMarkerAnimationDuration}" FillBehavior="HoldEnd" >
+            <DoubleAnimation.EasingFunction>
+                <BackEase EasingMode="EaseIn" />
+                <!--<ElasticEase EasingMode="EaseOut"  Oscillations="1"/>-->
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+        <DoubleAnimation Storyboard.TargetProperty="(UserControl.RenderTransform).Children[0].(ScaleTransform.ScaleY)" 
+                     To="1" Duration="{StaticResource mapMarkerAnimationDuration}" FillBehavior="HoldEnd">
+            <DoubleAnimation.EasingFunction>
+                <BackEase EasingMode="EaseIn" />
+                <!--<ElasticEase EasingMode="EaseOut"  Oscillations="1"/>-->
+            </DoubleAnimation.EasingFunction>
+        </DoubleAnimation>
+    </Storyboard>
+
+    <Storyboard x:Key="bringToFrontInCanvas">
+        <Int32AnimationUsingKeyFrames  Storyboard.TargetProperty="(Canvas.ZIndex)" AutoReverse="True">
+            <DiscreteInt32KeyFrame KeyTime="0" >
+                <DiscreteInt32KeyFrame.Value>
+                    <x:Static Member="sys:Int32.MaxValue" />
+                </DiscreteInt32KeyFrame.Value>  
+            </DiscreteInt32KeyFrame>
+        </Int32AnimationUsingKeyFrames >
+    </Storyboard>
+</ResourceDictionary>
