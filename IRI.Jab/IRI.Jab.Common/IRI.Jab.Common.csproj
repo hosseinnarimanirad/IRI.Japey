@@ -99,9 +99,12 @@
     <Compile Include="Assets\Converters\MapStatusToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\NotConverter.cs" />
     <Compile Include="Assets\Converters\NotNullToBoolConverter.cs" />
+    <Compile Include="Assets\Converters\StreamGeometryToImageConverter.cs" />
     <Compile Include="Assets\Converters\ScaleToGoogleScaleConverter.cs" />
     <Compile Include="Assets\Converters\SolidColorBrushToColorConverter.cs" />
+    <Compile Include="Assets\Converters\StreamGeometryToPathConverter.cs" />
     <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
+    <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
     <Compile Include="Assets\ShapeStrings\Appbar.cs" />
     <Compile Include="Assets\ShapeStrings\CustomShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Model\GoogleScale.cs" />
     <Compile Include="Model\MapAction.cs" />
     <Compile Include="Model\MapStatus.cs" />
+    <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="Event\PanEventArgs.cs" />
     <Compile Include="Event\PointEventArgs.cs" />
@@ -188,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\BYekan.ttf" />
+    <Resource Include="Assets\Fonts\IRANSans.ttf" />
     <None Include="HosseinNarimaniRad.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -211,6 +216,10 @@
     <Page Include="Assets\Shapes\Appbar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\IranBoundaries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Assets\Shapes\PointedIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -295,6 +304,10 @@
     <Resource Include="Assets\Images\appbar.globe.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Images\BaseMaps\roadmap.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\satellite.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\terrain.png" />
+    <Resource Include="Assets\Images\BaseMaps\bingSatellite.png" />
     <Content Include="Assets\Images\SNAG-0013.bmp" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
@@ -312,6 +325,7 @@
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

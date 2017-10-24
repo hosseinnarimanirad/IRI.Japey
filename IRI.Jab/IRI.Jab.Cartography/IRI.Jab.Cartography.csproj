@@ -92,11 +92,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Converters\TileTypeToBoolConverter.cs" />
+    <Compile Include="Extensions\EnvelopeMarkupLabelTripleExtension.cs" />
     <Compile Include="Layers\BaseLayer.cs" />
     <Compile Include="Layers\ClusteredPointLayer.cs" />
     <Compile Include="Layers\PolyBezierLayer.cs" />
     <Compile Include="Layers\SpecialLineLayer.cs" />
     <Compile Include="Model\BezierItem.cs" />
+    <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
+    <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
+    <Compile Include="Model\PathMarkupLabelPair.cs" />
     <Compile Include="Presenter\BasePresenter.cs" />
     <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToGdiBitmap.cs" />
@@ -113,7 +117,7 @@
     <Compile Include="Model\AncherFunctionHandlers.cs" />
     <Compile Include="Model\DataStructure\RecursiveCollection.cs" />
     <Compile Include="Model\Common\DrawMode.cs" />
-    <Compile Include="Model\GeometryLabelPair.cs" />
+    <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Common\LayerTag.cs" />
     <Compile Include="Model\Legend\LegendItem.cs" />
     <Compile Include="Model\Legend\LegendItemEventArgs.cs" />

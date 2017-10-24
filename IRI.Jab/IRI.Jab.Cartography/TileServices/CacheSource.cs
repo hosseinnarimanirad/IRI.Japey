@@ -83,6 +83,46 @@ namespace IRI.Jab.Cartography.TileServices
             }
         }
 
+
+
+        //Bing
+        public static string GetBingUrl(TileType type, TileInfo tile)
+        {
+            switch (type)
+            {
+                case TileType.Satellite:
+                    return $"http://a0.ortho.tiles.virtualearth.net/tiles/a{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5925";
+
+                case TileType.RoadMap:
+                case TileType.Terrain:
+                case TileType.Hybrid:
+                case TileType.None:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+        public static string TileXYToQuadKey(int tileX, int tileY, int levelOfDetail)
+        {
+            StringBuilder quadKey = new StringBuilder();
+            for (int i = levelOfDetail; i > 0; i--)
+            {
+                char digit = '0';
+                int mask = 1 << (i - 1);
+                if ((tileX & mask) != 0)
+                {
+                    digit++;
+                }
+                if ((tileY & mask) != 0)
+                {
+                    digit++;
+                    digit++;
+                }
+                quadKey.Append(digit);
+            }
+            return quadKey.ToString();
+        }
+
+
         //
         public static string GetUrl(MapProviderType provider, TileType type, TileInfo tile)
         {
@@ -95,6 +135,7 @@ namespace IRI.Jab.Cartography.TileServices
                     return GetNokiaUrl(type, tile);
 
                 case MapProviderType.Bing:
+                    return GetBingUrl(type, tile);
                 case MapProviderType.Yahoo:
                 case MapProviderType.OpenStreetMap:
                 default:

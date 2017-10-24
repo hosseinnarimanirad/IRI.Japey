@@ -18,6 +18,8 @@
     <converters:NotConverter x:Key="notConverter"/>
     <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
     <converters:LatinDigitsToFarsiDigitsConverter x:Key="latinDigitsToFarsiDigitsConverter"/>
-
+    <converters:StreamGeometryToImageConverter x:Key="streamGeometryToImageConverter"/>
+    <converters:StreamGeometryToPathConverter x:Key="streamGeometryToPathConverter"/>
+ 
     <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>
 </ResourceDictionary>

@@ -33,15 +33,34 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                SetBaseMap(value);
+                ChangeBaseMap(ProviderType, value);
             }
         }
 
-        private async void SetBaseMap(TileType type)
+        private MapProviderType _providerType = MapProviderType.Google;
+
+        public MapProviderType ProviderType
+        {
+            get { return _providerType; }
+            set
+            {
+                if (_providerType == value)
+                {
+                    return;
+                }
+
+                _providerType = value;
+                RaisePropertyChanged();
+
+                ChangeBaseMap(value, BaseMapType);
+            }
+        }
+
+        private async void ChangeBaseMap(MapProviderType provider, TileType tileType)
         {
             await CheckInternetAccess();
 
-            this.RequestChangeBaseMap?.Invoke(type);
+            this.RequestChangeBaseMap?.Invoke(provider, tileType);
         }
 
         public string GooglePath { get; set; }
@@ -223,7 +242,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<bool> RequestSetConnectedState;
 
-        public Action<TileType> RequestChangeBaseMap;
+        public Action<MapProviderType, TileType> RequestChangeBaseMap;
+
 
         public Func<double> RequestMapScale;
 
@@ -817,6 +837,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         {
             get
             {
+
                 if (_finishEditDrawingCommand == null)
                 {
                     _finishEditDrawingCommand = new RelayCommand(param =>
@@ -825,6 +846,37 @@ namespace IRI.Jab.Cartography.Presenter.Map
                     });
                 }
                 return _finishEditDrawingCommand;
+            }
+        }
+
+        private RelayCommand _changeBaseMapCommand;
+
+        public RelayCommand ChangeBaseMapCommand
+        {
+            get
+            {
+                if (_changeBaseMapCommand == null)
+                {
+                    _changeBaseMapCommand = new RelayCommand(param =>
+                    {
+                        try
+                        {
+                            var args = param.ToString().Split(',');
+
+                            MapProviderType provider = (MapProviderType)Enum.Parse(typeof(MapProviderType), args[0]);
+
+                            TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
+
+                            ChangeBaseMap(provider, tileType);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine("exception: " + ex);
+                        }
+                    });
+                }
+
+                return _changeBaseMapCommand;
             }
         }
 

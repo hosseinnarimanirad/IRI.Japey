@@ -90,6 +90,8 @@ namespace IRI.Jab.Cartography.TileServices
         {
             string filePath = GetFilePath(tile);
 
+            System.IO.DirectoryInfo dinfo = new System.IO.DirectoryInfo(filePath);
+
             if (System.IO.File.Exists(filePath))
             {
                 return Task.Run(() =>
