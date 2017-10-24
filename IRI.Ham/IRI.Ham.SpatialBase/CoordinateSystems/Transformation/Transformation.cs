@@ -366,7 +366,7 @@ namespace IRI.Ham.CoordinateSystem
             //TLinear height = new TLinear() { Value = hTempValue2 };
 
             //return new GeodeticPoint<TLinear, TAngular>(ellipsoid, height, tempValue.Angle, (new Radian(latitudeTempValue2, longitudinalRange)));
-            return new Ham.SpatialBase.Point(Math.Atan2(tempY, tempX) * 180.0 / Math.PI, latitudeTempValue2 * 180.0 / Math.PI);
+            return new Point(Math.Atan2(tempY, tempX) * 180.0 / Math.PI, latitudeTempValue2 * 180.0 / Math.PI);
         }
 
         public static IPoint ChangeDatumSimple(IPoint geodeticPoint, Ellipsoid<Meter, Degree> sourceDatum, Ellipsoid<Meter, Degree> destinationDatum)

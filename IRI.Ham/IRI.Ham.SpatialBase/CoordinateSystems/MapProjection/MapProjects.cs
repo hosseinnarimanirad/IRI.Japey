@@ -134,7 +134,7 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
 
             return (a * (1 - e * e)) / (temp02 * Math.Sqrt(temp02));
         }
-       
+
         //*******
         /// <summary>
         /// 
@@ -1282,13 +1282,20 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             return 6371000 / (6371000 + h);
         }
 
+        public static double CalculateUTMScaleFactorByMercatorLocation(IPoint mercatorPoint)
+        {
+            var geodeticPoint = MercatorToGeodetic(mercatorPoint);
+
+            return CalculateUTMScaleFactor(geodeticPoint);
+        }
+
         /// <summary>
         /// Calculate UTM Scale Factor
         /// </summary>
         /// <param name="geodeticPoint">phi, lambda</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static double CalcualteUTMScaleFactor(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid)
+        public static double CalculateUTMScaleFactor(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid)
         {
             double phi = geodeticPoint.Y * Math.PI / 180.0;
 
@@ -1324,9 +1331,9 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         /// <param name="geodeticPoint">phi, lambda</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static double CalcualteUTMScaleFactor(IPoint geodeticPoint)
+        public static double CalculateUTMScaleFactor(IPoint geodeticPoint)
         {
-            return CalcualteUTMScaleFactor(geodeticPoint, Ellipsoids.WGS84);
+            return CalculateUTMScaleFactor(geodeticPoint, Ellipsoids.WGS84);
         }
 
         /// <summary>
@@ -1336,9 +1343,9 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         /// <param name="h">Elevation above the ellipsoid</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static double CalcualteGridFactor(IPoint geodeticPoint, double h, Ellipsoid<Meter, Degree> ellipsoid)
+        public static double CalculateGridFactor(IPoint geodeticPoint, double h, Ellipsoid<Meter, Degree> ellipsoid)
         {
-            return CalcualteUTMScaleFactor(geodeticPoint, ellipsoid) * CalculateElevationFactor(h);
+            return CalculateUTMScaleFactor(geodeticPoint, ellipsoid) * CalculateElevationFactor(h);
         }
 
         /// <summary>
@@ -1346,9 +1353,9 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         /// </summary>
         /// <param name="geodeticPoint">lambda, phi</param>
         /// <returns></returns>
-        public static double CalcualteGridFactor(IPoint geodeticPoint)
+        public static double CalculateGridFactor(IPoint geodeticPoint)
         {
-            return CalcualteGridFactor(geodeticPoint);
+            return CalculateGridFactor(geodeticPoint);
         }
     }
 }

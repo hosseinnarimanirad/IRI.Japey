@@ -38,7 +38,7 @@ namespace IRI.Ham.SpatialBase.Model
             {
                 return GeodeticExtent.Transform(i => MapProjects.GeodeticWgs84ToWebMercator(i));
             }
-        }
+        }        
 
         /// <summary>
         /// Extent based on sphere

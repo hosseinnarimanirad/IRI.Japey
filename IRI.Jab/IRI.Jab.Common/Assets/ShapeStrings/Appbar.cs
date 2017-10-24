@@ -44,7 +44,10 @@ namespace IRI.Jab.Common.Assets.ShapeStrings
         public const string appbarVectorPolygon = "F1 M 12,0L 12,4L 26,20L 29,20L 29,26L 23,26L 23,24.3472L 6,17.9027L 6,19L 9.53674e-007,19L 0,13L 2.22222,13L 6,4.99997L 6.00004,0L 12,0 Z M 10,6L 8.52776,6L 5.22222,13L 6,13L 6,14.9028L 23.2985,21.0647L 10,6 Z M 25,24L 27,24L 27,22L 25,22L 25,24 Z M 8.00002,4L 10,4L 10,2L 8.00002,2L 8.00002,4 Z M 4.00001,17L 3.99997,15L 2.00001,15L 2.00001,17L 4.00001,17 Z";
         public static readonly Geometry appbarVectorPolygonGeometry = Geometry.Parse(appbarVectorPolygon);
 
-        
+
+        public const string appbarLocationCheckin = "F1 M 38,19C 42.9706,19 47,23.0294 47,28C 47,30.5642 45.9276,32.878 38,49C 30.0724,32.878 29,30.5642 29,28C 29,23.0294 33.0294,19 38,19 Z M 38,24C 35.7909,24 34,25.7909 34,28C 34,30.2092 35.7909,32 38,32C 40.2091,32 42,30.2092 42,28C 42,25.7909 40.2091,24 38,24 Z M 19,57L 24,42L 31.5,42L 33.5,46L 27.6641,46L 25.3324,53L 50.6676,53L 48.3359,46L 42.5,46L 44.5,42L 52,42L 57,57L 19,57 Z ";
+        public static readonly Geometry appbarLocationCheckinGeometry = Geometry.Parse(appbarVectorPolygon);
+
 
 
     }

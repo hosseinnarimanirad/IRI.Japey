@@ -358,7 +358,7 @@ namespace IRI.Jab.Common.Helpers
 
         public static void MergeTilesAndSaveByGdiplus(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName, string waterMarkText = null)
         {
-            if (tiles == null)
+            if (tiles == null || tiles.Count < 1)
             {
                 return;
             }
@@ -386,8 +386,57 @@ namespace IRI.Jab.Common.Helpers
 
                     graphics.DrawImage(image, new System.Drawing.Rectangle((tiles[i].ColumnNumber - minX) * 256, (tiles[i].RowNumber - minY) * 256, 256, 256),
                                             new System.Drawing.Rectangle(0, 0, 256, 256), System.Drawing.GraphicsUnit.Pixel);
+                }
 
-                    //drawingContext.DrawImage(frame, new System.Windows.Rect((tiles[i].ColumnNumber - minX) * 256, (tiles[i].RowNumber - minY) * 256, 256, 256));
+            }
+
+            //if (!string.IsNullOrWhiteSpace(waterMarkText))
+            //{
+            //    AddWaterMark(outputImage, waterMarkText, Extensions.BrushHelper.AsGdiBrush(System.Drawing.Color.White, .7));
+            //}
+
+            outputImage.Save(outputFileName);
+
+            var worldFile = Ket.WorldfileFormat.WorldfileManager.Create(tiles.GetTotalImageBoundsInWebMercator(), width * 256, height * 256);
+
+            Ket.WorldfileFormat.WorldfileManager.SaveWorldFile(Ket.WorldfileFormat.WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
+        }
+
+        public static void MergeTilesAndSaveByGdiplusInGeodetic(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName, string waterMarkText = null)
+        {
+            if (tiles == null || tiles.Count < 1)
+            {
+                return;
+            }
+
+            var minX = tiles.Min(t => t.ColumnNumber);
+
+            var minY = tiles.Min(t => t.RowNumber);
+
+            var width = tiles.Max(t => t.ColumnNumber) - minX + 1;
+
+            var height = tiles.Max(t => t.RowNumber) - minY + 1;
+
+            var outputImage = new System.Drawing.Bitmap(width * 256, height * 256, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            var geodeticRegionHeight = tiles.Max(i => i.GeodeticExtent.YMax) - tiles.Min(i => i.GeodeticExtent.YMin);
+
+            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(outputImage))
+            {
+                for (int i = 0; i < tiles.Count; i++)
+                {
+                    var fileName = fileNameFunc(tiles[i]);
+
+                    if (!File.Exists(fileName))
+                        continue;
+
+                    var image = System.Drawing.Image.FromFile(fileName);
+
+                    var subImageHeight = outputImage.Height * tiles[i].GeodeticExtent.Height / geodeticRegionHeight;
+
+                    graphics.DrawImage(image, new System.Drawing.Rectangle((tiles[i].ColumnNumber - minX) * 256, (tiles[i].RowNumber - minY) * 256, 256, 256),
+                                            new System.Drawing.Rectangle(0, 0, 256, 256), System.Drawing.GraphicsUnit.Pixel);
+
                 }
 
             }
@@ -403,6 +452,8 @@ namespace IRI.Jab.Common.Helpers
 
             Ket.WorldfileFormat.WorldfileManager.SaveWorldFile(Ket.WorldfileFormat.WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
         }
+
+
 
         public static void AddWaterMark(System.Drawing.Bitmap image, string waterMarkText, System.Drawing.Brush brush)
         {

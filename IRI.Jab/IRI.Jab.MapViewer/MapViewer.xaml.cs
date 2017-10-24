@@ -159,13 +159,14 @@ namespace IRI.Jab.MapViewer
             get { return _currentMouseAction; }
             set
             {
+                this.SetCursor(CursorSettings[value]);
+
                 if (_currentMouseAction == value)
                     return;
 
                 _currentMouseAction = value;
                 RaisePropertyChanged();
 
-                this.SetCursor(CursorSettings[value]);
                 //if (UseDefaultCursorForMapAction)
                 //{
                 //switch (value)
@@ -401,11 +402,11 @@ namespace IRI.Jab.MapViewer
                 this.SetConnectionState(i);
             };
 
-            presenter.RequestChangeBaseMap = (i) =>
+            presenter.RequestChangeBaseMap = (provider, baseMapType) =>
             {
                 this.UnSetTileServices();
 
-                this.SetTileService(Jab.Cartography.TileServices.MapProviderType.Google, i, true, presenter.GooglePath, isOffline: !presenter.IsConnected);
+                this.SetTileService(provider, baseMapType, true, presenter.GooglePath, isOffline: !presenter.IsConnected);
 
                 this.RefreshTiles();
             };

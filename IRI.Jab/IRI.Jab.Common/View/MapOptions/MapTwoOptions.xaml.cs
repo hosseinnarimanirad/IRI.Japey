@@ -22,6 +22,11 @@ namespace IRI.Jab.Common.View.MapOptions
     /// </summary>
     public partial class MapTwoOptions : UserControl
     {
+        public MapTwoOptions()
+        {
+            InitializeComponent();
+        }
+
         public MapTwoOptions(bool isPointEllipseVisible = true)
         {
             InitializeComponent();

@@ -105,7 +105,7 @@ namespace IRI.Ham.CoordinateSystem
                 return new Ellipsoid<Meter, Degree>("D_FD_1958", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-241.54), new Meter(-163.64), new Meter(396.06)),
                     new OrientationParameter(new Degree(), new Degree(), new Degree()))
-                    { EsriName = "Nahrawan" };
+                    { EsriName = "FD58" };
             }
         }
 
