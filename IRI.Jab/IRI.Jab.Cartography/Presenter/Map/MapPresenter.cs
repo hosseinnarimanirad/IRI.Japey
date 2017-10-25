@@ -20,6 +20,35 @@ namespace IRI.Jab.Cartography.Presenter.Map
     {
         #region Properties
 
+        private bool _zoomOnMouseWheel;
+
+        public bool ZoomOnMouseWheel
+        {
+            get { return _zoomOnMouseWheel; }
+            set
+            {
+                _zoomOnMouseWheel = value;
+                RaisePropertyChanged();
+
+                this.PropagateZoomOnMouseWheelChanged?.Invoke(value);
+            }
+        }
+
+        private bool _isGoogleZoomLevelsEnabled;
+
+        public bool IsGoogleZoomLevelsEnabled
+        {
+            get { return _isGoogleZoomLevelsEnabled; }
+            set
+            {
+                _isGoogleZoomLevelsEnabled = value;
+                RaisePropertyChanged();
+
+                this.PropagateGoogleZoomLevelsEnabledChanged?.Invoke(value);
+            }
+        }
+
+
         private TileType _baseMapType = TileType.Hybrid;
 
         public TileType BaseMapType
@@ -33,7 +62,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                ChangeBaseMap(ProviderType, value, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(ProviderType, value, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
@@ -52,15 +81,15 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _providerType = value;
                 RaisePropertyChanged();
 
-                ChangeBaseMap(value, BaseMapType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(value, BaseMapType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
-        private async void ChangeBaseMap(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory, bool isOffline)
+        public async void SetTileService(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory, bool isOffline)
         {
             await CheckInternetAccess();
 
-            this.RequestChangeBaseMap?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, isOffline);
+            this.RequestSetTileService?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, isOffline);
         }
 
         private string _baseMapCacheDirectory = null;
@@ -143,6 +172,18 @@ namespace IRI.Jab.Cartography.Presenter.Map
             set
             {
                 _layers = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                _isBusy = value;
                 RaisePropertyChanged();
             }
         }
@@ -268,8 +309,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<bool> RequestSetConnectedState;
 
-        public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
+        //public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
 
+        public Action<MapProviderType, TileType, bool, string, bool> RequestSetTileService;
 
         public Func<double> RequestMapScale;
 
@@ -283,7 +325,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestFullExtent;
 
-        public Action<bool> RequestEnableZoomOnMouseWheel;
+        public Action<bool> PropagateZoomOnMouseWheelChanged;
+
+        public Action<bool> PropagateGoogleZoomLevelsEnabledChanged;
 
         public Action<double> RequestZoomToScale;
 
@@ -368,6 +412,17 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestSetProxy?.Invoke(proxy);
         }
 
+        public void SetMapCursorSet1()
+        {
+            var zoomInCursor = new System.Windows.Input.Cursor(Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyPlusRightHanded.cur", UriKind.Relative)).Stream, false);
+            this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomInRectangle, zoomInCursor);
+            this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomIn, zoomInCursor);
+
+            var zoomOutCursor = new System.Windows.Input.Cursor(Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyMinusRightHanded.cur", UriKind.Relative)).Stream, false);
+            this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomOutRectangle, zoomOutCursor);
+            this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomOut, zoomOutCursor);
+        }
+
         public void SetDefaultCursor(MapAction action, Cursor cursor)
         {
             this.RequestSetDefaultCursor?.Invoke(action, cursor);
@@ -381,11 +436,6 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public void Pan()
         {
             this.RequestPan?.Invoke();
-        }
-
-        public void EnableZoomOnMouseWheel(bool isEnabled)
-        {
-            this.RequestEnableZoomOnMouseWheel?.Invoke(isEnabled);
         }
 
         public void Refresh()
@@ -895,7 +945,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                             if (provider != this.ProviderType || tileType != this.BaseMapType)
                             {
-                                ChangeBaseMap(provider, tileType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                                SetTileService(provider, tileType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
                             }
                         }
                         catch (Exception ex)

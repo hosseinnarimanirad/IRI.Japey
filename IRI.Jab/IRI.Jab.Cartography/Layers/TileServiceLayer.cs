@@ -21,6 +21,8 @@ namespace IRI.Jab.Cartography
 {
     public class TileServiceLayer : BaseLayer
     {
+        public int GroupId { get; set; } = 1;
+
         public static readonly byte[] notFoundImage;
          
         static TileServiceLayer()

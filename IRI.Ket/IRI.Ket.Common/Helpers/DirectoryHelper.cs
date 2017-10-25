@@ -33,5 +33,22 @@ namespace IRI.Ket.Common.Helpers
                 Directory.Delete(path, true);
             }
         }
+
+        public static bool TryCreateDirectory(string path)
+        {
+            try
+            {
+                if (!System.IO.Directory.Exists(path))
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

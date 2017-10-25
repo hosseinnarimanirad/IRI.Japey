@@ -130,6 +130,10 @@
       <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
       <Name>IRI.Ham.SpatialBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
       <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
       <Name>IRI.Jab.Cartography</Name>

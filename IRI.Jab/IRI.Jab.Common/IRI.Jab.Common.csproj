@@ -217,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Assets\Shapes\Others.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Shapes\IranBoundaries.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,6 +312,9 @@
     <Resource Include="Assets\Images\BaseMaps\satellite.jpg" />
     <Resource Include="Assets\Images\BaseMaps\terrain.png" />
     <Resource Include="Assets\Images\BaseMaps\bingSatellite.png" />
+    <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
+    <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
+    <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
     <Content Include="Assets\Images\SNAG-0013.bmp" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>

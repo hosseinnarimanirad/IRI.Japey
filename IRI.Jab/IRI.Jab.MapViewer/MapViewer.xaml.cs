@@ -33,6 +33,7 @@ using IRI.Ham.SpatialBase.Model;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
+using IRI.Ket.Common.Helpers;
 
 namespace IRI.Jab.MapViewer
 {
@@ -380,7 +381,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestEnableZoomOut = () => { this.ZoomOutPoint(); };
 
-            presenter.RequestEnableZoomOnMouseWheel = (e) =>
+            presenter.PropagateZoomOnMouseWheelChanged = (e) =>
             {
                 if (e)
                 {
@@ -390,6 +391,11 @@ namespace IRI.Jab.MapViewer
                 {
                     this.DisableZoomingOnMouseWheel();
                 }
+            };
+
+            presenter.PropagateGoogleZoomLevelsEnabledChanged = (e) =>
+            {
+                this.IsGoogleZoomLevelsEnabled = e;
             };
 
             presenter.Layers = this.Layers;
@@ -402,7 +408,8 @@ namespace IRI.Jab.MapViewer
                 this.SetConnectionState(i);
             };
             //bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false
-            presenter.RequestChangeBaseMap = (provider, baseMapType, isCachEnabled, cacheDirectory, isOffline) =>
+
+            presenter.RequestSetTileService = (provider, baseMapType, isCachEnabled, cacheDirectory, isOffline) =>
             {
                 this.UnSetTileServices();
 
@@ -646,7 +653,7 @@ namespace IRI.Jab.MapViewer
         {
             var layer = new TileServiceLayer(provider, type) { VisibleRange = scaleInterval };
 
-            if (isCachEnabled && System.IO.Directory.Exists(cacheDirectory))
+            if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
             {
                 layer.EnableCaching(cacheDirectory);
             }
@@ -666,9 +673,9 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Remove(provider, type);
         }
 
-        public void UnSetTileServices()
+        public void UnSetTileServices(int groupId = 1)
         {
-            this._layerManager.Remove(LayerType.BaseMap);
+            this._layerManager.Remove(layer => layer.Type == LayerType.BaseMap && layer is TileServiceLayer && (layer as TileServiceLayer).GroupId == groupId);
         }
 
         public void SetVectorLayer(

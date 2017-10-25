@@ -83,6 +83,19 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        internal void Remove(Predicate<ILayer> rule)
+        {
+            this.map.RemoveAll(rule);
+
+            for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            {
+                if (rule(CurrentLayers[i]))
+                {
+                    this.CurrentLayers.Remove(CurrentLayers[i]);
+                }
+            }
+        }
+
         public void Remove(Cartography.TileServices.MapProviderType provider, Cartography.TileServices.TileType type)
         {
             for (int i = CurrentLayers.Count - 1; i >= 0; i--)
