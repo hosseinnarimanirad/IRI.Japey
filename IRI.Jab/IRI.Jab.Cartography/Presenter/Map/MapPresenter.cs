@@ -33,7 +33,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                ChangeBaseMap(ProviderType, value);
+                ChangeBaseMap(ProviderType, value, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
@@ -52,16 +52,42 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _providerType = value;
                 RaisePropertyChanged();
 
-                ChangeBaseMap(value, BaseMapType);
+                ChangeBaseMap(value, BaseMapType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
-        private async void ChangeBaseMap(MapProviderType provider, TileType tileType)
+        private async void ChangeBaseMap(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory, bool isOffline)
         {
             await CheckInternetAccess();
 
-            this.RequestChangeBaseMap?.Invoke(provider, tileType);
+            this.RequestChangeBaseMap?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, isOffline);
         }
+
+        private string _baseMapCacheDirectory = null;
+
+        public string BaseMapCacheDirectory
+        {
+            get { return _baseMapCacheDirectory; }
+            set
+            {
+                _baseMapCacheDirectory = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool _isCacheEnabled;
+
+        public bool IsCacheEnabled
+        {
+            get { return _isCacheEnabled; }
+            set
+            {
+                _isCacheEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public string GooglePath { get; set; }
 
@@ -242,7 +268,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<bool> RequestSetConnectedState;
 
-        public Action<MapProviderType, TileType> RequestChangeBaseMap;
+        public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
 
 
         public Func<double> RequestMapScale;
@@ -867,7 +893,10 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                             TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 
-                            ChangeBaseMap(provider, tileType);
+                            if (provider != this.ProviderType || tileType != this.BaseMapType)
+                            {
+                                ChangeBaseMap(provider, tileType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                            }
                         }
                         catch (Exception ex)
                         {

@@ -85,8 +85,8 @@ namespace IRI.Jab.Common.Model.Spatialable
             {
                 new EnvelopeMarkupLabelTriple("البرز",IriProvinces93.Alborz, IriProvinces93WmEnvelopes.Alborz){ RequestRaiseSelected = selectAction },
                 new EnvelopeMarkupLabelTriple("اردبیل",IriProvinces93.Ardabil,IriProvinces93WmEnvelopes.Ardabil){ RequestRaiseSelected = selectAction },
-                new EnvelopeMarkupLabelTriple("اذربایجان غربی",IriProvinces93.AzarbayejaneGarbi,  IriProvinces93WmEnvelopes.AzarbayejaneGarbi){ RequestRaiseSelected = selectAction },
-                new EnvelopeMarkupLabelTriple("اذربایجان شرقی",IriProvinces93.AzarbayejaneShargi,IriProvinces93WmEnvelopes.AzarbayejaneShargi){ RequestRaiseSelected = selectAction },
+                new EnvelopeMarkupLabelTriple("آذربایجان غربی",IriProvinces93.AzarbayejaneGarbi,  IriProvinces93WmEnvelopes.AzarbayejaneGarbi){ RequestRaiseSelected = selectAction },
+                new EnvelopeMarkupLabelTriple("آذربایجان شرقی",IriProvinces93.AzarbayejaneShargi,IriProvinces93WmEnvelopes.AzarbayejaneShargi){ RequestRaiseSelected = selectAction },
                 new EnvelopeMarkupLabelTriple("اصفهان",IriProvinces93.Esfahan,IriProvinces93WmEnvelopes.Esfahan){ RequestRaiseSelected = selectAction },
                 new EnvelopeMarkupLabelTriple("بوشهر",IriProvinces93.Booshehr,IriProvinces93WmEnvelopes.Booshehr){ RequestRaiseSelected = selectAction },
                 new EnvelopeMarkupLabelTriple("چهارمحال و...",IriProvinces93.Chaharmahal,IriProvinces93WmEnvelopes.Chaharmahal){ RequestRaiseSelected = selectAction },

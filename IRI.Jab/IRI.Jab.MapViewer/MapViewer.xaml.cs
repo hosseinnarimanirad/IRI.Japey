@@ -401,12 +401,12 @@ namespace IRI.Jab.MapViewer
 
                 this.SetConnectionState(i);
             };
-
-            presenter.RequestChangeBaseMap = (provider, baseMapType) =>
+            //bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false
+            presenter.RequestChangeBaseMap = (provider, baseMapType, isCachEnabled, cacheDirectory, isOffline) =>
             {
                 this.UnSetTileServices();
 
-                this.SetTileService(provider, baseMapType, true, presenter.GooglePath, isOffline: !presenter.IsConnected);
+                this.SetTileService(provider, baseMapType, isCachEnabled, cacheDirectory, isOffline);
 
                 this.RefreshTiles();
             };
