@@ -23,14 +23,32 @@ namespace IRI.Jab.Common.View.MapMarkers
         {
             InitializeComponent();
 
-            this.numberBox.Text = number.ToString();
+            this.Value = number.ToString();
+
+            //this.numberBox.Text = number.ToString();
         }
 
         public MapMarker(string content)
         {
             InitializeComponent();
 
-            this.numberBox.Text = content;
+            this.Value = content;
+
+            //this.numberBox.Text = content;
         }
+
+
+
+        public string Value
+        {
+            get { return (string)GetValue(ValueProperty); }
+            set { SetValue(ValueProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ValueProperty =
+            DependencyProperty.Register(nameof(Value), typeof(string), typeof(MapMarker), new PropertyMetadata(string.Empty));
+
+
     }
 }

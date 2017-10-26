@@ -213,6 +213,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        public bool IsPanning { get; set; } = false;
 
         public bool IsGoogleZoomLevelsEnabled
         {
@@ -606,6 +607,11 @@ namespace IRI.Jab.MapViewer
         public double MapToScreen(double mercatorDistance)
         {
             return mercatorDistance * MapScale / GetUnitDistance();
+        }
+
+        public double ScreenToMap(double screenDistance)
+        {
+            return screenDistance * GetUnitDistance() / MapScale;
         }
 
         private Point MercatorToGeodetic(Point point)
@@ -2445,6 +2451,7 @@ namespace IRI.Jab.MapViewer
                 return;
             }
 
+            this.IsPanning = true;
             //Abort();
 
             Mouse.Capture(this.mapView);
@@ -2472,6 +2479,8 @@ namespace IRI.Jab.MapViewer
             this.MouseMove -= mapView_MouseMoveForPan;
 
             this.MouseUp -= mapView_MouseUpForPan;
+
+            this.IsPanning = false;
 
             //Abort();
 
@@ -4133,6 +4142,61 @@ namespace IRI.Jab.MapViewer
                 this.Status = MapStatus.Idle;
 
                 throw ex;
+            }
+        }
+
+        #endregion
+
+        #region Measure Area/Distance
+
+        SpecialPointLayer measureLayer;
+
+        public async void Measure()
+        {
+            this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+            this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
+
+            var measureLocatable = new Locateable(new sb.Point(51, 35), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
+
+            measureLayer = new SpecialPointLayer("measure", measureLocatable, ScaleInterval.All, LayerType.Complex, 1);
+
+            this.SetLayer(measureLayer);
+            this.AddComplexLayer(measureLayer, true);
+
+            var drawing = await GetDrawingAsync(DrawMode.Polyline);
+        }
+
+
+
+        private void MapView_MouseMoveForMeasureDistance(object sender, MouseEventArgs e)
+        {
+            if (this.itWasPanningWhileDrawing)
+            {
+                return;
+            }
+
+            var currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
+
+            var offset = ScreenToMap(10);
+
+            measureLayer.Items.First().X = currentMouseLocation.X;
+            measureLayer.Items.First().Y = currentMouseLocation.Y + offset;
+
+            var marker = (measureLayer.Items.First().Element as IRI.Jab.Common.View.MapMarkers.LabelMarker);
+
+            try
+            {
+                var geo = drawingLayer.GetFinalGeometry().Clone();
+                geo.AddLastPoint(currentMouseLocation.AsPoint());
+                var length = geo.AsSqlGeometry().STLength().Value;
+
+                var text = length < 1000 ? length.ToString("N3") : (length / 1000).ToString("N2");
+
+                marker.LabelValue = $"{text} متر";
+            }
+            catch (Exception ex)
+            {
+                marker.LabelValue = "عارضه نامعتبر";
             }
         }
 

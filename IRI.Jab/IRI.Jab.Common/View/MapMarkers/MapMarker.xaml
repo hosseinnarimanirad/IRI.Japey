@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Name="control"
              Width="30" Height="40" Opacity=".9">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -51,7 +51,7 @@
         </Viewbox>
         <Border Width="30" Height="40">
             <TextBlock x:Name="numberBox" TextAlignment="Center" FontFamily="B Yekan" FontSize="20" Margin="0,-4,0,0"
-                       HorizontalAlignment="Center" Text="5" Foreground="White"/>
+                       HorizontalAlignment="Center" Text="{Binding ElementName=control, Path=Value}" Foreground="White"/>
         </Border>
     </Canvas>
 </UserControl>

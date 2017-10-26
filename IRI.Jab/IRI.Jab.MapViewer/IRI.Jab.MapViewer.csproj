@@ -83,7 +83,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapInfoView.xaml.cs">
+      <DependentUpon>MapInfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\ExtentManager.cs" />
+    <Page Include="MapInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MapViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

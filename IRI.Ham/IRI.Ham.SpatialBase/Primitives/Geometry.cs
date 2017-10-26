@@ -134,7 +134,7 @@ namespace IRI.Ham.SpatialBase.Primitives
             }
         }
 
-        public Geometry(Geometry[] geometries, GeometryType type)
+        public Geometry(Geometry[] geometries, GeometryType type, int srid = 0)
         {
             if (type != GeometryType.MultiLineString && type != GeometryType.MultiPoint && type != GeometryType.MultiPolygon && type != GeometryType.Polygon && type != GeometryType.GeometryCollection)
             {
@@ -144,6 +144,8 @@ namespace IRI.Ham.SpatialBase.Primitives
             this.Geometries = geometries;
 
             this.Type = type;
+
+            this.Srid = srid;
 
             if (geometries.Length > 0)
             {
@@ -430,7 +432,7 @@ namespace IRI.Ham.SpatialBase.Primitives
 
                 points.Add(newPoint);
 
-                this.Points = points.ToArray(); 
+                this.Points = points.ToArray();
             }
             else
             {
@@ -448,6 +450,20 @@ namespace IRI.Ham.SpatialBase.Primitives
             geometries.Add(new Geometry(new IPoint[] { startPoint }, type));
 
             this.Geometries = geometries.ToArray();
+        }
+
+        public Geometry Clone()
+        {
+            if (this.Points != null)
+            {
+                return Geometry.Create((IPoint[])this.Points.Clone(), this.Type, this.Srid);
+            }
+            if (this.Geometries == null)
+            {
+                return new Geometry((Geometry[])this.Geometries.Clone(), this.Type, this.Srid);
+            }
+
+            return new Geometry(null, this.Type, this.Srid);
         }
     }
 }
