@@ -3410,7 +3410,7 @@ namespace IRI.Jab.MapViewer
 
                 double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
 
-                if (Math.Abs(xOffset) > 0 || Math.Abs(yOffset) > 0)
+                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
                 {
                     this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
 
@@ -3491,6 +3491,14 @@ namespace IRI.Jab.MapViewer
 
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseUp += MapView_MouseUpForDrawing;
+
+                if (_isMeasuring)
+                {
+                    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+                    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
+                }
+
+                itWasPanningWhileDrawing = false;
 
                 return;
             }
@@ -4151,10 +4159,14 @@ namespace IRI.Jab.MapViewer
 
         SpecialPointLayer measureLayer;
 
+        bool _isMeasuring = false;
+
         public async void Measure()
         {
             this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
             this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
+
+            _isMeasuring = true;
 
             var measureLocatable = new Locateable(new sb.Point(51, 35), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
 
@@ -4164,6 +4176,23 @@ namespace IRI.Jab.MapViewer
             this.AddComplexLayer(measureLayer, true);
 
             var drawing = await GetDrawingAsync(DrawMode.Polyline);
+
+            _isMeasuring = false;
+
+            Debug.WriteLine("");
+
+            foreach (var item in drawing.GetAllPoints())
+            {
+                Debug.WriteLine("points: ", item.ToString());
+            }
+
+            var coordinates = drawing.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+
+            var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
+            MessageBox.Show(temp.ToString());
+
+            this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+
         }
 
 
@@ -4177,7 +4206,7 @@ namespace IRI.Jab.MapViewer
 
             var currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
 
-            var offset = ScreenToMap(10);
+            var offset = ScreenToMap(20);
 
             measureLayer.Items.First().X = currentMouseLocation.X;
             measureLayer.Items.First().Y = currentMouseLocation.Y + offset;
@@ -4186,13 +4215,21 @@ namespace IRI.Jab.MapViewer
 
             try
             {
-                var geo = drawingLayer.GetFinalGeometry().Clone();
-                geo.AddLastPoint(currentMouseLocation.AsPoint());
-                var length = geo.AsSqlGeometry().STLength().Value;
+                var geo1 = drawingLayer.GetFinalGeometry().Clone();
+                geo1.AddLastPoint(currentMouseLocation.AsPoint());
+                var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
 
-                var text = length < 1000 ? length.ToString("N3") : (length / 1000).ToString("N2");
+                //marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
 
-                marker.LabelValue = $"{text} متر";
+                //Debug.WriteLine("last point: " + currentMouseLocation.AsPoint().ToString());
+
+                var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
+                geo.Add(currentMouseLocation.AsPoint());
+                var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+                var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
+
+                marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
+                 
             }
             catch (Exception ex)
             {

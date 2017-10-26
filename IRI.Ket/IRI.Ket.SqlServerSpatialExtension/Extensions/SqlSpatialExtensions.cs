@@ -523,7 +523,7 @@ namespace IRI.Ket.SpatialExtensions
 
 
 
-        #region Projection
+        #region Projection (SqlGeography)
 
 
         public static SqlGeometry Project(this SqlGeography geography, Func<Point, Point> mapFunction, int newSrid = 0)
@@ -580,9 +580,9 @@ namespace IRI.Ket.SpatialExtensions
             return builder.ConstructedGeometry.STIsValid().IsTrue ? builder.ConstructedGeometry : builder.ConstructedGeometry.MakeValid();
         }
 
-        public static SqlGeometry Transform(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        public static SqlGeometry Transform(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction, int newSrid = 0)
         {
-            return geometry.ExtractPoints().Transform(mapFunction).AsSqlGeometry();
+            return geometry.ExtractPoints().Transform(mapFunction, newSrid).AsSqlGeometry();
         }
 
         //Not supporting Z and M values
@@ -677,9 +677,9 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndFigure();
         }
 
-        private static Point GetPoint(SqlGeography geometry, int index)
+        private static Point GetPoint(SqlGeography geography, int index)
         {
-            return geometry.STPointN(index).AsPoint();
+            return geography.STPointN(index).AsPoint();
 
             //return new IRI.Ham.SpatialBase.Point(temp.Long.Value, temp.Lat.Value);
         }
@@ -692,11 +692,186 @@ namespace IRI.Ket.SpatialExtensions
         public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
         {
             return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(point, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84));
-        }
+        }    
 
         #endregion
 
 
+        #region Projection (SqlGeometry)
+
+        public static SqlGeography Project(this SqlGeometry geometry, Func<Point, Point> mapFunction, int srid)
+        {
+            var builder = new SqlGeographyBuilder();
+
+            builder.SetSrid(srid);
+
+            geometry = geometry.MakeValid();
+
+            OpenGisGeographyType geographyType = (OpenGisGeographyType)Enum.Parse(typeof(OpenGisGeographyType), geometry.STGeometryType().Value, true);
+
+            builder.BeginGeography(geographyType);
+
+            switch (geographyType)
+            {
+                case OpenGisGeographyType.Point:
+                    ProjectPoint(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.LineString:
+                    ProjectLineString(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.Polygon:
+                    ProjectPolygon(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.MultiPoint:
+                    ProjectMultiPoint(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.MultiLineString:
+                    ProjectMultiLineSring(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.MultiPolygon:
+                    ProjectMultiPolygon(builder, geometry, mapFunction);
+                    break;
+
+                case OpenGisGeographyType.GeometryCollection:
+                case OpenGisGeographyType.CircularString:
+                case OpenGisGeographyType.CompoundCurve:
+                case OpenGisGeographyType.CurvePolygon:
+                case OpenGisGeographyType.FullGlobe:
+                default:
+                    throw new NotImplementedException();
+            }
+
+            builder.EndGeography();
+
+            var result = builder.ConstructedGeography.STIsValid().IsTrue ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
+
+            return result.EnvelopeAngle().Value == 180 ? result.ReorientObject() : result;
+
+
+        }
+
+        //Not supporting Z and M values
+        public static void ProjectMultiPolygon(SqlGeographyBuilder builder, SqlGeometry multiPolygon, Func<Point, Point> mapFunction)
+        {
+            int numberOfGeometries = multiPolygon.STNumGeometries().Value;
+
+            for (int i = 1; i <= numberOfGeometries; i++)
+            {
+                builder.BeginGeography(OpenGisGeographyType.Polygon);
+
+                ProjectPolygon(builder, multiPolygon.STGeometryN(i), mapFunction);
+
+                builder.EndGeography();
+            }
+        }
+
+        //Not supporting Z and M values
+        public static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<Point, Point> mapFunction)
+        {
+            //ProjectRing(builder, geometry.STExteriorRing(), mapFunction);
+
+            //int numberOfInteriorRings = geometry.STNumInteriorRing().Value;
+            int numberOfRings = polygon.STNumCurves().Value;
+
+            for (int i = 1; i <= numberOfRings; i++)
+            {
+                //ProjectRing(builder, geometry.STInteriorRingN(i), mapFunction);
+                ProjectLineString(builder, polygon.STCurveN(i), mapFunction);
+            }
+        }
+
+        //Not supporting Z and M values
+        public static void ProjectMultiLineSring(SqlGeographyBuilder builder, SqlGeometry multiLineString, Func<Point, Point> mapFunction)
+        {
+            int numberOfGeometries = multiLineString.STNumGeometries().Value;
+
+            for (int i = 1; i <= numberOfGeometries; i++)
+            {
+                builder.BeginGeography(OpenGisGeographyType.LineString);
+
+                ProjectLineString(builder, multiLineString.STGeometryN(i), mapFunction);
+
+                builder.EndGeography();
+            }
+        }
+
+        //Not supporting Z and M values
+        public static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<Point, Point> mapFunction)
+        {
+            int numberOfPoints = lineString.STNumPoints().Value;
+
+            //Point startPoint = mapFunction(new Point(lineString.STStartPoint().Long.Value, lineString.STStartPoint().Lat.Value));
+            Point startPoint = mapFunction(lineString.STStartPoint().AsPoint());
+
+            builder.BeginFigure(startPoint.Y, startPoint.X);
+
+            for (int i = 2; i <= numberOfPoints; i++)
+            {
+                Point point = mapFunction(GetPoint(lineString, i));
+
+                builder.AddLine(point.Y, point.X);
+            }
+
+            builder.EndFigure();
+        }
+
+        //Not supporting Z and M values
+        //?? possible bug: start value for i
+        public static void ProjectMultiPoint(SqlGeographyBuilder builder, SqlGeometry multiPoint, Func<Point, Point> mapFunction)
+        {
+            int numberOfGeometries = multiPoint.STNumGeometries().Value;
+
+            for (int i = 1; i <= numberOfGeometries; i++)
+            {
+                builder.BeginGeography(OpenGisGeographyType.Point);
+
+                ProjectPoint(builder, multiPoint.STGeometryN(i), mapFunction);
+
+                builder.EndGeography();
+            }
+        }
+
+        //Not supporting Z and M values
+        public static void ProjectPoint(SqlGeographyBuilder builder, SqlGeometry point, Func<Point, Point> mapFunction)
+        {
+            //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
+            Point thePoint = mapFunction(point.AsPoint());
+
+            builder.BeginFigure(thePoint.Y, thePoint.X);
+
+            builder.EndFigure();
+        }
+
+        private static Point GetPoint(SqlGeometry geometry, int index)
+        {
+            return geometry.STPointN(index).AsPoint();
+
+            //return new IRI.Ham.SpatialBase.Point(temp.Long.Value, temp.Lat.Value);
+        }
+
+        public static SqlGeography WebMercatorToGeographic(this SqlGeometry geometry)
+        {
+            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+        }
+
+        public static SqlGeography MercatorToGeographic(this SqlGeometry geometry)
+        {
+            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
+        }
+
+        public static SqlGeography UTMToGeographic(this SqlGeometry geometry, int utmZone)
+        {
+            return geometry.Project(i => Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), 4326);
+        }
+
+
+
+        #endregion
 
         #region Extract Points
 
