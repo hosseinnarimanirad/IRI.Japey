@@ -10,6 +10,7 @@ namespace IRI.Jab.Common.Model
     {
         Drawing,
         EditingGeometry,
+        Measurement,
         //Rendering,
         //Paning,
         //Zooming,

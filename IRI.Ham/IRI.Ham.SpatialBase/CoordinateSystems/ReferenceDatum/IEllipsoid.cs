@@ -25,6 +25,8 @@ namespace IRI.Ham.CoordinateSystem
 
         double InverseFlattening { get; }
 
+        int Srid { get;  }
+
         ICartesian3DPoint DatumTranslation { get; }
 
         OrientationParameter DatumMisalignment { get; }

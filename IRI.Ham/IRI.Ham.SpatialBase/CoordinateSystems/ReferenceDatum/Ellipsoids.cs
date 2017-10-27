@@ -14,7 +14,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Airy 1830", new Meter(6377563.396), 299.3249646) { EsriName = "Airy_1830" };
+                return new Ellipsoid<Meter, Degree>("Airy 1830", new Meter(6377563.396), 299.3249646, 7001) { EsriName = "Airy_1830" };
             }
         }
 
@@ -22,7 +22,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Modified Airy", new Meter(6377340.189), 299.3249646) { EsriName = "Airy_Modified" };
+                return new Ellipsoid<Meter, Degree>("Modified Airy", new Meter(6377340.189), 299.3249646, 7002) { EsriName = "Airy_Modified" };
             }
         }
 
@@ -30,7 +30,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Australian National", new Meter(6378160.0), 298.25) { EsriName = "Australian" };
+                return new Ellipsoid<Meter, Degree>("Australian National", new Meter(6378160.0), 298.25, 7003) { EsriName = "Australian" };
             }
         }
 
@@ -38,7 +38,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Bessel 1841 (Namibia)", new Meter(6377483.865280418), 299.1528128) { EsriName = "Bessel_Namibia" };
+                return new Ellipsoid<Meter, Degree>("Bessel 1841 (Namibia)", new Meter(6377483.865280418), 299.1528128, 7046) { EsriName = "Bessel_Namibia" };
             }
         }
 
@@ -46,7 +46,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Bessel 1841", new Meter(6377397.155), 299.1528128) { EsriName = "Bessel_1841" };
+                return new Ellipsoid<Meter, Degree>("Bessel 1841", new Meter(6377397.155), 299.1528128, 7004) { EsriName = "Bessel_1841" };
             }
         }
 
@@ -54,7 +54,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Clarke 1866", new Meter(6378206.4), 294.9786982) { EsriName = "Clarke_1866" };
+                return new Ellipsoid<Meter, Degree>("Clarke 1866", new Meter(6378206.4), 294.9786982, 7008) { EsriName = "Clarke_1866" };
             }
         }
 
@@ -62,7 +62,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Clarke 1880", new Meter(6378249.144808011), 293.4663076556253) { EsriName = "Clarke_1880" };
+                return new Ellipsoid<Meter, Degree>("Clarke 1880", new Meter(6378249.144808011), 293.4663076556253, 7013) { EsriName = "Clarke_1880" };
             }
         }
 
@@ -73,17 +73,20 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Clarke 1880 RGS", new Meter(6378249.145), 293.465) { EsriName = "Clarke_1880_RGS" };
+                return new Ellipsoid<Meter, Degree>("Clarke 1880 RGS", new Meter(6378249.145), 293.465, 7012) { EsriName = "Clarke_1880_RGS" };
             }
         }
+
+
+        //EPSG not found
         public static Ellipsoid<Meter, Degree> Nahrawan
         {
             get
             {
                 return new Ellipsoid<Meter, Degree>("Nahrwan 67 ", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-245.0), new Meter(-153.9), new Meter(382.8)),
-                    new OrientationParameter(new Degree(), new Degree(), new Degree()))
-                    { EsriName = "Nahrwan 1967 (deg)" };
+                    new OrientationParameter(new Degree(), new Degree(), new Degree()), int.MinValue)
+                { EsriName = "Nahrwan 1967 (deg)" };
             }
         }
 
@@ -93,10 +96,11 @@ namespace IRI.Ham.CoordinateSystem
             {
                 return new Ellipsoid<Meter, Degree>("Nahrwan 1967 Iraq", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-242.2), new Meter(-144.9), new Meter(370.3)),
-                    new OrientationParameter(new Degree(), new Degree(), new Degree()))
-                    { EsriName = "Nahrawan" };
+                    new OrientationParameter(new Degree(), new Degree(), new Degree()),
+                    4270)
+                { EsriName = "Nahrawan" };
             }
-        } 
+        }
 
         public static Ellipsoid<Meter, Degree> FD58
         {
@@ -104,81 +108,82 @@ namespace IRI.Ham.CoordinateSystem
             {
                 return new Ellipsoid<Meter, Degree>("D_FD_1958", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-241.54), new Meter(-163.64), new Meter(396.06)),
-                    new OrientationParameter(new Degree(), new Degree(), new Degree()))
-                    { EsriName = "FD58" };
+                    new OrientationParameter(new Degree(), new Degree(), new Degree()),
+                    4132)
+                { EsriName = "FD58" };
             }
         }
 
 
-        public static Ellipsoid<Meter, Degree> EverestSabahSarawak1967
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Everest (Sabah Sarawak) 1967", new Meter(6377298.556), 300.8017) { EsriName = "Everest_Definition_1967" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> EverestSabahSarawak1967
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Everest (Sabah Sarawak) 1967", new Meter(6377298.556), 300.8017) { EsriName = "Everest_Definition_1967" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> EverestIndia1956
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Everest (India 1956)", new Meter(6377301.243), 300.8017) { EsriName = "Everest_India_1956" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> EverestIndia1956
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Everest (India 1956)", new Meter(6377301.243), 300.8017) { EsriName = "Everest_India_1956" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> EverestMalaysia1969
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Everest (Malaysia 1969)", new Meter(6377295.664), 300.8017) { EsriName = "Everest_Modified_1969" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> EverestMalaysia1969
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Everest (Malaysia 1969)", new Meter(6377295.664), 300.8017) { EsriName = "Everest_Modified_1969" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> EverestMalaySing1830
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Everest (Malay. & Sing)", new Meter(6377304.063), 300.8017) { EsriName = "Everest_1830_Modified" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> EverestMalaySing1830
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Everest (Malay. & Sing)", new Meter(6377304.063), 300.8017) { EsriName = "Everest_1830_Modified" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> EverestPakistan
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Everest (Pakistan)", new Meter(6377309.613), 300.8017) { EsriName = "Everest_Pakistan" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> EverestPakistan
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Everest (Pakistan)", new Meter(6377309.613), 300.8017) { EsriName = "Everest_Pakistan" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> ModifiedFischer1960
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Modified Fischer 1960", new Meter(6378155.0), 298.3) { EsriName = "Fischer_Modified" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> ModifiedFischer1960
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Modified Fischer 1960", new Meter(6378155.0), 298.3) { EsriName = "Fischer_Modified" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> Helmert1906
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Helmert 1906", new Meter(6378200.0), 298.3) { EsriName = "Helmert_1906" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> Helmert1906
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Helmert 1906", new Meter(6378200.0), 298.3) { EsriName = "Helmert_1906" };
+        //    }
+        //}
 
-        public static Ellipsoid<Meter, Degree> Hough1960
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Hough 1960", new Meter(6378270.0), 297.0) { EsriName = "Hough_1960" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> Hough1960
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Hough 1960", new Meter(6378270.0), 297.0) { EsriName = "Hough_1960" };
+        //    }
+        //}
 
         public static Ellipsoid<Meter, Degree> Indonesian1974
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Indonesian 1974", new Meter(6378160.0), 298.247) { EsriName = "Indonesian" };
+                return new Ellipsoid<Meter, Degree>("Indonesian 1974", new Meter(6378160.0), 298.247, 6238) { EsriName = "Indonesian" };
             }
         }
 
@@ -189,23 +194,25 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("International 1924", new Meter(6378388.0), 297) { EsriName = "International_1924" };
+                return new Ellipsoid<Meter, Degree>("International 1924", new Meter(6378388.0), 297, 7022) { EsriName = "International_1924" };
             }
         }
 
-        public static Ellipsoid<Meter, Degree> Krassovsky1940
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("Krassovsky 1940", new Meter(6378245.0), 298.3) { EsriName = "Krasovsky_1940" };
-            }
-        }
+        //public static Ellipsoid<Meter, Degree> Krassovsky1940
+        //{
+        //    get
+        //    {
+        //        return new Ellipsoid<Meter, Degree>("Krassovsky 1940", new Meter(6378245.0), 298.3) { EsriName = "Krasovsky_1940" };
+        //    }
+        //}
 
+
+        //Srid value may be wrong
         public static Ellipsoid<Meter, Degree> GRS80
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("GRS 80", new Meter(6378137.0), 298.257222101) { EsriName = "GRS_1980" };
+                return new Ellipsoid<Meter, Degree>("GRS 80", new Meter(6378137.0), 298.257222101, 4019) { EsriName = "GRS_1980" };
             }
         }
 
@@ -213,7 +220,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("South American 1969", new Meter(6378160.0), 298.25) { EsriName = "South_American_1969" };
+                return new Ellipsoid<Meter, Degree>("South American 1969", new Meter(6378160.0), 298.25, 6618) { EsriName = "South_American_1969" };
             }
         }
 
@@ -221,7 +228,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("WGS 72", new Meter(6378135.0), 298.26) { EsriName = "WGS_1972" };
+                return new Ellipsoid<Meter, Degree>("WGS 72", new Meter(6378135.0), 298.26, 4322) { EsriName = "WGS_1972" };
             }
         }
 
@@ -229,7 +236,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563) { EsriName = "WGS_1984" };
+                return new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563, 4326) { EsriName = "WGS_1984" };
             }
         }
 
@@ -237,7 +244,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("Sphere", new Meter(6378137), double.PositiveInfinity) { EsriName = "shpere" };
+                return new Ellipsoid<Meter, Degree>("Sphere", new Meter(6378137), double.PositiveInfinity, 1) { EsriName = "shpere" };
             }
         }
     }

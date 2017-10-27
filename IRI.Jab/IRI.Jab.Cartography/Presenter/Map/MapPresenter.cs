@@ -394,6 +394,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestFinishEditGeometry;
 
+        public Action RequestMeasureArea;
+
+        public Action RequestMeasureLength;
+
+        public Action RequestCancelMeasure;
+
         public Func<Geometry, Task<Geometry>> RequestEdit;
 
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<PolyBezierLayer>> RequestGetBezier;
@@ -630,6 +636,21 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestFinishEditGeometry?.Invoke(); //this is called in MapViewer
 
             this.OnFinishEditGeometry?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        }
+
+        protected void MeasureLength()
+        {
+            this.RequestMeasureLength?.Invoke();
+        }
+
+        protected void MeasureArea()
+        {
+            this.RequestMeasureArea?.Invoke();
+        }
+
+        protected void CancelMeasure()
+        {
+            this.RequestCancelMeasure?.Invoke();
         }
 
         protected Task<PolyBezierLayer> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
@@ -956,6 +977,52 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 }
 
                 return _changeBaseMapCommand;
+            }
+        }
+
+
+        private RelayCommand _measureLengthCommand;
+
+        public RelayCommand MeasureLengthCommand
+        {
+            get
+            {
+                if (_measureLengthCommand == null)
+                {
+                    _measureLengthCommand = new RelayCommand(param => this.MeasureLength());
+                }
+
+                return _measureLengthCommand;
+            }
+        }
+
+        private RelayCommand _measureAreaCommand;
+
+        public RelayCommand MeasureAreaCommand
+        {
+            get
+            {
+                if (_measureAreaCommand == null)
+                {
+                    _measureAreaCommand = new RelayCommand(param => this.MeasureArea());
+                }
+
+                return _measureAreaCommand;
+            }
+        }
+
+        private RelayCommand _cancelMeasureCommand;
+
+        public RelayCommand CancelMeasureCommand
+        {
+            get
+            {
+                if (_cancelMeasureCommand == null)
+                {
+                    _cancelMeasureCommand = new RelayCommand(param => this.CancelMeasure());
+                }
+
+                return _cancelMeasureCommand;
             }
         }
 

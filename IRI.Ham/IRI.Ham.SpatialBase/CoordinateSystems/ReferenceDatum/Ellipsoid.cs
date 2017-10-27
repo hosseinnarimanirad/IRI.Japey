@@ -13,21 +13,23 @@ namespace IRI.Ham.CoordinateSystem
     {
         #region Fields
 
-        private Cartesian3DPoint<TLinear> m_DatumTranslation;
+        private Cartesian3DPoint<TLinear> _datumTranslation;
 
         //private AngularUnit m_Omega, m_Phi, m_Kappa;
 
-        private OrientationParameter m_DatumMisalignment;
+        private OrientationParameter _datumMisalignment;
 
-        private LinearUnit m_SemiMajorAxis;
+        private LinearUnit _semiMajorAxis;
 
-        private LinearUnit m_SemiMinorAxis;
+        private LinearUnit _semiMinorAxis;
 
-        private string m_Name;
+        private string _name;
 
-        private double m_FirstEccentricity;
+        private double _firstEccentricity;
 
-        private double m_SecondEccentricity;
+        private double _secondEccentricity;
+
+        private int _srid;
 
         #endregion
 
@@ -35,39 +37,39 @@ namespace IRI.Ham.CoordinateSystem
 
         public ICartesian3DPoint DatumTranslation
         {
-            get { return this.m_DatumTranslation; }
+            get { return this._datumTranslation; }
         }
 
         public OrientationParameter DatumMisalignment
         {
-            get { return this.m_DatumMisalignment; }
+            get { return this._datumMisalignment; }
         }
 
         public LinearUnit SemiMajorAxis
         {
-            get { return m_SemiMajorAxis; }
+            get { return _semiMajorAxis; }
         }
 
         public LinearUnit SemiMinorAxis
         {
-            get { return m_SemiMinorAxis; }
+            get { return _semiMinorAxis; }
         }
 
         public string Name
         {
-            get { return m_Name; }
+            get { return _name; }
         }
 
         public string EsriName { get; set; }
 
         public double FirstEccentricity
         {
-            get { return m_FirstEccentricity; }
+            get { return _firstEccentricity; }
         }
 
         public double SecondEccentricity
         {
-            get { return m_SecondEccentricity; }
+            get { return _secondEccentricity; }
         }
 
         public double Flattening
@@ -86,58 +88,70 @@ namespace IRI.Ham.CoordinateSystem
             }
         }
 
+        public int Srid
+        {
+            get
+            {
+                return _srid;
+            }
+        }
+
         #endregion
 
         #region Constructors
 
-        public Ellipsoid(string name, LinearUnit semiMajorAxis, double inverseFlattening)
+        public Ellipsoid(string name, LinearUnit semiMajorAxis, double inverseFlattening, int srid)
             : this(name,
                     semiMajorAxis,
                     inverseFlattening,
                     new Cartesian3DPoint<TLinear>(new TLinear(), new TLinear(), new TLinear()),
-                    new OrientationParameter(new Radian(), new Radian(), new Radian()))
+                    new OrientationParameter(new Radian(), new Radian(), new Radian()),
+                    srid)
         { }
 
         public Ellipsoid(string name, LinearUnit semiMajorAxis, LinearUnit semiMinorAxis,
-                            ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment)
+                            ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment, int srid)
             : this(name,
                     semiMajorAxis,
-                    1 / ((semiMajorAxis.Subtract(semiMinorAxis)).Divide(semiMajorAxis)).Value,
+                    1.0 / ((semiMajorAxis.Subtract(semiMinorAxis)).Divide(semiMajorAxis)).Value,
                     datumTranslation,
-                    datumMisalignment)
+                    datumMisalignment,
+                    srid)
         { }
 
         public Ellipsoid(string name, LinearUnit semiMajorAxis, double inverseFlattening,
-                            ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment)
+                            ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment, int srid)
         {
-            this.m_DatumTranslation = new Cartesian3DPoint<TLinear>(datumTranslation.X, datumTranslation.Y, datumTranslation.Z);
+            this._datumTranslation = new Cartesian3DPoint<TLinear>(datumTranslation.X, datumTranslation.Y, datumTranslation.Z);
 
-            this.m_DatumMisalignment = new OrientationParameter(datumMisalignment.Omega.ChangeTo<TAngular>(),
+            this._datumMisalignment = new OrientationParameter(datumMisalignment.Omega.ChangeTo<TAngular>(),
                                                                 datumMisalignment.Phi.ChangeTo<TAngular>(),
                                                                 datumMisalignment.Kappa.ChangeTo<TAngular>());
 
-            this.m_Name = name;
+            this._name = name;
 
-            this.m_SemiMajorAxis = semiMajorAxis.ChangeTo<TLinear>();
+            this._srid = srid;
 
-            double tempSemiMajor = this.m_SemiMajorAxis.Value;
+            this._semiMajorAxis = semiMajorAxis.ChangeTo<TLinear>();
+
+            double tempSemiMajor = this._semiMajorAxis.Value;
 
             if (inverseFlattening == 0)
             {
-                this.m_SemiMinorAxis = new TLinear() { Value = tempSemiMajor };
+                this._semiMinorAxis = new TLinear() { Value = tempSemiMajor };
             }
             else
             {
-                this.m_SemiMinorAxis = new TLinear() { Value = tempSemiMajor - tempSemiMajor / inverseFlattening };
+                this._semiMinorAxis = new TLinear() { Value = tempSemiMajor - tempSemiMajor / inverseFlattening };
             }
 
-            double tempSemiMinor = this.m_SemiMinorAxis.Value;
+            double tempSemiMinor = this._semiMinorAxis.Value;
 
-            this.m_FirstEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
+            this._firstEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
                                                    /
                                                 (tempSemiMajor * tempSemiMajor));
 
-            this.m_SecondEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
+            this._secondEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
                                                    /
                                                  (tempSemiMinor * tempSemiMinor));
 
@@ -166,7 +180,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             double sin = Math.Sin(Latitude * Math.PI / 180);
 
-            return (this.m_SemiMajorAxis.Value
+            return (this._semiMajorAxis.Value
                            /
                            Math.Sqrt(1 - this.FirstEccentricity * this.FirstEccentricity * sin * sin));
         }
@@ -175,7 +189,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             TLinear result = new TLinear();
 
-            result.Value = (this.m_SemiMajorAxis.Value
+            result.Value = (this._semiMajorAxis.Value
                             /
                             Math.Sqrt(1 - this.FirstEccentricity * this.FirstEccentricity * Latitude.Sin * Latitude.Sin));
 
@@ -186,7 +200,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             TLinear result = new TLinear();
 
-            result.Value = (this.m_SemiMajorAxis.Value * (1 - this.FirstEccentricity * this.FirstEccentricity)
+            result.Value = (this._semiMajorAxis.Value * (1 - this.FirstEccentricity * this.FirstEccentricity)
                             /
                             Math.Pow((1 - this.FirstEccentricity * this.FirstEccentricity * Latitude.Sin * Latitude.Sin), 3.0 / 2.0));
 
@@ -229,12 +243,13 @@ namespace IRI.Ham.CoordinateSystem
                                                                 this.SemiMajorAxis,
                                                                 this.SemiMinorAxis,
                                                                 this.DatumTranslation,
-                                                                this.DatumMisalignment);
+                                                                this.DatumMisalignment,
+                                                                this.Srid);
         }
 
-        public Ellipsoid<TLinear, TAngular> GetGeocentricVersion()
+        public Ellipsoid<TLinear, TAngular> GetGeocentricVersion(int newSrid)
         {
-            return new Ellipsoid<TLinear, TAngular>(this.Name + "_Geocentric", this.SemiMajorAxis, this.InverseFlattening);
+            return new Ellipsoid<TLinear, TAngular>(this.Name + "_Geocentric", this.SemiMajorAxis, this.InverseFlattening, newSrid);
         }
 
         #endregion

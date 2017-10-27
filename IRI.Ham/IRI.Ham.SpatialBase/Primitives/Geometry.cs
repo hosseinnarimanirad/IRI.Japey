@@ -458,9 +458,9 @@ namespace IRI.Ham.SpatialBase.Primitives
             {
                 return Geometry.Create((IPoint[])this.Points.Clone(), this.Type, this.Srid);
             }
-            if (this.Geometries == null)
+            if (this.Geometries != null)
             {
-                return new Geometry((Geometry[])this.Geometries.Clone(), this.Type, this.Srid);
+                return new Geometry(this.Geometries.Select(g => g.Clone()).ToArray(), this.Type, this.Srid);
             }
 
             return new Geometry(null, this.Type, this.Srid);

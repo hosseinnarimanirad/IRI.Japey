@@ -14,17 +14,17 @@ namespace IRI.Ham.CoordinateSystem
     {
         #region Fields
 
-        private string m_Name;
+        private string _name;
 
-        private IEllipsoid m_Datum;
+        private IEllipsoid _datum;
 
-        private AxisType m_Handedness;
+        private AxisType _handedness;
 
-        private const int m_Dimension = 2;
+        private const int _dimension = 2;
 
-        private IAngularCollection m_VerticalAngle;
+        private IAngularCollection _verticalAngle;
 
-        private IAngularCollection m_HorizontalAngle;
+        private IAngularCollection _horizontalAngle;
 
         #endregion
 
@@ -32,17 +32,17 @@ namespace IRI.Ham.CoordinateSystem
 
         public string Name
         {
-            get { return this.m_Name; }
+            get { return this._name; }
         }
 
         public int Dimension
         {
-            get { return m_Dimension; }
+            get { return _dimension; }
         }
 
         public IEllipsoid Datum
         {
-            get { return this.m_Datum; }
+            get { return this._datum; }
         }
 
         public int NumberOfPoints
@@ -52,7 +52,7 @@ namespace IRI.Ham.CoordinateSystem
 
         public AxisType Handedness
         {
-            get { return this.m_Handedness; }
+            get { return this._handedness; }
         }
 
         public AngleMode AngularMode
@@ -68,12 +68,12 @@ namespace IRI.Ham.CoordinateSystem
 
         public IAngularCollection VerticalAngle
         {
-            get { return this.m_VerticalAngle; }
+            get { return this._verticalAngle; }
         }
 
         public IAngularCollection HorizontalAngle
         {
-            get { return this.m_HorizontalAngle; }
+            get { return this._horizontalAngle; }
         }
 
         #endregion
@@ -110,15 +110,15 @@ namespace IRI.Ham.CoordinateSystem
                 throw new NotImplementedException();
             }
 
-            this.m_Name = name;
+            this._name = name;
 
-            this.m_Handedness = handedness;
+            this._handedness = handedness;
 
-            this.m_Datum = ellipsoid.ChangeTo<TLinear, TAngular>();
+            this._datum = ellipsoid.ChangeTo<TLinear, TAngular>();
 
-            this.m_HorizontalAngle = (AngularCollection<TAngular>)horizontalAngle.ChangeTo<TAngular>();
+            this._horizontalAngle = (AngularCollection<TAngular>)horizontalAngle.ChangeTo<TAngular>();
 
-            this.m_VerticalAngle = (AngularCollection<TAngular>)verticalAngle.ChangeTo<TAngular>();
+            this._verticalAngle = (AngularCollection<TAngular>)verticalAngle.ChangeTo<TAngular>();
         }
 
         public Ellipsoidal(string name, Matrix values, AxisType handedness, AngleRange horizontalRange, IEllipsoid ellipsoid)
@@ -128,15 +128,15 @@ namespace IRI.Ham.CoordinateSystem
                 throw new NotImplementedException();
             }
 
-            this.m_Name = name;
+            this._name = name;
 
-            this.m_Handedness = handedness;
+            this._handedness = handedness;
 
-            this.m_Datum = ellipsoid.ChangeTo<TLinear, TAngular>();
+            this._datum = ellipsoid.ChangeTo<TLinear, TAngular>();
 
-            this.m_HorizontalAngle = new AngularCollection<TAngular>(values.GetColumn(0), horizontalRange);
+            this._horizontalAngle = new AngularCollection<TAngular>(values.GetColumn(0), horizontalRange);
 
-            this.m_VerticalAngle = new AngularCollection<TAngular>(values.GetColumn(1), AngleRange.MinusPiTOPi);
+            this._verticalAngle = new AngularCollection<TAngular>(values.GetColumn(1), AngleRange.MinusPiTOPi);
         }
 
         #endregion

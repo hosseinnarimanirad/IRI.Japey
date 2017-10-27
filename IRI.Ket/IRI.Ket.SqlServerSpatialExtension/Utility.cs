@@ -83,5 +83,27 @@ namespace IRI.Ket.SqlServerSpatialExtension
 
             return resultGeography.EnvelopeAngle().Value == 180 ? resultGeography.ReorientObject() : resultGeography;
         }
+
+        public static SqlGeometry Union(List<SqlGeometry> geometries)
+        {
+            return Aggregate(geometries, (g1, g2) => g1.STUnion(g2));
+        }
+
+        private static SqlGeometry Aggregate(List<SqlGeometry> geometries, Func<SqlGeometry, SqlGeometry, SqlGeometry> map)
+        {
+            if (geometries == null || geometries.Count < 1)
+            {
+                return null;
+            }
+
+            var result = geometries.First();
+
+            for (int i = 1; i < geometries.Count; i++)
+            {
+                result = map(result, geometries[i]);
+            }
+
+            return result;
+        }
     }
 }

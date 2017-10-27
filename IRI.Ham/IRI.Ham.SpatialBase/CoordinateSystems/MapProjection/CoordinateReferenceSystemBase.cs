@@ -63,11 +63,12 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             return ToGeodetic(point, Ellipsoids.WGS84);
         }
 
+        //must be tested
         public IPoint ToLocalGeodetic(IPoint point)
         {
             var geocentricGeodeticPoint = ToGeodetic(point);
 
-            return Transformation.ChangeDatum(geocentricGeodeticPoint, this.Ellipsoid.GetGeocentricVersion(), this.Ellipsoid);
+            return Transformation.ChangeDatum(geocentricGeodeticPoint, this.Ellipsoid.GetGeocentricVersion(0), this.Ellipsoid);
         }
 
         public IPoint ToGeodetic(IPoint point, Ellipsoid targetEllipsoid)
@@ -85,9 +86,10 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             return FromGeodetic(point, Ellipsoids.WGS84);
         }
 
+        //must be tested
         public IPoint FromLocalGeodetic(IPoint point)
         {
-            var geocentricGeodeticPoint = Transformation.ChangeDatum(point, this.Ellipsoid, this.Ellipsoid.GetGeocentricVersion());
+            var geocentricGeodeticPoint = Transformation.ChangeDatum(point, this.Ellipsoid, this.Ellipsoid.GetGeocentricVersion(0));
 
             return FromGeodetic(geocentricGeodeticPoint);
         }

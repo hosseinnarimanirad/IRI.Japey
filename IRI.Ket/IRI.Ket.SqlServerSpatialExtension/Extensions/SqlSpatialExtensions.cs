@@ -773,15 +773,15 @@ namespace IRI.Ket.SpatialExtensions
         //Not supporting Z and M values
         public static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<Point, Point> mapFunction)
         {
-            //ProjectRing(builder, geometry.STExteriorRing(), mapFunction);
+            ProjectLineString(builder, polygon.STExteriorRing(), mapFunction);
 
-            //int numberOfInteriorRings = geometry.STNumInteriorRing().Value;
-            int numberOfRings = polygon.STNumCurves().Value;
+            int numberOfInteriorRings = polygon.STNumInteriorRing().Value;
+            //int numberOfRings = polygon.STNumCurves().Value;
 
-            for (int i = 1; i <= numberOfRings; i++)
+            for (int i = 1; i <= numberOfInteriorRings; i++)
             {
                 //ProjectRing(builder, geometry.STInteriorRingN(i), mapFunction);
-                ProjectLineString(builder, polygon.STCurveN(i), mapFunction);
+                ProjectLineString(builder, polygon.STInteriorRingN(i), mapFunction);
             }
         }
 

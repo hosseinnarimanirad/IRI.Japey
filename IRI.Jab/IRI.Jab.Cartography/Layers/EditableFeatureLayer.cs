@@ -209,12 +209,9 @@ namespace IRI.Jab.Cartography
             this._midVertices = new RecursiveCollection<Locateable>();
 
             MakeLocateables(this._mercatorGeometry, _vertices, _midVertices);
-
-            //this._primaryVerticesLayer = new SpecialPointLayer("vert", this._vertices.GetFlattenCollection(), ScaleInterval.All, layerType, 1);
-
-            //this._midVerticesLayer = new SpecialPointLayer("int. vert", this._midVertices.GetFlattenCollection(), ScaleInterval.All, layerType, .7);
-
+             
             this._primaryVerticesLayer.Items.Clear();
+
             this._midVerticesLayer.Items.Clear();
 
             var primary = _vertices.GetFlattenCollection();
@@ -230,32 +227,6 @@ namespace IRI.Jab.Cartography
             {
                 _primaryVerticesLayer.Items.Add(item);
             }
-
-
-
-
-
-            //this._vertices = new List<List<Locateable>>();
-
-            //this._midVertices = new List<List<Locateable>>();
-
-            //if (this._mercatorGeometry.Points != null)
-            //{
-            //    MakeLocateables(this._mercatorGeometry.Points);
-            //}
-            //else
-            //{
-            //    foreach (var item in this._mercatorGeometry.Geometries)
-            //    {
-            //        MakeLocateables(item.Points);
-            //    }
-            //}
-
-            //var layerType = _isNewDrawingMode ? LayerType.EditableItem : LayerType.MoveableItem | LayerType.EditableItem;
-
-            //this._primaryVerticesLayer = new SpecialPointLayer("vert", this._vertices.SelectMany(i => i), ScaleInterval.All, layerType, 1);
-
-            //this._midVerticesLayer = new SpecialPointLayer("int. vert", this._midVertices.SelectMany(i => i), ScaleInterval.All, layerType, .7);
         }
 
         private void MakeLocateables(Geometry geometry, RecursiveCollection<Locateable> primaryCollection, RecursiveCollection<Locateable> midCollection)
