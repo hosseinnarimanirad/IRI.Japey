@@ -115,7 +115,7 @@ namespace IRI.Jab.Cartography
         public static readonly DependencyProperty DashStyleProperty =
             DependencyProperty.Register("DashStyle", typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
-        public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible, DoubleCollection dashType = null)
+        public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
         {
             this.Fill = fill;
 
@@ -127,11 +127,11 @@ namespace IRI.Jab.Cartography
 
             this.Visibility = visibility;
 
-            this.DashType = dashType;
+            //this.DashType = dashType;
         }
 
-        public VisualParameters(Color fill, Color? stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible, DoubleCollection dashType = null)
-            : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity, visibility, dashType)
+        public VisualParameters(Color fill, Color? stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
+            : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity, visibility)
         {
 
         }
@@ -190,7 +190,7 @@ namespace IRI.Jab.Cartography
 
             if (DashStyle != null && result != null)
             {
-                result.DashStyle = DashStyle;
+                result.DashStyle = DashStyle;                
             }
 
             return result;

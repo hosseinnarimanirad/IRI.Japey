@@ -52,7 +52,10 @@ namespace IRI.Ham.SpatialBase.Primitives
             }
         }
 
-
+        public bool IsRingBase()
+        {
+            return this.Type == GeometryType.Polygon || this.Type == GeometryType.MultiPolygon || this.Type == GeometryType.CurvePolygon;
+        }
 
         public GeometryType Type { get; set; }
 
@@ -464,6 +467,59 @@ namespace IRI.Ham.SpatialBase.Primitives
             }
 
             return new Geometry(null, this.Type, this.Srid);
+        }
+
+        public List<LineSegment> GetLineSegments()
+        {
+            switch (this.Type)
+            {
+                case GeometryType.LineString:
+                    return GetLineSegments(false);
+
+                case GeometryType.Polygon:
+                    return Geometries.SelectMany(i => i.GetLineSegments(true)).ToList();
+
+                case GeometryType.MultiLineString:
+                    return Geometries.SelectMany(i => i.GetLineSegments(false)).ToList();
+
+                case GeometryType.MultiPolygon:
+                    return Geometries.SelectMany(i => i.GetLineSegments(true)).ToList();
+
+                case GeometryType.GeometryCollection:
+                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
+
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private List<LineSegment> GetLineSegments(bool isClosed)
+        {
+            List<LineSegment> result = new List<LineSegment>();
+
+            if (Points != null)
+            {
+                for (int i = 0; i < this.Points.Length - 1; i++)
+                {
+                    result.Add(new LineSegment(Points[i], Points[i + 1]));
+                }
+
+                if (isClosed)
+                {
+                    //prevent returning segment when polygon has one point
+                    if (Points.Length > 1)
+                    {
+                        result.Add(new LineSegment(Points[Points.Length - 1], Points[0]));
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

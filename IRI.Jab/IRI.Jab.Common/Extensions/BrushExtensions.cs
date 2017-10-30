@@ -30,6 +30,13 @@ namespace IRI.Jab.Common.Extensions
             return new SolidColorBrush(ColorExtensions.GetRandomWpfColor());
         }
 
+        public static Brush MakeTransparent(Color color, double opacity)
+        {
+            var alpha = opacity > 1 ? color.A : (opacity < 0 ? 0 : opacity * color.A);
+
+            return new SolidColorBrush(Color.FromArgb((byte)alpha, r: color.R, g: color.G, b: color.B));
+        }
+
         public static List<SolidColorBrush> GetAllKnownColors()
         {
             Type ColorType = typeof(System.Windows.Media.Colors);

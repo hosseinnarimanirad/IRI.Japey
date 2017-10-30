@@ -297,5 +297,45 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndFigure();
         }
 
+
+
+        #region LineSegment
+
+        public static double CalculateLength(this LineSegment line, Func<IPoint, IPoint> toGeodeticWgs84Func)
+        {
+            var start = toGeodeticWgs84Func(line.Start);
+
+            var end = toGeodeticWgs84Func(line.End);
+
+            var geodeticLine = SqlServerSpatialExtension.Utility.MakeGeography(new System.Collections.Generic.List<Point>() { (Point)start, (Point)end }, false);
+
+            return geodeticLine.STLength().Value;
+        }
+
+        public static string GetLengthLabel(this LineSegment line, Func<IPoint, IPoint> toGeodeticWgs84Func)
+        {
+            var length = CalculateLength(line, toGeodeticWgs84Func);
+
+            if (length < 1)
+            {
+                return $"{length * 10:N3} cm";
+            }
+            else if (length < 1000)
+            {
+                return $"{length:N3} m";
+            }
+            else if (length < 1E6)
+            {
+                return $"{length / 1E3:N3} Km";
+            }
+            //else if (length < 1E9)
+            else
+            {
+                return $"{length / 1E6:N3} Mm";
+            }
+
+        }
+
+        #endregion
     }
 }

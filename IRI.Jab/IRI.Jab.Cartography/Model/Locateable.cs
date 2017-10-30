@@ -59,7 +59,7 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public Point _location;
+        private Point _location;
 
         public Point Location
         {

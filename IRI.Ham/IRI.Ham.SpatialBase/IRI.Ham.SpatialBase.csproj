@@ -123,6 +123,7 @@
     <Compile Include="Mapping\MapUtility.cs" />
     <Compile Include="Mapping\WebMercatorUtility.cs" />
     <Compile Include="Primitives\IPointCollection.cs" />
+    <Compile Include="Primitives\LineSegment.cs" />
     <Compile Include="Primitives\Point.cs" />
     <Compile Include="Primitives\Point3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

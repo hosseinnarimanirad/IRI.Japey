@@ -49,7 +49,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         }
 
 
-        private TileType _baseMapType = TileType.Hybrid;
+        private TileType _baseMapType = TileType.None;
 
         public TileType BaseMapType
         {
@@ -89,7 +89,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         {
             await CheckInternetAccess();
 
-            this.RequestSetTileService?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, isOffline);
+            this.RequestSetTileService?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, !IsConnected);
         }
 
         private string _baseMapCacheDirectory = null;

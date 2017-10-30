@@ -17,6 +17,7 @@ using System.Windows.Input;
 using IRI.Ham.SpatialBase.Primitives;
 using IRI.Ham.CoordinateSystem.MapProjection;
 using IRI.Jab.Common.Extensions;
+using LineSegment = System.Windows.Media.LineSegment;
 
 namespace IRI.Jab.Cartography
 {
@@ -205,6 +206,7 @@ namespace IRI.Jab.Cartography
                 var control1 = AsLocateable(point, Colors.Gray);
 
                 var controlLine1 = new PathFigure() { StartPoint = _toScreen.Transform(_mainLocateables[i].Location) };
+
                 controlLine1.Segments.Add(new LineSegment() { Point = _toScreen.Transform(control1.Location) });
 
                 control1.OnPositionChanged += controlLocateable_OnPositionChanged;

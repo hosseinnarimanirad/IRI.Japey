@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Cartography.Model;
+using IRI.Jab.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,6 @@ namespace IRI.Jab.Cartography
 {
     public partial class VisualParameters
     {
-
-
-
         public static VisualParameters GetFill(Color fill, double opacity = 1)
         {
             return new VisualParameters(new SolidColorBrush(fill), null, 0, opacity);
@@ -39,6 +37,24 @@ namespace IRI.Jab.Cartography
 
         public static SolidColorBrush DefaultDrawingFill = new SolidColorBrush(new Color() { R = 255, G = 200, B = 0, A = 160 });
 
-      
+
+        public static DashStyle GetDefaultDashStyleForMeasurements()
+        {
+            return new DashStyle(new double[] { 2, 1 }, 0);
+        }
+
+        public static VisualParameters GetDefaultForMeasurements()
+        {
+
+            return new VisualParameters(
+                BrushHelper.MakeTransparent(ColorExtensions.ToWpfColor("#FBB03B"), 0.3),
+                BrushHelper.FromHex("#FBB03B"),
+                3,
+                1,
+                System.Windows.Visibility.Visible)
+            {
+                DashStyle = VisualParameters.GetDefaultDashStyleForMeasurements()
+            };
+        }
     }
 }

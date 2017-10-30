@@ -68,7 +68,7 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public DrawingLayer(DrawMode mode, Transform toScreen, sb.Point startMercatorPoint)
+        public DrawingLayer(DrawMode mode, Transform toScreen, Func<double, double> screenToMap, sb.Point startMercatorPoint, EditableFeatureLayerOptions options)
         {
             this._mode = mode;
 
@@ -91,7 +91,9 @@ namespace IRI.Jab.Cartography
                     throw new NotImplementedException();
             }
 
-            this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<sb.Point>() { startMercatorPoint }, toScreen, type, true);
+            //var options = new EditableFeatureLayerOptions() { IsVerticesLabelVisible = isEdgeLengthVisible };
+
+            this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<sb.Point>() { startMercatorPoint }, toScreen, screenToMap, type, options);
 
             this._editableFeatureLayer.OnRequestFinishDrawing += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
 

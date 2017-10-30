@@ -261,7 +261,15 @@ namespace IRI.Jab.Cartography
 
             //GeometryDrawing drawing = new GeometryDrawing();
 
-            Path path = new Path() { Data = geo, Tag = new LayerTag(-1) { Layer = this, IsTiled = false }, Stroke = VisualParameters.Stroke, Fill = VisualParameters.Fill, StrokeThickness = VisualParameters.StrokeThickness };
+            Path path = new Path()
+            {
+                StrokeDashArray = VisualParameters.DashType,
+                Data = geo,
+                Tag = new LayerTag(-1) { Layer = this, IsTiled = false },
+                Stroke = VisualParameters.Stroke,
+                Fill = VisualParameters.Fill,
+                StrokeThickness = VisualParameters.StrokeThickness
+            };
 
             this.Element = path;
 
@@ -296,7 +304,7 @@ namespace IRI.Jab.Cartography
             image.Freeze();
 
             Path path = new Path()
-            {
+            { 
                 Data = area,
                 Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false }
             };
@@ -448,7 +456,7 @@ namespace IRI.Jab.Cartography
 
 
         //DrawingVisual Approach
-        public Path AsTileUsingDrawingVisual(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Transform viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingDrawingVisual(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
                 return null;
@@ -554,7 +562,7 @@ namespace IRI.Jab.Cartography
 
         //Writeable Bitmap Approach
         //Consider Labeling
-        public Path AsTileUsingWriteableBitmap(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Transform viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingWriteableBitmap(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
             {
@@ -599,7 +607,7 @@ namespace IRI.Jab.Cartography
         }
 
         //OpenTK Approach
-        public Path AsTileUsinOpenTK(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Transform viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsinOpenTK(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
                 return null;
@@ -694,13 +702,13 @@ namespace IRI.Jab.Cartography
 
         //    return p => { return viewTransform.Transform(new Point(p.X - mapShift.X, p.Y - mapShift.Y)).AsPoint(); };
         //}
-        private static Func<Point, Point> MapToTileScreenWpf(sb.BoundingBox totalExtent, sb.BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
+        private static Func<Point, Point> MapToTileScreenWpf(sb.BoundingBox totalExtent, sb.BoundingBox mapBoundingBoxOfTile, Func<Point, Point> viewTransform)
         {
             //var mapShift = (mapBoundingBoxOfTile.TopLeft - new sb.Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
 
             //var mapShift = new Point(mapBoundingBoxOfTile.TopLeft.X - totalExtent.TopLeft.X, mapBoundingBoxOfTile.BottomRight.Y - totalExtent.BottomRight.Y);
 
-            return p => { return viewTransform.Transform(new Point(p.X - mapBoundingBoxOfTile.TopLeft.X + totalExtent.TopLeft.X, p.Y - mapBoundingBoxOfTile.BottomRight.Y + totalExtent.BottomRight.Y)); };
+            return p => { return viewTransform(new Point(p.X - mapBoundingBoxOfTile.TopLeft.X + totalExtent.TopLeft.X, p.Y - mapBoundingBoxOfTile.BottomRight.Y + totalExtent.BottomRight.Y)); };
         }
 
         private static Func<Point, Point> OldMapToTileScreenWpf(sb.BoundingBox totalExtent, sb.BoundingBox mapBoundingBoxOfTile, Transform viewTransform)

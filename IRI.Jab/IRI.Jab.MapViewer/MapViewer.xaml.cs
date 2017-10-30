@@ -456,7 +456,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestGetGeometry = (mode, display) =>
             {
-                return this.GetDrawingAsync(mode, display);
+                return this.GetDrawingAsync(mode, null, display);
             };
 
             presenter.RequestCancelGetDrawing = () => this.CancelGetDrawing();
@@ -857,16 +857,16 @@ namespace IRI.Jab.MapViewer
             switch (layer.ToRasterTechnique)
             {
                 case RasterizationApproach.DrawingVisual:
-                    pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
                     break;
                 case RasterizationApproach.GdiPlus:
                     pathImage = layer.AsTileUsingGdiPlusAsync(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
                     break;
                 case RasterizationApproach.WriteableBitmap:
-                    pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
                     break;
                 case RasterizationApproach.OpenTk:
-                    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
                     break;
                 case RasterizationApproach.StreamGeometry:
                 //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
@@ -945,16 +945,16 @@ namespace IRI.Jab.MapViewer
             switch (layer.ToRasterTechnique)
             {
                 case RasterizationApproach.DrawingVisual:
-                    pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
                     break;
                 case RasterizationApproach.GdiPlus:
                     pathImage = layer.AsTileUsingGdiPlusAsync(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
                     break;
                 case RasterizationApproach.WriteableBitmap:
-                    pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
                     break;
                 case RasterizationApproach.OpenTk:
-                    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent);
+                    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
                     break;
                 case RasterizationApproach.StreamGeometry:
                 //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
@@ -1102,6 +1102,11 @@ namespace IRI.Jab.MapViewer
             AddComplexLayer(layer.GetMidVertices(), false);
 
             AddComplexLayer(layer.GetVertices(), false);
+
+            if (layer.Options.IsEdgeLengthVisible)
+            {
+                AddComplexLayer(layer.GetEdgeLengthes(), true);
+            }
         }
 
         //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
@@ -1949,6 +1954,8 @@ namespace IRI.Jab.MapViewer
                 RemoveLayer((ILayer)layer.GetVertices());
 
                 RemoveLayer((ILayer)layer.GetMidVertices());
+
+                RemoveLayer((ILayer)layer.GetEdgeLengthes());
             }
         }
 
@@ -2240,7 +2247,7 @@ namespace IRI.Jab.MapViewer
         public void DrawGeometries(List<SqlGeometry> geometries, string layerName,
                                         VisualParameters visualElements, List<object> labels = null,
                                         Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0,
-                                        Brush labelBackground = null, FontFamily font = null)
+                                        Brush labelBackground = null, FontFamily font = null, RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
         {
             if (geometries == null || geometries.Count < 1)
                 return;
@@ -2258,14 +2265,15 @@ namespace IRI.Jab.MapViewer
                 visualElements,
                 LayerType.Drawing,
                 RenderingApproach.Default,
-                RasterizationApproach.GdiPlus,
+                RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
                 pointSymbol: null,
                 labeling: parameters);
 
             this._layerManager.Add(layer);
 
-            AddTiledLayer(layer);
+            //AddTiledLayer(layer);
+            AddNonTiledLayer(layer);
         }
 
         public void DrawGeometries(List<SqlGeometry> geometries, string layerName,
@@ -3340,6 +3348,10 @@ namespace IRI.Jab.MapViewer
 
         DrawingLayer drawingLayer;
 
+        //bool isEdgeLengthVisible = false;
+
+        EditableFeatureLayerOptions drawingOptions = new EditableFeatureLayerOptions();
+
         DrawMode drawMode;
 
         Action<Point> onMoveForDrawAction = null;
@@ -3365,7 +3377,7 @@ namespace IRI.Jab.MapViewer
 
             this.RemoveLayer(drawingLayer);
 
-            this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, mercatorPoint);
+            this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, ScreenToMap, mercatorPoint, drawingOptions);
 
             this.drawingLayer.OnRequestFinishDrawing += (s, arg) =>
             {
@@ -3507,11 +3519,11 @@ namespace IRI.Jab.MapViewer
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseUp += MapView_MouseUpForDrawing;
 
-                if (_isMeasuring)
-                {
-                    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
-                    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
-                }
+                //if (_isMeasuring)
+                //{
+                //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+                //    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
+                //}
 
                 itWasPanningWhileDrawing = false;
 
@@ -3534,13 +3546,15 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        private Task<sb.Primitives.Geometry> GetDrawing(DrawMode mode, bool display = false)
+        private Task<sb.Primitives.Geometry> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
         {
             drawingTcs = new TaskCompletionSource<sb.Primitives.Geometry>();
 
             drawingCancellationToken = new CancellationTokenSource();
 
             this.displayDrawingPath = display;
+
+            this.drawingOptions = options;
 
             this.drawMode = mode;
 
@@ -3580,7 +3594,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<sb.Primitives.Geometry> GetDrawingAsync(DrawMode mode, bool display = false)
+        public async Task<sb.Primitives.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false)
         {
             try
             {
@@ -3591,7 +3605,11 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Drawing;
 
-                var result = await GetDrawing(mode, display);
+                options = options ?? EditableFeatureLayerOptions.CreateDefault();
+
+                options.IsNewDrawing = true;
+
+                var result = await GetDrawing(mode, options, display);
 
                 this.Status = MapStatus.Idle;
 
@@ -3682,6 +3700,7 @@ namespace IRI.Jab.MapViewer
                             "edit",
                             wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(i)).Take(wgs84Points.Count - 1).ToList(),
                             this.viewTransform,
+                            ScreenToMap,
                             sb.Primitives.GeometryType.Polygon);
 
             layer.RequestRightClickOptions = (i1, i2, i3) =>
@@ -3710,7 +3729,7 @@ namespace IRI.Jab.MapViewer
         {
             var layer = new EditableFeatureLayer(
                             "edit", geometry,
-                            this.viewTransform);
+                            this.viewTransform, ScreenToMap);
 
             layer.RequestRightClickOptions = (i1, i2, i3) =>
             {
@@ -3746,8 +3765,8 @@ namespace IRI.Jab.MapViewer
 
             editingLayer = new EditableFeatureLayer(
                             "edit", geometry,
-                            this.viewTransform,
-                            isNewDrawing: false);
+                            this.viewTransform, ScreenToMap,
+                            new EditableFeatureLayerOptions() { IsNewDrawing = false });
 
             editingLayer.RequestRightClickOptions = (i1, i2, i3) =>
             {
@@ -4179,43 +4198,43 @@ namespace IRI.Jab.MapViewer
 
         bool _isMeasuring = false;
 
-        CancellationTokenSource measureCancellationToken;
+        //CancellationTokenSource measureCancellationToken;
 
 
 
-        public async void Measure()
-        {
-            this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
-            this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
+        //public async void Measure()
+        //{
+        //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+        //    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
 
-            _isMeasuring = true;
+        //    _isMeasuring = true;
 
-            var measureLocatable = new Locateable(new sb.Point(0, 0), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
+        //    var measureLocatable = new Locateable(new sb.Point(0, 0), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
 
-            measureLayer = new SpecialPointLayer("measure", measureLocatable, ScaleInterval.All, LayerType.Complex, 1);
+        //    measureLayer = new SpecialPointLayer("measure", measureLocatable, 1, ScaleInterval.All, LayerType.Complex);
 
-            this.SetLayer(measureLayer);
-            this.AddComplexLayer(measureLayer, true);
+        //    this.SetLayer(measureLayer);
+        //    this.AddComplexLayer(measureLayer, true);
 
-            var drawing = await GetDrawingAsync(DrawMode.Polyline);
+        //    var drawing = await GetDrawingAsync(DrawMode.Polyline);
 
-            _isMeasuring = false;
+        //    _isMeasuring = false;
 
-            Debug.WriteLine("");
+        //    Debug.WriteLine("");
 
-            foreach (var item in drawing.GetAllPoints())
-            {
-                Debug.WriteLine("points: ", item.ToString());
-            }
+        //    foreach (var item in drawing.GetAllPoints())
+        //    {
+        //        Debug.WriteLine("points: ", item.ToString());
+        //    }
 
-            var coordinates = drawing.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+        //    var coordinates = drawing.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
 
-            var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
-            MessageBox.Show(temp.ToString());
+        //    var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
+        //    MessageBox.Show(temp.ToString());
 
-            this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
+        //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
 
-        }
+        //}
 
         public async Task<sb.Primitives.Geometry> Measure(DrawMode mode, Action action)
         {
@@ -4229,16 +4248,16 @@ namespace IRI.Jab.MapViewer
 
             var measureLocatable = new Locateable(new sb.Point(0, 0), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
 
-            measureLayer = new SpecialPointLayer("measure", measureLocatable, ScaleInterval.All, LayerType.Complex, 1);
+            measureLayer = new SpecialPointLayer("measure", measureLocatable, 1, ScaleInterval.All, LayerType.Complex);
 
             this.SetLayer(measureLayer);
 
             onMoveForDrawAction = p =>
             {
-                //if (!this.Layers.Contains(measureLayer))
-                //{
-                this.AddComplexLayer(measureLayer, true);
-                //}
+                if (!this.Layers.Contains(measureLayer))
+                {
+                    this.AddComplexLayer(measureLayer, true);
+                }
 
                 var offset = ScreenToMap(20);
 
@@ -4251,19 +4270,14 @@ namespace IRI.Jab.MapViewer
                 {
                     var geo1 = drawingLayer.GetFinalGeometry().Clone();
                     geo1.AddLastPoint(p.AsPoint());
-                    var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
+                    var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326).MakeValid().STLength().Value;
 
-                    //marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
+                    //var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
+                    //geo.Add(p.AsPoint());
+                    //var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+                    //var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
 
-                    //Debug.WriteLine("last point: " + currentMouseLocation.AsPoint().ToString());
-
-                    var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
-                    geo.Add(p.AsPoint());
-                    var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
-                    var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
-
-                    marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
-
+                    marker.LabelValue = length2 < 1000 ? $"{length2.ToString("N3")} m" : $"{(length2 / 1000).ToString("N2")} km";
                 }
                 catch (Exception ex)
                 {
@@ -4271,22 +4285,50 @@ namespace IRI.Jab.MapViewer
                 }
             };
 
-            var result = await GetDrawingAsync(mode, true);
+            var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
+            {
+                Visual = VisualParameters.GetDefaultForMeasurements(),
+                IsEdgeLengthVisible = true
+            }, true);
+
+            this.RemoveLayer(measureLayer);
 
             _isMeasuring = false;
 
-            if (result!=null)
+            if (result != null)
             {
-                var coordinates = result.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+                //var coordinates = result.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
 
-                var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
+                //var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
 
-                MessageBox.Show(temp.ToString());
+
+                EditableFeatureLayer resultLayer = new EditableFeatureLayer("measure", result, this.viewTransform, ScreenToMap, new EditableFeatureLayerOptions() { IsEdgeLengthVisible = true });
+
+                resultLayer.RequestRightClickOptions = (i1, i2, i3) =>
+                {
+                    this.AddRightClickOptions(i1, i2, i3);
+                };
+
+                resultLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
+
+                resultLayer.Refresh = l =>
+                {
+                    //this.ClearLayer(LayerType.EditableItem, false);
+
+                    this.RemoveLayer(l);
+
+                    this.SetLayer(l);
+
+                    AddEditableFeatureLayer(l);
+                };
+
+                this.SetLayer(resultLayer);
+                this.AddEditableFeatureLayer(resultLayer);
 
             }
 
 
-            this.RemoveLayer(measureLayer);
+            //this.RemoveLayer(measureLayer);
 
 
             this.Status = MapStatus.Idle;
@@ -4310,7 +4352,7 @@ namespace IRI.Jab.MapViewer
             //taskCompletionSource = null;
             onMoveForDrawAction = null;
 
-            measureCancellationToken = null;
+            //measureCancellationToken = null;
 
             this.Status = MapStatus.Idle;
 
@@ -4327,45 +4369,45 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private void MapView_MouseMoveForMeasureDistance(object sender, MouseEventArgs e)
-        {
-            if (this.itWasPanningWhileDrawing)
-            {
-                return;
-            }
+        //private void MapView_MouseMoveForMeasureDistance(object sender, MouseEventArgs e)
+        //{
+        //    if (this.itWasPanningWhileDrawing)
+        //    {
+        //        return;
+        //    }
 
-            var currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
+        //    var currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
 
-            var offset = ScreenToMap(20);
+        //    var offset = ScreenToMap(20);
 
-            measureLayer.Items.First().X = currentMouseLocation.X;
-            measureLayer.Items.First().Y = currentMouseLocation.Y + offset;
+        //    measureLayer.Items.First().X = currentMouseLocation.X;
+        //    measureLayer.Items.First().Y = currentMouseLocation.Y + offset;
 
-            var marker = (measureLayer.Items.First().Element as IRI.Jab.Common.View.MapMarkers.LabelMarker);
+        //    var marker = (measureLayer.Items.First().Element as IRI.Jab.Common.View.MapMarkers.LabelMarker);
 
-            try
-            {
-                var geo1 = drawingLayer.GetFinalGeometry().Clone();
-                geo1.AddLastPoint(currentMouseLocation.AsPoint());
-                var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
+        //    try
+        //    {
+        //        var geo1 = drawingLayer.GetFinalGeometry().Clone();
+        //        geo1.AddLastPoint(currentMouseLocation.AsPoint());
+        //        var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
 
-                //marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
+        //        //marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
 
-                //Debug.WriteLine("last point: " + currentMouseLocation.AsPoint().ToString());
+        //        //Debug.WriteLine("last point: " + currentMouseLocation.AsPoint().ToString());
 
-                var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
-                geo.Add(currentMouseLocation.AsPoint());
-                var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
-                var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
+        //        var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
+        //        geo.Add(currentMouseLocation.AsPoint());
+        //        var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+        //        var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
 
-                marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
+        //        marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
 
-            }
-            catch (Exception ex)
-            {
-                marker.LabelValue = "عارضه نامعتبر";
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        marker.LabelValue = "عارضه نامعتبر";
+        //    }
+        //}
 
         #endregion
     }

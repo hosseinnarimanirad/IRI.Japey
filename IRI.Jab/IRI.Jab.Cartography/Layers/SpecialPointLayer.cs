@@ -169,7 +169,7 @@ namespace IRI.Jab.Cartography
         //    }
         //}
 
-        public SpecialPointLayer(string name, Locateable item, ScaleInterval visibleRange = null, LayerType type = LayerType.Complex, double opacity = 1)
+        public SpecialPointLayer(string name, Locateable item, double opacity = 1, ScaleInterval visibleRange = null, LayerType type = LayerType.Complex)
             : this(name, new List<Locateable>() { item }, opacity, visibleRange, type)
         {
 

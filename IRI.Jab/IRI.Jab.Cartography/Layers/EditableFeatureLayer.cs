@@ -14,21 +14,27 @@ using WpfPoint = System.Windows.Point;
 using WpfGeometry = System.Windows.Media.Geometry;
 using Geometry = IRI.Ham.SpatialBase.Primitives.Geometry;
 using Point = IRI.Ham.SpatialBase.Point;
+using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Ham.SpatialBase.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Jab.Cartography
 {
     public class EditableFeatureLayer : BaseLayer
     {
-        static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
-        static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
+        //static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
+        //static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
         string _delete = "حذف";
         string _copy = "کپی";
         string _move = "انتقال";
 
         //private bool _isClosed;
+
+        private Model.EditableFeatureLayerOptions _options;
+
+        public Model.EditableFeatureLayerOptions Options { get => _options; }
 
         private Geometry _mercatorGeometry;
 
@@ -45,17 +51,30 @@ namespace IRI.Jab.Cartography
 
         private SpecialPointLayer _midVerticesLayer;
 
+
+        private SpecialPointLayer _primaryVerticesLabelLayer;
+
+        // Edge Length
+        private SpecialPointLayer _edgeLabelLayer;
+
+
+        //public bool IsVerticesLabelVisible { get; set; } = false;
+
+        //public bool IsEdgeLengthVisible { get; set; } = false;
+
         Transform _toScreen;
 
-        bool _isNewDrawingMode = false;
+        Func<double, double> _screenToMap;
 
-        bool IsRingBase()
-        {
-            return this._mercatorGeometry.Type == GeometryType.Polygon ||
-                this._mercatorGeometry.Type == GeometryType.MultiPolygon ||
-                this._mercatorGeometry.Type == GeometryType.CurvePolygon;
+        //bool _isNewDrawingMode = false;
 
-        }
+        //bool IsRingBase()
+        //{
+        //    return this._mercatorGeometry.Type == GeometryType.Polygon ||
+        //        this._mercatorGeometry.Type == GeometryType.MultiPolygon ||
+        //        this._mercatorGeometry.Type == GeometryType.CurvePolygon;
+
+        //}
 
         public Action<FrameworkElement, MouseButtonEventArgs, ILocateable> RequestRightClickOptions;
 
@@ -118,8 +137,9 @@ namespace IRI.Jab.Cartography
         /// <param name="name"></param>
         /// <param name="mercatorPoints"></param>
         /// <param name="isClosed"></param>
-        public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, GeometryType type, bool isNewDrawing = false)
-            : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type), toScreen, isNewDrawing)
+        //public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, GeometryType type, bool isNewDrawing = false)
+        public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, Func<double, double> screenToMap, GeometryType type, Model.EditableFeatureLayerOptions options = null)
+            : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type), toScreen, screenToMap, options)
         {
 
         }
@@ -136,9 +156,11 @@ namespace IRI.Jab.Cartography
 
         //}
 
-        public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, bool isNewDrawing = false)
+        //public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, bool isNewDrawing = false)
+        public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, Func<double, double> screenToMap, Model.EditableFeatureLayerOptions options = null)
         {
-            this._isNewDrawingMode = isNewDrawing;
+            //this._isNewDrawingMode = isNewDrawing;
+            this._options = options ?? Model.EditableFeatureLayerOptions.CreateDefault();
 
             this.LayerName = name;
 
@@ -148,12 +170,13 @@ namespace IRI.Jab.Cartography
 
             this._toScreen = toScreen;
 
+            this._screenToMap = screenToMap;
+
             this.VisibleRange = ScaleInterval.All;
 
-            this.VisualParameters = new VisualParameters(IsRingBase() ? _fill : null, _stroke, 3, 1);
+            //this.VisualParameters = new VisualParameters(_mercatorGeometry.IsRingBase() ? _fill : null, _stroke, 3, 1);
+            this.VisualParameters = Options.Visual;
 
-            //if (  mercatorPoints.Count < 1)
-            //    return;
 
             this._feature = GetDefaultEditingPath();
 
@@ -163,20 +186,25 @@ namespace IRI.Jab.Cartography
 
             this._feature.Data = this._pathGeometry;
 
-            if (!isNewDrawing)
+            //if (!isNewDrawing)
+            if (Options.IsNewDrawing)
             {
                 this._feature.MouseRightButtonDown += (sender, e) => { this.RegisterMapOptionsForPath(e); };
             }
 
-            var layerType = _isNewDrawingMode ? LayerType.EditableItem : LayerType.MoveableItem | LayerType.EditableItem;
+            var layerType = Options.IsNewDrawing ? LayerType.EditableItem : LayerType.MoveableItem | LayerType.EditableItem;
 
             this._primaryVerticesLayer = new SpecialPointLayer("vert", new List<Locateable>(), 1, ScaleInterval.All, layerType) { AlwaysTop = true };
 
             this._midVerticesLayer = new SpecialPointLayer("int. vert", new List<Locateable>(), .7, ScaleInterval.All, layerType) { AlwaysTop = true };
 
+            this._edgeLabelLayer = new SpecialPointLayer("edge length", new List<Locateable>(), .9, ScaleInterval.All, LayerType.Complex) { AlwaysTop = true };
+
+            this._primaryVerticesLabelLayer = new SpecialPointLayer("vert length", new List<Locateable>(), .9, ScaleInterval.All, LayerType.Complex) { AlwaysTop = true };
+
             ReconstructLocateables();
 
-            if (this._isNewDrawingMode)
+            if (Options.IsNewDrawing)
             {
                 this.AddSemiVertex((Point)(mercatorGeometry.Points == null ? mercatorGeometry.Geometries.Last().Points.Last() : mercatorGeometry.Points.Last()));
             }
@@ -185,16 +213,31 @@ namespace IRI.Jab.Cartography
 
         private Path GetDefaultEditingPath()
         {
+            //var result = new Path()
+            //{
+            //    Stroke = _stroke,
+            //    StrokeThickness = 4,
+            //    Opacity = .9,
+            //};
+
+            //if (_mercatorGeometry.IsRingBase())
+            //{
+            //    result.Fill = _fill;
+            //}
+
+            //return result;
+
             var result = new Path()
             {
-                Stroke = _stroke,
-                StrokeThickness = 4,
-                Opacity = .9,
+                Stroke = this.Options.Visual.Stroke,
+                StrokeThickness = this.Options.Visual.StrokeThickness,
+                StrokeDashArray = Options.Visual.DashStyle?.Dashes,
+                Opacity = this.Options.Visual.Opacity,
             };
 
-            if (IsRingBase())
+            if (_mercatorGeometry.IsRingBase())
             {
-                result.Fill = _fill;
+                result.Fill = this.Options.Visual.Fill;
             }
 
             return result;
@@ -209,10 +252,12 @@ namespace IRI.Jab.Cartography
             this._midVertices = new RecursiveCollection<Locateable>();
 
             MakeLocateables(this._mercatorGeometry, _vertices, _midVertices);
-             
+
             this._primaryVerticesLayer.Items.Clear();
 
             this._midVerticesLayer.Items.Clear();
+
+            this._primaryVerticesLabelLayer.Items.Clear();
 
             var primary = _vertices.GetFlattenCollection();
 
@@ -226,6 +271,23 @@ namespace IRI.Jab.Cartography
             foreach (var item in primary)
             {
                 _primaryVerticesLayer.Items.Add(item);
+            }
+
+            UpdateEdgeLables();
+        }
+
+        private void UpdateEdgeLables()
+        {
+            if (Options.IsEdgeLengthVisible)
+            {
+                this._edgeLabelLayer.Items.Clear();
+
+                var edges = _mercatorGeometry.GetLineSegments().Select(i => ToEdgeLengthLocatable(i.Start, i.End));
+
+                foreach (var item in edges)
+                {
+                    _edgeLabelLayer.Items.Add(item);
+                }
             }
         }
 
@@ -241,19 +303,10 @@ namespace IRI.Jab.Cartography
                 {
                     var locateable = ToPrimaryLocateable(geometry.Points[i]);
 
-                    //if (i == 0 && _isNewDrawingMode && IsRingBase())
-                    //{
-                    //locateable.Element.MouseDown += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
-                    //}
-                    //else if (i == geometry.Points.Length - 1 && _isNewDrawingMode && !IsRingBase())
-                    //{
-                    //    locateable.Element.MouseDown += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
-                    //}
-
                     primaryCollection.Values.Add(locateable);
 
                     //do not make mid points in drawing mode
-                    if (_isNewDrawingMode)
+                    if (Options.IsNewDrawing)
                         continue;
 
                     if (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint)
@@ -261,7 +314,7 @@ namespace IRI.Jab.Cartography
 
                     if (i == geometry.Points.Length - 1)
                     {
-                        if (IsRingBase())
+                        if (_mercatorGeometry.IsRingBase())
                         {
                             midCollection.Values.Add(ToSecondaryLocateable(geometry.Points[i], geometry.Points[0]));
                         }
@@ -304,7 +357,7 @@ namespace IRI.Jab.Cartography
         {
             if (geometry.Points != null)
             {
-                PathFigure pathFigure = new PathFigure() { IsClosed = IsRingBase(), StartPoint = ToScreen(geometry.Points.First().AsWpfPoint()) };
+                PathFigure pathFigure = new PathFigure() { IsClosed = _mercatorGeometry.IsRingBase(), StartPoint = ToScreen(geometry.Points.First().AsWpfPoint()) };
 
                 for (int i = 1; i < geometry.Points.Length; i++)
                 {
@@ -336,7 +389,8 @@ namespace IRI.Jab.Cartography
 
             var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = mercatorPoint.X, Y = mercatorPoint.Y };
 
-            if (_isNewDrawingMode)
+            //if (_isNewDrawingMode)
+            if (Options.IsNewDrawing)
             {
                 locateable.Element.MouseDown += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
             }
@@ -354,6 +408,8 @@ namespace IRI.Jab.Cartography
 
                 mercatorPoint.X = locateable.X;
                 mercatorPoint.Y = locateable.Y;
+
+                UpdateEdgeLables();
             };
 
             return locateable;
@@ -382,6 +438,27 @@ namespace IRI.Jab.Cartography
             return locateable;
         }
 
+        public Locateable ToEdgeLengthLocatable(IPoint first, IPoint second)
+        {
+            //var lines = _mercatorGeometry.GetLineSegments();
+
+            Func<IPoint, IPoint> toGeodeticWgs84 = p => MapProjects.MercatorToGeodetic(p);
+
+            var edge = new IRI.Ham.SpatialBase.Primitives.LineSegment(first, second);
+
+            //var locatables = lines.Select(l => new Locateable((Point)l.Middle, Model.AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker(l.GetLengthLabel(toGeodeticWgs84)) });
+
+            var element = new Common.View.MapMarkers.LabelMarker(edge.GetLengthLabel(toGeodeticWgs84));
+
+            var scale = ((_toScreen as TransformGroup).Children[1] as ScaleTransform).ScaleX;
+
+            var offset = _screenToMap(15);
+
+            return new Locateable(Model.AncherFunctionHandlers.BottomCenter) { Element = element, X = edge.Middle.X, Y = edge.Middle.Y + offset };
+
+            //return new SpecialPointLayer("measure", locateable, 0.9, ScaleInterval.All, LayerType.Complex);
+        }
+
 
         public Path GetPath(Transform transform)
         {
@@ -402,6 +479,13 @@ namespace IRI.Jab.Cartography
         {
             //return new SpecialPointLayer("int. vert", this._midVertices.SelectMany(i => i), ScaleInterval.All, LayerType.MoveableItem | LayerType.EditableItem, .7);
             return _midVerticesLayer;
+        }
+
+        public SpecialPointLayer GetEdgeLengthes()
+        {
+            UpdateEdgeLables();
+
+            return _edgeLabelLayer;
         }
 
         public Geometry GetFinalGeometry()
@@ -489,11 +573,11 @@ namespace IRI.Jab.Cartography
         {
             int left;
 
-            if (primaryIndex == 0 && IsRingBase())
+            if (primaryIndex == 0 && _mercatorGeometry.IsRingBase())
             {
                 left = length - 1;
             }
-            else if (primaryIndex == 0 && !IsRingBase())
+            else if (primaryIndex == 0 && !_mercatorGeometry.IsRingBase())
             {
                 left = int.MinValue;
             }
@@ -509,7 +593,7 @@ namespace IRI.Jab.Cartography
         {
             int right;
 
-            if (primaryIndex == length && !IsRingBase())
+            if (primaryIndex == length && !_mercatorGeometry.IsRingBase())
             {
                 right = int.MinValue;
             }
@@ -722,9 +806,11 @@ namespace IRI.Jab.Cartography
 
                 this._primaryVerticesLayer.Items.Add(locateable);
 
-                //this._pathGeometry.Figures.Last().Segments.RemoveAt(this._pathGeometry.Figures.Last().Segments.Count - 1);
+                if (geometry.Points.Length > 1 && Options.IsEdgeLengthVisible)
+                {
+                    this._edgeLabelLayer.Items.Add(ToEdgeLengthLocatable(geometry.Points[geometry.Points.Length - 2], mercatorPoint));
+                }
 
-                //this._pathGeometry.Figures.Last().Segments.Add(new LineSegment(new WpfPoint(point.X, point.Y), true));
             }
             else
             {
