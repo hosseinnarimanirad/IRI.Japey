@@ -17,15 +17,15 @@
         <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColorBrush}"  Margin="0,0,0,0" Stroke="White" StrokeThickness="2"/>
         
         <Button Name="rightButton" Style="{StaticResource circleButton}" Command="{Binding RightCommand}" ToolTip="{Binding RightToolTip}" Background="{DynamicResource AccentColorBrush}">
-            <Path Height="20.7781" Stretch="Uniform" Fill="White" Data="{Binding RightSymbol}"/>
+            <Path Height="20.7781" MaxWidth="24" Stretch="Uniform" Fill="White" Data="{Binding RightSymbol}"/>
         </Button>
 
         <Button Name="middleButton" Style="{StaticResource circleButton}" Command="{Binding MiddleCommand}" ToolTip="{Binding MiddleToolTip}" Background="{DynamicResource AccentColorBrush}">
-            <Path Height="20.7781" Stretch="Uniform" Fill="White" Data="{Binding MiddleSymbol}"/>
+            <Path Height="20.7781" MaxWidth="24" Stretch="Uniform" Fill="White" Data="{Binding MiddleSymbol}"/>
         </Button>
 
         <Button Name="leftButton" Style="{StaticResource circleButton}" Command="{Binding LeftCommand}" ToolTip="{Binding LeftToolTip}" Background="{DynamicResource AccentColorBrush}">
-            <Path Height="24" Stretch="Uniform" Fill="White" Data="{Binding LeftSymbol}"/>
+            <Path Height="24" MaxWidth="24" Stretch="Uniform" Fill="White" Data="{Binding LeftSymbol}"/>
         </Button>
     </Grid>
 </UserControl>

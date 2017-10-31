@@ -19,6 +19,7 @@ using IRI.Ham.SpatialBase.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Ham.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
+using System.Collections.ObjectModel;
 
 namespace IRI.Jab.Cartography
 {
@@ -28,7 +29,7 @@ namespace IRI.Jab.Cartography
         //static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
         string _delete = "حذف";
         string _copy = "کپی";
-        string _move = "انتقال";
+        string _move = "نمایش مختصات";
 
         //private bool _isClosed;
 
@@ -51,40 +52,30 @@ namespace IRI.Jab.Cartography
 
         private SpecialPointLayer _midVerticesLayer;
 
-
-        private SpecialPointLayer _primaryVerticesLabelLayer;
-
         // Edge Length
         private SpecialPointLayer _edgeLabelLayer;
 
 
-        //public bool IsVerticesLabelVisible { get; set; } = false;
+        // Vertext Coordinates 
+        private SpecialPointLayer _primaryVerticesLabelLayer;
 
-        //public bool IsEdgeLengthVisible { get; set; } = false;
+        //private ObservableCollection<Locateable> _visibleCoordinatePrimaryVertices;
 
         Transform _toScreen;
 
         Func<double, double> _screenToMap;
 
-        //bool _isNewDrawingMode = false;
-
-        //bool IsRingBase()
-        //{
-        //    return this._mercatorGeometry.Type == GeometryType.Polygon ||
-        //        this._mercatorGeometry.Type == GeometryType.MultiPolygon ||
-        //        this._mercatorGeometry.Type == GeometryType.CurvePolygon;
-
-        //}
-
         public Action<FrameworkElement, MouseButtonEventArgs, ILocateable> RequestRightClickOptions;
 
         public Action RequestRemoveRightClickOptions;
 
-        public Action<EditableFeatureLayer> Refresh;
+        public Action<EditableFeatureLayer> RequestRefresh;
 
         public event EventHandler OnRequestFinishDrawing;
 
         public Action<Geometry> RequestFinishEditing;
+
+        public Action<EditableFeatureLayer> RquestShowCoordinates;
 
         public override BoundingBox Extent
         {
@@ -137,26 +128,18 @@ namespace IRI.Jab.Cartography
         /// <param name="name"></param>
         /// <param name="mercatorPoints"></param>
         /// <param name="isClosed"></param>
-        //public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, GeometryType type, bool isNewDrawing = false)
         public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, Func<double, double> screenToMap, GeometryType type, Model.EditableFeatureLayerOptions options = null)
             : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type), toScreen, screenToMap, options)
         {
 
         }
 
-        ///// <summary>
-        ///// For Polygons do not repeat first point in the last point
-        ///// </summary>
-        ///// <param name="name"></param>
-        ///// <param name="mercatorPoints"></param>
-        ///// <param name="isClosed"></param>
-        //public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, GeometryType type, bool isNewDrawing = false)
-        //    : this(name, new Geometry(mercatorPoints.Cast<IPoint>().ToArray(), type), toScreen, isNewDrawing)
-        //{
-
-        //}
-
-        //public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, bool isNewDrawing = false)
+        /// <summary>
+        /// For Polygons do not repeat first point in the last point
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="mercatorPoints"></param>
+        /// <param name="isClosed"></param>
         public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, Func<double, double> screenToMap, Model.EditableFeatureLayerOptions options = null)
         {
             //this._isNewDrawingMode = isNewDrawing;
@@ -198,9 +181,9 @@ namespace IRI.Jab.Cartography
 
             this._midVerticesLayer = new SpecialPointLayer("int. vert", new List<Locateable>(), .7, ScaleInterval.All, layerType) { AlwaysTop = true };
 
-            this._edgeLabelLayer = new SpecialPointLayer("edge length", new List<Locateable>(), .9, ScaleInterval.All, LayerType.Complex) { AlwaysTop = true };
+            this._edgeLabelLayer = new SpecialPointLayer("edge length", new List<Locateable>(), .9, ScaleInterval.All, LayerType.Complex) { AlwaysTop = false };
 
-            this._primaryVerticesLabelLayer = new SpecialPointLayer("vert length", new List<Locateable>(), .9, ScaleInterval.All, LayerType.Complex) { AlwaysTop = true };
+            this._primaryVerticesLabelLayer = new SpecialPointLayer("vert length", new List<Locateable>(), .9, ScaleInterval.All, layerType) { AlwaysTop = false };
 
             ReconstructLocateables();
 
@@ -213,20 +196,6 @@ namespace IRI.Jab.Cartography
 
         private Path GetDefaultEditingPath()
         {
-            //var result = new Path()
-            //{
-            //    Stroke = _stroke,
-            //    StrokeThickness = 4,
-            //    Opacity = .9,
-            //};
-
-            //if (_mercatorGeometry.IsRingBase())
-            //{
-            //    result.Fill = _fill;
-            //}
-
-            //return result;
-
             var result = new Path()
             {
                 Stroke = this.Options.Visual.Stroke,
@@ -289,6 +258,13 @@ namespace IRI.Jab.Cartography
                     _edgeLabelLayer.Items.Add(item);
                 }
             }
+        }
+
+        private void UpdatePrimaryVerticesLabels()
+        {
+            this._primaryVerticesLabelLayer.Items.Clear();
+
+
         }
 
         private void MakeLocateables(Geometry geometry, RecursiveCollection<Locateable> primaryCollection, RecursiveCollection<Locateable> midCollection)
@@ -387,7 +363,7 @@ namespace IRI.Jab.Cartography
 
             var element = new Common.View.MapMarkers.Circle(1);
 
-            var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = mercatorPoint.X, Y = mercatorPoint.Y };
+            var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = mercatorPoint.X, Y = mercatorPoint.Y, Id = Guid.NewGuid() };
 
             //if (_isNewDrawingMode)
             if (Options.IsNewDrawing)
@@ -398,7 +374,7 @@ namespace IRI.Jab.Cartography
             {
                 element.MouseRightButtonDown += (sender, e) =>
                 {
-                    RegisterMapOptionsForVertices(e, mercatorPoint);
+                    RegisterMapOptionsForVertices(e, mercatorPoint, locateable);
                 };
             }
 
@@ -432,7 +408,7 @@ namespace IRI.Jab.Cartography
                 if (!TryInsertPoint(mercatorPoint, first, second, this._mercatorGeometry))
                     throw new NotImplementedException();
 
-                Refresh?.Invoke(this);
+                RequestRefresh?.Invoke(this);
             };
 
             return locateable;
@@ -488,13 +464,18 @@ namespace IRI.Jab.Cartography
             return _edgeLabelLayer;
         }
 
+        public SpecialPointLayer GetPrimaryVerticesLabels()
+        {
+            return _primaryVerticesLabelLayer;
+        }
+
         public Geometry GetFinalGeometry()
         {
             return this._mercatorGeometry;
         }
 
 
-        private void RegisterMapOptionsForVertices(MouseButtonEventArgs e, IPoint point)
+        private void RegisterMapOptionsForVertices(MouseButtonEventArgs e, IPoint point, Locateable locateable)
         {
             var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
                 rightToolTip: _copy,
@@ -502,7 +483,7 @@ namespace IRI.Jab.Cartography
                 middleToolTip: _delete,
 
                 rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClipboard,
-                leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+                leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.CustomShapes.xY,
                 middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
 
             presenter.RightCommandAction = i =>
@@ -516,16 +497,29 @@ namespace IRI.Jab.Cartography
 
             presenter.LeftCommandAction = i =>
             {
-                RequestFinishEditing?.Invoke(this._mercatorGeometry);
+                //RequestFinishEditing?.Invoke(this._mercatorGeometry);
+                if (_primaryVerticesLabelLayer.Items.Any(l => l.Id == locateable.Id))
+                {
+                    _primaryVerticesLabelLayer.Remove(locateable.Id);
+                }
+                else
+                {
+                    var element = new Common.View.MapMarkers.CoordinateMarker(locateable.X, locateable.Y, 3);
+
+                    var auxLocateable = new Locateable(Model.AncherFunctionHandlers.CenterLeft) { Element = element, X = point.X, Y = point.Y, Id = locateable.Id };
+
+                    _primaryVerticesLabelLayer.Items.Add(auxLocateable);
+                }
 
                 this.RemoveMapOptions();
             };
 
             presenter.MiddleCommandAction = i =>
             {
+                //TryDeleteVertex(point, this._mercatorGeometry, _mercatorGeometry.Type == GeometryType.Polygon);
                 TryDeleteVertex(point, this._mercatorGeometry, _mercatorGeometry.Type == GeometryType.Polygon);
 
-                Refresh?.Invoke(this);
+                this.RequestRefresh?.Invoke(this);
 
                 this.RemoveMapOptions();
             };

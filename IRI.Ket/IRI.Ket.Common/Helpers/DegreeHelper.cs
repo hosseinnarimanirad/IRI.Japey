@@ -8,7 +8,7 @@ namespace IRI.Ket.Common.Helpers
 {
     public static class DegreeHelper
     {
-        public static string ToDms(double degreeValue)
+        public static string ToDms(double degreeValue, bool roundSecond = false)
         {
             var degreePart = Math.Truncate(degreeValue);
 
@@ -16,7 +16,16 @@ namespace IRI.Ket.Common.Helpers
 
             var secondPart = (degreeValue - degreePart - minutePart / 60.0) * 3600;
 
-            return $" {degreePart}° {minutePart}' {secondPart}'' ";
+            if (roundSecond)
+            {
+                return $" {degreePart:000}° {minutePart:00}' {Math.Round(secondPart, 2):00.00}'' ";
+            }
+            else
+            {
+                return $" {degreePart:000}° {minutePart:00}' {secondPart}'' ";
+            }
+
+
         }
     }
 }

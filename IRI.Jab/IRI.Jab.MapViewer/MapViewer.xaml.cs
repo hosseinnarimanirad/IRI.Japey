@@ -1107,6 +1107,8 @@ namespace IRI.Jab.MapViewer
             {
                 AddComplexLayer(layer.GetEdgeLengthes(), true);
             }
+
+            AddComplexLayer(layer.GetPrimaryVerticesLabels(), true);
         }
 
         //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
@@ -1956,6 +1958,8 @@ namespace IRI.Jab.MapViewer
                 RemoveLayer((ILayer)layer.GetMidVertices());
 
                 RemoveLayer((ILayer)layer.GetEdgeLengthes());
+
+                RemoveLayer(layer.GetPrimaryVerticesLabels());
             }
         }
 
@@ -3710,7 +3714,7 @@ namespace IRI.Jab.MapViewer
 
             layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            layer.Refresh = l =>
+            layer.RequestRefresh = l =>
             {
                 //this.ClearLayer(LayerType.EditableItem, false);
 
@@ -3738,7 +3742,7 @@ namespace IRI.Jab.MapViewer
 
             layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            layer.Refresh = l =>
+            layer.RequestRefresh = l =>
             {
                 //this.ClearLayer(LayerType.EditableItem, false);
 
@@ -3775,7 +3779,7 @@ namespace IRI.Jab.MapViewer
 
             editingLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            editingLayer.Refresh = l =>
+            editingLayer.RequestRefresh = l =>
             {
                 this.RemoveEditableFeatureLayer(l);
 
@@ -4311,7 +4315,7 @@ namespace IRI.Jab.MapViewer
 
                 resultLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-                resultLayer.Refresh = l =>
+                resultLayer.RequestRefresh = l =>
                 {
                     //this.ClearLayer(LayerType.EditableItem, false);
 

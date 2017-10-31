@@ -1,0 +1,146 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace IRI.Jab.Common.View.MapMarkers
+{
+    /// <summary>
+    /// Interaction logic for ShapeWithLabelMarker.xaml
+    /// </summary>
+    public partial class CoordinateMarker : UserControl, INotifyPropertyChanged
+    {
+        public double X
+        {
+            get { return (double)GetValue(XProperty); }
+            set
+            {
+                SetValue(XProperty, value);
+                UpdateCoordinates();
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for X.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty XProperty =
+            DependencyProperty.Register(nameof(X), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
+
+
+        public double Y
+        {
+            get { return (double)GetValue(YProperty); }
+            set
+            {
+                SetValue(YProperty, value);
+                UpdateCoordinates();
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for Y.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty YProperty =
+            DependencyProperty.Register(nameof(Y), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
+
+
+        public bool ChangeToDms { get; }
+
+        public int Decimals { get; }
+
+        private string _xLabel;
+
+        public string XLabel
+        {
+            get { return _xLabel; }
+            set
+            {
+                _xLabel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _yLabel;
+
+        public string YLabel
+        {
+            get { return _yLabel; }
+            set
+            {
+                _yLabel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private coordinates _current;
+
+        private IRI.Ham.SpatialBase.Point _mercator;
+
+        public CoordinateMarker(double mercatorX, double mercatorY, int decimals, bool changeToDms = false)
+        {
+            InitializeComponent();
+
+            this._current = coordinates.Geodetic;
+
+            this.Decimals = decimals;
+
+            this.ChangeToDms = changeToDms;
+
+            this._mercator = new IRI.Ham.SpatialBase.Point(mercatorX, mercatorY);
+
+            this.X = mercatorX;
+
+            this.Y = mercatorY;
+
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void changeCoordinate(object sender, MouseButtonEventArgs e)
+        {
+            _current = (coordinates)((int)(_current + 1) % 3);
+
+            UpdateCoordinates();
+        }
+
+        private void UpdateCoordinates()
+        {
+            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(_mercator);
+
+            if (_current == coordinates.Utm)
+            {
+                value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(value);
+            }
+
+            if (_current == coordinates.GeodeticDms)
+            {
+                XLabel = Ket.Common.Helpers.DegreeHelper.ToDms(value.X, true); YLabel = Ket.Common.Helpers.DegreeHelper.ToDms(value.Y, true);
+            }
+            else
+            {
+                XLabel = value.X.ToString($"N{Decimals}"); YLabel = value.Y.ToString($"N{Decimals}");
+            }
+
+        }
+
+        enum coordinates
+        {
+            Utm = 0,
+            Geodetic = 1,
+            GeodeticDms = 2
+        }
+    }
+}

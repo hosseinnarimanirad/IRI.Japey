@@ -150,8 +150,14 @@ namespace IRI.Jab.Cartography.TileServices
                 System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(filePath));
             }
 
-            System.IO.File.WriteAllBytes(GetFilePath(tile), tileImage.Image);
-
+            try
+            {
+                System.IO.File.WriteAllBytes(GetFilePath(tile), tileImage.Image);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
     }
 }
