@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Jab.CommonDialog.Business
+namespace IRI.Jab.Controls.Model
 {
     public enum CoordinateTypes
     {

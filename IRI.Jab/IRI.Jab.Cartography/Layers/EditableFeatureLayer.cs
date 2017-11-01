@@ -504,7 +504,7 @@ namespace IRI.Jab.Cartography
                 }
                 else
                 {
-                    var element = new Common.View.MapMarkers.CoordinateMarker(locateable.X, locateable.Y, 3);
+                    var element = new Common.View.MapMarkers.CoordinateMarker(locateable.X, locateable.Y);
 
                     var auxLocateable = new Locateable(Model.AncherFunctionHandlers.CenterLeft) { Element = element, X = point.X, Y = point.Y, Id = locateable.Id };
 

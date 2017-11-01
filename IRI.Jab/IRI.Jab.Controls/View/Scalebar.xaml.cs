@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.MapScalebar
+namespace IRI.Jab.Controls.View
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml

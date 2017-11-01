@@ -46,10 +46,10 @@
 
                 <Label Name="system" Margin="0,0,1,0" Style="{StaticResource staticText}" Content="ژئودتیک"/>
                 <Label Name="first" Content="طول جغرافیایی:" Height="auto" Style="{StaticResource staticText}" />
-                <Label Width="100" Content="51 34' 12''" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x1" 
+                <Label Width="100" Content="{Binding ElementName=root, Path=XLabel}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x1" 
                        HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"/>
                 <Label Name="second" Content="عرض جغرافیایی:" Height="auto" Style="{StaticResource staticText}"/>
-                <Label Width="100" Content="35 34' 12''" Background="White" Foreground="{DynamicResource HighlightBrush}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x2" HorizontalContentAlignment="Right" />
+                <Label Width="100" Content="{Binding ElementName=root, Path=YLabel}" Background="White" Foreground="{DynamicResource HighlightBrush}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x2" HorizontalContentAlignment="Right" />
                 <Label Visibility="Collapsed" Name="region" Content="ناحیه :" Height="auto" Style="{StaticResource staticText}"/>
                 <Label Visibility="Collapsed" Name="zone" Width="100" Content="35 34' 12''" Margin="00 0 10 0" Background="White" 
                        FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"/>

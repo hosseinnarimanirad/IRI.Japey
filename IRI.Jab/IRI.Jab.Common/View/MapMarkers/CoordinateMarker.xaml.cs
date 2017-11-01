@@ -54,8 +54,6 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         public bool ChangeToDms { get; }
 
-        public int Decimals { get; }
-
         private string _xLabel;
 
         public string XLabel
@@ -84,13 +82,11 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         private IRI.Ham.SpatialBase.Point _mercator;
 
-        public CoordinateMarker(double mercatorX, double mercatorY, int decimals, bool changeToDms = false)
+        public CoordinateMarker(double mercatorX, double mercatorY, bool changeToDms = false)
         {
             InitializeComponent();
 
             this._current = coordinates.Geodetic;
-
-            this.Decimals = decimals;
 
             this.ChangeToDms = changeToDms;
 
@@ -100,13 +96,6 @@ namespace IRI.Jab.Common.View.MapMarkers
 
             this.Y = mercatorY;
 
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void changeCoordinate(object sender, MouseButtonEventArgs e)
@@ -131,7 +120,12 @@ namespace IRI.Jab.Common.View.MapMarkers
             }
             else
             {
-                XLabel = value.X.ToString($"N{Decimals}"); YLabel = value.Y.ToString($"N{Decimals}");
+                var decimals = 2;
+
+                if (_current == coordinates.Geodetic)
+                    decimals = 5;
+
+                XLabel = value.X.ToString($"N{decimals}"); YLabel = value.Y.ToString($"N{decimals}");
             }
 
         }
@@ -142,5 +136,13 @@ namespace IRI.Jab.Common.View.MapMarkers
             Geodetic = 1,
             GeodeticDms = 2
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

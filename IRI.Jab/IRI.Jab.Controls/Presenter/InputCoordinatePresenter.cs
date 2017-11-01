@@ -1,13 +1,13 @@
 ﻿using IRI.Jab.Common;
-using IRI.Jab.CommonDialog.Business;
 using IRI.Ham.CoordinateSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using IRI.Ham.SpatialBase.CoordinateSystems;
 
-namespace IRI.Jab.CommonDialog.Presenters
+namespace IRI.Jab.Controls.Presenters
 {
     public class InputCoordinatePresenter : Notifier
     {
@@ -42,9 +42,9 @@ namespace IRI.Jab.CommonDialog.Presenters
 
         public event EventHandler PointAdded;
 
-        private CoordinateTypes _inputType;
+        private SpatialReferenceType _inputType;
 
-        public CoordinateTypes InputType
+        public SpatialReferenceType InputType
         {
             get { return _inputType; }
             set
@@ -54,10 +54,10 @@ namespace IRI.Jab.CommonDialog.Presenters
 
                 switch (value)
                 {
-                    case CoordinateTypes.Geodetic:
+                    case SpatialReferenceType.Geodetic:
                         MapFunction = p => p;
                         break;
-                    case CoordinateTypes.UTM:
+                    case SpatialReferenceType.UTM:
                         MapFunction = p => (IRI.Ham.SpatialBase.Point)IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
                         break;
                     default:

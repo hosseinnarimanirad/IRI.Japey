@@ -11,7 +11,7 @@ using System.Windows.Media;
 using IRI.Ham.Common;
 //using Microsoft.SqlServer.Types;
 
-namespace IRI.Jab.MapViewer
+namespace IRI.Jab.Controls.View
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
@@ -234,7 +234,7 @@ namespace IRI.Jab.MapViewer
         bool isPanning = false;
 
         System.Windows.Point prevMouseLocation;
-
+        
         public void Pan()
         {
             this.mapView.MouseDown -= mapView_MouseDownForPan;

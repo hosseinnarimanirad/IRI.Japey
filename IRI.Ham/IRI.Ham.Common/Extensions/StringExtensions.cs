@@ -36,7 +36,8 @@ namespace System
                     .Replace('7', '۷')
                     .Replace('8', '۸')
                     .Replace('9', '۹')
-                    .Replace('0', '۰');
+                    .Replace('0', '۰')
+                    .Replace('.', '\u066B');
         }
 
     }

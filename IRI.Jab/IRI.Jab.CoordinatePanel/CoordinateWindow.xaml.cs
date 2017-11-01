@@ -1,6 +1,10 @@
-﻿using System;
+﻿using IRI.Ket.Common.Helpers;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +21,7 @@ namespace IRI.Jab.CoordinatePanel
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class CoordinateWindow : UserControl
+    public partial class CoordinateWindow : UserControl, INotifyPropertyChanged
     {
         public CoordinateWindow()
         {
@@ -53,6 +57,32 @@ namespace IRI.Jab.CoordinatePanel
 
         }
 
+        private string _xLabel;
+
+        public string XLabel
+        {
+            get { return _xLabel; }
+            set
+            {
+                _xLabel = value.LatinNumbersToFarsiNumbers();
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _yLabel;
+
+        public string YLabel
+        {
+            get { return _yLabel; }
+            set
+            {
+                _yLabel = value.LatinNumbersToFarsiNumbers();
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         /// <summary>
         /// Sets the x,y coordinates from elipsoidal mercatar. elipsoid: WGS84
         /// </summary>
@@ -71,23 +101,27 @@ namespace IRI.Jab.CoordinatePanel
 
                 IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.Y);
 
-                this.x1.Content = string.Format("{0:D3}° {1:D2}' {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
+                this.XLabel = DegreeHelper.ToDms(geodeticPoint.X, true);
 
-                this.x2.Content = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
+                //string.Format("{0:D3}° {1:D2} {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
+
+                //this.YLabel = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
+
+                this.YLabel = DegreeHelper.ToDms(geodeticPoint.Y, true);
             }
             else if (geodeticDd.IsChecked == true)
             {
-                this.x1.Content = string.Format("{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
+                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
 
-                this.x2.Content = string.Format("{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
+                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
             }
             else if (utm.IsChecked == true)
             {
                 Point tempUtm = GeodeticToUTM(geodeticPoint);
 
-                this.x1.Content = string.Format("{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.x2.Content = string.Format("{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
 
                 this.zone.Visibility = System.Windows.Visibility.Visible;
 
@@ -99,25 +133,25 @@ namespace IRI.Jab.CoordinatePanel
             {
                 Point tempUtm = GeodeticToMercator(geodeticPoint);
 
-                this.x1.Content = string.Format("{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.x2.Content = string.Format("{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
             else if (cea.IsChecked == true)
             {
                 Point tempUtm = GeodeticToCylindricalEqualArea(geodeticPoint);
 
-                this.x1.Content = string.Format("{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.x2.Content = string.Format("{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
             else if (tm.IsChecked == true)
             {
                 Point tempUtm = GeodeticToTransverseMercator(geodeticPoint);
 
-                this.x1.Content = string.Format("{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.x2.Content = string.Format("{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
 
         }
@@ -262,9 +296,6 @@ namespace IRI.Jab.CoordinatePanel
             DependencyProperty.Register("ShowGeodetic", typeof(bool), typeof(CoordinateWindow), new PropertyMetadata(true));
 
 
-
-
-
         public bool ShowUTM
         {
             get { return (bool)GetValue(ShowUTMProperty); }
@@ -276,7 +307,6 @@ namespace IRI.Jab.CoordinatePanel
             DependencyProperty.Register("ShowUTM", typeof(bool), typeof(CoordinateWindow), new PropertyMetadata(true));
 
 
-
         public bool ShowMercator
         {
             get { return (bool)GetValue(ShowMercatorProperty); }
@@ -286,7 +316,6 @@ namespace IRI.Jab.CoordinatePanel
         // Using a DependencyProperty as the backing store for ShowMercator.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowMercatorProperty =
             DependencyProperty.Register("ShowMercator", typeof(bool), typeof(CoordinateWindow), new PropertyMetadata(true));
-
 
 
         public bool ShowTM
@@ -312,5 +341,11 @@ namespace IRI.Jab.CoordinatePanel
             DependencyProperty.Register("ShowCylindricalEqualArea", typeof(bool), typeof(CoordinateWindow), new PropertyMetadata(true));
 
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

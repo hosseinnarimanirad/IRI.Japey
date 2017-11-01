@@ -356,7 +356,8 @@ namespace IRI.Jab.Common.Helpers
 
         }
 
-        public static void MergeTilesAndSaveByGdiplus(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName, string waterMarkText = null)
+        public static void MergeTilesAndSaveByGdiplus(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName,
+            System.Drawing.Imaging.PixelFormat format = System.Drawing.Imaging.PixelFormat.Format24bppRgb, string waterMarkText = null)
         {
             if (tiles == null || tiles.Count < 1)
             {
@@ -371,7 +372,7 @@ namespace IRI.Jab.Common.Helpers
 
             var height = tiles.Max(t => t.RowNumber) - minY + 1;
 
-            var outputImage = new System.Drawing.Bitmap(width * 256, height * 256, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var outputImage = new System.Drawing.Bitmap(width * 256, height * 256, format);
 
             using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(outputImage))
             {

@@ -16,13 +16,15 @@ namespace IRI.Ket.Common.Helpers
 
             var secondPart = (degreeValue - degreePart - minutePart / 60.0) * 3600;
 
+            var minuteSign = '\u2019'; var secondSign = '\u201d';
+
             if (roundSecond)
             {
-                return $" {degreePart:000}° {minutePart:00}' {Math.Round(secondPart, 2):00.00}'' ";
+                return FormattableString.Invariant($" {degreePart:000}° {minutePart:00}{minuteSign} {secondPart:00.00}{secondSign} ");
             }
             else
             {
-                return $" {degreePart:000}° {minutePart:00}' {secondPart}'' ";
+                return FormattableString.Invariant($" {degreePart:000}° {minutePart:00}{minuteSign} {secondPart:00.#}{secondSign} ");
             }
 
 

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Background="Transparent" FlowDirection="LeftToRight"
-             xmlns:local="clr-namespace:IRI.Jab.Common.View.MapMarkers" x:Name="root" Width="90" Height="40" MinWidth="40"
+             xmlns:local="clr-namespace:IRI.Jab.Common.View.MapMarkers" x:Name="root" Width="90" Height="40" MinWidth="40" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib" MouseDoubleClick="changeCoordinate">
     <UserControl.Style>
         <Style TargetType="UserControl">
@@ -63,7 +63,7 @@
 
         </EventTrigger>
     </UserControl.Triggers>
-    <Grid x:Name="Document" Background="White" >
+    <Grid x:Name="Document" Background="#AAFFFFFF" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>

@@ -12,9 +12,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using IRI.Ham.SpatialBase.CoordinateSystems;
 //using Microsoft.SqlServer.Types;
 
-namespace IRI.Jab.CommonDialog
+namespace IRI.Jab.Controls.View
 {
     /// <summary>
     /// Interaction logic for InputCoordinate.xaml
@@ -79,12 +80,12 @@ namespace IRI.Jab.CommonDialog
                 if (coordinateType.SelectedIndex == 0)
                 {
                     note.Content = "توجه: مختصات ها بایستی بر اساس طول و عرض جغرافیایی باشند.";
-                    this.Presenter.InputType = Business.CoordinateTypes.Geodetic;
+                    this.Presenter.InputType = SpatialReferenceType.Geodetic;
                 }
                 else
                 {
 
-                    this.Presenter.InputType = Business.CoordinateTypes.UTM;
+                    this.Presenter.InputType = SpatialReferenceType.UTM;
                     note.Content = "توجه: مختصات ها، UTM می باشند.";
                 }
             }

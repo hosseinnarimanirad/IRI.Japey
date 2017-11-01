@@ -102,6 +102,7 @@
     <Compile Include="CoordinateSystems\ReferenceDatum\Ellipsoids.cs" />
     <Compile Include="CoordinateSystems\ReferenceDatum\IEllipsoid.cs" />
     <Compile Include="CoordinateSystems\ReferenceDatum\OrientationParameter.cs" />
+    <Compile Include="CoordinateSystems\SpatialReferenceType.cs" />
     <Compile Include="CoordinateSystems\Transformation\Transformation.cs" />
     <Compile Include="Extensions\PointExtension.cs" />
     <Compile Include="Extensions\PointHelper.cs" />
