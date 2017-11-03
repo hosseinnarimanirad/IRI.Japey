@@ -346,17 +346,6 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
-        public void SetConnectionState(bool isConnectedToInternet)
-        {
-            foreach (var item in this.Layers)
-            {
-                if (item is TileServiceLayer)
-                {
-                    ((TileServiceLayer)item).IsOffline = !isConnectedToInternet;
-                }
-            }
-        }
-
 
         public void Register(Cartography.Presenter.Map.MapPresenter presenter)
         {
@@ -454,26 +443,25 @@ namespace IRI.Jab.MapViewer
             presenter.RequestZoomToExtent = (boundingBox, callback) => { this.ZoomToExtent(boundingBox, false, true, callback); };
 
 
-            presenter.RequestGetGeometry = (mode, display) =>
+            presenter.RequestGetDrawing = (mode, display) =>
             {
                 return this.GetDrawingAsync(mode, null, display);
             };
 
-            presenter.RequestCancelGetDrawing = () => this.CancelGetDrawing();
+            presenter.RequestCancelNewDrawing = () => this.CancelGetDrawing();
 
-            presenter.RequestCancelEditGeometry = () => this.CancelEditGeometry();
+            presenter.RequestCancelEdit = () => this.CancelEditGeometry();
 
-            presenter.RequestFinishEditGeometry = () => this.FinishEditing();
+            presenter.RequestFinishEdit = () => this.FinishEditing();
 
-            presenter.RequestMeasureArea = async () => await this.Measure(DrawMode.Polygon, null);
+            presenter.RequestMeasure = async (mode, isEdgeLabelVisible) => await this.MeasureAsync(mode, isEdgeLabelVisible, null);
 
-            presenter.RequestMeasureLength = async () => await this.Measure(DrawMode.Polyline, null);
 
             presenter.RequestCancelMeasure = this.CancelMeasure;
 
             presenter.RequestGetBezier = async (geometry, decorationVisual) => { return await GetBezierAsync(geometry, decorationVisual); };
 
-            presenter.RequestEdit = (g) => { return this.EditGeometryAsync(g); };
+            presenter.RequestEdit = (g, options) => { return this.EditGeometryAsync(g, options); };
 
             presenter.RequestAddSpecialPointLayer = (i) =>
             {
@@ -1103,7 +1091,7 @@ namespace IRI.Jab.MapViewer
 
             AddComplexLayer(layer.GetVertices(), false);
 
-            if (layer.Options.IsEdgeLengthVisible)
+            if (layer.Options.IsEdgeLabelVisible)
             {
                 AddComplexLayer(layer.GetEdgeLengthes(), true);
             }
@@ -1775,7 +1763,8 @@ namespace IRI.Jab.MapViewer
         //POTENTIALLY ERROR PROUNE; not sure everything is considered or not
         private void ResetMapViewEvents()
         {
-            this.SetCursor(Cursors.Arrow);
+            //this.SetCursor(Cursors.Arrow);
+            this.SetCursor(CursorSettings[_currentMouseAction]);
 
             this.mapView.MouseDown -= mapView_MouseDownForPan;
             this.mapView.MouseUp -= mapView_MouseUpForPan;
@@ -1813,6 +1802,17 @@ namespace IRI.Jab.MapViewer
         public void SetCursor(Cursor cursor)
         {
             this.mapView.Cursor = cursor;
+        }
+
+        public void SetConnectionState(bool isConnectedToInternet)
+        {
+            foreach (var item in this.Layers)
+            {
+                if (item is TileServiceLayer)
+                {
+                    ((TileServiceLayer)item).IsOffline = !isConnectedToInternet;
+                }
+            }
         }
 
         #endregion
@@ -2341,7 +2341,8 @@ namespace IRI.Jab.MapViewer
 
         public void ReleaseSelectPoint()
         {
-            this.SetCursor(Cursors.Arrow);
+            //this.SetCursor(Cursors.Arrow);
+            this.SetCursor(CursorSettings[_currentMouseAction]);
 
             this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
         }
@@ -2375,7 +2376,8 @@ namespace IRI.Jab.MapViewer
               {
                   this.mapView.MouseUp -= action;
 
-                  this.SetCursor(Cursors.Arrow);
+                  //this.SetCursor(Cursors.Arrow);
+                  this.SetCursor(CursorSettings[_currentMouseAction]);
 
                   tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
               };
@@ -2388,7 +2390,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-                this.SetCursor(Cursors.Arrow);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 tcs = null;
 
@@ -3424,7 +3427,11 @@ namespace IRI.Jab.MapViewer
 
             this.RemoveEditableFeatureLayer(drawingLayer.GetLayer());
 
+            drawingCancellationToken = null;
+
             drawingTcs.SetResult(drawingLayer.GetFinalGeometry());
+
+            this.Pan();
         }
 
         private void MapView_MouseMoveDrawing(object sender, MouseEventArgs e)
@@ -3523,12 +3530,6 @@ namespace IRI.Jab.MapViewer
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseUp += MapView_MouseUpForDrawing;
 
-                //if (_isMeasuring)
-                //{
-                //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
-                //    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
-                //}
-
                 itWasPanningWhileDrawing = false;
 
                 return;
@@ -3573,7 +3574,8 @@ namespace IRI.Jab.MapViewer
             {
                 drawingTcs.TrySetCanceled();
 
-                this.SetCursor(Cursors.Arrow);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
@@ -3588,6 +3590,8 @@ namespace IRI.Jab.MapViewer
                 }
 
                 drawingTcs = null;
+
+                drawingCancellationToken = null;
 
             }, useSynchronizationContext: false);
 
@@ -3629,17 +3633,19 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
-                throw ex;
-            }
-            finally
-            {
                 drawingTcs = null;
 
                 drawingCancellationToken = null;
 
+                this.Pan();
+
+                throw ex;
+            }
+            finally
+            {
                 this.Status = MapStatus.Idle;
 
-                this.Pan();
+                //this.Pan();
             }
         }
 
@@ -3756,7 +3762,7 @@ namespace IRI.Jab.MapViewer
             this.SetLayer(layer);
         }
 
-        private Task<sb.Primitives.Geometry> EditGeometry(sb.Primitives.Geometry geometry)
+        private Task<sb.Primitives.Geometry> EditGeometry(sb.Primitives.Geometry geometry, EditableFeatureLayerOptions options)
         {
             editingCancellationToken = new CancellationTokenSource();
 
@@ -3767,10 +3773,12 @@ namespace IRI.Jab.MapViewer
                 this.RemoveEditableFeatureLayer(editingLayer);
             }
 
+            options.IsNewDrawing = false;
+
             editingLayer = new EditableFeatureLayer(
                             "edit", geometry,
                             this.viewTransform, ScreenToMap,
-                            new EditableFeatureLayerOptions() { IsNewDrawing = false });
+                            options);
 
             editingLayer.RequestRightClickOptions = (i1, i2, i3) =>
             {
@@ -3797,6 +3805,15 @@ namespace IRI.Jab.MapViewer
                 editingLayer = null;
             };
 
+            editingLayer.RequestCancelEditing = (g) =>
+            {
+                tcs.SetCanceled();
+
+                this.RemoveEditableFeatureLayer(editingLayer);
+
+                editingLayer = null;
+            };
+
             this.SetLayer(editingLayer);
 
             AddEditableFeatureLayer(editingLayer);
@@ -3805,7 +3822,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-                this.SetCursor(Cursors.Arrow);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 this.RemoveEditableFeatureLayer(editingLayer);
 
@@ -3816,7 +3834,7 @@ namespace IRI.Jab.MapViewer
             return tcs.Task;
         }
 
-        public async Task<sb.Primitives.Geometry> EditGeometryAsync(sb.Primitives.Geometry originalGeometry)
+        public async Task<sb.Primitives.Geometry> EditGeometryAsync(sb.Primitives.Geometry originalGeometry, EditableFeatureLayerOptions options)
         {
             try
             {
@@ -3825,9 +3843,9 @@ namespace IRI.Jab.MapViewer
                     editingCancellationToken.Cancel();
                 }
 
-                this.Status = MapStatus.EditingGeometry;
+                this.Status = MapStatus.Editing;
 
-                var result = await EditGeometry(originalGeometry);
+                var result = await EditGeometry(originalGeometry, options);
 
                 this.Status = MapStatus.Idle;
 
@@ -4068,7 +4086,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-                this.SetCursor(Cursors.Arrow);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
             }, useSynchronizationContext: false);
 
@@ -4200,55 +4219,23 @@ namespace IRI.Jab.MapViewer
 
         SpecialPointLayer measureLayer;
 
-        bool _isMeasuring = false;
+        CancellationTokenSource _measureCancellationToken;
 
-        //CancellationTokenSource measureCancellationToken;
-
-
-
-        //public async void Measure()
-        //{
-        //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
-        //    this.mapView.MouseMove += MapView_MouseMoveForMeasureDistance;
-
-        //    _isMeasuring = true;
-
-        //    var measureLocatable = new Locateable(new sb.Point(0, 0), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
-
-        //    measureLayer = new SpecialPointLayer("measure", measureLocatable, 1, ScaleInterval.All, LayerType.Complex);
-
-        //    this.SetLayer(measureLayer);
-        //    this.AddComplexLayer(measureLayer, true);
-
-        //    var drawing = await GetDrawingAsync(DrawMode.Polyline);
-
-        //    _isMeasuring = false;
-
-        //    Debug.WriteLine("");
-
-        //    foreach (var item in drawing.GetAllPoints())
-        //    {
-        //        Debug.WriteLine("points: ", item.ToString());
-        //    }
-
-        //    var coordinates = drawing.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
-
-        //    var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
-        //    MessageBox.Show(temp.ToString());
-
-        //    this.mapView.MouseMove -= MapView_MouseMoveForMeasureDistance;
-
-        //}
-
-        public async Task<sb.Primitives.Geometry> Measure(DrawMode mode, Action action)
+        public async Task<sb.Primitives.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action)
         {
-            //try
-            //{
-            //    CancelMeasure();
+            //this.Status = MapStatus.Measuring;
+            this._measureCancellationToken = new CancellationTokenSource();
 
-            this.Status = MapStatus.Measurement;
+            this._measureCancellationToken.Token.Register(() =>
+            {
+                this.RemoveLayer(measureLayer);
 
-            _isMeasuring = true;
+                _measureCancellationToken = null;
+
+                return;//  async() => null;
+            });
+
+            this.RemoveLayer(measureLayer);
 
             var measureLocatable = new Locateable(new sb.Point(0, 0), AncherFunctionHandlers.BottomCenter) { Element = new IRI.Jab.Common.View.MapMarkers.LabelMarker("test") };
 
@@ -4258,10 +4245,7 @@ namespace IRI.Jab.MapViewer
 
             onMoveForDrawAction = p =>
             {
-                if (!this.Layers.Contains(measureLayer))
-                {
-                    this.AddComplexLayer(measureLayer, true);
-                }
+                this.AddComplexLayer(measureLayer, true);
 
                 var offset = ScreenToMap(20);
 
@@ -4272,16 +4256,15 @@ namespace IRI.Jab.MapViewer
 
                 try
                 {
-                    var geo1 = drawingLayer.GetFinalGeometry().Clone();
-                    geo1.AddLastPoint(p.AsPoint());
-                    var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326).MakeValid().STLength().Value;
+                    var geo = drawingLayer.GetFinalGeometry().Clone();
 
-                    //var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
-                    //geo.Add(p.AsPoint());
-                    //var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
-                    //var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
+                    geo.AddLastPoint(p.AsPoint());
 
-                    marker.LabelValue = length2 < 1000 ? $"{length2.ToString("N3")} m" : $"{(length2 / 1000).ToString("N2")} km";
+                    var geoAsGeodetic = geo.AsSqlGeometry().MercatorToGeographic().MakeValid();
+
+                    var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
+
+                    marker.LabelValue = measureValue;
                 }
                 catch (Exception ex)
                 {
@@ -4292,77 +4275,51 @@ namespace IRI.Jab.MapViewer
             var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
             {
                 Visual = VisualParameters.GetDefaultForMeasurements(),
-                IsEdgeLengthVisible = true
+                IsEdgeLabelVisible = isEdgeLabelVisible
             }, true);
-
-            this.RemoveLayer(measureLayer);
-
-            _isMeasuring = false;
 
             if (result != null)
             {
-                //var coordinates = result.GetAllPoints().Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
+                this.RemoveLayer(measureLayer);
 
-                //var temp = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coordinates, false).MakeValid().STLength().Value;
-
-
-                EditableFeatureLayer resultLayer = new EditableFeatureLayer("measure", result, this.viewTransform, ScreenToMap, new EditableFeatureLayerOptions() { IsEdgeLengthVisible = true });
-
-                resultLayer.RequestRightClickOptions = (i1, i2, i3) =>
-                {
-                    this.AddRightClickOptions(i1, i2, i3);
-                };
-
-                resultLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
-
-                resultLayer.RequestRefresh = l =>
-                {
-                    //this.ClearLayer(LayerType.EditableItem, false);
-
-                    this.RemoveLayer(l);
-
-                    this.SetLayer(l);
-
-                    AddEditableFeatureLayer(l);
-                };
-
-                this.SetLayer(resultLayer);
-                this.AddEditableFeatureLayer(resultLayer);
-
+                await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true });
             }
 
-
-            //this.RemoveLayer(measureLayer);
-
-
-            this.Status = MapStatus.Idle;
-
-            //return result;
-            //}
-            //catch (TaskCanceledException)
-            //{
-            //    this.Status = MapStatus.Idle;
-
-            //    return null;
-            //}
-            //catch (Exception ex)
-            //{
-            //    this.Status = MapStatus.Idle;
-
-            //    throw ex;
-            //}
-            //finally
-            //{
-            //taskCompletionSource = null;
             onMoveForDrawAction = null;
 
-            //measureCancellationToken = null;
+            //this.Status = MapStatus.Idle;
 
-            this.Status = MapStatus.Idle;
+            //this.Pan();
 
-            this.Pan();
-            //}
             return result;
+        }
+
+        public async Task<sb.Primitives.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
+        {
+            try
+            {
+                if (this._measureCancellationToken != null)
+                {
+                    this._measureCancellationToken.Cancel();
+                }
+
+                return await Measure(mode, isEdgeLabelVisible, action);
+            }
+            catch (TaskCanceledException)
+            {
+                this.Status = MapStatus.Idle;
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                this._measureCancellationToken = null;
+
+                this.Status = MapStatus.Idle;
+
+                throw ex;
+            }
+
         }
 
         public void CancelMeasure()
@@ -4371,47 +4328,12 @@ namespace IRI.Jab.MapViewer
             {
                 this.drawingCancellationToken.Cancel();
             }
+
+            if (this.editingCancellationToken != null)
+            {
+                this.editingCancellationToken.Cancel();
+            }
         }
-
-        //private void MapView_MouseMoveForMeasureDistance(object sender, MouseEventArgs e)
-        //{
-        //    if (this.itWasPanningWhileDrawing)
-        //    {
-        //        return;
-        //    }
-
-        //    var currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
-
-        //    var offset = ScreenToMap(20);
-
-        //    measureLayer.Items.First().X = currentMouseLocation.X;
-        //    measureLayer.Items.First().Y = currentMouseLocation.Y + offset;
-
-        //    var marker = (measureLayer.Items.First().Element as IRI.Jab.Common.View.MapMarkers.LabelMarker);
-
-        //    try
-        //    {
-        //        var geo1 = drawingLayer.GetFinalGeometry().Clone();
-        //        geo1.AddLastPoint(currentMouseLocation.AsPoint());
-        //        var length2 = geo1.AsSqlGeometry().Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
-
-        //        //marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
-
-        //        //Debug.WriteLine("last point: " + currentMouseLocation.AsPoint().ToString());
-
-        //        var geo = drawingLayer.GetFinalGeometry().GetAllPoints().ToList();
-        //        geo.Add(currentMouseLocation.AsPoint());
-        //        var coords = geo.Select(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic).ToList();
-        //        var length = IRI.Ket.SqlServerSpatialExtension.Utility.MakeGeography(coords, false).MakeValid().STLength().Value;
-
-        //        marker.LabelValue = length < 1000 ? $"{length.ToString("N3")} m" : $"{(length / 1000).ToString("N2")} km";
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        marker.LabelValue = "عارضه نامعتبر";
-        //    }
-        //}
 
         #endregion
     }

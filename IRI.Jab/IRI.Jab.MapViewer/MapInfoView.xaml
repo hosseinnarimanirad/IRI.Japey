@@ -27,24 +27,69 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style  TargetType="{x:Type ToggleButton}" x:Key="circleToggle">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Grid>
+                            <Ellipse Margin="1" Fill="{TemplateBinding Property=Background}"/>
+                            <ContentPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource HighlightBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </UserControl.Resources>
     <Border CornerRadius="15" BorderThickness="2" MinWidth="200" VerticalAlignment="Top" HorizontalAlignment="Center" 
                     Background="{DynamicResource AccentColorBrush3}" BorderBrush="#77FFFFFF"  
-                    Margin="4" Visibility="{Binding IsNewDrawOrEditMode, Converter={StaticResource boolToVisivilityConverter}}">
-        <DockPanel Margin="0">
-            <TextBlock Text="برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
-            <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" 
+                    Margin="4" Visibility="{Binding IsDrawEditMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
+        <StackPanel>
+            <DockPanel Margin="0" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+                <TextBlock Text="برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" 
                             Command="{Binding CancelNewDrawingCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
-            </Button>
-            <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding CancelEditDrawingCommand}" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
-            </Button>
-            <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding FinishEditDrawingCommand}" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
-            </Button>
-        </DockPanel>
+                    <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                </Button>
+            </DockPanel>
+            <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
+                <!--<TextBlock Text="ویرایش." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                            Command="{Binding FinishEditDrawingCommand}" >
+                        <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                    </Button>
+                    <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                            Command="{Binding CancelEditDrawingCommand}" >
+                        <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                    </Button>
+                    <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                            Command="{Binding DeleteDrawingCommand}" >
+                        <Path Data="{StaticResource appbarDelete}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+            <!--<DockPanel Margin="0" Visibility="{Binding IsMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
+                --><!--<TextBlock Text="اندازه‌گیری." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>--><!--
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="2"
+                            Command="{Binding DeleteDrawingCommand}" >
+                    <Path Data="{StaticResource appbarDelete}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                </Button>
+             
+            </DockPanel>-->
+        </StackPanel>
     </Border>
 </UserControl>
