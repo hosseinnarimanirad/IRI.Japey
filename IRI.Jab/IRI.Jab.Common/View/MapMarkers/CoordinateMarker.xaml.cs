@@ -22,34 +22,34 @@ namespace IRI.Jab.Common.View.MapMarkers
     /// </summary>
     public partial class CoordinateMarker : UserControl, INotifyPropertyChanged
     {
-        public double X
-        {
-            get { return (double)GetValue(XProperty); }
-            set
-            {
-                SetValue(XProperty, value);
-                UpdateCoordinates();
-            }
-        }
+        //public double X
+        //{
+        //    get { return (double)GetValue(XProperty); }
+        //    set
+        //    {
+        //        SetValue(XProperty, value);
+        //        UpdateCoordinates();
+        //    }
+        //}
 
-        // Using a DependencyProperty as the backing store for X.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty XProperty =
-            DependencyProperty.Register(nameof(X), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
+        //// Using a DependencyProperty as the backing store for X.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty XProperty =
+        //    DependencyProperty.Register(nameof(X), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
 
 
-        public double Y
-        {
-            get { return (double)GetValue(YProperty); }
-            set
-            {
-                SetValue(YProperty, value);
-                UpdateCoordinates();
-            }
-        }
+        //public double Y
+        //{
+        //    get { return (double)GetValue(YProperty); }
+        //    set
+        //    {
+        //        SetValue(YProperty, value);
+        //        UpdateCoordinates();
+        //    }
+        //}
 
-        // Using a DependencyProperty as the backing store for Y.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty YProperty =
-            DependencyProperty.Register(nameof(Y), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
+        //// Using a DependencyProperty as the backing store for Y.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty YProperty =
+        //    DependencyProperty.Register(nameof(Y), typeof(double), typeof(CoordinateMarker), new PropertyMetadata(0.0));
 
 
         public bool ChangeToDms { get; }
@@ -78,9 +78,23 @@ namespace IRI.Jab.Common.View.MapMarkers
             }
         }
 
+
+
         private coordinates _current;
 
-        private IRI.Ham.SpatialBase.Point _mercator;
+        private Ham.SpatialBase.Point _mercatorLocation;
+
+        public Ham.SpatialBase.Point MercatorLocation
+        {
+            get { return _mercatorLocation; }
+            set
+            {
+                _mercatorLocation = value;
+                RaisePropertyChanged();
+                UpdateCoordinates();
+            }
+        }
+
 
         public CoordinateMarker(double mercatorX, double mercatorY, bool changeToDms = false)
         {
@@ -90,11 +104,11 @@ namespace IRI.Jab.Common.View.MapMarkers
 
             this.ChangeToDms = changeToDms;
 
-            this._mercator = new IRI.Ham.SpatialBase.Point(mercatorX, mercatorY);
+            this.MercatorLocation = new IRI.Ham.SpatialBase.Point(mercatorX, mercatorY);
 
-            this.X = mercatorX;
+            //this.X = mercatorX;
 
-            this.Y = mercatorY;
+            //this.Y = mercatorY;
 
         }
 
@@ -105,9 +119,9 @@ namespace IRI.Jab.Common.View.MapMarkers
             UpdateCoordinates();
         }
 
-        private void UpdateCoordinates()
+        public void UpdateCoordinates()
         {
-            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(_mercator);
+            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(MercatorLocation);
 
             if (_current == coordinates.Utm)
             {

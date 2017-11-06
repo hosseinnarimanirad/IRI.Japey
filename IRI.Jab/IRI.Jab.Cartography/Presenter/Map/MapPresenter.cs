@@ -62,7 +62,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                SetTileService(ProviderType, value, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(ProviderType, value, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
@@ -81,7 +81,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _providerType = value;
                 RaisePropertyChanged();
 
-                SetTileService(value, BaseMapType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(value, BaseMapType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
             }
         }
 
@@ -105,20 +105,20 @@ namespace IRI.Jab.Cartography.Presenter.Map
         }
 
 
-        private bool _isCacheEnabled;
+        private bool _isBaseMapCacheEnabled;
 
-        public bool IsCacheEnabled
+        public bool IsBaseMapCacheEnabled
         {
-            get { return _isCacheEnabled; }
+            get { return _isBaseMapCacheEnabled; }
             set
             {
-                _isCacheEnabled = value;
+                _isBaseMapCacheEnabled = value;
                 RaisePropertyChanged();
             }
         }
 
 
-        public string GooglePath { get; set; }
+        //public string GooglePath { get; set; }
 
         private bool _isConnected = false;
 
@@ -144,8 +144,33 @@ namespace IRI.Jab.Cartography.Presenter.Map
             get { return _mapStatus; }
             set
             {
+                if (_mapStatus == value)
+                {
+                    return;
+                }
+
                 _mapStatus = value;
                 RaisePropertyChanged();
+
+                switch (_mapStatus)
+                {
+                    case MapStatus.Drawing:
+                        this.IsDrawMode = true;
+                        break;
+                    case MapStatus.Editing:
+                        this.IsEditMode = true;
+                        break;
+                    //case MapStatus.Measuring:
+                    //    this.IsMeasureMode = true;
+                    //    break;
+                    case MapStatus.Idle:
+                        this.IsDrawMode = false;
+                        this.IsEditMode = false;
+                        break;
+                    default:
+                        break;
+                }
+
             }
         }
 
@@ -225,7 +250,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 _isDrawMode = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsNewDrawOrEditMode));
+                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
             }
         }
 
@@ -238,11 +263,25 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 _isEditMode = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsNewDrawOrEditMode));
+                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
             }
         }
 
-        public bool IsNewDrawOrEditMode
+        //private bool _isMeasureMode;
+
+        //public bool IsMeasureMode
+        //{
+        //    get { return _isMeasureMode; }
+        //    set
+        //    {
+        //        _isMeasureMode = value;
+        //        RaisePropertyChanged();
+        //        RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
+        //    }
+        //}
+
+
+        public bool IsDrawEditMeasureMode
         {
             get { return IsEditMode || IsDrawMode; }
         }
@@ -384,23 +423,23 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
 
-        public Func<DrawMode, bool, Task<Geometry>> RequestGetGeometry;
+        public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawing;
 
         public Action RequestClearMap;
 
-        public Action RequestCancelGetDrawing;
+        public Action RequestCancelNewDrawing;
 
-        public Action RequestCancelEditGeometry;
+        public Action RequestCancelEdit;
 
-        public Action RequestFinishEditGeometry;
+        public Action RequestFinishEdit;
 
-        public Action RequestMeasureArea;
+        public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
 
-        public Action RequestMeasureLength;
+        //public Action RequestMeasureLength;
 
         public Action RequestCancelMeasure;
 
-        public Func<Geometry, Task<Geometry>> RequestEdit;
+        public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
 
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<PolyBezierLayer>> RequestGetBezier;
 
@@ -603,7 +642,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         {
             this.IsDrawMode = true;
 
-            var result = await this.RequestGetGeometry?.Invoke(mode, display);
+            var result = await this.RequestGetDrawing?.Invoke(mode, display);
 
             this.IsDrawMode = false;
 
@@ -611,45 +650,64 @@ namespace IRI.Jab.Cartography.Presenter.Map
             //return tcs.Task;
         }
 
-        protected void CancelGetDrawing()
+        protected void CancelNewDrawing()
         {
             this.IsDrawMode = false;
 
-            this.RequestCancelGetDrawing?.Invoke(); //this is called in MapViewer
+            this.RequestCancelNewDrawing?.Invoke(); //this is called in MapViewer
 
-            this.OnCancelDrawGeometry?.Invoke(null, EventArgs.Empty); //this is called in the apps
+            this.OnCancelNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected void CancelEditGeometry()
+        protected void CancelEdit()
         {
             this.IsEditMode = false;
 
-            this.RequestCancelEditGeometry?.Invoke(); //this is called in MapViewer
+            this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
-            this.OnCancelDrawGeometry?.Invoke(null, EventArgs.Empty); //this is called in the apps
+            this.OnCancelEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected void FinishEditGeometry()
+        protected void DeleteDrawing()
         {
             this.IsEditMode = false;
 
-            this.RequestFinishEditGeometry?.Invoke(); //this is called in MapViewer
+            this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
-            this.OnFinishEditGeometry?.Invoke(null, EventArgs.Empty); //this is called in the apps
+            this.OnDeleteDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected void MeasureLength()
+        protected void FinishEdit()
         {
-            this.RequestMeasureLength?.Invoke();
+            this.IsEditMode = false;
+
+            this.RequestFinishEdit?.Invoke(); //this is called in MapViewer
+
+            this.OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected void MeasureArea()
+        protected async Task<Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible)
         {
-            this.RequestMeasureArea?.Invoke();
+            //this.IsMeasureMode = true;
+
+            var result = await this.RequestMeasure?.Invoke(mode, isEdgeLabelVisible);
+
+            //this.IsMeasureMode = false;
+
+            return result;
         }
+
+        //protected void MeasureArea()
+        //{
+        //    this.IsMeasureMode = true;
+
+        //    this.RequestMeasureArea?.Invoke();
+        //}
 
         protected void CancelMeasure()
         {
+            //this.IsMeasureMode = false;
+
             this.RequestCancelMeasure?.Invoke();
         }
 
@@ -665,7 +723,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        public async Task<Geometry> Edit(Geometry geometry)
+        public async Task<Geometry> Edit(Geometry geometry, EditableFeatureLayerOptions options)
         {
             this.IsEditMode = true;
 
@@ -673,7 +731,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
             if (this.RequestEdit != null)
             {
-                result = await RequestEdit(geometry);
+                result = await RequestEdit(geometry, options);
             }
             else
             {
@@ -685,18 +743,23 @@ namespace IRI.Jab.Cartography.Presenter.Map
             return result;
         }
 
-        public Task<Geometry> Edit(List<Ham.SpatialBase.Point> points, bool isClosed)
+        public Task<Geometry> Edit(List<Ham.SpatialBase.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
         {
             if (points == null || points.Count < 1)
             {
                 return new Task<Geometry>(null);
             }
 
+            if (options == null)
+            {
+                options = new EditableFeatureLayerOptions();
+            }
+
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
 
             Geometry geometry = new Geometry(points.ToArray(), type);
 
-            return Edit(geometry);
+            return Edit(geometry, options);
         }
 
         public void FireMapStatusChanged(MapStatus status)
@@ -903,7 +966,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_cancelNewDrawingCommand == null)
                 {
-                    _cancelNewDrawingCommand = new RelayCommand(param => this.CancelGetDrawing());
+                    _cancelNewDrawingCommand = new RelayCommand(param => this.CancelNewDrawing());
                 }
                 return _cancelNewDrawingCommand;
             }
@@ -917,16 +980,27 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_cancelEditDrawingCommand == null)
                 {
-                    _cancelEditDrawingCommand = new RelayCommand(param =>
-                    {
-                        this.IsEditMode = false;
-
-                        this.CancelEditGeometry();
-                    });
+                    _cancelEditDrawingCommand = new RelayCommand(param => this.CancelEdit());
                 }
                 return _cancelEditDrawingCommand;
             }
         }
+
+        private RelayCommand _deleteDrawingCommand;
+
+        public RelayCommand DeleteDrawingCommand
+        {
+            get
+            {
+                if (_deleteDrawingCommand == null)
+                {
+                    _deleteDrawingCommand = new RelayCommand(param => this.DeleteDrawing());
+                }
+                return _deleteDrawingCommand;
+            }
+
+        }
+
 
         private RelayCommand _finishEditDrawingCommand;
 
@@ -937,14 +1011,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                 if (_finishEditDrawingCommand == null)
                 {
-                    _finishEditDrawingCommand = new RelayCommand(param =>
-                    {
-                        this.FinishEditGeometry();
-                    });
+                    _finishEditDrawingCommand = new RelayCommand(param => this.FinishEdit());
                 }
                 return _finishEditDrawingCommand;
             }
         }
+
 
         private RelayCommand _changeBaseMapCommand;
 
@@ -966,7 +1038,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                             if (provider != this.ProviderType || tileType != this.BaseMapType)
                             {
-                                SetTileService(provider, tileType, IsCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                                SetTileService(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
                             }
                         }
                         catch (Exception ex)
@@ -980,7 +1052,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-
+        //**********Measurements
         private RelayCommand _measureLengthCommand;
 
         public RelayCommand MeasureLengthCommand
@@ -989,7 +1061,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_measureLengthCommand == null)
                 {
-                    _measureLengthCommand = new RelayCommand(param => this.MeasureLength());
+                    _measureLengthCommand = new RelayCommand(async param => await this.Measure(DrawMode.Polyline, param == null ? true : (bool)param));
                 }
 
                 return _measureLengthCommand;
@@ -1004,7 +1076,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_measureAreaCommand == null)
                 {
-                    _measureAreaCommand = new RelayCommand(param => this.MeasureArea());
+                    _measureAreaCommand = new RelayCommand(async param => await this.Measure(DrawMode.Polygon, param == null ? true : (bool)param));
                 }
 
                 return _measureAreaCommand;
@@ -1041,11 +1113,13 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public event EventHandler OnExtentChanged;
 
-        public event EventHandler OnCancelEditGeometry;
+        public event EventHandler OnCancelEdit;
 
-        public event EventHandler OnFinishEditGeometry;
+        public event EventHandler OnFinishEdit;
 
-        public event EventHandler OnCancelDrawGeometry;
+        public event EventHandler OnCancelNewDrawing;
+
+        public event EventHandler OnDeleteDrawing;
 
         #endregion
     }

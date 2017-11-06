@@ -595,11 +595,11 @@ namespace IRI.Jab.Cartography
 
             var index = _mainLocateables.IndexOf(locateable);
 
-            var newScreen = _toScreen.Transform(e.NewValue);
+            //var newScreen = _toScreen.Transform(e.NewValue);
 
-            var oldScreen = _toScreen.Transform(e.OldValue);
+            //var oldScreen = _toScreen.Transform(e.OldValue);
 
-            var displacement = newScreen - oldScreen;
+            //var displacement = newScreen - oldScreen;
 
             if (index > 0)
             {

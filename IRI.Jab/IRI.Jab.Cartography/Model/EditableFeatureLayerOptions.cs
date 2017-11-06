@@ -6,19 +6,81 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Jab.Common.Extensions;
 using System.Windows;
+using IRI.Jab.Common;
 
 namespace IRI.Jab.Cartography.Model
 {
-    public class EditableFeatureLayerOptions
+    public class EditableFeatureLayerOptions : Notifier
     {
         static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
         static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
 
         public bool IsNewDrawing { get; set; } = false;
 
-        public bool IsVerticesLabelVisible { get; set; } = false;
+        private bool _isFeatureInfoVisible;
 
-        public bool IsEdgeLengthVisible { get; set; } = false;
+        public bool IsFeatureInfoVisible
+        {
+            get { return _isFeatureInfoVisible; }
+            set
+            {
+                _isFeatureInfoVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool _isVerticesLabelVisible = false;
+
+        public bool IsVerticesLabelVisible
+        {
+            get { return _isVerticesLabelVisible && IsVerticesVisible; }
+            set
+            {
+                _isVerticesLabelVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool _isEdgeLabelVisible = false;
+
+        public bool IsEdgeLabelVisible
+        {
+            get { return _isEdgeLabelVisible; }
+            set
+            {
+                _isEdgeLabelVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool _isVerticesVisible;
+
+        public bool IsVerticesVisible
+        {
+            get { return _isVerticesVisible; }
+            set
+            {
+                _isVerticesVisible = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsVerticesLabelVisible));
+            }
+        }
+
+        private bool _isAutoMeasureEnabled = false;
+
+        public bool IsAutoMeasureEnabled
+        {
+            get { return _isAutoMeasureEnabled; }
+            set
+            {
+                _isAutoMeasureEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         //public Brush Fill { get; set; } = _stroke;
 

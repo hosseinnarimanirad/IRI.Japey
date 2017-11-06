@@ -159,6 +159,9 @@
     <Compile Include="View\MapMarkers\CoordinateMarker.xaml.cs">
       <DependentUpon>CoordinateMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MapMarkers\RectangleLabelMarker.xaml.cs">
+      <DependentUpon>RectangleLabelMarker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MapMarkers\PhotoMarker.xaml.cs">
       <DependentUpon>PhotoMarker.xaml</DependentUpon>
     </Compile>
@@ -219,6 +222,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Assets\Shapes\MaterialDesign.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Assets\Shapes\Appbar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -256,6 +263,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MapMarkers\CoordinateMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MapMarkers\RectangleLabelMarker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

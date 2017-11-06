@@ -521,5 +521,12 @@ namespace IRI.Ham.SpatialBase.Primitives
 
             return result;
         }
+
+        public Point GetMeanPoint()
+        {
+            var allPoints = GetAllPoints();
+
+            return new Point(allPoints.Sum(i => i.X) / allPoints.Length, allPoints.Sum(i => i.Y) / allPoints.Length);
+        }
     }
 }

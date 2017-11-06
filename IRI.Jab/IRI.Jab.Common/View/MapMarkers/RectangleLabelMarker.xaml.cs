@@ -20,7 +20,7 @@ namespace IRI.Jab.Common.View.MapMarkers
     /// <summary>
     /// Interaction logic for ShapeWithLabelMarker.xaml
     /// </summary>
-    public partial class LabelMarker : UserControl
+    public partial class RectangleLabelMarker : UserControl
     {
          
         public string LabelValue
@@ -31,11 +31,11 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         // Using a DependencyProperty as the backing store for LabelValue.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelValueProperty =
-            DependencyProperty.Register(nameof(LabelValue), typeof(string), typeof(LabelMarker), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(LabelValue), typeof(string), typeof(RectangleLabelMarker), new PropertyMetadata(string.Empty));
 
 
 
-        public LabelMarker(string count, bool isExpandBringToFrontEnabled = false)
+        public RectangleLabelMarker(string count, bool isExpandBringToFrontEnabled = false)
         {
             InitializeComponent();
 

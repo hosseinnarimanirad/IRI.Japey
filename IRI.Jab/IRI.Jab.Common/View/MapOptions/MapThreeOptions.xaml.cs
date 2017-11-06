@@ -27,6 +27,13 @@ namespace IRI.Jab.Common.View.MapOptions
             InitializeComponent();
         }
 
+        public MapThreeOptions(bool isPointEllipseVisible = true)
+        {
+            InitializeComponent();
+
+            this.pointEllipse.Visibility = isPointEllipseVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Storyboard storyboard = new Storyboard();

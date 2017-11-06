@@ -87,6 +87,21 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
+        public static double GetArea(this Geometry geometry)
+        {
+            var sqlGeometry = geometry.AsSqlGeometry();
+
+            if (sqlGeometry != null && sqlGeometry.STIsValid().Value)
+            {
+                return geometry.AsSqlGeometry().STArea().Value;
+            }
+            else
+            {
+                return double.NaN;
+            }
+
+        }
+
         public static OpenGisGeometryType ToOpenGisGeometryType(this GeometryType type)
         {
             return (OpenGisGeometryType)((int)type);
@@ -316,23 +331,24 @@ namespace IRI.Ket.SpatialExtensions
         {
             var length = CalculateLength(line, toGeodeticWgs84Func);
 
-            if (length < 1)
-            {
-                return $"{length * 10:N3} cm";
-            }
-            else if (length < 1000)
-            {
-                return $"{length:N3} m";
-            }
-            else if (length < 1E6)
-            {
-                return $"{length / 1E3:N3} Km";
-            }
-            //else if (length < 1E9)
-            else
-            {
-                return $"{length / 1E6:N3} Mm";
-            }
+            return Common.Helpers.UnitHelper.GetLengthLabel(length);
+            //if (length < 1)
+            //{
+            //    return $"{length * 10:N3} cm";
+            //}
+            //else if (length < 1000)
+            //{
+            //    return $"{length:N3} m";
+            //}
+            //else if (length < 1E6)
+            //{
+            //    return $"{length / 1E3:N3} Km";
+            //}
+            ////else if (length < 1E9)
+            //else
+            //{
+            //    return $"{length / 1E6:N3} Mm";
+            //}
 
         }
 

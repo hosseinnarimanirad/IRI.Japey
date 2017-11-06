@@ -357,12 +357,16 @@ namespace IRI.Jab.Common.Helpers
         }
 
         public static void MergeTilesAndSaveByGdiplus(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName,
-            System.Drawing.Imaging.PixelFormat format = System.Drawing.Imaging.PixelFormat.Format24bppRgb, string waterMarkText = null)
+            System.Drawing.Imaging.ImageFormat imageFormat,
+            System.Drawing.Imaging.PixelFormat format = System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+            string waterMarkText = null)
         {
             if (tiles == null || tiles.Count < 1)
             {
                 return;
             }
+
+            var sizeoff = System.Drawing.Image.GetPixelFormatSize(System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             var minX = tiles.Min(t => t.ColumnNumber);
 
@@ -396,7 +400,8 @@ namespace IRI.Jab.Common.Helpers
             //    AddWaterMark(outputImage, waterMarkText, Extensions.BrushHelper.AsGdiBrush(System.Drawing.Color.White, .7));
             //}
 
-            outputImage.Save(outputFileName);
+            //if imageFormat not provided, then it will use png format
+            outputImage.Save(outputFileName, imageFormat);
 
             var worldFile = Ket.WorldfileFormat.WorldfileManager.Create(tiles.GetTotalImageBoundsInWebMercator(), width * 256, height * 256);
 
@@ -471,6 +476,12 @@ namespace IRI.Jab.Common.Helpers
                 }
 
             }
+        }
+
+        public static long CalculateBitmapSize(int width, int height, int bitsPerPixel = 24)
+        {
+            //54 byte: bmp header size
+            return (long)(54.0 + (bitsPerPixel / 8.0) * width * height);
         }
     }
 }

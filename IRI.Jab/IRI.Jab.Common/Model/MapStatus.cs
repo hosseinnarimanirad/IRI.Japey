@@ -8,12 +8,12 @@ namespace IRI.Jab.Common.Model
 {
     public enum MapStatus
     {
+        Idle,
         Drawing,
-        EditingGeometry,
-        Measurement,
+        Editing,
+        //Measuring,
         //Rendering,
         //Paning,
         //Zooming,
-        Idle,
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="Helpers\PathHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="Helpers\StreamHelper.cs" />
+    <Compile Include="Helpers\UnitHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
     <Compile Include="Helpers\XsdHelper.cs" />
     <Compile Include="Model\Esri\EsriJsonGeometry.cs" />

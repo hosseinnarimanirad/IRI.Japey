@@ -448,7 +448,7 @@ namespace IRI.Jab.MapViewer
                 return this.GetDrawingAsync(mode, null, display);
             };
 
-            presenter.RequestCancelNewDrawing = () => this.CancelGetDrawing();
+            presenter.RequestCancelNewDrawing = () => this.CancelDrawing();
 
             presenter.RequestCancelEdit = () => this.CancelEditGeometry();
 
@@ -3051,121 +3051,7 @@ namespace IRI.Jab.MapViewer
 
             return tcs.Task;
         }
-
-        ////It has animation
-        //private void ZoomToExtent(Rect intermediateBoundingBox, bool ignoreCase, bool isExactExtent = true, Action callback = null)
-        //{
-        //    if (double.IsNaN(intermediateBoundingBox.Width + intermediateBoundingBox.Height))
-        //        return;
-
-        //    else if (intermediateBoundingBox.Width + intermediateBoundingBox.Height == 0)
-        //    {
-        //        PanTo(intermediateBoundingBox.X, intermediateBoundingBox.Y, callback);
-
-        //        return;
-        //    }
-
-        //    StopUnnecessaryJobs();
-
-        //    ClearLayer(LayerType.AnimatingItem, false);
-
-        //    ClearLayer(LayerType.Complex, false);
-
-
-        //    counter = 0;
-
-        //    Point lowerLeft = (intermediateBoundingBox.BottomLeft);
-
-        //    Point upperRight = (intermediateBoundingBox.TopRight);
-
-        //    if ((lowerLeft - upperRight).Length < 15 && !ignoreCase)
-        //    {
-        //        ZoomToPoint(MapToScreen(intermediateBoundingBox.Location), 1.25);
-        //    }
-        //    else
-        //    {
-        //        counterValue = 8;
-
-        //        Point intermediateExtentCenter = new Point((intermediateBoundingBox.Left + intermediateBoundingBox.Right) / 2.0,
-        //                                                    (intermediateBoundingBox.Top + intermediateBoundingBox.Bottom) / 2.0);
-
-        //        Point windowCenter = new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0);
-
-        //        Point screenExtentCenter = MapToScreen(intermediateExtentCenter);
-
-        //        double xScale = (isExactExtent ? this.mapView.ActualWidth : this.mapView.ActualWidth - 20) / intermediateBoundingBox.Width;
-
-        //        double yScale = (isExactExtent ? this.mapView.ActualHeight : this.mapView.ActualHeight - 20) / intermediateBoundingBox.Height;
-
-        //        double scale = xScale > yScale ? yScale : xScale;
-
-        //        double pointScale = ToMapScale(scale) / this.MapScale;
-
-        //        DoubleAnimation animation = new DoubleAnimation()
-        //        {
-        //            Duration = new Duration(TimeSpan.FromMilliseconds(100)),
-        //            FillBehavior = FillBehavior.Stop,
-        //        };
-
-        //        animation.Completed += (s, e) =>
-        //        {
-        //            if (++counter != counterValue)
-        //                return;
-
-        //            this.OnZoomChanged.SafeInvoke(null, null);
-
-        //            Refresh();
-
-        //            if (callback != null)
-        //            {
-        //                Dispatcher.BeginInvoke(callback, DispatcherPriority.Background, null);
-        //            }
-
-        //            //RaisePropertyChanged("MapScale");
-
-        //            this.counterValue = -1;
-        //        };
-
-        //        animation.To = windowCenter.X - intermediateExtentCenter.X;
-        //        this.panTransform.BeginAnimation(TranslateTransform.XProperty, animation);
-
-        //        animation.To = windowCenter.Y - intermediateExtentCenter.Y;
-        //        this.panTransform.BeginAnimation(TranslateTransform.YProperty, animation);
-
-        //        animation.To = windowCenter.X - screenExtentCenter.X;
-        //        this.panTransformForPoints.BeginAnimation(TranslateTransform.XProperty, animation);
-
-        //        animation.To = windowCenter.Y - screenExtentCenter.Y;
-        //        this.panTransformForPoints.BeginAnimation(TranslateTransform.YProperty, animation);
-
-        //        this.panTransform.X = windowCenter.X - intermediateExtentCenter.X;
-        //        this.panTransform.Y = windowCenter.Y - intermediateExtentCenter.Y;
-
-        //        this.panTransformForPoints.X = 0;
-        //        this.panTransformForPoints.Y = 0;
-
-        //        animation.To = this.mapView.ActualWidth / 2.0;
-        //        this.zoomTransform.BeginAnimation(ScaleTransform.CenterXProperty, animation);
-
-        //        animation.To = this.mapView.ActualHeight / 2.0;
-        //        this.zoomTransform.BeginAnimation(ScaleTransform.CenterYProperty, animation);
-
-        //        animation.To = scale * baseScaleX;
-        //        this.zoomTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animation);
-
-        //        animation.To = scale * baseScaleY;
-        //        this.zoomTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animation);
-
-        //        this.zoomTransform.CenterX = this.mapView.ActualWidth / 2.0;
-
-        //        this.zoomTransform.CenterY = this.mapView.ActualHeight / 2.0;
-
-        //        this.zoomTransform.ScaleX = scale * baseScaleX;
-
-        //        this.zoomTransform.ScaleY = scale * baseScaleY;
-        //    }
-        //}
-
+         
         private void ZoomToPoint(Point windowPoint, double deltaZoom)
         {
             Debug.Print("ZoomToPoint(Point windowPoint, double deltaZoom)");
@@ -3481,8 +3367,6 @@ namespace IRI.Jab.MapViewer
             if (e.ChangedButton != MouseButton.Left)
                 return;
 
-            Debug.WriteLine("DOWND");
-
             e.Handled = true;
 
             itWasPanningWhileDrawing = false;
@@ -3500,8 +3384,6 @@ namespace IRI.Jab.MapViewer
 
             if (e.ChangedButton != MouseButton.Left)
                 return;
-
-            Debug.WriteLine("UP");
 
             e.Handled = true;
 
@@ -3649,7 +3531,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        public void CancelGetDrawing()
+        public void CancelDrawing()
         {
             if (this.drawingCancellationToken != null)
             {
@@ -3908,174 +3790,6 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource bezierCancellationToken;
 
-        //public async Task DrawBezier()
-        //{
-        //    var start = (sb.Point)(await GetDrawingAsync(DrawMode.Point)).Geometry.Points.First();
-
-        //    var end = (sb.Point)(await GetDrawingAsync(DrawMode.Point)).Geometry.Points.First();
-
-        //    var startBezier = new Point(start.X, start.Y);
-
-        //    var endBezier = new Point(end.X, end.Y);
-
-        //    var bezierSegment = new BezierSegment(
-        //                            viewTransform.Transform(startBezier),
-        //                            viewTransform.Transform(endBezier),
-        //                            viewTransform.Transform(end.AsWpfPoint()),
-        //                            true);
-
-        //    PathFigure figure = new PathFigure() { StartPoint = viewTransform.Transform(start.AsWpfPoint()) };
-        //    figure.Segments.Add(bezierSegment);
-
-        //    PathGeometry pathGeometry = new PathGeometry(new List<PathFigure>() { figure });
-        //    pathGeometry.Transform = this.panTransformForPoints;
-
-        //    PathFigure fig2 = new PathFigure() { StartPoint = viewTransform.Transform(start.AsWpfPoint()) };
-        //    fig2.Segments.Add(new LineSegment(viewTransform.Transform(startBezier), true));
-
-        //    PathFigure fig3 = new PathFigure() { StartPoint = viewTransform.Transform(end.AsWpfPoint()) };
-        //    fig3.Segments.Add(new LineSegment(viewTransform.Transform(endBezier), true));
-
-        //    Path temp = new Path();
-        //    temp.Data = pathGeometry;
-        //    temp.Stroke = new SolidColorBrush(Colors.Black);
-        //    temp.StrokeThickness = 2;
-        //    //temp.RenderTransform = this.panTransformForPoints;
-        //    temp.Tag = new LayerTag(0) { IsTiled = false, LayerType = LayerType.Drawing };
-
-        //    this.mapView.Children.Add(temp);
-
-        //    Path axLine2 = new Path() { Stroke = new SolidColorBrush(Colors.Gray), StrokeThickness = 1, RenderTransform = panTransformForPoints };
-        //    axLine2.Data = new PathGeometry(new List<PathFigure>() { fig2 });
-        //    axLine2.Tag = new LayerTag(-1) { IsTiled = false, LayerType = LayerType.Drawing };
-        //    this.mapView.Children.Add(axLine2);
-
-        //    Path axLine3 = new Path() { Stroke = new SolidColorBrush(Colors.Gray), StrokeThickness = 1, RenderTransform = panTransformForPoints };
-        //    axLine3.Data = new PathGeometry(new List<PathFigure>() { fig3 });
-        //    axLine3.Tag = new LayerTag(-1) { IsTiled = false, LayerType = LayerType.Drawing };
-        //    this.mapView.Children.Add(axLine3);
-
-
-        //    //Geometry g = Geometry.Parse("F1 M 22.6563,23.75L 24.6563,25.75L 31.9063,32.75L 25.4063,32.75L 15.9063,23.75L 25.4063,14.75L 31.9063,14.75L 24.6563,21.75L 22.6563,23.75 Z");
-
-        //    //Centered
-        //    Geometry g = Geometry.Parse("F1 M 6.75,9L 8.75,11L 16,18L 9.5,18L 0,9L 9.5,0L 16,0L 8.75,7L 6.75,9 Z");
-        //    //Geometry g = Geometry.Parse("F1 M 0,-1.52588e-005L 16,15.9986L 0,31.9986L 8.94823,15.9986L 0,-1.52588e-005 Z ");
-
-
-        //    var bound = g.Bounds;
-
-        //    Action update = () =>
-        //    {
-        //        ClearLayer(LayerType.AnimatingItem, false);
-
-        //        for (int i = 0; i <= 10; i++)
-        //        {
-        //            double fraction = (i) / 10.0;
-
-        //            Point location, direction;
-
-        //            pathGeometry.GetPointAtFractionLength(fraction, out location, out direction);
-
-        //            Path tempPath = new Path() { Fill = new SolidColorBrush(Colors.Red), Data = g };
-
-        //            Matrix matrix = Matrix.Identity;
-
-        //            var rotation = Math.Atan2(direction.Y, direction.X) * 180 / Math.PI;
-
-        //            matrix.RotateAt(rotation, (bound.Width + bound.X) / 2.0, (bound.Height + bound.Y) / 2.0);
-
-        //            matrix.Translate(location.X - bound.Width / 2.0 - bound.X / 2.0, location.Y - bound.Height / 2.0 - bound.Y / 2.0);
-
-        //            tempPath.RenderTransform = new MatrixTransform(matrix);
-
-        //            tempPath.Tag = new LayerTag(-1) { IsTiled = false, LayerType = LayerType.AnimatingItem };
-
-        //            mapView.Children.Add(tempPath);
-
-        //            if (!mapView.Children.Contains(temp))
-        //            {
-        //                mapView.Children.Add(temp);
-        //            }
-        //        }
-        //    };
-
-        //    var startLocateable = new Locateable(Projection.MercatorToGeodetic(start)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
-        //    startLocateable.OnPositionChanged += (s, e) =>
-        //    {
-        //        var l = (Locateable)s;
-        //        figure.StartPoint = viewTransform.Transform(new Point(l.X, l.Y));
-        //        fig2.StartPoint = viewTransform.Transform(new Point(l.X, l.Y));
-        //        update();
-
-        //    };
-
-
-        //    var endLocateable = new Locateable(Projection.MercatorToGeodetic(end)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
-        //    endLocateable.OnPositionChanged += (s, e) =>
-        //    {
-        //        var l = (Locateable)s;
-        //        bezierSegment.Point3 = viewTransform.Transform(new Point(l.X, l.Y));
-        //        fig3.StartPoint = viewTransform.Transform(new Point(l.X, l.Y));
-
-        //        update();
-        //    };
-
-
-        //    var startBezierLocateable = new Locateable(Projection.MercatorToGeodetic(startBezier.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
-        //    startBezierLocateable.OnPositionChanged += (s, e) =>
-        //    {
-        //        var l = (Locateable)s;
-        //        bezierSegment.Point1 = viewTransform.Transform(new Point(l.X, l.Y));
-        //        (fig2.Segments.First() as LineSegment).Point = viewTransform.Transform(new Point(l.X, l.Y));
-        //        update();
-        //    };
-
-
-        //    var endBezierLocateable = new Locateable(Projection.MercatorToGeodetic(endBezier.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
-        //    endBezierLocateable.OnPositionChanged += (s, e) =>
-        //    {
-        //        var l = (Locateable)s;
-        //        bezierSegment.Point2 = viewTransform.Transform(new Point(l.X, l.Y));
-        //        (fig3.Segments.First() as LineSegment).Point = viewTransform.Transform(new Point(l.X, l.Y));
-        //        update();
-        //    };
-
-
-        //    var specialLayer = new SpecialPointLayer("temp", new List<Locateable> { startLocateable, startBezierLocateable, endBezierLocateable, endLocateable }, 1, ScaleInterval.All, LayerType.MoveableItem);
-
-        //    this.AddSpecialPointLayerToMap(specialLayer);
-        //    update();
-        //}
-
-        //public async Task DrawBezier2()
-        //{
-        //    var polyline = (await GetDrawingAsync(DrawMode.Polyline)).Geometry.Points.Cast<sb.Point>().ToList();
-
-        //    PolyBezierLayer layer = new PolyBezierLayer(polyline, this.viewTransform);
-
-        //    layer.RequestRightClickOptions = (i1, i2, i3) =>
-        //    {
-        //        this.AddRightClickOptions(i1, i2, i3);
-        //    };
-
-        //    layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
-
-        //    layer.RequestRefresh = l =>
-        //      {
-        //          this.RemoveLayer(l);
-
-        //          this.SetLayer(l);
-
-        //          AddPolyBezierLayer(l);
-        //      };
-
-        //    this.SetLayer(layer);
-
-        //    this.AddPolyBezierLayer(layer);
-
-        //}
-
         private async Task<PolyBezierLayer> GetBezier(Geometry decoration, VisualParameters decorationVisual)
         {
             bezierCancellationToken = new CancellationTokenSource();
@@ -4221,9 +3935,10 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource _measureCancellationToken;
 
-        public async Task<sb.Primitives.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action)
+        Guid _measureId;
+
+        private async Task<sb.Primitives.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
         {
-            //this.Status = MapStatus.Measuring;
             this._measureCancellationToken = new CancellationTokenSource();
 
             this._measureCancellationToken.Token.Register(() =>
@@ -4232,8 +3947,11 @@ namespace IRI.Jab.MapViewer
 
                 _measureCancellationToken = null;
 
-                return;//  async() => null;
+                CancelDrawing();
+
+                CancelEditGeometry();
             });
+
 
             this.RemoveLayer(measureLayer);
 
@@ -4278,32 +3996,37 @@ namespace IRI.Jab.MapViewer
                 IsEdgeLabelVisible = isEdgeLabelVisible
             }, true);
 
+            this.RemoveLayer(measureLayer);
+
             if (result != null)
             {
-                this.RemoveLayer(measureLayer);
-
-                await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true });
+                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true });
             }
 
-            onMoveForDrawAction = null;
+            if (_measureId == guid)
+            {
+                onMoveForDrawAction = null;
 
-            //this.Status = MapStatus.Idle;
+                _measureCancellationToken = null;
 
-            //this.Pan();
-
+                if (result==null)
+                {
+                    this.Pan();
+                }
+            }
+             
             return result;
         }
 
         public async Task<sb.Primitives.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
         {
+            _measureId = Guid.NewGuid();
+
             try
             {
-                if (this._measureCancellationToken != null)
-                {
-                    this._measureCancellationToken.Cancel();
-                }
+                CancelMeasure();
 
-                return await Measure(mode, isEdgeLabelVisible, action);
+                return await Measure(mode, isEdgeLabelVisible, action, _measureId);
             }
             catch (TaskCanceledException)
             {
@@ -4319,19 +4042,13 @@ namespace IRI.Jab.MapViewer
 
                 throw ex;
             }
-
         }
 
         public void CancelMeasure()
         {
-            if (this.drawingCancellationToken != null)
+            if (_measureCancellationToken != null)
             {
-                this.drawingCancellationToken.Cancel();
-            }
-
-            if (this.editingCancellationToken != null)
-            {
-                this.editingCancellationToken.Cancel();
+                _measureCancellationToken.Cancel();
             }
         }
 
