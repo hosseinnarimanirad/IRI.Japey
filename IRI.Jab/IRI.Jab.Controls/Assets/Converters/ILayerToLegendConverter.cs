@@ -1,13 +1,13 @@
-﻿using System;
+﻿using IRI.Jab.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using IRI.Jab.Common.Model;
 
-namespace IRI.Jab.LegendControl
+namespace IRI.Jab.Controls.Assets.Converters
 {
     public class ILayerToLegendConverter : IValueConverter
     {

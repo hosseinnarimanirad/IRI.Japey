@@ -15,7 +15,7 @@ using IRI.Jab.Cartography;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
 
-namespace IRI.Jab.LegendControl
+namespace IRI.Jab.Controls.View.Map
 {
     //public enum FeatureType
     //{

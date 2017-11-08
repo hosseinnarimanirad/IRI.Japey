@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.LegendControl.View
+namespace IRI.Jab.Controls.View.Map
 {
     /// <summary>
     /// Interaction logic for ComplexLegend.xaml

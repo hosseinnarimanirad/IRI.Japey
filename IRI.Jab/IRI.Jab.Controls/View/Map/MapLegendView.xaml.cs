@@ -15,26 +15,26 @@ using IRI.Jab.Cartography;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 
-namespace IRI.Jab.LegendControl
+namespace IRI.Jab.Controls.View.Map
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class MapLegend : UserControl
+    public partial class MapLegendView : UserControl
     {
         //public delegate void layerOpacityValueChangedEventHandler(object sender, RoutedPropertyChangedEventArgs<double> e);
 
-        public event IRI.Jab.LegendControl.MapLegendItem.layerOpacityValueChangedEventHandler LayerOpacityValueChanged;
+        public event MapLegendItem.layerOpacityValueChangedEventHandler LayerOpacityValueChanged;
 
         //public delegate void layerVisibilityChangedEventHandler(object sender, RoutedEventArgs e);
 
-        public event IRI.Jab.LegendControl.MapLegendItem.layerVisibilityChangedEventHandler LayerVisibilityChanged;
+        public event MapLegendItem.layerVisibilityChangedEventHandler LayerVisibilityChanged;
 
         //public delegate void layerStyleChangedEventHandler(object sender, MouseButtonEventArgs e);
 
-        public event IRI.Jab.LegendControl.MapLegendItem.layerStyleChangedEventHandler LayerStyleChanged;
+        public event MapLegendItem.layerStyleChangedEventHandler LayerStyleChanged;
 
-        public MapLegend()
+        public MapLegendView()
         {
             InitializeComponent();
         }
@@ -54,26 +54,17 @@ namespace IRI.Jab.LegendControl
 
         void item_LayerStyleChanged(object sender, MouseButtonEventArgs e)
         {
-            if (this.LayerStyleChanged != null)
-            {
-                this.LayerStyleChanged(sender, e);
-            }
+            this.LayerStyleChanged?.Invoke(sender, e);
         }
 
         void item_LayerVisibilityChanged(object sender, RoutedEventArgs e)
         {
-            if (this.LayerVisibilityChanged != null)
-            {
-                this.LayerVisibilityChanged(sender, e);
-            }
+            LayerVisibilityChanged?.Invoke(sender, e);
         }
 
         void item_LayerOpacityValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (this.LayerOpacityValueChanged != null)
-            {
-                this.LayerOpacityValueChanged(sender, e);
-            }
+            this.LayerOpacityValueChanged?.Invoke(sender, e);
         }
 
         public void RemoveLayer(string layerName)

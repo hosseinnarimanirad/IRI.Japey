@@ -35,10 +35,18 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,9 +54,22 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="telerik.windows.controls">
+      <HintPath>..\..\IRI.Deploy\Telerik\telerik.windows.controls.dll</HintPath>
+    </Reference>
+    <Reference Include="telerik.windows.controls.input">
+      <HintPath>..\..\IRI.Deploy\Telerik\telerik.windows.controls.input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Navigation">
+      <HintPath>..\..\IRI.Deploy\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data">
+      <HintPath>..\..\IRI.Deploy\Telerik\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,6 +78,15 @@
     </Compile>
     <Compile Include="View\Input\InputCoordinate.xaml.cs">
       <DependentUpon>InputCoordinate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Map\ComplexLegend.xaml.cs">
+      <DependentUpon>ComplexLegend.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Map\MapLegendView.xaml.cs">
+      <DependentUpon>MapLegendView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Map\MapLegendItem.xaml.cs">
+      <DependentUpon>MapLegendItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Scalebar.xaml.cs">
       <DependentUpon>Scalebar.xaml</DependentUpon>
@@ -105,10 +135,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Map\ComplexLegend.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Map\MapLegendView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Map\MapLegendItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Scalebar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
