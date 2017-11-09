@@ -35,6 +35,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
@@ -47,6 +50,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -71,10 +77,24 @@
   <ItemGroup>
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
+    <Compile Include="Model\DegreeMinuteSecondModel.cs" />
+    <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\Imaging\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Input\DegreeMinuteSecondView.xaml.cs">
+      <DependentUpon>DegreeMinuteSecondView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Input\GoToGeodeticView.xaml.cs">
+      <DependentUpon>GoToGeodeticView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Input\GoToMapProjectView.xaml.cs">
+      <DependentUpon>GoToMapProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Input\GoToView.xaml.cs">
+      <DependentUpon>GoToView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Input\InputCoordinate.xaml.cs">
       <DependentUpon>InputCoordinate.xaml</DependentUpon>
@@ -130,6 +150,22 @@
     <Page Include="View\Imaging\ImageViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Input\DegreeMinuteSecondView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Input\GoToGeodeticView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Input\GoToMapProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Input\GoToView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Input\InputCoordinate.xaml">
       <Generator>MSBuild:Compile</Generator>

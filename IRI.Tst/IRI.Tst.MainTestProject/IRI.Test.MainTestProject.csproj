@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B5FE231F-DC0F-4FA0-BF3B-34C0CE0CF37D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IRI.Test.MainTestProject</RootNamespace>
+    <AssemblyName>IRI.Test.MainTestProject</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\SqlGeometrySamples.cs" />
+    <Compile Include="Assets\SqlSpatialSamples\SqlGeometrySamples.cs" />
+    <Compile Include="Common\HexStringHelper.cs" />
+    <Compile Include="Common\WorldfileFormatTest.cs" />
+    <Compile Include="CoordinateSystems\ChangeDatumTest.cs" />
+    <Compile Include="CoordinateSystems\FourInOneUnitTest.cs" />
+    <Compile Include="CoordinateSystems\LccUnitTest.cs" />
+    <Compile Include="CoordinateSystems\MercatorUnitTest.cs" />
+    <Compile Include="CoordinateSystems\ProjectUnitTest.cs" />
+    <Compile Include="EsriJson\EsriJsonTest.cs" />
+    <Compile Include="OGC\GeometryTypesTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CoordinateSystemUnitTest.cs" />
+    <Compile Include="SpatialBaseTest.cs" />
+    <Compile Include="SpatialConversions\TestShapefileToKml.cs" />
+    <Compile Include="SpatialConversions\TestSqlSpatialToShapefile.cs" />
+    <Compile Include="Spatial\KdTreeTest.cs" />
+    <Compile Include="WebMercatorUtilityTest.cs" />
+    <Compile Include="SqlServerSpatialExtension.cs" />
+    <Compile Include="ShapefileFormatTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
+      <Project>{95669E46-2465-40FF-88BA-BA6ABCA548AA}</Project>
+      <Name>IRI.Ham.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
+      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
+      <Name>IRI.Ham.SpatialBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
+      <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>
+      <Name>IRI.Ket.DataStructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.KmlFormat\IRI.Ket.KmlFormat.csproj">
+      <Project>{1aa883d8-142e-4afb-aaaa-d094dcfdf607}</Project>
+      <Name>IRI.Ket.KmlFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
+      <Name>IRI.Ket.ShapefileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
+      <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
+      <Name>IRI.Ket.SqlServerSpatialExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
+      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
+      <Name>IRI.Std.OGC</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\PrjSamples\Clarke 1880 %28RGS%29.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\Cylindrical Equal Area %28world%29.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\lccnioc.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\Mercator %28sphere%29.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\Mercator %28world%29.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\WGS 1984 UTM Zone 39N.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\WGS 1984 Web Mercator %28auxiliary sphere%29.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\WGS 1984 World Mercator.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\WGS 1984.prj" />
+    <EmbeddedResource Include="Assets\PrjSamples\World_Mercator.prj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\PrjSamples\d900.prj" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Assets\ShapefileSamples\sourceD900.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\sourceD900.prj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\sourceD900.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\sourceD900.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\targetWebMercator.dbf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\targetWebMercator.prj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\targetWebMercator.shp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\ShapefileSamples\targetWebMercator.shx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\WorldfileSamples\NI38.8.jpgw">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\WorldfileSamples\vanakUTM.tfw">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

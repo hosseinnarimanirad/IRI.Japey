@@ -131,6 +131,7 @@
     <Compile Include="Helpers\RichTextBoxHelper.cs" />
     <Compile Include="Helpers\WorldfilePyramid.cs" />
     <Compile Include="Model\EditableItem.cs" />
+    <Compile Include="Model\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
     <Compile Include="Model\MapAction.cs" />

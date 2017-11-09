@@ -17,13 +17,13 @@ namespace IRI.Ham.MeasurementUnit
 
         private const double period = 360;
 
-        private short m_DegreePart;
+        private short _degreePart;
 
-        private byte m_MinutePart;
+        private byte _minutePart;
 
-        private double m_SecondPart;
+        private double _secondPart;
 
-        private int m_Sign;
+        private int _sign;
 
         #endregion
 
@@ -31,39 +31,27 @@ namespace IRI.Ham.MeasurementUnit
 
         public int Sign
         {
-            get { return this.m_Sign; }
+            get { return this._sign; }
         }
 
         public override AngleMode Mode
         {
             get { return AngleMode.Degree; }
         }
-
-        //public override AngleRange Range
-        //{
-        //    get { return m_Range; }
-
-        //    set
-        //    {
-        //        this.m_Range = value;
-
-        //        SetValue(this.m_Value);
-        //    }
-        //}
-
+         
         public short DegreePart
         {
-            get { return m_DegreePart; }
+            get { return _degreePart; }
         }
 
         public byte MinutePart
         {
-            get { return m_MinutePart; }
+            get { return _minutePart; }
         }
 
         public double SecondPart
         {
-            get { return m_SecondPart; }
+            get { return _secondPart; }
         }
 
         public override double Sin
@@ -116,13 +104,13 @@ namespace IRI.Ham.MeasurementUnit
         {
             this.OnValueChanged += new ValueChangedEventHandler(Degree_OnValueChanged);
 
-            this.m_Sign = Math.Sign(value);
+            this._sign = Math.Sign(value);
 
-            this.m_DegreePart = (short)Math.Floor(m_Sign * this.Value);
+            this._degreePart = (short)Math.Floor(_sign * this.Value);
 
-            this.m_MinutePart = (byte)Math.Floor((m_Sign * this.Value - this.m_DegreePart) * 60);
+            this._minutePart = (byte)Math.Floor((_sign * this.Value - this._degreePart) * 60);
 
-            this.m_SecondPart = (((m_Sign * this.Value - this.m_DegreePart) * 60 - this.m_MinutePart) * 60);
+            this._secondPart = (((_sign * this.Value - this._degreePart) * 60 - this._minutePart) * 60);
         }
 
         public Degree(double value, AngleRange range)
@@ -130,13 +118,13 @@ namespace IRI.Ham.MeasurementUnit
         {
             //this.m_Value = this.Adapter.Adopt(value);
 
-            this.m_Sign = Math.Sign(value);
+            this._sign = Math.Sign(value);
 
-            this.m_DegreePart = (short)Math.Floor(m_Sign * this.Value);
+            this._degreePart = (short)Math.Floor(_sign * this.Value);
 
-            this.m_MinutePart = (byte)Math.Floor((m_Sign * this.Value - this.m_DegreePart) * 60);
+            this._minutePart = (byte)Math.Floor((_sign * this.Value - this._degreePart) * 60);
 
-            this.m_SecondPart = (((m_Sign * this.Value - this.m_DegreePart) * 60 - this.m_MinutePart) * 60);
+            this._secondPart = (((_sign * this.Value - this._degreePart) * 60 - this._minutePart) * 60);
 
             this.OnValueChanged += new ValueChangedEventHandler(Degree_OnValueChanged);
             //this.m_Range = range;
@@ -144,13 +132,13 @@ namespace IRI.Ham.MeasurementUnit
 
         void Degree_OnValueChanged(object sender, EventArgs e)
         {
-            this.m_Sign = Math.Sign(this.Value);
+            this._sign = Math.Sign(this.Value);
 
-            this.m_DegreePart = (short)Math.Floor(m_Sign * this.Value);
+            this._degreePart = (short)Math.Floor(_sign * this.Value);
 
-            this.m_MinutePart = (byte)Math.Floor((m_Sign * this.Value - this.m_DegreePart) * 60);
+            this._minutePart = (byte)Math.Floor((_sign * this.Value - this._degreePart) * 60);
 
-            this.m_SecondPart = (((m_Sign * this.Value - this.m_DegreePart) * 60 - this.m_MinutePart) * 60);
+            this._secondPart = (((_sign * this.Value - this._degreePart) * 60 - this._minutePart) * 60);
         }
 
         public Degree(short degreePart, byte minutePart, double secondPart, AngleRange range)
@@ -171,17 +159,17 @@ namespace IRI.Ham.MeasurementUnit
                 minutePart = (byte)(minutePart % 60);
             }
 
-            this.m_Sign = (isPositive ? 1 : -1);
+            this._sign = (isPositive ? 1 : -1);
 
             //double value = m_Sign * (degreePart + minutePart / 60d + secondPart / 3600d);
 
             //this.m_Value = this.Adapter.Adopt(value);
 
-            this.m_DegreePart = (short)Math.Floor(m_Sign * this.Value);
+            this._degreePart = (short)Math.Floor(_sign * this.Value);
 
-            this.m_MinutePart = (byte)Math.Floor((m_Sign * this.Value - this.m_DegreePart) * 60);
+            this._minutePart = (byte)Math.Floor((_sign * this.Value - this._degreePart) * 60);
 
-            this.m_SecondPart = (((m_Sign * this.Value - this.m_DegreePart) * 60 - this.m_MinutePart) * 60);
+            this._secondPart = (((_sign * this.Value - this._degreePart) * 60 - this._minutePart) * 60);
 
             this.OnValueChanged += new ValueChangedEventHandler(Degree_OnValueChanged);
             //this.m_Range = range;

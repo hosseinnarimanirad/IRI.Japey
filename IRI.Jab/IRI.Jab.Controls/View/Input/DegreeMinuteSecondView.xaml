@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="IRI.Jab.Controls.View.Input.DegreeMinuteSecondView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <mahApp:NumericUpDown HasDecimals="False" Value="{Binding Degree, Mode=TwoWay}" Maximum="180" Minimum="-180" StringFormat="000°"/>
+            <mahApp:NumericUpDown HasDecimals="False" Value="{Binding Minute, Mode=TwoWay}" Maximum="59" Minimum="0" StringFormat="{}{0:00} ' "/>
+            <mahApp:NumericUpDown HasDecimals="True" Value="{Binding Second, Mode=TwoWay}" Maximum="59.99" Minimum="0" StringFormat="{}{0:N2} &quot;"/>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

@@ -8,15 +8,18 @@ namespace IRI.Ket.Common.Helpers
 {
     public static class DegreeHelper
     {
+
+        public const char minuteSign = '\u2019';
+
+        public const char secondSign = '\u201d';
+
         public static string ToDms(double degreeValue, bool roundSecond = false)
         {
-            var degreePart = Math.Truncate(degreeValue);
+            int degreePart, minutePart;
 
-            var minutePart = Math.Truncate((degreeValue - degreePart) * 60);
+            double secondPart;
 
-            var secondPart = (degreeValue - degreePart - minutePart / 60.0) * 3600;
-
-            var minuteSign = '\u2019'; var secondSign = '\u201d';
+            ToDms(degreeValue, roundSecond, out degreePart, out minutePart, out secondPart);
 
             if (roundSecond)
             {
@@ -27,7 +30,15 @@ namespace IRI.Ket.Common.Helpers
                 return FormattableString.Invariant($" {degreePart:000}° {minutePart:00}{minuteSign} {secondPart:00.#}{secondSign} ");
             }
 
+        }
 
+        public static void ToDms(double degreeValue, bool roundSecond, out int degree, out int minute, out double second)
+        {
+            degree = (int)Math.Truncate(degreeValue);
+
+            minute = (int)Math.Truncate((degreeValue - degree) * 60);
+
+            second = (degreeValue - degree - minute / 60.0) * 3600;
         }
     }
 }
