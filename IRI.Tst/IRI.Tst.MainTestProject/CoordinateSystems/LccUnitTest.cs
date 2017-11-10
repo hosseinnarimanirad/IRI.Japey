@@ -181,7 +181,7 @@ namespace IRI.Test.CoordinateSystem
         [TestMethod]
         public void TestNiocLcc()
         {
-            var niocLcc = MapProjections.LccNiocWithClarcke1880Rgs;
+            var niocLcc = DefaultMapProjections.LccNiocWithClarcke1880Rgs;
 
             double wgsPhi, wgsLambda, x_1, y_1;
 
@@ -205,7 +205,7 @@ namespace IRI.Test.CoordinateSystem
         [TestMethod]
         public void TestNiocLcc2()
         {
-            var niocLcc = MapProjections.LccNiocWithClarcke1880Rgs;
+            var niocLcc = DefaultMapProjections.LccNiocWithClarcke1880Rgs;
 
             double wgsPhi, wgsLambda, x_1, y_1;
 

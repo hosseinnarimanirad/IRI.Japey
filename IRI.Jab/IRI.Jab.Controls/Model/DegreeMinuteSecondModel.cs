@@ -9,27 +9,39 @@ namespace IRI.Jab.Controls.Model
 {
     public class DegreeMinuteSecondModel : Notifier
     {
-        private int _degree;
+        private double _degree;
 
-        public int Degree
+        public double Degree
         {
             get { return _degree; }
             set
             {
+                if (_degree == value)
+                    return;
+
                 _degree = value;
+
                 RaisePropertyChanged();
+
+                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        private int _minute;
+        private double _minute;
 
-        public int Minute
+        public double Minute
         {
             get { return _minute; }
             set
             {
+                if (_minute == value)
+                    return;
+
                 _minute = value;
+
                 RaisePropertyChanged();
+
+                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -40,23 +52,46 @@ namespace IRI.Jab.Controls.Model
             get { return _second; }
             set
             {
+                if (_second == value)
+                    return;
                 _second = value;
+
                 RaisePropertyChanged();
+
+                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        public DegreeMinuteSecondModel(double deciamlDegree)
+        public DegreeMinuteSecondModel() : this(0)
         {
-            int degree, minute;
 
-            double second;
+        }
 
-            IRI.Ket.Common.Helpers.DegreeHelper.ToDms(deciamlDegree, true, out degree, out minute, out second);
+        public DegreeMinuteSecondModel(double deciamalDegree)
+        {
+            SetValue(deciamalDegree);
         }
 
         public double GetDegreeValue()
         {
             return Degree + Minute / 60.0 + Second / 3600.0;
+        }
+
+        public event EventHandler OnValueChanged;
+
+        internal void SetValue(double value)
+        {
+            int degree, minute;
+
+            double second;
+
+            IRI.Ket.Common.Helpers.DegreeHelper.ToDms(value, true, out degree, out minute, out second);
+
+            this.Degree = degree;
+
+            this.Minute = minute;
+
+            this.Second = second;
         }
     }
 }

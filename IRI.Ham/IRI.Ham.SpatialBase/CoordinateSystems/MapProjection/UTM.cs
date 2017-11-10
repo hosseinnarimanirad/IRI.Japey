@@ -31,6 +31,20 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             this._scaleFactor = 0.9996;
         }
 
+        public static UTM CreateForZone(int zone)
+        {
+            return CreateForZone(Ellipsoids.WGS84, zone);
+        }
+
+        public static UTM CreateForZone(Ellipsoid ellipsoid, int zone)
+        {
+            var centralLongitude = MapProjects.CalculateCentralMeridian(zone);
+
+            return new UTM(ellipsoid, centralLongitude);
+        }
+
+
+
         //public override Point FromGeodetic(Point point)
         //{
         //    return MapProjects.GeodeticToUTM(point, this._ellipsoid);
@@ -68,6 +82,20 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
 
             return result;
 
+        }
+
+        public static int GetSrid(int zone, bool isNorthHemisphere = true)
+        {
+            if (isNorthHemisphere)
+            {
+                return 32600 + zone;
+                //return int.Parse($"326{zone:00}");
+            }
+            else
+            {
+                return 32700 + zone;
+                //return int.Parse($"326{zone:00}");
+            }
         }
     }
 }

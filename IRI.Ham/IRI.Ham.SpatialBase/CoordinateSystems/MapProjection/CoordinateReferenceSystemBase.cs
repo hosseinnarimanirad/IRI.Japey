@@ -17,6 +17,15 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             set { _title = value; }
         }
 
+        private int _srid;
+
+        public int Srid
+        {
+            get { return _srid; }
+            set { _srid = value; }
+        }
+
+
         private string _datumName;
 
         public string DatumName

@@ -384,6 +384,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<Point, Action> RequestPanTo;
 
+        public Action<int, Ham.SpatialBase.Point, Action, bool> RequestZoomToLevelAndCenter;
 
         public Action<MapOptionsEventArgs<FrameworkElement>> RequestRegisterMapOptions;
 
@@ -561,6 +562,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public void PanTo(Point point, Action callback)
         {
             this.RequestPanTo?.Invoke(point, callback);
+        }
+
+        public void ZoomToLevelAndCenter(int zoomLevel, Ham.SpatialBase.Point centerMapPoint, Action callback = null, bool withAnimation = true)
+        {
+            this.RequestZoomToLevelAndCenter?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
         }
 
         public void PanToGeographicPoint(IRI.Ham.SpatialBase.IPoint point, Action callback = null)

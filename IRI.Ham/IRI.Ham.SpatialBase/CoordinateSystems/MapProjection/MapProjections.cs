@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IRI.Ham.CoordinateSystem.MapProjection
 {
-    public static class MapProjections
+    public static class DefaultMapProjections
     {
         public static LambertConformalConic LccNiocWithWgs84
         {

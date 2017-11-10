@@ -95,6 +95,7 @@
     <Compile Include="CoordinateSystems\MapProjection\MapProjects.cs" />
     <Compile Include="CoordinateSystems\MapProjection\Mercator.cs" />
     <Compile Include="CoordinateSystems\MapProjection\NoProjection.cs" />
+    <Compile Include="CoordinateSystems\MapProjection\SridHelper.cs" />
     <Compile Include="CoordinateSystems\MapProjection\TransverseMercator.cs" />
     <Compile Include="CoordinateSystems\MapProjection\UTM.cs" />
     <Compile Include="CoordinateSystems\MapProjection\WebMercator.cs" />

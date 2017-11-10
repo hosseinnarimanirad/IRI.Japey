@@ -22,7 +22,7 @@ namespace IRI.Jab.Controls.View
     /// </summary>
     public partial class InputCoordinate : UserControl
     {
-        Presenters.InputCoordinatePresenter Presenter { get { return this.DataContext as Presenters.InputCoordinatePresenter; } }
+        Presenter.InputCoordinatePresenter Presenter { get { return this.DataContext as Presenter.InputCoordinatePresenter; } }
 
         public InputCoordinate()
         {

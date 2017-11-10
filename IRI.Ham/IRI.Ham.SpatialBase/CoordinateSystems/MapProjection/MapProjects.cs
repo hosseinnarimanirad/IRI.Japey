@@ -5,6 +5,7 @@ using IRI.Ham.MeasurementUnit;
 using IRI.Ham.SpatialBase;
 using Ellipsoid = IRI.Ham.CoordinateSystem.Ellipsoid<IRI.Ham.MeasurementUnit.Meter, IRI.Ham.MeasurementUnit.Degree>;
 using System.Linq;
+using IRI.Ham.SpatialBase.CoordinateSystems;
 
 namespace IRI.Ham.CoordinateSystem.MapProjection
 {
@@ -185,7 +186,7 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
 
         }
 
-        private static int CalculateCentralMeridian(int zone)
+        public static int CalculateCentralMeridian(int zone)
         {
             if (zone > 0 && zone <= 30)
             {
@@ -1357,5 +1358,6 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         {
             return CalculateGridFactor(geodeticPoint);
         }
+              
     }
 }

@@ -1,7 +1,14 @@
-﻿using IRI.Jab.Common;
+﻿using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Ham.SpatialBase;
+using IRI.Ham.SpatialBase.CoordinateSystems;
+using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Controls.Model.GoTo;
+using IRI.Jab.Controls.View.Input;
+using IRI.Ket.SpatialExtensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +24,13 @@ namespace IRI.Jab.Controls.Presenter
             get { return _x; }
             set
             {
+                if (_x == value)
+                    return;
+
                 _x = value;
                 RaisePropertyChanged();
+
+                UpdateLatLong();
             }
         }
 
@@ -29,10 +41,28 @@ namespace IRI.Jab.Controls.Presenter
             get { return _y; }
             set
             {
+                if (_y == value)
+                    return;
+
                 _y = value;
+                RaisePropertyChanged();
+
+                UpdateLatLong();
+            }
+        }
+
+        private int _utmZone = 39;
+
+        public int UtmZone
+        {
+            get { return _utmZone; }
+            set
+            {
+                _utmZone = value;
                 RaisePropertyChanged();
             }
         }
+
 
         private Model.DegreeMinuteSecondModel _longitudeDms;
 
@@ -59,31 +89,187 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        private RelayCommand _goToCommand;
+        private RelayCommand _zoomToCommand;
 
-        public RelayCommand GoToCommand
+        public RelayCommand ZoomToCommand
         {
             get
             {
-                if (_goToCommand == null)
+                if (_zoomToCommand == null)
                 {
-                    _goToCommand = new RelayCommand(param => { this.GoTo(); });
+                    _zoomToCommand = new RelayCommand(param => { this.ZoomTo(); });
                 }
 
-                return _goToCommand;
+                return _zoomToCommand;
             }
         }
 
-        public void GoTo()
+        private RelayCommand _panToCommand;
+
+        public RelayCommand PanToCommand
         {
-            this.RequestGoTo?.Invoke(new IRI.Ham.SpatialBase.Point(X, Y));
+            get
+            {
+                if (_panToCommand == null)
+                {
+                    _panToCommand = new RelayCommand(param => { this.PanTo(); });
+                }
+
+                return _panToCommand;
+            }
         }
 
-        public Action<IRI.Ham.SpatialBase.Point> RequestGoTo;
-
-        public GoToPresenter(Action<IRI.Ham.SpatialBase.Point> requestGoto)
+        public void ZoomTo()
         {
-            this.RequestGoTo = requestGoto;
+            this.RequestZoomTo?.Invoke(GetWgs84Point());
         }
+
+        public void PanTo()
+        {
+            this.RequestPanTo?.Invoke(new IRI.Ham.SpatialBase.Point(X, Y));
+        }
+
+        public Ham.SpatialBase.IPoint GetWgs84Point()
+        {
+            var point = new IRI.Ham.SpatialBase.Point(X, Y);
+
+            switch (this.SelectedItem?.MenuType)
+            {
+                case SpatialReferenceType.Geodetic:
+                    return point;//.Project( ,new IRI.Ham.CoordinateSystem.MapProjection.NoProjection());
+
+                case SpatialReferenceType.UTM:
+                    return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
+
+                case SpatialReferenceType.Mercator:
+                case SpatialReferenceType.TM:
+                case SpatialReferenceType.CylindricalEqualArea:
+                case SpatialReferenceType.LambertConformalConic:
+                case SpatialReferenceType.WebMercator:
+                case SpatialReferenceType.AlbersEqualAreaConic:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public Action<IRI.Ham.SpatialBase.IPoint> RequestZoomTo;
+
+        public Action<IRI.Ham.SpatialBase.IPoint> RequestPanTo;
+
+        public GoToPresenter(Action<IPoint> requestPanTo, Action<IPoint> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
+        {
+            this.RequestZoomTo = requestZoomTo;
+
+            this.RequestPanTo = requestPanTo;
+
+            if (items == null || items.Count() < 1)
+            {
+                this.MenuItems = GetDefaultItems();
+            }
+            else
+            {
+                this.MenuItems = items;
+            }
+
+            //this.SelectedItem = MenuItems.First();
+
+            this.LongitudeDms = new Model.DegreeMinuteSecondModel();
+
+            this.LongitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+
+            this.LatitudeDms = new Model.DegreeMinuteSecondModel();
+
+            this.LatitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+
+            this.IsPaneOpen = false;
+        }
+
+        private List<HamburgerGoToMenuItem> GetDefaultItems()
+        {
+            return new List<HamburgerGoToMenuItem>()
+            {
+                new HamburgerGoToMenuItem(new GoToGeodeticView(), SpatialReferenceType.Geodetic){
+                    Title = "Geodetic",
+                    SubTitle ="WGS84",
+                    Tooltip ="Geodetic",
+                    Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarGlobe,
+                },
+                new HamburgerGoToMenuItem(new GoToMapProjectView(), SpatialReferenceType.UTM){
+                    Title = "Uiversal Transverse Mercator",
+                    SubTitle ="UTM",
+                    Tooltip ="UTM",
+                    Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure,
+                }
+            };
+        }
+
+        private List<HamburgerGoToMenuItem> _menuItems;
+
+        public List<HamburgerGoToMenuItem> MenuItems
+        {
+            get { return _menuItems; }
+            set
+            {
+                _menuItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isPaneOpen;
+
+        public bool IsPaneOpen
+        {
+            get { return _isPaneOpen; }
+            set
+            {
+                _isPaneOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private void UpdateXY()
+        {
+            //if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
+            //{
+            this._x = this.LongitudeDms.GetDegreeValue();
+
+            this._y = this.LatitudeDms.GetDegreeValue();
+
+            RaisePropertyChanged(nameof(X));
+            RaisePropertyChanged(nameof(Y));
+            //}
+        }
+
+        private void UpdateLatLong()
+        {
+            if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
+            {
+                this.LongitudeDms.SetValue(this.X);
+
+                this.LatitudeDms.SetValue(this.Y);
+            }
+        }
+
+        private HamburgerGoToMenuItem _selectedItem;
+
+        public HamburgerGoToMenuItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                if (_selectedItem == value)
+                {
+                    return;
+                }
+
+                _selectedItem = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged("SelectedItem.Content");
+
+                this.LongitudeDms.SetValue(0);
+                this.LatitudeDms.SetValue(0);
+            }
+        }
+
     }
 }

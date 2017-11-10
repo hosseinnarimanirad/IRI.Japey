@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes; 
+using System.Windows.Shapes;
 
 namespace IRI.Jab.Controls.View.Input
 {
@@ -55,9 +55,34 @@ namespace IRI.Jab.Controls.View.Input
             }
         }
 
+        private string _panToLabel;
+
+        public string PanToLabel
+        {
+            get { return _panToLabel; }
+            set
+            {
+                _panToLabel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _zoomToLabel;
+
+        public string ZoomToLabel
+        {
+            get { return _zoomToLabel; }
+            set
+            {
+                _zoomToLabel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public string Note { get => string.Empty; }
 
-        private LanguageMode _uiLanguage ;
+        private LanguageMode _uiLanguage;
 
         public LanguageMode UILanguage
         {
@@ -66,18 +91,24 @@ namespace IRI.Jab.Controls.View.Input
             {
                 _uiLanguage = value;
                 RaisePropertyChanged();
-                 
+
                 UpdateUI();
             }
         }
 
         private void UpdateUI()
         {
-            this.FlowDirection = UILanguage == LanguageMode.Persian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            bool isPersian = this.UILanguage == LanguageMode.Persian;
 
-            this.XLabel = UILanguage == LanguageMode.Persian ? "طول جغرافیایی" : "Longitude";
+            this.FlowDirection = isPersian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
-            this.YLabel = UILanguage == LanguageMode.Persian ? "عرض جغرافیایی" : "Latitude";
+            this.XLabel = isPersian ? "طول جغرافیایی" : "Longitude";
+
+            this.YLabel = isPersian ? "عرض جغرافیایی" : "Latitude";
+
+            this.PanToLabel = isPersian ? "حرکت" : "Pan To";
+
+            this.ZoomToLabel = isPersian ? "بزرگ‌نمایی" : "Zoom To";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

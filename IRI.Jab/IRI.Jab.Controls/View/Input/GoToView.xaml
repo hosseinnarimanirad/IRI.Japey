@@ -4,60 +4,59 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Grid.Resources>
-            <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type mahApp:HamburgerMenuGlyphItem}">
-                <Grid Height="48" Margin="0,4,0,0" Background="Transparent" Cursor="Hand">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="48" />
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input" x:Name="window"
+             xmlns:model="clr-namespace:IRI.Jab.Controls.Model.GoTo" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type model:HamburgerGoToMenuItem}">
+            <Grid Height="48" Margin="0,4,0,0" Background="Transparent" Cursor="Hand" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Path Grid.Column="0" Width="28" Data="{Binding Icon}" Fill="White" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SubTitle}" HorizontalAlignment="Center" FontSize="11"
+                           Visibility="{Binding HasSubTitle, Converter={StaticResource boolToVisivilityConverter}}"/>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="15" Foreground="White" Text="{Binding Title}" Grid.RowSpan="2"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <!--<mahApp:HamburgerMenu  x:Name="hamburgerMenuControl" PaneBackground="{DynamicResource HighlightBrush}" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" DisplayMode="CompactInline"
+                               ItemTemplate="{StaticResource MenuItemTemplate}" CompactPaneLength="48" 
+                               HamburgerHeight="48" Content="{Binding SelectedItem.Content}"
+                               ItemClick="HamburgerMenu_ItemClick" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding MenuItems}">-->
+
+    <mahApp:HamburgerMenu  x:Name="hamburgerMenuControl" PaneBackground="{DynamicResource HighlightBrush}" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" DisplayMode="CompactInline"
+                               ItemTemplate="{StaticResource MenuItemTemplate}" CompactPaneLength="48" 
+                               HamburgerHeight="48" Content="{Binding SelectedItem.Content}"
+                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding MenuItems}">
+
+        <mahApp:HamburgerMenu.ContentTemplate>
+            <DataTemplate DataType="{x:Type FrameworkElement}">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Path Grid.Column="0" Width="28" Data="{Binding Glyph}" Fill="White" Stretch="Uniform" FlowDirection="LeftToRight"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Foreground="White" Text="{Binding Label}" Grid.RowSpan="2"/>
+                    <!--<TextBlock Grid.Row="0" Foreground="Black" Background="Red" HorizontalAlignment="Center">سیستم مرجع مکانی را از سمت چپ انتخاب کنید.</TextBlock>-->
+                    <ContentControl Grid.Row="0" Content="{Binding }"/>
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="8">
+                        <Button Command="{Binding ElementName=window, Path=DataContext.PanToCommand}" Height="32" Width="32" Margin="4" Cursor="Hand">
+                            <Path Data="{StaticResource appbarCursorHand}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+                      Height="24"/>
+                        </Button>
+                        <Button Command="{Binding ElementName=window, Path=DataContext.ZoomToCommand}" Height="32" Width="32" Margin="4" Cursor="Hand">
+                            <Path Data="{StaticResource appbarMagnifyAdd}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+                      Height="24" />
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
+        </mahApp:HamburgerMenu.ContentTemplate>
+    </mahApp:HamburgerMenu>
 
-        </Grid.Resources>
-        <mahApp:HamburgerMenu  x:Name="hamburgerMenuControl" Foreground="White" PaneBackground="{DynamicResource HighlightBrush}" IsPaneOpen="False" DisplayMode="CompactInline"
-                    ItemTemplate="{StaticResource MenuItemTemplate}" OptionsItemTemplate="{StaticResource MenuItemTemplate}"
-                    ItemClick="HamburgerMenu_ItemClick" >
-            <mahApp:HamburgerMenu.ContentTemplate>
-                <DataTemplate DataType="{x:Type mahApp:HamburgerMenuItem}">
-                    <Grid x:Name="TheContentGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="48" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Background="{DynamicResource AccentColorBrush}">
-                            <TextBlock x:Name="Header" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Foreground="White" Text="{Binding Tag.Note}" />
-                        </Border>
-                        <ContentControl x:Name="TheContent" Grid.Row="1" Focusable="False" Foreground="{DynamicResource BlackBrush}" Content="{Binding Tag}" />
-                    </Grid>
-                </DataTemplate>
-            </mahApp:HamburgerMenu.ContentTemplate>
-
-            <mahApp:HamburgerMenu.ItemsSource>
-                <mahApp:HamburgerMenuItemCollection>
-                    <mahApp:HamburgerMenuGlyphItem  Glyph="{Binding Source={StaticResource appbarGlobe}}" Label="Geodetic">
-                        <mahApp:HamburgerMenuGlyphItem.Tag>
-                            <local:GoToGeodeticView/>
-                        </mahApp:HamburgerMenuGlyphItem.Tag>
-                    </mahApp:HamburgerMenuGlyphItem>
-                    <mahApp:HamburgerMenuGlyphItem Glyph="{Binding Source={StaticResource appbarMapTreasure}}" Label="UTM">
-                        <mahApp:HamburgerMenuGlyphItem.Tag>
-                            <local:GoToMapProjectView/>
-                        </mahApp:HamburgerMenuGlyphItem.Tag>
-                    </mahApp:HamburgerMenuGlyphItem>
-
-                </mahApp:HamburgerMenuItemCollection>
-            </mahApp:HamburgerMenu.ItemsSource>
-        </mahApp:HamburgerMenu>
-    </Grid>
 </UserControl>

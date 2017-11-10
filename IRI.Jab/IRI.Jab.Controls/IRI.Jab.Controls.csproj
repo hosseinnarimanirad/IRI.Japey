@@ -78,6 +78,7 @@
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Model\DegreeMinuteSecondModel.cs" />
+    <Compile Include="Model\GoTo\HamburgerGoToMenuItem.cs" />
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

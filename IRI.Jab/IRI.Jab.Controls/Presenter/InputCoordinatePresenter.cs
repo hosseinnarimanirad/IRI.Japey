@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using IRI.Ham.SpatialBase.CoordinateSystems;
 
-namespace IRI.Jab.Controls.Presenters
+namespace IRI.Jab.Controls.Presenter
 {
     public class InputCoordinatePresenter : Notifier
     {
@@ -20,9 +20,9 @@ namespace IRI.Jab.Controls.Presenters
         {
             get { return _pointCollection; }
             set
-            {
+            {  
                 _pointCollection = value;
-                RaisePropertyChanged("PointCollection");
+                RaisePropertyChanged();
             }
         }
 
@@ -36,7 +36,7 @@ namespace IRI.Jab.Controls.Presenters
             set
             {
                 _zone = value;
-                RaisePropertyChanged("Zone");
+                RaisePropertyChanged();
             }
         }
 
@@ -50,7 +50,7 @@ namespace IRI.Jab.Controls.Presenters
             set
             {
                 _inputType = value;
-                RaisePropertyChanged("InputType");
+                RaisePropertyChanged();
 
                 switch (value)
                 {

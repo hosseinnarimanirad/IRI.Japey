@@ -436,6 +436,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestPanTo = (point, callback) => { this.PanTo(point.X, point.Y, callback); };
 
+            presenter.RequestZoomToLevelAndCenter = (zoomLevel, centerMapPoint, callback, withAnimation) => this.ZoomToLevelAndCenter(zoomLevel, centerMapPoint, callback, withAnimation);
+
             presenter.RequestFlashPoints = (i) => { this.Flash(i); };
 
             presenter.RequestFlashPoint = (i) => { this.Flash(i); };
@@ -2759,6 +2761,11 @@ namespace IRI.Jab.MapViewer
             }
             else
             {
+                if (callback != null)
+                {
+                    Dispatcher.BeginInvoke(callback, System.Windows.Threading.DispatcherPriority.Background, null);
+                }
+
                 Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _methodEscaped);
             }
         }
@@ -3051,7 +3058,7 @@ namespace IRI.Jab.MapViewer
 
             return tcs.Task;
         }
-         
+
         private void ZoomToPoint(Point windowPoint, double deltaZoom)
         {
             Debug.Print("ZoomToPoint(Point windowPoint, double deltaZoom)");
@@ -4010,12 +4017,12 @@ namespace IRI.Jab.MapViewer
 
                 _measureCancellationToken = null;
 
-                if (result==null)
+                if (result == null)
                 {
                     this.Pan();
                 }
             }
-             
+
             return result;
         }
 

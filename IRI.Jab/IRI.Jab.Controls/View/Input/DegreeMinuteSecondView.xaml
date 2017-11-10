@@ -6,11 +6,10 @@
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input">
     <Grid>
-        <StackPanel Orientation="Horizontal">
-            <mahApp:NumericUpDown HasDecimals="False" Value="{Binding Degree, Mode=TwoWay}" Maximum="180" Minimum="-180" StringFormat="000°"/>
-            <mahApp:NumericUpDown HasDecimals="False" Value="{Binding Minute, Mode=TwoWay}" Maximum="59" Minimum="0" StringFormat="{}{0:00} ' "/>
-            <mahApp:NumericUpDown HasDecimals="True" Value="{Binding Second, Mode=TwoWay}" Maximum="59.99" Minimum="0" StringFormat="{}{0:N2} &quot;"/>
+        <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight">
+            <mahApp:NumericUpDown Width="95" Margin="1,0" HasDecimals="False" Value="{Binding Degree, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Maximum="180" Minimum="-180" StringFormat="{}{0:000} °" />
+            <mahApp:NumericUpDown Width="95" Margin="1,0" HasDecimals="False" Value="{Binding Minute, Mode=TwoWay}" Maximum="59" Minimum="0" StringFormat="{}{0:00} ' " />
+            <mahApp:NumericUpDown Width="95" Margin="1,0" HasDecimals="True" Value="{Binding Second, Mode=TwoWay}" Maximum="59.99" Minimum="0" StringFormat="{}{0:00.00} &quot;" />
         </StackPanel>
-        
     </Grid>
 </UserControl>

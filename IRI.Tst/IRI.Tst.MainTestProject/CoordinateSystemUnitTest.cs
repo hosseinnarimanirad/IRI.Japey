@@ -68,7 +68,7 @@ namespace IRI.Test.MainTestProject
             var lccNahrawanPoint = new Point(2119090.03, 823058.15);
 
 
-            var result = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
+            var result = IRI.Ham.CoordinateSystem.MapProjection.DefaultMapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
 
             Assert.AreEqual(lccNahrawanPoint.X, result.X, 1);
             Assert.AreEqual(lccNahrawanPoint.Y, result.Y, 2);

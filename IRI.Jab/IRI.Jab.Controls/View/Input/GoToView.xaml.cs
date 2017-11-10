@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IRI.Jab.Controls.Model.GoTo;
+using IRI.Jab.Controls.Presenter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,16 +22,45 @@ namespace IRI.Jab.Controls.View.Input
     /// </summary>
     public partial class GoToView : UserControl
     {
+        public Presenter.GoToPresenter Presenter { get => this.DataContext as Presenter.GoToPresenter; }
         public GoToView()
         {
             InitializeComponent();
+
+            //this.hamburgerMenuControl.ItemsSource = new List<HamburgerGoToMenuItem>()
+            //{
+            //    new HamburgerGoToMenuItem(new GoToGeodeticView()){ Title = "Geodetic", SubTitle=string.Empty, Tooltip="Geodetic", Icon= IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarGlobe},
+            //    new HamburgerGoToMenuItem(new GoToMapProjectView()){ Title = "UTM", SubTitle="UTM", Tooltip="UTM", Icon= IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure}
+            //};
         }
+
+        //public GoToView(GoToPresenter presenter) : this()
+        //{
+        //    //this.hamburgerMenuControl.ItemsSource = new List<HamburgerGoToMenuItem>()
+        //    //{
+        //    //    new HamburgerGoToMenuItem(new GoToGeodeticView()){ Title = "Geodetic", SubTitle=string.Empty, Tooltip="Geodetic", Icon= IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarGlobe},
+        //    //    new HamburgerGoToMenuItem(new GoToMapProjectView()){ Title = "UTM", SubTitle="UTM", Tooltip="UTM", Icon= IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure}
+        //    //};
+
+
+        //    //this.hamburgerMenuControl.OptionsItemsSource = ;
+        //}
 
         private void HamburgerMenu_ItemClick(object sender, MahApps.Metro.Controls.ItemClickEventArgs e)
         {
-            this.hamburgerMenuControl.Content = e.ClickedItem;
+            //var menuItem = e.ClickedItem as HamburgerGoToMenuItem;
 
-            this.hamburgerMenuControl.IsPaneOpen = false;
+            //this.hamburgerMenuControl.Content = menuItem.Content;
+
+            //this.hamburgerMenuControl.IsPaneOpen = false;
+
+
+            //contentFrame.Navigate(menuItem.PageType);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            //this.Presenter.IsPaneOpen = false;
         }
     }
 }

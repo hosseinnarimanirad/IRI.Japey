@@ -1,7 +1,10 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Ham.SpatialBase;
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 using IRI.Ham.SpatialBase.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -350,6 +353,54 @@ namespace IRI.Ket.SpatialExtensions
             //    return $"{length / 1E6:N3} Mm";
             //}
 
+        }
+
+        #endregion
+
+        #region Projection
+
+
+        public static IPoint Project(this IPoint point, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        {
+            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
+            {
+                var c1 = sourceSrs.ToGeodetic(point);
+
+                return targetSrs.FromGeodetic(c1);
+            }
+            else
+            {
+                var c1 = sourceSrs.ToGeodetic(point);
+
+                return targetSrs.FromGeodetic(c1, sourceSrs.Ellipsoid);
+
+            }
+        }
+
+        public static List<Geometry> Project(this List<Geometry> values, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        {
+            List<Geometry> result = new List<Geometry>(values.Count);
+
+            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
+
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p), targetSrs.Srid));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
+
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid));
+                }
+            }
+
+            return result;
         }
 
         #endregion
