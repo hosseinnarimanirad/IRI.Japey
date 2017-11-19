@@ -310,7 +310,7 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        public static Point AsPoint(this SqlGeometry point)
+        public static IPoint AsPoint(this SqlGeometry point)
         {
             if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
             {
@@ -526,7 +526,7 @@ namespace IRI.Ket.SpatialExtensions
         #region Projection (SqlGeography)
 
 
-        public static SqlGeometry Project(this SqlGeography geography, Func<Point, Point> mapFunction, int newSrid = 0)
+        public static SqlGeometry Project(this SqlGeography geography, Func<IPoint, IPoint> mapFunction, int newSrid = 0)
         {
 
             SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -586,7 +586,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectMultiPolygon(SqlGeometryBuilder builder, SqlGeography multiPolygon, Func<Point, Point> mapFunction)
+        public static void ProjectMultiPolygon(SqlGeometryBuilder builder, SqlGeography multiPolygon, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiPolygon.STNumGeometries().Value;
 
@@ -601,7 +601,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectPolygon(SqlGeometryBuilder builder, SqlGeography geometry, Func<Point, Point> mapFunction)
+        public static void ProjectPolygon(SqlGeometryBuilder builder, SqlGeography geometry, Func<IPoint, IPoint> mapFunction)
         {
             //ProjectRing(builder, geometry.STExteriorRing(), mapFunction);
 
@@ -616,7 +616,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectMultiLineSring(SqlGeometryBuilder builder, SqlGeography multiLineString, Func<Point, Point> mapFunction)
+        public static void ProjectMultiLineSring(SqlGeometryBuilder builder, SqlGeography multiLineString, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiLineString.STNumGeometries().Value;
 
@@ -631,18 +631,18 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectLineString(SqlGeometryBuilder builder, SqlGeography lineString, Func<Point, Point> mapFunction)
+        public static void ProjectLineString(SqlGeometryBuilder builder, SqlGeography lineString, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfPoints = lineString.STNumPoints().Value;
 
             //Point startPoint = mapFunction(new Point(lineString.STStartPoint().Long.Value, lineString.STStartPoint().Lat.Value));
-            Point startPoint = mapFunction(lineString.STStartPoint().AsPoint());
+            var startPoint = mapFunction(lineString.STStartPoint().AsPoint());
 
             builder.BeginFigure(startPoint.X, startPoint.Y);
 
             for (int i = 2; i <= numberOfPoints; i++)
             {
-                Point point = mapFunction(GetPoint(lineString, i));
+                var point = mapFunction(GetPoint(lineString, i));
 
                 builder.AddLine(point.X, point.Y);
             }
@@ -652,7 +652,7 @@ namespace IRI.Ket.SpatialExtensions
 
         //Not supporting Z and M values
         //?? possible bug: start value for i
-        public static void ProjectMultiPoint(SqlGeometryBuilder builder, SqlGeography multiPoint, Func<Point, Point> mapFunction)
+        public static void ProjectMultiPoint(SqlGeometryBuilder builder, SqlGeography multiPoint, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiPoint.STNumGeometries().Value;
 
@@ -667,10 +667,10 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectPoint(SqlGeometryBuilder builder, SqlGeography point, Func<Point, Point> mapFunction)
+        public static void ProjectPoint(SqlGeometryBuilder builder, SqlGeography point, Func<IPoint, IPoint> mapFunction)
         {
             //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
-            Point thePoint = mapFunction(point.AsPoint());
+            var thePoint = mapFunction(point.AsPoint());
 
             builder.BeginFigure(thePoint.X, thePoint.Y);
 
@@ -699,7 +699,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Projection (SqlGeometry)
 
-        public static SqlGeography Project(this SqlGeometry geometry, Func<Point, Point> mapFunction, int srid)
+        public static SqlGeography Project(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction, int srid)
         {
             var builder = new SqlGeographyBuilder();
 
@@ -756,7 +756,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectMultiPolygon(SqlGeographyBuilder builder, SqlGeometry multiPolygon, Func<Point, Point> mapFunction)
+        public static void ProjectMultiPolygon(SqlGeographyBuilder builder, SqlGeometry multiPolygon, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiPolygon.STNumGeometries().Value;
 
@@ -771,7 +771,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<Point, Point> mapFunction)
+        public static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<IPoint, IPoint> mapFunction)
         {
             ProjectLineString(builder, polygon.STExteriorRing(), mapFunction);
 
@@ -786,7 +786,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectMultiLineSring(SqlGeographyBuilder builder, SqlGeometry multiLineString, Func<Point, Point> mapFunction)
+        public static void ProjectMultiLineSring(SqlGeographyBuilder builder, SqlGeometry multiLineString, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiLineString.STNumGeometries().Value;
 
@@ -801,18 +801,18 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<Point, Point> mapFunction)
+        public static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfPoints = lineString.STNumPoints().Value;
 
             //Point startPoint = mapFunction(new Point(lineString.STStartPoint().Long.Value, lineString.STStartPoint().Lat.Value));
-            Point startPoint = mapFunction(lineString.STStartPoint().AsPoint());
+            var startPoint = mapFunction(lineString.STStartPoint().AsPoint());
 
             builder.BeginFigure(startPoint.Y, startPoint.X);
 
             for (int i = 2; i <= numberOfPoints; i++)
             {
-                Point point = mapFunction(GetPoint(lineString, i));
+                var point = mapFunction(GetPoint(lineString, i));
 
                 builder.AddLine(point.Y, point.X);
             }
@@ -822,7 +822,7 @@ namespace IRI.Ket.SpatialExtensions
 
         //Not supporting Z and M values
         //?? possible bug: start value for i
-        public static void ProjectMultiPoint(SqlGeographyBuilder builder, SqlGeometry multiPoint, Func<Point, Point> mapFunction)
+        public static void ProjectMultiPoint(SqlGeographyBuilder builder, SqlGeometry multiPoint, Func<IPoint, IPoint> mapFunction)
         {
             int numberOfGeometries = multiPoint.STNumGeometries().Value;
 
@@ -837,17 +837,17 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectPoint(SqlGeographyBuilder builder, SqlGeometry point, Func<Point, Point> mapFunction)
+        public static void ProjectPoint(SqlGeographyBuilder builder, SqlGeometry point, Func<IPoint, IPoint> mapFunction)
         {
             //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
-            Point thePoint = mapFunction(point.AsPoint());
+            var thePoint = mapFunction(point.AsPoint());
 
             builder.BeginFigure(thePoint.Y, thePoint.X);
 
             builder.EndFigure();
         }
 
-        private static Point GetPoint(SqlGeometry geometry, int index)
+        private static IPoint GetPoint(SqlGeometry geometry, int index)
         {
             return geometry.STPointN(index).AsPoint();
 

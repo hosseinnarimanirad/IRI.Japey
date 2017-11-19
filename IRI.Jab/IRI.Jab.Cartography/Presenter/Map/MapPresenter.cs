@@ -334,6 +334,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Actions & Funcs
 
+        public Action<bool> RequestEnableZoomInOnDoubleClick;
+
         public Action<System.Net.WebProxy> RequestSetProxy;
 
         public Action<MapAction, Cursor> RequestSetDefaultCursor;
@@ -452,6 +454,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Methods
+
+        public void ConfigureZoomInOnDoubleClick(bool enable = true)
+        {
+            this.RequestEnableZoomInOnDoubleClick(enable);
+        }
 
         public void SetProxy(System.Net.WebProxy proxy)
         {

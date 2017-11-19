@@ -28,9 +28,16 @@ namespace IRI.Ket.Common.Extensions
 
         public static string GetPersianMonthName(this PersianCalendar calendar, DateTime dateTime)
         {
-            var monthIndex = calendar.GetMonth(dateTime) - 1;
+            try
+            {
+                var monthIndex = calendar.GetMonth(dateTime) - 1;
 
-            return persianMonths[monthIndex];
+                return persianMonths[monthIndex];
+            }
+            catch (Exception) //ArgumentOutOfRangeException
+            {
+                return string.Empty;
+            }
         }
 
         public static string GetYearMonthString(this PersianCalendar calendar, DateTime dateTime)

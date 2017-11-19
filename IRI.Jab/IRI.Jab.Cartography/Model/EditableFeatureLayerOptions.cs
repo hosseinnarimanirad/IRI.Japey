@@ -55,6 +55,18 @@ namespace IRI.Jab.Cartography.Model
             }
         }
 
+        private bool _isMeasureVisible = false;
+
+        public bool IsMeasureVisible
+        {
+            get { return _isMeasureVisible; }
+            set
+            {
+                _isMeasureVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private bool _isVerticesVisible;
 

@@ -349,6 +349,18 @@ namespace IRI.Jab.MapViewer
 
         public void Register(Cartography.Presenter.Map.MapPresenter presenter)
         {
+            presenter.RequestEnableZoomInOnDoubleClick = (enable) =>
+            {
+                if (enable)
+                {
+                    this.EnableZoomOnDoubleClick();
+                }
+                else
+                {
+                    this.DisableZoomOnDoubleClick();
+                }
+            };
+
             presenter.RequestSetProxy = (p) => this.Proxy = p;
 
             presenter.RequestGetActualHeight = () => this.mapView.ActualHeight;
@@ -2804,6 +2816,26 @@ namespace IRI.Jab.MapViewer
             ZoomToExtent(this._layerManager.CalculateMapExtent(), false);
         }
 
+        public void EnableZoomOnDoubleClick()
+        {
+            this.mapView.MouseDown -= MapView_MouseDownForDoubleClickZoom;
+            this.mapView.MouseDown += MapView_MouseDownForDoubleClickZoom;
+        }
+
+        public void DisableZoomOnDoubleClick()
+        {
+            this.mapView.MouseDown -= MapView_MouseDownForDoubleClickZoom;
+        }
+
+        private void MapView_MouseDownForDoubleClickZoom(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1)
+            {
+                Zoom(true, e.GetPosition(this.mapView));
+
+            }
+        }
+
         public void ZoomIn()
         {
             ResetMapViewEvents();
@@ -2911,6 +2943,35 @@ namespace IRI.Jab.MapViewer
             Point canvasPosition = e.GetPosition(this.mapView);
 
             ZoomToPoint(canvasPosition, .75);
+        }
+
+        private void mapView_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+
+            //Debug.Print($"e.Delta: {e.Delta}");
+
+            //Point point = e.GetPosition(this.mapView);
+
+            //if (IsGoogleZoomLevelsEnabled)
+            //{
+            //    int newZoomLevel = e.Delta > 0 ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
+
+            //    this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), point);
+            //}
+            //else
+            //{
+            //    double delta = e.Delta > 0 ? 1.5 : 0.5;
+
+            //    double newMapScale = ToMapScale(this.ScreenScale * delta);
+
+            //    this.Zoom(newMapScale, point);
+            //}
+
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
+
+            Zoom(e.Delta > 0, e.GetPosition(this.mapView));
+
         }
 
 
@@ -3171,44 +3232,37 @@ namespace IRI.Jab.MapViewer
             ZoomAndCenter(mapScale, centerMapPoint, callback, withAnimation);
         }
 
-        public void Zoom(double mapScale, sb.Point centerMapPoint, Action callback = null)
+        public void Zoom(double mapScale, sb.IPoint centerMapPoint, Action callback = null)
         {
             var windowCenter = MapToScreen(new Point(centerMapPoint.X, centerMapPoint.Y));
 
             ZoomAndCenter(mapScale, windowCenter, callback);
         }
 
-        private void mapView_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void Zoom(bool zoomIn, Point windowCenter)
         {
             Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
-            Debug.Print($"e.Delta: {e.Delta}");
-
-            //StopUnnecessaryJobs();
-
-            Point point = e.GetPosition(this.mapView);
+            Debug.Print($"e.Delta: {zoomIn}");
 
             if (IsGoogleZoomLevelsEnabled)
             {
-                int newZoomLevel = e.Delta > 0 ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
+                int newZoomLevel = zoomIn ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
 
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), point);
+                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), windowCenter);
             }
             else
             {
-                double delta = e.Delta > 0 ? 1.5 : 0.5;
+                double delta = zoomIn ? 1.5 : 0.5;
 
-                //this.ZoomToPoint(point, delta);
-                //double newMapScale = ToMapScale(this.zoomTransform.ScaleX * delta);
                 double newMapScale = ToMapScale(this.ScreenScale * delta);
 
-                this.Zoom(newMapScale, point);
+                this.Zoom(newMapScale, windowCenter);
             }
 
             Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
 
         }
-
 
         private void ZoomToFeature(SqlGeometry geometry)
         {
@@ -4001,14 +4055,14 @@ namespace IRI.Jab.MapViewer
             var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
             {
                 Visual = VisualParameters.GetDefaultForMeasurements(),
-                IsEdgeLabelVisible = isEdgeLabelVisible
+                IsEdgeLabelVisible = isEdgeLabelVisible,
             }, true);
 
             this.RemoveLayer(measureLayer);
 
             if (result != null)
             {
-                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true });
+                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true, IsMeasureVisible = true });
             }
 
             if (_measureId == guid)

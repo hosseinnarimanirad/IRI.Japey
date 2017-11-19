@@ -105,6 +105,124 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
+        public static double GetArea(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        {
+            try
+            {
+                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, 4326).MakeValid().STArea().Value;
+            }
+            catch (Exception)
+            {
+                return double.NaN;
+            }
+            //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
+        }
+
+        public static double GetLength(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        {
+            try
+            {
+                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, 4326).MakeValid().STLength().Value;
+            }
+            catch (Exception)
+            {
+                return double.NaN;
+            }
+            //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
+        }
+
+        public static double GetMeasure(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        {
+            if (geometry == null)
+            {
+                return double.NaN;
+            }
+            else
+            {
+                switch (geometry.Type)
+                {
+                    case GeometryType.LineString:
+                    case GeometryType.MultiLineString:
+                        return geometry.GetLength(toWgs84Geodetic);
+
+                    case GeometryType.Polygon:
+                    case GeometryType.MultiPolygon:
+                        return geometry.GetArea(toWgs84Geodetic);
+
+                    case GeometryType.Point:
+                    case GeometryType.MultiPoint:
+                    case GeometryType.GeometryCollection:
+                    case GeometryType.CircularString:
+                    case GeometryType.CompoundCurve:
+                    case GeometryType.CurvePolygon:
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+
+        }
+
+        public static string GetMeasureLabel(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        {
+            if (geometry == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                switch (geometry.Type)
+                {
+                    case GeometryType.LineString:
+                    case GeometryType.MultiLineString:
+                        return Common.Helpers.UnitHelper.GetLengthLabel(geometry.GetLength(toWgs84Geodetic));
+
+                    case GeometryType.Polygon:
+                    case GeometryType.MultiPolygon:
+                        return Common.Helpers.UnitHelper.GetAreaLabel(geometry.GetArea(toWgs84Geodetic));
+
+                    case GeometryType.Point:
+                    case GeometryType.MultiPoint:
+                    case GeometryType.GeometryCollection:
+                    case GeometryType.CircularString:
+                    case GeometryType.CompoundCurve:
+                    case GeometryType.CurvePolygon:
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            //
+        }
+
+        public static IPoint GetMeanOrLastPoint(this Geometry geometry)
+        {
+            if (geometry == null)
+            {
+                return null;
+            }
+            else
+            {
+                switch (geometry.Type)
+                {
+                    case GeometryType.LineString:
+                    case GeometryType.MultiLineString:
+                        return geometry.GetLastPoint();
+
+                    case GeometryType.Polygon:
+                    case GeometryType.MultiPolygon:
+                        return geometry.GetMeanPoint();
+
+                    case GeometryType.Point:
+                    case GeometryType.MultiPoint:
+                    case GeometryType.GeometryCollection:
+                    case GeometryType.CircularString:
+                    case GeometryType.CompoundCurve:
+                    case GeometryType.CurvePolygon:
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
+
         public static OpenGisGeometryType ToOpenGisGeometryType(this GeometryType type)
         {
             return (OpenGisGeometryType)((int)type);

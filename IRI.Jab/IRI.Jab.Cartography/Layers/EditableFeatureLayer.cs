@@ -258,8 +258,20 @@ namespace IRI.Jab.Cartography
                 {
                     _edgeLabelLayer.Items.Add(item);
                 }
+
+                var point = this._mercatorGeometry?.GetMeanOrLastPoint();
+
+                if (point != null && Options.IsMeasureVisible)
+                {
+                    var element = new Common.View.MapMarkers.RectangleLabelMarker(MeasureLabel);
+
+                    var offset = _screenToMap(20);
+
+                    _edgeLabelLayer.Items.Add(new Locateable(Model.AncherFunctionHandlers.BottomCenter) { Element = element, X = point.X + offset, Y = point.Y + offset });
+
+                }
             }
-             
+
             //if (Options.IsAutoMeasureEnabled && _mercatorGeometry.IsRingBase())
             //{
             //    RaisePropertyChanged(nameof(AreaLabel));
@@ -393,6 +405,8 @@ namespace IRI.Jab.Cartography
                     if (e.LeftButton == MouseButtonState.Pressed)
                     {
                         this.OnRequestFinishDrawing.SafeInvoke(this);
+
+                        e.Handled = true;
                     }
                 };
             }
@@ -420,11 +434,20 @@ namespace IRI.Jab.Cartography
             return locateable;
         }
 
-        public string AreaLabel
+        public string MeasureLabel
         {
-            get { return UnitHelper.GetAreaLabel(_mercatorGeometry.GetArea()); }
+            get { return _mercatorGeometry.GetMeasureLabel(MapProjects.MercatorToGeodetic); }
         }
 
+        public string AreaLabel
+        {
+            get { return UnitHelper.GetAreaLabel(_mercatorGeometry.GetArea(MapProjects.MercatorToGeodetic)); }
+        }
+
+        public string LengthLabel
+        {
+            get { return UnitHelper.GetAreaLabel(_mercatorGeometry.GetLength(MapProjects.MercatorToGeodetic)); }
+        }
 
         private Locateable ToSecondaryLocateable(IPoint first, IPoint second)
         {

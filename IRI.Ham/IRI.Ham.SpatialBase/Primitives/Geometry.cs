@@ -310,6 +310,22 @@ namespace IRI.Ham.SpatialBase.Primitives
             }
         }
 
+        public IPoint GetLastPoint()
+        {
+            if (Points != null)
+            {
+                return Points.Last();
+            }
+            else if (Geometries != null)
+            {
+                return Geometries.Last().GetLastPoint();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public override string ToString()
         {
             return $"{Type} - #Points: {NumberOfPoints} - #Parts: {Geometries?.Count()}";

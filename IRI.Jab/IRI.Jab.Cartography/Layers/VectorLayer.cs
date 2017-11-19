@@ -994,7 +994,7 @@ namespace IRI.Jab.Cartography
 
 
 
-        private void DrawLabels(List<string> labels, List<SqlGeometry> geometries, System.Drawing.Bitmap image, Func<sb.Point, sb.Point> mapToScreen)
+        private void DrawLabels(List<string> labels, List<SqlGeometry> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
         {
             if (labels.Count != geometries.Count)
                 return;
@@ -1027,7 +1027,7 @@ namespace IRI.Jab.Cartography
             graphic.Flush();
         }
 
-        private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<SqlGeometry> positions, Func<sb.Point, sb.Point> transform)
+        private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<SqlGeometry> positions, Func<sb.IPoint, sb.IPoint> transform)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
 

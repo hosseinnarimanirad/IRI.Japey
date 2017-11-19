@@ -12,24 +12,38 @@ namespace IRI.Ket.Common.Extensions
 
         public static string ToPersianAlphabeticDate(this DateTime dateTime)
         {
-            var year = _calendar.GetYear(dateTime);
+            try
+            {
+                var year = _calendar.GetYear(dateTime);
 
-            var month = _calendar.GetPersianMonthName(dateTime);
+                var month = _calendar.GetPersianMonthName(dateTime);
 
-            var day = _calendar.GetDayOfMonth(dateTime);
+                var day = _calendar.GetDayOfMonth(dateTime);
 
-            return $"{day} {month} {year}";
+                return $"{day} {month} {year}";
+            }
+            catch //ArgumentOutOfRangeException
+            {
+                return string.Empty;
+            }
         }
 
         public static string ToLongPersianDateTime(this DateTime time)
         {
-            var year = _calendar.GetYear(time);
+            try
+            {
+                var year = _calendar.GetYear(time);
 
-            var month = _calendar.GetMonth(time);
+                var month = _calendar.GetMonth(time);
 
-            var day = _calendar.GetDayOfMonth(time);
+                var day = _calendar.GetDayOfMonth(time);
 
-            return $" تاریخ {day:00}-{month:00}-{year}  ساعت {time.Hour:00}:{time.Minute:00}  {time.GetPersianAmPm()} ";
+                return $" تاریخ {day:00}-{month:00}-{year}  ساعت {time.Hour:00}:{time.Minute:00}  {time.GetPersianAmPm()} ";
+            }
+            catch //ArgumentOutOfRangeException
+            {
+                return string.Empty;
+            }
         }
 
         public static bool IsAM(this DateTime time)
