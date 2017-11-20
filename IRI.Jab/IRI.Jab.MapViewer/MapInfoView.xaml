@@ -67,17 +67,17 @@
             </DockPanel>
             <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
                 <!--<TextBlock Text="ویرایش." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding FinishEditDrawingCommand}" >
+                            Command="{Binding FinishEditingCommand}" Visibility="{Binding Options.IsFinishButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                     </Button>
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding CancelEditDrawingCommand}" >
+                            Command="{Binding CancelEditingCommand}" Visibility="{Binding Options.IsCancelButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}" >
                         <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                     </Button>
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding DeleteDrawingCommand}" >
+                            Command="{Binding DeleteCommand}" Visibility="{Binding Options.IsDeleteButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarDelete}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                     </Button>
                 </StackPanel>

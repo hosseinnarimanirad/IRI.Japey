@@ -321,19 +321,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\appbar.add.png" />
-    <Resource Include="Assets\Images\appbar.check.png" />
-    <Resource Include="Assets\Images\appbar.climacons.cloud.sun.png" />
-    <Resource Include="Assets\Images\appbar.close.png" />
-    <Resource Include="Assets\Images\appbar.crosshair.png" />
-    <Resource Include="Assets\Images\appbar.edit.png" />
-    <Resource Include="Assets\Images\appbar.information.png" />
-    <Resource Include="Assets\Images\appbar.magnify.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Images\appbar.globe.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\Images\BaseMaps\roadmap.jpg" />
     <Resource Include="Assets\Images\BaseMaps\satellite.jpg" />
     <Resource Include="Assets\Images\BaseMaps\terrain.png" />
@@ -341,7 +328,6 @@
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
-    <Content Include="Assets\Images\SNAG-0013.bmp" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
   <ItemGroup>

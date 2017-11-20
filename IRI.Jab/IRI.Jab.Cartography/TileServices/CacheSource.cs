@@ -22,7 +22,8 @@ namespace IRI.Jab.Cartography.TileServices
 
         public static string MakeGoogleTerrainUrl(TileInfo tile, int server) => $@"http://mt{server}.google.com/vt/lyrs=t@131,r@176163100&hl=en&x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
 
-        ///* http://mt1.google.com/vt/lyrs=s@901000000&hl=en&x=4&y=10&z=5&s=Ga
+        // http://mt1.google.com/vt/lyrs=s@901000000&hl=en&x=4&y=10&z=5&s=Ga
+        // http://khm0.google.com/kh/v=748&s=&x=1354740&y=825228&z=21
 
         public static string MakeGoogleSatelliteUrl(TileInfo tile, int server) => $@"http://mt{server}.google.com/vt/lyrs=s@901000000&hl=en&x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}&s=Gal";
 

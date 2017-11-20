@@ -8,52 +8,139 @@ namespace IRI.Ket.Common.Extensions
 {
     public static class DateTimeExtensions
     {
-        private static System.Globalization.PersianCalendar _calendar = new System.Globalization.PersianCalendar();
+        internal static readonly DateTime _midValidPersianDateTime = new DateTime(622, 3, 22);
+
+        private static readonly System.Globalization.PersianCalendar _calendar = new System.Globalization.PersianCalendar();
+
+        public static bool IsAM(this DateTime dateTime)
+        {
+            return dateTime.ToString("tt").ToUpper() == "AM";
+        }
+
+        public static string GetPersianAmPm(this DateTime dateTime)
+        {
+            return dateTime.IsAM() ? "ق.ظ" : "ب.ظ";
+        }
 
         public static string ToPersianAlphabeticDate(this DateTime dateTime)
         {
-            try
-            {
-                var year = _calendar.GetYear(dateTime);
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return ToPersianAlphabeticDate(_midValidPersianDateTime);
 
-                var month = _calendar.GetPersianMonthName(dateTime);
+            var year = _calendar.GetYear(dateTime);
 
-                var day = _calendar.GetDayOfMonth(dateTime);
+            var month = GetPersianMonthName(dateTime);
 
-                return $"{day} {month} {year}";
-            }
-            catch //ArgumentOutOfRangeException
-            {
-                return string.Empty;
-            }
+            var day = _calendar.GetDayOfMonth(dateTime);
+
+            return $"{day:00} {month} {year:0000}";
         }
 
-        public static string ToLongPersianDateTime(this DateTime time)
+        public static string ToLongPersianDateTime(this DateTime dateTime)
         {
-            try
-            {
-                var year = _calendar.GetYear(time);
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return ToLongPersianDateTime(_midValidPersianDateTime);
 
-                var month = _calendar.GetMonth(time);
+            var year = _calendar.GetYear(dateTime);
 
-                var day = _calendar.GetDayOfMonth(time);
+            var month = _calendar.GetMonth(dateTime);
 
-                return $" تاریخ {day:00}-{month:00}-{year}  ساعت {time.Hour:00}:{time.Minute:00}  {time.GetPersianAmPm()} ";
-            }
-            catch //ArgumentOutOfRangeException
-            {
-                return string.Empty;
-            }
+            var day = _calendar.GetDayOfMonth(dateTime);
+
+            return $" تاریخ {day:00}-{month:00}-{year:0000}  ساعت {dateTime.Hour:00}:{dateTime.Minute:00}  {dateTime.GetPersianAmPm()} ";
+
         }
 
-        public static bool IsAM(this DateTime time)
+        public static string ToLongPersianDateTimeSimple(this DateTime dateTime)
         {
-            return time.ToString("tt").ToUpper() == "AM";
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return ToLongPersianDateTimeSimple(_midValidPersianDateTime);
+
+            return FormattableString.Invariant(
+                $"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}-{_calendar.GetHour(dateTime):00}:{_calendar.GetMinute(dateTime):00}:{_calendar.GetSecond(dateTime):00}");
         }
 
-        public static string GetPersianAmPm(this DateTime time)
+        public static string ToPersianDate(this DateTime dateTime)
         {
-            return time.IsAM() ? "ق.ظ" : "ب.ظ";
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return ToPersianDate(_midValidPersianDateTime);
+
+            return FormattableString.Invariant($"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}");
         }
+
+        public static string ToPersianYearMonth(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return ToPersianYearMonth(_midValidPersianDateTime);
+
+            return $"{GetPersianMonthName(dateTime)} {_calendar.GetYear(dateTime)}";
+        }
+
+        public static DateTime GetBeginningOfThePersianYear(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetBeginningOfThePersianYear(_midValidPersianDateTime);
+
+            var year = _calendar.GetYear(dateTime);
+
+            return new DateTime(year, 1, 1, _calendar);
+        }
+
+        public static DateTime GetBeginningOfThePersianMonth(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetBeginningOfThePersianMonth(_midValidPersianDateTime);
+
+            var year = _calendar.GetYear(dateTime);
+
+            var month = _calendar.GetMonth(dateTime);
+
+            return new DateTime(year, month, 1, _calendar);
+        }
+
+        public static DateTime GetBeginningOfThePersianWeek(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetBeginningOfThePersianWeek(_midValidPersianDateTime);
+
+            var dayOfWeek = ((int)_calendar.GetDayOfWeek(dateTime) + 1) % 7;
+
+            return dateTime.Date.AddDays(-dayOfWeek);
+        }
+
+        public static string GetPersianMonthName(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetPersianMonthName(_midValidPersianDateTime);
+
+            var monthIndex = _calendar.GetMonth(dateTime) - 1;
+
+            return persianMonths[monthIndex];
+        }
+
+        static readonly string[] persianMonths = new string[]
+        {
+            "فروردین",
+            "اردیبهشت",
+            "خرداد",
+            "تیر",
+            "مرداد",
+            "شهریور",
+            "مهر",
+            "آبان",
+            "آذر",
+            "دی",
+            "بهمن",
+            "اسفند",
+        };
     }
 }

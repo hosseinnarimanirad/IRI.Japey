@@ -34,6 +34,7 @@ using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
+using IRI.Jab.Cartography.TileServices;
 
 namespace IRI.Jab.MapViewer
 {
@@ -83,6 +84,8 @@ namespace IRI.Jab.MapViewer
         public event EventHandler<MapActionEventArgs> OnMapActionChanged;
 
         public event EventHandler OnExtentChanged;
+
+        public event EventHandler<EditableFeatureLayer> OnEditableFeatureLayerChanged;
 
         #endregion
 
@@ -344,6 +347,8 @@ namespace IRI.Jab.MapViewer
             };
         }
 
+
+
         #endregion
 
 
@@ -360,6 +365,8 @@ namespace IRI.Jab.MapViewer
                     this.DisableZoomOnDoubleClick();
                 }
             };
+
+            presenter.RequestGetProxy = () => this.Proxy;
 
             presenter.RequestSetProxy = (p) => this.Proxy = p;
 
@@ -437,6 +444,8 @@ namespace IRI.Jab.MapViewer
             this.OnStatusChanged += (sender, e) => { presenter.FireMapStatusChanged(e.Status); };
 
             this.OnMapActionChanged += (sender, e) => { presenter.FireMapActionChanged(e.Action); };
+
+            this.OnEditableFeatureLayerChanged += (sender, e) => { presenter.CurrentEditingLayer = e; };
 
             presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
 
@@ -663,7 +672,7 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(new RasterLayer(dataSource, layerName, scaleInterval, isBaseMap, isPyramid, Visibility.Visible, opacity, rendering));
         }
 
-        public void SetTileService(ScaleInterval scaleInterval, Cartography.TileServices.MapProviderType provider, Cartography.TileServices.TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
+        public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
         {
             var layer = new TileServiceLayer(provider, type) { VisibleRange = scaleInterval };
 
@@ -677,12 +686,12 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(layer);
         }
 
-        public void SetTileService(Cartography.TileServices.MapProviderType provider, Cartography.TileServices.TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
+        public void SetTileService(MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
         {
             SetTileService(ScaleInterval.All, provider, type, isCachEnabled, cacheDirectory, isOffline);
         }
 
-        public void UnSetTileService(Cartography.TileServices.MapProviderType provider, Cartography.TileServices.TileType type)
+        public void UnSetTileService(MapProviderType provider, TileType type)
         {
             this._layerManager.Remove(provider, type);
         }
@@ -3641,7 +3650,21 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource editingCancellationToken;
 
-        EditableFeatureLayer editingLayer;
+        private EditableFeatureLayer _currentEditingLayer;
+
+        public EditableFeatureLayer CurrentEditingLayer
+        {
+            get { return _currentEditingLayer; }
+            set
+            {
+                _currentEditingLayer = value;
+                RaisePropertyChanged();
+                this.OnEditableFeatureLayerChanged?.Invoke(null, value);
+            }
+        }
+
+
+        //EditableFeatureLayer editingLayer;
 
         public void EditPolygon(List<sb.Point> wgs84Points)
         {
@@ -3712,26 +3735,26 @@ namespace IRI.Jab.MapViewer
 
             var tcs = new TaskCompletionSource<sb.Primitives.Geometry>();
 
-            if (editingLayer != null)
+            if (CurrentEditingLayer != null)
             {
-                this.RemoveEditableFeatureLayer(editingLayer);
+                this.RemoveEditableFeatureLayer(CurrentEditingLayer);
             }
 
             options.IsNewDrawing = false;
 
-            editingLayer = new EditableFeatureLayer(
+            CurrentEditingLayer = new EditableFeatureLayer(
                             "edit", geometry,
                             this.viewTransform, ScreenToMap,
                             options);
 
-            editingLayer.RequestRightClickOptions = (i1, i2, i3) =>
+            CurrentEditingLayer.RequestRightClickOptions = (i1, i2, i3) =>
             {
                 this.AddRightClickOptions(i1, i2, i3);
             };
 
-            editingLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
+            CurrentEditingLayer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            editingLayer.RequestRefresh = l =>
+            CurrentEditingLayer.RequestRefresh = l =>
             {
                 this.RemoveEditableFeatureLayer(l);
 
@@ -3740,27 +3763,27 @@ namespace IRI.Jab.MapViewer
                 AddEditableFeatureLayer(l);
             };
 
-            editingLayer.RequestFinishEditing = (g) =>
+            CurrentEditingLayer.RequestFinishEditing = (g) =>
             {
                 tcs.SetResult(g);
 
-                this.RemoveEditableFeatureLayer(editingLayer);
+                this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
-                editingLayer = null;
+                CurrentEditingLayer = null;
             };
 
-            editingLayer.RequestCancelEditing = (g) =>
+            CurrentEditingLayer.RequestCancelEditing = (g) =>
             {
                 tcs.SetCanceled();
 
-                this.RemoveEditableFeatureLayer(editingLayer);
+                this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
-                editingLayer = null;
+                CurrentEditingLayer = null;
             };
+             
+            this.SetLayer(CurrentEditingLayer);
 
-            this.SetLayer(editingLayer);
-
-            AddEditableFeatureLayer(editingLayer);
+            AddEditableFeatureLayer(CurrentEditingLayer);
 
             editingCancellationToken.Token.Register(() =>
             {
@@ -3769,7 +3792,7 @@ namespace IRI.Jab.MapViewer
                 //this.SetCursor(Cursors.Arrow);
                 this.SetCursor(CursorSettings[_currentMouseAction]);
 
-                this.RemoveEditableFeatureLayer(editingLayer);
+                this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
                 tcs = null;
 
@@ -3819,7 +3842,7 @@ namespace IRI.Jab.MapViewer
 
         public void FinishEditing()
         {
-            editingLayer?.FinishEditing();
+            CurrentEditingLayer?.FinishEditing();
         }
 
         #endregion
@@ -4062,7 +4085,14 @@ namespace IRI.Jab.MapViewer
 
             if (result != null)
             {
-                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions() { IsEdgeLabelVisible = true, IsMeasureVisible = true });
+                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions()
+                {
+                    IsEdgeLabelVisible = true,
+                    IsMeasureVisible = true,
+                    IsFinishButtonVisible = false,
+                    IsCancelButtonVisible = false,
+                    IsDeleteButtonVisible = true
+                });
             }
 
             if (_measureId == guid)

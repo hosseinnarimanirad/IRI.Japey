@@ -22,7 +22,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         private bool _zoomOnMouseWheel;
 
-        public bool ZoomOnMouseWheel
+        public bool EnableZoomOnMouseWheel
         {
             get { return _zoomOnMouseWheel; }
             set
@@ -62,7 +62,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                SetTileService(ProviderType, value, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(ProviderType, value, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
             }
         }
 
@@ -81,11 +81,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _providerType = value;
                 RaisePropertyChanged();
 
-                SetTileService(value, BaseMapType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                SetTileService(value, BaseMapType, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
             }
         }
 
-        public async void SetTileService(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory, bool isOffline)
+        public async void SetTileService(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory)
         {
             await CheckInternetAccess();
 
@@ -330,6 +330,19 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+
+        private EditableFeatureLayer _currentEditingLayer;
+
+        public EditableFeatureLayer CurrentEditingLayer
+        {
+            get { return _currentEditingLayer; }
+            set
+            {
+                _currentEditingLayer = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         #region Actions & Funcs
@@ -337,6 +350,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<bool> RequestEnableZoomInOnDoubleClick;
 
         public Action<System.Net.WebProxy> RequestSetProxy;
+
+        public Func<System.Net.WebProxy> RequestGetProxy;
 
         public Action<MapAction, Cursor> RequestSetDefaultCursor;
 
@@ -455,9 +470,18 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Methods
 
-        public void ConfigureZoomInOnDoubleClick(bool enable = true)
+        private bool _enableZoomInOnDoubleClick;
+
+        public bool EnableZoomInOnDoubleClick
         {
-            this.RequestEnableZoomInOnDoubleClick(enable);
+            get { return _enableZoomInOnDoubleClick; }
+            set
+            {
+                _enableZoomInOnDoubleClick = value;
+                RaisePropertyChanged();
+
+                this.RequestEnableZoomInOnDoubleClick(value);
+            }
         }
 
         public void SetProxy(System.Net.WebProxy proxy)
@@ -498,7 +522,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public async Task CheckInternetAccess()
         {
-            this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet();
+            var proxy = this.RequestGetProxy();
+
+            this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
 
         public void DrawGeometries(List<SqlGeometry> geometry, string name, VisualParameters parameters)
@@ -1051,7 +1077,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                             if (provider != this.ProviderType || tileType != this.BaseMapType)
                             {
-                                SetTileService(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+                                SetTileService(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
                             }
                         }
                         catch (Exception ex)

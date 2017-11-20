@@ -9,80 +9,105 @@ namespace IRI.Ket.Common.Extensions
 {
     public static class PersianCalendarExtensions
     {
+        //internal static readonly DateTime _midValidPersianDateTime = new DateTime(622, 3, 22);
 
-        public static DateTime GetBeginningOfThePersianYear(this PersianCalendar calendar, DateTime dateTime)
-        {
-            var year = calendar.GetYear(dateTime);
+        //public static DateTime GetBeginningOfThePersianYear(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetBeginningOfThePersianYear(calendar, _midValidPersianDateTime);
 
-            return new DateTime(year, 1, 1, calendar);
-        }
+        //    var year = calendar.GetYear(dateTime);
 
-        public static DateTime GetBeginningOfThePersianMonth(this PersianCalendar calendar, DateTime dateTime)
-        {
-            var year = calendar.GetYear(dateTime);
+        //    return new DateTime(year, 1, 1, calendar);
+        //}
 
-            var month = calendar.GetMonth(dateTime);
+        //public static DateTime GetBeginningOfThePersianMonth(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetBeginningOfThePersianMonth(calendar, _midValidPersianDateTime);
 
-            return new DateTime(year, month, 1, calendar);
-        }
+        //    var year = calendar.GetYear(dateTime);
 
-        public static string GetPersianMonthName(this PersianCalendar calendar, DateTime dateTime)
-        {
-            try
-            {
-                var monthIndex = calendar.GetMonth(dateTime) - 1;
+        //    var month = calendar.GetMonth(dateTime);
 
-                return persianMonths[monthIndex];
-            }
-            catch (Exception) //ArgumentOutOfRangeException
-            {
-                return string.Empty;
-            }
-        }
+        //    return new DateTime(year, month, 1, calendar);
+        //}
 
-        public static string GetYearMonthString(this PersianCalendar calendar, DateTime dateTime)
-        {
-            return $"{calendar.GetPersianMonthName(dateTime)} {calendar.GetYear(dateTime)}";
-        }
+        //public static string GetPersianMonthName(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetPersianMonthName(calendar, _midValidPersianDateTime);
 
-        public static string GetDateTimeString(this Calendar calendar, DateTime dateTime)
-        {
-            return string.Format(
-                CultureInfo.InvariantCulture,
-                $"{calendar.GetYear(dateTime)}/{calendar.GetMonth(dateTime)}/{calendar.GetDayOfMonth(dateTime)}-{calendar.GetHour(dateTime)}:{calendar.GetMinute(dateTime)}:{calendar.GetSecond(dateTime)}");
-        }
+        //    var monthIndex = calendar.GetMonth(dateTime) - 1;
 
-        public static string GetShortDateString(this Calendar calendar, DateTime dateTime)
-        {
-            return string.Format(CultureInfo.InvariantCulture, $"{calendar.GetYear(dateTime)}/{calendar.GetMonth(dateTime)}/{calendar.GetDayOfMonth(dateTime)}");
-        }
+        //    return persianMonths[monthIndex];
+        //}
 
-        public static string GetLongDateString(this PersianCalendar calendar, DateTime dateTime)
-        {
-            return string.Format(CultureInfo.InvariantCulture, $"{calendar.GetYear(dateTime)}/{calendar.GetMonth(dateTime)}/{calendar.GetDayOfMonth(dateTime)}");
-        }
+        //public static string GetYearMonthString(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetYearMonthString(calendar, _midValidPersianDateTime);
 
-        public static DateTime GetBeginningOfThePersianWeek(this PersianCalendar calendar, DateTime dateTime)
-        {
-            var dayOfWeek = ((int)calendar.GetDayOfWeek(dateTime) + 1) % 7;
+        //    return $"{calendar.GetPersianMonthName(dateTime)} {calendar.GetYear(dateTime)}";
+        //}
 
-            return dateTime.Date.AddDays(-dayOfWeek);
-        }
+        //public static string GetDateTimeString(this Calendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetDateTimeString(calendar, _midValidPersianDateTime);
 
-        static readonly string[] persianMonths = new string[]
-        {
-            "فروردین",
-            "اردیبهشت",
-            "خرداد",
-            "تیر",
-            "مرداد",
-            "شهریور",
-            "مهر",
-            "آبان",
-            "آذر",
-            "دی",
-            "بهمن",
-            "اسفند",
-        };
+        //    return FormattableString.Invariant(
+        //        $"{calendar.GetYear(dateTime):0000}/{calendar.GetMonth(dateTime):00}/{calendar.GetDayOfMonth(dateTime):00}-{calendar.GetHour(dateTime):00}:{calendar.GetMinute(dateTime):00}:{calendar.GetSecond(dateTime):00}");
+        //}
+
+        //public static string GetShortDateString(this Calendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetShortDateString(calendar, _midValidPersianDateTime);
+
+        //    return FormattableString.Invariant($"{calendar.GetYear(dateTime):0000}/{calendar.GetMonth(dateTime):00}/{calendar.GetDayOfMonth(dateTime):00}");
+        //}
+
+        //public static string GetLongDateString(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetLongDateString(calendar, _midValidPersianDateTime);
+
+        //    return FormattableString.Invariant($"{calendar.GetYear(dateTime):0000}/{calendar.GetMonth(dateTime):00}/{calendar.GetDayOfMonth(dateTime):00}");
+        //}
+
+        //public static DateTime GetBeginningOfThePersianWeek(this PersianCalendar calendar, DateTime dateTime)
+        //{
+        //    //to avoid ArgumentOutOfRangeException
+        //    if (dateTime < _midValidPersianDateTime)
+        //        return GetBeginningOfThePersianWeek(calendar, _midValidPersianDateTime);
+
+        //    var dayOfWeek = ((int)calendar.GetDayOfWeek(dateTime) + 1) % 7;
+
+        //    return dateTime.Date.AddDays(-dayOfWeek);
+        //}
+
+        //static readonly string[] persianMonths = new string[]
+        //{
+        //    "فروردین",
+        //    "اردیبهشت",
+        //    "خرداد",
+        //    "تیر",
+        //    "مرداد",
+        //    "شهریور",
+        //    "مهر",
+        //    "آبان",
+        //    "آذر",
+        //    "دی",
+        //    "بهمن",
+        //    "اسفند",
+        //};
     }
 }

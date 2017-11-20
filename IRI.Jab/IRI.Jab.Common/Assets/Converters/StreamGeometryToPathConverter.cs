@@ -16,7 +16,7 @@ namespace IRI.Jab.Common.Assets.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Path result;
-
+             
             try
             {
                 result = new Path() { Data = value as StreamGeometry, Stretch = Stretch.Uniform };

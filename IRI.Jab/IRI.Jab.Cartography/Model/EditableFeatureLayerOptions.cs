@@ -93,6 +93,42 @@ namespace IRI.Jab.Cartography.Model
             }
         }
 
+        private bool _isFinishButtonVisible;
+
+        public bool IsFinishButtonVisible
+        {
+            get { return _isFinishButtonVisible; }
+            set
+            {
+                _isFinishButtonVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isCancelButtonVisible;
+
+        public bool IsCancelButtonVisible
+        {
+            get { return _isCancelButtonVisible; }
+            set
+            {
+                _isCancelButtonVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isDeleteButtonVisible;
+
+        public bool IsDeleteButtonVisible
+        {
+            get { return _isDeleteButtonVisible; }
+            set
+            {
+                _isDeleteButtonVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         //public Brush Fill { get; set; } = _stroke;
 
