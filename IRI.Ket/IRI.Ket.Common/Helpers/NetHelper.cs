@@ -33,7 +33,7 @@ namespace IRI.Ket.Common.Helpers
             return pingable;
         }
 
-        public static async Task<bool> PingHostAsync(string nameOrAddress, int timeout = 3000)
+        public static async Task<bool> PingHostAsync(string nameOrAddress, int timeout = 5000)
         {
             bool pingable = false;
 

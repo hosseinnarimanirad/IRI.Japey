@@ -348,12 +348,15 @@ namespace IRI.Jab.MapViewer
         }
 
 
+        Cartography.Presenter.Map.MapPresenter _presenter;
 
         #endregion
 
 
         public void Register(Cartography.Presenter.Map.MapPresenter presenter)
         {
+            _presenter = presenter;
+
             presenter.RequestEnableZoomInOnDoubleClick = (enable) =>
             {
                 if (enable)
@@ -1457,7 +1460,7 @@ namespace IRI.Jab.MapViewer
 
         private async Task AddLayerAsync(TileServiceLayer layer, TileInfo tile)
         {
-            if (tile.ZoomLevel != CurrentZoomLevel)
+            if (tile.ZoomLevel != CurrentZoomLevel || layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)
             {
                 Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 return;
@@ -1465,7 +1468,7 @@ namespace IRI.Jab.MapViewer
 
             var geoImage = await layer.GetTileAsync(tile, this.Proxy);
 
-            if (tile.ZoomLevel != CurrentZoomLevel)
+            if (tile.ZoomLevel != CurrentZoomLevel || layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)
             {
                 Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 return;
@@ -3780,7 +3783,7 @@ namespace IRI.Jab.MapViewer
 
                 CurrentEditingLayer = null;
             };
-             
+
             this.SetLayer(CurrentEditingLayer);
 
             AddEditableFeatureLayer(CurrentEditingLayer);

@@ -62,7 +62,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                SetTileService(ProviderType, value, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
+                SetTileService(ProviderType, value);
             }
         }
 
@@ -81,15 +81,15 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _providerType = value;
                 RaisePropertyChanged();
 
-                SetTileService(value, BaseMapType, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
+                SetTileService(value, BaseMapType);
             }
         }
 
-        public async void SetTileService(MapProviderType provider, TileType tileType, bool isCachEnabled, string cacheDirectory)
+        private async void SetTileService(MapProviderType provider, TileType tileType)
         {
             await CheckInternetAccess();
 
-            this.RequestSetTileService?.Invoke(provider, tileType, isCachEnabled, cacheDirectory, !IsConnected);
+            this.RequestSetTileService?.Invoke(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
         }
 
         private string _baseMapCacheDirectory = null;
@@ -120,11 +120,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         //public string GooglePath { get; set; }
 
-        private bool _isConnected = false;
+        private bool? _isConnected = null;
 
         public bool IsConnected
         {
-            get { return _isConnected; }
+            get { return _isConnected.HasValue && _isConnected.Value; }
             set
             {
                 if (_isConnected == value)
@@ -484,9 +484,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        public void SetProxy(System.Net.WebProxy proxy)
+        public async void SetProxy(System.Net.WebProxy proxy)
         {
             this.RequestSetProxy?.Invoke(proxy);
+
+            await CheckInternetAccess();
         }
 
         public void SetMapCursorSet1()
@@ -522,7 +524,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public async Task CheckInternetAccess()
         {
-            var proxy = this.RequestGetProxy();
+            var proxy = this.RequestGetProxy?.Invoke();
 
             this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
@@ -1075,10 +1077,13 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                             TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 
-                            if (provider != this.ProviderType || tileType != this.BaseMapType)
-                            {
-                                SetTileService(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory);
-                            }
+                            this.ProviderType = provider;
+
+                            this.BaseMapType = tileType;
+                            //if (provider != this.ProviderType || tileType != this.BaseMapType)
+                            //{
+                            //    SetTileService(provider, tileType);
+                            //}
                         }
                         catch (Exception ex)
                         {
