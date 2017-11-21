@@ -12,6 +12,8 @@ namespace IRI.Ket.Common.Helpers
     {
         const string _defaulHost = "www.google.com";
 
+        const string _defaultUri = "https://google.com";
+
         public static bool PingHost(string nameOrAddress, int timeout = 3000)
         {
             bool pingable = false;
@@ -53,35 +55,48 @@ namespace IRI.Ket.Common.Helpers
             return pingable;
         }
 
-        public static async Task<bool> IsConnectedToInternet(string address = _defaulHost)
-        {
-            return await PingHostAsync(address);
-        }
-
-        public static async Task<bool> IsConnectedToInternet(WebProxy proxy, string address = _defaulHost)
+        public static async Task<bool> IsConnectedToInternet(WebProxy proxy, string address = null)
         {
             if (proxy == null)
             {
-                return await IsConnectedToInternet(address);
+                //var isConnected = await PingHostAsync(address ?? _defaulHost);
+
+                //if (!isConnected)
+                //{
+                //    return await OpenRead(proxy, address ?? _defaultUri);
+                //}
+
+                //return isConnected;
+                return await OpenRead(proxy, address ?? _defaultUri);
             }
             else
             {
-                try
+                return await OpenRead(proxy, address ?? _defaultUri);
+            }
+        }
+
+        private static async Task<bool> OpenRead(WebProxy proxy, string address)
+        {
+            try
+            {
+                using (var client = new WebClient())
                 {
-                    using (var client = new WebClient())
+                    client.Headers.Add(HttpRequestHeader.UserAgent, "app!");
+
+                    if (proxy?.Address != null)
                     {
                         client.Proxy = proxy;
+                    }
 
-                        using (var stream = await client.OpenReadTaskAsync(address))
-                        {
-                            return true;
-                        }
+                    using (var stream = await client.OpenReadTaskAsync(new Uri(address, UriKind.Absolute)))
+                    {
+                        return true;
                     }
                 }
-                catch
-                {
-                    return false;
-                }
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
     }

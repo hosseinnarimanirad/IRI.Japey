@@ -315,37 +315,13 @@
       <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
       <Name>IRI.Jab.Cartography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.CommonDialog\IRI.Jab.CommonDialog.csproj">
-      <Project>{0f04539f-8374-4bfb-b2a4-85da87a96060}</Project>
-      <Name>IRI.Jab.CommonDialog</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
       <Name>IRI.Jab.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.CoordinatePanel\IRI.Jab.CoordinatePanel.csproj">
-      <Project>{02e7c9bf-dd2b-4b43-8cb5-70a66a0335ba}</Project>
-      <Name>IRI.Jab.CoordinatePanel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.ImageViewer\IRI.Jab.ImageViewer.csproj">
-      <Project>{0e452830-01c8-468b-bf80-55ed9a119202}</Project>
-      <Name>IRI.Jab.ImageViewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.LegendControl\IRI.Jab.LegendControl.csproj">
-      <Project>{bb395210-314f-4d50-a851-3a4be55cecbe}</Project>
-      <Name>IRI.Jab.LegendControl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.MapScalebar\IRI.Jab.MapScalebar.csproj">
-      <Project>{25f97b56-5542-4cc9-bffc-ba8b66835d50}</Project>
-      <Name>IRI.Jab.MapScalebar</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab\IRI.Jab.MapViewer\IRI.Jab.MapViewer.csproj">
       <Project>{f53ffe09-138b-4f3e-9039-3bc0cd107952}</Project>
       <Name>IRI.Jab.MapViewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.NavigationControl\IRI.Jab.NavigationControl.csproj">
-      <Project>{6db5f463-910d-4115-a8b8-0398ba429ca5}</Project>
-      <Name>IRI.Jab.NavigationControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>

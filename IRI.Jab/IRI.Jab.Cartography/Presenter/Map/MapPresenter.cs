@@ -20,17 +20,17 @@ namespace IRI.Jab.Cartography.Presenter.Map
     {
         #region Properties
 
-        private bool _zoomOnMouseWheel;
+        private bool _isZoomOnMouseWheelEnabled;
 
-        public bool EnableZoomOnMouseWheel
+        public bool IsZoomOnMouseWheelEnabled
         {
-            get { return _zoomOnMouseWheel; }
+            get { return _isZoomOnMouseWheelEnabled; }
             set
             {
-                _zoomOnMouseWheel = value;
+                _isZoomOnMouseWheelEnabled = value;
                 RaisePropertyChanged();
 
-                this.PropagateZoomOnMouseWheelChanged?.Invoke(value);
+                this.FireIsZoomOnMouseWheelEnabledChanged?.Invoke(value);
             }
         }
 
@@ -44,7 +44,21 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 _isGoogleZoomLevelsEnabled = value;
                 RaisePropertyChanged();
 
-                this.PropagateGoogleZoomLevelsEnabledChanged?.Invoke(value);
+                this.FireIsGoogleZoomLevelsEnabledChanged?.Invoke(value);
+            }
+        }
+
+        private bool _isZoomInOnDoubleClickEnabled;
+
+        public bool IsZoomInOnDoubleClickEnabled
+        {
+            get { return _isZoomInOnDoubleClickEnabled; }
+            set
+            {
+                _isZoomInOnDoubleClickEnabled = value;
+                RaisePropertyChanged();
+
+                this.FireIsZoomInOnDoubleClickEnabledChanged?.Invoke(value);
             }
         }
 
@@ -221,7 +235,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel.Invoke(); } }
+        public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
 
         public IRI.Ham.SpatialBase.BoundingBox CurrentExtent
         {
@@ -347,7 +361,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Actions & Funcs
 
-        public Action<bool> RequestEnableZoomInOnDoubleClick;
+        public Action<bool> FireIsZoomInOnDoubleClickEnabledChanged;
 
         public Action<System.Net.WebProxy> RequestSetProxy;
 
@@ -381,9 +395,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestFullExtent;
 
-        public Action<bool> PropagateZoomOnMouseWheelChanged;
+        public Action<bool> FireIsZoomOnMouseWheelEnabledChanged;
 
-        public Action<bool> PropagateGoogleZoomLevelsEnabledChanged;
+        public Action<bool> FireIsGoogleZoomLevelsEnabledChanged;
 
         public Action<double> RequestZoomToScale;
 
@@ -469,20 +483,6 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Methods
-
-        private bool _enableZoomInOnDoubleClick;
-
-        public bool EnableZoomInOnDoubleClick
-        {
-            get { return _enableZoomInOnDoubleClick; }
-            set
-            {
-                _enableZoomInOnDoubleClick = value;
-                RaisePropertyChanged();
-
-                this.RequestEnableZoomInOnDoubleClick(value);
-            }
-        }
 
         public async void SetProxy(System.Net.WebProxy proxy)
         {

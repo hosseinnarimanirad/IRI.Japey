@@ -24,7 +24,7 @@ namespace IRI.Jab.Cartography
         public int GroupId { get; set; } = 1;
 
         public static readonly byte[] notFoundImage;
-         
+
         static TileServiceLayer()
         {
             notFoundImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound);
@@ -179,7 +179,11 @@ namespace IRI.Jab.Cartography
         private bool IsCacheEnabled
         {
             get { return _isCacheEnabled; }
-            set { this._isCacheEnabled = value; }
+            set
+            {
+                this._isCacheEnabled = value;
+                RaisePropertyChanged();
+            }
         }
 
         private TileServices.TileCacheAddress Cache;
@@ -193,7 +197,7 @@ namespace IRI.Jab.Cartography
                     return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
                 }
 
-                WiseWebClient client = new WiseWebClient(50);
+                WiseWebClient client = new WiseWebClient(40);
 
                 if (proxy != null)
                 {
@@ -211,6 +215,11 @@ namespace IRI.Jab.Cartography
                 //var url = $@"http://mt1.google.com/vt/lyrs=t@131,r@176163100&hl=en&x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
 
                 var url = TileServices.CacheSourceFactory.GetUrl(Cache.Provider, Cache.Type, tile);
+
+                if (url == null)
+                {
+                    return GetNotFoundImage(tile);
+                }
 
                 var byteImage = await client.DownloadDataTaskAsync(url);
 
@@ -239,7 +248,8 @@ namespace IRI.Jab.Cartography
             {
                 if (IsOffline)
                 {
-                    return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+                    //return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+                    return GetNotFoundImage(tile);
                 }
 
                 WiseWebClient client = new WiseWebClient(3000);
@@ -261,17 +271,21 @@ namespace IRI.Jab.Cartography
 
                 var url = TileServices.CacheSourceFactory.GetUrl(Cache.Provider, Cache.Type, tile);
 
-                var byteImage = client.DownloadData(url);
+                if (url == null)
+                {
+                    return GetNotFoundImage(tile);
+                }
 
-                //System.IO.File.WriteAllBytes($@"C:\Users\Hossein\Desktop\New folder (3)\map{tile.RowNumber}.{tile.ColumnNumber}.{tile.ZoomLevel}.png", byteImage);
+                var byteImage = client.DownloadData(url);
 
                 return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)));
             }
             catch (Exception ex)
             {
-                var byteImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(IRI.Jab.Cartography.Properties.Resources.imageNotFound);
+                //var byteImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(IRI.Jab.Cartography.Properties.Resources.imageNotFound);
 
-                return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+                //return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+                return GetNotFoundImage(tile);
             }
         }
 

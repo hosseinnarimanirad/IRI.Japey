@@ -50,7 +50,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             //this._indexName = indexName;
 
-            if (spatialColumnName==null)
+            if (spatialColumnName == null)
             {
                 this.Extent = BoundingBox.NaN;
             }
@@ -58,7 +58,7 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 this.Extent = GetGeometries().GetBoundingBox();
             }
-            
+
         }
 
         //public List<SqlGeometry> GetGeometries()
@@ -74,7 +74,7 @@ namespace IRI.Ket.DataManagement.DataSource
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="whereClause">Do not forget the "WHERE", e.g. WHERE coulumn01 = someValue</param>
+        /// <param name="whereClause"> forget the "WHERE", e.g.   coulumn01 = someValue</param>
         /// <returns></returns>
         public override List<SqlGeometry> GetGeometries(string whereClause)
         {
@@ -86,7 +86,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             SqlCeCommand command =
                 new SqlCeCommand(
-                    string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2} ", _spatialColumnName, _tableName, whereClause),
+                    string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2} ", _spatialColumnName, _tableName, MakeWhereClause(whereClause)),
                     _connection);
 
             command.CommandType = System.Data.CommandType.Text;
@@ -141,13 +141,13 @@ namespace IRI.Ket.DataManagement.DataSource
         /// 
         /// </summary>
         /// <param name="attributeColumn"></param>
-        /// <param name="whereClause">Do not forget the "WHERE", e.g. WHERE coulumn01 = someValue</param>
+        /// <param name="whereClause"> forget the "WHERE", e.g.  coulumn01 = someValue</param>
         /// <returns></returns>
         public override List<object> GetAttributes(string attributeColumn, string whereClause)
         {
             //SqlCeConnection connection = new SqlCeConnection(_connectionString);
 
-            SqlCeCommand command = new SqlCeCommand(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}", attributeColumn, _tableName, whereClause), _connection);
+            SqlCeCommand command = new SqlCeCommand(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}", attributeColumn, _tableName, MakeWhereClause(whereClause)), _connection);
 
             command.CommandType = System.Data.CommandType.Text;
 
@@ -205,7 +205,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override System.Data.DataTable GetEntireFeature(string whereClause)
         {
-            return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, whereClause));
+            return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, MakeWhereClause(whereClause)));
         }
 
         //public   Task<DataTable> GetEntireFeatureAsync(string whereClause)
@@ -229,7 +229,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //}
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
-        { 
+        {
             List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
 
             SqlGeometry boundary = boundingBox.AsSqlGeometry();
