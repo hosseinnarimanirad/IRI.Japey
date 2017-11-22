@@ -100,6 +100,9 @@
     <Compile Include="View\Input\GoToMapProjectView.xaml.cs">
       <DependentUpon>GoToMapProjectView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Input\GoToMetroWindow.xaml.cs">
+      <DependentUpon>GoToMetroWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Input\GoToView.xaml.cs">
       <DependentUpon>GoToView.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Input\GoToMetroWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Input\GoToView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -213,6 +220,9 @@
     <None Include="HosseinNarimaniRad.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Assets\Images\" />
+    <Folder Include="View\Security\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3755,7 +3755,7 @@ namespace IRI.Jab.MapViewer
             options.IsNewDrawing = false;
 
             CurrentEditingLayer = new EditableFeatureLayer(
-                            "edit", geometry,
+                            "edit", geometry.Clone(),
                             this.viewTransform, ScreenToMap,
                             options);
 
@@ -3824,7 +3824,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Editing;
 
-                var result = await EditGeometry(originalGeometry.Clone(), options);
+                var result = await EditGeometry(originalGeometry, options);
 
                 this.Status = MapStatus.Idle;
 

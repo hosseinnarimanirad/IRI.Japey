@@ -13,6 +13,7 @@ using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -543,6 +544,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestCancelMeasure;
 
+        public Action RequestGoTo;
+
         public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
 
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<PolyBezierLayer>> RequestGetBezier;
@@ -555,6 +558,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Methods
+
         private async void Draw(DrawMode mode)
         {
             var shapeItem = await MakeShapeItem(mode, $"DRAWING {DrawingItems?.Count}");
@@ -1303,8 +1307,22 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        #endregion
+        private RelayCommand _goToCommand;
 
+        public RelayCommand GoToCommand
+        {
+            get
+            {
+                if (_goToCommand == null)
+                {
+                    _goToCommand = new RelayCommand(param => this.RequestGoTo?.Invoke());
+                }
+
+                return _goToCommand;
+            }
+        }
+
+        #endregion
 
 
         #region Events

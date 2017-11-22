@@ -1,8 +1,10 @@
 ﻿using IRI.Ham.CoordinateSystem.MapProjection;
 using IRI.Ham.SpatialBase;
 using IRI.Ham.SpatialBase.CoordinateSystems;
+using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Extensions;
 using IRI.Jab.Controls.Model.GoTo;
 using IRI.Jab.Controls.View.Input;
 using IRI.Ket.SpatialExtensions;
@@ -271,5 +273,40 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
+        public void SelectDefaultMenu()
+        {
+            if (this.MenuItems?.Count > 0)
+            {
+                this.SelectedItem = this.MenuItems.First();
+                this.IsPaneOpen = false;
+            }
+
+        }
+
+        public static GoToPresenter Create(MapPresenter mapPresenter)
+        {
+            var gotoPresenter = new GoToPresenter(
+               p =>
+               {
+                   var mercatorPoint = MapProjects.GeodeticToMercator(p).AsWpfPoint();
+
+                   mapPresenter.PanTo(mercatorPoint, () =>
+                   {
+                       mapPresenter.FlashPoint(mercatorPoint);
+                   });
+
+               },
+               p =>
+               {
+                   var mercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(p);
+
+                   mapPresenter.ZoomToLevelAndCenter(13, mercatorPoint, () =>
+                   {
+                       mapPresenter.FlashPoint(mercatorPoint.AsWpfPoint());
+                   });
+               });
+             
+            return gotoPresenter;
+        }
     }
 }
