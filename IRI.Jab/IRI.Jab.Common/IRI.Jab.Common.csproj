@@ -107,6 +107,7 @@
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
     <Compile Include="Assets\ShapeStrings\Appbar.cs" />
     <Compile Include="Assets\ShapeStrings\CustomShapes.cs" />
+    <Compile Include="Assets\ShapeStrings\IriShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
     <Compile Include="Event\CallbackEventArgs.cs" />
@@ -130,6 +131,8 @@
     <Compile Include="Helpers\ImageUtility.cs" />
     <Compile Include="Helpers\RichTextBoxHelper.cs" />
     <Compile Include="Helpers\WorldfilePyramid.cs" />
+    <Compile Include="Model\Common\IProxySettings.cs" />
+    <Compile Include="Model\Common\ProxySettingsModel.cs" />
     <Compile Include="Model\EditableItem.cs" />
     <Compile Include="Model\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
@@ -228,6 +231,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Shapes\Appbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\IriShapes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

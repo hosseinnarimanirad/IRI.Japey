@@ -1,10 +1,13 @@
 ﻿using IRI.Ham.SpatialBase.Primitives;
 using IRI.Jab.Cartography.Model;
+using IRI.Jab.Cartography.Model.Map;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Model.Common;
+using IRI.Jab.Common.Model.Spatialable;
 using IRI.Ket.SpatialExtensions;
 using Microsoft.SqlServer.Types;
 using System;
@@ -18,49 +21,92 @@ namespace IRI.Jab.Cartography.Presenter.Map
 {
     public class MapPresenter : BasePresenter
     {
+
+        public void Initialize()
+        {
+            this.Ostanha = EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
+            {
+                this.ZoomToExtent(a.Parse(3857));
+            });
+
+            this.ZoomToExtent(BoundingBoxes.IranMercatorBoundingBox);
+
+            this.Pan();
+
+            this.SetMapCursorSet1();
+        }
+
         #region Properties
 
-        private bool _isZoomOnMouseWheelEnabled;
+        private ProxySettingsModel _proxy;
 
-        public bool IsZoomOnMouseWheelEnabled
+        public ProxySettingsModel Proxy
         {
-            get { return _isZoomOnMouseWheelEnabled; }
+            get { return _proxy; }
             set
             {
-                _isZoomOnMouseWheelEnabled = value;
+                _proxy = value;
+                value.FireProxyChanged = p => this.SetProxy(p.GetProxy());
                 RaisePropertyChanged();
-
-                this.FireIsZoomOnMouseWheelEnabledChanged?.Invoke(value);
             }
         }
 
-        private bool _isGoogleZoomLevelsEnabled;
 
-        public bool IsGoogleZoomLevelsEnabled
+
+        private MapSettingsModel _mapSettings = new MapSettingsModel();
+
+        public MapSettingsModel MapSettings
         {
-            get { return _isGoogleZoomLevelsEnabled; }
-            set
+            get { return _mapSettings; }
+            private set
             {
-                _isGoogleZoomLevelsEnabled = value;
+                _mapSettings = value;
                 RaisePropertyChanged();
-
-                this.FireIsGoogleZoomLevelsEnabledChanged?.Invoke(value);
             }
         }
 
-        private bool _isZoomInOnDoubleClickEnabled;
 
-        public bool IsZoomInOnDoubleClickEnabled
-        {
-            get { return _isZoomInOnDoubleClickEnabled; }
-            set
-            {
-                _isZoomInOnDoubleClickEnabled = value;
-                RaisePropertyChanged();
+        //private bool _isZoomOnMouseWheelEnabled;
 
-                this.FireIsZoomInOnDoubleClickEnabledChanged?.Invoke(value);
-            }
-        }
+        //public bool IsZoomOnMouseWheelEnabled
+        //{
+        //    get { return _isZoomOnMouseWheelEnabled; }
+        //    set
+        //    {
+        //        _isZoomOnMouseWheelEnabled = value;
+        //        RaisePropertyChanged();
+
+        //        this.FireIsMouseWheelZoomEnabledChanged?.Invoke(value);
+        //    }
+        //}
+
+        //private bool _isGoogleZoomLevelsEnabled;
+
+        //public bool IsGoogleZoomLevelsEnabled
+        //{
+        //    get { return _isGoogleZoomLevelsEnabled; }
+        //    set
+        //    {
+        //        _isGoogleZoomLevelsEnabled = value;
+        //        RaisePropertyChanged();
+
+        //        this.FireIsGoogleZoomLevelsEnabledChanged?.Invoke(value);
+        //    }
+        //}
+
+        //private bool _isZoomInOnDoubleClickEnabled;
+
+        //public bool IsZoomInOnDoubleClickEnabled
+        //{
+        //    get { return _isZoomInOnDoubleClickEnabled; }
+        //    set
+        //    {
+        //        _isZoomInOnDoubleClickEnabled = value;
+        //        RaisePropertyChanged();
+
+        //        this.FireIsZoomInOnDoubleClickEnabledChanged?.Invoke(value);
+        //    }
+        //}
 
 
         private TileType _baseMapType = TileType.None;
@@ -103,33 +149,33 @@ namespace IRI.Jab.Cartography.Presenter.Map
         {
             await CheckInternetAccess();
 
-            this.RequestSetTileService?.Invoke(provider, tileType, IsBaseMapCacheEnabled, BaseMapCacheDirectory, !IsConnected);
+            this.RequestSetTileService?.Invoke(provider, tileType, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected);
         }
 
-        private string _baseMapCacheDirectory = null;
+        //private string _baseMapCacheDirectory = null;
 
-        public string BaseMapCacheDirectory
-        {
-            get { return _baseMapCacheDirectory; }
-            set
-            {
-                _baseMapCacheDirectory = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public string BaseMapCacheDirectory
+        //{
+        //    get { return _baseMapCacheDirectory; }
+        //    set
+        //    {
+        //        _baseMapCacheDirectory = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
-        private bool _isBaseMapCacheEnabled;
+        //private bool _isBaseMapCacheEnabled;
 
-        public bool IsBaseMapCacheEnabled
-        {
-            get { return _isBaseMapCacheEnabled; }
-            set
-            {
-                _isBaseMapCacheEnabled = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public bool IsBaseMapCacheEnabled
+        //{
+        //    get { return _isBaseMapCacheEnabled; }
+        //    set
+        //    {
+        //        _isBaseMapCacheEnabled = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
         //public string GooglePath { get; set; }
@@ -214,6 +260,20 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 RaisePropertyChanged();
             }
         }
+
+
+        private ObservableCollection<DrawingItem> _drawingItems = new ObservableCollection<DrawingItem>();
+
+        public ObservableCollection<DrawingItem> DrawingItems
+        {
+            get { return _drawingItems; }
+            set
+            {
+                _drawingItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private bool _isBusy;
 
@@ -345,6 +405,18 @@ namespace IRI.Jab.Cartography.Presenter.Map
         }
 
 
+        private List<EnvelopeMarkupLabelTriple> _ostanha;
+
+        public List<EnvelopeMarkupLabelTriple> Ostanha
+        {
+            get { return _ostanha; }
+            set
+            {
+                _ostanha = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private EditableFeatureLayer _currentEditingLayer;
 
         public EditableFeatureLayer CurrentEditingLayer
@@ -360,8 +432,6 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Actions & Funcs
-
-        public Action<bool> FireIsZoomInOnDoubleClickEnabledChanged;
 
         public Action<System.Net.WebProxy> RequestSetProxy;
 
@@ -395,9 +465,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestFullExtent;
 
-        public Action<bool> FireIsZoomOnMouseWheelEnabledChanged;
+        //public Action<bool> FireIsZoomInOnDoubleClickEnabledChanged;
 
-        public Action<bool> FireIsGoogleZoomLevelsEnabledChanged;
+        //public Action<bool> FireIsMouseWheelZoomEnabledChanged;
+
+        //public Action<bool> FireIsGoogleZoomLevelsEnabledChanged;
 
         public Action<double> RequestZoomToScale;
 
@@ -455,7 +527,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
 
-        public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawing;
+        public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawingAsync;
 
         public Action RequestClearMap;
 
@@ -483,6 +555,67 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Methods
+        private async void Draw(DrawMode mode)
+        {
+            var shapeItem = await MakeShapeItem(mode, $"DRAWING {DrawingItems?.Count}");
+
+            this.SetLayer(shapeItem.AssociatedLayer);
+
+            this.DrawingItems.Add(shapeItem);
+
+            this.Refresh();
+        }
+
+        private async Task<DrawingItem> MakeShapeItem(DrawMode mode, string name)
+        {
+            this.IsPanMode = true;
+            //ResetMode(mode);
+
+            var drawing = await this.GetDrawingAsync(mode, true);
+
+            if (drawing == null)
+            {
+                return null;
+            }
+
+            var shapeItem = new DrawingItem() { Geometry = drawing };
+
+            shapeItem.Title = name;
+
+            shapeItem.RemoveAction = () =>
+            {
+                this.DrawingItems.Remove(shapeItem);
+                this.RemoveLayer(shapeItem.AssociatedLayer);
+                this.Refresh();
+            };
+
+            shapeItem.EditAction = async () =>
+            {
+                this.RemoveLayer(shapeItem.AssociatedLayer);
+
+                var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions() { IsDeleteButtonVisible = true, IsCancelButtonVisible = true, IsFinishButtonVisible = true });
+
+                if (edittedShape != null)
+                {
+                    shapeItem.Geometry = edittedShape;
+                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { edittedShape.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+                    this.SetLayer(shapeItem.AssociatedLayer);
+                    Refresh();
+                }
+            };
+
+            shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox()); };
+
+            shapeItem.RequestDownload = (s) =>
+            {
+                //this.OnRequestShowDownloadDialog?.Invoke(s);
+            };
+
+            shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+            return shapeItem;
+        }
 
         public async void SetProxy(System.Net.WebProxy proxy)
         {
@@ -679,11 +812,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestUnregisterMapOptions?.Invoke();
         }
 
-        protected async Task<Geometry> GetDrawing(DrawMode mode, bool display = true)
+        protected async Task<Geometry> GetDrawingAsync(DrawMode mode, bool display = true)
         {
             this.IsDrawMode = true;
 
-            var result = await this.RequestGetDrawing?.Invoke(mode, display);
+            var result = await this.RequestGetDrawingAsync?.Invoke(mode, display);
 
             this.IsDrawMode = false;
 
@@ -1142,6 +1275,33 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private RelayCommand _drawPolygonCommand;
+
+        public RelayCommand DrawPolygonCommand
+        {
+            get
+            {
+                if (_drawPolygonCommand == null)
+                {
+                    _drawPolygonCommand = new RelayCommand(param => { Draw(DrawMode.Polygon); });
+                }
+                return _drawPolygonCommand;
+            }
+        }
+
+        private RelayCommand _drawPolylineCommand;
+
+        public RelayCommand DrawPolylineCommand
+        {
+            get
+            {
+                if (_drawPolylineCommand == null)
+                {
+                    _drawPolylineCommand = new RelayCommand(param => { Draw(DrawMode.Polyline); });
+                }
+                return _drawPolylineCommand;
+            }
+        }
 
         #endregion
 

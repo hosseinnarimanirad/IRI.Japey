@@ -357,18 +357,6 @@ namespace IRI.Jab.MapViewer
         {
             _presenter = presenter;
 
-            presenter.FireIsZoomInOnDoubleClickEnabledChanged = (enable) =>
-            {
-                if (enable)
-                {
-                    this.EnableZoomOnDoubleClick();
-                }
-                else
-                {
-                    this.DisableZoomOnDoubleClick();
-                }
-            };
-
             presenter.RequestGetProxy = () => this.Proxy;
 
             presenter.RequestSetProxy = (p) => this.Proxy = p;
@@ -393,7 +381,19 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestEnableZoomOut = () => { this.ZoomOutPoint(); };
 
-            presenter.FireIsZoomOnMouseWheelEnabledChanged = (e) =>
+            presenter.MapSettings.FireIsDoubleClickZoomEnabledChanged = (e) =>
+            {
+                if (e)
+                {
+                    this.EnableZoomOnDoubleClick();
+                }
+                else
+                {
+                    this.DisableZoomOnDoubleClick();
+                }
+            };
+
+            presenter.MapSettings.FireIsMouseWheelZoomEnabledChanged = (e) =>
             {
                 if (e)
                 {
@@ -405,10 +405,12 @@ namespace IRI.Jab.MapViewer
                 }
             };
 
-            presenter.FireIsGoogleZoomLevelsEnabledChanged = (e) =>
+            presenter.MapSettings.FireIsGoogleZoomLevelsEnabledChanged = (e) =>
             {
                 this.IsGoogleZoomLevelsEnabled = e;
             };
+
+            presenter.MapSettings.Initialize();
 
             presenter.Layers = this.Layers;
 
@@ -469,7 +471,7 @@ namespace IRI.Jab.MapViewer
             presenter.RequestZoomToExtent = (boundingBox, callback) => { this.ZoomToExtent(boundingBox, false, true, callback); };
 
 
-            presenter.RequestGetDrawing = (mode, display) =>
+            presenter.RequestGetDrawingAsync = (mode, display) =>
             {
                 return this.GetDrawingAsync(mode, null, display);
             };
@@ -1732,10 +1734,10 @@ namespace IRI.Jab.MapViewer
 
                     Action action = () =>
                     {
-                //AddTiledLayer(vectorLayer);
-                AddNonTiledLayer(vectorLayer);
-                //ClearBasemap();
-            };
+                        //AddTiledLayer(vectorLayer);
+                        AddNonTiledLayer(vectorLayer);
+                        //ClearBasemap();
+                    };
 
                     var extent = this.CurrentExtent;
 
@@ -2409,8 +2411,8 @@ namespace IRI.Jab.MapViewer
               {
                   this.mapView.MouseUp -= action;
 
-          //this.SetCursor(Cursors.Arrow);
-          this.SetCursor(CursorSettings[_currentMouseAction]);
+                  //this.SetCursor(Cursors.Arrow);
+                  this.SetCursor(CursorSettings[_currentMouseAction]);
 
                   tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
               };
@@ -2423,8 +2425,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-        //this.SetCursor(Cursors.Arrow);
-        this.SetCursor(CursorSettings[_currentMouseAction]);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 tcs = null;
 
@@ -3536,8 +3538,8 @@ namespace IRI.Jab.MapViewer
             {
                 drawingTcs.TrySetCanceled();
 
-        //this.SetCursor(Cursors.Arrow);
-        this.SetCursor(CursorSettings[_currentMouseAction]);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
@@ -3699,9 +3701,9 @@ namespace IRI.Jab.MapViewer
 
             layer.RequestRefresh = l =>
             {
-        //this.ClearLayer(LayerType.EditableItem, false);
+                //this.ClearLayer(LayerType.EditableItem, false);
 
-        this.RemoveLayer(l);
+                this.RemoveLayer(l);
 
                 this.SetLayer(l);
 
@@ -3727,9 +3729,9 @@ namespace IRI.Jab.MapViewer
 
             layer.RequestRefresh = l =>
             {
-        //this.ClearLayer(LayerType.EditableItem, false);
+                //this.ClearLayer(LayerType.EditableItem, false);
 
-        this.RemoveLayer(l);
+                this.RemoveLayer(l);
 
                 this.SetLayer(l);
 
@@ -3799,8 +3801,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-        //this.SetCursor(Cursors.Arrow);
-        this.SetCursor(CursorSettings[_currentMouseAction]);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
@@ -3822,7 +3824,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Editing;
 
-                var result = await EditGeometry(originalGeometry, options);
+                var result = await EditGeometry(originalGeometry.Clone(), options);
 
                 this.Status = MapStatus.Idle;
 
@@ -3895,8 +3897,8 @@ namespace IRI.Jab.MapViewer
             {
                 tcs.TrySetCanceled();
 
-        //this.SetCursor(Cursors.Arrow);
-        this.SetCursor(CursorSettings[_currentMouseAction]);
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
 
             }, useSynchronizationContext: false);
 

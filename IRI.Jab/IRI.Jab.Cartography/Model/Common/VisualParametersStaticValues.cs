@@ -56,5 +56,11 @@ namespace IRI.Jab.Cartography
                 DashStyle = VisualParameters.GetDefaultDashStyleForMeasurements()
             };
         }
+
+        public static VisualParameters GetRandomVisualParameters()
+        {
+            return new VisualParameters(null, BrushHelper.PickGoodBrush(), 4, 1);
+        }
+
     }
 }
