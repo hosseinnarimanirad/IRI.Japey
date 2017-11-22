@@ -892,14 +892,14 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
 
 
 
-        public static Point UTMToGeodetic(IPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude)
+        public static Point UTMToGeodetic(IPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude, bool isNorthHemisphere = true)
         {
             double tempX = 0;
             double tempY = 0;
 
             tempX = (utmPoint.X - 500000) / 0.9996;
 
-            tempY = (utmPoint.Y) / 0.9996;
+            tempY = isNorthHemisphere ? (utmPoint.Y) / 0.9996 : (utmPoint.Y - 10000000.0) / 0.9996;
 
             Point result = TransverseMercatorToGeodetic(new Point(tempX, tempY), ellipsoid);
 
@@ -934,35 +934,35 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             return result;
         }
 
-        public static double[][] UTMToGeodetic(double[] x, double[] y, Ellipsoid<Meter, Degree> ellipsoid, int zone)
-        {
-            if (x.Length != y.Length)
-            {
-                throw new NotImplementedException();
-            }
+        //public static double[][] UTMToGeodetic(double[] x, double[] y, Ellipsoid<Meter, Degree> ellipsoid, int zone)
+        //{
+        //    if (x.Length != y.Length)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            double[] tempX = new double[x.Length];
-            double[] tempY = new double[x.Length];
+        //    double[] tempX = new double[x.Length];
+        //    double[] tempY = new double[x.Length];
 
-            for (int i = 0; i < x.Length; i++)
-            {
-                tempX[i] = (x[i] - 500000) / 0.9996;
+        //    for (int i = 0; i < x.Length; i++)
+        //    {
+        //        tempX[i] = (x[i] - 500000) / 0.9996;
 
-                //y[i] = (y[i] - 10000000) / 0.9996;
-                tempY[i] = (y[i]) / 0.9996;
-            }
+        //        //y[i] = (y[i] - 10000000) / 0.9996;
+        //        tempY[i] = (y[i]) / 0.9996;
+        //    }
 
-            double[][] result = TransverseMercatorToGeodetic(tempX, tempY, ellipsoid);
+        //    double[][] result = TransverseMercatorToGeodetic(tempX, tempY, ellipsoid);
 
-            double centralLongitude = CalculateCentralMeridian(zone);
+        //    double centralLongitude = CalculateCentralMeridian(zone);
 
-            for (int i = 0; i < x.Length; i++)
-            {
-                result[0][i] = result[0][i] + centralLongitude;
-            }
+        //    for (int i = 0; i < x.Length; i++)
+        //    {
+        //        result[0][i] = result[0][i] + centralLongitude;
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         #endregion
 
@@ -1358,6 +1358,6 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         {
             return CalculateGridFactor(geodeticPoint);
         }
-              
+
     }
 }

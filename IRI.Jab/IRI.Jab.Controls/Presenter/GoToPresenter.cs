@@ -144,7 +144,7 @@ namespace IRI.Jab.Controls.Presenter
                     return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
 
                 case SpatialReferenceType.Mercator:
-                case SpatialReferenceType.TM:
+                case SpatialReferenceType.TransverseMercator:
                 case SpatialReferenceType.CylindricalEqualArea:
                 case SpatialReferenceType.LambertConformalConic:
                 case SpatialReferenceType.WebMercator:

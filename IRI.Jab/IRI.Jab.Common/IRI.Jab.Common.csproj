@@ -134,7 +134,8 @@
     <Compile Include="Model\Common\IProxySettings.cs" />
     <Compile Include="Model\Common\ProxySettingsModel.cs" />
     <Compile Include="Model\EditableItem.cs" />
-    <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
+    <Compile Include="Model\Globalization\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
     <Compile Include="Model\MapAction.cs" />

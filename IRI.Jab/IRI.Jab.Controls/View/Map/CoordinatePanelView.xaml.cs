@@ -1,4 +1,6 @@
-﻿using IRI.Ket.Common.Helpers;
+﻿using IRI.Jab.Common.Model;
+using IRI.Jab.Controls.Presenter;
+using IRI.Ket.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,14 +26,42 @@ namespace IRI.Jab.Controls.View.Map
     /// </summary>
     public partial class CoordinatePanelView : UserControl, INotifyPropertyChanged
     {
+        CoordinatePanelPresenter Presenter { get { return this.DataContext as CoordinatePanelPresenter; } }
+        //const string persianLongitudeLabel = "طول جغرافیایی";
+        //const string persianLatitudeLabel = "عرض جغرافیایی";
+
+        //const string englishLongitudeLabel = "Longitude";
+        //const string englishLatitudeLabel = "Latitude";
+
+        //const string persianZoneLabel = "ناحیه";
+        //const string englishZoneLabel = "Zone";
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         public CoordinatePanelView()
         {
             InitializeComponent();
+
+            this.DataContext = new CoordinatePanelPresenter();
         }
+
+
+
 
         private void options_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.optionsRow.Height = new GridLength(1, GridUnitType.Auto);
+
+            this.optionsRow2.Height = new GridLength(1, GridUnitType.Auto);
 
             this.Opacity = 1;
         }
@@ -65,7 +95,7 @@ namespace IRI.Jab.Controls.View.Map
             get { return _xLabel; }
             set
             {
-                _xLabel = value.LatinNumbersToFarsiNumbers();
+                _xLabel = value;
                 RaisePropertyChanged();
             }
         }
@@ -77,7 +107,33 @@ namespace IRI.Jab.Controls.View.Map
             get { return _yLabel; }
             set
             {
-                _yLabel = value.LatinNumbersToFarsiNumbers();
+                _yLabel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        private string _xValue;
+
+        public string XValue
+        {
+            get { return _xValue; }
+            set
+            {
+                _xValue = value.LatinNumbersToFarsiNumbers();
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _yValue;
+
+        public string YValue
+        {
+            get { return _yValue; }
+            set
+            {
+                _yValue = value.LatinNumbersToFarsiNumbers();
                 RaisePropertyChanged();
             }
         }
@@ -91,6 +147,7 @@ namespace IRI.Jab.Controls.View.Map
         /// <param name="mercatorY"></param>
         public void SetCoordinates(Point geodeticPoint)
         {
+            Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
 
             this.zone.Visibility = System.Windows.Visibility.Collapsed;
 
@@ -102,27 +159,27 @@ namespace IRI.Jab.Controls.View.Map
 
                 IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.Y);
 
-                this.XLabel = DegreeHelper.ToDms(geodeticPoint.X, true);
+                this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
 
                 //string.Format("{0:D3}° {1:D2} {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
 
                 //this.YLabel = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
 
-                this.YLabel = DegreeHelper.ToDms(geodeticPoint.Y, true);
+                this.YValue = DegreeHelper.ToDms(geodeticPoint.Y, true);
             }
             else if (geodeticDd.IsChecked == true)
             {
-                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
+                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
 
-                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
+                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
             }
             else if (utm.IsChecked == true)
             {
                 Point tempUtm = GeodeticToUTM(geodeticPoint);
 
-                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
 
                 this.zone.Visibility = System.Windows.Visibility.Visible;
 
@@ -134,38 +191,28 @@ namespace IRI.Jab.Controls.View.Map
             {
                 Point tempUtm = GeodeticToMercator(geodeticPoint);
 
-                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
             else if (cea.IsChecked == true)
             {
                 Point tempUtm = GeodeticToCylindricalEqualArea(geodeticPoint);
 
-                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
             else if (tm.IsChecked == true)
             {
                 Point tempUtm = GeodeticToTransverseMercator(geodeticPoint);
 
-                this.XLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YLabel = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
             }
 
         }
-
-        //private Point MercatorToDecimalGeodetic(Point mercatorPoint)
-        //{
-        //    double[][] result = IRI.Ham.CoordinateSystem.Projection.MercatorToGeodetic(
-        //                                                            new double[] { mercatorPoint.X },
-        //                                                            new double[] { mercatorPoint.Y },
-        //                                                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
-
-        //    return new Point(result[0][0], result[1][0]);
-        //}
 
         private Point GeodeticToUTM(Point geodeticPoint)
         {
@@ -248,21 +295,10 @@ namespace IRI.Jab.Controls.View.Map
         {
             this.optionsRow.Height = new GridLength(0, GridUnitType.Pixel);
 
+            this.optionsRow2.Height = new GridLength(0, GridUnitType.Pixel);
+
             this.Opacity = .8;
         }
-
-        //private Point MercatorToDmsGeodetic(Point mercatorPoint)
-        //{
-        //    Point geodetic = MercatorToDecimalGeodetic(mercatorPoint);
-
-        //    IRI.Ham.MeasurementUnit.Degree longitude = new IRI.Ham.MeasurementUnit.Degree(geodetic.X);
-
-        //    IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodetic.Y);
-
-
-        //}
-
-
 
         public Point Position
         {
@@ -272,7 +308,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for Position.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty PositionProperty =
-            DependencyProperty.Register("Position", typeof(Point), typeof(CoordinatePanelView), new PropertyMetadata(new PropertyChangedCallback((d, dp) =>
+            DependencyProperty.Register(nameof(Position), typeof(Point), typeof(CoordinatePanelView), new PropertyMetadata(new PropertyChangedCallback((d, dp) =>
             {
                 try
                 {
@@ -294,7 +330,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for ShowGeodetic.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowGeodeticProperty =
-            DependencyProperty.Register("ShowGeodetic", typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowGeodetic), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
         public bool ShowUTM
@@ -305,7 +341,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for ShowUTM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowUTMProperty =
-            DependencyProperty.Register("ShowUTM", typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowUTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
         public bool ShowMercator
@@ -316,7 +352,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for ShowMercator.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowMercatorProperty =
-            DependencyProperty.Register("ShowMercator", typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowMercator), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
         public bool ShowTM
@@ -327,7 +363,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for ShowTM.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowTMProperty =
-            DependencyProperty.Register("ShowTM", typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
 
@@ -339,14 +375,49 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for ShowCylindricalEqualArea.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowCylindricalEqualAreaProperty =
-            DependencyProperty.Register("ShowCylindricalEqualArea", typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ShowCylindricalEqualArea), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+
+        public FlowDirection UIFlow
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get { return (FlowDirection)GetValue(UIFlowProperty); }
+            set { SetValue(UIFlowProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for UIFlow.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UIFlowProperty =
+            DependencyProperty.Register(nameof(UIFlow), typeof(FlowDirection), typeof(CoordinatePanelView), new PropertyMetadata(FlowDirection.RightToLeft));
+
+
+
+        public LanguageMode UILanguage
+        {
+            get { return (LanguageMode)GetValue(UILanguageProperty); }
+            set
+            {
+                SetValue(UILanguageProperty, value);
+                SetLanguage(value);
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for UILanguage.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UILanguageProperty =
+            DependencyProperty.Register(nameof(UILanguage), typeof(LanguageMode), typeof(CoordinatePanelView), new PropertyMetadata(LanguageMode.Persian));
+
+
+
+
+        private void SetLanguage(LanguageMode value)
+        {
+            var isPersian = value == LanguageMode.Persian;
+
+            this.UIFlow = isPersian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+            //this.XLabel = isPersian ?
+        }
+
+
     }
 }

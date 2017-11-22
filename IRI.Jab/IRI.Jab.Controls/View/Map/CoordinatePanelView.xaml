@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map"
              x:Name="root"
-             Height="auto" Width="auto" FlowDirection="RightToLeft" Opacity=".8" MouseLeave="UserControl_MouseLeave">
+             Height="auto" Width="auto" FlowDirection="{Binding ElementName=root, Path=UIFlow}" Opacity=".8" MouseLeave="UserControl_MouseLeave">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,6 +25,9 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Name="optionsRow" Height="0"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Name="optionsRow2" Height="0"/>
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style TargetType="Label" x:Key="staticText">
@@ -55,10 +58,11 @@
 
                 <Label Name="system" Margin="0,0,1,0" Style="{StaticResource staticText}" Content="ژئودتیک"/>
                 <Label Name="first" Content="طول جغرافیایی:" Height="auto" Style="{StaticResource staticText}" />
-                <Label Width="100" Content="{Binding ElementName=root, Path=XLabel}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x1" 
+                <Label Width="100" Content="{Binding ElementName=root, Path=XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x1" 
                        HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"/>
                 <Label Name="second" Content="عرض جغرافیایی:" Height="auto" Style="{StaticResource staticText}"/>
-                <Label Width="100" Content="{Binding ElementName=root, Path=YLabel}" Background="White" Foreground="{DynamicResource HighlightBrush}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x2" HorizontalContentAlignment="Right" />
+                <Label Width="100" Content="{Binding ElementName=root, Path=YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
+                       Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x2" HorizontalContentAlignment="Right" />
                 <Label Visibility="Collapsed" Name="region" Content="ناحیه :" Height="auto" Style="{StaticResource staticText}"/>
                 <Label Visibility="Collapsed" Name="zone" Width="100" Content="35 34' 12''" Margin="00 0 10 0" Background="White" 
                        FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"/>
@@ -100,6 +104,52 @@
                 </RadioButton>
             </StackPanel>
 
+            <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" MouseDown="options_MouseDown" Cursor="Hand">
+                <!--<StackPanel.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="WhiteSmoke" Offset="1" />
+                        <GradientStop Color="White" Offset="0.407" />
+                    </LinearGradientBrush>
+                </StackPanel.Background>-->
+
+                <!--<Label Style="{StaticResource info}">سیستم مرجع مکانی:</Label>-->
+
+                <Label Margin="0,0,1,0" Style="{StaticResource staticText}" Content="{Binding SelectedItem.TitleItem.Title}"/>
+                <Label Content="{Binding SelectedItem.XLabelItem.Title}" Height="auto" Style="{StaticResource staticText}" />
+                <Label Width="100" Content="{Binding SelectedItem.XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"  
+                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"/>
+                <Label   Content="{Binding SelectedItem.YLabelItem.Title}" Height="auto" Style="{StaticResource staticText}"/>
+                <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
+                       Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"   HorizontalContentAlignment="Right" />
+                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
+                       Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"/>
+                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
+                       Width="100" Content="{Binding SelectedItem.ZoneNumber}" Margin="00 0 10 0" Background="White" 
+                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"/>
+            </StackPanel>
+            <ItemsControl Grid.Row="4" ItemsSource="{Binding SpatialReferences}">
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <StackPanel IsItemsHost="True">
+                            <StackPanel.Resources>
+                                <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
+                                    <Setter Property="Margin" Value="6 2"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                </Style>
+                            </StackPanel.Resources>
+                        </StackPanel>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton GroupName="A" IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                            <Label Content="{Binding TitleItem.Title}" Foreground="White"/>
+                        </RadioButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
     </Border>
 </UserControl>

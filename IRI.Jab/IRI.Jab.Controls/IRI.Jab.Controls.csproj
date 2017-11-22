@@ -82,9 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
+    <Compile Include="Model\CoordinatePanel\SpatialReferenceItem.cs" />
+    <Compile Include="Model\CoordinatePanel\SpatialReferenceItems.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Model\DegreeMinuteSecondModel.cs" />
     <Compile Include="Model\GoTo\HamburgerGoToMenuItem.cs" />
+    <Compile Include="Presenter\CoordinatePanelPresenter.cs" />
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
