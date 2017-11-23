@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Jab.Common.Model;
+using System.Windows;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -51,6 +53,8 @@ namespace IRI.Jab.Controls.Presenter
             this.SpatialReferences.Add(SpatialReferenceItems.UtmWgs84);
 
             this.SpatialReferences.First().IsSelected = true;
+
+            SetLanguage(LanguageMode.Persian);
         }
 
         private void UpdateSelectedItem()
@@ -62,5 +66,29 @@ namespace IRI.Jab.Controls.Presenter
                 item.FireIsSelectedChanged = e => { this.SelectedItem = e; };
             }
         }
+
+        internal void SetLanguage(LanguageMode value)
+        {
+            foreach (var item in SpatialReferences)
+            {
+                item.UILanguage = value;
+            }
+
+            this.UIFlow = value == LanguageMode.Persian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+        }
+
+        private FlowDirection _uiFlow;
+
+        public FlowDirection UIFlow
+        {
+            get { return _uiFlow; }
+            set
+            {
+                _uiFlow = value;
+                RaisePropertyChanged();
+                System.Diagnostics.Debug.WriteLine("UIFlow: " + value.ToString());
+            }
+        }
+
     }
 }

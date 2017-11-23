@@ -15,25 +15,34 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         static readonly Func<double, string> toStringForGeodeticDms = d => DegreeHelper.ToDms(d, true);
         static readonly Func<double, string> toStringForDefault = d => d.ToString("#,#.###");
 
-        static readonly PersianEnglishItem geodetic = new PersianEnglishItem("ژئودتیک (اعشار درجه)", "Geodetic (decimal degree)", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem geodeticDms = new PersianEnglishItem("ژئودتیک (درجه، دقیقه، ثانیه)", "Geodetic (dms)", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem utm = new PersianEnglishItem("سیستم تصویر UTM", "UTM", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem mercator = new PersianEnglishItem("سیستم تصویر Mercator", "Mercator", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem tm = new PersianEnglishItem("سیستم تصویر Transeverse Mercator", "Transeverse Mercator", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem cea = new PersianEnglishItem("سیستم تصویر Cylindrical Equal Area", "Cylindrical Equal Area", Common.Model.LanguageMode.Persian);
+        static readonly PersianEnglishItem geodeticTitle = new PersianEnglishItem("سیستم مختصات ژئودتیک، WGS84 (اعشار درجه)", "Geodetic, WGS84 (decimal degree)");
+        static readonly PersianEnglishItem geodeticDmsTitle = new PersianEnglishItem("سیستم مختصات ژئودتیک، WGS84 (درجه، دقیقه، ثانیه)", "Geodetic, WGS84 (dms)");
+        static readonly PersianEnglishItem utmTitle = new PersianEnglishItem("سیستم تصویر Univarsal Transverse Mercator - UTM", "Universal Transeverse Mercator (UTM)");
+        static readonly PersianEnglishItem mercatorTitle = new PersianEnglishItem("سیستم تصویر Mercator", "Mercator");
+        static readonly PersianEnglishItem tmTitle = new PersianEnglishItem("سیستم تصویر Transeverse Mercator", "Transeverse Mercator");
+        static readonly PersianEnglishItem ceaTitle = new PersianEnglishItem("سیستم تصویر Cylindrical Equal Area", "Cylindrical Equal Area");
 
-        //static readonly PersianEnglishItem _defaultZone = new PersianEnglishItem("ناحیه", "Zone", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem _defaultX = new PersianEnglishItem("X", "X", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem _defaultY = new PersianEnglishItem("Y", "Y", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem _defaultLatitude = new PersianEnglishItem("عرض جغرافیایی", "Latitude", Common.Model.LanguageMode.Persian);
-        static readonly PersianEnglishItem _defaultLongitude = new PersianEnglishItem("طول جغرافیایی", "Longitude", Common.Model.LanguageMode.Persian);
 
-        static readonly SpatialReferenceItem _geodeticWgs84 = new SpatialReferenceItem(p => p, toStringForGeodetic, geodetic, _defaultLongitude, _defaultLatitude);
-        static readonly SpatialReferenceItem _geodeticDmsWgs84 = new SpatialReferenceItem(p => p, toStringForGeodeticDms, geodeticDms, _defaultLongitude, _defaultLatitude);
-        static readonly SpatialReferenceItem _utmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToUTM(p, p.Y > 0), toStringForDefault, utm, _defaultX, _defaultY) { IsZoneVisible = true };
-        static readonly SpatialReferenceItem _mercatorWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToMercator(p), toStringForDefault, mercator, _defaultX, _defaultY);
-        static readonly SpatialReferenceItem _tmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), toStringForDefault, tm, _defaultX, _defaultY);
-        static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), toStringForDefault, cea, _defaultX, _defaultY);
+        static readonly PersianEnglishItem geodeticSubTitle = new PersianEnglishItem("ژئودتیک", "Geodetic, WGS84");
+        static readonly PersianEnglishItem geodeticDmsSubTitle = new PersianEnglishItem("ژئودتیک", "Geodetic, WGS84");
+        static readonly PersianEnglishItem utmSubTitle = new PersianEnglishItem("UTM", "UTM");
+        static readonly PersianEnglishItem mercatorSubTitle = new PersianEnglishItem("Mercator", "Mercator");
+        static readonly PersianEnglishItem tmSubTitle = new PersianEnglishItem("Transeverse Mercator", "Transeverse Mercator");
+        static readonly PersianEnglishItem ceaSubTitle = new PersianEnglishItem("Cylindrical Equal Area", "Cylindrical Equal Area");
+
+
+        //static readonly PersianEnglishItem _defaultZone = new PersianEnglishItem("ناحیه", "Zone");
+        static readonly PersianEnglishItem _defaultX = new PersianEnglishItem("X:", "X:");
+        static readonly PersianEnglishItem _defaultY = new PersianEnglishItem("Y:", "Y:");
+        static readonly PersianEnglishItem _defaultLatitude = new PersianEnglishItem("عرض جغرافیایی:", "Latitude:");
+        static readonly PersianEnglishItem _defaultLongitude = new PersianEnglishItem("طول جغرافیایی:", "Longitude:");
+
+        static readonly SpatialReferenceItem _geodeticWgs84 = new SpatialReferenceItem(p => p, toStringForGeodetic, geodeticTitle, geodeticSubTitle, _defaultLongitude, _defaultLatitude);
+        static readonly SpatialReferenceItem _geodeticDmsWgs84 = new SpatialReferenceItem(p => p, toStringForGeodeticDms, geodeticDmsTitle, geodeticDmsSubTitle, _defaultLongitude, _defaultLatitude);
+        static readonly SpatialReferenceItem _utmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToUTM(p, p.Y > 0), toStringForDefault, utmTitle, utmSubTitle, _defaultX, _defaultY) { IsZoneVisible = true };
+        static readonly SpatialReferenceItem _mercatorWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToMercator(p), toStringForDefault, mercatorTitle, mercatorSubTitle, _defaultX, _defaultY);
+        static readonly SpatialReferenceItem _tmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), toStringForDefault, tmTitle, tmSubTitle, _defaultX, _defaultY);
+        static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), toStringForDefault, ceaSubTitle, geodeticSubTitle, _defaultX, _defaultY);
 
         public static SpatialReferenceItem GeodeticWgs84
         {

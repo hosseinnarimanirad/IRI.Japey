@@ -66,77 +66,77 @@ namespace IRI.Jab.Controls.View.Map
             this.Opacity = 1;
         }
 
-        private void coordinateChanged_Checked(object sender, RoutedEventArgs e)
-        {
-            //this.optionsRow.Height = new GridLength(0, GridUnitType.Pixel);
+        //private void coordinateChanged_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    //this.optionsRow.Height = new GridLength(0, GridUnitType.Pixel);
 
-            this.system.Content = ((RadioButton)sender).Tag.ToString();
+        //    this.system.Content = ((RadioButton)sender).Tag.ToString();
 
-            //this.Opacity = .8;
-            if (geodeticDms.IsChecked == true || geodeticDd.IsChecked == true)
-            {
-                this.first.Content = "طول جغرافیایی:";
+        //    //this.Opacity = .8;
+        //    if (geodeticDms.IsChecked == true || geodeticDd.IsChecked == true)
+        //    {
+        //        this.first.Content = "طول جغرافیایی:";
 
-                this.second.Content = "عرض جغرافیایی:";
-            }
-            else// if (utm.IsChecked == true)
-            {
-                this.first.Content = "X:";
+        //        this.second.Content = "عرض جغرافیایی:";
+        //    }
+        //    else// if (utm.IsChecked == true)
+        //    {
+        //        this.first.Content = "X:";
 
-                this.second.Content = "Y:";
-            }
+        //        this.second.Content = "Y:";
+        //    }
 
-        }
+        //}
 
-        private string _xLabel;
+        //private string _xLabel;
 
-        public string XLabel
-        {
-            get { return _xLabel; }
-            set
-            {
-                _xLabel = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public string XLabel
+        //{
+        //    get { return _xLabel; }
+        //    set
+        //    {
+        //        _xLabel = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
-        private string _yLabel;
+        //private string _yLabel;
 
-        public string YLabel
-        {
-            get { return _yLabel; }
-            set
-            {
-                _yLabel = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public string YLabel
+        //{
+        //    get { return _yLabel; }
+        //    set
+        //    {
+        //        _yLabel = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
 
-        private string _xValue;
+        //private string _xValue;
 
-        public string XValue
-        {
-            get { return _xValue; }
-            set
-            {
-                _xValue = value.LatinNumbersToFarsiNumbers();
-                RaisePropertyChanged();
-            }
-        }
+        //public string XValue
+        //{
+        //    get { return _xValue; }
+        //    set
+        //    {
+        //        _xValue = value.LatinNumbersToFarsiNumbers();
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
-        private string _yValue;
+        //private string _yValue;
 
-        public string YValue
-        {
-            get { return _yValue; }
-            set
-            {
-                _yValue = value.LatinNumbersToFarsiNumbers();
-                RaisePropertyChanged();
-            }
-        }
+        //public string YValue
+        //{
+        //    get { return _yValue; }
+        //    set
+        //    {
+        //        _yValue = value.LatinNumbersToFarsiNumbers();
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
 
@@ -145,151 +145,151 @@ namespace IRI.Jab.Controls.View.Map
         /// </summary>
         /// <param name="mecatorX"></param>
         /// <param name="mercatorY"></param>
-        public void SetCoordinates(Point geodeticPoint)
+        private void SetCoordinates(Point geodeticPoint)
         {
             Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
 
-            this.zone.Visibility = System.Windows.Visibility.Collapsed;
+            //this.zone.Visibility = System.Windows.Visibility.Collapsed;
 
-            this.region.Visibility = System.Windows.Visibility.Collapsed;
+            //this.region.Visibility = System.Windows.Visibility.Collapsed;
 
-            if (geodeticDms.IsChecked == true)
-            {
-                IRI.Ham.MeasurementUnit.Degree longitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.X);
+            //if (geodeticDms.IsChecked == true)
+            //{
+            //    IRI.Ham.MeasurementUnit.Degree longitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.X);
 
-                IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.Y);
+            //    IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.Y);
 
-                this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
+            //    this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
 
-                //string.Format("{0:D3}° {1:D2} {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
+            //    //string.Format("{0:D3}° {1:D2} {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
 
-                //this.YLabel = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
+            //    //this.YLabel = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
 
-                this.YValue = DegreeHelper.ToDms(geodeticPoint.Y, true);
-            }
-            else if (geodeticDd.IsChecked == true)
-            {
-                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
+            //    this.YValue = DegreeHelper.ToDms(geodeticPoint.Y, true);
+            //}
+            //else if (geodeticDd.IsChecked == true)
+            //{
+            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
 
-                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
-            }
-            else if (utm.IsChecked == true)
-            {
-                Point tempUtm = GeodeticToUTM(geodeticPoint);
+            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
+            //}
+            //else if (utm.IsChecked == true)
+            //{
+            //    Point tempUtm = GeodeticToUTM(geodeticPoint);
 
-                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
 
-                this.zone.Visibility = System.Windows.Visibility.Visible;
+            //    this.zone.Visibility = System.Windows.Visibility.Visible;
 
-                this.region.Visibility = System.Windows.Visibility.Visible;
+            //    this.region.Visibility = System.Windows.Visibility.Visible;
 
-                this.zone.Content = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
-            }
-            else if (mercator.IsChecked == true)
-            {
-                Point tempUtm = GeodeticToMercator(geodeticPoint);
+            //    this.zone.Content = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
+            //}
+            //else if (mercator.IsChecked == true)
+            //{
+            //    Point tempUtm = GeodeticToMercator(geodeticPoint);
 
-                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            }
-            else if (cea.IsChecked == true)
-            {
-                Point tempUtm = GeodeticToCylindricalEqualArea(geodeticPoint);
+            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+            //}
+            //else if (cea.IsChecked == true)
+            //{
+            //    Point tempUtm = GeodeticToCylindricalEqualArea(geodeticPoint);
 
-                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            }
-            else if (tm.IsChecked == true)
-            {
-                Point tempUtm = GeodeticToTransverseMercator(geodeticPoint);
+            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+            //}
+            //else if (tm.IsChecked == true)
+            //{
+            //    Point tempUtm = GeodeticToTransverseMercator(geodeticPoint);
 
-                this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
+            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
 
-                this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            }
-
-        }
-
-        private Point GeodeticToUTM(Point geodeticPoint)
-        {
-            try
-            {
-                IRI.Ham.SpatialBase.Point result =
-                    IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
-                            new IRI.Ham.SpatialBase.Point(geodeticPoint.X, geodeticPoint.Y),
-                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
-
-                return new Point(result.X, result.Y);
-            }
-            catch (Exception)
-            {
-                return new Point(double.NaN, double.NaN);
-            }
-        }
-
-        public Point GeodeticToMercator(Point point)
-        {
-            try
-            {
-                double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
-                                                                        new double[] { point.X },
-                                                                        new double[] { point.Y },
-                                                                        IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
-
-                return new Point(result[0][0], result[1][0]);
-            }
-            catch (Exception)
-            {
-                return new Point(double.NaN, double.NaN);
-            }
-        }
-
-        public Point GeodeticToTransverseMercator(Point point)
-        {
-            try
-            {
-                double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
-                                                                        new double[] { point.X },
-                                                                        new double[] { point.Y },
-                                                                        IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
-
-                return new Point(result[0][0], result[1][0]);
-            }
-            catch (Exception)
-            {
-                return new Point(double.NaN, double.NaN);
-            }
-        }
-
-        private Point GeodeticToCylindricalEqualArea(Point point)
-        {
-            try
-            {
-                double[][] result =
-                    IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
-                        new double[] { point.X },
-                        new double[] { point.Y }, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-                        0, 0);
-
-                return new Point(result[0][0], result[1][0]);
-            }
-            catch (Exception)
-            {
-                return new Point(double.NaN, double.NaN);
-            }
+            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
+            //}
 
         }
 
-        private void close_Click(object sender, RoutedEventArgs e)
-        {
-            this.optionsRow.Height = new GridLength(0, GridUnitType.Pixel);
+        //private Point GeodeticToUTM(Point geodeticPoint)
+        //{
+        //    try
+        //    {
+        //        IRI.Ham.SpatialBase.Point result =
+        //            IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
+        //                    new IRI.Ham.SpatialBase.Point(geodeticPoint.X, geodeticPoint.Y),
+        //                    IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
 
-            this.Opacity = .8;
-        }
+        //        return new Point(result.X, result.Y);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new Point(double.NaN, double.NaN);
+        //    }
+        //}
+
+        //public Point GeodeticToMercator(Point point)
+        //{
+        //    try
+        //    {
+        //        double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //                                                                new double[] { point.X },
+        //                                                                new double[] { point.Y },
+        //                                                                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
+
+        //        return new Point(result[0][0], result[1][0]);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new Point(double.NaN, double.NaN);
+        //    }
+        //}
+
+        //public Point GeodeticToTransverseMercator(Point point)
+        //{
+        //    try
+        //    {
+        //        double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
+        //                                                                new double[] { point.X },
+        //                                                                new double[] { point.Y },
+        //                                                                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
+
+        //        return new Point(result[0][0], result[1][0]);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new Point(double.NaN, double.NaN);
+        //    }
+        //}
+
+        //private Point GeodeticToCylindricalEqualArea(Point point)
+        //{
+        //    try
+        //    {
+        //        double[][] result =
+        //            IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
+        //                new double[] { point.X },
+        //                new double[] { point.Y }, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+        //                0, 0);
+
+        //        return new Point(result[0][0], result[1][0]);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new Point(double.NaN, double.NaN);
+        //    }
+
+        //}
+
+        //private void close_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.optionsRow.Height = new GridLength(0, GridUnitType.Pixel);
+
+        //    this.Opacity = .8;
+        //}
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -322,73 +322,60 @@ namespace IRI.Jab.Controls.View.Map
 
 
 
-        public bool ShowGeodetic
-        {
-            get { return (bool)GetValue(ShowGeodeticProperty); }
-            set { SetValue(ShowGeodeticProperty, value); }
-        }
+        //public bool ShowGeodetic
+        //{
+        //    get { return (bool)GetValue(ShowGeodeticProperty); }
+        //    set { SetValue(ShowGeodeticProperty, value); }
+        //}
 
-        // Using a DependencyProperty as the backing store for ShowGeodetic.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ShowGeodeticProperty =
-            DependencyProperty.Register(nameof(ShowGeodetic), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
-
-
-        public bool ShowUTM
-        {
-            get { return (bool)GetValue(ShowUTMProperty); }
-            set { SetValue(ShowUTMProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ShowUTM.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ShowUTMProperty =
-            DependencyProperty.Register(nameof(ShowUTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+        //// Using a DependencyProperty as the backing store for ShowGeodetic.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowGeodeticProperty =
+        //    DependencyProperty.Register(nameof(ShowGeodetic), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
-        public bool ShowMercator
-        {
-            get { return (bool)GetValue(ShowMercatorProperty); }
-            set { SetValue(ShowMercatorProperty, value); }
-        }
+        //public bool ShowUTM
+        //{
+        //    get { return (bool)GetValue(ShowUTMProperty); }
+        //    set { SetValue(ShowUTMProperty, value); }
+        //}
 
-        // Using a DependencyProperty as the backing store for ShowMercator.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ShowMercatorProperty =
-            DependencyProperty.Register(nameof(ShowMercator), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
-
-
-        public bool ShowTM
-        {
-            get { return (bool)GetValue(ShowTMProperty); }
-            set { SetValue(ShowTMProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for ShowTM.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ShowTMProperty =
-            DependencyProperty.Register(nameof(ShowTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+        //// Using a DependencyProperty as the backing store for ShowUTM.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowUTMProperty =
+        //    DependencyProperty.Register(nameof(ShowUTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
+        //public bool ShowMercator
+        //{
+        //    get { return (bool)GetValue(ShowMercatorProperty); }
+        //    set { SetValue(ShowMercatorProperty, value); }
+        //}
 
-        public bool ShowCylindricalEqualArea
-        {
-            get { return (bool)GetValue(ShowCylindricalEqualAreaProperty); }
-            set { SetValue(ShowCylindricalEqualAreaProperty, value); }
-        }
+        //// Using a DependencyProperty as the backing store for ShowMercator.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowMercatorProperty =
+        //    DependencyProperty.Register(nameof(ShowMercator), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
-        // Using a DependencyProperty as the backing store for ShowCylindricalEqualArea.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ShowCylindricalEqualAreaProperty =
-            DependencyProperty.Register(nameof(ShowCylindricalEqualArea), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
+
+        //public bool ShowTM
+        //{
+        //    get { return (bool)GetValue(ShowTMProperty); }
+        //    set { SetValue(ShowTMProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for ShowTM.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowTMProperty =
+        //    DependencyProperty.Register(nameof(ShowTM), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
 
+        //public bool ShowCylindricalEqualArea
+        //{
+        //    get { return (bool)GetValue(ShowCylindricalEqualAreaProperty); }
+        //    set { SetValue(ShowCylindricalEqualAreaProperty, value); }
+        //}
 
-        public FlowDirection UIFlow
-        {
-            get { return (FlowDirection)GetValue(UIFlowProperty); }
-            set { SetValue(UIFlowProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for UIFlow.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UIFlowProperty =
-            DependencyProperty.Register(nameof(UIFlow), typeof(FlowDirection), typeof(CoordinatePanelView), new PropertyMetadata(FlowDirection.RightToLeft));
+        //// Using a DependencyProperty as the backing store for ShowCylindricalEqualArea.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowCylindricalEqualAreaProperty =
+        //    DependencyProperty.Register(nameof(ShowCylindricalEqualArea), typeof(bool), typeof(CoordinatePanelView), new PropertyMetadata(true));
 
 
 
@@ -404,18 +391,28 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for UILanguage.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty UILanguageProperty =
-            DependencyProperty.Register(nameof(UILanguage), typeof(LanguageMode), typeof(CoordinatePanelView), new PropertyMetadata(LanguageMode.Persian));
-
-
-
+            DependencyProperty.Register(
+                nameof(UILanguage),
+                typeof(LanguageMode),
+                typeof(CoordinatePanelView),
+                new PropertyMetadata(LanguageMode.Persian, (d, dp) =>
+                {
+                    try
+                    {
+                        ((CoordinatePanelView)d).SetLanguage((LanguageMode)dp.NewValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        return;
+                    }
+                }));
 
         private void SetLanguage(LanguageMode value)
         {
-            var isPersian = value == LanguageMode.Persian;
-
-            this.UIFlow = isPersian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-
-            //this.XLabel = isPersian ?
+            if (this.Presenter != null)
+            {
+                this.Presenter.SetLanguage(value);
+            }
         }
 
 

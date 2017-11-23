@@ -46,13 +46,15 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
 
         private Func<double, string> _toString;
 
-        public SpatialReferenceItem(Func<IPoint, IPoint> fromWgs84Geodetic, Func<double, string> toString, PersianEnglishItem titleItem, PersianEnglishItem xLabel, PersianEnglishItem yLabel)
+        public SpatialReferenceItem(Func<IPoint, IPoint> fromWgs84Geodetic, Func<double, string> toString, PersianEnglishItem titleItem, PersianEnglishItem subTitleItem, PersianEnglishItem xLabel, PersianEnglishItem yLabel)
         {
             this._fromWgs84Geodetic = fromWgs84Geodetic;
 
             this._toString = toString;
 
             this.TitleItem = titleItem;
+
+            this.SubTitleItem = subTitleItem;
 
             this.XLabelItem = xLabel;
 
@@ -74,7 +76,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
 
             this.ZoneNumber = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
 
-            if (UILanguage== LanguageMode.Persian)
+            if (UILanguage == LanguageMode.Persian)
             {
                 this.XValue = this.XValue.LatinNumbersToFarsiNumbers();
                 this.YValue = this.YValue.LatinNumbersToFarsiNumbers();
@@ -94,6 +96,17 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
             }
         }
 
+        private PersianEnglishItem _subTitleItem;
+
+        public PersianEnglishItem SubTitleItem
+        {
+            get { return _subTitleItem; }
+            set
+            {
+                _subTitleItem = value;
+                RaisePropertyChanged();
+            }
+        }
 
         //private string _persianTitle;
 
@@ -166,7 +179,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
 
         //public string ZoneLabel { get => UILanguage == LanguageMode.Persian ? PersianZoneLabel : EnglishZoneLabel; }
 
-        private PersianEnglishItem _zoneItem = new PersianEnglishItem("ناحیه", "Zone", LanguageMode.Persian);
+        private PersianEnglishItem _zoneItem = new PersianEnglishItem("ناحیه :", "Zone :", LanguageMode.Persian);
 
         public PersianEnglishItem ZoneItem
         {
@@ -287,6 +300,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
                 _uiLanguage = value;
                 RaisePropertyChanged();
                 this.TitleItem.UILanguage = value;
+                this.SubTitleItem.UILanguage = value;
                 this.ZoneItem.UILanguage = value;
                 this.XLabelItem.UILanguage = value;
                 this.YLabelItem.UILanguage = value;
@@ -310,7 +324,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
                 {
                     this.FireIsSelectedChanged?.Invoke(this);
                 }
-                
+
             }
         }
 
