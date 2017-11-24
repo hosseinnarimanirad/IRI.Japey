@@ -13,7 +13,12 @@ namespace IRI.Ket.Common.Extensions
         {
             // variables  
             var enumType = value.GetType();
+
             var field = enumType.GetField(value.ToString());
+
+            if (field == null)
+                return value.ToString();
+
             var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
             // return  
