@@ -149,6 +149,8 @@ namespace IRI.Jab.Cartography
             //this._isNewDrawingMode = isNewDrawing;
             this._options = options ?? Model.EditableFeatureLayerOptions.CreateDefault();
 
+            this._options.RequestHandleIsEdgeLabelVisibleChanged = () => { UpdateEdgeLables(); };
+
             this.LayerName = name;
 
             this._mercatorGeometry = mercatorGeometry;
@@ -250,10 +252,10 @@ namespace IRI.Jab.Cartography
 
         private void UpdateEdgeLables()
         {
+            this._edgeLabelLayer.Items.Clear();
+
             if (Options.IsEdgeLabelVisible)
             {
-                this._edgeLabelLayer.Items.Clear();
-
                 var edges = _mercatorGeometry.GetLineSegments().Select(i => ToEdgeLengthLocatable(i.Start, i.End));
 
                 foreach (var item in edges)

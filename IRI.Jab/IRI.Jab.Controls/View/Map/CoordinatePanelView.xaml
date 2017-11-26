@@ -13,7 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border BorderThickness="1" CornerRadius="3" Padding="2" FlowDirection="{Binding UIFlow}">
+    <Border BorderThickness="1" CornerRadius="3" Padding="2" FlowDirection="{Binding UIFlow}" MinWidth="460">
         
         <Border.Style>
             <Style TargetType="Border">
@@ -102,21 +102,32 @@
                 </RadioButton>
             </StackPanel>-->
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" MouseDown="options_MouseDown" Cursor="Hand">
-                 
-                <Label Margin="0,0,1,0" Style="{StaticResource staticText}" Content="{Binding SelectedItem.SubTitleItem.Title}"/>
-                <Label Content="{Binding SelectedItem.XLabelItem.Title}" Height="auto" Style="{StaticResource staticText}" />
-                <Label Width="100" Content="{Binding SelectedItem.XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"  
-                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"/>
-                <Label   Content="{Binding SelectedItem.YLabelItem.Title}" Height="auto" Style="{StaticResource staticText}"/>
-                <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
-                       Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"   HorizontalContentAlignment="Right" />
-                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
-                       Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"/>
+            <DockPanel Grid.Row="2" VerticalAlignment="Center" MouseDown="options_MouseDown" Cursor="Hand" LastChildFill="True">
+
                 <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
                        Width="100" Content="{Binding SelectedItem.ZoneNumber}" Margin="00 0 10 0" Background="White" 
-                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"/>
-            </StackPanel>
+                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"
+                       DockPanel.Dock="Right"/>
+                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
+                       Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"
+                       DockPanel.Dock="Right"/>
+                <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
+                       Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"   HorizontalContentAlignment="Right" 
+                       DockPanel.Dock="Right"/>
+                <Label Content="{Binding SelectedItem.YLabelItem.Title}" Height="auto" Style="{StaticResource staticText}"
+                       DockPanel.Dock="Right"/>
+
+                <Label Width="100" Content="{Binding SelectedItem.XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"  
+                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"
+                       DockPanel.Dock="Right"/>
+
+                <Label Content="{Binding SelectedItem.XLabelItem.Title}" Height="auto" Style="{StaticResource staticText}" 
+                       DockPanel.Dock="Right"/>
+               
+
+                <Label Margin="0,0,1,0" Style="{StaticResource staticText}" Content="{Binding SelectedItem.SubTitleItem.Title}"
+                       DockPanel.Dock="Left"/>
+            </DockPanel>
             <ItemsControl Grid.Row="3" ItemsSource="{Binding SpatialReferences}">
                 <ItemsControl.Template>
                     <ControlTemplate>

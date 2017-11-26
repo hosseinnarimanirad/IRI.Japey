@@ -58,9 +58,7 @@ namespace IRI.Jab.Controls.Presenter
         }
 
         private void UpdateSelectedItem()
-        {
-            this.SelectedItem = null;
-
+        { 
             foreach (var item in SpatialReferences)
             {
                 item.FireIsSelectedChanged = e => { this.SelectedItem = e; };

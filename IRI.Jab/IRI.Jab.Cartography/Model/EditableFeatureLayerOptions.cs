@@ -52,6 +52,7 @@ namespace IRI.Jab.Cartography.Model
             {
                 _isEdgeLabelVisible = value;
                 RaisePropertyChanged();
+                this.RequestHandleIsEdgeLabelVisibleChanged?.Invoke();
             }
         }
 
@@ -129,6 +130,18 @@ namespace IRI.Jab.Cartography.Model
             }
         }
 
+        private bool _isMeasureButtonVisible;
+
+        public bool IsMeasureButtonVisible
+        {
+            get { return _isMeasureButtonVisible; }
+            set
+            {
+                _isMeasureButtonVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         //public Brush Fill { get; set; } = _stroke;
 
@@ -150,5 +163,7 @@ namespace IRI.Jab.Cartography.Model
         }
 
         public static EditableFeatureLayerOptions CreateDefault() => new EditableFeatureLayerOptions();
+
+        public Action RequestHandleIsEdgeLabelVisibleChanged;
     }
 }

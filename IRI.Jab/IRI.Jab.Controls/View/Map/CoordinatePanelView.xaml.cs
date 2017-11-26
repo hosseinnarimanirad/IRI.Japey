@@ -26,7 +26,7 @@ namespace IRI.Jab.Controls.View.Map
     /// </summary>
     public partial class CoordinatePanelView : UserControl, INotifyPropertyChanged
     {
-        CoordinatePanelPresenter Presenter { get { return this.DataContext as CoordinatePanelPresenter; } }
+        public CoordinatePanelPresenter Presenter { get { return this.DataContext as CoordinatePanelPresenter; } }
         //const string persianLongitudeLabel = "طول جغرافیایی";
         //const string persianLatitudeLabel = "عرض جغرافیایی";
 

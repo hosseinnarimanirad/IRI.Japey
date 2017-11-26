@@ -23,19 +23,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
     public class MapPresenter : BasePresenter
     {
 
-        public void Initialize()
-        {
-            this.Ostanha = EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
-            {
-                this.ZoomToExtent(a.Parse(3857));
-            });
 
-            this.ZoomToExtent(BoundingBoxes.IranMercatorBoundingBox);
+        //public void Initialize()
+        //{
 
-            this.Pan();
 
-            this.SetMapCursorSet1();
-        }
+        //}
 
         #region Properties
 
@@ -148,8 +141,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         private async void SetTileService(MapProviderType provider, TileType tileType)
         {
-            await CheckInternetAccess();
-
+            if (!IsConnected)
+            {
+                await CheckInternetAccess();
+            }
+             
             this.RequestSetTileService?.Invoke(provider, tileType, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected);
         }
 
@@ -563,11 +559,14 @@ namespace IRI.Jab.Cartography.Presenter.Map
         {
             var shapeItem = await MakeShapeItem(mode, $"DRAWING {DrawingItems?.Count}");
 
-            this.SetLayer(shapeItem.AssociatedLayer);
+            if (shapeItem != null)
+            {
+                this.SetLayer(shapeItem.AssociatedLayer);
 
-            this.DrawingItems.Add(shapeItem);
+                this.DrawingItems.Add(shapeItem);
 
-            this.Refresh();
+                this.Refresh();
+            }
         }
 
         private async Task<DrawingItem> MakeShapeItem(DrawMode mode, string name)

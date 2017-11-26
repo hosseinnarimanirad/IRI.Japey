@@ -35,6 +35,7 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
+using IRI.Jab.Common.Model.Spatialable;
 
 namespace IRI.Jab.MapViewer
 {
@@ -355,6 +356,7 @@ namespace IRI.Jab.MapViewer
 
         public void Register(Cartography.Presenter.Map.MapPresenter presenter)
         {
+
             _presenter = presenter;
 
             presenter.RequestGetProxy = () => this.Proxy;
@@ -552,6 +554,20 @@ namespace IRI.Jab.MapViewer
             presenter.RequestIdentify = p => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(p));
 
             presenter.RequestGetPoint = () => SelectPointAsync();
+
+
+
+            presenter.Ostanha = Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
+            {
+                this.ZoomToExtent(a.Parse(3857));
+            });
+
+            presenter.ZoomToExtent(sb.Primitives.BoundingBoxes.IranMercatorBoundingBox);
+
+            presenter.Pan();
+
+            presenter.SetMapCursorSet1();
+
         }
 
         #region Conversions
@@ -4103,7 +4119,8 @@ namespace IRI.Jab.MapViewer
                     IsMeasureVisible = true,
                     IsFinishButtonVisible = false,
                     IsCancelButtonVisible = false,
-                    IsDeleteButtonVisible = true
+                    IsDeleteButtonVisible = true,
+                    IsMeasureButtonVisible = true
                 });
             }
 

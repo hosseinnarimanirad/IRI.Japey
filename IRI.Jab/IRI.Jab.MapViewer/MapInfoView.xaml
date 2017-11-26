@@ -68,6 +68,12 @@
             <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
                 <!--<TextBlock Text="ویرایش." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
+
+                    <ToggleButton Style="{StaticResource circleToggle}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                            IsChecked="{Binding Options.IsEdgeLabelVisible, Mode=TwoWay}" Visibility="{Binding Options.IsMeasureButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">
+                        <Path Data="{StaticResource appbarMeasureMeter}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                    </ToggleButton>
+                    
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
                             Command="{Binding FinishEditingCommand}" Visibility="{Binding Options.IsFinishButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
@@ -80,6 +86,7 @@
                             Command="{Binding DeleteCommand}" Visibility="{Binding Options.IsDeleteButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarDelete}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                     </Button>
+                   
                 </StackPanel>
             </DockPanel>
             <!--<DockPanel Margin="0" Visibility="{Binding IsMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">

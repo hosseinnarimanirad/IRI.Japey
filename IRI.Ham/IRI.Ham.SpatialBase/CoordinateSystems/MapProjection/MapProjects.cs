@@ -808,6 +808,17 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
             return GeodeticToUTM(geodeticPoint, Ellipsoids.WGS84, isNorthHemisphere);
         }
 
+        public static Point GeodeticToUTM(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, int zone, bool isNorthHemisphere = true)
+        {
+            int centralMeredian = CalculateCentralMeridian(zone);
+
+            double tempLongitude = geodeticPoint.X - centralMeredian;
+
+            Point result = GeodeticToTransverseMercator(new Point(tempLongitude, geodeticPoint.Y), ellipsoid);
+
+            return new Point(result.X * 0.9996 + 500000, isNorthHemisphere ? result.Y * 0.9996 : result.Y * 0.9996 + 10000000);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -818,13 +829,14 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
         {
             int zone = FindZone(geodeticPoint.X);
 
-            int centralMeredian = CalculateCentralMeridian(zone);
+            return GeodeticToUTM(geodeticPoint, ellipsoid, zone, isNorthHemisphere);
+            //int centralMeredian = CalculateCentralMeridian(zone);
 
-            double tempLongitude = geodeticPoint.X - centralMeredian;
+            //double tempLongitude = geodeticPoint.X - centralMeredian;
 
-            Point result = GeodeticToTransverseMercator(new Point(tempLongitude, geodeticPoint.Y), ellipsoid);
+            //Point result = GeodeticToTransverseMercator(new Point(tempLongitude, geodeticPoint.Y), ellipsoid);
 
-            return new Point(result.X * 0.9996 + 500000, isNorthHemisphere ? result.Y * 0.9996 : result.Y * 0.9996 + 10000000);
+            //return new Point(result.X * 0.9996 + 500000, isNorthHemisphere ? result.Y * 0.9996 : result.Y * 0.9996 + 10000000);
         }
 
         /// <summary>

@@ -42,7 +42,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         static readonly SpatialReferenceItem _utmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToUTM(p, p.Y > 0), toStringForDefault, utmTitle, utmSubTitle, _defaultX, _defaultY) { IsZoneVisible = true };
         static readonly SpatialReferenceItem _mercatorWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToMercator(p), toStringForDefault, mercatorTitle, mercatorSubTitle, _defaultX, _defaultY);
         static readonly SpatialReferenceItem _tmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), toStringForDefault, tmTitle, tmSubTitle, _defaultX, _defaultY);
-        static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), toStringForDefault, ceaSubTitle, geodeticSubTitle, _defaultX, _defaultY);
+        static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), toStringForDefault, ceaTitle, ceaSubTitle, _defaultX, _defaultY);
 
         public static SpatialReferenceItem GeodeticWgs84
         {
