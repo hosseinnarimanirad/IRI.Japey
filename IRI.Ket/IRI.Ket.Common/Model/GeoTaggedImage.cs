@@ -30,9 +30,9 @@ namespace IRI.Ket.Common.Model
                 {
                     this.GeographicLocation = JsonConvert.DeserializeObject<Point3D>(System.IO.File.ReadAllText(location));
 
-                    var mercator = MapProjects.GeodeticToMercator((Point)GeographicLocation);
+                    var webMercator = MapProjects.GeodeticWgs84ToWebMercator((Point)GeographicLocation);
 
-                    this.MercatorLocation = new Point3D(mercator.X, mercator.Y, GeographicLocation.Z);
+                    this.MercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
                 }
                 else
                 {
@@ -40,9 +40,9 @@ namespace IRI.Ket.Common.Model
                     {
                         this.GeographicLocation = Helpers.ImageHelper.GetWgs84Location(bitmap);
 
-                        var mercator = MapProjects.GeodeticToMercator((Point)GeographicLocation);
+                        var webMercator = MapProjects.GeodeticWgs84ToWebMercator((Point)GeographicLocation);
 
-                        this.MercatorLocation = new Point3D(mercator.X, mercator.Y, GeographicLocation.Z);
+                        this.MercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
 
                         System.IO.File.WriteAllText(location, JsonConvert.SerializeObject(this.GeographicLocation));
                     }

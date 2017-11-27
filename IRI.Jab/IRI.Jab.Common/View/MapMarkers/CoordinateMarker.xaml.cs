@@ -121,7 +121,7 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         public void UpdateCoordinates()
         {
-            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(MercatorLocation);
+            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
 
             if (_current == coordinates.Utm)
             {

@@ -68,15 +68,15 @@ namespace IRI.Jab.Controls.View
             return this.MercatorToGeodetic(point);
         }
 
-        public System.Windows.Point GeodeticToMap(System.Windows.Point point)
-        {
-            double[][] result = Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
-                                                                    new double[] { point.X },
-                                                                    new double[] { point.Y },
-                                                                     Ham.CoordinateSystem.Ellipsoids.WGS84);
+        //public System.Windows.Point GeodeticToMap(System.Windows.Point point)
+        //{
+        //    double[][] result = Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //                                                            new double[] { point.X },
+        //                                                            new double[] { point.Y },
+        //                                                             Ham.CoordinateSystem.Ellipsoids.WGS84);
 
-            return new System.Windows.Point(result[0][0], result[1][0]);
-        }
+        //    return new System.Windows.Point(result[0][0], result[1][0]);
+        //}
 
         public System.Windows.Point IntermidiateToScreen(System.Windows.Point point)
         {
@@ -86,16 +86,13 @@ namespace IRI.Jab.Controls.View
 
 
 
-        private System.Windows.Point GeodeticToMercator(System.Windows.Point point)
+        private System.Windows.Point GeodeticToWebMercator(System.Windows.Point point)
         {
             try
             {
-                double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
-                                                                    new double[] { point.X },
-                                                                    new double[] { point.Y },
-                                                                    Ham.CoordinateSystem.Ellipsoids.WGS84);
+                var result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint());
 
-                return new System.Windows.Point(result[0][0], result[1][0]);
+                return new System.Windows.Point(result.X, result.Y);
             }
             catch (Exception)
             {
@@ -234,7 +231,7 @@ namespace IRI.Jab.Controls.View
         bool isPanning = false;
 
         System.Windows.Point prevMouseLocation;
-        
+
         public void Pan()
         {
             this.mapView.MouseDown -= mapView_MouseDownForPan;

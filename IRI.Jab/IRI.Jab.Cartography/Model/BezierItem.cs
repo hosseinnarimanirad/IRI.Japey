@@ -76,7 +76,7 @@ namespace IRI.Jab.Cartography.Model
 
             _endControlLineFigure.Segments.Add(new LineSegment(endControlPoint, true));
 
-            StartLocateable = new Locateable(MapProjects.MercatorToGeodetic(startPoint)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
+            StartLocateable = new Locateable(MapProjects.WebMercatorToGeodeticWgs84(startPoint)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
 
             StartLocateable.OnPositionChanged += (sender, e) =>
             {
@@ -92,7 +92,7 @@ namespace IRI.Jab.Cartography.Model
             };
 
 
-            EndLocateable = new Locateable(MapProjects.MercatorToGeodetic(endPoint)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
+            EndLocateable = new Locateable(MapProjects.WebMercatorToGeodeticWgs84(endPoint)) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
 
             EndLocateable.OnPositionChanged += (sender, e) =>
             {
@@ -108,7 +108,7 @@ namespace IRI.Jab.Cartography.Model
             };
 
 
-            StartControlLocateable = new Locateable(MapProjects.MercatorToGeodetic(startControlPoint.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
+            StartControlLocateable = new Locateable(MapProjects.WebMercatorToGeodeticWgs84(startControlPoint.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
 
             StartControlLocateable.OnPositionChanged += (sender, e) =>
             {
@@ -124,7 +124,7 @@ namespace IRI.Jab.Cartography.Model
             };
 
 
-            EndControlLocateable = new Locateable(MapProjects.MercatorToGeodetic(endControlPoint.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
+            EndControlLocateable = new Locateable(MapProjects.WebMercatorToGeodeticWgs84(endControlPoint.AsPoint())) { Element = new Common.View.MapMarkers.Circle(1, new SolidColorBrush(Colors.Green)) };
 
             EndControlLocateable.OnPositionChanged += (sender, e) =>
             {

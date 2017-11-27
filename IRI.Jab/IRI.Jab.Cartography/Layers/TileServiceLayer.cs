@@ -194,7 +194,7 @@ namespace IRI.Jab.Cartography
             {
                 if (IsOffline)
                 {
-                    return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+                    return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.GeodeticExtent, false);
                 }
 
                 WiseWebClient client = new WiseWebClient(40);
@@ -226,7 +226,8 @@ namespace IRI.Jab.Cartography
                 if (IRI.Jab.Common.Helpers.ImageUtility.ToImage(byteImage) == null)
                     return GetNotFoundImage(tile);
 
-                return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)));
+                //return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)));
+                return new GeoReferencedImage(byteImage, tile.GeodeticExtent);
             }
             catch (Exception ex)
             {
@@ -239,7 +240,7 @@ namespace IRI.Jab.Cartography
 
         private GeoReferencedImage GetNotFoundImage(TileInfo tile)
         {
-            return new GeoReferencedImage(notFoundImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
+            return new GeoReferencedImage(notFoundImage, tile.GeodeticExtent, false);
         }
 
         public GeoReferencedImage DownloadTile(TileInfo tile, WebProxy proxy)
@@ -248,7 +249,6 @@ namespace IRI.Jab.Cartography
             {
                 if (IsOffline)
                 {
-                    //return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
                     return GetNotFoundImage(tile);
                 }
 
@@ -278,13 +278,12 @@ namespace IRI.Jab.Cartography
 
                 var byteImage = client.DownloadData(url);
 
-                return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)));
+                return new GeoReferencedImage(byteImage, tile.GeodeticExtent);
             }
             catch (Exception ex)
             {
                 //var byteImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(IRI.Jab.Cartography.Properties.Resources.imageNotFound);
 
-                //return new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i)), false);
                 return GetNotFoundImage(tile);
             }
         }

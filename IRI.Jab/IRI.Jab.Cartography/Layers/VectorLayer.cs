@@ -471,7 +471,7 @@ namespace IRI.Jab.Cartography
 
             Brush brush = this.VisualParameters.Fill;
 
-            var transform = MapToTileScreenWpf(totalExtent, region.MercatorExtent, viewTransform);
+            var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
             var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.ImagePointSymbol, this.GeometryPointSymbol);
 
@@ -514,8 +514,8 @@ namespace IRI.Jab.Cartography
 
             var pen = this.VisualParameters.GetGdiPlusPen();
 
-            var shiftX = region.MercatorExtent.Center.X - totalExtent.TopLeft.X - region.MercatorExtent.Width / 2.0;
-            var shiftY = region.MercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.MercatorExtent.Height / 2.0;
+            var shiftX = region.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - region.WebMercatorExtent.Width / 2.0;
+            var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
             //;
 
             //var transform = MapToTileScreenWpf(totalExtent, region.MercatorExtent, viewTransform);
@@ -580,7 +580,7 @@ namespace IRI.Jab.Cartography
             //    pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
             //}
 
-            var transform = MapToTileScreenWpf(totalExtent, region.MercatorExtent, viewTransform);
+            var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
             var image = new SqlSpatialToWriteableBitmap().ParseSqlGeometry(
                 geometries,
@@ -626,7 +626,7 @@ namespace IRI.Jab.Cartography
 
             var brush = this.VisualParameters.GetGdiPlusFillBrush();
 
-            var transform = MapToTileScreenWpf(totalExtent, region.MercatorExtent, viewTransform);
+            var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
             var image = new SqlSpatialToOpenTKBitmap().ParseSqlGeometry(
                             geometries,
@@ -736,7 +736,7 @@ namespace IRI.Jab.Cartography
 
             foreach (var zoom in zoomLevels)
             {
-                var googleTiles = WebMercatorUtility.MercatorBoundingBoxToGoogleTileRegions(this.Extent, zoom);
+                var googleTiles = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(this.Extent, zoom);
 
                 var scale = GoogleScale.Scales.Single(i => i.ZoomLevel == zoom).InverseScale;
 
@@ -749,9 +749,9 @@ namespace IRI.Jab.Cartography
 
                 foreach (var tile in googleTiles)
                 {
-                    var geometries = this.GetGeometries(scale, tile.MercatorExtent);
+                    var geometries = this.GetGeometries(scale, tile.WebMercatorExtent);
 
-                    var transform = IRI.Ham.SpatialBase.Mapping.MapUtility.GetMapToScreen(tile.MercatorExtent, 256, 256);
+                    var transform = IRI.Ham.SpatialBase.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
                     Func<Point, Point> mapToScreen = p =>
                     {

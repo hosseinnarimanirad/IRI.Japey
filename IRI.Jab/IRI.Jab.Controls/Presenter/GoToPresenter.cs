@@ -288,21 +288,21 @@ namespace IRI.Jab.Controls.Presenter
             var gotoPresenter = new GoToPresenter(
                p =>
                {
-                   var mercatorPoint = MapProjects.GeodeticToMercator(p).AsWpfPoint();
+                   var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p).AsWpfPoint();
 
-                   mapPresenter.PanTo(mercatorPoint, () =>
+                   mapPresenter.PanTo(webMercatorPoint, () =>
                    {
-                       mapPresenter.FlashPoint(mercatorPoint);
+                       mapPresenter.FlashPoint(webMercatorPoint);
                    });
 
                },
                p =>
                {
-                   var mercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(p);
+                   var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
 
-                   mapPresenter.ZoomToLevelAndCenter(13, mercatorPoint, () =>
+                   mapPresenter.ZoomToLevelAndCenter(13, webMercatorPoint, () =>
                    {
-                       mapPresenter.FlashPoint(mercatorPoint.AsWpfPoint());
+                       mapPresenter.FlashPoint(webMercatorPoint.AsWpfPoint());
                    });
                });
              

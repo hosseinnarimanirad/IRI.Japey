@@ -103,13 +103,13 @@ namespace IRI.Jab.Cartography
 
         public Locateable(sb.Point wgs84GeodeticPosition, AncherFunctionHandler ancherFunction = null) : this(ancherFunction)
         {
-            var mercator = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(wgs84GeodeticPosition);
+            var webMercator = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
 
-            this.X = mercator.X;
+            this.X = webMercator.X;
 
-            this.Y = mercator.Y;
+            this.Y = webMercator.Y;
 
-            this._location = mercator.AsWpfPoint();
+            this._location = webMercator.AsWpfPoint();
         }
 
         //public Locateable(FrameworkElement element, Popup infoWindow, SpecialPointLayer.AncherFunctionHandler ancherFunction = null)

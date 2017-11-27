@@ -47,6 +47,27 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
+        public static double GetAreaInSquareKilometers(this SqlGeometry geometry, Func<IPoint, Point> toWgs84)
+        {
+
+            if (geometry == null)
+            {
+                return 0;
+            }
+
+            try
+            {
+                return geometry.Transform(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
+                                .STArea()
+                                .Value / 1000000.0;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+        }
+
         public static SqlGeometry Parse(string wkt)
         {
             return SqlGeometry.Parse(new System.Data.SqlTypes.SqlString(wkt));
@@ -689,10 +710,15 @@ namespace IRI.Ket.SpatialExtensions
             return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(point, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84));
         }
 
+        public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
+        {
+            return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point));
+        }
+
         public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
         {
             return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(point, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84));
-        }    
+        }
 
         #endregion
 
@@ -861,7 +887,7 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeography MercatorToGeographic(this SqlGeometry geometry)
         {
-            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic, 4326);
+            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
         }
 
         public static SqlGeography UTMToGeographic(this SqlGeometry geometry, int utmZone)
@@ -1444,7 +1470,7 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeometry AsSqlGeometry(this IRI.Ham.SpatialBase.Model.TileInfo tile)
         {
-            return tile.MercatorExtent.AsSqlGeometry();
+            return tile.WebMercatorExtent.AsSqlGeometry();
         }
 
         #endregion

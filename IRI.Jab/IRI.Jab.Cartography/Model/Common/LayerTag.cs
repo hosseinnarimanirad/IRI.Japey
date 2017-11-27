@@ -45,7 +45,7 @@ namespace IRI.Jab.Cartography.Model
             {
                 if (this.Tile != null)
                 {
-                    return this.Tile.MercatorExtent;
+                    return this.Tile.WebMercatorExtent;
                 }
                 else
                     return boundingBox;

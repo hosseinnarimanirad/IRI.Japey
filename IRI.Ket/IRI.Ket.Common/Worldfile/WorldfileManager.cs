@@ -192,9 +192,9 @@ namespace IRI.Ket.WorldfileFormat
             return Create(tile.GeodeticExtent, imagePixelWidth, imagePixelHeight);
         }
 
-        public static Worldfile CreateByMercatorValues(Ham.SpatialBase.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+        public static Worldfile CreateByWebMercatorValues(Ham.SpatialBase.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
         {
-            return Create(tile.MercatorExtent, imagePixelWidth, imagePixelHeight);
+            return Create(tile.WebMercatorExtent, imagePixelWidth, imagePixelHeight);
         }
     }
 }

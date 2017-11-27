@@ -65,18 +65,18 @@ namespace IRI.Ham.SpatialBase.Model
             return new BoundingBox(minX, minY, maxX, maxY);
         }
 
-        public static BoundingBox GetTotalImageBoundsInMercator(this IEnumerable<TileInfo> tiles)
-        {
-            var minX = tiles.Min(t => t.MercatorExtent.XMin);
+        //public static BoundingBox GetTotalImageBoundsInMercator(this IEnumerable<TileInfo> tiles)
+        //{
+        //    var minX = tiles.Min(t => t.MercatorExtent.XMin);
 
-            var minY = tiles.Min(t => t.MercatorExtent.YMin);
+        //    var minY = tiles.Min(t => t.MercatorExtent.YMin);
 
-            var maxX = tiles.Max(t => t.MercatorExtent.XMax);
+        //    var maxX = tiles.Max(t => t.MercatorExtent.XMax);
 
-            var maxY = tiles.Max(t => t.MercatorExtent.YMax);
+        //    var maxY = tiles.Max(t => t.MercatorExtent.YMax);
 
-            return new BoundingBox(minX, minY, maxX, maxY);
-        }
+        //    return new BoundingBox(minX, minY, maxX, maxY);
+        //}
 
         public static BoundingBox GetTotalImageBoundsInWebMercator(this IEnumerable<TileInfo> tiles)
         {

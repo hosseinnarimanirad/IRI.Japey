@@ -275,7 +275,7 @@ namespace IRI.Jab.Cartography
 
             presenter.RightCommandAction = i =>
             {
-                var geodetic = MapProjects.MercatorToGeodetic(mainLocateable.Location.AsPoint());
+                var geodetic = MapProjects.WebMercatorToGeodeticWgs84(mainLocateable.Location.AsPoint());
 
                 Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
 
@@ -638,9 +638,9 @@ namespace IRI.Jab.Cartography
             //}
         }
 
-        private Locateable AsLocateable(Ham.SpatialBase.Point mercatorPoint, Color color)
+        private Locateable AsLocateable(Ham.SpatialBase.Point webMercatorPoint, Color color)
         {
-            return new Locateable(MapProjects.MercatorToGeodetic(mercatorPoint)) { Element = new Circle(1, new SolidColorBrush(color)) };
+            return new Locateable(MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint)) { Element = new Circle(1, new SolidColorBrush(color)) };
         }
 
         public Path GetMainPath()

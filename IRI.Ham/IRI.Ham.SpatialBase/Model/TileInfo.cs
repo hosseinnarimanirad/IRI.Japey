@@ -20,17 +20,17 @@ namespace IRI.Ham.SpatialBase.Model
 
         public BoundingBox GeodeticExtent { get; private set; }
 
-        public BoundingBox MercatorExtent
-        {
-            get
-            {
-                //var topLeft = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
-                //var bottomRight = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
+        //public BoundingBox MercatorExtent
+        //{
+        //    get
+        //    {
+        //        //var topLeft = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
+        //        //var bottomRight = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
 
-                //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
-                return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));
-            }
-        }
+        //        //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
+        //        return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));
+        //    }
+        //}
 
         public BoundingBox WebMercatorExtent
         {
@@ -64,7 +64,7 @@ namespace IRI.Ham.SpatialBase.Model
 
         public override string ToString()
         {
-            return $"Z:{ZoomLevel}, R: {RowNumber}, C: {ColumnNumber}, W:{MercatorExtent.Width}, H:{MercatorExtent.Height}, X:{MercatorExtent.TopLeft.X}, Y:{MercatorExtent.TopLeft.Y}";
+            return $"Z:{ZoomLevel}, R: {RowNumber}, C: {ColumnNumber}, W:{WebMercatorExtent.Width}, H:{WebMercatorExtent.Height}, X:{WebMercatorExtent.TopLeft.X}, Y:{WebMercatorExtent.TopLeft.Y}";
         }
 
         public string ToShortString()

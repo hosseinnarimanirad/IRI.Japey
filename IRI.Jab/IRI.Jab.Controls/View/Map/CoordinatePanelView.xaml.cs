@@ -145,7 +145,7 @@ namespace IRI.Jab.Controls.View.Map
         /// </summary>
         /// <param name="mecatorX"></param>
         /// <param name="mercatorY"></param>
-        private void SetCoordinates(Point geodeticPoint)
+        public void SetCoordinates(Point geodeticPoint)
         {
             Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
 

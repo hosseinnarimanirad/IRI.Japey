@@ -23,16 +23,12 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 throw new NotImplementedException();
             }
-
-            //this.imageFileName = imageFileName;
-
-            //this.Extent = BoundingBox.Nan;
-
+            
             try
             {
                 this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName);
 
-                this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(i));
+                this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
             }
             catch (Exception ex)
             {

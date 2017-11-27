@@ -117,9 +117,9 @@ namespace IRI.Jab.Cartography
             return this._editableFeatureLayer;
         }
 
-        public void AddVertex(sb.Point mercatorPoint)
+        public void AddVertex(sb.Point webMercatorPoint)
         {
-            this._editableFeatureLayer.AddVertex(mercatorPoint);
+            this._editableFeatureLayer.AddVertex(webMercatorPoint);
         }
 
         public void UpdateLastVertexLocation(sb.Point point)
@@ -127,9 +127,9 @@ namespace IRI.Jab.Cartography
             this._editableFeatureLayer.UpdateLastSemiVertexLocation(point);
         }
 
-        public void AddSemiVertex(sb.Point mercatorPoint)
+        public void AddSemiVertex(sb.Point webMercatorPoint)
         {
-            this._editableFeatureLayer.AddSemiVertex(mercatorPoint);
+            this._editableFeatureLayer.AddSemiVertex(webMercatorPoint);
         }
 
         public sb.Primitives.Geometry GetFinalGeometry()

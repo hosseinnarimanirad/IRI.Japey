@@ -363,18 +363,18 @@ namespace IRI.Ham.SpatialBase.Mapping
             return result;
         }
 
-        public static List<TileInfo> MercatorBoundingBoxToGoogleTileRegions(BoundingBox mercatorBoundingBox, int zoomLevel)
-        {
-            //var topLeft = Projection.MercatorToGeodetic(mercatorBoundingBox.TopLeft);
+        //public static List<TileInfo> MercatorBoundingBoxToGoogleTileRegions(BoundingBox mercatorBoundingBox, int zoomLevel)
+        //{
+        //    //var topLeft = Projection.MercatorToGeodetic(mercatorBoundingBox.TopLeft);
 
-            //var bottomRigth = Projection.MercatorToGeodetic(mercatorBoundingBox.BottomRigth);
+        //    //var bottomRigth = Projection.MercatorToGeodetic(mercatorBoundingBox.BottomRigth);
 
-            //var geographicBoundingBox = new BoundingBox(topLeft.X, bottomRigth.Y, bottomRigth.X, topLeft.Y);
+        //    //var geographicBoundingBox = new BoundingBox(topLeft.X, bottomRigth.Y, bottomRigth.X, topLeft.Y);
 
-            var geographicBoundingBox = mercatorBoundingBox.Transform(i => MapProjects.MercatorToGeodetic(i));
+        //    var geographicBoundingBox = mercatorBoundingBox.Transform(i => MapProjects.MercatorToGeodetic(i));
 
-            return GeodeticBoundingBoxToGoogleTileRegions(geographicBoundingBox, zoomLevel);
-        }
+        //    return GeodeticBoundingBoxToGoogleTileRegions(geographicBoundingBox, zoomLevel);
+        //}
 
         public static List<TileInfo> WebMercatorBoundingBoxToGoogleTileRegions(BoundingBox webMercatorBoundingBox, int zoomLevel)
         {

@@ -742,9 +742,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public void PanToGeographicPoint(IRI.Ham.SpatialBase.IPoint point, Action callback = null)
         {
-            var mercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(point).AsWpfPoint();
+            var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point).AsWpfPoint();
 
-            this.PanTo(mercatorPoint, callback);
+            this.PanTo(webMercatorPoint, callback);
         }
 
         public void EnableRectangleZoomIn()

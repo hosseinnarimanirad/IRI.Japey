@@ -93,7 +93,7 @@ namespace IRI.Jab.MapViewer
 
 
         #region Fields, Properties
-
+         
         private readonly object locker = new object();
 
         ExtentManager extentManager = new ExtentManager();
@@ -239,7 +239,7 @@ namespace IRI.Jab.MapViewer
 
         private void UpdateTileInfos()
         {
-            this.CurrentTileInfos = WebMercatorUtility.MercatorBoundingBoxToGoogleTileRegions(this.CurrentExtent, this.CurrentZoomLevel);
+            this.CurrentTileInfos = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(this.CurrentExtent, this.CurrentZoomLevel);
         }
 
         private List<TileInfo> _currentTileInfos;
@@ -614,12 +614,12 @@ namespace IRI.Jab.MapViewer
 
         public Point MapToGeodetic(Point point)
         {
-            return this.MercatorToGeodetic(point);
+            return this.WebMercatorToGeodetic(point);
         }
 
         public Point GeodeticToMap(Point point)
         {
-            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(point.AsPoint()).AsWpfPoint();
+            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
         }
 
         public Point ScreenToGeodetic(Point point)
@@ -642,9 +642,9 @@ namespace IRI.Jab.MapViewer
             return this.viewTransform.Transform(point);
         }
 
-        public double MapToScreen(double mercatorDistance)
+        public double MapToScreen(double webMercatorDistance)
         {
-            return mercatorDistance * MapScale / GetUnitDistance();
+            return webMercatorDistance * MapScale / GetUnitDistance();
         }
 
         public double ScreenToMap(double screenDistance)
@@ -652,11 +652,11 @@ namespace IRI.Jab.MapViewer
             return screenDistance * GetUnitDistance() / MapScale;
         }
 
-        private Point MercatorToGeodetic(Point point)
+        private Point WebMercatorToGeodetic(Point point)
         {
             try
             {
-                return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(point.AsPoint()).AsWpfPoint();
+                return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
             }
             catch (Exception)
             {
@@ -867,7 +867,7 @@ namespace IRI.Jab.MapViewer
 
             layerTile.IsProcessing = true;
 
-            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.MercatorExtent);
+            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
 
             if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
             {
@@ -876,13 +876,11 @@ namespace IRI.Jab.MapViewer
                 return;
             }
 
-            double tileScreenWidth = MapToScreen(tile.MercatorExtent.Width);
+            double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
-            double tileScreenHeight = MapToScreen(tile.MercatorExtent.Height);
+            double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
 
-            var area = ParseToRectangleGeometry(tile.MercatorExtent);
-
-            //AddNonTiledLayer(new VectorLayer("", new List<SqlGeometry>() { tile.MercatorExtent.ToSqlGeometry(0) }, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus));
+            var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
 
             Path pathImage;
 
@@ -951,7 +949,7 @@ namespace IRI.Jab.MapViewer
 
             layerTile.IsProcessing = true;
 
-            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.MercatorExtent);
+            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
 
             if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
             {
@@ -960,11 +958,11 @@ namespace IRI.Jab.MapViewer
                 return;
             }
 
-            double tileScreenWidth = MapToScreen(tile.MercatorExtent.Width);
+            double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
-            double tileScreenHeight = MapToScreen(tile.MercatorExtent.Height);
+            double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
 
-            var area = ParseToRectangleGeometry(tile.MercatorExtent);
+            var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
 
             //AddNonTiledLayer(new VectorLayer("", new List<SqlGeometry>() { tile.MercatorExtent.ToSqlGeometry(0) }, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus));
 
@@ -1495,11 +1493,11 @@ namespace IRI.Jab.MapViewer
                     return;
                 }
 
-                var mercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(i));
+                var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
 
-                Point topLeft = mercatorExtent.TopLeft.AsWpfPoint();
+                Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
 
-                Point bottomRigth = mercatorExtent.BottomRight.AsWpfPoint();
+                Point bottomRigth = webMercatorExtent.BottomRight.AsWpfPoint();
 
                 RectangleGeometry geometry = new RectangleGeometry(new Rect(topLeft, bottomRigth), 0, 0);
 
@@ -2665,9 +2663,9 @@ namespace IRI.Jab.MapViewer
 
         Path GetTileBorder(TileInfo tile, bool isNew, bool isOld, bool isDefault)
         {
-            var p1 = tile.MercatorExtent.TopLeft.AsWpfPoint();
+            var p1 = tile.WebMercatorExtent.TopLeft.AsWpfPoint();
 
-            var p2 = tile.MercatorExtent.BottomRight.AsWpfPoint();
+            var p2 = tile.WebMercatorExtent.BottomRight.AsWpfPoint();
 
             RectangleGeometry geometry = new RectangleGeometry(new Rect(p1, p2), 0, 0);
 
@@ -2984,28 +2982,6 @@ namespace IRI.Jab.MapViewer
 
         private void mapView_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
-
-            //Debug.Print($"e.Delta: {e.Delta}");
-
-            //Point point = e.GetPosition(this.mapView);
-
-            //if (IsGoogleZoomLevelsEnabled)
-            //{
-            //    int newZoomLevel = e.Delta > 0 ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
-
-            //    this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), point);
-            //}
-            //else
-            //{
-            //    double delta = e.Delta > 0 ? 1.5 : 0.5;
-
-            //    double newMapScale = ToMapScale(this.ScreenScale * delta);
-
-            //    this.Zoom(newMapScale, point);
-            //}
-
-            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
 
             Zoom(e.Delta > 0, e.GetPosition(this.mapView));
 
@@ -3364,11 +3340,11 @@ namespace IRI.Jab.MapViewer
 
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
-            var mercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+            var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
 
             this.RemoveLayer(drawingLayer);
 
-            this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, ScreenToMap, mercatorPoint, drawingOptions);
+            this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, ScreenToMap, webMercatorPoint, drawingOptions);
 
             this.drawingLayer.OnRequestFinishDrawing += (s, arg) =>
             {
@@ -3487,7 +3463,7 @@ namespace IRI.Jab.MapViewer
 
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
-            var mercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+            var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
 
             if (itWasPanningWhileDrawing)
             {
@@ -3497,7 +3473,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Refresh();
 
-                this.drawingLayer.AddSemiVertex(mercatorPoint);
+                this.drawingLayer.AddSemiVertex(webMercatorPoint);
 
                 //this.mapView.CaptureMouse();
 
@@ -3523,9 +3499,9 @@ namespace IRI.Jab.MapViewer
             //}
             //else
             //{
-            this.drawingLayer.AddVertex(mercatorPoint);
+            this.drawingLayer.AddVertex(webMercatorPoint);
 
-            this.drawingLayer.AddSemiVertex(mercatorPoint);
+            this.drawingLayer.AddSemiVertex(webMercatorPoint);
             //}
 
 
@@ -3703,7 +3679,7 @@ namespace IRI.Jab.MapViewer
 
             var layer = new EditableFeatureLayer(
                             "edit",
-                            wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(i)).Take(wgs84Points.Count - 1).ToList(),
+                            wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
                             this.viewTransform,
                             ScreenToMap,
                             sb.Primitives.GeometryType.Polygon);
@@ -4091,7 +4067,7 @@ namespace IRI.Jab.MapViewer
 
                     geo.AddLastPoint(p.AsPoint());
 
-                    var geoAsGeodetic = geo.AsSqlGeometry().MercatorToGeographic().MakeValid();
+                    var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeographic().MakeValid();
 
                     var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
 

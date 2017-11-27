@@ -30,16 +30,16 @@ namespace IRI.Ket.DataManagement.DataSource
         public async Task<GeoReferencedImage> GetTile(BoundingBox mbb, double mapScale)
         {
             WiseWebClient client = new WiseWebClient(50);
-             
-            var center = MapProjects.MercatorToGeodetic(mbb.Center);
-             
+
+            var center = MapProjects.WebMercatorToGeodeticWgs84(mbb.Center);
+
             var zoom = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var url = $@"https://maps.googleapis.com/maps/api/staticmap?center={center.Y},{center.X}&zoom={zoom}&size=256x256&maptype=roadmap&key=AIzaSyASDX3dnoItXvimcgmsfNgw3J2piODjx9E";
 
             var byteImage = await client.DownloadDataTaskAsync(url);
 
-            return new GeoReferencedImage(byteImage, mbb.Transform(i => MapProjects.MercatorToGeodetic(i)));
+            return new GeoReferencedImage(byteImage, mbb.Transform(MapProjects.WebMercatorToGeodeticWgs84));
         }
 
         public async Task<Tuple<TileInfo, GeoReferencedImage>> GetTile(TileInfo tile, double mapScale)
@@ -62,7 +62,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 System.IO.File.WriteAllBytes($@"C:\Users\Hossein\Desktop\New folder (3)\map{tile.RowNumber}.{tile.ColumnNumber}.{tile.ZoomLevel}.png", byteImage);
 
-                return new Tuple<TileInfo, GeoReferencedImage>(tile, new GeoReferencedImage(byteImage, tile.MercatorExtent.Transform(i => MapProjects.MercatorToGeodetic(i))));
+                return new Tuple<TileInfo, GeoReferencedImage>(tile, new GeoReferencedImage(byteImage, tile.WebMercatorExtent.Transform(MapProjects.WebMercatorToGeodeticWgs84)));
             }
             catch (Exception)
             {
@@ -75,7 +75,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             var zoom = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
-            var tilesBoundary = WebMercatorUtility.MercatorBoundingBoxToGoogleTileRegions(mbb, zoom);
+            var tilesBoundary = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(mbb, zoom);
 
             Debug.Print($"#GetTiles: {string.Join(" # ", tilesBoundary.Select(i => i.ToShortString()))}");
 
@@ -106,6 +106,6 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return result;
         }
-        
+
     }
 }

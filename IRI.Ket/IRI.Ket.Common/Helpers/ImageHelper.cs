@@ -131,14 +131,14 @@ namespace IRI.Ket.Common.Helpers
 
         }
 
-        public static IRI.Ham.SpatialBase.Point3D GetMercatorLocation(Bitmap bitmap)
-        {
-            var wgs84 = GetWgs84Location(bitmap);
+        //public static IRI.Ham.SpatialBase.Point3D GetMercatorLocation(Bitmap bitmap)
+        //{
+        //    var wgs84 = GetWgs84Location(bitmap);
 
-            var mercator = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Ham.SpatialBase.Point)wgs84);
+        //    var mercator = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Ham.SpatialBase.Point)wgs84);
 
-            return new Ham.SpatialBase.Point3D(mercator.X, mercator.Y, wgs84.Z);
-        }
+        //    return new Ham.SpatialBase.Point3D(mercator.X, mercator.Y, wgs84.Z);
+        //}
 
         /// <summary>
         /// Point3D is in geodetic
