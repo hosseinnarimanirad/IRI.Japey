@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -97,6 +98,27 @@ namespace IRI.Ket.Common.Helpers
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public static async Task<T> HttpPost<T>(string address, object data) where T : class
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings() { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore });
+
+                var stringResult = await client.UploadStringTaskAsync(address, stringData);
+
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }

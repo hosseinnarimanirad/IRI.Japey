@@ -63,6 +63,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ISecurityRepository.cs" />
+    <Compile Include="Service\Google\ApiParameters\GoogleMapsGeolocationParameters.cs" />
+    <Compile Include="Service\Google\ApiResults\GoogleMapsGeolocationResult.cs" />
+    <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AuthenticationMethod.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AvailableNetworkPack.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssNetworkPack.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssType.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Common\DisposableContainer.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\EncryptionType.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceInfo.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceRadio.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceState.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NativeWifi.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NativeWifiPlayer.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NetworkIdentifier.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\PhyType.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfileDocument.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfilePack.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfileType.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\RadioSet.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\BaseMethod.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\NativeMethod.cs" />
+    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\SafeClientHandle.cs" />
     <Compile Include="Encodings\Base64UrlEncoding.cs" />
     <Compile Include="Encodings\EncodingConverter.cs" />
     <Compile Include="Encodings\PersianDOS.cs" />
@@ -115,11 +138,13 @@
     <Compile Include="Worldfile\WorldfilePyramid.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ThirdPartyLibraries\ManagedNativeWifi\README.md" />
     <None Include="HosseinNarimaniRad.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Deploy\" />
+    <Folder Include="Devices\WiFi\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
@@ -130,6 +155,9 @@
       <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
       <Name>IRI.Ham.SpatialBase</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ThirdPartyLibraries\ManagedNativeWifi\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
