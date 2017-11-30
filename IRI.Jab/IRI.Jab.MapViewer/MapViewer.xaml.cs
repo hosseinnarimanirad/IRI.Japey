@@ -93,7 +93,7 @@ namespace IRI.Jab.MapViewer
 
 
         #region Fields, Properties
-         
+
         private readonly object locker = new object();
 
         ExtentManager extentManager = new ExtentManager();
@@ -431,7 +431,8 @@ namespace IRI.Jab.MapViewer
 
                 this.SetTileService(provider, baseMapType, isCachEnabled, cacheDirectory, isOffline);
 
-                this.RefreshTiles();
+                //this.RefreshTiles();
+                this.RefreshBaseMaps();
             };
 
             presenter.RequestMapScale = () => { return this.MapScale; };
@@ -1551,6 +1552,20 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+        public void RefreshBaseMaps()
+        {
+            this.Clear(tag => (tag.IsTiled || tag.LayerType == LayerType.BaseMap));
+
+            var tiles = this.CurrentTileInfos;
+
+            if (tiles == null)
+                return;
+
+            foreach (var tile in tiles)
+            {
+                RefreshTiles(tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
+            }
+        }
 
         public void RefreshTilesButNotBaseMaps()
         {
@@ -1580,6 +1595,73 @@ namespace IRI.Jab.MapViewer
             {
                 RefreshTiles(tile);
             }
+        }
+
+        public void RefreshTiles(TileInfo tile, Func<ILayer, bool> criteria)
+        {
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale).ToList();
+
+            Action action = async () =>
+            {
+                foreach (ILayer item in infos)
+                {
+                    if (item.VisualParameters.Visibility != Visibility.Visible)
+                        continue;
+
+                    if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
+                    {
+                        Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
+                        return;
+                    }
+
+                    if (item.Rendering != RenderingApproach.Tiled)
+                        continue;
+
+                    //Do not draw base map in the case of change visibility for layers
+                    if (!criteria(item))
+                        continue;
+
+                    //Debug.Print($"{item.LayerName} - {tile.ToShortString()}");
+
+                    if (item is VectorLayer)
+                    {
+                        VectorLayer vectorLayer = (VectorLayer)item;
+
+                        vectorLayer.TileManager.TryAdd(tile);
+
+                        await AddTiledLayer(vectorLayer, tile);
+                    }
+                    else if (item is TileServiceLayer)
+                    {
+                        await AddLayerAsync(item as TileServiceLayer, tile);
+                    }
+                    else
+                    {
+                        //return;
+                        throw new NotImplementedException();
+                    }
+
+                }
+            };
+
+            Task.Run(() =>
+            {
+                lock (locker)
+                {
+                    this.jobs.Add(
+                            new Job(
+                                new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
+                                Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
+                }
+            });
+
+            ////94.09.17
+            //Task.Run(() =>
+            // this.jobs.Add(
+            //     new Job(
+            //         new LayerTag(WebMercatorUtility.GetGoogleMapScale(tile.ZoomLevel)) { LayerType = LayerType.None, Tile = tile },
+            //         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)))
+            //                        );
         }
 
         public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
@@ -1927,6 +2009,20 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        public void Clear(Func<LayerTag, bool> criteria)
+        {
+            for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
+            {
+                var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
+
+                if (criteria(tag))
+                {
+                    this.mapView.Children.RemoveAt(i);
+                }
+
+            }
+        }
+
         public void ClearTiledButNotBaseMaps()
         {
             for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
@@ -2220,7 +2316,7 @@ namespace IRI.Jab.MapViewer
 
         #region Drawing & Anot
 
-        public void Flash(List<Point> points)
+        public void Flash(List<Ham.SpatialBase.Point> points)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2228,13 +2324,13 @@ namespace IRI.Jab.MapViewer
             if (points == null)
                 return;
 
-            foreach (Point item in points)
+            foreach (var item in points)
             {
                 AddFlash(item);
             }
         }
 
-        public void Flash(Point mapPoint)
+        public void Flash(Ham.SpatialBase.Point mapPoint)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2242,9 +2338,14 @@ namespace IRI.Jab.MapViewer
             AddFlash(mapPoint);
         }
 
-        private void AddFlash(Point mapPoint)
+        private void AddFlash(Ham.SpatialBase.Point mapPoint)
         {
-            Point point = this.panTransformForPoints.Inverse.Transform(this.viewTransform.Transform(mapPoint));
+            if (mapPoint == null || mapPoint.IsNaN())
+            {
+                return;
+            }
+
+            Point point = this.panTransformForPoints.Inverse.Transform(this.viewTransform.Transform(mapPoint.AsWpfPoint()));
 
             EllipseGeometry geo = new EllipseGeometry(point, 8, 8);
 

@@ -144,6 +144,7 @@
     <Compile Include="Notifier.cs" />
     <Compile Include="Event\PanEventArgs.cs" />
     <Compile Include="Event\PointEventArgs.cs" />
+    <Compile Include="Presenters\General\AboutMePresenter.cs" />
     <Compile Include="Presenters\MapMarkerPresenter.cs" />
     <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
