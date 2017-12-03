@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ham.Common.Helpers;
 using IRI.Ket.Common.Model.Esri;
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -882,17 +883,17 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeography WebMercatorToGeographic(this SqlGeometry geometry)
         {
-            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
         }
 
         public static SqlGeography MercatorToGeographic(this SqlGeometry geometry)
         {
-            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+            return geometry.Project(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
         }
 
         public static SqlGeography UTMToGeographic(this SqlGeometry geometry, int utmZone)
         {
-            return geometry.Project(i => Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), 4326);
+            return geometry.Project(i => Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
         }
 
 

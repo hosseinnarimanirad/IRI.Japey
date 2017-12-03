@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Ham.SpatialBase;
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 
 namespace IRI.Ket.SqlServerSpatialExtension
 {
@@ -50,7 +51,7 @@ namespace IRI.Ket.SqlServerSpatialExtension
         /// <param name="points"></param>
         /// <param name="isClosed"></param>
         /// <returns></returns>
-        public static SqlGeography MakeGeography(List<Point> points, bool isClosed, int srid = 4326)
+        public static SqlGeography MakeGeography(List<Point> points, bool isClosed, int srid = SridHelper.GeodeticWGS84)
         {
             if (points == null)
             {

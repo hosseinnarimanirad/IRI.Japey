@@ -28,7 +28,7 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeography AsSqlGeography(this IPoint point)
         {
-            return SqlGeography.Point(point.Y, point.X, 4326);
+            return SqlGeography.Point(point.Y, point.X, SridHelper.GeodeticWGS84);
         }
 
         //public static SqlGeometry AsSqlGeometry(this IPoint point, int srid)
@@ -109,7 +109,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             try
             {
-                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, 4326).MakeValid().STArea().Value;
+                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, SridHelper.GeodeticWGS84).MakeValid().STArea().Value;
             }
             catch (Exception)
             {
@@ -122,7 +122,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             try
             {
-                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, 4326).MakeValid().STLength().Value;
+                return geometry.AsSqlGeometry().Project(toWgs84Geodetic, SridHelper.GeodeticWGS84).MakeValid().STLength().Value;
             }
             catch (Exception)
             {

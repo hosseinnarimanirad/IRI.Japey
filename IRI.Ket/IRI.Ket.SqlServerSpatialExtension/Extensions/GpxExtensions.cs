@@ -1,4 +1,5 @@
 ﻿
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 using IRI.Ket.Common.Gpx;
 using Microsoft.SqlServer.Types;
 using System;
@@ -15,7 +16,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             SqlGeographyBuilder builder = new SqlGeographyBuilder();
 
-            builder.SetSrid(4326);
+            builder.SetSrid(SridHelper.GeodeticWGS84);
 
             builder.BeginGeography(OpenGisGeographyType.Point);
 
@@ -32,7 +33,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             SqlGeographyBuilder builder = new SqlGeographyBuilder();
 
-            builder.SetSrid(4326);
+            builder.SetSrid(SridHelper.GeodeticWGS84);
 
             builder.BeginGeography(OpenGisGeographyType.Point);
 
@@ -49,7 +50,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             SqlGeographyBuilder builder = new SqlGeographyBuilder();
 
-            builder.SetSrid(4326);
+            builder.SetSrid(SridHelper.GeodeticWGS84);
 
             //builder.BeginGeography(OpenGisGeographyType.LineString);
             if (trackSegment.TrackPoints.Count < 2)
@@ -66,7 +67,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             SqlGeographyBuilder builder = new SqlGeographyBuilder();
 
-            builder.SetSrid(4326);
+            builder.SetSrid(SridHelper.GeodeticWGS84);
 
             builder.BeginGeography(OpenGisGeographyType.MultiLineString);
 

@@ -106,12 +106,12 @@ namespace IRI.Ham.SpatialBase.Primitives
 
         public int Srid { get; set; }
 
-        public Geometry(IPoint[] points, GeometryType type) : this(points, type, false)
+        public Geometry(IPoint[] points, GeometryType type, int srid = 0) : this(points, type, false, srid)
         {
 
         }
 
-        public Geometry(IPoint[] points, GeometryType type, bool isClosed)
+        public Geometry(IPoint[] points, GeometryType type, bool isClosed, int srid = 0)
         {
             if (type == GeometryType.LineString || type == GeometryType.Point)
             {
@@ -482,7 +482,7 @@ namespace IRI.Ham.SpatialBase.Primitives
                 return new Geometry(this.Geometries.Select(g => g.Clone()).ToArray(), this.Type, this.Srid);
             }
 
-            return new Geometry(null, this.Type, this.Srid);
+            return new Geometry(null, this.Type, false, this.Srid);
         }
 
         public List<LineSegment> GetLineSegments()

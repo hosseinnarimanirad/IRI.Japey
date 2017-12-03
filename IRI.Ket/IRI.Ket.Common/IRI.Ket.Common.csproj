@@ -66,6 +66,8 @@
     <Compile Include="Service\Google\ApiParameters\GoogleMapsGeolocationParameters.cs" />
     <Compile Include="Service\Google\ApiResults\GoogleMapsGeolocationResult.cs" />
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
+    <Compile Include="Service\News\LiveuaMapApiResults.cs" />
+    <Compile Include="Service\News\LiveuaMapService.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AuthenticationMethod.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AvailableNetworkPack.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssNetworkPack.cs" />

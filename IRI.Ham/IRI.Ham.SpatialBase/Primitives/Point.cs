@@ -59,6 +59,11 @@ namespace IRI.Ham.SpatialBase
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1}", this.X, this.Y);
         }
 
+        public bool IsNaN()
+        {
+            return double.IsNaN(X) || double.IsNaN(Y);
+        }
+
         public string AsExactString()
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17}", this.X, this.Y);

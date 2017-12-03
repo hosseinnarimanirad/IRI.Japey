@@ -4,7 +4,7 @@
 using System;
 using IRI.Ham.MeasurementUnit;
 using System.Collections.Generic;
-
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 
 namespace IRI.Ham.CoordinateSystem
 {
@@ -236,7 +236,7 @@ namespace IRI.Ham.CoordinateSystem
         {
             get
             {
-                return new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563, 4326) { EsriName = "WGS_1984" };
+                return new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563, SridHelper.GeodeticWGS84) { EsriName = "WGS_1984" };
             }
         }
 

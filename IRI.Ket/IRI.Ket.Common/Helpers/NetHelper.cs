@@ -124,5 +124,24 @@ namespace IRI.Ket.Common.Helpers
                 return null;
             }
         }
+
+        public static async Task<T> HttpGet<T>(string address) where T : class
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                 
+                var stringResult = await client.DownloadStringTaskAsync(address);
+
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }
