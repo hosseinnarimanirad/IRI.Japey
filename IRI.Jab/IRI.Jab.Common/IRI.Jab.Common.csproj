@@ -148,7 +148,8 @@
     <Compile Include="Presenters\MapMarkerPresenter.cs" />
     <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
-    <Compile Include="Presenters\Security\LoginPresenter.cs" />
+    <Compile Include="Presenters\Security\IHavePassword.cs" />
+    <Compile Include="Presenters\Security\AccountPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Event\ZoomEventArgs.cs" />

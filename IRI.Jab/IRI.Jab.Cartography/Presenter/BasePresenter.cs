@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,12 +11,42 @@ namespace IRI.Jab.Cartography.Presenter
     public class BasePresenter : Notifier
     {
 
+        private string _userName;
+
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                _userName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public GenericPrincipal CurrentGenericPrincipal
+        {
+            get { return System.Threading.Thread.CurrentPrincipal as GenericPrincipal; }
+            set
+            {
+                System.Threading.Thread.CurrentPrincipal = value;
+
+                this.UserName = value.Identity.Name;
+
+                RaisePropertyChanged(nameof(UserName));
+
+                RaisePropertyChanged();
+
+                this.UserChanged?.Invoke(this, this.UserName);
+            }
+        }
+
         public Func<string, string> RequestOpenFile;
 
         public Func<string, string> RequestSaveFile;
 
         public Action<string> RequestShowMessage;
 
+        public event EventHandler<string> UserChanged;
 
         public void ShowMessage(string message)
         {
@@ -43,5 +74,8 @@ namespace IRI.Jab.Cartography.Presenter
             this.RequestSaveFile = arg => presenter.RequestSaveFile(arg);
             this.RequestShowMessage = message => presenter.ShowMessage(message);
         }
+
+
+
     }
 }

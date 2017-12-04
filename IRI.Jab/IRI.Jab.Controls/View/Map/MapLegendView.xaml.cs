@@ -21,63 +21,19 @@ namespace IRI.Jab.Controls.View.Map
     /// Interaction logic for UserControl1.xaml
     /// </summary>
     public partial class MapLegendView : UserControl
-    {
-        //public delegate void layerOpacityValueChangedEventHandler(object sender, RoutedPropertyChangedEventArgs<double> e);
-
-        public event MapLegendItem.layerOpacityValueChangedEventHandler LayerOpacityValueChanged;
-
-        //public delegate void layerVisibilityChangedEventHandler(object sender, RoutedEventArgs e);
-
-        public event MapLegendItem.layerVisibilityChangedEventHandler LayerVisibilityChanged;
-
-        //public delegate void layerStyleChangedEventHandler(object sender, MouseButtonEventArgs e);
-
-        public event MapLegendItem.layerStyleChangedEventHandler LayerStyleChanged;
-
+    { 
         public MapLegendView()
         {
             InitializeComponent();
         }
 
-        public void AddLayer(string layerName, VisualParameters parameters, LayerType type)
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
-            MapLegendItem item = new MapLegendItem(layerName, parameters, type);
+            var item = e.Item as ILayer;
 
-            item.LayerOpacityValueChanged += new MapLegendItem.layerOpacityValueChangedEventHandler(item_LayerOpacityValueChanged);
-
-            item.LayerVisibilityChanged += new MapLegendItem.layerVisibilityChangedEventHandler(item_LayerVisibilityChanged);
-
-            item.LayerStyleChanged += new MapLegendItem.layerStyleChangedEventHandler(item_LayerStyleChanged);
-
-            this.mapItems.Items.Add(item);
-        }
-
-        void item_LayerStyleChanged(object sender, MouseButtonEventArgs e)
-        {
-            this.LayerStyleChanged?.Invoke(sender, e);
-        }
-
-        void item_LayerVisibilityChanged(object sender, RoutedEventArgs e)
-        {
-            LayerVisibilityChanged?.Invoke(sender, e);
-        }
-
-        void item_LayerOpacityValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.LayerOpacityValueChanged?.Invoke(sender, e);
-        }
-
-        public void RemoveLayer(string layerName)
-        {
-            for (int i = 0; i < this.mapItems.Items.Count; i++)
-            {
-                if (((MapLegendItem)this.mapItems.Items[i]).layerName.Text.Equals(layerName))
-                {
-                    this.mapItems.Items.Remove(this.mapItems.Items[i]);
-
-                    break;
-                }
-            }
+            e.Accepted =
+                item.Type.HasFlag(LayerType.VectorLayer) ||
+                item.Type.HasFlag(LayerType.Raster);
         }
 
     }

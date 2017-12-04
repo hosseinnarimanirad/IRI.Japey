@@ -78,6 +78,8 @@ namespace IRI.Jab.Common.Model.Common
         public ProxySettingsModel(IProxySettings settings)
         {
             this._proxySettings = settings;
+
+            Update();
         }
 
         private void Update()

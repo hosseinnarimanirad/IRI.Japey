@@ -145,7 +145,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 await CheckInternetAccess();
             }
-             
+
             this.RequestSetTileService?.Invoke(provider, tileType, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected);
         }
 
@@ -482,7 +482,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestPan;
 
-        public Action<Point, Action> RequestPanTo;
+        public Action<Ham.SpatialBase.Point, Action> RequestPanTo;
 
         public Action<int, Ham.SpatialBase.Point, Action, bool> RequestZoomToLevelAndCenter;
 
@@ -508,9 +508,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
 
 
-        public Action<List<Point>> RequestFlashPoints;
+        public Action<List<Ham.SpatialBase.Point>> RequestFlashPoints;
 
-        public Action<Point> RequestFlashPoint;
+        public Action<Ham.SpatialBase.Point> RequestFlashPoint;
 
 
         public Action<List<SqlGeometry>, string, VisualParameters> RequestAddGeometries;
@@ -720,17 +720,17 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestRemoveLayer?.Invoke(layer);
         }
 
-        public void FlashPoints(List<Point> points)
+        public void FlashPoints(List<Ham.SpatialBase.Point> points)
         {
             this.RequestFlashPoints?.Invoke(points);
         }
 
-        public void FlashPoint(Point point)
+        public void FlashPoint(Ham.SpatialBase.Point point)
         {
             this.RequestFlashPoint?.Invoke(point);
         }
 
-        public void PanTo(Point point, Action callback)
+        public void PanTo(Ham.SpatialBase.Point point, Action callback)
         {
             this.RequestPanTo?.Invoke(point, callback);
         }
@@ -742,7 +742,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public void PanToGeographicPoint(IRI.Ham.SpatialBase.IPoint point, Action callback = null)
         {
-            var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point).AsWpfPoint();
+            var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 
             this.PanTo(webMercatorPoint, callback);
         }
