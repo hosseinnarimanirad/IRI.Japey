@@ -84,7 +84,13 @@ namespace IRI.Jab.Cartography.TileServices
             }
         }
 
+        //Bing
+        private static string MakeBingSatelliteUrl(TileInfo tile, int server) => $@"http://a{server}.ortho.tiles.virtualearth.net/tiles/a{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5925";
 
+        private static string MakeBingHybridUrl(TileInfo tile, int server) => $@"http://h{server}.ortho.tiles.virtualearth.net/tiles/h{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5978";
+
+        private static string MakeBingStreetUrl(TileInfo tile, int server) => $@"http://r{server}.ortho.tiles.virtualearth.net/tiles/r{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5978";
+         
 
         //Bing
         private static string GetBingUrl(TileType type, TileInfo tile)
@@ -92,11 +98,16 @@ namespace IRI.Jab.Cartography.TileServices
             switch (type)
             {
                 case TileType.Satellite:
-                    return $"http://a0.ortho.tiles.virtualearth.net/tiles/a{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5925";
+                    return MakeBingSatelliteUrl(tile, GetServer(0, 3));
+                    //return $"http://a0.ortho.tiles.virtualearth.net/tiles/a{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5925";
 
                 case TileType.RoadMap:
+                    return MakeBingStreetUrl(tile, GetServer(0, 3));
+
                 case TileType.Terrain:
                 case TileType.Hybrid:
+                    return MakeBingHybridUrl(tile, GetServer(0, 3));
+
                 case TileType.None:
                 default:
                     return null;

@@ -40,13 +40,51 @@ namespace IRI.Ket.WorldfileFormat
             set { _yRotation = value; }
         }
 
+        public double GroundXMin
+        {
+            get => CenterOfUpperLeftPixel.X - XPixelSize / 2.0;
+        }
+
+        public double GroundYMax
+        {
+            get => CenterOfUpperLeftPixel.Y + YPixelSize / 2.0;
+        }
+
         public BoundingBox GetBoundingBox(int imagePixelWidth, int imagePixelHeight)
         {
-            return new BoundingBox(xMin: CenterOfUpperLeftPixel.X - XPixelSize / 2.0,
-                                                   yMin: (CenterOfUpperLeftPixel.Y + YPixelSize / 2.0) - YPixelSize * imagePixelHeight,
-                                                   xMax: (CenterOfUpperLeftPixel.X - XPixelSize / 2.0) + XPixelSize * imagePixelWidth,
-                                                   yMax: CenterOfUpperLeftPixel.Y + YPixelSize / 2.0);
+            return new BoundingBox(xMin: GroundXMin,
+                                    yMin: (CenterOfUpperLeftPixel.Y + YPixelSize / 2.0) - YPixelSize * imagePixelHeight,
+                                    xMax: (CenterOfUpperLeftPixel.X - XPixelSize / 2.0) + XPixelSize * imagePixelWidth,
+                                    yMax: GroundYMax);
         }
+
+        public Point ToImageCoordinate(Point groundCoordinate, int imagePixelWidth, int imagePixelHeight)
+        {
+            var groundWidth = XPixelSize * imagePixelWidth;
+
+            var groundHeight = YPixelSize * imagePixelHeight;
+
+            var x = (groundCoordinate.X - GroundXMin) * imagePixelWidth / groundWidth;
+
+            var y = (GroundYMax - groundCoordinate.Y) * imagePixelHeight / groundHeight;
+
+            return new Point(x, y);
+        }
+
+
+        public Point ToGroundCoordinate(Point imageCoordinate, int imagePixelWidth, int imagePixelHeight)
+        {
+            var groundWidth = XPixelSize * imagePixelWidth;
+
+            var groundHeight = YPixelSize * imagePixelHeight;
+
+            var x = (imageCoordinate.X) * groundWidth / imagePixelWidth + GroundXMin;
+
+            var y = GroundYMax - imageCoordinate.Y * groundHeight / imagePixelHeight;
+
+            return new Point(x, y);
+        }
+
 
         private IRI.Ham.SpatialBase.Point _centerOfUpperLeftPixel;
 
