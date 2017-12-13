@@ -483,5 +483,19 @@ namespace IRI.Jab.Common.Helpers
             //54 byte: bmp header size
             return (long)(54.0 + (bitsPerPixel / 8.0) * width * height);
         }
+
+
+        private static System.Drawing.Image AsGdiPlusImage(this System.Windows.Media.ImageSource image)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                var encoder = new System.Windows.Media.Imaging.BmpBitmapEncoder();
+                encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(image as System.Windows.Media.Imaging.BitmapSource));
+                encoder.Save(memoryStream);
+                memoryStream.Flush();
+                return System.Drawing.Image.FromStream(memoryStream);
+            }
+
+        }
     }
 }

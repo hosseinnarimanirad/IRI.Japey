@@ -472,6 +472,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<Ham.SpatialBase.Point, double> RequestZoomToPoint;
 
+        public Action<Ham.SpatialBase.Point, int> RequestZoomToGoogleScale;
+
         public Action<Ham.SpatialBase.BoundingBox, Action> RequestZoomToExtent;
 
         public Action<SqlGeometry> RequestZoomToFeature;
@@ -513,7 +515,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<Ham.SpatialBase.Point> RequestFlashPoint;
 
 
+        public Action<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry> RequestSelectGeometries;
+
         public Action<List<SqlGeometry>, string, VisualParameters> RequestAddGeometries;
+
+        public Action<GeometryLabelPairs, string, VisualParameters, LabelParameters> RequestDrawGeometryLablePairs;
 
         public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
 
@@ -665,6 +671,16 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
 
+        public void SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        {
+            this.RequestSelectGeometries(geometries, visualParameters, pointSymbol);
+        }
+
+        public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
+        {
+            this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
+        }
+
         public void DrawGeometries(List<SqlGeometry> geometry, string name, VisualParameters parameters)
         {
             this.RequestAddGeometries?.Invoke(geometry, name, parameters);
@@ -790,6 +806,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public void Zoom(double mapScale, Ham.SpatialBase.Point center)
         {
             this.RequestZoomToPoint?.Invoke(center, mapScale);
+        }
+
+        public void ZoomToGoogleScale(int googleScale, Ham.SpatialBase.Point center)
+        {
+            this.RequestZoomToGoogleScale?.Invoke(center, googleScale);
         }
 
         public void ZoomToExtent(Ham.SpatialBase.BoundingBox boundingBox, Action callback = null)
@@ -1343,5 +1364,14 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public event EventHandler OnDeleteDrawing;
 
         #endregion
+
+        public virtual void Initialize()
+        {
+        }
+
+        public virtual void RegisterMapOptions()
+        {
+
+        }
     }
 }

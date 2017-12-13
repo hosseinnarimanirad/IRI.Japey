@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Animations\GridLengthAnimation.cs" />
+    <Compile Include="Assets\ColorBrushes\MapAppColors.cs" />
     <Compile Include="Assets\Commands\RelayCommand.cs" />
     <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
     <Compile Include="Assets\Converters\BoolToBoldFontConverter.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Assets\Converters\StreamGeometryToPathConverter.cs" />
     <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
+    <Compile Include="Assets\Fonts\Fonts.cs" />
     <Compile Include="Assets\ShapeStrings\Appbar.cs" />
     <Compile Include="Assets\ShapeStrings\CustomShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriShapes.cs" />

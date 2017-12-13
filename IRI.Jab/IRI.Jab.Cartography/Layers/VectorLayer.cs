@@ -24,6 +24,7 @@ using IRI.Jab.Common.Model;
 using IRI.Ham.SpatialBase.Mapping;
 using IRI.Ham.SpatialBase.Model;
 using IRI.Ket.SpatialExtensions;
+using IRI.Jab.Cartography.Model.Symbology;
 
 namespace IRI.Jab.Cartography
 {
@@ -113,29 +114,18 @@ namespace IRI.Jab.Cartography
         //    }
         //}
 
-        private Geometry _geometryPointSymbol;
+        private SimplePointSymbol _pointSymbol;
 
-        public Geometry GeometryPointSymbol
+        public SimplePointSymbol PointSymbol
         {
-            get { return _geometryPointSymbol; }
+            get { return _pointSymbol; }
             set
             {
-                _geometryPointSymbol = value;
+                _pointSymbol = value;
                 RaisePropertyChanged();
             }
         }
 
-        private media.ImageSource _imagePointSymbol;
-
-        public media.ImageSource ImagePointSymbol
-        {
-            get { return _imagePointSymbol; }
-            set
-            {
-                _imagePointSymbol = value;
-                RaisePropertyChanged();
-            }
-        }
 
         private sb.BoundingBox _extent;
 
@@ -175,18 +165,18 @@ namespace IRI.Jab.Cartography
             if (features == null || features.Count == 0)
                 throw new NotImplementedException();
 
-            Initialize(layerName, new MemoryDataSource<object>(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null, null);
+            Initialize(layerName, new MemoryDataSource<object>(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
         }
 
         public VectorLayer(string layerName, IFeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
-            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Geometry pointSymbol = null, LabelParameters labeling = null)
+            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbol pointSymbol = null, LabelParameters labeling = null)
         {
-            Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, null, labeling);
+            Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
         }
 
         private void Initialize(string layerName, IFeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
                                     RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
-                                    Geometry pointSymbol, media.ImageSource imageSymbol, LabelParameters labeling)
+                                    SimplePointSymbol pointSymbol, LabelParameters labeling)
         {
             this.Id = Guid.NewGuid();
 
@@ -213,7 +203,7 @@ namespace IRI.Jab.Cartography
 
             this.VisualParameters = parameters;
 
-            this.GeometryPointSymbol = pointSymbol;
+            this.PointSymbol = pointSymbol;
 
             //this.PositionFunc = positionFunc;
 
@@ -246,7 +236,7 @@ namespace IRI.Jab.Cartography
 
             if (this.Type.HasFlag(LayerType.Point))
             {
-                geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, mapToScreen, this.GeometryPointSymbol);
+                geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, mapToScreen, this.PointSymbol.GeometryPointSymbol);
 
                 geo.FillRule = FillRule.Nonzero;
 
@@ -290,7 +280,7 @@ namespace IRI.Jab.Cartography
 
             Brush brush = this.VisualParameters.Fill;
 
-            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.ImagePointSymbol, this.GeometryPointSymbol);
+            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSize, this.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
 
@@ -304,7 +294,7 @@ namespace IRI.Jab.Cartography
             image.Freeze();
 
             Path path = new Path()
-            { 
+            {
                 Data = area,
                 Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false }
             };
@@ -332,8 +322,8 @@ namespace IRI.Jab.Cartography
                 mapToScreen,
                 pen,
                 this.VisualParameters.Fill.AsGdiBrush(),
-                null,
-                this.GeometryPointSymbol);
+                this.VisualParameters.PointSize,
+                this.PointSymbol);
 
             if (image == null)
                 return null;
@@ -473,7 +463,7 @@ namespace IRI.Jab.Cartography
 
             var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.ImagePointSymbol, this.GeometryPointSymbol);
+            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.VisualParameters.PointSize, this.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)tileWidth, (int)tileHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -531,8 +521,8 @@ namespace IRI.Jab.Cartography
                             p => transform(new Point(p.X - shiftX, p.Y - shiftY)),
                             pen,
                             this.VisualParameters.Fill.AsGdiBrush(),
-                            null,
-                            this.GeometryPointSymbol);
+                            this.VisualParameters.PointSize,
+                            this.PointSymbol);
 
             if (image == null)
                 return null;
@@ -767,15 +757,15 @@ namespace IRI.Jab.Cartography
                                     mapToScreen,
                                     pen,
                                     this.VisualParameters.Fill.AsGdiBrush(),
-                                    null,
-                                    this.GeometryPointSymbol);
+                                    this.VisualParameters.PointSize,
+                                    this.PointSymbol);
 
                     image.Save($"{directory}\\{tile.ZoomLevel}, {tile.RowNumber}, {tile.ColumnNumber}.jpg");
                 }
             }
         }
 
-        public async Task<GeometryLabelPair> GetGeometryLabelPairAsync(double mapScale, sb.BoundingBox mapExtent)
+        public async Task<GeometryLabelPairs> GetGeometryLabelPairAsync(double mapScale, sb.BoundingBox mapExtent)
         {
             List<SqlGeometry> geometries; List<string> labels = null;
 
@@ -792,10 +782,10 @@ namespace IRI.Jab.Cartography
                 geometries = await this.GetGeometriesAsync(mapScale, mapExtent);
             }
 
-            return new GeometryLabelPair(geometries, labels);
+            return new GeometryLabelPairs(geometries, labels);
         }
 
-        public GeometryLabelPair GetGeometryLabelPair(double mapScale, sb.BoundingBox mapExtent)
+        public GeometryLabelPairs GetGeometryLabelPair(double mapScale, sb.BoundingBox mapExtent)
         {
             List<SqlGeometry> geometries; List<string> labels = null;
 
@@ -812,7 +802,7 @@ namespace IRI.Jab.Cartography
                 geometries = this.GetGeometries(mapScale, mapExtent);
             }
 
-            return new GeometryLabelPair(geometries, labels);
+            return new GeometryLabelPairs(geometries, labels);
         }
 
         public void BindWithFrameworkElement(FrameworkElement element)
@@ -981,7 +971,7 @@ namespace IRI.Jab.Cartography
                     Point location = mapToScreen(mapCoordinates[i]);
 
                     FormattedText formattedText =
-                        new FormattedText(labels[i], System.Globalization.CultureInfo.CurrentCulture, FlowDirection.RightToLeft,
+                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, FlowDirection.RightToLeft,
                         new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
                         this.Labels.FontSize, this.Labels.Foreground);
 

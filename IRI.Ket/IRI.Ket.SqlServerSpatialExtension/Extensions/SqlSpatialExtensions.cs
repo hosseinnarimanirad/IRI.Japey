@@ -356,6 +356,15 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
+        public static SqlGeometry GetCentroidPlus(this SqlGeometry geometry)
+        {
+            if (geometry.IsNotValidOrEmpty())
+            {
+                return SqlGeometry.Null;
+            }
+
+            return geometry.STContains(geometry.STCentroid()).Value ? geometry.STCentroid() : geometry.STPointOnSurface();
+        }
 
 
         #region Convert To ESRI Shape
@@ -713,7 +722,7 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
         {
-            return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point));
+            return Project(geometry, point => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
         }
 
         public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)

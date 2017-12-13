@@ -12,7 +12,7 @@ namespace IRI.Jab.Common.Assets.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.ToString().ArabicToFarsi();
+            return value == null ? null : value.ToString().ArabicToFarsi();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

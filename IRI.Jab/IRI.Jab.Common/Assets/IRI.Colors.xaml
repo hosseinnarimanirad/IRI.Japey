@@ -3,8 +3,33 @@
     <Color x:Key="mapTehranIrDarkRedColor">#FF900000</Color>
     <Color x:Key="mapTehranIrLightRedColor">#FFC75050</Color>
     <Color x:Key="mapTehranIrNormalRedColor">#FFAD0000</Color>
-    
+
     <SolidColorBrush x:Key="mapTehranIrDarkRedBrush" Color="{StaticResource mapTehranIrDarkRedColor}"/>
     <SolidColorBrush x:Key="mapTehranIrLightRedBrush" Color="{StaticResource mapTehranIrLightRedColor}"/>
     <SolidColorBrush x:Key="mapTehranIrNormalRedBrush" Color="{StaticResource mapTehranIrNormalRedColor}"/>
+ 
+    <SolidColorBrush x:Key="red">#FFEA4333</SolidColorBrush>
+    <SolidColorBrush x:Key="green">#FF81BA45</SolidColorBrush>
+    <SolidColorBrush x:Key="blue">#FF41B1E1</SolidColorBrush>
+    <SolidColorBrush x:Key="purple">#FF837AE5</SolidColorBrush>
+    <SolidColorBrush x:Key="orange">#FFFF8130</SolidColorBrush>
+    <SolidColorBrush x:Key="lime">#FFB8D135</SolidColorBrush>
+    <SolidColorBrush x:Key="emerald">#FF34A134</SolidColorBrush>
+    <SolidColorBrush x:Key="teal">#FF34BCBA</SolidColorBrush>
+    <SolidColorBrush x:Key="cyan">#FF4AB4E8</SolidColorBrush>
+    <SolidColorBrush x:Key="cobalt">#FF3474F2</SolidColorBrush>
+    <SolidColorBrush x:Key="indigo">#FF8D3BFF</SolidColorBrush>
+    <SolidColorBrush x:Key="violet">#FFB733F9</SolidColorBrush>
+    <SolidColorBrush x:Key="pink">#FFF68ED9</SolidColorBrush>
+    <SolidColorBrush x:Key="magenta">#FFE0338F</SolidColorBrush>
+    <SolidColorBrush x:Key="crimson">#FFB53251</SolidColorBrush>
+    <SolidColorBrush x:Key="amber">#FFEEB739</SolidColorBrush>
+    <SolidColorBrush x:Key="yellow">#FFFFE736</SolidColorBrush>
+    <SolidColorBrush x:Key="brown">#FF9E794F</SolidColorBrush>
+    <SolidColorBrush x:Key="olive">#FF8A9E82</SolidColorBrush>
+    <SolidColorBrush x:Key="steel">#FF83919E</SolidColorBrush>
+    <SolidColorBrush x:Key="mauve">#FF9180A2</SolidColorBrush>
+    <SolidColorBrush x:Key="taupe">#FFA09575</SolidColorBrush>
+    <SolidColorBrush x:Key="sienna">#FFB27759</SolidColorBrush>
+
 </ResourceDictionary>

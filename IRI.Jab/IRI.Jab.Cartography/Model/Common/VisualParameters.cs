@@ -7,10 +7,11 @@ using System.Windows;
 using System.ComponentModel;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Extensions;
+using System.Runtime.CompilerServices;
 
 namespace IRI.Jab.Cartography
 {
-    public partial class VisualParameters : DependencyObject//, INotifyPropertyChanged
+    public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
     {
         public Brush Fill
         {
@@ -115,6 +116,19 @@ namespace IRI.Jab.Cartography
         public static readonly DependencyProperty DashStyleProperty =
             DependencyProperty.Register("DashStyle", typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
+        private double _pointSize = 4;
+
+        public double PointSize
+        {
+            get { return _pointSize; }
+            set
+            {
+                _pointSize = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
         {
             this.Fill = fill;
@@ -190,7 +204,7 @@ namespace IRI.Jab.Cartography
 
             if (DashStyle != null && result != null)
             {
-                result.DashStyle = DashStyle;                
+                result.DashStyle = DashStyle;
             }
 
             return result;
@@ -217,5 +231,17 @@ namespace IRI.Jab.Cartography
         {
             return Fill.AsGdiBrush();
         }
+
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

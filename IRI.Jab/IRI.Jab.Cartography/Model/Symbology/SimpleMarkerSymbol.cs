@@ -6,10 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace IRI.Jab.Cartography.Model.Symbol
+namespace IRI.Jab.Cartography.Model.Symbology
 {
-    public class SimpleLineSymbol : Notifier, ISymbol
+    public class SimpleMarkerSymbol : Notifier, ISymbol
     {
+        private Brush _fill;
+
+        public Brush Fill
+        {
+            get { return _fill; }
+            set
+            {
+                _fill = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private Brush _stroke;
 
         public Brush Stroke
@@ -48,5 +61,30 @@ namespace IRI.Jab.Cartography.Model.Symbol
             }
         }
 
+
+        private Geometry _geometrySymbol = null;
+
+        public Geometry GeometrySymbol
+        {
+            get { return _geometrySymbol; }
+            set
+            {
+                _geometrySymbol = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private DrawingImage _imageSymbol = null;
+
+        public DrawingImage ImageSymbol
+        {
+            get { return _imageSymbol; }
+            set
+            {
+                _imageSymbol = value;
+                RaisePropertyChanged();
+            }
+        } 
     }
 }

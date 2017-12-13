@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace IRI.Jab.Cartography.Model.Symbol
+namespace IRI.Jab.Cartography.Model.Symbology
 {
     public interface ISymbol
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace IRI.Jab.Cartography.Model.Symbol
+namespace IRI.Jab.Cartography.Model.Symbology
 {
     public class SimplePolygonSymbol : Notifier, ISymbol
     {

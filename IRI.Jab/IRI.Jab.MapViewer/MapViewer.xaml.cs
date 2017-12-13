@@ -457,6 +457,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
 
+            presenter.RequestZoomToGoogleScale = (center, googleScale) => this.ZoomToGoogleScale(googleScale);
+
             presenter.RequestRegisterMapOptions = (arg) => { this.RegisterRightClickContextOptions(arg.View, arg.DataContext); };
 
             presenter.RequestRemoveMapOptions = () => { this.RemoveRightClickOptions(); };
@@ -544,6 +546,16 @@ namespace IRI.Jab.MapViewer
                 this.DrawGeometries(g, n, p);
             };
 
+            presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
+            {
+                DrawGeometryLablePairs(gl, n, p, lp);
+            };
+
+            presenter.RequestSelectGeometries = (g, v, s) =>
+            {
+                SelectGeometries(g, v, s);
+            };
+
             presenter.RequestClearLayer = (t, r) => { this.ClearLayer(t, r); };
 
             presenter.RequestClearLayerByName = (l, r) => { this.ClearLayer(l, r); };
@@ -568,6 +580,10 @@ namespace IRI.Jab.MapViewer
             presenter.Pan();
 
             presenter.SetMapCursorSet1();
+
+            presenter.Initialize();
+
+            presenter.RegisterMapOptions();
 
         }
 
@@ -729,7 +745,7 @@ namespace IRI.Jab.MapViewer
         {
             LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
-            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, pointSymbol, isLabeled ? parameters : null);
+            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
 
             this._layerManager.Add(layer);
         }
@@ -743,7 +759,7 @@ namespace IRI.Jab.MapViewer
                 throw new NotImplementedException();
             }
 
-            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, pointSymbol, parameters);
+            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
 
             this._layerManager.Add(layer);
         }
@@ -2430,6 +2446,28 @@ namespace IRI.Jab.MapViewer
             AddNonTiledLayer(layer);
         }
 
+        public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
+        {
+            if (geometries == null)
+                return;
+
+            var layer = new VectorLayer(
+                layerName,
+                new MemoryDataSource<string>(geometries.Geometries, geometries.Labels, i => i?.ToString()),
+                parameters,
+                LayerType.Drawing,
+                RenderingApproach.Default,
+                RasterizationApproach.DrawingVisual,
+                ScaleInterval.All,
+                pointSymbol: null,
+                labeling: labelParameters);
+
+            this._layerManager.Add(layer);
+
+            //AddTiledLayer(layer);
+            AddNonTiledLayer(layer);
+        }
+
         public void DrawGeometries(List<SqlGeometry> geometries, string layerName,
                                         VisualParameters visualParameters, Geometry pointSymbol)
         {
@@ -2444,7 +2482,7 @@ namespace IRI.Jab.MapViewer
                 RenderingApproach.Default,
                 RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
-                pointSymbol);
+                new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
             this._layerManager.Add(layer);
 
@@ -2453,7 +2491,7 @@ namespace IRI.Jab.MapViewer
 
         public void SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
         {
-            ClearLayer(LayerType.Selection, false);
+            ClearLayer(LayerType.Selection, true);
 
             if (geometries == null || geometries.Count < 1)
                 return;
@@ -2466,7 +2504,7 @@ namespace IRI.Jab.MapViewer
                 RenderingApproach.Default,
                 RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
-                pointSymbol);
+                new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
             this._layerManager.Add(layer);
 
@@ -3279,7 +3317,7 @@ namespace IRI.Jab.MapViewer
             this.Zoom(mapScale, new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0));
         }
 
-        public void Zoom(int googleZoomLevel)
+        public void ZoomToGoogleScale(int googleZoomLevel)
         {
             if (googleZoomLevel < 1 || googleZoomLevel > 23)
             {
@@ -3287,6 +3325,16 @@ namespace IRI.Jab.MapViewer
             }
 
             Zoom(WebMercatorUtility.GetGoogleMapScale(googleZoomLevel));
+        }
+
+        public void ZoomToGoogleScale(sb.Point center, int googleZoomLevel)
+        {
+            if (googleZoomLevel < 1 || googleZoomLevel > 23)
+            {
+                return;
+            }
+
+            Zoom(WebMercatorUtility.GetGoogleMapScale(googleZoomLevel), center.AsWpfPoint());
         }
 
         //public void Zoom(double mapScale, sb.Point mapPoint)

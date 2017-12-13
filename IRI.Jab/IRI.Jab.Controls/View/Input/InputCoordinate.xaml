@@ -27,7 +27,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" HorizontalAlignment="Right">X:</Label>
+        <Label Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">X:</Label>
      
         <ComboBox Name="coordinateType" Grid.Column="0" HorizontalAlignment="Left" FontWeight="Bold" VerticalAlignment="Center" SelectedIndex="0"
                   Width="100" SelectionChanged="coordinateType_SelectionChanged" 
@@ -35,16 +35,16 @@
             <ComboBoxItem>ژئودتیک</ComboBoxItem>
             <ComboBoxItem>UTM</ComboBoxItem>
         </ComboBox>
-        <TextBox Name="x" Grid.Column="1" FlowDirection="LeftToRight"></TextBox>
-        <Label Grid.Column="2">Y:</Label>
-        <TextBox Name="y" Grid.Column="3" FlowDirection="LeftToRight"></TextBox>
+        <TextBox Name="x" Grid.Column="1" FlowDirection="LeftToRight" VerticalAlignment="Center" MinWidth="72"></TextBox>
+        <Label Grid.Column="2" VerticalAlignment="Center">Y:</Label>
+        <TextBox Name="y" Grid.Column="3" FlowDirection="LeftToRight" VerticalAlignment="Center" MinWidth="72"></TextBox>
         <Label Name="zoneLabel" Grid.Column="4" Content="ناحیه UTM:"
                Visibility="{Binding ElementName=coordinateType, Path=SelectedIndex, Converter={StaticResource intGreaterThanIntParameterToVisibilityConverter}, ConverterParameter=0}"/>
-        <TextBox Name="zone" Grid.Column="5" Text="{Binding Zone}" LostFocus="zone_LostFocus"
+        <TextBox Name="zone" Grid.Column="5" Text="{Binding Zone}" LostFocus="zone_LostFocus" VerticalAlignment="Center"
                  Visibility="{Binding ElementName=coordinateType, Path=SelectedIndex, Converter={StaticResource intGreaterThanIntParameterToVisibilityConverter}, ConverterParameter=0}"/>
-        <Button Grid.Column="6" Height="23" Width="23" Name="save" Grid.RowSpan="1"  Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5">
+        <Button Grid.Column="6" Height="32" Width="32" Name="save" Grid.RowSpan="1"  Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4">
             <!--<Image Stretch="Uniform" Source="/IRI.Smaja.ZaminNegarAja;component/Images/appbar.add24.png"></Image>-->
-            <TextBlock>+</TextBlock>
+            <Path Data="{StaticResource appbarAdd}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Button>
         <Label Name="note" Grid.Row="3" Grid.ColumnSpan="5" FontStyle="Italic" Foreground="DarkGray">توجه: مختصات ها به صورت طول و عرض جغرافیایی می باشند</Label>
         <DataGrid Name="pointList" AutoGenerateColumns="False" AlternatingRowBackground="LightBlue" ItemsSource="{Binding PointCollection}"

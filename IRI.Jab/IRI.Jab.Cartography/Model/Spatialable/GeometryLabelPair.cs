@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Cartography.Model
 {
-    public class GeometryLabelPair
+    public class GeometryLabelPairs
     {
         public List<SqlGeometry> Geometries { get; set; }
 
         public List<string> Labels { get; set; }
 
-        public GeometryLabelPair(List<SqlGeometry> geometries, List<string> labels)
+        public GeometryLabelPairs(List<SqlGeometry> geometries, List<string> labels)
         {
             this.Geometries = geometries;
 

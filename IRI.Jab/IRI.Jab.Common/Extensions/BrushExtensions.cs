@@ -120,5 +120,7 @@ namespace IRI.Jab.Common.Extensions
 
             return new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(alpha: (int)alpha, red: color.R, green: color.G, blue: color.B));
         }
+
+
     }
 }

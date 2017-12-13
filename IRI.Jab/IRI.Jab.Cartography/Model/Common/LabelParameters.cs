@@ -65,21 +65,21 @@ namespace IRI.Jab.Cartography
 
         public Func<SqlGeometry, SqlGeometry> PositionFunc { get; set; }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush background, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
         {
             this.VisibleRange = visibleRange;
 
             this.FontSize = fontSize;
 
-            this.Foreground = background;
+            this.Foreground = foreground ?? Brushes.Black;
 
             this.FontFamily = fontFamily;
 
             this.PositionFunc = positionFunc;
         }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color background, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
-            : this(visibleRange, fontSize, new SolidColorBrush(background), fontFamily, positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
+            : this(visibleRange, fontSize, new SolidColorBrush(foreground), fontFamily, positionFunc)
         {
 
         }

@@ -105,6 +105,7 @@
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
     <Compile Include="Model\PathMarkupLabelPair.cs" />
+    <Compile Include="Model\Symbology\SimplePointSymbol.cs" />
     <Compile Include="Presenter\BasePresenter.cs" />
     <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToGdiBitmap.cs" />
@@ -127,10 +128,10 @@
     <Compile Include="Model\Legend\LegendItemEventArgs.cs" />
     <Compile Include="Model\MoveableItem.cs" />
     <Compile Include="Model\Common\RasterizationApproach.cs" />
-    <Compile Include="Model\Symbol\ISymbol.cs" />
-    <Compile Include="Model\Symbol\SimpleLineSymbol.cs" />
-    <Compile Include="Model\Symbol\SimpleMarkerSymbol.cs" />
-    <Compile Include="Model\Symbol\SimplePolygonSymbol.cs" />
+    <Compile Include="Model\Symbology\ISymbol.cs" />
+    <Compile Include="Model\Symbology\SimpleLineSymbol.cs" />
+    <Compile Include="Model\Symbology\SimpleMarkerSymbol.cs" />
+    <Compile Include="Model\Symbology\SimplePolygonSymbol.cs" />
     <Compile Include="Model\TileManager.cs" />
     <Compile Include="Model\Common\LabelParameters.cs" />
     <Compile Include="Model\Locateable.cs" />

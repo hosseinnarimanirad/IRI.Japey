@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Cartography.Model.Symbol;
+﻿using IRI.Jab.Cartography.Model.Symbology;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using System;
