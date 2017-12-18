@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using IRI.Ham.SpatialBase.CoordinateSystems;
+using IRI.Jab.Common.Assets.Commands;
+using System.Threading.Tasks;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -20,7 +22,7 @@ namespace IRI.Jab.Controls.Presenter
         {
             get { return _pointCollection; }
             set
-            {  
+            {
                 _pointCollection = value;
                 RaisePropertyChanged();
             }
@@ -40,7 +42,7 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public event EventHandler PointAdded;
+        public event EventHandler PointCollectionChanged;
 
         private SpatialReferenceType _inputType;
 
@@ -76,32 +78,63 @@ namespace IRI.Jab.Controls.Presenter
         {
             this.Zone = 39;
 
-            this._pointCollection = new ObservableCollection<IRI.Ham.SpatialBase.Point>();
-
             FeedGeographicPoints(geographicPoints);
         }
 
         public void FeedGeographicPoints(List<IRI.Ham.SpatialBase.Point> geographicPoints)
         {
+            this.PointCollection = new ObservableCollection<IRI.Ham.SpatialBase.Point>();
+
+            this.PointCollection.CollectionChanged += (sender, e) => PointCollectionChanged?.Invoke(null, null);
+
             foreach (var item in geographicPoints)
             {
                 this.PointCollection.Add(item);
             }
         }
 
-        internal void AddPoint(IRI.Ham.SpatialBase.Point point)
-        {
-            this.PointCollection.Add(MapFunction(point));
+        //internal void AddPoint(IRI.Ham.SpatialBase.Point point)
+        //{
+        //    this.PointCollection.Add(MapFunction(point));
 
-            if (PointAdded != null)
+        //    if (PointCollectionChanged != null)
+        //    {
+        //        PointCollectionChanged(null, null);
+        //    }
+        //}
+
+        //internal void RemovePoint(IRI.Ham.SpatialBase.Point point)
+        //{
+        //    this.PointCollection.Remove(point);
+        //}
+
+        public Func<Task<Ham.SpatialBase.Primitives.Geometry>> RequestGetGeometry;
+
+        private RelayCommand _drawGeometryCommand;
+
+        public RelayCommand DrawGeometryCommand
+        {
+            get
             {
-                PointAdded(null, null);
+                if (_drawGeometryCommand == null)
+                {
+                    _drawGeometryCommand = new RelayCommand(param => DrawGeometry());
+                }
+
+                return _drawGeometryCommand;
             }
         }
 
-        internal void RemovePoint(IRI.Ham.SpatialBase.Point point)
+        private async void DrawGeometry()
         {
-            this.PointCollection.Remove(point);
+            var geometry = await RequestGetGeometry?.Invoke();
+
+            if (geometry == null)
+            {
+                return;
+            }
+
+            FeedGeographicPoints(geometry.Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Ham.SpatialBase.Point>().ToList());
         }
     }
 }

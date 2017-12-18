@@ -72,13 +72,19 @@ namespace IRI.Jab.MapViewer
 
         internal void Remove(LayerType type)
         {
-            this.map.RemoveAll(i => i.Type.HasFlag(type));
-
-            for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            lock (map)
             {
-                if (CurrentLayers[i].Type.HasFlag(type))
+                lock (CurrentLayers)
                 {
-                    this.CurrentLayers.Remove(CurrentLayers[i]);
+                    this.map.RemoveAll(i => i.Type.HasFlag(type));
+
+                    for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+                    {
+                        if (CurrentLayers[i].Type.HasFlag(type))
+                        {
+                            this.CurrentLayers.Remove(CurrentLayers[i]);
+                        }
+                    }
                 }
             }
         }

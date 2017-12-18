@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Jab.Common.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,14 +24,14 @@ namespace IRI.Jab.Common.Extensions
 
         public static System.Drawing.Pen AsGdiPen(string hexColor, float thickness)
         {
-            var color = ColorExtensions.ToGdiColor(hexColor);
+            var color = ColorHelper.ToGdiColor(hexColor);
 
             return new System.Drawing.Pen(color, thickness);
         }
 
         public static System.Drawing.Pen AsGdiPen(string hexColor, float thickness, double opacity)
         {
-            var color = ColorExtensions.ToGdiColor(hexColor);
+            var color = ColorHelper.ToGdiColor(hexColor);
 
             var alpha = opacity > 1 ? 255 : (opacity < 0 ? 0 : opacity * 255);
              

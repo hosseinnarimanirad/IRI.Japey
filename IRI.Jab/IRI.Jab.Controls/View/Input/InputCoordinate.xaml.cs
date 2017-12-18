@@ -15,7 +15,7 @@ using System.Collections.ObjectModel;
 using IRI.Ham.SpatialBase.CoordinateSystems;
 //using Microsoft.SqlServer.Types;
 
-namespace IRI.Jab.Controls.View
+namespace IRI.Jab.Controls.View.Input
 {
     /// <summary>
     /// Interaction logic for InputCoordinate.xaml
@@ -40,7 +40,7 @@ namespace IRI.Jab.Controls.View
 
             if (double.TryParse(this.x.Text, out x) && double.TryParse(this.y.Text, out y))
             {
-                this.Presenter.AddPoint(new IRI.Ham.SpatialBase.Point(x, y));
+                this.Presenter.PointCollection.Add(new IRI.Ham.SpatialBase.Point(x, y));
             }
 
             this.y.Text = string.Empty;
@@ -64,7 +64,7 @@ namespace IRI.Jab.Controls.View
         {
             Button button = e.OriginalSource as Button;
 
-            this.Presenter.RemovePoint(button.DataContext as IRI.Ham.SpatialBase.Point);
+            this.Presenter.PointCollection.Remove(button.DataContext as IRI.Ham.SpatialBase.Point);
         }
 
         private void coordinateType_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Model
 {
-    [DataContract]
+    [JsonObject]
     public class GeoJsonGeometry
     {
 
-        [DataMember(Name = "coordinates")]
+        //[DataMember(Name = "coordinates")]
+        [JsonProperty("coordinates")]
         public double[][] Points { get; set; }
 
         private void ShouldSerializePoints()
@@ -19,12 +21,15 @@ namespace IRI.Ket.Common.Model
 
         }
 
+
         //polygon
-        [DataMember(Name = "coordinates")]
+        //[DataMember(Name = "coordinates")]
+        [JsonProperty("coordinates")]
         public double[][][] Rings { get; set; }
 
         //polyline
-        [DataMember(Name = "coordinates")]
+        //[DataMember(Name = "coordinates")]
+        [JsonProperty("coordinates")]
         public double[][][] Paths { get; set; }
 
     }

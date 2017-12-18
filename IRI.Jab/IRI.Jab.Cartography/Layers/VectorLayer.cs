@@ -25,6 +25,7 @@ using IRI.Ham.SpatialBase.Mapping;
 using IRI.Ham.SpatialBase.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Cartography.Model.Symbology;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Jab.Cartography
 {

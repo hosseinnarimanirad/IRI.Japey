@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common.Extensions;
+using IRI.Jab.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,8 +48,8 @@ namespace IRI.Jab.Cartography
         {
 
             return new VisualParameters(
-                BrushHelper.MakeTransparent(ColorExtensions.ToWpfColor("#FBB03B"), 0.3),
-                BrushHelper.FromHex("#FBB03B"),
+                BrushHelper.Create(ColorHelper.ToWpfColor("#FBB03B"), 0.3),
+                BrushHelper.Create("#FBB03B"),
                 3,
                 1,
                 System.Windows.Visibility.Visible)

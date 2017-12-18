@@ -506,7 +506,7 @@ namespace IRI.Jab.MapViewer
             presenter.RequestAddLayer = (l) =>
             {
                 this.SetLayer(l);
-                this.AddNonTiledLayer(l);
+                return this.AddNonTiledLayer(l);
             };
 
             presenter.RequestRemoveLayer = (i) =>
@@ -543,17 +543,17 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestAddGeometries = (g, n, p) =>
             {
-                this.DrawGeometries(g, n, p);
+                return this.DrawGeometries(g, n, p);
             };
 
             presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
-            {
-                DrawGeometryLablePairs(gl, n, p, lp);
-            };
+          {
+              return DrawGeometryLablePairs(gl, n, p, lp);
+          };
 
             presenter.RequestSelectGeometries = (g, v, s) =>
             {
-                SelectGeometries(g, v, s);
+                return SelectGeometries(g, v, s);
             };
 
             presenter.RequestClearLayer = (t, r) => { this.ClearLayer(t, r); };
@@ -1027,7 +1027,7 @@ namespace IRI.Jab.MapViewer
         }
 
 
-        private async void AddNonTiledLayer(VectorLayer layer)
+        private async Task AddNonTiledLayer(VectorLayer layer)
         {
             if (this.CurrentTileInfos == null)
                 return;
@@ -1844,12 +1844,12 @@ namespace IRI.Jab.MapViewer
                 {
                     VectorLayer vectorLayer = (VectorLayer)item;
 
-                    Action action = () =>
-                    {
-                        //AddTiledLayer(vectorLayer);
-                        AddNonTiledLayer(vectorLayer);
-                        //ClearBasemap();
-                    };
+                    Action action = async () =>
+                     {
+                         //AddTiledLayer(vectorLayer);
+                         await AddNonTiledLayer(vectorLayer);
+                         //ClearBasemap();
+                     };
 
                     var extent = this.CurrentExtent;
 
@@ -2077,6 +2077,7 @@ namespace IRI.Jab.MapViewer
 
         public void ClearLayer(LayerType type, bool remove)
         {
+            int count = 0;
             for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
             {
                 //Complex layer items may not be Path, so use FrameworkElement
@@ -2086,12 +2087,16 @@ namespace IRI.Jab.MapViewer
                 {
                     this.mapView.Children.RemoveAt(i);
 
+                    count++;
+
                     if (remove)
                     {
                         this._layerManager.Remove(type);
                     }
                 }
             }
+
+            Debug.WriteLine($"ClearLayer: {count} {type.ToString()} removed");
         }
 
         public void ClearLayer(ILayer layer)
@@ -2414,7 +2419,7 @@ namespace IRI.Jab.MapViewer
         }
 
         //Get the FontFamily in method parameters
-        public void DrawGeometries(List<SqlGeometry> geometries, string layerName,
+        public async Task DrawGeometries(List<SqlGeometry> geometries, string layerName,
                                         VisualParameters visualElements, List<object> labels = null,
                                         Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0,
                                         Brush labelBackground = null, FontFamily font = null, RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
@@ -2443,10 +2448,10 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(layer);
 
             //AddTiledLayer(layer);
-            AddNonTiledLayer(layer);
+            await AddNonTiledLayer(layer);
         }
 
-        public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
+        public async Task DrawGeometryLablePairs(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
         {
             if (geometries == null)
                 return;
@@ -2465,10 +2470,10 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(layer);
 
             //AddTiledLayer(layer);
-            AddNonTiledLayer(layer);
+            await AddNonTiledLayer(layer);
         }
 
-        public void DrawGeometries(List<SqlGeometry> geometries, string layerName,
+        public async Task DrawGeometries(List<SqlGeometry> geometries, string layerName,
                                         VisualParameters visualParameters, Geometry pointSymbol)
         {
             if (geometries == null || geometries.Count < 1)
@@ -2486,10 +2491,10 @@ namespace IRI.Jab.MapViewer
 
             this._layerManager.Add(layer);
 
-            AddNonTiledLayer(layer);
+            await AddNonTiledLayer(layer);
         }
 
-        public void SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
+        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
         {
             ClearLayer(LayerType.Selection, true);
 
@@ -2508,7 +2513,13 @@ namespace IRI.Jab.MapViewer
 
             this._layerManager.Add(layer);
 
-            AddNonTiledLayer(layer);
+            Debug.WriteLine("AddNonTiledLayer [MapViewer] start");
+
+            Debug.WriteLine($"{geometries?.Count} Geometries Selected");
+
+            await AddNonTiledLayer(layer);
+
+            Debug.WriteLine("AddNonTiledLayer [MapViewer] end");
         }
 
         #endregion
@@ -2896,6 +2907,9 @@ namespace IRI.Jab.MapViewer
 
             counterValue = 4;
             counter = 0;
+
+            if (double.IsNaN(xOffset + yOffset))
+                return;
 
             if (Math.Abs(xOffset) > 2 || Math.Abs(yOffset) > 2)
             {

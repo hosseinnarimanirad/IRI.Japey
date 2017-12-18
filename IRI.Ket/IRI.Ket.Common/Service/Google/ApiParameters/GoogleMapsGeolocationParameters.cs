@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,58 +8,96 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Service.Google.ApiParameters
 {
-    [DataContract]
+    //[DataContract]
+    [JsonObject]
     public class GoogleMapsGeolocationParameters
     {
-        [DataMember]
+        //[DataMember]
+        [JsonProperty]
         public int homeMobileCountryCode { get; set; }
-        [DataMember]
-        public int homeMobileNetworkCode { get; set; }
-        [DataMember]
-        public string radioType { get; set; }
-        [DataMember]
-        public string carrier { get; set; }
-        [DataMember]
-        public string considerIp { get; set; }
 
-        [DataMember]
+        //[DataMember]
+        [JsonProperty]
+        public int homeMobileNetworkCode { get; set; }
+
+        //[DataMember]
+        [JsonProperty]
+        public string radioType { get; set; }
+
+        //[DataMember]
+        [JsonProperty]
+        public string carrier { get; set; }
+
+        //[DataMember]
+        [JsonProperty]
+        public string considerIp { get; set; }
+         
+        //[DataMember]
+        [JsonProperty]
         public Celltower[] cellTowers { get; set; }
 
-        [DataMember]
+        //[DataMember]
+        [JsonProperty]
         public Wifiaccesspoint[] wifiAccessPoints { get; set; }
     }
 
-    [DataContract]
+    //[DataContract]
+    [JsonObject]
     public class Celltower
     {
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int cellId { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int locationAreaCode { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int mobileCountryCode { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int mobileNetworkCode { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int age { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int signalStrength { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int timingAdvance { get; set; }
     }
 
-    [DataContract]
+    //[DataContract]
+    [JsonObject]
     public class Wifiaccesspoint
     {
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public string macAddress { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int signalStrength { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int age { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int channel { get; set; }
-        [DataMember]
+
+        //[DataMember]
+        [JsonProperty]
         public int signalToNoiseRatio { get; set; }
     }
 }

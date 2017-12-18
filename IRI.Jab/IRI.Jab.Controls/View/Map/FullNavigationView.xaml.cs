@@ -115,7 +115,7 @@ namespace IRI.Jab.Controls.View.Map
         {
             this.ZoomLevel = this.zoom.Value;
 
-            this.OnZoomChanged?.Invoke(sender, new Common.ZoomEventArgs(e.NewValue, double.NaN));
+            this.OnZoomChanged?.Invoke(sender, new IRI.Jab.Common.ZoomEventArgs(e.NewValue, double.NaN));
         }
 
         private void PanMap(double xOffset, double yOffset)

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Extensions;
 using System.Runtime.CompilerServices;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Jab.Cartography
 {

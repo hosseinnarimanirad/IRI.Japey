@@ -5,18 +5,24 @@ using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Extensions;
+using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Common;
 using IRI.Jab.Common.Model.Spatialable;
+using IRI.Ket.DataManagement.DataSource;
+using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using static System.Windows.Media.Colors;
 
 namespace IRI.Jab.Cartography.Presenter.Map
 {
@@ -515,17 +521,17 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<Ham.SpatialBase.Point> RequestFlashPoint;
 
 
-        public Action<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry> RequestSelectGeometries;
+        public Func<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
 
-        public Action<List<SqlGeometry>, string, VisualParameters> RequestAddGeometries;
+        public Func<List<SqlGeometry>, string, VisualParameters, Task> RequestAddGeometries;
 
-        public Action<GeometryLabelPairs, string, VisualParameters, LabelParameters> RequestDrawGeometryLablePairs;
+        public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
 
         public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
 
         public Action<ILayer> RequestSetLayer;
 
-        public Action<VectorLayer> RequestAddLayer;
+        public Func<VectorLayer, Task> RequestAddLayer;
 
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
@@ -671,9 +677,18 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
 
-        public void SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometries(List<SqlGeometry> geometries)
         {
-            this.RequestSelectGeometries(geometries, visualParameters, pointSymbol);
+            Debug.WriteLine("SelectGeometries 343 start");
+            await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
+            Debug.WriteLine("SelectGeometries 343 end");
+        }
+
+        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        {
+            Debug.WriteLine("SelectGeometries 675 start [MapPresenter]");
+            await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
+            Debug.WriteLine("SelectGeometries 675 end [MapPresenter]");
         }
 
         public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
@@ -820,10 +835,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public void Zoom(SqlGeometry geometry)
         {
-            if (this.RequestZoomToFeature != null)
-            {
-                this.RequestZoomToFeature(geometry);
-            }
+            this.RequestZoomToFeature?.Invoke(geometry);
         }
 
         protected void RegisterRightClickMapOptions(FrameworkElement view, ILocateable dataContext)
@@ -836,7 +848,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestUnregisterMapOptions?.Invoke();
         }
 
-        protected async Task<Geometry> GetDrawingAsync(DrawMode mode, bool display = true)
+        public async Task<Geometry> GetDrawingAsync(DrawMode mode, bool display = true)
         {
             this.IsDrawMode = true;
 
@@ -1035,6 +1047,66 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+
+        public async virtual void AddShapefile()
+        {
+            this.IsBusy = true;
+
+            var fileName = this.RequestOpenFile("shapefile|*.shp");
+
+            if (!File.Exists(fileName))
+            {
+                this.IsBusy = false;
+
+                return;
+            }
+
+            FileInfo info = new FileInfo(fileName);
+
+            //if (info.Length / 10000.0 > 1000) //5k
+            //{
+            //    ShowMessage("حجم فایل انتخابی بیش از حد مجاز است");
+
+            //    return;
+            //}
+
+            try
+            {
+                var dataSource = await Task.Run<IFeatureDataSource>(async () =>
+                {
+                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Ham.CoordinateSystem.MapProjection.WebMercator()))
+                                    .Select(i => i.AsSqlGeometry(3857))
+                                    .Where(i => !i.IsNotValidOrEmpty())
+                                    .ToList();
+
+                    MemoryDataSource<object> source = new MemoryDataSource<object>(shp);
+
+                    return source;
+                });
+
+                var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(fileName), dataSource,
+                    new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
+                    LayerType.VectorLayer,
+                    RenderingApproach.Default,
+                    IRI.Jab.Cartography.Model.RasterizationApproach.GdiPlus, ScaleInterval.All);
+
+                this.SetLayer(vectorLayer);
+
+                this.Refresh();
+
+            }
+            catch (Exception ex)
+            {
+                ShowMessage(ex.Message);
+            }
+            finally
+            {
+                this.IsBusy = false;
+            }
+
+        }
+
+
         #endregion
 
 
@@ -1082,8 +1154,6 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 {
                     _clearMapCommand = new RelayCommand(param =>
                     {
-                        ClearMap();
-
                         this.RequestClearMap?.Invoke();
                     });
                 }
@@ -1154,7 +1224,19 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
         //
+        private RelayCommand _addShapefileCommand;
 
+        public RelayCommand AddShapefileCommand
+        {
+            get
+            {
+                if (_addShapefileCommand == null)
+                {
+                    _addShapefileCommand = new RelayCommand(param => { AddShapefile(); });
+                }
+                return _addShapefileCommand;
+            }
+        }
 
         private RelayCommand _cancelNewDrawingCommand;
 

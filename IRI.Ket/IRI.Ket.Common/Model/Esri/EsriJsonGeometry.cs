@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Model.Esri
 {
-    [DataContract]
+    //[DataContract]
+
+    [JsonObject]
     public class EsriJsonGeometry
     {
         const string pointType = "POINT";

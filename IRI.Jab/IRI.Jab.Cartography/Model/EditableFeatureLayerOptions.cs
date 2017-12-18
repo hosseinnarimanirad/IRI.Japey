@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Extensions;
 using System.Windows;
 using IRI.Jab.Common;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Jab.Cartography.Model
 {
     public class EditableFeatureLayerOptions : Notifier
     {
-        static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
-        static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
+        static readonly Brush _stroke = BrushHelper.Create("#FF1CA1E2");
+        static readonly Brush _fill = BrushHelper.Create("#661CA1E2");
 
         public bool IsNewDrawing { get; set; } = false;
 
@@ -138,6 +139,18 @@ namespace IRI.Jab.Cartography.Model
             set
             {
                 _isMeasureButtonVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _editText;
+
+        public string EditText
+        {
+            get { return _editText; }
+            set
+            {
+                _editText = value;
                 RaisePropertyChanged();
             }
         }

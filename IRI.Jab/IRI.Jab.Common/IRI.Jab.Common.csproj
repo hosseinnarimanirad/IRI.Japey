@@ -130,6 +130,8 @@
     <Compile Include="Extensions\PenExtensions.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\SpatialBaseExtensions.cs" />
+    <Compile Include="Helpers\BrushHelper.cs" />
+    <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Helpers\ImageUtility.cs" />
     <Compile Include="Helpers\RichTextBoxHelper.cs" />
     <Compile Include="Helpers\WorldfilePyramid.cs" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,19 +8,24 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Model.Esri
 {
-    [DataContract]
+    //[DataContract]
+    [JsonObject]
     public class EsriJsonSpatialreference
     {
-        [DataMember(Name = "wkid")]
+        //[DataMember(Name = "wkid")]
+        [JsonProperty("wkid")]
         public int Wkid { get; set; }
 
-        [DataMember(Name = "latestWkid")]
+        //[DataMember(Name = "latestWkid")]
+        [JsonProperty("latestWkid")]
         public int? LatestWkid { get; set; }
 
-        [DataMember(Name = "vcsWkid")]
+        //[DataMember(Name = "vcsWkid")]
+        [JsonProperty("vcsWkid")]
         public int? VcsWkid { get; set; }
 
-        [DataMember(Name = "latestVcsWkid")]
+        //[DataMember(Name = "latestVcsWkid")]
+        [JsonProperty("latestVcsWkid")]
         public int? LatestVcsWkid { get; set; }
     }
 }

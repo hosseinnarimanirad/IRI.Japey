@@ -18,12 +18,13 @@ using IRI.Ham.SpatialBase.Primitives;
 using IRI.Ham.CoordinateSystem.MapProjection;
 using IRI.Jab.Common.Extensions;
 using LineSegment = System.Windows.Media.LineSegment;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Jab.Cartography
 {
     public class PolyBezierLayer : BaseLayer
     {
-        static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
+        static readonly Brush _stroke = BrushHelper.Create("#FF1CA1E2");
 
         #region ILayerMembers
 

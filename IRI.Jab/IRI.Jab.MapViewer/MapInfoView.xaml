@@ -66,8 +66,8 @@
                 </Button>
             </DockPanel>
             <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <!--<TextBlock Text="ویرایش." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
+                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
+                    <TextBlock Text="{Binding Options.EditText}" VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
 
                     <ToggleButton Style="{StaticResource circleToggle}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
                             IsChecked="{Binding Options.IsEdgeLabelVisible, Mode=TwoWay}" Visibility="{Binding Options.IsMeasureButtonVisible, Converter={StaticResource boolToVisivilityConverter}, FallbackValue=Collapsed}">

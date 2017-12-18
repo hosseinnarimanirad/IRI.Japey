@@ -13,6 +13,7 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Common.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Cartography.Model.Symbology;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Jab.Cartography.Convertor
 {
