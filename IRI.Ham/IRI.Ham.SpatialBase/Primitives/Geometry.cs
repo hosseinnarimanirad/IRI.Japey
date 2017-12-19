@@ -1,4 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Ham.Common.Extensions;
+using IRI.Ham.SpatialBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -310,6 +311,22 @@ namespace IRI.Ham.SpatialBase.Primitives
             }
         }
 
+        public bool HasAnyPoint()
+        {
+            if (Points != null)
+            {
+                return Points.Length > 0;
+            }
+            else if (Geometries != null)
+            {
+                return Geometries.Any(g => g.HasAnyPoint());
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public IPoint GetLastPoint()
         {
             if (Points != null)
@@ -543,6 +560,102 @@ namespace IRI.Ham.SpatialBase.Primitives
             var allPoints = GetAllPoints();
 
             return new Point(allPoints.Sum(i => i.X) / allPoints.Length, allPoints.Sum(i => i.Y) / allPoints.Length);
+        }
+
+        //Returns last geometry ring or point
+        public Geometry GetLastGeometryPart()
+        {
+            if (this.Points != null)
+            {
+                return this;
+            }
+            else if (this.Geometries != null)
+            {
+                if (this.Geometries.Length > 0)
+                {
+                    return this.Geometries.Last().GetLastGeometryPart();
+                }
+            }
+
+            return null;
+        }
+
+        public void AddNewPart()
+        {
+            var currentGeometry = this.Clone();
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                    this.Geometries = new Geometry[2];
+                    this.Geometries[0] = currentGeometry;
+                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.Point);
+                    this.Points = null;
+                    this.Type = GeometryType.MultiPoint;
+                    break;
+
+                case GeometryType.LineString:
+                    this.Geometries = new Geometry[2];
+                    this.Geometries[0] = currentGeometry;
+                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.LineString);
+                    this.Points = null;
+                    this.Type = GeometryType.MultiLineString;
+                    break;
+
+                case GeometryType.Polygon:
+                    this.Geometries = new Geometry[2];
+                    this.Geometries[0] = currentGeometry;
+                    this.Geometries[1] = new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString) }, GeometryType.Polygon);
+                    this.Type = GeometryType.MultiPolygon;
+                    break;
+
+                case GeometryType.MultiPoint:
+                    var points = this.Geometries.ToList();
+                    points.Add(new Geometry(new IPoint[0], GeometryType.Point));
+                    this.Geometries = points.ToArray();
+                    break;
+
+                case GeometryType.MultiLineString:
+                    var lines = this.Geometries.ToList();
+                    lines.Add(new Geometry(new IPoint[0], GeometryType.LineString));
+                    this.Geometries = lines.ToArray();
+                    break;
+
+                case GeometryType.MultiPolygon:
+                    var polygons = this.Geometries.ToList();
+                    polygons.Add(new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString) }, GeometryType.Polygon));
+                    this.Geometries = polygons.ToArray();
+                    break;
+
+
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public void ClearEmptyGeometries()
+        {
+            if (Geometries == null)
+            {
+                return;
+            }
+
+            for (int i = Geometries.Length; i >= 0; i--)
+            {
+                if (Geometries[i].HasAnyPoint())
+                {
+                    Geometries[i].ClearEmptyGeometries();
+                }
+                else
+                {
+                    this.Geometries.RemoveAt(i);
+                }
+            }
         }
     }
 }

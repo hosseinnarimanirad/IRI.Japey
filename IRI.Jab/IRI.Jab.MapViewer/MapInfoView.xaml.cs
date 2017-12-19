@@ -81,9 +81,66 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        private PersianEnglishItem _cancelDrawingText = new PersianEnglishItem("لغو ترسیم", "Cancel Drawing", LanguageMode.Persian);
+
+        public PersianEnglishItem CancelDrawingText
+        {
+            get { return _cancelDrawingText; }
+            set
+            {
+                _cancelDrawingText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private PersianEnglishItem _finishDrawingText = new PersianEnglishItem("پایان ترسیم", "Finish Drawing", LanguageMode.Persian);
+
+        public PersianEnglishItem FinishDrawingText
+        {
+            get { return _finishDrawingText; }
+            set
+            {
+                _finishDrawingText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private PersianEnglishItem _finishDrawingPartText = new PersianEnglishItem("تکمیل بخش", "Finish Drawing Part", LanguageMode.Persian);
+
+        public PersianEnglishItem FinishDrawingPartText
+        {
+            get { return _finishDrawingPartText; }
+            set
+            {
+                _finishDrawingPartText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private PersianEnglishItem _addPointText = new PersianEnglishItem("افزودن نقطه", "Add Point", LanguageMode.Persian);
+
+        public PersianEnglishItem AddPointText
+        {
+            get { return _addPointText; }
+            set
+            {
+                _addPointText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private void SetLanguage(LanguageMode mode)
         {
-            NewDrawingText.UILanguage = mode;
+            //NewDrawingText.UILanguage = mode;
+            var properties = (typeof(MapInfoView)).GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public)
+                .Where(p => p.DeclaringType == typeof(PersianEnglishItem));
+
+            foreach (var property in properties)
+            {
+                property.SetValue(this, mode);
+            }
+
         }
 
     }

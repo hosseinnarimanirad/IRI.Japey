@@ -106,8 +106,34 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         //        this.FireIsZoomInOnDoubleClickEnabledChanged?.Invoke(value);
         //    }
+
         //}
 
+
+        private Ham.SpatialBase.Point _currentMapInfoPoint = new Ham.SpatialBase.Point(0, 0);
+
+        public Ham.SpatialBase.Point CurrentMapInfoPoint
+        {
+            get { return _currentMapInfoPoint; }
+            set
+            {
+                _currentMapInfoPoint = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private Ham.SpatialBase.Point _currentPoint;
+
+        public Ham.SpatialBase.Point CurrentPoint
+        {
+            get { return _currentPoint; }
+            set
+            {
+                _currentPoint = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private TileType _baseMapType = TileType.None;
 
@@ -542,6 +568,10 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestCancelNewDrawing;
 
+        public Action RequestFinishDrawingPart;
+
+        public Action RequestFinishNewDrawing;
+
         public Action RequestCancelEdit;
 
         public Action RequestFinishEdit;
@@ -553,6 +583,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action RequestCancelMeasure;
 
         public Action RequestGoTo;
+
+        public Action<Ham.SpatialBase.Point> RequestAddPointToNewDrawing;
 
         public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
 
@@ -869,6 +901,20 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.OnCancelNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
+        private void FinishNewDrawing()
+        {
+            this.IsDrawMode = false;
+
+            this.RequestFinishNewDrawing?.Invoke(); //this is called in MapViewer
+
+            this.OnFinishNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        }
+
+        private void FinishDrawingPart()
+        {
+            this.RequestFinishDrawingPart?.Invoke();
+        }
+
         protected void CancelEdit()
         {
             this.IsEditMode = false;
@@ -991,12 +1037,19 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public void FireMouseMove(Point currentPoint)
         {
+            this.CurrentPoint = new Ham.SpatialBase.Point(currentPoint.X, currentPoint.Y);
+
             this.OnMouseMove?.Invoke(this, currentPoint);
         }
 
         public void FireMapMouseUp(Point currentPoint)
         {
             this.OnMapMouseUp?.Invoke(this, currentPoint);
+        }
+
+        private void AddPointToNewDrawing()
+        {
+            this.RequestAddPointToNewDrawing?.Invoke(CurrentMapInfoPoint);
         }
 
         public void FireZoomChanged(double mapScale)
@@ -1252,6 +1305,34 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private RelayCommand _finishDrawingPartCommand;
+
+        public RelayCommand FinishDrawingPartCommand
+        {
+            get
+            {
+                if (_finishDrawingPartCommand == null)
+                {
+                    _finishDrawingPartCommand = new RelayCommand(param => this.FinishDrawingPart());
+                }
+                return _finishDrawingPartCommand;
+            }
+        }
+
+        private RelayCommand _finishNewDrawingCommand;
+
+        public RelayCommand FinishNewDrawingCommand
+        {
+            get
+            {
+                if (_finishNewDrawingCommand == null)
+                {
+                    _finishNewDrawingCommand = new RelayCommand(param => this.FinishNewDrawing());
+                }
+                return _finishNewDrawingCommand;
+            }
+        }
+         
         private RelayCommand _cancelEditDrawingCommand;
 
         public RelayCommand CancelEditDrawingCommand
@@ -1424,6 +1505,21 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private RelayCommand _addPointToNewDrawingCommand;
+
+        public RelayCommand AddPointToNewDrawingCommand
+        {
+            get
+            {
+                if (_addPointToNewDrawingCommand == null)
+                {
+                    _addPointToNewDrawingCommand = new RelayCommand(param => AddPointToNewDrawing());
+                }
+
+                return _addPointToNewDrawingCommand;
+            }
+        }
+
         #endregion
 
 
@@ -1442,6 +1538,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public event EventHandler OnFinishEdit;
 
         public event EventHandler OnCancelNewDrawing;
+
+        public event EventHandler OnFinishNewDrawing;
 
         public event EventHandler OnDeleteDrawing;
 

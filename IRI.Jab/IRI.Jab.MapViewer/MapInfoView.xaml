@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="window">
+        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="window"
+             >
     <UserControl.Resources>
         <Style  TargetType="{x:Type Button}" x:Key="circleButton">
             <Setter Property="Margin" Value="4"/>
@@ -59,11 +60,16 @@
                     Margin="4" Visibility="{Binding IsDrawEditMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
         <StackPanel>
             <DockPanel Margin="0" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <TextBlock Text="{Binding ElementName=window, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" 
-                            Command="{Binding CancelNewDrawingCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding FinishDrawingText.Title}"
+                            Command="{Binding FinishNewDrawingCommand}">
+                    <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                </Button>
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding CancelDrawingText.Title}"
+                            Command="{Binding CancelNewDrawingCommand}">
                     <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                 </Button>
+              
+                <TextBlock Text="{Binding ElementName=window, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
             </DockPanel>
             <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
@@ -89,6 +95,7 @@
                    
                 </StackPanel>
             </DockPanel>
+            
             <!--<DockPanel Margin="0" Visibility="{Binding IsMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
                 --><!--<TextBlock Text="اندازه‌گیری." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>--><!--
                 <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="2"
@@ -97,6 +104,20 @@
                 </Button>
              
             </DockPanel>-->
+            <DockPanel Margin="4,0">
+                <TextBlock Text="X" Foreground="White" VerticalAlignment="Center" Margin="4"/>
+                <TextBox Text="{Binding CurrentMapInfoPoint.X, Mode=TwoWay}" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center"/>
+                <TextBlock Text="Y" Foreground="White" VerticalAlignment="Center" Margin="4"/>
+                <TextBox Text="{Binding CurrentMapInfoPoint.Y, Mode=TwoWay}" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center"/>
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding AddPointText.Title}"
+                        Command="{Binding AddPointToNewDrawingCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+                    <Path Data="{StaticResource appbarAdd}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                </Button>
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding FinishDrawingPartText.Title}"
+                        Command="{Binding FinishDrawingPartCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+                    <Path Data="{StaticResource appbarVectorPenAdd}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
+                </Button>
+            </DockPanel>
         </StackPanel>
     </Border>
 </UserControl>

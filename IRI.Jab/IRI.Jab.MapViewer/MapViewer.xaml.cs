@@ -475,6 +475,10 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToExtent = (boundingBox, callback) => { this.ZoomToExtent(boundingBox, false, true, callback); };
 
+            presenter.RequestAddPointToNewDrawing = p =>
+            {
+                AddPointToNewDrawing(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+            };
 
             presenter.RequestGetDrawingAsync = (mode, display) =>
             {
@@ -482,6 +486,10 @@ namespace IRI.Jab.MapViewer
             };
 
             presenter.RequestCancelNewDrawing = () => this.CancelDrawing();
+
+            presenter.RequestFinishDrawingPart = () => this.FinishDrawingPart();
+
+            presenter.RequestFinishNewDrawing = () => this.FinishDrawing();
 
             presenter.RequestCancelEdit = () => this.CancelEditGeometry();
 
@@ -1094,9 +1102,12 @@ namespace IRI.Jab.MapViewer
             if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
 
-            this.mapView.Children.Add(path);
+            if (layer.IsValid)
+            {
+                this.mapView.Children.Add(path);
 
-            Canvas.SetZIndex(path, layer.ZIndex);
+                Canvas.SetZIndex(path, layer.ZIndex);
+            }
         }
 
         private RectangleGeometry ParseToRectangleGeometry(sb.BoundingBox mapBoundingBox)
@@ -3499,11 +3510,16 @@ namespace IRI.Jab.MapViewer
             if (e.ChangedButton != MouseButton.Left)
                 return;
 
-            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
             var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+
+            AddFirstPointForNewDrawing(webMercatorPoint);
+        }
+
+        private void AddFirstPointForNewDrawing(sb.Point webMercatorPoint)
+        {
+            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
 
             this.RemoveLayer(drawingLayer);
 
@@ -3534,6 +3550,82 @@ namespace IRI.Jab.MapViewer
 
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseUp += MapView_MouseUpForDrawing;
+            }
+        }
+
+        private void MapView_MouseDownForStartNewPart(object sender, MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("MapView_MouseDownForStartNewPart");
+
+            if (e.ChangedButton != MouseButton.Left)
+                return;
+
+            this.prevMouseLocation = (e.GetPosition(this.mapView));
+
+            var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+
+            this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+
+            //this.RemoveLayer(drawingLayer);
+
+            //this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, ScreenToMap, webMercatorPoint, drawingOptions);
+
+            //this.drawingLayer.OnRequestFinishDrawing += (s, arg) =>
+            //{
+            //    FinishDrawing();
+            //};
+
+            //this.SetLayer(drawingLayer);
+
+            //this.AddEditableFeatureLayer(drawingLayer.GetLayer());
+
+            if (this.drawMode == DrawMode.Point)
+            {
+                FinishDrawing();
+            }
+            else
+            {
+                //this.mapView.CaptureMouse();
+
+                this.drawingLayer.StartNewPart(webMercatorPoint);
+
+                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseMove += MapView_MouseMoveDrawing;
+
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+                this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
+
+                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
+                this.mapView.MouseUp += MapView_MouseUpForDrawing;
+            }
+        }
+
+        private void AddPointToNewDrawing(sb.Point webMercatorPoint)
+        {
+            if (drawingLayer == null)
+            {
+                AddFirstPointForNewDrawing(webMercatorPoint);
+            }
+            else
+            {
+                DoMoveForStartDrawing(webMercatorPoint);
+
+                AddPointForNewDrawing(webMercatorPoint);
+            }
+        }
+
+        private void FinishDrawingPart()
+        {
+            if (drawingLayer != null)
+            {
+                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+
+                this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+                this.mapView.MouseDown += MapView_MouseDownForStartNewPart;
+
+                drawingLayer.FinishDrawingPart();
             }
         }
 
@@ -3599,6 +3691,13 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        private void DoMoveForStartDrawing(sb.Point webMercatorPoint)
+        {
+            this.drawingLayer.UpdateLastVertexLocation(webMercatorPoint);
+
+            onMoveForDrawAction?.Invoke(webMercatorPoint.AsWpfPoint());
+        }
+
         private void MapView_MouseDownForPanWhileDrawing(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton != MouseButton.Left)
@@ -3628,6 +3727,11 @@ namespace IRI.Jab.MapViewer
 
             var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
 
+            AddPointForNewDrawing(webMercatorPoint);
+        }
+
+        private void AddPointForNewDrawing(sb.Point webMercatorPoint)
+        {
             if (itWasPanningWhileDrawing)
             {
                 //this.mapView.ReleaseMouseCapture();
@@ -3653,20 +3757,9 @@ namespace IRI.Jab.MapViewer
 
                 return;
             }
-
-            //if (isFinished)
-            //{
-            //    Debug.WriteLine("UP Finished");
-
-
-            //}
-            //else
-            //{
             this.drawingLayer.AddVertex(webMercatorPoint);
 
             this.drawingLayer.AddSemiVertex(webMercatorPoint);
-            //}
-
 
         }
 
@@ -3764,6 +3857,7 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
+                drawingLayer = null;
                 //this.Pan();
             }
         }

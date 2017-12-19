@@ -136,5 +136,20 @@ namespace IRI.Jab.Cartography
         {
             return this._editableFeatureLayer.GetFinalGeometry();
         }
+
+        public bool HasAnyPoint()
+        {
+            return this._editableFeatureLayer == null ? false : this._editableFeatureLayer.HasAnyPoint();
+        }
+
+        public void FinishDrawingPart()
+        {
+            this._editableFeatureLayer.FinishDrawingPart();
+        }
+
+        public void StartNewPart(sb.Point webMercatorPoint)
+        {
+            this._editableFeatureLayer.StartNewPart(webMercatorPoint);
+        }
     }
 }

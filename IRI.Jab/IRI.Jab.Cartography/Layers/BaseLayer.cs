@@ -39,7 +39,7 @@ namespace IRI.Jab.Cartography
 
         public Guid Id { get; protected set; }
 
-        public bool IsValid { get; set; }
+        public bool IsValid { get; set; } = true;
 
         public int ZIndex { get; set; }
 
@@ -88,7 +88,6 @@ namespace IRI.Jab.Cartography
 
             }
         }
-
 
         //public event EventHandler<CustomEventArgs<bool>> OnVisibilityChanged;
         private event EventHandler<CustomEventArgs<Visibility>> _onVisibilityChanged;
