@@ -8,6 +8,11 @@ using System.Text;
 using IRI.Ham.SpatialBase.CoordinateSystems;
 using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
+using IRI.Jab.Controls.Extensions;
+using IRI.Ham.SpatialBase.Primitives;
+using IRI.Ket.SpatialExtensions;
+using Microsoft.SqlServer.Types;
+using IRI.Ham.SpatialBase;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -27,6 +32,20 @@ namespace IRI.Jab.Controls.Presenter
                 RaisePropertyChanged();
             }
         }
+
+
+        private Model.CoordinateEditor.CoordinateEditor _coordinates;
+
+        public Model.CoordinateEditor.CoordinateEditor Coordinates
+        {
+            get { return _coordinates; }
+            set
+            {
+                _coordinates = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> MapFunction = p => p;
 
@@ -125,6 +144,15 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
+        public Geometry Geometry
+        {
+            set
+            {
+                this.Coordinates = value.AsCoordinateEditor();
+                 
+            }
+        }
+
         private async void DrawGeometry()
         {
             var geometry = await RequestGetGeometry?.Invoke();
@@ -134,7 +162,14 @@ namespace IRI.Jab.Controls.Presenter
                 return;
             }
 
-            FeedGeographicPoints(geometry.Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Ham.SpatialBase.Point>().ToList());
+            this.Coordinates = geometry.AsCoordinateEditor();
+
+            //FeedGeographicPoints(geometry.Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Ham.SpatialBase.Point>().ToList());
         }
+
+
+
+
+
     }
 }

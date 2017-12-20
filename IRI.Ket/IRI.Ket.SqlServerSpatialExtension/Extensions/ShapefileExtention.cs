@@ -288,5 +288,208 @@ namespace IRI.Ket.SpatialExtensions
 
             return result;
         }
+
+
+
+        public static EsriPoint AsEsriPoint(this SqlGeometry point)
+        {
+            if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
+            {
+                return new EsriPoint(double.NaN, double.NaN);
+            }
+            else
+            {
+                return new EsriPoint(point.STX.Value, point.STY.Value);
+            }
+        }
+
+
+        #region Convert To ESRI Shape
+
+
+
+        public static IShape ParseToEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
+        {
+            if (geometry.IsNotValidOrEmpty())
+            {
+                throw new NotImplementedException();
+            }
+
+            OpenGisGeometryType geometryType = geometry.GetOpenGisType();
+
+            switch (geometryType)
+            {
+                case OpenGisGeometryType.CircularString:
+                case OpenGisGeometryType.CompoundCurve:
+                case OpenGisGeometryType.CurvePolygon:
+                case OpenGisGeometryType.GeometryCollection:
+                default:
+                    throw new NotImplementedException();
+
+                case OpenGisGeometryType.LineString:
+                    return LineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiLineString:
+                    return LineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiPoint:
+                    return MultiPointToEsriMultiPoint(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiPolygon:
+                    return PolygonToEsriPolygon(geometry, mapFunction);
+
+
+                case OpenGisGeometryType.Point:
+                    return PointToEsriPoint(geometry, mapFunction);
+
+                case OpenGisGeometryType.Polygon:
+                    return PolygonToEsriPolygon(geometry, mapFunction);
+            }
+        }
+
+        //Not supportig Z and M Values
+        private static EsriPoint PointToEsriPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            var point = geometry.AsEsriPoint();
+
+            return mapFunction == null ? point : (EsriPoint)mapFunction(point);
+        }
+
+        //Not supportig Z and M Values
+        private static MultiPoint MultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
+            {
+                return new MultiPoint();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                //EsriPoint point = new EsriPoint(geometry.STGeometryN(index).STX.Value, geometry.STGeometryN(index).STY.Value);
+                var point = geometry.STGeometryN(index).AsEsriPoint();
+
+                if (mapFunction != null)
+                {
+                    point = (EsriPoint)mapFunction(point);
+                }
+
+                points.Add(point);
+            }
+
+            return new MultiPoint(points.ToArray());
+        }
+
+        //Not supporting Z and M values
+        private static PolyLine LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new PolyLine();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(geometry.STGeometryN(index), mapFunction));
+            }
+
+            return new PolyLine(points.ToArray(), parts.ToArray());
+        }
+
+
+        //Not supporting Z and M values
+        //check for cw and cww criteria
+        private static Polygon PolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new Polygon();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                SqlGeometry tempPolygon = geometry.STGeometryN(index);
+
+                var exterior = tempPolygon.STExteriorRing();
+
+                if (tempPolygon.IsNullOrEmpty() || exterior.IsNullOrEmpty())
+                    continue;
+
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(exterior, mapFunction));
+
+                for (int j = 0; j < tempPolygon.STNumInteriorRing(); j++)
+                {
+                    var interior = tempPolygon.STInteriorRingN(j + 1);
+
+                    if (interior.IsNullOrEmpty())
+                        continue;
+
+                    parts.Add(points.Count);
+
+                    points.AddRange(GetPoints(interior, mapFunction));
+                }
+            }
+
+            return new Polygon(points.ToArray(), parts.ToArray());
+        }
+
+        private static EsriPoint[] GetPoints(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            int numberOfPoints = geometry.STNumPoints().Value;
+
+            EsriPoint[] points = new EsriPoint[numberOfPoints];
+
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                int index = i + 1;
+
+                //EsriPoint point = new EsriPoint(geometry.STPointN(index).STX.Value, geometry.STPointN(index).STY.Value);
+                var point = geometry.STPointN(index).AsEsriPoint();
+
+                if (mapFunction == null)
+                {
+                    points[i] = point;
+                }
+                else
+                {
+                    points[i] = (EsriPoint)mapFunction(point);
+                }
+
+            }
+
+            return points;
+        }
+      
+        #endregion
     }
 }

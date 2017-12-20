@@ -80,6 +80,8 @@ namespace IRI.Jab.Cartography
 
         public Action<EditableFeatureLayer> RquestShowCoordinates;
 
+        public Action RequestCancelDrawing;
+
 
         public override BoundingBox Extent
         {
@@ -174,11 +176,14 @@ namespace IRI.Jab.Cartography
             MakePathGeometry();
 
             this._feature.Data = this._pathGeometry;
-
-            //if (!isNewDrawing)
+             
+            //if 
+            //{
+            //    this._feature.MouseUp += (sender, e) => { this.RegisterMapOptionsForNewPath(e); };
+            //}
             if (!Options.IsNewDrawing)
             {
-                this._feature.MouseRightButtonDown += (sender, e) => { this.RegisterMapOptionsForPath(e); };
+                this._feature.MouseRightButtonDown += (sender, e) => { this.RegisterMapOptionsForEditPath(e); };
             }
 
             var layerType = Options.IsNewDrawing ? LayerType.EditableItem : LayerType.MoveableItem | LayerType.EditableItem;
@@ -206,6 +211,11 @@ namespace IRI.Jab.Cartography
             MakePathGeometry();
 
             ReconstructLocateables();
+        }
+
+        internal void CancelDrawing()
+        {
+            this.RequestCancelDrawing?.Invoke();
         }
 
         internal void FinishDrawingPart()
@@ -544,7 +554,30 @@ namespace IRI.Jab.Cartography
 
         }
 
-        private void RegisterMapOptionsForPath(MouseButtonEventArgs e)
+        //private void RegisterMapOptionsForNewPath(MouseButtonEventArgs e)
+        //{
+        //    var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
+        //      rightToolTip: "لغو",
+        //      leftToolTip: "تکمیل",
+        //      middleToolTip: "تکمیل بخش",
+
+        //  rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+        //  leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+        //  middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCitySeattle);
+
+        //    presenter.LeftCommandAction = i => { this.RequestCancelEditing?.Invoke(this); };
+        //    presenter.RightCommandAction = i => { this.FinishEditing(); };
+        //    presenter.MiddleCommandAction = i => { this.FinishDrawingPart(); };
+
+
+        //    var view = new Common.View.MapOptions.MapThreeOptions(true);
+
+        //    view.DataContext = presenter;
+
+        //    RequestRightClickOptions?.Invoke(new Common.View.MapOptions.MapThreeOptions(false), e, presenter);
+        //}
+
+        private void RegisterMapOptionsForEditPath(MouseButtonEventArgs e)
         {
             var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
                 rightToolTip: string.Empty,
@@ -986,6 +1019,23 @@ namespace IRI.Jab.Cartography
                 return _deleteCommand;
             }
         }
+
+        private RelayCommand _cancelDrawingCommand;
+
+        public RelayCommand CancelDrawingCommand
+        {
+            get
+            {
+                if (_cancelDrawingCommand == null)
+                {
+                    _cancelDrawingCommand = new RelayCommand(param => this.CancelDrawing());
+                }
+
+                return _cancelDrawingCommand;
+            }
+        }
+
+
 
         #endregion
     }

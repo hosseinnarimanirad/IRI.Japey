@@ -2227,8 +2227,8 @@ namespace IRI.Jab.MapViewer
 
         public void RegisterRightClickContextOptions<T>(sb.Primitives.ILocateable context) where T : FrameworkElement, new()
         {
-            this.mapView.MouseUp -= mapView_MouseUp;
-            this.mapView.MouseUp += mapView_MouseUp;
+            this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
+            this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
 
             this.rightClickOptions = new T();
 
@@ -2239,8 +2239,8 @@ namespace IRI.Jab.MapViewer
 
         public void RegisterRightClickContextOptions(FrameworkElement view, sb.Primitives.ILocateable context)
         {
-            this.mapView.MouseUp -= mapView_MouseUp;
-            this.mapView.MouseUp += mapView_MouseUp;
+            this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
+            this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
 
             this.rightClickOptions = view;
 
@@ -2254,13 +2254,13 @@ namespace IRI.Jab.MapViewer
         {
             this.rightClickOptions = null;
 
-            this.mapView.MouseUp -= mapView_MouseUp;
+            this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
         }
 
-        void mapView_MouseUp(object sender, MouseButtonEventArgs e)
+        void mapView_MouseUpForRightClickOptions(object sender, MouseButtonEventArgs e)
         {
             //Do not raise when other options are available
-            if (e.OriginalSource != this.mapView)
+            if (e.OriginalSource != this.mapView && this.Status != MapStatus.Drawing)
             {
                 return;
             }
@@ -2274,31 +2274,50 @@ namespace IRI.Jab.MapViewer
 
             var screenLocation = e.GetPosition(this.mapView);
 
-            rightClickOptions = (FrameworkElement)Activator.CreateInstance(this.rightClickOptions.GetType());
+            FrameworkElement view;
 
-            this.rightClickDataContext.Location = ScreenToMap(screenLocation).AsPoint();
+            if (this.Status == MapStatus.Drawing)
+            {
+                view = GetRightClickOptionsForDraw();
 
-            rightClickOptions.DataContext = this.rightClickDataContext;
+                var context = (sb.Primitives.ILocateable)view.DataContext;
 
-            rightClickOptions.RenderTransformOrigin = new Point(rightClickOptions.Width / 2, -rightClickOptions.Height);
+                context.Location = ScreenToMap(screenLocation).AsPoint();
 
-            var scaleTransform = ((TransformGroup)(rightClickOptions.RenderTransform)).Children.First();
-            ((TransformGroup)(rightClickOptions.RenderTransform)).Children.Clear();
+                view = (FrameworkElement)Activator.CreateInstance(view.GetType());
 
-            ((TransformGroup)(rightClickOptions.RenderTransform)).Children.Add(scaleTransform);
+                view.DataContext = context;
+            }
+            else
+            {
+                view = (FrameworkElement)Activator.CreateInstance(rightClickOptions.GetType());
 
-            ((TransformGroup)(rightClickOptions.RenderTransform)).Children.Add(this.panTransformForPoints);
+                this.rightClickDataContext.Location = ScreenToMap(screenLocation).AsPoint();
 
-            ((TransformGroup)(rightClickOptions.RenderTransform)).Children.Add(
+                view.DataContext = this.rightClickDataContext;
+
+            }
+
+            view.RenderTransformOrigin = new Point(view.Width / 2, -view.Height);
+
+            var scaleTransform = ((TransformGroup)(view.RenderTransform)).Children.First();
+            ((TransformGroup)(view.RenderTransform)).Children.Clear();
+
+            ((TransformGroup)(view.RenderTransform)).Children.Add(scaleTransform);
+
+            ((TransformGroup)(view.RenderTransform)).Children.Add(this.panTransformForPoints);
+
+            ((TransformGroup)(view.RenderTransform)).Children.Add(
                 new TranslateTransform(
-                    screenLocation.X - rightClickOptions.Width / 2,
-                    screenLocation.Y - rightClickOptions.Height / 2));
+                    screenLocation.X - view.Width / 2,
+                    screenLocation.Y - view.Height / 2));
 
-            Canvas.SetZIndex(rightClickOptions, int.MaxValue);
+            Canvas.SetZIndex(view, int.MaxValue);
 
-            rightClickOptions.Tag = new LayerTag(this.MapScale) { IsTiled = false, LayerType = LayerType.RightClickOption };
+            view.Tag = new LayerTag(this.MapScale) { IsTiled = false, LayerType = LayerType.RightClickOption };
 
-            this.mapView.Children.Add(rightClickOptions);
+            this.mapView.Children.Add(view);
+
         }
 
         public void AddRightClickOptions(FrameworkElement options, MouseButtonEventArgs e, sb.Primitives.ILocateable context)
@@ -3530,6 +3549,8 @@ namespace IRI.Jab.MapViewer
                 FinishDrawing();
             };
 
+            this.drawingLayer.RequestCancelDrawing = () => this.CancelDrawing();
+
             this.SetLayer(drawingLayer);
 
             this.AddEditableFeatureLayer(drawingLayer.GetLayer());
@@ -3713,15 +3734,15 @@ namespace IRI.Jab.MapViewer
 
         private void MapView_MouseUpForDrawing(object sender, MouseButtonEventArgs e)
         {
-            if (e.RightButton == MouseButtonState.Pressed || e.ChangedButton == MouseButton.Right)
-            {
-                drawingCancellationToken.Cancel();
-            }
+            //if (e.RightButton == MouseButtonState.Pressed || e.ChangedButton == MouseButton.Right)
+            //{
+            //    drawingCancellationToken.Cancel();
+            //}
 
             if (e.ChangedButton != MouseButton.Left)
                 return;
 
-            e.Handled = true;
+            //e.Handled = true;
 
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
@@ -3761,6 +3782,42 @@ namespace IRI.Jab.MapViewer
 
             this.drawingLayer.AddSemiVertex(webMercatorPoint);
 
+        }
+
+        private FrameworkElement GetRightClickOptionsForDraw()
+        {
+            var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
+              rightToolTip: "تکمیل",
+              leftToolTip: "لغو",
+              middleToolTip: "تکمیل بخش و شروع بخش جدید",
+
+          rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+          leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+          middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenAdd);
+
+            presenter.LeftCommandAction = i =>
+            {
+                this.CancelDrawing();
+                this.RemoveRightClickOptions();
+            };
+            presenter.RightCommandAction = i =>
+            {
+                this.FinishDrawing();
+                this.RemoveRightClickOptions();
+            }
+            ;
+            presenter.MiddleCommandAction = i =>
+            {
+                this.FinishDrawingPart();
+                this.RemoveRightClickOptions();
+            };
+
+
+            var view = new Common.View.MapOptions.MapThreeOptions(true);
+
+            view.DataContext = presenter;
+
+            return view;
         }
 
         private Task<sb.Primitives.Geometry> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
@@ -3814,7 +3871,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<sb.Primitives.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false)
+        public async Task<sb.Primitives.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
         {
             try
             {
@@ -3833,7 +3890,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                return result;
+                return result.AsSqlGeometry().MakeValid().ExtractPoints();
             }
             catch (TaskCanceledException)
             {
@@ -3869,6 +3926,8 @@ namespace IRI.Jab.MapViewer
                 this.drawingCancellationToken.Cancel();
             }
         }
+
+
 
         #endregion
 

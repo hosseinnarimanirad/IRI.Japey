@@ -83,6 +83,14 @@
   <ItemGroup>
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
     <Compile Include="Common\Defaults\DefaultActions.cs" />
+    <Compile Include="Extensions\GeometryExtensions.cs" />
+    <Compile Include="Model\CoordinateEditor\CoordinateEditor.cs" />
+    <Compile Include="Model\CoordinateEditor\LineStringEditorModel.cs" />
+    <Compile Include="Model\CoordinateEditor\MultiLineStringEditorModel.cs" />
+    <Compile Include="Model\CoordinateEditor\MultiPointEditorModel.cs" />
+    <Compile Include="Model\CoordinateEditor\MultiPolygonEditorModel.cs" />
+    <Compile Include="Model\CoordinateEditor\PointEditorModel.cs" />
+    <Compile Include="Model\CoordinateEditor\PolygonEditorModel.cs" />
     <Compile Include="Model\CoordinatePanel\SpatialReferenceItem.cs" />
     <Compile Include="Model\CoordinatePanel\SpatialReferenceItems.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
@@ -92,6 +100,18 @@
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\CoordinateEditor\LineStringEditorView.xaml.cs">
+      <DependentUpon>LineStringEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CoordinateEditor\MultiLineStringEditorView.xaml.cs">
+      <DependentUpon>MultiLineStringEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CoordinateEditor\MultiPolygonEditorViewxaml.xaml.cs">
+      <DependentUpon>MultiPolygonEditorViewxaml.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CoordinateEditor\PolygonEditorView.xaml.cs">
+      <DependentUpon>PolygonEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Imaging\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
     </Compile>
@@ -152,6 +172,10 @@
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+      <Project>{BDA8CB8C-3871-4565-A766-8C3F641074EB}</Project>
+      <Name>IRI.Ket.ShapefileFormat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
       <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
       <Name>IRI.Ket.SqlServerSpatialExtension</Name>
@@ -170,6 +194,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\CoordinateEditor\LineStringEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CoordinateEditor\MultiLineStringEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CoordinateEditor\MultiPolygonEditorViewxaml.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CoordinateEditor\PolygonEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Imaging\ImageViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

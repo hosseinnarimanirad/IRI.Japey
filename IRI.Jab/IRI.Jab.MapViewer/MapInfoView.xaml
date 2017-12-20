@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="window"
-             >
+        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="window">
     <UserControl.Resources>
         <Style  TargetType="{x:Type Button}" x:Key="circleButton">
             <Setter Property="Margin" Value="4"/>

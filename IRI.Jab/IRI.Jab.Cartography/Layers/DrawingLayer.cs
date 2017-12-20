@@ -102,6 +102,8 @@ namespace IRI.Jab.Cartography
                 this.RequestFinishEditing?.Invoke(g);
             };
 
+            this._editableFeatureLayer.RequestCancelDrawing = () => { this.RequestCancelDrawing?.Invoke(); };
+
             this.VisibleRange = ScaleInterval.All;
 
             this.VisualParameters = new VisualParameters(mode == DrawMode.Polygon ? new SolidColorBrush(Colors.YellowGreen) : null, new SolidColorBrush(Colors.Blue), 3, 1);
@@ -109,6 +111,8 @@ namespace IRI.Jab.Cartography
         }
 
         public Action<sb.Primitives.Geometry> RequestFinishEditing;
+
+        public Action RequestCancelDrawing { get; set; }
 
         public event EventHandler OnRequestFinishDrawing;
 

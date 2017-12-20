@@ -112,6 +112,7 @@
     <Compile Include="Assets\ShapeStrings\IriShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
+    <Compile Include="Common\Defaults\DefaultRighClickOptions.cs" />
     <Compile Include="Event\CallbackEventArgs.cs" />
     <Compile Include="Event\ChangeEventArgs.cs" />
     <Compile Include="Event\CustomEventArgs.cs" />
