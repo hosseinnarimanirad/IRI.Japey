@@ -7,60 +7,94 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Margin="0,4">
-        <Expander Grid.Row="1" Cursor="Hand">
-            <Expander.Header>
-                <DockPanel>
-                    <Button Grid.Column="6" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" DockPanel.Dock="Right">
-                        <Path Data="{StaticResource appbarMagnifyAdd}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Button>
-                    <Button Grid.Column="6" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" DockPanel.Dock="Right">
-                        <Path Data="{StaticResource appbarCheck}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Button>
-                    <TextBlock Text="حلقه بیرونی" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                </DockPanel>
-            </Expander.Header>
-            <local:LineStringEditorView DataContext="{Binding OutterRing}"/>
-        </Expander>
+            <Expander Grid.Row="1" Cursor="Hand">
+                <Expander.Header>
+                    <DockPanel LastChildFill="True">
+                        <DockPanel.Resources>
+                            <Style TargetType="Path">
+                                <Setter Property="Width" Value="16"/>
+                                <Setter Property="Height" Value="16"/>
+                                <Setter Property="Fill" Value="{DynamicResource AccentColorBrush}"/>
+                                <Setter Property="Stretch" Value="Uniform"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="FlowDirection" Value="LeftToRight"/>
+                            </Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Width" Value="Auto"/>
+                                <Setter Property="Height" Value="Auto"/>
+                                <Setter Property="HorizontalAlignment" Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="4"/>
+                                <Setter Property="Margin" Value="2"/>
+                            </Style>
+                        </DockPanel.Resources>
+                        <Button Grid.Column="6" DockPanel.Dock="Right">
+                            <Path Data="{StaticResource appbarMagnifyAdd}"/>
+                        </Button>
+                        <Button Grid.Column="6" DockPanel.Dock="Right">
+                            <Path Data="{StaticResource appbarCheck}" />
+                        </Button>
+                        <TextBlock Text="حلقه بیرونی" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+                    </DockPanel>
+                </Expander.Header>
+                <local:LineStringEditorView DataContext="{Binding OutterRing}" Margin="10,0,0,0"/>
+            </Expander>
         </ScrollViewer>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" >
-            <Expander Header="حلقه‌های داخلی" ScrollViewer.VerticalScrollBarVisibility="Auto" Cursor="Hand">
-            <ItemsControl ItemsSource="{Binding InnerRings}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Expander ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            <Expander.Header>
-                                <DockPanel Cursor="Hand">
-                                    <Button Grid.Column="6" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" DockPanel.Dock="Right">
-                                        <Path Data="{StaticResource appbarMagnifyAdd}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Button>
-                                    <Button Grid.Column="6" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" DockPanel.Dock="Right">
-                                        <Path Data="{StaticResource appbarCheck}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Button>
-                                    <Button Grid.Column="0" Height="32" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" DockPanel.Dock="Right">
-                                        <Path Data="{StaticResource appbarDelete}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Button>
-                                    <TextBlock Text="حلقه داخلی" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                </DockPanel>
-                            </Expander.Header>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                          
-                            <local:LineStringEditorView Grid.Column="1"/>
-                        </Grid>
-                        </Expander>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Expander>
+            <Expander Header="حلقه‌های داخلی" ScrollViewer.VerticalScrollBarVisibility="Auto" Cursor="Hand" Foreground="White">
+                <ItemsControl ItemsSource="{Binding InnerRings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <Expander.Header>
+                                    <DockPanel Cursor="Hand" LastChildFill="True">
+                                        <DockPanel.Resources>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Width" Value="16"/>
+                                                <Setter Property="Height" Value="16"/>
+                                                <Setter Property="Fill" Value="{DynamicResource AccentColorBrush}"/>
+                                                <Setter Property="Stretch" Value="Uniform"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="FlowDirection" Value="LeftToRight"/>
+                                            </Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                <Setter Property="Width" Value="Auto"/>
+                                                <Setter Property="Height" Value="Auto"/>
+                                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                                <Setter Property="Padding" Value="4"/>
+                                                <Setter Property="Margin" Value="2"/>
+                                            </Style>
+                                        </DockPanel.Resources>
+                                        <Button Grid.Column="6" DockPanel.Dock="Right">
+                                            <Path Data="{StaticResource appbarMagnifyAdd}"/>
+                                        </Button>
+                                        <Button Grid.Column="6" DockPanel.Dock="Right">
+                                            <Path Data="{StaticResource appbarCheck}"/>
+                                        </Button>
+                                        <Button Grid.Column="0" DockPanel.Dock="Right">
+                                            <Path Data="{StaticResource appbarDelete}"/>
+                                        </Button>
+                                        <TextBlock Text="حلقه داخلی" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
+                                    </DockPanel>
+                                </Expander.Header>
+
+                                <local:LineStringEditorView Grid.Column="1" Margin="10,0,0,0"/>
+
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Expander>
         </ScrollViewer>
     </Grid>
 </UserControl>

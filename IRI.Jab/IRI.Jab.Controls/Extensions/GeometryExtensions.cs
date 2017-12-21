@@ -23,9 +23,17 @@ namespace IRI.Jab.Controls.Extensions
                     return new Model.CoordinateEditor.PolygonEditorModel(geometry);
 
                 case GeometryType.Point:
+                    return new Model.CoordinateEditor.PointEditorModel(geometry);
+
                 case GeometryType.MultiPoint:
+                    return new Model.CoordinateEditor.MultiPointEditorModel(geometry);
+
                 case GeometryType.MultiLineString:
+                    return new Model.CoordinateEditor.MultiLineStringEditorModel(geometry);
+
                 case GeometryType.MultiPolygon:
+                    return new Model.CoordinateEditor.MultiPolygonEditorModel(geometry);
+
                 case GeometryType.GeometryCollection:
                 case GeometryType.CircularString:
                 case GeometryType.CompoundCurve:

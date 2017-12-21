@@ -29,7 +29,7 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
 
         public MultiPolygonEditorModel(Geometry multiPolygon)
         {
-            if (multiPolygon.Type != GeometryType.MultiLineString)
+            if (multiPolygon.Type != GeometryType.MultiPolygon)
             {
                 throw new NotImplementedException();
             }

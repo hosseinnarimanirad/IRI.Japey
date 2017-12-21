@@ -3640,6 +3640,7 @@ namespace IRI.Jab.MapViewer
             if (drawingLayer != null)
             {
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
                 this.mapView.MouseMove -= MapView_MouseMoveDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
 
@@ -3656,6 +3657,8 @@ namespace IRI.Jab.MapViewer
             this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
             this.mapView.MouseMove -= MapView_MouseMoveDrawing;
             this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+
+            this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
 
             ResetMapViewEvents();
 
