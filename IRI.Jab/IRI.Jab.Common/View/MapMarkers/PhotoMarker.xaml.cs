@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for ImageMarker.xaml
     /// </summary>
-    public partial class PhotoMarker : UserControl
+    public partial class PhotoMarker : UserControl, IMapMarker
     {
         public PhotoMarker()
         {
@@ -30,6 +31,16 @@ namespace IRI.Jab.Common.View.MapMarkers
             InitializeComponent();
 
             this.image.Source = imageSource;
+        }
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
         }
     }
 }

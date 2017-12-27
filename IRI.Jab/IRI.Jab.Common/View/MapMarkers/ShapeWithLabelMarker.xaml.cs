@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IRI.Jab.Common.Model.MapMarkers;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,7 +22,7 @@ namespace IRI.Jab.Common.View.MapMarkers
     /// <summary>
     /// Interaction logic for ShapeWithLabelMarker.xaml
     /// </summary>
-    public partial class ShapeWithLabelMarker : UserControl//, INotifyPropertyChanged
+    public partial class ShapeWithLabelMarker : UserControl, IMapMarker//, INotifyPropertyChanged
     {
         //private bool _isExpanded;
 
@@ -55,6 +57,16 @@ namespace IRI.Jab.Common.View.MapMarkers
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //this.IsExpanded = !this.IsExpanded;
+        }
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
         }
     }
 }

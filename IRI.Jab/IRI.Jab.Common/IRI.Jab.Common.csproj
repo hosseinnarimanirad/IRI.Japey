@@ -144,7 +144,9 @@
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
     <Compile Include="Model\MapAction.cs" />
+    <Compile Include="Model\MapMarkers\IMapMarker.cs" />
     <Compile Include="Model\MapStatus.cs" />
+    <Compile Include="Model\NotifiablePoint.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="Event\PanEventArgs.cs" />

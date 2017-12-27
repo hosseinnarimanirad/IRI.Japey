@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for ShapeWithLabelMarker.xaml
     /// </summary>
-    public partial class LabelMarker : UserControl
+    public partial class LabelMarker : UserControl, IMapMarker
     {
          
         public string LabelValue
@@ -44,6 +45,16 @@ namespace IRI.Jab.Common.View.MapMarkers
             if (isExpandBringToFrontEnabled)
             {
                 this.Style = (Style)this.FindResource("expandableStyle");
+            }
+        }
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
             }
         }
     }

@@ -255,6 +255,14 @@ namespace IRI.Jab.Cartography
             }
         }
 
+        public void SelectLocatable(FrameworkElement element)
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Items[i].IsSelected = Items[i].Element == element;
+            }
+        }
+
         //public void BindWithFrameworkElement(FrameworkElement element)
         //{
         //    if (element is Path)

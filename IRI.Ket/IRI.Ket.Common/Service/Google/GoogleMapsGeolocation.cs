@@ -38,6 +38,27 @@ namespace IRI.Ket.Common.Service.Google
                 return new ApiResults.GoogleMapsGeolocationJsonResult() { accuracy = int.MaxValue };
             }
         }
+
+        public static async Task<ApiResults.GoogleMapsGeolocationJsonResult> GetLocation(string key, List<Wifiaccesspoint> networks)
+        {
+            try
+            {
+                var parameter = new GoogleMapsGeolocationParameters()
+                {
+                    wifiAccessPoints = networks.ToArray()
+                };
+
+                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
+
+                return await Helpers.NetHelper.HttpPost<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+
+                return new ApiResults.GoogleMapsGeolocationJsonResult() { accuracy = int.MaxValue };
+            }
+        }
     }
 }
 

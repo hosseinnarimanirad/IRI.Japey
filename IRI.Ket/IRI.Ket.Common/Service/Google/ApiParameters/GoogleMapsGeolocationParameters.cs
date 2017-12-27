@@ -100,4 +100,5 @@ namespace IRI.Ket.Common.Service.Google.ApiParameters
         [JsonProperty]
         public int signalToNoiseRatio { get; set; }
     }
+
 }

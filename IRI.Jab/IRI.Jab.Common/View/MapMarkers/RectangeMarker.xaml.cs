@@ -12,17 +12,28 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for RectangeMarker.xaml
     /// </summary>
-    public partial class RectangeMarker : UserControl
+    public partial class RectangeMarker : UserControl, IMapMarker
     {
         public RectangeMarker()
         {
             InitializeComponent();
+        }
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
         }
     }
 }

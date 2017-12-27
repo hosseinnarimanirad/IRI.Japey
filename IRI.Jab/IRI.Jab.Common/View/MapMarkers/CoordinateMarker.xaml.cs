@@ -14,13 +14,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for ShapeWithLabelMarker.xaml
     /// </summary>
-    public partial class CoordinateMarker : UserControl, INotifyPropertyChanged
+    public partial class CoordinateMarker : UserControl, INotifyPropertyChanged, IMapMarker
     {
         //public double X
         //{
@@ -158,5 +159,15 @@ namespace IRI.Jab.Common.View.MapMarkers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
+        }
     }
 }

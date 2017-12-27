@@ -191,5 +191,20 @@ namespace IRI.Jab.Cartography
         public event EventHandler OnRequestHandleMouseDown;
 
         public event EventHandler<ChangeEventArgs<Point>> OnPositionChanged;
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged();
+                this.RequestChangeIsSelected?.Invoke(value);
+            }
+        }
+
+        public Action<bool> RequestChangeIsSelected;
     }
 }

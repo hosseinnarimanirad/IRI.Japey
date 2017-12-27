@@ -115,7 +115,7 @@ namespace IRI.Jab.Cartography
         //    }
         //}
 
-        private SimplePointSymbol _pointSymbol;
+        private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
 
         public SimplePointSymbol PointSymbol
         {
@@ -204,7 +204,7 @@ namespace IRI.Jab.Cartography
 
             this.VisualParameters = parameters;
 
-            this.PointSymbol = pointSymbol;
+            this.PointSymbol = pointSymbol ?? new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
 
             //this.PositionFunc = positionFunc;
 

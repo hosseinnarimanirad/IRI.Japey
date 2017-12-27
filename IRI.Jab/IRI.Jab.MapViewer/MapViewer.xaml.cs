@@ -80,6 +80,8 @@ namespace IRI.Jab.MapViewer
 
         public event EventHandler<PointEventArgs> OnPointSelected;
 
+        public EventHandler<PointEventArgs> CurrentEditingPointChanged;
+
         public event EventHandler<MapStatusEventArgs> OnStatusChanged;
 
         public event EventHandler<MapActionEventArgs> OnMapActionChanged;
@@ -252,6 +254,19 @@ namespace IRI.Jab.MapViewer
                 _currentTileInfos = value;
 
                 this.extentManager.Update(_currentTileInfos);
+            }
+        }
+
+        private Point _currentEditingPoint;
+
+        public Point CurrentEditingPoint
+        {
+            get { return _currentEditingPoint; }
+            set
+            {
+                _currentEditingPoint = value;
+                RaisePropertyChanged();
+                this.CurrentEditingPointChanged?.Invoke(null, new PointEventArgs(value));
             }
         }
 
@@ -448,6 +463,13 @@ namespace IRI.Jab.MapViewer
             this.OnExtentChanged += (sender, e) => { presenter.FireExtentChanged(this.CurrentExtent); };
 
             this.MouseUp += (sender, e) => { presenter.FireMapMouseUp(this.CurrentPoint); };
+
+            this.CurrentEditingPointChanged += (sender, e) =>
+            {
+                presenter.CurrentMapInfoPoint.X = e.Point.X;// = new NotifiablePoint(e.Point.X, e.Point.Y);
+
+                presenter.CurrentMapInfoPoint.Y = e.Point.Y;
+            };
 
             this.OnStatusChanged += (sender, e) => { presenter.FireMapStatusChanged(e.Status); };
 
@@ -1037,76 +1059,87 @@ namespace IRI.Jab.MapViewer
 
         private async Task AddNonTiledLayer(VectorLayer layer)
         {
-            if (this.CurrentTileInfos == null)
-                return;
-
-            #region Old Tries
-
-            // Try #1
-            //var image = layer.AsDrawing(this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
-
-            ////consider if layer was Labeled
-            //var geometries = await layer.GetGeometries(this.MapScale, this.CurrentExtent);
-
-            ////Try #2
-            //var image = layer.AsBitmapUsingOpenTK(geometries, this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
-
-            //image.RenderTransform = viewTransformForPoints;
-
-            //this.mapView.Children.Add(image);
-
-            //Canvas.SetZIndex(image, this.mapView.Children.Count);
-
-            #endregion
-
-            //Try #3
-            var extent = this.CurrentExtent;
-
-            var mapScale = this.MapScale;
-
-            //consider if layer was Labeled
-            var geoLabledPairs = await layer.GetGeometryLabelPairAsync(mapScale, extent);
-
-            if (this.MapScale != mapScale || this.CurrentExtent != extent)
-                return;
-
-            var area = ParseToRectangleGeometry(extent);
-
-            Path path;
-
-            switch (layer.ToRasterTechnique)
+            try
             {
-                case RasterizationApproach.GdiPlus:
-                    path = layer.AsBitmapUsingGdiPlus(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                    break;
-                case RasterizationApproach.OpenTk:
-                    path = layer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                    break;
-                case RasterizationApproach.DrawingVisual:
-                    path = layer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                    break;
-                case RasterizationApproach.WriteableBitmap:
-                    path = layer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                    break;
-                case RasterizationApproach.StreamGeometry:
-                    path = layer.AsShape(geoLabledPairs.Geometries, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight,
-                        this.viewTransform,
-                        this.panTransformForPoints,
-                        this.MapToScreen);
-                    break;
-                case RasterizationApproach.None:
-                default:
-                    throw new NotImplementedException();
+
+                if (this.CurrentTileInfos == null)
+                    return;
+
+                #region Old Tries
+
+                // Try #1
+                //var image = layer.AsDrawing(this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
+
+                ////consider if layer was Labeled
+                //var geometries = await layer.GetGeometries(this.MapScale, this.CurrentExtent);
+
+                ////Try #2
+                //var image = layer.AsBitmapUsingOpenTK(geometries, this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
+
+                //image.RenderTransform = viewTransformForPoints;
+
+                //this.mapView.Children.Add(image);
+
+                //Canvas.SetZIndex(image, this.mapView.Children.Count);
+
+                #endregion
+
+                //Try #3
+                var extent = this.CurrentExtent;
+
+                var mapScale = this.MapScale;
+
+                //consider if layer was Labeled
+                var geoLabledPairs = await layer.GetGeometryLabelPairAsync(mapScale, extent);
+
+                if (this.MapScale != mapScale || this.CurrentExtent != extent)
+                    return;
+
+                var area = ParseToRectangleGeometry(extent);
+
+                Path path;
+
+                switch (layer.ToRasterTechnique)
+                {
+                    case RasterizationApproach.GdiPlus:
+                        path = layer.AsBitmapUsingGdiPlus(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        break;
+                    case RasterizationApproach.OpenTk:
+                        path = layer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        break;
+                    case RasterizationApproach.DrawingVisual:
+                        path = layer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        break;
+                    case RasterizationApproach.WriteableBitmap:
+                        path = layer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        break;
+                    case RasterizationApproach.StreamGeometry:
+                        path = layer.AsShape(geoLabledPairs.Geometries, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight,
+                            this.viewTransform,
+                            this.panTransformForPoints,
+                            this.MapToScreen);
+                        break;
+                    case RasterizationApproach.None:
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
+                    return;
+
+                if (layer.IsValid)
+                {
+                    this.mapView.Children.Add(path);
+
+                    Canvas.SetZIndex(path, layer.ZIndex);
+                }
+
+
             }
-
-            if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
-                return;
-
-            if (layer.IsValid)
+            catch (Exception ex)
             {
-                this.mapView.Children.Add(path);
 
-                Canvas.SetZIndex(path, layer.ZIndex);
+                throw;
             }
         }
 
@@ -1229,6 +1262,11 @@ namespace IRI.Jab.MapViewer
 
             this.startPointLocationForPan = this.prevMouseLocation;
 
+            this.CurrentEditingPoint = ScreenToMap(prevMouseLocation);
+
+            var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
+
+            layer.SelectLocatable(this.currentMoveableItem);
             //this.startMapPointLocation = ScreenToMap(this.prevMouseLocation);
         }
 
@@ -1251,6 +1289,8 @@ namespace IRI.Jab.MapViewer
                 locateable.X += currentMapLocation.X - prevMapLocation.X;
                 locateable.Y += currentMapLocation.Y - prevMapLocation.Y;
             }
+
+            this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
 
             //translateTransform.X += currentMouseLocation.X - this.prevMouseLocation.X;
 
@@ -1279,6 +1319,8 @@ namespace IRI.Jab.MapViewer
                 locateable.X += offset.X;
                 locateable.Y += offset.Y;
             }
+
+            this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
 
             this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
 
@@ -3836,7 +3878,7 @@ namespace IRI.Jab.MapViewer
             this.drawMode = mode;
 
             if (this.viewTransform == null || drawMode == DrawMode.Rectange || drawMode == DrawMode.Freehand)
-                drawingTcs.SetCanceled();
+                drawingTcs.TrySetCanceled();
 
             ResetMapViewEvents();
 
@@ -3897,7 +3939,10 @@ namespace IRI.Jab.MapViewer
             }
             catch (TaskCanceledException)
             {
-                this.Status = MapStatus.Idle;
+                if (drawingCancellationToken == null)
+                {
+                    this.Status = MapStatus.Idle;
+                }
 
                 return null;
             }
@@ -4093,6 +4138,8 @@ namespace IRI.Jab.MapViewer
                 this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
                 CurrentEditingLayer = null;
+
+                editingCancellationToken = null;
             };
 
             CurrentEditingLayer.RequestCancelEditing = (g) =>
@@ -4102,6 +4149,8 @@ namespace IRI.Jab.MapViewer
                 this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
                 CurrentEditingLayer = null;
+
+                editingCancellationToken = null;
             };
 
             this.SetLayer(CurrentEditingLayer);
@@ -4143,7 +4192,10 @@ namespace IRI.Jab.MapViewer
             }
             catch (TaskCanceledException)
             {
-                this.Status = MapStatus.Idle;
+                if (editingCancellationToken == null)
+                {
+                    this.Status = MapStatus.Idle;
+                }
 
                 return originalGeometry;
             }

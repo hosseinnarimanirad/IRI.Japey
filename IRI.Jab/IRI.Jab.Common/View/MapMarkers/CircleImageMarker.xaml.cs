@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Jab.Common.Model.MapMarkers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,14 +12,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Shapes; 
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for CircleImageMarker.xaml
     /// </summary>
-    public partial class CircleImageMarker : UserControl
+    public partial class CircleImageMarker : UserControl, IMapMarker
     {
         public CircleImageMarker()
         {
@@ -34,6 +35,17 @@ namespace IRI.Jab.Common.View.MapMarkers
             if (tooltip != null)
             {
                 this.image.ToolTip = tooltip;
+            }
+        }
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value; 
             }
         }
     }

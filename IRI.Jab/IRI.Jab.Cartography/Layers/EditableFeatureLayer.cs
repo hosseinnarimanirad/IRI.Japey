@@ -22,6 +22,7 @@ using IRI.Ket.SpatialExtensions;
 using System.Collections.ObjectModel;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Cartography
 {
@@ -176,7 +177,7 @@ namespace IRI.Jab.Cartography
             MakePathGeometry();
 
             this._feature.Data = this._pathGeometry;
-             
+
             //if 
             //{
             //    this._feature.MouseUp += (sender, e) => { this.RegisterMapOptionsForNewPath(e); };
@@ -438,6 +439,7 @@ namespace IRI.Jab.Cartography
 
             var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = webMercatorPoint.X, Y = webMercatorPoint.Y, Id = Guid.NewGuid() };
 
+            locateable.RequestChangeIsSelected = (isSelected) => ((IMapMarker)locateable.Element).IsSelected = isSelected;
 
             if (Options.IsNewDrawing)
             {

@@ -110,9 +110,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
         //}
 
 
-        private Ham.SpatialBase.Point _currentMapInfoPoint = new Ham.SpatialBase.Point(0, 0);
+        private NotifiablePoint _currentMapInfoPoint = new NotifiablePoint(0, 0);
 
-        public Ham.SpatialBase.Point CurrentMapInfoPoint
+        public NotifiablePoint CurrentMapInfoPoint
         {
             get { return _currentMapInfoPoint; }
             set
@@ -584,7 +584,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestGoTo;
 
-        public Action<Ham.SpatialBase.Point> RequestAddPointToNewDrawing;
+        public Action<Ham.SpatialBase.IPoint> RequestAddPointToNewDrawing;
 
         public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
 
@@ -981,7 +981,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public async Task<Geometry> Edit(Geometry geometry, EditableFeatureLayerOptions options)
         {
-            this.IsEditMode = true;
+            //this.IsEditMode = true;
 
             Geometry result = null;
 
@@ -994,7 +994,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 result = await new Task<Geometry>(null);
             }
 
-            this.IsEditMode = false;
+            //this.IsEditMode = false;
 
             return result;
         }

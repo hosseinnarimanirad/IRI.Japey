@@ -11,13 +11,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for MapMarker.xaml
     /// </summary>
-    public partial class MapMarker : UserControl
+    public partial class MapMarker : UserControl, IMapMarker
     {
         public MapMarker(int number)
         {
@@ -50,5 +51,15 @@ namespace IRI.Jab.Common.View.MapMarkers
             DependencyProperty.Register(nameof(Value), typeof(string), typeof(MapMarker), new PropertyMetadata(string.Empty));
 
 
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
+        }
     }
 }

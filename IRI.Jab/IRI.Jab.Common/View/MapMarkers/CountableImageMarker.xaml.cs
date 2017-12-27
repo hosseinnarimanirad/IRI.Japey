@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Jab.Common.Model.MapMarkers;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
     /// <summary>
     /// Interaction logic for ImageSymbolWithCountMarker.xaml
     /// </summary>
-    public partial class CountableImageMarker : UserControl
+    public partial class CountableImageMarker : UserControl, IMapMarker
     {
         public CountableImageMarker(ImageSource imageSource, string count)
         {
@@ -27,6 +28,16 @@ namespace IRI.Jab.Common.View.MapMarkers
             this.image.Source = imageSource;
 
             this.labelBox.Text = count;
+        }
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+            }
         }
     }
 }
