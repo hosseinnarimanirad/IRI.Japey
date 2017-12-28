@@ -110,7 +110,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
         //}
 
 
-        private NotifiablePoint _currentMapInfoPoint = new NotifiablePoint(0, 0);
+        private NotifiablePoint _currentMapInfoPoint;
 
         public NotifiablePoint CurrentMapInfoPoint
         {
@@ -460,6 +460,15 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #endregion
 
+        public MapPresenter()
+        {
+            this.CurrentMapInfoPoint = new NotifiablePoint(0, 0, param =>
+            {
+                this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Ham.SpatialBase.Point(param.X, param.Y));
+                //this.CurrentMapInfoPointChanged?.Invoke(param);
+            });
+        }
+
         #region Actions & Funcs
 
         public Action<System.Net.WebProxy> RequestSetProxy;
@@ -477,6 +486,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<MapPresenter> RegisterAction;
 
         public Action<bool> RequestSetConnectedState;
+
+        ////public Action<NotifiablePoint> CurrentMapInfoPointChanged;
 
         //public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
 
@@ -558,6 +569,24 @@ namespace IRI.Jab.Cartography.Presenter.Map
         public Action<ILayer> RequestSetLayer;
 
         public Func<VectorLayer, Task> RequestAddLayer;
+
+        public void UpdateCurrentMapInfoPoint(Point point)
+        {
+            lock (this.CurrentMapInfoPoint)
+            {
+                this.CurrentMapInfoPoint.IsRaiseCoordinateChangeEnabled = false;
+
+                this.CurrentMapInfoPoint.X = point.X;
+
+                this.CurrentMapInfoPoint.Y = point.Y;
+
+                this.CurrentMapInfoPoint.IsRaiseCoordinateChangeEnabled = true;
+            }
+
+            //RaisePropertyChanged($"{nameof(CurrentMapInfoPoint)}.{nameof(CurrentMapInfoPoint.X)}");// "CurrentMapInfoPoint.X");
+
+            //RaisePropertyChanged($"{nameof(CurrentMapInfoPoint)}.{nameof(CurrentMapInfoPoint.Y)}");
+        }
 
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
@@ -1332,7 +1361,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 return _finishNewDrawingCommand;
             }
         }
-         
+
         private RelayCommand _cancelEditDrawingCommand;
 
         public RelayCommand CancelEditDrawingCommand

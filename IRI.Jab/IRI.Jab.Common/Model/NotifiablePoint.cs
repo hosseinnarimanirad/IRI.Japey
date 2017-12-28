@@ -18,6 +18,12 @@ namespace IRI.Jab.Common.Model
             {
                 _x = value;
                 RaisePropertyChanged();
+
+                if (IsRaiseCoordinateChangeEnabled)
+                {
+                    RaiseCoordinateChangedAction?.Invoke(this);
+                }
+
             }
         }
 
@@ -31,14 +37,22 @@ namespace IRI.Jab.Common.Model
             {
                 _y = value;
                 RaisePropertyChanged();
+
+                if (IsRaiseCoordinateChangeEnabled)
+                {
+                    RaiseCoordinateChangedAction?.Invoke(this);
+                }
+                
             }
         }
 
-        public NotifiablePoint(double x, double y)
+        public NotifiablePoint(double x, double y, Action<NotifiablePoint> changeAction)
         {
             this.X = x;
 
             this.Y = y;
+
+            this.RaiseCoordinateChangedAction = changeAction;
         }
 
         public bool AreExactlyTheSame(object obj)
@@ -55,5 +69,17 @@ namespace IRI.Jab.Common.Model
         {
             throw new NotImplementedException();
         }
+
+        public Action<NotifiablePoint> RaiseCoordinateChangedAction { get; set; }
+
+        private bool _isRaiseCoordinateChangeEnabled;
+
+        public bool IsRaiseCoordinateChangeEnabled
+        {
+            get { return _isRaiseCoordinateChangeEnabled; }
+            set { _isRaiseCoordinateChangeEnabled = value; }
+        }
+
+
     }
 }

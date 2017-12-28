@@ -263,6 +263,17 @@ namespace IRI.Jab.Cartography
             }
         }
 
+        public Locateable FindSelectedLocatable()
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].IsSelected)
+                    return Items[i];
+            }
+
+            return null;
+        }
+
         //public void BindWithFrameworkElement(FrameworkElement element)
         //{
         //    if (element is Path)

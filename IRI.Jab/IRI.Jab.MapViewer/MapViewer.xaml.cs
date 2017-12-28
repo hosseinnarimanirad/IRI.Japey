@@ -466,9 +466,11 @@ namespace IRI.Jab.MapViewer
 
             this.CurrentEditingPointChanged += (sender, e) =>
             {
-                presenter.CurrentMapInfoPoint.X = e.Point.X;// = new NotifiablePoint(e.Point.X, e.Point.Y);
+                //presenter.CurrentMapInfoPoint.X = e.Point.X;// = new NotifiablePoint(e.Point.X, e.Point.Y);
 
-                presenter.CurrentMapInfoPoint.Y = e.Point.Y;
+                //presenter.CurrentMapInfoPoint.Y = e.Point.Y;
+
+                presenter.UpdateCurrentMapInfoPoint(e.Point);
             };
 
             this.OnStatusChanged += (sender, e) => { presenter.FireMapStatusChanged(e.Status); };
@@ -1261,9 +1263,7 @@ namespace IRI.Jab.MapViewer
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
             this.startPointLocationForPan = this.prevMouseLocation;
-
-            this.CurrentEditingPoint = ScreenToMap(prevMouseLocation);
-
+             
             var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
 
             layer.SelectLocatable(this.currentMoveableItem);
@@ -1288,9 +1288,10 @@ namespace IRI.Jab.MapViewer
             {
                 locateable.X += currentMapLocation.X - prevMapLocation.X;
                 locateable.Y += currentMapLocation.Y - prevMapLocation.Y;
+
+                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
             }
 
-            this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
 
             //translateTransform.X += currentMouseLocation.X - this.prevMouseLocation.X;
 
@@ -1318,9 +1319,9 @@ namespace IRI.Jab.MapViewer
             {
                 locateable.X += offset.X;
                 locateable.Y += offset.Y;
-            }
 
-            this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+            }
 
             this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
 

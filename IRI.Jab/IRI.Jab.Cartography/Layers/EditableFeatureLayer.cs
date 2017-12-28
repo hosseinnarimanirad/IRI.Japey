@@ -391,6 +391,20 @@ namespace IRI.Jab.Cartography
             }
         }
 
+        internal void ChangeCurrentEditingPoint(Point point)
+        {
+            //find selected locatable
+
+            var currentEditingPoint = this._primaryVerticesLayer.FindSelectedLocatable();
+
+            if (currentEditingPoint == null)
+                return;
+
+            currentEditingPoint.X = point.X;
+
+            currentEditingPoint.Y = point.Y;
+        }
+
         private void MakePathGeometry()
         {
             _pathGeometry.Figures.Clear();
