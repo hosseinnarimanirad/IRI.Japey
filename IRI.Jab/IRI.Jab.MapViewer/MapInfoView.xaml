@@ -106,6 +106,7 @@
             <DockPanel Margin="4,0">
                 <TextBlock Text="X" Foreground="White" VerticalAlignment="Center" Margin="4"/>
                 <TextBox Text="{Binding CurrentMapInfoPoint.X, Mode=TwoWay}" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center"/>
+                
                 <TextBlock Text="Y" Foreground="White" VerticalAlignment="Center" Margin="4"/>
                 <TextBox Text="{Binding CurrentMapInfoPoint.Y, Mode=TwoWay}" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center"/>
                 <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding AddPointText.Title}"

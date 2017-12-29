@@ -95,7 +95,7 @@ namespace IRI.Jab.Cartography.Model
             }
         }
 
-        private bool _isFinishButtonVisible;
+        private bool _isFinishButtonVisible = true;
 
         public bool IsFinishButtonVisible
         {
@@ -107,7 +107,7 @@ namespace IRI.Jab.Cartography.Model
             }
         }
 
-        private bool _isCancelButtonVisible;
+        private bool _isCancelButtonVisible = true;
 
         public bool IsCancelButtonVisible
         {

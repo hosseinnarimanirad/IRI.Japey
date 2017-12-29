@@ -133,7 +133,7 @@
     <Compile Include="View\Input\InputCoordinate.xaml.cs">
       <DependentUpon>InputCoordinate.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Map\ComplexLegend.xaml.cs">
+    <Compile Include="View\Map\Legend\ComplexLegend.xaml.cs">
       <DependentUpon>ComplexLegend.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Map\CoordinatePanelView.xaml.cs">
@@ -142,10 +142,10 @@
     <Compile Include="View\Map\FullNavigationView.xaml.cs">
       <DependentUpon>FullNavigationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Map\MapLegendView.xaml.cs">
+    <Compile Include="View\Map\Legend\MapLegendView.xaml.cs">
       <DependentUpon>MapLegendView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Map\MapLegendItem.xaml.cs">
+    <Compile Include="View\Map\Legend\MapLegendItem.xaml.cs">
       <DependentUpon>MapLegendItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Scalebar.xaml.cs">
@@ -238,7 +238,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Map\ComplexLegend.xaml">
+    <Page Include="View\Map\Legend\ComplexLegend.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -250,11 +250,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Map\MapLegendView.xaml">
+    <Page Include="View\Map\Legend\MapLegendView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Map\MapLegendItem.xaml">
+    <Page Include="View\Map\Legend\MapLegendItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -273,6 +273,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Images\" />
+    <Folder Include="View\Map\Auxilary\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
