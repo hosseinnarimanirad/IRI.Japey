@@ -8,6 +8,7 @@ using IRI.Jab.Common.Extensions;
 using System.Windows;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Helpers;
+using IRI.Jab.Common.Assets.Commands;
 
 namespace IRI.Jab.Cartography.Model
 {
@@ -178,5 +179,47 @@ namespace IRI.Jab.Cartography.Model
         public static EditableFeatureLayerOptions CreateDefault() => new EditableFeatureLayerOptions();
 
         public Action RequestHandleIsEdgeLabelVisibleChanged;
+
+        private bool _isDetailsVisible;
+
+        public bool IsDetailsVisible
+        {
+            get { return _isDetailsVisible; }
+            set
+            {
+                _isDetailsVisible = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsDetailsNotVisible));
+            }
+        }
+         
+        public bool IsDetailsNotVisible
+        {
+            get { return !IsDetailsVisible; }
+            set
+            {
+                _isDetailsVisible = !value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsDetailsVisible));
+            }
+        }
+
+
+
+        private RelayCommand _toggleDetailsVisibilityCommand;
+
+        public RelayCommand ToggleDetailsVisibilityCommand
+        {
+            get
+            {
+                if (_toggleDetailsVisibilityCommand == null)
+                {
+                    _toggleDetailsVisibilityCommand = new RelayCommand(param => { IsDetailsVisible = !IsDetailsVisible; });
+                }
+
+                return _toggleDetailsVisibilityCommand;
+            }
+        }
+
     }
 }
