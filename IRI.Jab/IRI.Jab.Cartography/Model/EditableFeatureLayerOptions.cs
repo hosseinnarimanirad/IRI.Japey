@@ -180,46 +180,11 @@ namespace IRI.Jab.Cartography.Model
 
         public Action RequestHandleIsEdgeLabelVisibleChanged;
 
-        private bool _isDetailsVisible;
-
-        public bool IsDetailsVisible
-        {
-            get { return _isDetailsVisible; }
-            set
-            {
-                _isDetailsVisible = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDetailsNotVisible));
-            }
-        }
-         
-        public bool IsDetailsNotVisible
-        {
-            get { return !IsDetailsVisible; }
-            set
-            {
-                _isDetailsVisible = !value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDetailsVisible));
-            }
-        }
+       
 
 
 
-        private RelayCommand _toggleDetailsVisibilityCommand;
-
-        public RelayCommand ToggleDetailsVisibilityCommand
-        {
-            get
-            {
-                if (_toggleDetailsVisibilityCommand == null)
-                {
-                    _toggleDetailsVisibilityCommand = new RelayCommand(param => { IsDetailsVisible = !IsDetailsVisible; });
-                }
-
-                return _toggleDetailsVisibilityCommand;
-            }
-        }
+       
 
     }
 }

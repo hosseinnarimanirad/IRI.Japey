@@ -152,8 +152,8 @@
     <Compile Include="Event\PanEventArgs.cs" />
     <Compile Include="Event\PointEventArgs.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
-    <Compile Include="Presenters\MapMarkerPresenter.cs" />
     <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
+    <Compile Include="Presenters\MapPanelPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
     <Compile Include="Presenters\Security\IHavePassword.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />

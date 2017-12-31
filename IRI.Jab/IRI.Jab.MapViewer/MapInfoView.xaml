@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="window">
+        xmlns:local="clr-namespace:IRI.Jab.MapViewer" x:Name="root">
     <UserControl.Resources>
         <Style  TargetType="{x:Type Button}" x:Key="circleButton">
             <Setter Property="Margin" Value="4"/>
@@ -59,47 +59,34 @@
                     Margin="4" Visibility="{Binding IsDrawEditMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
         <StackPanel >
             <DockPanel Margin="0" >
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding FinishDrawingText.Title}"
-                            Command="{Binding FinishNewDrawingCommand}"
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                        ToolTip="{Binding ElementName=root, Path=FinishDrawingText.Title}"
+                        Command="{Binding FinishNewDrawingCommand}"
                         Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
                     <Path Data="{StaticResource appbarCheck}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                 </Button>
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding CancelDrawingText.Title}"
-                            Command="{Binding CancelNewDrawingCommand}"
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                        ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
+                        Command="{Binding CancelNewDrawingCommand}"
                         Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
                     <Path Data="{StaticResource appbarClose}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                 </Button>
- 
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding FinishDrawingPartText.Title}"
-                        Command="{Binding FinishDrawingPartCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                        ToolTip="{Binding ElementName=root, Path=FinishDrawingPartText.Title}"
+                        Command="{Binding FinishDrawingPartCommand}" 
+                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
                     <Path Data="{StaticResource appbarVectorPenAdd}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                 </Button>
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" ToolTip="{Binding AddPointText.Title}"
-                        Command="{Binding AddPointToNewDrawingCommand}" Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
+                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                        ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
+                        Command="{Binding AddPointToNewDrawingCommand}" 
+                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}">
                     <Path Data="{StaticResource appbarAdd}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
                 </Button>
-                
-                 <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMapInfoPoint.Y, Mode=TwoWay}" BorderThickness="0" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center">
-                    <TextBox.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="3"/>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
-                <TextBlock DockPanel.Dock="Right" Text="Y" Foreground="White" VerticalAlignment="Center" Margin="4"/>
-              
-                <TextBox DockPanel.Dock="Right" Text="{Binding CurrentMapInfoPoint.X, Mode=TwoWay}" BorderThickness="0" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center">
-                    <TextBox.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="3"/>
-                        </Style>
-                    </TextBox.Resources>
-                </TextBox>
-                <TextBlock DockPanel.Dock="Right" Text="X" Foreground="White" VerticalAlignment="Center" Margin="4"/>
-
-            </DockPanel>
-            <DockPanel Margin="0" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DataContext="{Binding CurrentEditingLayer}">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Center" 
+                            DataContext="{Binding CurrentEditingLayer}"
+                            Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisivilityConverter}}">
                     <TextBlock Text="{Binding Options.EditText}" VerticalAlignment="Center" Margin="8,0" Foreground="White"/>
 
                     <ToggleButton Style="{StaticResource circleToggle}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
@@ -121,40 +108,54 @@
                     </Button>
 
                 </StackPanel>
-            </DockPanel>
+                <TextBox DockPanel.Dock="Right" BorderThickness="0" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center"
+                         Text="{Binding MapPanel.CurrentEditingZone, Mode=TwoWay}" 
+                         Visibility="{Binding IsUTMEditingMode, Converter={StaticResource boolToVisibilityConverter}}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBlock DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Center" Margin="4"
+                           Visibility="{Binding MapPanel.IsUTMEditingMode, Converter={StaticResource boolToVisibilityConverter}}"
+                           Text="{Binding ElementName=root, Path=UtmZone.Title}"/>
 
-            <!--<DockPanel Margin="0" Visibility="{Binding IsMeasureMode, Converter={StaticResource boolToVisivilityConverter}}">
-                -->
-            <!--<TextBlock Text="اندازه‌گیری." VerticalAlignment="Center" Margin="8,0" Foreground="White"/>-->
-            <!--
-                <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Center" Margin="2"
-                            Command="{Binding DeleteDrawingCommand}" >
-                    <Path Data="{StaticResource appbarDelete}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
-                </Button>
+                <TextBox DockPanel.Dock="Right" Text="{Binding MapPanel.CurrentEditingPoint.Y, Mode=TwoWay}" BorderThickness="0" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBlock DockPanel.Dock="Right" Text="Y" Foreground="White" VerticalAlignment="Center" Margin="4"/>
+
+                <TextBox DockPanel.Dock="Right" Text="{Binding MapPanel.CurrentEditingPoint.X, Mode=TwoWay}" BorderThickness="0" FlowDirection="LeftToRight" MinWidth="100" Margin="2" VerticalAlignment="Center">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBlock DockPanel.Dock="Right" Text="X" Foreground="White" VerticalAlignment="Center" Margin="4"/>
+
+            </DockPanel>
              
-            </DockPanel>-->
-            <!--<DockPanel Margin="4,0" >-->
-                
-                <!--<Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" HorizontalAlignment="Right" Margin="2"
-                        Command="{Binding ChangeEditingSpatialReferenceCommand}">
-                    <Path Data="{StaticResource appbarSettings}" Stretch="Uniform" Margin="8" Fill="White" FlowDirection="LeftToRight"/>
-                </Button>-->
-            <!--</DockPanel>-->
             <DockPanel>
                 <StackPanel>
-                    <TextBlock Text="{Binding ElementName=window, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"
+                    <TextBlock Text="{Binding ElementName=root, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"
                                Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisivilityConverter}}"/>
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding Options.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}"
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}"
                                 DataContext="{Binding CurrentEditingLayer}">
-                        <RadioButton GroupName="A" Content="{Binding GeodeticWgs84Text.Title}" Foreground="White" Margin="4,2"/>
-                        <RadioButton GroupName="A" Content="{Binding UTMText.Title}" Foreground="White" Margin="4,2"/>
+                        <RadioButton GroupName="A" Content="{Binding ElementName=root, Path=GeodeticWgs84Text.Title}" Foreground="White" Margin="4,2" IsChecked="{Binding MapPanel.IsGeodeticWgs84EditingMode, Mode=TwoWay}"/>
+                        <RadioButton GroupName="A" Content="{Binding ElementName=root, Path=UTMText.Title}" Foreground="White" Margin="4,2" IsChecked="{Binding MapPanel.IsUTMEditingMode, Mode=TwoWay}"/>
                     </StackPanel>
                 </StackPanel>
             </DockPanel>
             <Border Height="Auto" Margin="0 5 0 0" CornerRadius="0 0 15 15" 
                     DataContext="{Binding CurrentEditingLayer}" Cursor="Hand">
                 <Border.InputBindings>
-                    <MouseBinding MouseAction="LeftClick" Command="{Binding Options.ToggleDetailsVisibilityCommand}"/>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding MapPanel.ToggleDetailsVisibilityCommand}"/>
                 </Border.InputBindings>
                 <Border.Style>
                     <Style>
@@ -168,10 +169,10 @@
                 </Border.Style>
                 <StackPanel>
                     <Path Stretch="Uniform" Fill="White" FlowDirection="LeftToRight" Margin="2"  OpacityMask="Black" Height="8"
-                          Visibility="{Binding Options.IsDetailsNotVisible, Converter={StaticResource boolToVisibilityConverter}}"
+                          Visibility="{Binding MapPanel.IsDetailsNotVisible, Converter={StaticResource boolToVisibilityConverter}}"
                             Data="M39.629,19.819l-14.63,14.63L10.37,19.819c-0.976-0.976-0.976-2.559,0-3.536c0.976-0.976,2.559-0.976,3.536,0l11.093,11.093	l11.095-11.094c0.977-0.976,2.56-0.976,3.536,0C40.606,17.259,40.606,18.842,39.629,19.819z"/>
                     <Path Stretch="Uniform" Fill="White" FlowDirection="LeftToRight" Margin="2"  OpacityMask="Black" Height="8"
-                          Visibility="{Binding Options.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}"
+                          Visibility="{Binding MapPanel.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}"
                             Data="M39.631,33.716c-0.976,0.977-2.56,0.977-3.535,0L25.001,22.621L13.904,33.717c-0.488,0.487-1.128,0.731-1.768,0.731c-0.64,0-1.28-0.244-1.768-0.731c-0.976-0.978-0.976-2.56,0-3.536L25,15.551l14.63,14.629
 	C40.608,31.156,40.608,32.739,39.631,33.716z"/>
                 </StackPanel>

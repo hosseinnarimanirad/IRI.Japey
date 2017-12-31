@@ -69,6 +69,42 @@ namespace IRI.Jab.MapViewer
                 }));
 
 
+        private PersianEnglishItem _utmZone = new PersianEnglishItem("ناحیهٔ UTM", "Zone", LanguageMode.Persian);
+
+        public PersianEnglishItem UtmZone
+        {
+            get { return _utmZone; }
+            set
+            {
+                _utmZone = value;
+                RaisePropertyChanged();
+            }
+        }
+ 
+        private PersianEnglishItem _utmText = new PersianEnglishItem("سیستم تصویر UTM", "UTM", LanguageMode.Persian);
+
+        public PersianEnglishItem UTMText
+        {
+            get { return _utmText; }
+            set
+            {
+                _utmText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private PersianEnglishItem _geodeticWgs84Text= new PersianEnglishItem("سیستم مختصات ژئودتیک - WGS84", "Geodetic (WGS84)", LanguageMode.Persian);
+
+        public PersianEnglishItem GeodeticWgs84Text
+        {
+            get { return _geodeticWgs84Text; }
+            set
+            {
+                _geodeticWgs84Text = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private PersianEnglishItem _newDrawingText = new PersianEnglishItem("برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید.", "Click on the last point to finish drawing.", LanguageMode.Persian);
 
         public PersianEnglishItem NewDrawingText

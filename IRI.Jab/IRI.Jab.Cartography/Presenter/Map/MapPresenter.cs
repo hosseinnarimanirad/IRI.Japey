@@ -9,6 +9,7 @@ using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Common;
 using IRI.Jab.Common.Model.Spatialable;
+using IRI.Jab.Common.Presenters;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
@@ -109,18 +110,30 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         //}
 
+        private MapPanelPresenter _mapPanel;
 
-        private NotifiablePoint _currentMapInfoPoint;
-
-        public NotifiablePoint CurrentMapInfoPoint
+        public MapPanelPresenter MapPanel
         {
-            get { return _currentMapInfoPoint; }
+            get { return _mapPanel; }
             set
             {
-                _currentMapInfoPoint = value;
+                _mapPanel = value;
                 RaisePropertyChanged();
             }
         }
+
+
+        //private NotifiablePoint _currentMapInfoPoint;
+
+        //public NotifiablePoint CurrentEditingPoint
+        //{
+        //    get { return _currentMapInfoPoint; }
+        //    set
+        //    {
+        //        _currentMapInfoPoint = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
         private Ham.SpatialBase.Point _currentPoint;
@@ -462,11 +475,14 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public MapPresenter()
         {
-            this.CurrentMapInfoPoint = new NotifiablePoint(0, 0, param =>
-            {
-                this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Ham.SpatialBase.Point(param.X, param.Y));
-                //this.CurrentMapInfoPointChanged?.Invoke(param);
-            });
+            this.MapPanel = new MapPanelPresenter();
+            this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
+              {
+
+                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Ham.SpatialBase.Point(param.X, param.Y));
+                  this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
+
+              });
         }
 
         #region Actions & Funcs
@@ -570,22 +586,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Func<VectorLayer, Task> RequestAddLayer;
 
-        public void UpdateCurrentMapInfoPoint(Point point)
+        public void UpdateCurrentEditingPoint(Ham.SpatialBase.Point point)
         {
-            lock (this.CurrentMapInfoPoint)
-            {
-                this.CurrentMapInfoPoint.IsRaiseCoordinateChangeEnabled = false;
-
-                this.CurrentMapInfoPoint.X = point.X;
-
-                this.CurrentMapInfoPoint.Y = point.Y;
-
-                this.CurrentMapInfoPoint.IsRaiseCoordinateChangeEnabled = true;
-            }
-
-            //RaisePropertyChanged($"{nameof(CurrentMapInfoPoint)}.{nameof(CurrentMapInfoPoint.X)}");// "CurrentMapInfoPoint.X");
-
-            //RaisePropertyChanged($"{nameof(CurrentMapInfoPoint)}.{nameof(CurrentMapInfoPoint.Y)}");
+            MapPanel.UpdateCurrentEditingPoint(point);
         }
 
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
@@ -1078,7 +1081,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         private void AddPointToNewDrawing()
         {
-            this.RequestAddPointToNewDrawing?.Invoke(CurrentMapInfoPoint);
+            this.RequestAddPointToNewDrawing?.Invoke(this.MapPanel.CurrentWebMercatorEditingPoint);
         }
 
         public void FireZoomChanged(double mapScale)

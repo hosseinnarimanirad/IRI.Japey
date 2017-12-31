@@ -470,7 +470,7 @@ namespace IRI.Jab.MapViewer
 
                 //presenter.CurrentMapInfoPoint.Y = e.Point.Y;
 
-                presenter.UpdateCurrentMapInfoPoint(e.Point);
+                presenter.UpdateCurrentEditingPoint(e.Point.AsPoint());
             };
 
             this.OnStatusChanged += (sender, e) => { presenter.FireMapStatusChanged(e.Status); };
