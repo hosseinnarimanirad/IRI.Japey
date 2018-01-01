@@ -10,8 +10,8 @@
     <StackPanel>
         <Button Width="300" Content="ورود مجدد" Margin="5" Command="{Binding LogOutCommand}" Foreground="White"/>
         <ToggleButton Width="300" Content="تغییر رمز" Margin="4"  Name="showChangePassword"  Foreground="White"  BorderThickness="0"  FontWeight="Normal"
-                      FontSize="13" Background="#FFDDDDDD" IsChecked="{Binding ShowChangePassword, Mode=TwoWay}" Visibility="{Binding IsGuest, Converter={StaticResource boolToVisivilityConverter}}"/>
-        <Grid Visibility="{Binding ShowChangePassword, Converter={StaticResource boolToVisivilityConverter}}"
+                      FontSize="13" Background="#FFDDDDDD" IsChecked="{Binding ShowChangePassword, Mode=TwoWay}" Visibility="{Binding IsGuest, Converter={StaticResource boolToVisibilityConverter}}"/>
+        <Grid Visibility="{Binding ShowChangePassword, Converter={StaticResource boolToVisibilityConverter}}"
               HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

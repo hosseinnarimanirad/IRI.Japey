@@ -77,38 +77,38 @@
                 </StackPanel.Resources>
                 <Label FontWeight="Bold" Style="{StaticResource staticText}">سیستم مرجع مکانی</Label>
                 <RadioButton  Tag="ژئودتیک" Name="geodeticDms"   Checked="coordinateChanged_Checked" IsChecked="True"
-                             HorizontalContentAlignment="Stretch" Visibility="{Binding ElementName=root, Path=ShowGeodetic, Converter={StaticResource boolToVisivilityConverter}}">
+                             HorizontalContentAlignment="Stretch" Visibility="{Binding ElementName=root, Path=ShowGeodetic, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم مختصات ژئودتیک - (درجه؛ دقیقه؛ ثانیه)" Foreground="White"/>
                 </RadioButton>
                 <RadioButton  Tag="ژئودتیک" Name="geodeticDd"   Checked="coordinateChanged_Checked" 
-                             HorizontalContentAlignment="Stretch" Visibility="{Binding ElementName=root, Path=ShowGeodetic, Converter={StaticResource boolToVisivilityConverter}}">
+                             HorizontalContentAlignment="Stretch" Visibility="{Binding ElementName=root, Path=ShowGeodetic, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم مختصات ژئودتیک - (اعشار درجه)" Foreground="White"/>
                 </RadioButton>
                 <RadioButton  Tag="UTM" Name="utm"   Checked="coordinateChanged_Checked"
-                             Visibility="{Binding ElementName=root, Path=ShowUTM, Converter={StaticResource boolToVisivilityConverter}}">
+                             Visibility="{Binding ElementName=root, Path=ShowUTM, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم تصویر Univarsal Transverse Mercator - UTM" Foreground="White"/>
                 </RadioButton>
                 <RadioButton  Tag="MERCATOR" Name="mercator"   Checked="coordinateChanged_Checked" 
-                             Visibility="{Binding ElementName=root, Path=ShowMercator, Converter={StaticResource boolToVisivilityConverter}}">
+                             Visibility="{Binding ElementName=root, Path=ShowMercator, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم تصویر Mercator" Foreground="White"/>
                 </RadioButton>
                 <RadioButton  Tag="TM" Name="tm"   Checked="coordinateChanged_Checked" 
-                             Visibility="{Binding ElementName=root, Path=ShowTM, Converter={StaticResource boolToVisivilityConverter}}">
+                             Visibility="{Binding ElementName=root, Path=ShowTM, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم تصویر Transverse Mercator" Foreground="White"/>
                 </RadioButton>
                 <RadioButton  Tag="CYLINDRICAL EQUAL AREA" Name="cea"   Checked="coordinateChanged_Checked"
-                             Visibility="{Binding ElementName=root, Path=ShowCylindricalEqualArea, Converter={StaticResource boolToVisivilityConverter}}">
+                             Visibility="{Binding ElementName=root, Path=ShowCylindricalEqualArea, Converter={StaticResource boolToVisibilityConverter}}">
                     <Label Content="سیستم تصویر Cylindrical Equal Area" Foreground="White"/>
                 </RadioButton>
             </StackPanel>-->
 
             <DockPanel Grid.Row="2" VerticalAlignment="Center" MouseDown="options_MouseDown" Cursor="Hand" LastChildFill="True">
 
-                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
+                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisibilityConverter}}"   
                        Width="100" Content="{Binding SelectedItem.ZoneNumber}" Margin="00 0 10 0" Background="White" 
                        FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"
                        DockPanel.Dock="Right"/>
-                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisivilityConverter}}"   
+                <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisibilityConverter}}"   
                        Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"
                        DockPanel.Dock="Right"/>
                 <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 

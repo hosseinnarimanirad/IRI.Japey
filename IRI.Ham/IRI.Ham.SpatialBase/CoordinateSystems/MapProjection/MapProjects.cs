@@ -188,7 +188,7 @@ namespace IRI.Ham.CoordinateSystem.MapProjection
 
         public static int CalculateCentralMeridian(int zone)
         {
-            if (zone > 0 && zone <= 30)
+            if (zone >= 0 && zone <= 30)
             {
                 return 180 + zone * 6 - 3;
             }

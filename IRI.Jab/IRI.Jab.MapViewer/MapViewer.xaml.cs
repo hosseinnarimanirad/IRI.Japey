@@ -501,7 +501,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestAddPointToNewDrawing = p =>
             {
-                AddPointToNewDrawing(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+                //AddPointToNewDrawing(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+                AddPointToNewDrawing((sb.Point)p);
             };
 
             presenter.RequestGetDrawingAsync = (mode, display) =>

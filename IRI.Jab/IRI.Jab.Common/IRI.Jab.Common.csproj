@@ -87,7 +87,7 @@
     <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
     <Compile Include="Assets\Converters\BoolToBoldFontConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGeometryConverter.cs" />
-    <Compile Include="Assets\Converters\BoolToVisivilityConverter.cs" />
+    <Compile Include="Assets\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\DoubleInverseConverter.cs" />
     <Compile Include="Assets\Converters\FlowDocumentXmlToStringConverter.cs" />
     <Compile Include="Assets\Converters\IntGreaterThanIntParameterToIsEnabledConverter.cs" />

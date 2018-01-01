@@ -20,20 +20,20 @@
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
                         <Border DockPanel.Dock="Left"  Width="15" Height="15" BorderBrush="Black" BorderThickness="1"
-                            Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisivilityConverter}}">
+                            Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}">
                             <Path Margin="1" Data="{Binding Layer.Type, Converter={StaticResource iLayerToLegendConverter}}"
                                           Fill="{Binding Layer.VisualParameters.Fill}" Stroke="{Binding Layer.VisualParameters.Stroke}"
                                           StrokeThickness="{Binding Layer.VisualParameters.StrokeThickness}"
                                           HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Opacity="{Binding Layer.VisualParameters.Opacity}"/>
                         </Border>
-                        <telerik:RadSlider DockPanel.Dock="Left" MinWidth="50" Margin="2" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisivilityConverter}}"
+                        <telerik:RadSlider DockPanel.Dock="Left" MinWidth="50" Margin="2" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}"
                                         Maximum="1" Value="{Binding Layer.VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2"/>
                         <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Layer.VisualParameters.Visibility, Converter={StaticResource visibilityToBoolConverter}}" 
-                                    Margin="2" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisivilityConverter}}"/>
+                                    Margin="2" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}"/>
                         <TextBlock MinHeight="25" Text="{Binding Caption}" VerticalAlignment="Center" FontWeight="{Binding IsGroupLayer, Converter={StaticResource boolToBoldFontConverter}}"/>
                     </DockPanel>
-                    <StackPanel Grid.Row="1" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisivilityConverter}}">
+                    <StackPanel Grid.Row="1" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}">
                         <!--<Button Content="Select By Drawing" Command="{Binding SelectByDrawingCommand}" HorizontalAlignment="Right" Margin="2"/>-->
                         <Button Content="Show Table" Command="{Binding ShowAllCommand}" HorizontalAlignment="Right" Margin="2"/>
                     </StackPanel>

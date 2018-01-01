@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 namespace IRI.Jab.Common.Presenters
 {
     public class MapPanelPresenter : Notifier
@@ -112,9 +112,11 @@ namespace IRI.Jab.Common.Presenters
         private Ham.SpatialBase.Point FromWebMercator(Ham.SpatialBase.Point webMercatorPoint)
         {
             var geodetic = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
-       
+
             if (IsUTMEditingMode)
             {
+                this.CurrentEditingZone = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
+
                 return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
             }
             else if (IsGeodeticWgs84EditingMode)

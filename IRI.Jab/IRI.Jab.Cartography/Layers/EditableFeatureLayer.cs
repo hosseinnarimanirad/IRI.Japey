@@ -83,6 +83,9 @@ namespace IRI.Jab.Cartography
 
         public Action RequestCancelDrawing;
 
+        public Action<Locateable> RequestSelectedLocatableChanged;
+
+        public Action<Point> RequestZoomToPoint;
 
         public override BoundingBox Extent
         {
@@ -190,6 +193,8 @@ namespace IRI.Jab.Cartography
             var layerType = Options.IsNewDrawing ? LayerType.EditableItem : LayerType.MoveableItem | LayerType.EditableItem;
 
             this._primaryVerticesLayer = new SpecialPointLayer("vert", new List<Locateable>(), 1, ScaleInterval.All, layerType) { AlwaysTop = true };
+
+            this._primaryVerticesLayer.RequestSelectedLocatableChanged = (l) => this.RequestSelectedLocatableChanged?.Invoke(l);
 
             this._midVerticesLayer = new SpecialPointLayer("int. vert", new List<Locateable>(), .7, ScaleInterval.All, layerType) { AlwaysTop = true };
 
@@ -453,7 +458,10 @@ namespace IRI.Jab.Cartography
 
             var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = webMercatorPoint.X, Y = webMercatorPoint.Y, Id = Guid.NewGuid() };
 
-            locateable.RequestChangeIsSelected = (isSelected) => ((IMapMarker)locateable.Element).IsSelected = isSelected;
+            locateable.RequestChangeIsSelected = (isSelected) =>
+            {
+                ((IMapMarker)locateable.Element).IsSelected = isSelected;
+            };
 
             if (Options.IsNewDrawing)
             {
@@ -486,7 +494,6 @@ namespace IRI.Jab.Cartography
                 UpdateEdgeLables();
 
                 UpdateCoordinate(locateable);
-
             };
 
             return locateable;
@@ -741,6 +748,38 @@ namespace IRI.Jab.Cartography
             return false;
         }
 
+        private bool TryDeleteVertex(double x, double y, Geometry geometry, bool isRing)
+        {
+            if (geometry.Points != null)
+            {
+                var minimumPoints = isRing ? 3 : 2;
+
+                if (geometry.Points.Count() <= minimumPoints)
+                    return false;
+
+                geometry.Remove(x, y);
+
+                MakePathGeometry();
+
+                ReconstructLocateables();
+
+                return true;
+
+            }
+            else
+            {
+                for (int g = 0; g < geometry.Geometries.Length; g++)
+                {
+                    if (TryDeleteVertex(x, y, geometry.Geometries[g], geometry.Type == GeometryType.Polygon))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private void UpdateLineSegment(Point point, Point newValue)
         {
             var oldPoint = ToScreen(point.AsWpfPoint());
@@ -982,6 +1021,47 @@ namespace IRI.Jab.Cartography
             this.RequestFinishEditing?.Invoke(this._mercatorGeometry);
         }
 
+        private void GoToPreviousPoint()
+        {
+            this._primaryVerticesLayer.SelectPreviousLocatable();
+        }
+
+        private void GoToNextPoint()
+        {
+            this._primaryVerticesLayer.SelectNextLocatable();
+        }
+
+        private void TryDeleteCurrentPoint()
+        {
+            var locateable = _primaryVerticesLayer.FindSelectedLocatable();
+
+            if (locateable == null)
+                return;
+
+            this._primaryVerticesLabelLayer.Remove(locateable.Id);
+
+            TryDeleteVertex(locateable.X, locateable.Y, this._mercatorGeometry, _mercatorGeometry.Type == GeometryType.Polygon || _mercatorGeometry.Type == GeometryType.MultiPolygon);
+
+            this.RequestRefresh?.Invoke(this);
+        }
+
+        private void ZoomToCurrentPoint()
+        {
+            var current = this._primaryVerticesLayer.FindSelectedLocatable();
+
+            this.RequestZoomToPoint?.Invoke(new Point(current.X, current.Y));
+        }
+
+        private void CopyCurrentPointCoordinateToClipboard()
+        {
+            var current = this._primaryVerticesLayer.FindSelectedLocatable();
+
+            var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(current.X, current.Y));
+
+            Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
+
+        }
+
         #endregion
 
         #region Commands
@@ -1050,6 +1130,86 @@ namespace IRI.Jab.Cartography
                 return _cancelDrawingCommand;
             }
         }
+
+
+        private RelayCommand _goToPreviousPointCommand;
+
+        public RelayCommand GoToPreviousPointCommand
+        {
+            get
+            {
+                if (_goToPreviousPointCommand == null)
+                {
+                    _goToPreviousPointCommand = new RelayCommand(param => this.GoToPreviousPoint());
+                }
+
+                return _goToPreviousPointCommand;
+            }
+        }
+
+        private RelayCommand _goToNextPointCommand;
+
+        public RelayCommand GoToNextPointCommand
+        {
+            get
+            {
+                if (_goToNextPointCommand == null)
+                {
+                    _goToNextPointCommand = new RelayCommand(param => this.GoToNextPoint());
+                }
+
+                return _goToNextPointCommand;
+            }
+        }
+
+
+
+        private RelayCommand _deleteCurrentPointCommand;
+
+        public RelayCommand DeleteCurrentPointCommand
+        {
+            get
+            {
+                if (_deleteCurrentPointCommand == null)
+                {
+                    _deleteCurrentPointCommand = new RelayCommand(param => this.TryDeleteCurrentPoint());
+                }
+
+                return _deleteCurrentPointCommand;
+            }
+        }
+
+        private RelayCommand _zoomToCurrentPointCommand;
+
+        public RelayCommand ZoomToCurrentPointCommand
+        {
+            get
+            {
+                if (_zoomToCurrentPointCommand == null)
+                {
+                    _zoomToCurrentPointCommand = new RelayCommand(param => this.ZoomToCurrentPoint());
+                }
+
+                return _zoomToCurrentPointCommand;
+            }
+        }
+
+        private RelayCommand _copyCurrentPointCommand;
+
+        public RelayCommand CopyCurrentPointCommand
+        {
+            get
+            {
+                if (_copyCurrentPointCommand == null)
+                {
+                    _copyCurrentPointCommand = new RelayCommand(param => this.CopyCurrentPointCoordinateToClipboard());
+                }
+
+                return _copyCurrentPointCommand;
+            }
+        }
+
+
 
 
 

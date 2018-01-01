@@ -19,7 +19,7 @@
                 </Grid.RowDefinitions>
                 <Path Grid.Column="0" Width="28" Data="{Binding Icon}" Fill="White" Stretch="Uniform" FlowDirection="LeftToRight"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding SubTitle}" HorizontalAlignment="Center" FontSize="11"
-                           Visibility="{Binding HasSubTitle, Converter={StaticResource boolToVisivilityConverter}}"/>
+                           Visibility="{Binding HasSubTitle, Converter={StaticResource boolToVisibilityConverter}}"/>
                 <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="15" Foreground="White" Text="{Binding Title}" Grid.RowSpan="2"/>
             </Grid>
         </DataTemplate>

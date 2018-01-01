@@ -468,6 +468,15 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 _currentEditingLayer = value;
                 RaisePropertyChanged();
+
+                if (_currentEditingLayer != null)
+                {
+                    _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
+                    {
+                        this.UpdateCurrentEditingPoint(new Ham.SpatialBase.Point(l.X, l.Y));
+                    };
+                }
+
             }
         }
 
@@ -586,9 +595,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Func<VectorLayer, Task> RequestAddLayer;
 
-        public void UpdateCurrentEditingPoint(Ham.SpatialBase.Point point)
+        public void UpdateCurrentEditingPoint(Ham.SpatialBase.Point webMercatorPoint)
         {
-            MapPanel.UpdateCurrentEditingPoint(point);
+            MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
         }
 
         public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;

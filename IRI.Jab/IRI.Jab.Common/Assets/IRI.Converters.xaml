@@ -3,7 +3,7 @@
                     xmlns:converters="clr-namespace:IRI.Jab.Common.Assets.Converters">
     <converters:CountLessThanOneToBoolConverter x:Key="countLessThanOneToBoolConverter"/>
     <converters:ArabicStringToFarsiStringConverter x:Key="arabicToFarsiConverter"/>
-    <converters:BoolToVisivilityConverter x:Key="boolToVisivilityConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
     <converters:IntGreaterThanIntParameterToVisibilityConverter x:Key="intGreaterThanIntParameterToVisibilityConverter"/>
     <converters:IntGreaterThanIntParameterToIsEnabledConverter x:Key="intGreaterThanIntParameterToIsEnabledConverter"/>
     <converters:IntLessThanIntParameterToIsEnabledConverter x:Key="intLessThanIntParameterToIsEnabledConverter"/>

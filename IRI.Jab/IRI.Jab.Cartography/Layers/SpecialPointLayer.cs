@@ -261,6 +261,18 @@ namespace IRI.Jab.Cartography
             {
                 Items[i].IsSelected = Items[i].Element == element;
             }
+
+            this.RequestSelectedLocatableChanged?.Invoke(FindSelectedLocatable());
+        }
+
+        public void SelectLocatable(int index)
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                Items[i].IsSelected = index == i;
+            }
+
+            this.RequestSelectedLocatableChanged?.Invoke(FindSelectedLocatable());
         }
 
         public Locateable FindSelectedLocatable()
@@ -274,6 +286,48 @@ namespace IRI.Jab.Cartography
             return null;
         }
 
+        public int FindSelectedLocatableIndex()
+        {
+            for (int i = 0; i < Items.Count; i++)
+            {
+                if (Items[i].IsSelected)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public void SelectNextLocatable()
+        {
+            if (!(Items?.Count > 0))
+                return;
+
+            var current = FindSelectedLocatableIndex();
+
+            if (current < 0)
+                SelectLocatable(0);
+
+            var next = current + 1 < Items.Count ? current + 1 : 0;
+
+            SelectLocatable(next);
+        }
+
+        public void SelectPreviousLocatable()
+        {
+            if (!(Items?.Count > 0))
+                return;
+
+            var current = FindSelectedLocatableIndex();
+
+            if (current < 0)
+                SelectLocatable(0);
+
+            var next = current - 1 >= 0 ? current - 1 : Items.Count - 1;
+
+            SelectLocatable(next);
+        }
         //public void BindWithFrameworkElement(FrameworkElement element)
         //{
         //    if (element is Path)
@@ -484,5 +538,6 @@ namespace IRI.Jab.Cartography
         //    return image;
         //}
 
+        public Action<Locateable> RequestSelectedLocatableChanged;
     }
 }

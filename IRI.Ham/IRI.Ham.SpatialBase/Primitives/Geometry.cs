@@ -459,6 +459,23 @@ namespace IRI.Ham.SpatialBase.Primitives
             this.Points = list.ToArray();
         }
 
+        public void Remove(double x, double y)
+        {
+            var list = this.Points.ToList();
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].X == x && list[i].Y == y)
+                {
+                    list.Remove(list[i]);
+
+                    break;
+                }
+            }
+
+            this.Points = list.ToArray();
+        }
+
         //This method can better using Array.Resize()
         public void AddLastPoint(IPoint newPoint)
         {
