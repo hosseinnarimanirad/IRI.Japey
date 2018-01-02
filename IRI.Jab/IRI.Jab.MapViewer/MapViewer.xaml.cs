@@ -1264,7 +1264,7 @@ namespace IRI.Jab.MapViewer
             this.prevMouseLocation = (e.GetPosition(this.mapView));
 
             this.startPointLocationForPan = this.prevMouseLocation;
-             
+
             var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
 
             layer.SelectLocatable(this.currentMoveableItem);
@@ -3545,6 +3545,16 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+        private void CancelAsyncMapInteractions()
+        {
+            CancelDrawing();
+
+            CancelEditGeometry();
+
+            CancelGetBezier();
+
+            //CancelMeasure();
+        }
 
         #region Draw Shapes
 
@@ -3836,11 +3846,11 @@ namespace IRI.Jab.MapViewer
             var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
               rightToolTip: "تکمیل",
               leftToolTip: "لغو",
-              middleToolTip: "تکمیل بخش و شروع بخش جدید",
+              middleToolTip: "تکمیل تکه‌جاری",
 
           rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
           leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
-          middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenAdd);
+          middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheckmark);
 
             presenter.LeftCommandAction = i =>
             {
@@ -3922,10 +3932,11 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                if (drawingCancellationToken != null)
-                {
-                    drawingCancellationToken.Cancel();
-                }
+                //if (drawingCancellationToken != null)
+                //{
+                //    drawingCancellationToken.Cancel();
+                //}
+                CancelAsyncMapInteractions();
 
                 this.Status = MapStatus.Drawing;
 
@@ -4036,68 +4047,68 @@ namespace IRI.Jab.MapViewer
 
         //EditableFeatureLayer editingLayer;
 
-        public void EditPolygon(List<sb.Point> wgs84Points)
-        {
-            if (wgs84Points == null || wgs84Points.Count < 1)
-            {
-                return;
-            }
+        //public void EditPolygon(List<sb.Point> wgs84Points)
+        //{
+        //    if (wgs84Points == null || wgs84Points.Count < 1)
+        //    {
+        //        return;
+        //    }
 
-            var layer = new EditableFeatureLayer(
-                            "edit",
-                            wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
-                            this.viewTransform,
-                            ScreenToMap,
-                            sb.Primitives.GeometryType.Polygon);
+        //    var layer = new EditableFeatureLayer(
+        //                    "edit",
+        //                    wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
+        //                    this.viewTransform,
+        //                    ScreenToMap,
+        //                    sb.Primitives.GeometryType.Polygon);
 
-            layer.RequestRightClickOptions = (i1, i2, i3) =>
-            {
-                this.AddRightClickOptions(i1, i2, i3);
-            };
+        //    layer.RequestRightClickOptions = (i1, i2, i3) =>
+        //    {
+        //        this.AddRightClickOptions(i1, i2, i3);
+        //    };
 
-            layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
+        //    layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            layer.RequestRefresh = l =>
-            {
-                //this.ClearLayer(LayerType.EditableItem, false);
+        //    layer.RequestRefresh = l =>
+        //    {
+        //        //this.ClearLayer(LayerType.EditableItem, false);
 
-                this.RemoveLayer(l);
+        //        this.RemoveLayer(l);
 
-                this.SetLayer(l);
+        //        this.SetLayer(l);
 
-                AddEditableFeatureLayer(l);
-            };
+        //        AddEditableFeatureLayer(l);
+        //    };
 
-            this.SetLayer(layer);
+        //    this.SetLayer(layer);
 
-        }
+        //}
 
-        public void Edit(sb.Primitives.Geometry geometry)
-        {
-            var layer = new EditableFeatureLayer(
-                            "edit", geometry,
-                            this.viewTransform, ScreenToMap);
+        //public void Edit(sb.Primitives.Geometry geometry)
+        //{
+        //    var layer = new EditableFeatureLayer(
+        //                    "edit", geometry,
+        //                    this.viewTransform, ScreenToMap);
 
-            layer.RequestRightClickOptions = (i1, i2, i3) =>
-            {
-                this.AddRightClickOptions(i1, i2, i3);
-            };
+        //    layer.RequestRightClickOptions = (i1, i2, i3) =>
+        //    {
+        //        this.AddRightClickOptions(i1, i2, i3);
+        //    };
 
-            layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
+        //    layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
 
-            layer.RequestRefresh = l =>
-            {
-                //this.ClearLayer(LayerType.EditableItem, false);
+        //    layer.RequestRefresh = l =>
+        //    {
+        //        //this.ClearLayer(LayerType.EditableItem, false);
 
-                this.RemoveLayer(l);
+        //        this.RemoveLayer(l);
 
-                this.SetLayer(l);
+        //        this.SetLayer(l);
 
-                AddEditableFeatureLayer(l);
-            };
+        //        AddEditableFeatureLayer(l);
+        //    };
 
-            this.SetLayer(layer);
-        }
+        //    this.SetLayer(layer);
+        //}
 
         private Task<sb.Primitives.Geometry> EditGeometry(sb.Primitives.Geometry geometry, EditableFeatureLayerOptions options)
         {
@@ -4179,10 +4190,12 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                if (editingCancellationToken != null)
-                {
-                    editingCancellationToken.Cancel();
-                }
+
+                //if (editingCancellationToken != null)
+                //{
+                //    editingCancellationToken.Cancel();
+                //}
+                CancelAsyncMapInteractions();
 
                 this.Status = MapStatus.Editing;
 
@@ -4388,6 +4401,14 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        public void CancelGetBezier()
+        {
+            if (bezierCancellationToken != null)
+            {
+                bezierCancellationToken.Cancel();
+            }
+        }
+
         #endregion
 
 
@@ -4494,6 +4515,8 @@ namespace IRI.Jab.MapViewer
 
             try
             {
+                CancelAsyncMapInteractions();
+
                 CancelMeasure();
 
                 return await Measure(mode, isEdgeLabelVisible, action, _measureId);

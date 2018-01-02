@@ -29,6 +29,9 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{DynamicResource HighlightBrush}"/>
                     </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="LightGray"  />
+                    </Trigger>
                 </Style.Triggers>
             </Style>
             <Style  TargetType="{x:Type ToggleButton}" x:Key="simpleToggle">
@@ -185,10 +188,10 @@
                     </Grid.ColumnDefinitions>-->
 
                 <Expander Header="نقطه جاری"
-                          DataContext="{Binding CurrentEditingLayer}"
+                          
                           Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
 
-                    <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
                         <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
                                   x:Name="showMultiPartTools" IsChecked="True"/>-->
@@ -220,11 +223,10 @@
                         </Button>
                     </StackPanel>
                 </Expander>
-                <Expander Header="عوارض چند تکه‌ای" 
-                          DataContext="{Binding CurrentEditingLayer}" 
+                <Expander Header="عوارض چند تکه‌ای"                           
                           Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
 
-                    <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
                         <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
                                   x:Name="showMultiPartTools" IsChecked="True"/>-->
@@ -236,18 +238,18 @@
                         </Button>-->
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
                                 ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
-                                Command="{Binding CancelNewDrawingCommand}" >
+                                Command="{Binding DeleteCurrentPartCommand}" >
                             <Path Data="{StaticResource appbarDelete}" FlowDirection="LeftToRight"/>
                         </Button>
 
-                        <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2 " 
+                        <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" IsEnabled="False"
                                     ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
-                                    Command="{Binding AddPointToNewDrawingCommand}">
+                                    Command="{Binding AddNewPartCommand}">
                             <Path Data="{StaticResource appbarAdd}" FlowDirection="LeftToRight"/>
                         </Button>
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
                                 ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
-                                Command="{Binding CancelNewDrawingCommand}" >
+                                Command="{Binding ZoomToCurrentPartCommand}" >
                             <Path Data="{StaticResource appbarMagnifyAdd}" FlowDirection="LeftToRight"/>
                         </Button>
                         <!--<Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 

@@ -643,6 +643,9 @@ namespace IRI.Ket.SpatialExtensions
         //Not supporting Z and M values
         public static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<IPoint, IPoint> mapFunction)
         {
+            if (lineString.IsNull)
+                return;
+
             int numberOfPoints = lineString.STNumPoints().Value;
 
             //Point startPoint = mapFunction(new Point(lineString.STStartPoint().Long.Value, lineString.STStartPoint().Lat.Value));

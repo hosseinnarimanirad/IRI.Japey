@@ -441,6 +441,26 @@ namespace IRI.Ham.SpatialBase.Primitives
             return false; ;
         }
 
+        private bool TryFind(IPoint[] points, double x, double y, out int pointIndex)
+        {
+            pointIndex = -1;
+
+            if (points == null)
+                return false;
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (points[i].X == x && points[i].Y == y)
+                {
+                    pointIndex = i;
+
+                    return true;
+                }
+            }
+
+            return false; ;
+        }
+
         public void InsertPoint(IPoint newPoint, int index)
         {
             var points = this.Points.ToList();
@@ -533,7 +553,7 @@ namespace IRI.Ham.SpatialBase.Primitives
                     return Geometries.SelectMany(i => i.GetLineSegments(false)).ToList();
 
                 case GeometryType.MultiPolygon:
-                    return Geometries.SelectMany(i => i.GetLineSegments(true)).ToList();
+                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
 
                 case GeometryType.GeometryCollection:
                     return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
@@ -673,6 +693,112 @@ namespace IRI.Ham.SpatialBase.Primitives
                     this.Geometries.RemoveAt(i);
                 }
             }
+        }
+
+        public Geometry GetRingOrLineStringPassingPoint(double x, double y)
+        {
+            int index;
+
+            switch (this.Type)
+            {
+                case GeometryType.LineString:
+                    if (TryFind(this.Points, x, y, out index))
+                    {
+                        return this;
+                    }
+
+                    return null;
+
+                case GeometryType.Polygon:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    for (int i = 0; i < this.Geometries.Length; i++)
+                    {
+                        var geo = this.Geometries[i].GetRingOrLineStringPassingPoint(x, y);
+
+                        if (geo != null)
+                        {
+                            return geo;
+                        }
+                    }
+
+                    return null;
+
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public bool TryRemovePart(Geometry geometry)
+        {
+            if (this.Geometries?.Length > 0)
+            {
+                for (int i = 0; i < this.Geometries.Length; i++)
+                {
+                    if (this.Geometries[i] == geometry)
+                    {
+                        var temp = this.Geometries.ToList();
+
+                        temp.Remove(geometry);
+
+                        this.Geometries = temp.ToArray();
+                         
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool TryRemoveEntireRingOrLineString(double x, double y)
+        {
+            var part = this.GetRingOrLineStringPassingPoint(x, y);
+
+            if (this.Geometries?.Length > 0)
+            {
+                for (int i = 0; i < this.Geometries.Length; i++)
+                {
+                    switch (Geometries[i].Type)
+                    {
+                        case GeometryType.LineString:
+                            if (this.TryRemovePart(part))
+                                return true;
+                            break;
+
+                        case GeometryType.Polygon:
+                            for (int g = Geometries[i].Geometries.Length - 1; g >= 0; g--)
+                            {
+                                if (Geometries[i].TryRemovePart(part))
+                                {
+                                    return true;
+                                }
+                            }
+                            break;
+
+                        case GeometryType.MultiLineString:
+                        case GeometryType.MultiPoint:
+                        case GeometryType.MultiPolygon:
+                        case GeometryType.Point:
+                        case GeometryType.GeometryCollection:
+                        case GeometryType.CircularString:
+                        case GeometryType.CompoundCurve:
+                        case GeometryType.CurvePolygon:
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }
+                 
+                return false;
+            }
+
+            return false;
         }
     }
 }
