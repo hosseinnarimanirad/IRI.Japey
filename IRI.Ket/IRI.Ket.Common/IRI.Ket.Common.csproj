@@ -66,6 +66,7 @@
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Service\Google\ApiParameters\GoogleMapsGeolocationParameters.cs" />
     <Compile Include="Service\Google\ApiResults\GoogleMapsGeolocationResult.cs" />
+    <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
     <Compile Include="Service\News\LiveuaMapApiResults.cs" />
     <Compile Include="Service\News\LiveuaMapService.cs" />

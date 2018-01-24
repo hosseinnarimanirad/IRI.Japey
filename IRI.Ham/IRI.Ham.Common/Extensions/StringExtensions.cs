@@ -40,5 +40,20 @@ namespace System
                     .Replace('.', '\u066B');
         }
 
+        public static string FarsiNumbersToLatinNumbers(this string value)
+        {
+            return value.Replace('۱', '1')
+                        .Replace('۲', '2')
+                        .Replace('۳', '3')
+                        .Replace('۴', '4')
+                        .Replace('۵', '5')
+                        .Replace('۶', '6')
+                        .Replace('۷', '7')
+                        .Replace('۸', '8')
+                        .Replace('۹', '9')
+                        .Replace('۰', '0')
+                    .Replace('\u066B', '.');
+        }
+
     }
 }
