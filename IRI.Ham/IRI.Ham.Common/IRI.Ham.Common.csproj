@@ -60,8 +60,11 @@
     <Compile Include="Mathematics\Algebra\Vector.cs" />
     <Compile Include="Mathematics\Statistics\Statistic.cs" />
     <Compile Include="Mathematics\Statistics\ZeroSizeArrayException.cs" />
+    <Compile Include="Model\Bing\BingIsolineResult.cs" />
     <Compile Include="Model\Google\GoogleDistanceMatrixResult.cs" />
     <Compile Include="Model\Google\GooglePlacesResult.cs" />
+    <Compile Include="Model\Google\GoogleDirectionsResult.cs" />
+    <Compile Include="Model\Here\HereIsolineResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

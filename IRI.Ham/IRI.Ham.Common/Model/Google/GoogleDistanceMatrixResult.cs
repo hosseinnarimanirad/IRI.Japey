@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IRI.Ham.Common.Model.Google
 {
-    
+
     public class GoogleDistanceMatrixResult
     {
         public string[] destination_addresses { get; set; }
@@ -23,6 +23,7 @@ namespace IRI.Ham.Common.Model.Google
     {
         public Distance distance { get; set; }
         public Duration duration { get; set; }
+        public Duration duration_in_traffic { get; set; }
         public string status { get; set; }
     }
 

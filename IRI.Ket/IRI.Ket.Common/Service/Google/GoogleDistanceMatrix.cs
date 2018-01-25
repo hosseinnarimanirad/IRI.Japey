@@ -19,7 +19,9 @@ namespace IRI.Ket.Common.Service.Google
 
                 var destinationString = string.Join("|", destinations.Select(p => $"{p.Y.ToString(CultureInfo.InvariantCulture)},{p.X.ToString(CultureInfo.InvariantCulture)}"));
 
-                var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={originString}&destinations={destinationString}&key={key}";
+                var time = (int)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+
+                var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={originString}&destinations={destinationString}&departure_time={time}&key={key}";
 
                 return await Helpers.NetHelper.HttpGet<GoogleDistanceMatrixResult>(url);
             }
