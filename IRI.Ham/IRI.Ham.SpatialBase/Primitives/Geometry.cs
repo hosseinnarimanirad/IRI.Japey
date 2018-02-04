@@ -329,7 +329,7 @@ namespace IRI.Ham.SpatialBase.Primitives
 
         public IPoint GetLastPoint()
         {
-            if (Points != null)
+            if (Points?.Any() == true)
             {
                 return Points.Last();
             }
@@ -632,10 +632,11 @@ namespace IRI.Ham.SpatialBase.Primitives
                     break;
 
                 case GeometryType.LineString:
+                    this.Points = null;
                     this.Geometries = new Geometry[2];
                     this.Geometries[0] = currentGeometry;
                     this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.LineString);
-                    this.Points = null;
+
                     this.Type = GeometryType.MultiLineString;
                     break;
 
@@ -748,7 +749,7 @@ namespace IRI.Ham.SpatialBase.Primitives
                         temp.Remove(geometry);
 
                         this.Geometries = temp.ToArray();
-                         
+
                         return true;
                     }
                 }
@@ -794,7 +795,7 @@ namespace IRI.Ham.SpatialBase.Primitives
                             throw new NotImplementedException();
                     }
                 }
-                 
+
                 return false;
             }
 

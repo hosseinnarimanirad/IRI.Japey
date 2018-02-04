@@ -87,6 +87,8 @@ namespace IRI.Jab.Cartography
 
         public Action<Point> RequestZoomToPoint;
 
+        public Action<Geometry> RequestZoomToGeometry;
+
         public override BoundingBox Extent
         {
             get
@@ -786,16 +788,20 @@ namespace IRI.Jab.Cartography
 
             var screenPoint = ToScreen(newValue.AsWpfPoint());
 
-            for (int f = 0; f < this._pathGeometry.Figures.Count; f++)
+            for (int f = this._pathGeometry.Figures.Count - 1; f >= 0; f--)
             {
                 var dif = this._pathGeometry.Figures[f].StartPoint - oldPoint;
 
                 if (this._pathGeometry.Figures[f].StartPoint.AsPoint().AreExactlyTheSame(oldPoint.AsPoint()))
                 {
                     this._pathGeometry.Figures[f].StartPoint = screenPoint;
+
+                    break;
                 }
                 else
                 {
+                    bool updated = false;
+
                     for (int s = 0; s < this._pathGeometry.Figures[f].Segments.Count; s++)
                     {
                         var lineSegment = (this._pathGeometry.Figures[f].Segments[s] as LineSegment);
@@ -805,8 +811,15 @@ namespace IRI.Jab.Cartography
                         if (lineSegment.Point.AsPoint().AreExactlyTheSame(oldPoint.AsPoint()))
                         {
                             lineSegment.Point = screenPoint;
+
+                            updated = true;
+
+                            break;
                         }
                     }
+
+                    if (updated)
+                        break;
                 }
             }
 
@@ -1047,19 +1060,51 @@ namespace IRI.Jab.Cartography
 
         private void ZoomToCurrentPoint()
         {
-            var current = this._primaryVerticesLayer.FindSelectedLocatable();
+            var currentPoint = this._primaryVerticesLayer.FindSelectedLocatable();
 
-            this.RequestZoomToPoint?.Invoke(new Point(current.X, current.Y));
+            if (currentPoint == null)
+                return;
+
+            this.RequestZoomToPoint?.Invoke(new Point(currentPoint.X, currentPoint.Y));
         }
 
         private void CopyCurrentPointCoordinateToClipboard()
         {
-            var current = this._primaryVerticesLayer.FindSelectedLocatable();
+            var currentPoint = this._primaryVerticesLayer.FindSelectedLocatable();
 
-            var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(current.X, current.Y));
+            if (currentPoint == null)
+                return;
+
+            var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(currentPoint.X, currentPoint.Y));
 
             Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
 
+        }
+
+        private void DeleteCurrentPart()
+        {
+            var currentPoint = _primaryVerticesLayer.FindSelectedLocatable();
+
+            if (currentPoint == null)
+                return;
+
+            _mercatorGeometry.TryRemoveEntireRingOrLineString(currentPoint.X, currentPoint.Y);
+
+            ReconstructLocateables();
+
+            this.RequestRefresh?.Invoke(this);
+        }
+
+        private void ZoomToCurrentPart()
+        {
+            var currentPoint = _primaryVerticesLayer.FindSelectedLocatable();
+
+            if (currentPoint == null)
+                return;
+
+            var part = _mercatorGeometry.GetRingOrLineStringPassingPoint(currentPoint.X, currentPoint.Y);
+
+            this.RequestZoomToGeometry?.Invoke(part);
         }
 
         #endregion
@@ -1210,8 +1255,35 @@ namespace IRI.Jab.Cartography
         }
 
 
+        private RelayCommand _deleteCurrentPartCommand;
 
+        public RelayCommand DeleteCurrentPartCommand
+        {
+            get
+            {
+                if (_deleteCurrentPartCommand == null)
+                {
+                    _deleteCurrentPartCommand = new RelayCommand(param => this.DeleteCurrentPart());
+                }
 
+                return _deleteCurrentPartCommand;
+            }
+        }
+
+        private RelayCommand _zoomToCurrentPartCommand;
+
+        public RelayCommand ZoomToCurrentPartCommand
+        {
+            get
+            {
+                if (_zoomToCurrentPartCommand == null)
+                {
+                    _zoomToCurrentPartCommand = new RelayCommand(param => this.ZoomToCurrentPart());
+                }
+
+                return _zoomToCurrentPartCommand;
+            }
+        }
 
         #endregion
     }

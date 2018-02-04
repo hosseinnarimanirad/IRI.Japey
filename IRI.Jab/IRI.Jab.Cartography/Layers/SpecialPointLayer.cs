@@ -255,6 +255,23 @@ namespace IRI.Jab.Cartography
             }
         }
 
+        public void Remove(spatialBase.IPoint[] points)
+        {
+            for (int i = Items.Count - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < points.Length; j++)
+                {
+                    if (Items[i].X == points[j].X && Items[i].Y == points[j].Y)
+                    {
+                        Items.Remove(Items[i]);
+
+                        break;
+                    }
+                }
+
+            }
+        }
+
         public void SelectLocatable(FrameworkElement element)
         {
             for (int i = 0; i < Items.Count; i++)

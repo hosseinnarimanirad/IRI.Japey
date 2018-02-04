@@ -237,18 +237,18 @@
                             <Path Data="{StaticResource appbarChevronLeft}" FlowDirection="LeftToRight"/>
                         </Button>-->
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
-                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
+                                ToolTip="حذف تکهٔ جاری"
                                 Command="{Binding DeleteCurrentPartCommand}" >
                             <Path Data="{StaticResource appbarDelete}" FlowDirection="LeftToRight"/>
                         </Button>
 
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" IsEnabled="False"
-                                    ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
+                                    ToolTip="اضافه کردن تکهٔ جدید"
                                     Command="{Binding AddNewPartCommand}">
                             <Path Data="{StaticResource appbarAdd}" FlowDirection="LeftToRight"/>
                         </Button>
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
-                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
+                                ToolTip="بزرگ‌نمایی روی تکهٔ جاری"
                                 Command="{Binding ZoomToCurrentPartCommand}" >
                             <Path Data="{StaticResource appbarMagnifyAdd}" FlowDirection="LeftToRight"/>
                         </Button>

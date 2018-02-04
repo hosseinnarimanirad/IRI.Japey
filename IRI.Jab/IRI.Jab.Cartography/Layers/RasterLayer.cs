@@ -180,7 +180,7 @@ namespace IRI.Jab.Cartography
             {
                 var pyramidDataSource = this.DataSource as ZippedImagePyramidDataSource;
 
-                var tiles = pyramidDataSource.GetTiles(region.Transform( Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator), mapScale);
+                var tiles = pyramidDataSource.GetTiles(region.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
                 foreach (var item in tiles)
                 {

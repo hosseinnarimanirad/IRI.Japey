@@ -33,7 +33,8 @@ namespace IRI.Jab.Controls.View.Map
 
             e.Accepted =
                 item.Type.HasFlag(LayerType.VectorLayer) ||
-                item.Type.HasFlag(LayerType.Raster);
+                item.Type.HasFlag(LayerType.Raster) ||
+                item.Type.HasFlag(LayerType.ImagePyramid);
         }
 
     }

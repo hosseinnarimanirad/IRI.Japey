@@ -475,6 +475,16 @@ namespace IRI.Jab.Cartography.Presenter.Map
                     {
                         this.UpdateCurrentEditingPoint(new Ham.SpatialBase.Point(l.X, l.Y));
                     };
+
+                    _currentEditingLayer.RequestZoomToPoint = (p) =>
+                    {
+                        this.Zoom(IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
+                    };
+
+                    _currentEditingLayer.RequestZoomToGeometry = g =>
+                    {
+                        this.ZoomToExtent(g.GetBoundingBox());
+                    };
                 }
 
             }

@@ -53,6 +53,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var upperRight = WebMercatorUtility.LatLonToImageNumber(geographicBoundingBox.YMax, geographicBoundingBox.XMax, zoomLevel);
 
+            if (upperRight.IsNaN() || lowerLeft.IsNaN())
+            {
+                return result;
+            }
+
             for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
             {
                 for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
