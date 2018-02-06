@@ -104,7 +104,47 @@ namespace IRI.Jab.Cartography.Model.Map
         }
 
         public Action<bool> FireIsGoogleZoomLevelsEnabledChanged;
-         
+
+
+        private int _minGoogleZoomLevel = 1;
+
+        public int MinGoogleZoomLevel
+        {
+            get { return _minGoogleZoomLevel; }
+            set
+            {
+                if (value > MaxGoogleZoomLevel)
+                    return;
+
+                _minGoogleZoomLevel = value;
+                RaisePropertyChanged();
+
+                this.FireMinGoogleZoomLevelChanged?.Invoke(value);
+            }
+        }
+
+        public Action<int> FireMinGoogleZoomLevelChanged;
+
+
+        private int _maxGoogleZoomLevel = 22;
+
+        public int MaxGoogleZoomLevel
+        {
+            get { return _maxGoogleZoomLevel; }
+            set
+            {
+                if (value < MinGoogleZoomLevel)
+                    return;
+
+                _maxGoogleZoomLevel = value;
+                RaisePropertyChanged();
+
+                this.FireMaxGoogleZoomLevelChanged?.Invoke(value);
+            }
+        }
+
+        public Action<int> FireMaxGoogleZoomLevelChanged;
+
 
         public void Initialize()
         {

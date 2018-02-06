@@ -149,6 +149,38 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+
+        private int _minGoogleZoomLevel = 1;
+
+        public int MinGoogleZoomLevel
+        {
+            get { return _minGoogleZoomLevel; }
+            set
+            {
+                if (value > MaxGoogleZoomLevel)
+                    return;
+
+                _minGoogleZoomLevel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _maxGoogleZoomLevel = 22;
+
+        public int MaxGoogleZoomLevel
+        {
+            get { return _maxGoogleZoomLevel; }
+            set
+            {
+                if (value < MinGoogleZoomLevel)
+                    return;
+
+                _maxGoogleZoomLevel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         //public bool UseDefaultCursorForMapAction { get; set; } = true;
 
         public Cursor PanCursor { get; set; } = Cursors.Hand;
@@ -425,6 +457,16 @@ namespace IRI.Jab.MapViewer
             presenter.MapSettings.FireIsGoogleZoomLevelsEnabledChanged = (e) =>
             {
                 this.IsGoogleZoomLevelsEnabled = e;
+            };
+
+            presenter.MapSettings.FireMinGoogleZoomLevelChanged = (e) =>
+            {
+                this.MinGoogleZoomLevel = e;
+            };
+
+            presenter.MapSettings.FireMaxGoogleZoomLevelChanged = (e) =>
+            {
+                this.MaxGoogleZoomLevel = e;
             };
 
             presenter.MapSettings.Initialize();
@@ -3405,24 +3447,38 @@ namespace IRI.Jab.MapViewer
             this.Zoom(mapScale, new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0));
         }
 
-        public void ZoomToGoogleScale(int googleZoomLevel)
+        private int CheckGoogleZoomLevel(int googleZoomLevel)
         {
-            if (googleZoomLevel < 1 || googleZoomLevel > 23)
+            if (googleZoomLevel < this.MinGoogleZoomLevel)
             {
-                return;
+                return MinGoogleZoomLevel;
+            }
+            else if (googleZoomLevel > this.MaxGoogleZoomLevel)
+            {
+                return MaxGoogleZoomLevel;
             }
 
-            Zoom(WebMercatorUtility.GetGoogleMapScale(googleZoomLevel));
+            return googleZoomLevel;
+        }
+
+        public void ZoomToGoogleScale(int googleZoomLevel)
+        {
+            //if (googleZoomLevel < 1 || googleZoomLevel > 23)
+            //{
+            //    return;
+            //}
+
+            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)));
         }
 
         public void ZoomToGoogleScale(sb.Point center, int googleZoomLevel)
         {
-            if (googleZoomLevel < 1 || googleZoomLevel > 23)
-            {
-                return;
-            }
+            //if (googleZoomLevel < 1 || googleZoomLevel > 23)
+            //{
+            //    return;
+            //}
 
-            Zoom(WebMercatorUtility.GetGoogleMapScale(googleZoomLevel), center.AsWpfPoint());
+            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)), center.AsWpfPoint());
         }
 
         //public void Zoom(double mapScale, sb.Point mapPoint)
@@ -3498,6 +3554,8 @@ namespace IRI.Jab.MapViewer
             if (IsGoogleZoomLevelsEnabled)
             {
                 int newZoomLevel = zoomIn ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
+
+                newZoomLevel = CheckGoogleZoomLevel(newZoomLevel);
 
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), windowCenter);
             }
