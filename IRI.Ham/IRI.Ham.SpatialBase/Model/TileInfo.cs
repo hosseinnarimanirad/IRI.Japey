@@ -4,6 +4,7 @@ using IRI.Ham.SpatialBase;
 using IRI.Ham.SpatialBase.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace IRI.Ham.SpatialBase.Model
             {
                 return GeodeticExtent.Transform(i => MapProjects.GeodeticWgs84ToWebMercator(i));
             }
-        }        
+        }
 
         /// <summary>
         /// Extent based on sphere
@@ -69,7 +70,7 @@ namespace IRI.Ham.SpatialBase.Model
 
         public string ToShortString()
         {
-            return $"{ZoomLevel}, {RowNumber}, {ColumnNumber}";
+            return $"{ZoomLevel.ToString(CultureInfo.InvariantCulture)}, {RowNumber.ToString(CultureInfo.InvariantCulture)}, {ColumnNumber.ToString(CultureInfo.InvariantCulture)}";
         }
 
         public override bool Equals(object obj)
@@ -89,6 +90,6 @@ namespace IRI.Ham.SpatialBase.Model
             return $"{ZoomLevel}{RowNumber}{ColumnNumber}".GetHashCode();
         }
 
-        
+
     }
 }
