@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace System
+﻿namespace System
 {
     public static class StringExtensions
     {
@@ -55,5 +50,6 @@ namespace System
                     .Replace('\u066B', '.');
         }
 
+       
     }
 }

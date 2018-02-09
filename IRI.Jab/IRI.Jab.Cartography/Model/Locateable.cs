@@ -206,5 +206,7 @@ namespace IRI.Jab.Cartography
         }
 
         public Action<bool> RequestChangeIsSelected;
+
+        public bool CanBeUsedAsEditingPoint { get; set; } = false;
     }
 }

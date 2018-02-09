@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -15,6 +16,11 @@ namespace System
         public static double AsDouble(this double? value)
         {
             return value.HasValue ? value.Value : double.NaN;
+        }
+
+        public static string ToInvariantString(this double value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

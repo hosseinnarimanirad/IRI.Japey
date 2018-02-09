@@ -1,6 +1,7 @@
 ﻿using IRI.Ham.SpatialBase;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -48,13 +49,13 @@ namespace IRI.Ket.WorldfileFormat
         {
             StringBuilder lines = new StringBuilder();
 
-            lines.AppendLine(worldfile.XPixelSize.ToString());
-            lines.AppendLine(worldfile.YRotation.ToString());
-            lines.AppendLine(worldfile.XRotation.ToString());
-            lines.AppendLine((-worldfile.YPixelSize).ToString());
+            lines.AppendLine(worldfile.XPixelSize.ToInvariantString());
+            lines.AppendLine(worldfile.YRotation.ToInvariantString());
+            lines.AppendLine(worldfile.XRotation.ToInvariantString());
+            lines.AppendLine((-worldfile.YPixelSize).ToInvariantString());
 
-            lines.AppendLine(worldfile.CenterOfUpperLeftPixel.X.ToString());
-            lines.AppendLine(worldfile.CenterOfUpperLeftPixel.Y.ToString());
+            lines.AppendLine(worldfile.CenterOfUpperLeftPixel.X.ToInvariantString());
+            lines.AppendLine(worldfile.CenterOfUpperLeftPixel.Y.ToInvariantString());
 
             System.IO.File.WriteAllText(fileName, lines.ToString());
         }

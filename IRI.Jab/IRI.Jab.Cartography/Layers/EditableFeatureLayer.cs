@@ -304,17 +304,22 @@ namespace IRI.Jab.Cartography
                     _edgeLabelLayer.Items.Add(item);
                 }
 
-                var point = this._mercatorGeometry?.GetMeanOrLastPoint();
+            }
 
-                if (point != null && Options.IsMeasureVisible)
+            var point = this._mercatorGeometry?.GetMeanOrLastPoint();
+
+            if (point != null && Options.IsMeasureVisible)
+            {
+                var element = new Common.View.MapMarkers.RectangleLabelMarker(MeasureLabel);
+
+                var offset = _screenToMap(20);
+
+                _edgeLabelLayer.Items.Add(new Locateable(Model.AncherFunctionHandlers.BottomCenter)
                 {
-                    var element = new Common.View.MapMarkers.RectangleLabelMarker(MeasureLabel);
-
-                    var offset = _screenToMap(20);
-
-                    _edgeLabelLayer.Items.Add(new Locateable(Model.AncherFunctionHandlers.BottomCenter) { Element = element, X = point.X + offset, Y = point.Y + offset });
-
-                }
+                    Element = element,
+                    X = point.X + offset,
+                    Y = point.Y + offset
+                });
             }
 
             //if (Options.IsAutoMeasureEnabled && _mercatorGeometry.IsRingBase())
@@ -458,7 +463,14 @@ namespace IRI.Jab.Cartography
 
             var element = Options.MakePrimaryVertex();
 
-            var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter) { Element = element, X = webMercatorPoint.X, Y = webMercatorPoint.Y, Id = Guid.NewGuid() };
+            var locateable = new Locateable(Model.AncherFunctionHandlers.CenterCenter)
+            {
+                Element = element,
+                X = webMercatorPoint.X,
+                Y = webMercatorPoint.Y,
+                Id = Guid.NewGuid(),
+                CanBeUsedAsEditingPoint = true
+            };
 
             locateable.RequestChangeIsSelected = (isSelected) =>
             {
@@ -482,6 +494,10 @@ namespace IRI.Jab.Cartography
             {
                 element.MouseRightButtonDown += (sender, e) =>
                 {
+                    //locateable.IsSelected = true;
+
+                    this._primaryVerticesLayer.SelectLocatable(locateable.Element);
+
                     RegisterMapOptionsForVertices(e, webMercatorPoint, locateable);
                 };
             }
@@ -575,7 +591,7 @@ namespace IRI.Jab.Cartography
                 this.RemoveMapOptions();
             };
 
-            RequestRightClickOptions?.Invoke(new Common.View.MapOptions.MapThreeOptions(), e, presenter);
+            RequestRightClickOptions?.Invoke(new Common.View.MapOptions.MapThreeOptions(false), e, presenter);
 
         }
 

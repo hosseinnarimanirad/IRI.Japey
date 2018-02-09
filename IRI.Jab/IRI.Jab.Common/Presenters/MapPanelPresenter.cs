@@ -1,4 +1,5 @@
 ﻿using IRI.Ham.SpatialBase;
+using IRI.Ham.SpatialBase.CoordinateSystems;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using System;
@@ -35,6 +36,24 @@ namespace IRI.Jab.Common.Presenters
             }
         }
 
+        private SpatialReferenceType _spatialReference = SpatialReferenceType.Geodetic;
+
+        public SpatialReferenceType SpatialReference
+        {
+            get { return _spatialReference; }
+            set
+            {
+                var currentPoint = CurrentWebMercatorEditingPoint;
+
+                _spatialReference = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsUTMEditingMode));
+                RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
+
+                UpdateCurrentEditingPoint(currentPoint);
+            }
+        }
+
 
         private bool _isUTMEditingMode;
 
@@ -43,8 +62,19 @@ namespace IRI.Jab.Common.Presenters
             get { return _isUTMEditingMode; }
             set
             {
+                if (_isUTMEditingMode == value)
+                {
+                    return;
+                }
+                 
+                if (CurrentEditingPoint != null && value)
+                {
+                    this.SpatialReference = SpatialReferenceType.UTM;
+                }
+
                 _isUTMEditingMode = value;
                 RaisePropertyChanged();
+
             }
         }
 
@@ -56,8 +86,19 @@ namespace IRI.Jab.Common.Presenters
             get { return _isGeodeticWgs84EditingMode; }
             set
             {
+                if (_isGeodeticWgs84EditingMode == value)
+                {
+                    return;
+                }
+                 
+                if (CurrentEditingPoint != null && value)
+                {
+                    this.SpatialReference = SpatialReferenceType.Geodetic;
+                }
+
                 _isGeodeticWgs84EditingMode = value;
                 RaisePropertyChanged();
+
             }
         }
 
@@ -91,13 +132,13 @@ namespace IRI.Jab.Common.Presenters
         {
             get
             {
-                if (IsUTMEditingMode)
+                if (this.SpatialReference == SpatialReferenceType.UTM)
                 {
                     var geodetic = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
 
                     return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
                 }
-                else if (IsGeodeticWgs84EditingMode)
+                else if (this.SpatialReference == SpatialReferenceType.Geodetic)
                 {
                     return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
                 }
@@ -113,13 +154,13 @@ namespace IRI.Jab.Common.Presenters
         {
             var geodetic = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
 
-            if (IsUTMEditingMode)
+            if (this.SpatialReference == SpatialReferenceType.UTM)
             {
                 this.CurrentEditingZone = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
 
                 return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
             }
-            else if (IsGeodeticWgs84EditingMode)
+            else if (this.SpatialReference == SpatialReferenceType.Geodetic)
             {
                 return geodetic;
             }

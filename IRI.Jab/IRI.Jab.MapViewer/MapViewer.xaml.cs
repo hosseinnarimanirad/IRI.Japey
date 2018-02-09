@@ -1239,7 +1239,7 @@ namespace IRI.Jab.MapViewer
 
             AddComplexLayer(layer.GetVertices(), false);
 
-            if (layer.Options.IsEdgeLabelVisible)
+            if (layer.Options.IsMeasureVisible)
             {
                 AddComplexLayer(layer.GetEdgeLengthes(), true);
             }
@@ -1332,7 +1332,10 @@ namespace IRI.Jab.MapViewer
                 locateable.X += currentMapLocation.X - prevMapLocation.X;
                 locateable.Y += currentMapLocation.Y - prevMapLocation.Y;
 
-                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+                if (locateable.CanBeUsedAsEditingPoint)
+                {
+                    this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+                }                
             }
 
 
@@ -1363,7 +1366,11 @@ namespace IRI.Jab.MapViewer
                 locateable.X += offset.X;
                 locateable.Y += offset.Y;
 
-                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+                if (locateable.CanBeUsedAsEditingPoint)
+                {
+                    this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+                }
+                
             }
 
             this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;

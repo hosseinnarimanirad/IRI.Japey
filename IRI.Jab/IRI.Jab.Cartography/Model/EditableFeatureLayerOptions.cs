@@ -19,6 +19,7 @@ namespace IRI.Jab.Cartography.Model
 
         public bool IsNewDrawing { get; set; } = false;
 
+
         private bool _isFeatureInfoVisible;
 
         public bool IsFeatureInfoVisible
@@ -57,6 +58,7 @@ namespace IRI.Jab.Cartography.Model
                 this.RequestHandleIsEdgeLabelVisibleChanged?.Invoke();
             }
         }
+
 
         private bool _isMeasureVisible = false;
 
