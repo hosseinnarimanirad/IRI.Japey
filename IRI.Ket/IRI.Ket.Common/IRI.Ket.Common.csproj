@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\ISecurityRepository.cs" />
+    <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Service\Bing\BingMap.cs" />
     <Compile Include="Service\Google\ApiParameters\GoogleMapsGeolocationParameters.cs" />
@@ -72,6 +73,9 @@
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
     <Compile Include="Service\Google\GoogleServiceUtility.cs" />
     <Compile Include="Service\Here\HereRoutingApi.cs" />
+    <Compile Include="Service\Mapzen\MapzenResult.cs" />
+    <Compile Include="Service\Mapzen\MapzenRouteCostingModel.cs" />
+    <Compile Include="Service\Mapzen\MapzenService.cs" />
     <Compile Include="Service\News\LiveuaMapApiResults.cs" />
     <Compile Include="Service\News\LiveuaMapService.cs" />
     <Compile Include="Service\Oxford\OxfordDictionaryResult.cs" />

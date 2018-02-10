@@ -306,10 +306,13 @@ namespace IRI.Jab.Cartography
 
             }
 
-            var point = this._mercatorGeometry?.GetMeanOrLastPoint();
-
-            if (point != null && Options.IsMeasureVisible)
+            if (Options.IsMeasureVisible)
             {
+                var point = this._mercatorGeometry?.GetMeanOrLastPoint();
+
+                if (point == null)
+                    return;
+
                 var element = new Common.View.MapMarkers.RectangleLabelMarker(MeasureLabel);
 
                 var offset = _screenToMap(20);

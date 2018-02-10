@@ -1,5 +1,6 @@
 ﻿using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 using IRI.Ham.SpatialBase.Primitives;
+using IRI.Ket.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,31 +78,31 @@ namespace IRI.Ket.Common.Service.News
         public string symbolpath { get; set; }
         public string fillcolor { get; set; }
         public string fillopacity { get; set; }
-        public float[][] points { get; set; }
+        public double[][] points { get; set; }
 
         public Geometry ParseToGeometry(GeometryType geometryType)
         {
-            return new Geometry(this.points.Select(p => ParseToGeometry(p)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
-
+            //return new Geometry(this.points.Select(p => ParseToGeometry(p)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
+            return GeometryHelper.ParseToGeometry(this.points, geometryType);
         }
 
-        private Geometry ParseToGeometry(float[] values)
-        {
-            if (values == null || values.Count() % 2 != 0)
-            {
-                throw new NotImplementedException();
-            }
+        //private Geometry ParseToGeometry(float[] values)
+        //{
+        //    if (values == null || values.Count() % 2 != 0)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
 
-            List<IRI.Ham.SpatialBase.Point> result = new List<IRI.Ham.SpatialBase.Point>(values.Length / 2);
+        //    List<IRI.Ham.SpatialBase.Point> result = new List<IRI.Ham.SpatialBase.Point>(values.Length / 2);
 
-            for (int i = 0; i < values.Length - 1; i += 2)
-            {
-                result.Add(new IRI.Ham.SpatialBase.Point(values[i + 1], values[i]));
-            }
+        //    for (int i = 0; i < values.Length - 1; i += 2)
+        //    {
+        //        result.Add(new IRI.Ham.SpatialBase.Point(values[i + 1], values[i]));
+        //    }
 
-            return new Geometry(result.ToArray(), GeometryType.LineString, SridHelper.GeodeticWGS84);
+        //    return new Geometry(result.ToArray(), GeometryType.LineString, SridHelper.GeodeticWGS84);
 
-        }
+        //}
     }
 
 }

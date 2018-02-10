@@ -101,20 +101,20 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static async Task<T> HttpPost<T>(string address, object data) where T : class
+        public static async Task<T> HttpPost<T>(string address, object data, string contentType = "application/json") where T : class
         {
             try
             {
                 WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
-
+                
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
                     NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
                 });
-
+                 
                 var stringResult = await client.UploadStringTaskAsync(address, stringData);
 
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
