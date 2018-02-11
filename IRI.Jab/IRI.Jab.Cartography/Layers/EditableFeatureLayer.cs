@@ -32,6 +32,8 @@ namespace IRI.Jab.Cartography
         //static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
         string _delete = "حذف";
         string _copy = "کپی";
+        string _finish = "اتمام";
+        string _cancel = "لغو";
         string _displayCoordinates = "نمایش مختصات";
 
 
@@ -551,7 +553,7 @@ namespace IRI.Jab.Cartography
                 leftToolTip: _displayCoordinates,
                 middleToolTip: _delete,
 
-                rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClipboard,
+                rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCopy,
                 leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.CustomShapes.xY,
                 middleSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
 
@@ -624,9 +626,9 @@ namespace IRI.Jab.Cartography
         private void RegisterMapOptionsForEditPath(MouseButtonEventArgs e)
         {
             var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
-                rightToolTip: string.Empty,
-                leftToolTip: string.Empty,
-                middleToolTip: string.Empty,
+                leftToolTip: _cancel,
+                rightToolTip: _finish,
+                middleToolTip: _delete,
 
                 leftSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
                 rightSymbol: IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,

@@ -287,7 +287,17 @@ namespace IRI.Ket.SpatialExtensions
 
         public static BoundingBox GetBoundingBoxFromEnvelopes(List<SqlGeometry> envelopes)
         {
+            if (envelopes==null)
+            {
+                return BoundingBox.NaN;
+            }
+
             var validEnvelopes = envelopes.Where(i => !i.IsNotValidOrEmpty()).ToList();
+
+            if (validEnvelopes.Count == 0)
+            {
+                return BoundingBox.NaN;
+            }
 
             var xValues = validEnvelopes.SelectMany(i => new double[] { i.STPointN(1).STX.Value, i.STPointN(2).STX.Value, i.STPointN(3).STX.Value, i.STPointN(4).STX.Value });
 
@@ -354,7 +364,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-      
+
 
 
 
@@ -711,7 +721,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             return geometry.Project(i => Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
         }
-         
+
         #endregion
 
 

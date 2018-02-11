@@ -497,7 +497,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.MapPanel = new MapPanelPresenter();
             this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
               {
-
+                  if (this.CurrentEditingLayer == null)
+                  {
+                      Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
+                      return;
+                  }
                   //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Ham.SpatialBase.Point(param.X, param.Y));
                   this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
 

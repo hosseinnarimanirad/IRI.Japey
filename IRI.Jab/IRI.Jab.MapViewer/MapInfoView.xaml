@@ -181,15 +181,114 @@
             <!--<TextBlock Text="{Binding ElementName=root, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"
                                Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}"/>-->
             <StackPanel Visibility="{Binding MapPanel.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <!--<Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>-->
+                <TabControl>
+                    <TabControl.Items>
+                        <TabItem Header="نقطه جاری" Cursor="Hand" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
+                                <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
+                                  x:Name="showMultiPartTools" IsChecked="True"/>-->
 
-                <Expander Header="نقطه جاری"
-                          
-                          Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="نقطه قبلی"
+                                Command="{Binding GoToPreviousPointCommand}" >
+                                    <Path Data="{StaticResource appbarChevronLeft}"/>
+                                </Button>
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="حذف نقطه"
+                                Command="{Binding DeleteCurrentPointCommand}" >
+                                    <Path Data="{StaticResource appbarDelete}" FlowDirection="LeftToRight"/>
+                                </Button>
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="بزرگ‌نمایی"
+                                Command="{Binding ZoomToCurrentPointCommand}" >
+                                    <Path Data="{StaticResource appbarMagnifyAdd}" FlowDirection="LeftToRight"/>
+                                </Button>
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="کپی مختصات"
+                                Command="{Binding CopyCurrentPointCommand}" >
+                                    <Path Data="{StaticResource appbarPageCopy}" FlowDirection="LeftToRight"/>
+                                </Button>
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="نقطهٔ بعدی"
+                                Command="{Binding GoToNextPointCommand}" >
+                                    <Path Data="{StaticResource appbarChevronRight}"/>
+                                </Button>
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="عوارض چند تکه‌ای" Cursor="Hand" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
+                                <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
+                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
+                                  x:Name="showMultiPartTools" IsChecked="True"/>-->
+
+                                <!--<Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
+                                Command="{Binding CancelNewDrawingCommand}" >
+                            <Path Data="{StaticResource appbarChevronLeft}" FlowDirection="LeftToRight"/>
+                        </Button>-->
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="حذف تکهٔ جاری"
+                                Command="{Binding DeleteCurrentPartCommand}" >
+                                    <Path Data="{StaticResource appbarDelete}" FlowDirection="LeftToRight"/>
+                                </Button>
+
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" IsEnabled="False"
+                                    ToolTip="اضافه کردن تکهٔ جدید"
+                                    Command="{Binding AddNewPartCommand}">
+                                    <Path Data="{StaticResource appbarAdd}" FlowDirection="LeftToRight"/>
+                                </Button>
+                                <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="بزرگ‌نمایی روی تکهٔ جاری"
+                                Command="{Binding ZoomToCurrentPartCommand}" >
+                                    <Path Data="{StaticResource appbarMagnifyAdd}" FlowDirection="LeftToRight"/>
+                                </Button>
+                                <!--<Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
+                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
+                                Command="{Binding CancelNewDrawingCommand}" >
+                            <Path Data="{StaticResource appbarChevronRight}" FlowDirection="LeftToRight"/>
+                        </Button>-->
+                            </StackPanel>
+                        </TabItem>
+
+                        <TabItem Header="سیستم مرجع مکانی" Cursor="Hand">
+                            <StackPanel Orientation="Horizontal" >
+                                <RadioButton GroupName="A" ToolTip="{Binding ElementName=root, Path=GeodeticWgs84Text.Title}" Foreground="White" Margin="4,2" 
+                                     IsChecked="{Binding MapPanel.IsGeodeticWgs84EditingMode, Mode=TwoWay}" Width="Auto" Height="Auto"  
+                                     HorizontalContentAlignment="Center" Style="{StaticResource simpleToggle}" >
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
+                                        <Path Data="{StaticResource appbarGlobe}" Height="16" Margin="2" FlowDirection="LeftToRight"/>
+                                        <TextBlock Text="WGS84" Margin="2" Foreground="White"/>
+                                    </StackPanel>
+                                </RadioButton>
+                                <RadioButton GroupName="A" ToolTip="{Binding ElementName=root, Path=UTMText.Title}" Foreground="White" Margin="4,2"
+                                     IsChecked="{Binding MapPanel.IsUTMEditingMode, Mode=TwoWay}" Style="{StaticResource simpleToggle}" >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
+                                        <Path Data="{StaticResource appbarMapTreasure}" Height="16" Margin="2" FlowDirection="LeftToRight"/>
+                                        <TextBlock Text="UTM" Margin="2" Foreground="White"/>
+                                    </StackPanel>
+                                </RadioButton>
+                                <TextBlock DockPanel.Dock="Left" Margin="4"
+                           Visibility="{Binding MapPanel.IsUTMEditingMode, Converter={StaticResource boolToVisibilityConverter}}"
+                           Text="{Binding ElementName=root, Path=UtmZone.Title}"/>
+                                <TextBox DockPanel.Dock="Left" BorderThickness="1" FlowDirection="LeftToRight" MinWidth="30" Margin="2" VerticalAlignment="Center"
+                             Text="{Binding MapPanel.CurrentEditingZone, Mode=TwoWay}" MaxWidth="30"
+                             Visibility="{Binding MapPanel.IsUTMEditingMode, Converter={StaticResource boolToVisibilityConverter}}">
+                                    <TextBox.Resources>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="CornerRadius" Value="3"/>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+                            </StackPanel>
+                        </TabItem>
+                    </TabControl.Items>
+                </TabControl>
+
+                <Expander Header="نقطه جاری"  Visibility="Collapsed">
+                    <!--Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">-->
 
                     <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
                         <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
@@ -223,8 +322,8 @@
                         </Button>
                     </StackPanel>
                 </Expander>
-                <Expander Header="عوارض چند تکه‌ای"                           
-                          Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
+                <Expander Header="عوارض چند تکه‌ای"   Visibility="Collapsed">
+                    <!--Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">-->
 
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
                         <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
@@ -259,8 +358,8 @@
                         </Button>-->
                     </StackPanel>
                 </Expander>
-                <!--</Grid>-->
-                <Expander Header="سیستم مرجع مکانی">
+                
+                <Expander Header="سیستم مرجع مکانی" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" >
                         <RadioButton GroupName="A" ToolTip="{Binding ElementName=root, Path=GeodeticWgs84Text.Title}" Foreground="White" Margin="4,2" 
                                      IsChecked="{Binding MapPanel.IsGeodeticWgs84EditingMode, Mode=TwoWay}" Width="Auto" Height="Auto"  

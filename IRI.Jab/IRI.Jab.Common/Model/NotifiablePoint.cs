@@ -42,7 +42,7 @@ namespace IRI.Jab.Common.Model
                 {
                     RaiseCoordinateChangedAction?.Invoke(this);
                 }
-                
+
             }
         }
 
@@ -72,7 +72,7 @@ namespace IRI.Jab.Common.Model
 
         public Action<NotifiablePoint> RaiseCoordinateChangedAction { get; set; }
 
-        private bool _isRaiseCoordinateChangeEnabled;
+        private bool _isRaiseCoordinateChangeEnabled = true;
 
         public bool IsRaiseCoordinateChangeEnabled
         {

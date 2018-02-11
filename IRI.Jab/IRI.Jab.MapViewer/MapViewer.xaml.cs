@@ -4020,6 +4020,8 @@ namespace IRI.Jab.MapViewer
                 if (drawingCancellationToken == null)
                 {
                     this.Status = MapStatus.Idle;
+
+                    this.Pan();
                 }
 
                 return null;
