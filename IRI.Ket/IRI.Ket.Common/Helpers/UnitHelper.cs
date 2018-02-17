@@ -12,15 +12,15 @@ namespace IRI.Ket.Common.Helpers
         {
             if (length < 1)
             {
-                return $"{length * 10:N3} cm";
+                return $"{length * 10:N1} cm";
             }
             else if (length < 1000)
             {
-                return $"{length:N4} m";
+                return $"{length:N2} m";
             }
             else
             {
-                return $"{length / 1E3:N3} Km";
+                return $"{length / 1E3:N1} Km";
             }
             //else
             //{
