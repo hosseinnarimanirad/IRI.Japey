@@ -97,5 +97,11 @@ namespace IRI.Jab.Controls.View.Input
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //private void NumericUpDown_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var numericUpDown = sender as MahApps.Metro.Controls.NumericUpDown;
+
+        //    numericUpDown.SelectAll();
+        //}
     }
 }

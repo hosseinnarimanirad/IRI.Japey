@@ -239,6 +239,9 @@ namespace IRI.Jab.Controls.Presenter
 
             RaisePropertyChanged(nameof(X));
             RaisePropertyChanged(nameof(Y));
+
+            RaisePropertyChanged(nameof(LongitudeDms));
+            RaisePropertyChanged(nameof(LatitudeDms));
             //}
         }
 

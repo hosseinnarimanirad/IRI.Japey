@@ -18,10 +18,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="UTM Zone" Margin="4" VerticalAlignment="Center"/>
-        <mahApp:NumericUpDown Grid.Column="1" HorizontalAlignment="Left" Margin="4" Minimum="0" Maximum="60" Value="{Binding UtmZone, Mode=TwoWay, StringFormat={}{0:00}}" MinWidth="75"/>
+        <mahApp:NumericUpDown Grid.Column="1" HorizontalAlignment="Left" Margin="4" Minimum="0" Maximum="60" mahApp:TextBoxHelper.SelectAllOnFocus="True"
+                              Value="{Binding UtmZone, Mode=TwoWay, StringFormat={}{0:00}}" MinWidth="75"/>
+        
         <TextBlock Grid.Row="1" Text="X" Margin="4" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, Mode=TwoWay}" Margin="4"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
+        
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Y" Margin="4" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Y, Mode=TwoWay}" Margin="4"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Y, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
     </Grid>
 </UserControl>
