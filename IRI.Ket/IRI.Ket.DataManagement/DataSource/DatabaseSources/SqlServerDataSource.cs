@@ -325,7 +325,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 connection = new SqlConnection(_connectionString);
 
                 //SqlCommand command = new SqlCommand(string.Format(CultureInfo.InvariantCulture, "SELECT TOP 1 {0}.STSrid FROM {1} ", _spatialColumnName, GetTable()), connection);
-                SqlCommand command = new SqlCommand(FormattableString.Invariant($"SELECT TOP 1 {_spatialColumnName}.STSrid FROM {GetTable()} "), connection);
+                SqlCommand command = new SqlCommand(FormattableString.Invariant($"SELECT TOP 1 {_spatialColumnName}.STSrid FROM {GetTable()} WHERE NOT {_spatialColumnName} IS NULL AND {_spatialColumnName}.STIsValid()=1"), connection);
 
                 connection.Open();
 
@@ -504,7 +504,8 @@ namespace IRI.Ket.DataManagement.DataSource
                     //geometries.Add(SqlGeometry.Deserialize(reader.GetSqlBytes(0))); //3220 ms
 
                     //approach 3 
-                    geometries.Add((SqlGeometry)reader[0]);//2565 ms
+                     
+                    geometries.Add(reader[0] as SqlGeometry);//2565 ms
 
                 }
             }

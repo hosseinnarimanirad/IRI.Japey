@@ -17,7 +17,7 @@ namespace IRI.Ket.Common.Service.News
 
             var url = $"http://{region}.liveuamap.com/ajax/do?act=pts&curid=0&time={minutes}&last=0";
 
-            var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGet<LiveuaMapApiResults>(url);
+            var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<LiveuaMapApiResults>(url);
 
             return result;
 

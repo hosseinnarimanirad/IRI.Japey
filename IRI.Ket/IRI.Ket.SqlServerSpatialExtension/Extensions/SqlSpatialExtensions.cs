@@ -270,7 +270,7 @@ namespace IRI.Ket.SpatialExtensions
                 return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
             }
 
-            var envelopes = spatialFeatures.Select(i => i.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
+            var envelopes = spatialFeatures.Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
 
 
             //var xValues = envelopes.SelectMany(i => new double[] { i.STPointN(1).STX.Value, i.STPointN(2).STX.Value, i.STPointN(3).STX.Value, i.STPointN(4).STX.Value });
@@ -287,7 +287,7 @@ namespace IRI.Ket.SpatialExtensions
 
         public static BoundingBox GetBoundingBoxFromEnvelopes(List<SqlGeometry> envelopes)
         {
-            if (envelopes==null)
+            if (envelopes == null)
             {
                 return BoundingBox.NaN;
             }

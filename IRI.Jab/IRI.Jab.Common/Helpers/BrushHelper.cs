@@ -49,6 +49,11 @@ namespace IRI.Jab.Common.Helpers
 
         public static Brush Create(string hexColor)
         {
+            if (hexColor == null)
+            {
+                return null;
+            }
+
             if (!hexColor.StartsWith("#"))
             {
                 hexColor = $"#{hexColor}";

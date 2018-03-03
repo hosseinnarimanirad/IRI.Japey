@@ -10,7 +10,7 @@ namespace IRI.Ket.Common.Service.Google
 {
     public static class GoogleMapsGeolocation
     {
-        public static async Task<ApiResults.GoogleMapsGeolocationJsonResult> GetLocation(string key)
+        public static async Task<ApiResults.GoogleMapsGeolocationJsonResult> GetLocationAsync(string key)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return await Helpers.NetHelper.HttpPost<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
+                return await Helpers.NetHelper.HttpPostAsync<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
             }
             catch (Exception ex)
             {
@@ -38,8 +38,8 @@ namespace IRI.Ket.Common.Service.Google
                 return new ApiResults.GoogleMapsGeolocationJsonResult() { accuracy = int.MaxValue };
             }
         }
-
-        public static async Task<ApiResults.GoogleMapsGeolocationJsonResult> GetLocation(string key, List<Wifiaccesspoint> networks)
+         
+        public static async Task<ApiResults.GoogleMapsGeolocationJsonResult> GetLocationAsync(string key, List<Wifiaccesspoint> networks)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return await Helpers.NetHelper.HttpPost<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
+                return await Helpers.NetHelper.HttpPostAsync<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
             }
             catch (Exception ex)
             {
@@ -59,6 +59,28 @@ namespace IRI.Ket.Common.Service.Google
                 return new ApiResults.GoogleMapsGeolocationJsonResult() { accuracy = int.MaxValue };
             }
         }
+
+        public static ApiResults.GoogleMapsGeolocationJsonResult GetLocation(string key, List<Wifiaccesspoint> networks)
+        {
+            try
+            {
+                var parameter = new GoogleMapsGeolocationParameters()
+                {
+                    wifiAccessPoints = networks.ToArray()
+                };
+
+                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
+
+                return Helpers.NetHelper.HttpPost<ApiResults.GoogleMapsGeolocationJsonResult>(url, parameter);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+
+                return new ApiResults.GoogleMapsGeolocationJsonResult() { accuracy = int.MaxValue };
+            }
+        }
+
     }
 }
 

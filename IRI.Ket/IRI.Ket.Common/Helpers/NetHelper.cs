@@ -101,7 +101,7 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static async Task<T> HttpPost<T>(string address, object data, string contentType = "application/json") where T : class
+        public static async Task<T> HttpPostAsync<T>(string address, object data, string contentType = "application/json") where T : class
         {
             try
             {
@@ -109,12 +109,12 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
-                
+
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
                     NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
                 });
-                 
+
                 var stringResult = await client.UploadStringTaskAsync(address, stringData);
 
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
@@ -125,7 +125,7 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static async Task<T> HttpGet<T>(string address) where T : class
+        public static async Task<T> HttpGetAsync<T>(string address) where T : class
         {
             try
             {
@@ -133,7 +133,7 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
-                 
+
                 var stringResult = await client.DownloadStringTaskAsync(address);
 
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
@@ -143,5 +143,33 @@ namespace IRI.Ket.Common.Helpers
                 return null;
             }
         }
+
+
+        public static T HttpPost<T>(string address, object data, string contentType = "application/json") where T : class
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+                {
+                    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+                });
+
+                var stringResult = client.UploadString(address, stringData);
+
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
+
 }
+

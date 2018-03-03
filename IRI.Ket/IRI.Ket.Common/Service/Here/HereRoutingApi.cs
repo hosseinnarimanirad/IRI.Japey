@@ -19,7 +19,7 @@ namespace IRI.Ket.Common.Service.Here
 
                 var url = $"https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?app_id={appId}&app_code={appCode}&start=geo!{pointString}&range={timeLimit}&rangetype=time&mode=shortest;car;traffic:enabled";
 
-                return await Helpers.NetHelper.HttpGet<HereIsolineResult>(url);
+                return await Helpers.NetHelper.HttpGetAsync<HereIsolineResult>(url);
             }
             catch (Exception ex)
             {

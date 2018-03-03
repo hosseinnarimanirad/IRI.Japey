@@ -23,7 +23,7 @@ namespace IRI.Ket.Common.Service.Mapzen
 
             var url = $"http://matrix.mapzen.com/isochrone?id=Walk_From_Office&api_key={apiKey}";
 
-            return await Helpers.NetHelper.HttpPost<MapzenResult>(url, parameter);
+            return await Helpers.NetHelper.HttpPostAsync<MapzenResult>(url, parameter);
         }
     }
 

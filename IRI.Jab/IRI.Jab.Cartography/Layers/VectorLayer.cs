@@ -191,7 +191,7 @@ namespace IRI.Jab.Cartography
 
             if (geometries.Count > 0)
             {
-                this.Type = type | GetGeometryType(geometries.FirstOrDefault());
+                this.Type = type | GetGeometryType(geometries.FirstOrDefault(g => g != null));
             }
             else
             {
