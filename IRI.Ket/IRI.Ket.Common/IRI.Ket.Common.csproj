@@ -80,6 +80,8 @@
     <Compile Include="Service\News\LiveuaMapService.cs" />
     <Compile Include="Service\Oxford\OxfordDictionaryResult.cs" />
     <Compile Include="Service\Oxford\OxfordDictionaryService.cs" />
+    <Compile Include="Service\Waze\WazeGeoRssResult.cs" />
+    <Compile Include="Service\Waze\WazeService.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AuthenticationMethod.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AvailableNetworkPack.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssNetworkPack.cs" />

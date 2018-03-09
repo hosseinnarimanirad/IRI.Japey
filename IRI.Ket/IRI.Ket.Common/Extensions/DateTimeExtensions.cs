@@ -142,5 +142,7 @@ namespace IRI.Ket.Common.Extensions
             "بهمن",
             "اسفند",
         };
+
+        public static readonly DateTime JulianDate = new DateTime(1970, 1, 1, 0, 0, 0);
     }
 }
