@@ -104,6 +104,8 @@
     <Compile Include="Assets\Converters\ScaleToGoogleScaleConverter.cs" />
     <Compile Include="Assets\Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Assets\Converters\StreamGeometryToPathConverter.cs" />
+    <Compile Include="Assets\Converters\StringToFarsiStringConverter.cs" />
+    <Compile Include="Assets\Converters\StringToRtlFlowDirection.cs" />
     <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
     <Compile Include="Assets\Fonts\Fonts.cs" />

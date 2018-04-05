@@ -108,6 +108,13 @@
     <Compile Include="Extensions\PointExtension.cs" />
     <Compile Include="Extensions\PointHelper.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
+    <Compile Include="Model\Bing\BingIsolineResult.cs" />
+    <Compile Include="Model\Google\GoogleDirectionsResult.cs" />
+    <Compile Include="Model\Google\GoogleDistanceMatrixResult.cs" />
+    <Compile Include="Model\Google\GoogleGeolocationParameters.cs" />
+    <Compile Include="Model\Google\GoogleGeolocationResult.cs" />
+    <Compile Include="Model\Google\GooglePlacesResult.cs" />
+    <Compile Include="Model\Here\HereIsolineResult.cs" />
     <Compile Include="Model\SpatialRelation.cs" />
     <Compile Include="Model\TileInfoCollection.cs" />
     <Compile Include="Model\ZoomScale.cs" />

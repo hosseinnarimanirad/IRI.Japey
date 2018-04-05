@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.Common.Model.Google
-{ 
+namespace IRI.Ham.SpatialBase.Model.Google
+{
     public class GoogleDirectionsResult
     {
         public Geocoded_Waypoints[] geocoded_waypoints { get; set; }
@@ -32,8 +32,8 @@ namespace IRI.Ham.Common.Model.Google
 
     public class Bounds
     {
-        public Northeast northeast { get; set; }
-        public Southwest southwest { get; set; }
+        public Location northeast { get; set; }
+        public Location southwest { get; set; }
     }
 
     //public class Northeast
@@ -131,5 +131,4 @@ namespace IRI.Ham.Common.Model.Google
         public float lat { get; set; }
         public float lng { get; set; }
     }
-
 }

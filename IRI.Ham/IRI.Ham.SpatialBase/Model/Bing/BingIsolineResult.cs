@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.Common.Model.Bing
-{ 
-
+namespace IRI.Ham.SpatialBase.Model.Bing
+{
     public class BingIsolineResult
     {
         public string authenticationResultCode { get; set; }

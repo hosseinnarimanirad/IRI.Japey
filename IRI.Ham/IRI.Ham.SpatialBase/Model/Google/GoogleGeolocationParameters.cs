@@ -2,16 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Google.ApiParameters
+namespace IRI.Ham.SpatialBase.Model.Google
 {
-    //[DataContract]
     [JsonObject]
-    public class GoogleMapsGeolocationParameters
+    public class GoogleGeolocationParameters
     {
+
         //[DataMember]
         [JsonProperty]
         public int homeMobileCountryCode { get; set; }
@@ -31,7 +29,7 @@ namespace IRI.Ket.Common.Service.Google.ApiParameters
         //[DataMember]
         [JsonProperty]
         public string considerIp { get; set; }
-         
+
         //[DataMember]
         [JsonProperty]
         public Celltower[] cellTowers { get; set; }

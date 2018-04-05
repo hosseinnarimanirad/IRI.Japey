@@ -20,6 +20,8 @@
     <converters:LatinDigitsToFarsiDigitsConverter x:Key="latinDigitsToFarsiDigitsConverter"/>
     <converters:StreamGeometryToImageConverter x:Key="streamGeometryToImageConverter"/>
     <converters:StreamGeometryToPathConverter x:Key="streamGeometryToPathConverter"/>
- 
+    <converters:StringToFarsiStringConverter x:Key="stringToFarsiStringConverter"/>
+    <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
+
     <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>
 </ResourceDictionary>

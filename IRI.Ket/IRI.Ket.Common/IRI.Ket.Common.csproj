@@ -66,8 +66,6 @@
     <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Service\Bing\BingMap.cs" />
-    <Compile Include="Service\Google\ApiParameters\GoogleMapsGeolocationParameters.cs" />
-    <Compile Include="Service\Google\ApiResults\GoogleMapsGeolocationResult.cs" />
     <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
     <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />

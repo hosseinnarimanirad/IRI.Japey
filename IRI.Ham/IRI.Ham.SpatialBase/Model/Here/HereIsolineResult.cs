@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.Common.Model.Here
+namespace IRI.Ham.SpatialBase.Model.Here
 {
-     
     public class HereIsolineResult
     {
         public Response response { get; set; }
@@ -64,5 +63,4 @@ namespace IRI.Ham.Common.Model.Here
         public int id { get; set; }
         public string[] shape { get; set; }
     }
-
 }

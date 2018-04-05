@@ -523,7 +523,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
 
-            presenter.RequestZoomToGoogleScale = (center, googleScale) => this.ZoomToGoogleScale(googleScale);
+            presenter.RequestZoomToGoogleScale = (center, googleScale, callback) => this.ZoomToGoogleScale(googleScale, center, callback);
 
             presenter.RequestRegisterMapOptions = (arg) => { this.RegisterRightClickContextOptions(arg.View, arg.DataContext); };
 
@@ -1335,7 +1335,7 @@ namespace IRI.Jab.MapViewer
                 if (locateable.CanBeUsedAsEditingPoint)
                 {
                     this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
-                }                
+                }
             }
 
 
@@ -1370,7 +1370,7 @@ namespace IRI.Jab.MapViewer
                 {
                     this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
                 }
-                
+
             }
 
             this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
@@ -3478,14 +3478,14 @@ namespace IRI.Jab.MapViewer
             Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)));
         }
 
-        public void ZoomToGoogleScale(sb.Point center, int googleZoomLevel)
+        public void ZoomToGoogleScale(int googleZoomLevel, sb.Point center, Action callback)
         {
             //if (googleZoomLevel < 1 || googleZoomLevel > 23)
             //{
             //    return;
             //}
 
-            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)), center.AsWpfPoint());
+            ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)), center, callback);
         }
 
         //public void Zoom(double mapScale, sb.Point mapPoint)

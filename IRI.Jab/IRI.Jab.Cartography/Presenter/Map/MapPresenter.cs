@@ -554,7 +554,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<Ham.SpatialBase.Point, double> RequestZoomToPoint;
 
-        public Action<Ham.SpatialBase.Point, int> RequestZoomToGoogleScale;
+        public Action<Ham.SpatialBase.Point, int, Action> RequestZoomToGoogleScale;
 
         public Action<Ham.SpatialBase.BoundingBox, Action> RequestZoomToExtent;
 
@@ -910,9 +910,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleScale(int googleScale, Ham.SpatialBase.Point center)
+        public void ZoomToGoogleScale(int googleScale, Ham.SpatialBase.Point center, Action callback)
         {
-            this.RequestZoomToGoogleScale?.Invoke(center, googleScale);
+            this.RequestZoomToGoogleScale?.Invoke(center, googleScale, callback);
         }
 
         public void ZoomToExtent(Ham.SpatialBase.BoundingBox boundingBox, Action callback = null)
