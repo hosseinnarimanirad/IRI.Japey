@@ -129,6 +129,24 @@ namespace IRI.Ham.SpatialBase.Model.Google
         {
             return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
         }
+
+        public BoundingBox AsGeodeticBoundingBox()
+        {
+            if (this.Geometry?.Viewport == null)
+            {
+                return BoundingBox.NaN;
+            }
+
+            return new BoundingBox(xMin: this.Geometry.Viewport.Southwest.Lng,
+                yMin: this.Geometry.Viewport.Southwest.Lat,
+                xMax: this.Geometry.Viewport.Northeast.Lng,
+                yMax: this.Geometry.Viewport.Northeast.Lat);
+        }
+
+        public BoundingBox AsWebMercatorBoundingBox()
+        {
+            return (AsGeodeticBoundingBox().Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
+        }
     }
 
     public class GooglePlacesResult

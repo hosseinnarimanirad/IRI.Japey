@@ -24,6 +24,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         private int Srid { get { return this._geometries == null || this._geometries.Count == 0 ? 0 : this._geometries.First().GetSrid(); } }
 
+        private bool HasAttribute
+        {
+            get { return _attributes != null && _labelFunc != null && _attributes.Count == _geometries?.Count; }
+        }
+
         public static MemoryDataSource<object> Create(SqlGeometry geometry)
         {
             return new MemoryDataSource<object>(new List<SqlGeometry>() { geometry });
@@ -160,12 +165,51 @@ namespace IRI.Ket.DataManagement.DataSource
             //93.01.18
             //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STIntersects(boundary).Value).ToList();
 
-            return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(boundary).Value).ToList();
+            //return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(boundary).IsTrue).ToList();
+            return GetGeometryLabelPairs(boundary);
         }
+
+        public List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(geometry).IsTrue).ToList();
+        }
+
+
 
         public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
         {
-            throw new NotImplementedException();
+
+            if (geometry?.STSrid.Value != this.Srid)
+            {
+                throw new NotImplementedException();
+            }
+
+            DataTable result = new DataTable();
+
+            result.Columns.Add(new DataColumn("Geo"));
+
+            if (HasAttribute)
+            {
+                var geometries = GetGeometryLabelPairs(geometry);
+
+                result.Columns.Add(new DataColumn("Attribute", typeof(string)));
+
+                foreach (var item in geometries)
+                {
+                    result.Rows.Add(item.Geometry, item.Label);
+                }
+            }
+            else
+            {
+                var geometries = GetGeometries().Where(i => i.STIntersects(geometry).IsTrue);
+
+                foreach (var item in geometries)
+                {
+                    result.Rows.Add(item);
+                }
+            }
+
+            return result;
         }
 
         //public Task<IEnumerable<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)

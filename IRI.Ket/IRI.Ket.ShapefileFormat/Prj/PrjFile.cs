@@ -168,6 +168,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
+        //EPSG not available
         public Ellipsoid Ellipsoid
         {
             get
@@ -176,7 +177,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
 
                 return new Ellipsoid(values.First(),
                                         new Ham.MeasurementUnit.Meter(double.Parse(values.Skip(1).First(), CultureInfo.InvariantCulture)),
-                                        double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture))
+                                        double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture), int.MaxValue)
                 {
                     EsriName = values.First()
                 };

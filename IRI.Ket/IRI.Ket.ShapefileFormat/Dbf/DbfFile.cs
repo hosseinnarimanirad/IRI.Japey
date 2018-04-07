@@ -449,7 +449,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             return result;
         }
 
-        internal static void Write(string fileName, System.Data.DataTable table, Encoding encoding, bool overwrite = false)
+        public static void Write(string fileName, System.Data.DataTable table, Encoding encoding, bool overwrite = false)
         {
             var mode = Shapefile.GetMode(fileName, overwrite);
 
@@ -497,7 +497,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             stream.Close();
         }
 
-        internal static void Write<T>(string fileName,
+        public static void Write<T>(string fileName,
                                         List<T> values,
                                         List<Func<T, object>> mapping,
                                         List<DbfFieldDescriptor> columns,

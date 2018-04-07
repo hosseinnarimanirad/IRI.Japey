@@ -36,6 +36,7 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
+using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
 
 namespace IRI.Jab.MapViewer
 {
@@ -4064,12 +4065,24 @@ namespace IRI.Jab.MapViewer
 
         public List<System.Data.DataTable> GetFeatures(sb.Point point)
         {
-            return GetFeatures(point.AsSqlGeometry());
+            return GetFeatures(point.AsSqlGeometry(SridHelper.WebMercator));
         }
 
         public List<System.Data.DataTable> GetFeatures(SqlGeometry geometry)
         {
+            if (geometry.IsNotValidOrEmpty())
+            {
+                return null;
+            }
+
             List<System.Data.DataTable> result = new List<System.Data.DataTable>();
+
+            if (geometry.GetOpenGisType() == OpenGisGeometryType.Point || geometry.GetOpenGisType() == OpenGisGeometryType.MultiPoint)
+            {
+                var mapDistance = ScreenToMap(5);
+
+                geometry = geometry.STBuffer(mapDistance);
+            }
 
             foreach (var layer in this.Layers.OfType<VectorLayer>())
             {
