@@ -21,7 +21,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -154,7 +155,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="ThirdPartyLibraries\ManagedNativeWifi\README.md" />
-    <None Include="HosseinNarimaniRad.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Deploy\" />

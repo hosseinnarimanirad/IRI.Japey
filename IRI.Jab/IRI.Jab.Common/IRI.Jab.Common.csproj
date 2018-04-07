@@ -42,7 +42,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -219,7 +220,6 @@
     <None Include="Assets\Fonts\BYekan.ttf" />
     <None Include="packages.config" />
     <Resource Include="Assets\Fonts\IRANSans.ttf" />
-    <None Include="HosseinNarimaniRad.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Assets\IRI.Animations.xaml">
