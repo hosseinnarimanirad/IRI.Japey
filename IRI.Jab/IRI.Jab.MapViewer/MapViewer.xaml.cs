@@ -1601,7 +1601,7 @@ namespace IRI.Jab.MapViewer
             try
             {
 
-                if (tile.ZoomLevel != CurrentZoomLevel || layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)
+                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
                     Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
@@ -1609,7 +1609,7 @@ namespace IRI.Jab.MapViewer
 
                 var geoImage = await layer.GetTileAsync(tile, this.Proxy);
 
-                if (tile.ZoomLevel != CurrentZoomLevel || layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)
+                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
                     Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
