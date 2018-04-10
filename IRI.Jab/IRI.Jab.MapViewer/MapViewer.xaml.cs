@@ -937,82 +937,82 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private async void OldAddTiledLayer(VectorLayer layer, TileInfo tile)
-        {
-            var mapScale = MapScale;
+        //private async void OldAddTiledLayer(VectorLayer layer, TileInfo tile)
+        //{
+        //    var mapScale = MapScale;
 
-            var extent = this.CurrentExtent;
+        //    var extent = this.CurrentExtent;
 
-            var layerTile = layer.TileManager.Find(tile);
+        //    var layerTile = layer.TileManager.Find(tile);
 
-            if (layerTile == null || layerTile.IsProcessing)
-            {
-                Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
-                return;
-            }
+        //    if (layerTile == null || layerTile.IsProcessing)
+        //    {
+        //        Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
+        //        return;
+        //    }
 
-            if (tile.ZoomLevel != this.CurrentZoomLevel)
-            {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-                layerTile.IsProcessing = false;
-                return;
-            }
+        //    if (tile.ZoomLevel != this.CurrentZoomLevel)
+        //    {
+        //        Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+        //        layerTile.IsProcessing = false;
+        //        return;
+        //    }
 
-            layerTile.IsProcessing = true;
+        //    layerTile.IsProcessing = true;
 
-            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
+        //    var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
 
-            if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
-            {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-                layerTile.IsProcessing = false;
-                return;
-            }
+        //    if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
+        //    {
+        //        Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+        //        layerTile.IsProcessing = false;
+        //        return;
+        //    }
 
-            double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
+        //    double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
-            double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
+        //    double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
 
-            var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
+        //    var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
 
-            Path pathImage;
+        //    Path pathImage;
 
-            switch (layer.ToRasterTechnique)
-            {
-                case RasterizationApproach.DrawingVisual:
-                    pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-                    break;
-                case RasterizationApproach.GdiPlus:
-                    pathImage = layer.AsTileUsingGdiPlusAsync(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-                    break;
-                case RasterizationApproach.WriteableBitmap:
-                    pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-                    break;
-                case RasterizationApproach.OpenTk:
-                    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-                    break;
-                case RasterizationApproach.StreamGeometry:
-                //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
-                case RasterizationApproach.None:
-                default:
-                    throw new NotImplementedException();
-            }
+        //    switch (layer.ToRasterTechnique)
+        //    {
+        //        case RasterizationApproach.DrawingVisual:
+        //            pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
+        //            break;
+        //        case RasterizationApproach.GdiPlus:
+        //            pathImage = layer.AsTileUsingGdiPlusAsync(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
+        //            break;
+        //        case RasterizationApproach.WriteableBitmap:
+        //            pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
+        //            break;
+        //        case RasterizationApproach.OpenTk:
+        //            pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
+        //            break;
+        //        case RasterizationApproach.StreamGeometry:
+        //        //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
+        //        case RasterizationApproach.None:
+        //        default:
+        //            throw new NotImplementedException();
+        //    }
 
-            if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
-            {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-                return;
-            }
+        //    if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
+        //    {
+        //        Debug.Print($"Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+        //        return;
+        //    }
 
-            if (pathImage != null)
-            {
-                this.mapView.Children.Add(pathImage);
+        //    if (pathImage != null)
+        //    {
+        //        this.mapView.Children.Add(pathImage);
 
-                Canvas.SetZIndex(pathImage, layer.ZIndex);
-            }
+        //        Canvas.SetZIndex(pathImage, layer.ZIndex);
+        //    }
 
-            layerTile.IsProcessing = false;
-        }
+        //    layerTile.IsProcessing = false;
+        //}
 
 
         private async Task AddTiledLayer(VectorLayer layer, TileInfo tile)
@@ -1646,7 +1646,8 @@ namespace IRI.Jab.MapViewer
                 {
                     Fill = fill,
                     Data = geometry,
-                    Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile }
+                    Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile },
+                    ToolTip = $"R:{tile.RowNumber}, C:{tile.ColumnNumber}, Z:{tile.ZoomLevel}"
                     //Tag = new LayerTag(GoogleMapsUtility.GetGoogleMapScale(tile.ZoomLevel)) { Layer = layer, LayerType = layer.Type, Tile = tile }
                 };
 
@@ -2167,7 +2168,7 @@ namespace IRI.Jab.MapViewer
                 if (justTiled && !tag.IsTiled)
                     continue;
 
-                if (this.CurrentTileInfos.Contains(tag.Tile) && tag.Scale == this.MapScale)
+                if (this.CurrentTileInfos.Contains(tag.Tile) && tag.Tile.ZoomLevel == this.CurrentZoomLevel)// && tag.Scale == this.MapScale)
                     continue;
 
                 if (tag.LayerType == LayerType.Raster && this.CurrentExtent.Intersects(tag.Layer.Extent))
@@ -2175,6 +2176,9 @@ namespace IRI.Jab.MapViewer
 
                 if (tag.LayerType == LayerType.ImagePyramid && this.CurrentExtent.Intersects(tag.Layer.Extent))
                     continue;
+
+                //if (tag.LayerType == LayerType.BaseMap && this.CurrentExtent.Intersects(tag.Tile.WebMercatorExtent))
+                //    continue;
 
                 this.mapView.Children.RemoveAt(i);
             }

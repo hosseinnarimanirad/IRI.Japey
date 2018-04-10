@@ -19,6 +19,8 @@ namespace IRI.Ham.SpatialBase.Model
 
         public int ZoomLevel { get; private set; }
 
+        //public double UsedMapScale { get; set; }
+
         public BoundingBox GeodeticExtent { get; private set; }
 
         //public BoundingBox MercatorExtent
@@ -59,6 +61,8 @@ namespace IRI.Ham.SpatialBase.Model
             this.ColumnNumber = column;
 
             this.ZoomLevel = zoomLevel;
+
+            //this.UsedMapScale = usedMapScale;
 
             this.GeodeticExtent = WebMercatorUtility.GetWgs84ImageBoundingBox(row, column, zoomLevel);
         }
