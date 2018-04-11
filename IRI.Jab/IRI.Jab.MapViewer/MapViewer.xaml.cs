@@ -1647,7 +1647,7 @@ namespace IRI.Jab.MapViewer
                     Fill = fill,
                     Data = geometry,
                     Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile },
-                    ToolTip = $"R:{tile.RowNumber}, C:{tile.ColumnNumber}, Z:{tile.ZoomLevel}"
+                    //ToolTip = $"R:{tile.RowNumber}, C:{tile.ColumnNumber}, Z:{tile.ZoomLevel}"
                     //Tag = new LayerTag(GoogleMapsUtility.GetGoogleMapScale(tile.ZoomLevel)) { Layer = layer, LayerType = layer.Type, Tile = tile }
                 };
 

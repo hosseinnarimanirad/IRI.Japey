@@ -654,9 +654,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Methods
 
-        private async void Draw(DrawMode mode)
+        private async void DrawAsync(DrawMode mode)
         {
-            var shapeItem = await MakeShapeItem(mode, $"DRAWING {DrawingItems?.Count}");
+            var shapeItem = await MakeShapeItemAsync(mode, $"DRAWING {DrawingItems?.Count}");
 
             if (shapeItem != null)
             {
@@ -668,7 +668,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        private async Task<DrawingItem> MakeShapeItem(DrawMode mode, string name)
+        private async Task<DrawingItem> MakeShapeItemAsync(DrawMode mode, string name)
         {
             this.IsPanMode = true;
             //ResetMode(mode);
@@ -695,7 +695,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions() { IsDeleteButtonVisible = true, IsCancelButtonVisible = true, IsFinishButtonVisible = true });
+                var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions() { IsDeleteButtonVisible = true, IsCancelButtonVisible = true, IsFinishButtonVisible = true, IsMeasureVisible = false });
 
                 if (edittedShape != null)
                 {
@@ -1525,7 +1525,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_drawPolygonCommand == null)
                 {
-                    _drawPolygonCommand = new RelayCommand(param => { Draw(DrawMode.Polygon); });
+                    _drawPolygonCommand = new RelayCommand(param => { DrawAsync(DrawMode.Polygon); });
                 }
                 return _drawPolygonCommand;
             }
@@ -1539,7 +1539,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 if (_drawPolylineCommand == null)
                 {
-                    _drawPolylineCommand = new RelayCommand(param => { Draw(DrawMode.Polyline); });
+                    _drawPolylineCommand = new RelayCommand(param => { DrawAsync(DrawMode.Polyline); });
                 }
                 return _drawPolylineCommand;
             }

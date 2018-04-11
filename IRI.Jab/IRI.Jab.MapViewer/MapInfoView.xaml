@@ -101,8 +101,21 @@
         <StackPanel >
             <DockPanel Margin="0" >
                 <TextBlock DockPanel.Dock="Left" Text="X" Margin="4"/>
-                <TextBox DockPanel.Dock="Left" Text="{Binding MapPanel.CurrentEditingPoint.X, Mode=TwoWay}" MaxWidth="90"
-                         FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                <!--<TextBox DockPanel.Dock="Left" Text="{Binding MapPanel.CurrentEditingPoint.X, Mode=TwoWay}" MaxWidth="90"
+                         FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">-->
+                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=MapPanel.IsGeodeticWgs84EditingMode}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Path=MapPanel.CurrentEditingPoint.X, Mode=TwoWay, StringFormat={}{0:N5}}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=MapPanel.IsGeodeticWgs84EditingMode}" Value="False">
+                                    <Setter Property="Text" Value="{Binding Path=MapPanel.CurrentEditingPoint.X, Mode=TwoWay, StringFormat={}{0:N2}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="3"/>
@@ -111,8 +124,19 @@
                 </TextBox>
 
                 <TextBlock DockPanel.Dock="Left" Text="Y" Margin="4"/>
-                <TextBox DockPanel.Dock="Left" Text="{Binding MapPanel.CurrentEditingPoint.Y, Mode=TwoWay}" MaxWidth="90"
-                         FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=MapPanel.IsGeodeticWgs84EditingMode}" Value="True">
+                                    <Setter Property="Text" Value="{Binding Path=MapPanel.CurrentEditingPoint.Y, Mode=TwoWay, StringFormat={}{0:N5}}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=MapPanel.IsGeodeticWgs84EditingMode}" Value="False">
+                                    <Setter Property="Text" Value="{Binding Path=MapPanel.CurrentEditingPoint.Y, Mode=TwoWay, StringFormat={}{0:N2}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="3"/>

@@ -66,7 +66,7 @@ namespace IRI.Jab.Common.Presenters
                 {
                     return;
                 }
-                 
+
                 if (CurrentEditingPoint != null && value)
                 {
                     this.SpatialReference = SpatialReferenceType.UTM;
@@ -90,7 +90,7 @@ namespace IRI.Jab.Common.Presenters
                 {
                     return;
                 }
-                 
+
                 if (CurrentEditingPoint != null && value)
                 {
                     this.SpatialReference = SpatialReferenceType.Geodetic;
@@ -148,6 +148,11 @@ namespace IRI.Jab.Common.Presenters
                 }
             }
 
+        }
+
+        public MapPanelPresenter()
+        {
+            //RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
         }
 
         private Ham.SpatialBase.Point FromWebMercator(Ham.SpatialBase.Point webMercatorPoint)
