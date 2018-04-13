@@ -1,4 +1,5 @@
 ﻿using IRI.Ham.SpatialBase;
+using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,16 +13,17 @@ namespace IRI.Ket.Common.Service.Waze
 {
     public static class WazeService
     {
-        public static WazeGeoRssResult GetRss(BoundingBox geographicBound)
+        public static Response<WazeGeoRssResult> GetRss(BoundingBox geographicBound, long _epoc = -1)
         {
 
             //https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=100&mu=100&left=51.263646841049194&right=51.328981161117554&bottom=35.72281242757668&top=35.74842331753895&_=1520571802973
+            
+            var time = DateTime.UtcNow - IRI.Ket.Common.Extensions.DateTimeExtensions.JulianDate;
 
-            var time = DateTime.Now.AddHours(-3.5) - IRI.Ket.Common.Extensions.DateTimeExtensions.JulianDate;
-
-            long epoc = ((long)time.TotalSeconds ) * (long)1000;
+            long epoc = ((long)time.TotalSeconds) * (long)1000;
+            epoc = _epoc > 0 ? _epoc : epoc;
             //epoc = 1520571803066;
-            var url = $"https://www.waze.com/row-rtserver/web/TGeoRSS?ma=10&mj=10&mu=400&left={geographicBound.XMin}&right={geographicBound.XMax}&bottom={geographicBound.YMin}&top={geographicBound.YMax}&_={epoc}";
+            var url = $"https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=1&mu=400&left={geographicBound.XMin}&right={geographicBound.XMax}&bottom={geographicBound.YMin}&top={geographicBound.YMax}&_={epoc}";
 
             //var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<WazeGeoRssResult>(url);
             try
@@ -42,11 +44,13 @@ namespace IRI.Ket.Common.Service.Waze
 
                 var stringResult = new StreamReader(new GZipStream(client.OpenRead(url), CompressionMode.Decompress)).ReadToEnd();
 
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<WazeGeoRssResult>(stringResult);
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<WazeGeoRssResult>(stringResult);
+
+                return ResponseFactory.Create(result);
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<WazeGeoRssResult>(ex.GetMessagePlus());
             }
 
 
