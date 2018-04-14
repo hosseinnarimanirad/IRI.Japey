@@ -1,4 +1,5 @@
 ﻿using IRI.Ham.SpatialBase;
+using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,21 +7,29 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.GoogleStaticMapProvider
+namespace IRI.Ket.Common.Service.Google
 {
     public static class GoogleStaticMapProvider
     {
-        public static async Task<GeoReferencedImage> Get(Point centerGeoPoint, int width, int height, BoundingBox mbb, int zoom)
+        public static async Task<Response<GeoReferencedImage>> GetAsync(Point centerGeoPoint, int width, int height, BoundingBox mbb, int zoom)
         {
-            WebClient client = new WebClient();
+            try
+            {
+                WebClient client = new WebClient();
 
-            var center = mbb.Center;
+                var center = mbb.Center;
 
-            var url = $@"https://maps.googleapis.com/maps/api/staticmap?center={center.Y},{center.X}&zoom={zoom}&size={width}x{height}&maptype=roadmap";
+                var url = $@"https://maps.googleapis.com/maps/api/staticmap?center={center.Y},{center.X}&zoom={zoom}&size={width}x{height}&maptype=roadmap";
 
-            var byteImage = await client.DownloadDataTaskAsync(url);
+                var byteImage = await client.DownloadDataTaskAsync(url);
 
-            return new GeoReferencedImage(byteImage, mbb);
+                return ResponseFactory.Create(new GeoReferencedImage(byteImage, mbb));
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<GeoReferencedImage>(ex.GetMessagePlus());
+            }
         }
 
 

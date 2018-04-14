@@ -83,7 +83,7 @@ namespace IRI.Ket.Common.Service.News
         public Geometry ParseToGeometry(GeometryType geometryType)
         {
             //return new Geometry(this.points.Select(p => ParseToGeometry(p)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
-            return GeometryHelper.ParseToGeometry(this.points, geometryType);
+            return Geometry.ParseToGeometry(this.points, geometryType);
         }
 
         //private Geometry ParseToGeometry(float[] values)

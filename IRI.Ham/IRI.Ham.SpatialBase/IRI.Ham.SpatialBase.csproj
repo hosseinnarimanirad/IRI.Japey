@@ -115,6 +115,8 @@
     <Compile Include="Model\Google\GoogleGeolocationResult.cs" />
     <Compile Include="Model\Google\GooglePlacesResult.cs" />
     <Compile Include="Model\Here\HereIsolineResult.cs" />
+    <Compile Include="Model\Mapzen\MapzenIsochroneResult.cs" />
+    <Compile Include="Model\Mapzen\MapzenRouteCostingModel.cs" />
     <Compile Include="Model\SpatialRelation.cs" />
     <Compile Include="Model\TileInfoCollection.cs" />
     <Compile Include="Model\ZoomScale.cs" />

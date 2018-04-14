@@ -1,5 +1,6 @@
 ﻿using IRI.Ham.SpatialBase;
 using IRI.Ham.SpatialBase.Model.Here;
+using IRI.Ket.Common.Extensions;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace IRI.Ket.Common.Service.Here
 {
     public static class HereRoutingApi
     {
-        public static async Task<HereIsolineResult> GetIsoline(Point centerGeographic, double timeLimit, string appCode, string appId)
+        public static async Task<Response<HereIsolineResult>> GetIsolineAsync(Point centerGeographic, double timeLimit, string appCode, string appId)
         {
             try
             {
@@ -16,13 +17,13 @@ namespace IRI.Ket.Common.Service.Here
 
                 var url = $"https://isoline.route.api.here.com/routing/7.2/calculateisoline.json?app_id={appId}&app_code={appCode}&start=geo!{pointString}&range={timeLimit}&rangetype=time&mode=shortest;car;traffic:enabled";
 
-                return await Helpers.NetHelper.HttpGetAsync<HereIsolineResult>(url);
+                return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<HereIsolineResult>(url));
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
 
-                return null;
+                return ResponseFactory.CreateError<HereIsolineResult>(ex.GetMessagePlus());
             }
         }
     }

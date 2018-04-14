@@ -10,10 +10,10 @@ namespace IRI.Ham.SpatialBase.Model.Google
     {
 
         [JsonProperty("lat")]
-        public double Lat { get; set; }
+        public double Latitude { get; set; }
 
         [JsonProperty("lng")]
-        public double Lng { get; set; }
+        public double Longitude { get; set; }
     }
 
     //public class Northeast
@@ -122,7 +122,7 @@ namespace IRI.Ham.SpatialBase.Model.Google
                 return Point.NaN;
             }
 
-            return new Point(this.Geometry.Location.Lng, this.Geometry.Location.Lat);
+            return new Point(this.Geometry.Location.Longitude, this.Geometry.Location.Latitude);
         }
 
         public Point AsWebMercatorPoint()
@@ -137,10 +137,10 @@ namespace IRI.Ham.SpatialBase.Model.Google
                 return BoundingBox.NaN;
             }
 
-            return new BoundingBox(xMin: this.Geometry.Viewport.Southwest.Lng,
-                yMin: this.Geometry.Viewport.Southwest.Lat,
-                xMax: this.Geometry.Viewport.Northeast.Lng,
-                yMax: this.Geometry.Viewport.Northeast.Lat);
+            return new BoundingBox(xMin: this.Geometry.Viewport.Southwest.Longitude,
+                yMin: this.Geometry.Viewport.Southwest.Latitude,
+                xMax: this.Geometry.Viewport.Northeast.Longitude,
+                yMax: this.Geometry.Viewport.Northeast.Latitude);
         }
 
         public BoundingBox AsWebMercatorBoundingBox()

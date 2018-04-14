@@ -9,7 +9,7 @@ namespace IRI.Ket.Common.Service.News
 {
     public static class LiveuaMapService
     {
-        public static async Task<LiveuaMapApiResults> Get(string region, DateTime date)
+        public static async Task<LiveuaMapApiResults> GetAsync(string region, DateTime date)
         {
             var days = (date.Date - new DateTime(2017, 12, 01)).Days;
 
@@ -18,9 +18,8 @@ namespace IRI.Ket.Common.Service.News
             var url = $"http://{region}.liveuamap.com/ajax/do?act=pts&curid=0&time={minutes}&last=0";
 
             var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<LiveuaMapApiResults>(url);
-
+              
             return result;
-
         }
     }
 }

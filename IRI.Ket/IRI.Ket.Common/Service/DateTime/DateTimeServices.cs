@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Ket.Common.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace IRI.Ket.Common.Service
 {
     public static class DateTimeServices
     {
-        public static async Task<DateTime?> GetNowFromServer(WebProxy proxy = null)
+        public static async Task<Response<DateTime>> GetNowFromServerAsync(WebProxy proxy = null)
         {
             WebClient client = new WebClient();
 
@@ -28,11 +29,11 @@ namespace IRI.Ket.Common.Service
                 double milliseconds = Convert.ToInt64(time) / 1000.0;
                 var result = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
 
-                return result;
+                return ResponseFactory.Create(result);
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<DateTime>(ex.GetMessagePlus());
             }
         }
     }

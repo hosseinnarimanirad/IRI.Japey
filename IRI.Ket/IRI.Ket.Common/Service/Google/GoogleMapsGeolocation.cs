@@ -1,5 +1,6 @@
 ﻿using IRI.Ham.SpatialBase.Model.Google;
-using IRI.Ket.Common.Devices.ManagedNativeWifi; 
+using IRI.Ket.Common.Devices.ManagedNativeWifi;
+using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,36 +11,55 @@ namespace IRI.Ket.Common.Service.Google
 {
     public static class GoogleMapsGeolocation
     {
-        public static async Task<GoogleGeolocationResult> GetLocationAsync(string key)
+        public static async Task<Response<GoogleGeolocationResult>> GetLocationAsync(string key)
         {
             try
             {
                 var networks = NativeWifi.EnumerateBssNetworks();
 
-                var parameter = new GoogleGeolocationParameters()
-                {
+                var
                     wifiAccessPoints = networks.Select(i => new Wifiaccesspoint()
                     {
                         channel = i.Channel,
                         macAddress = i.Bssid.ToString(),
                         signalStrength = i.SignalStrength,
 
-                    }).ToArray()
-                };
+                    }).ToArray();
 
-                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
+                return await GetLocationAsync(key, wifiAccessPoints);
 
-                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter);
+                //var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
+
+                //return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
 
-                return new GoogleGeolocationResult() { accuracy = int.MaxValue };
+                //return new GoogleGeolocationResult() { accuracy = int.MaxValue };
+                return ResponseFactory.CreateError<GoogleGeolocationResult>(ex.GetMessagePlus());
             }
         }
-         
-        public static async Task<GoogleGeolocationResult> GetLocationAsync(string key, List<Wifiaccesspoint> networks)
+
+        public static async Task<Response<GoogleGeolocationResult>> GetLocationAsync(string key, Wifiaccesspoint[] networks)
+        {
+            try
+            {
+                var parameter = new GoogleGeolocationParameters() { wifiAccessPoints = networks };
+
+                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
+
+                return ResponseFactory.Create(await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+
+                return ResponseFactory.CreateError<GoogleGeolocationResult>(ex.GetMessagePlus());
+            }
+        }
+
+        public static Response<GoogleGeolocationResult> GetLocation(string key, List<Wifiaccesspoint> networks)
         {
             try
             {
@@ -50,34 +70,13 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter);
+                return ResponseFactory.Create(Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(url, parameter));
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
 
-                return new GoogleGeolocationResult() { accuracy = int.MaxValue };
-            }
-        }
-
-        public static GoogleGeolocationResult GetLocation(string key, List<Wifiaccesspoint> networks)
-        {
-            try
-            {
-                var parameter = new GoogleGeolocationParameters()
-                {
-                    wifiAccessPoints = networks.ToArray()
-                };
-
-                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
-
-                return Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(url, parameter);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-
-                return new GoogleGeolocationResult() { accuracy = int.MaxValue };
+                return ResponseFactory.CreateError<GoogleGeolocationResult>(ex.GetMessagePlus());
             }
         }
 
