@@ -1015,6 +1015,7 @@ namespace IRI.Jab.MapViewer
         //}
 
 
+        //This method should be improved. it is not working well
         private async Task AddTiledLayer(VectorLayer layer, TileInfo tile)
         {
             var mapScale = MapScale;
@@ -1022,8 +1023,6 @@ namespace IRI.Jab.MapViewer
             var extent = this.CurrentExtent;
 
             var _vt = viewTransform.Clone();
-
-
 
             var layerTile = layer.TileManager.Find(tile);
 
@@ -1086,7 +1085,7 @@ namespace IRI.Jab.MapViewer
                     throw new NotImplementedException();
             }
 
-            if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
+            if (tile.ZoomLevel != this.CurrentZoomLevel)//|| MapScale != mapScale)
             {
                 Debug.Print($"Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 return;

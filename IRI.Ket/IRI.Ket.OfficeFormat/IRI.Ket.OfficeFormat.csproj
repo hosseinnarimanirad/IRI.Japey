@@ -39,9 +39,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelHelper.cs" />
+    <Compile Include="Extensions\ShapefileExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +58,10 @@
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
+      <Name>IRI.Ket.ShapefileFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
