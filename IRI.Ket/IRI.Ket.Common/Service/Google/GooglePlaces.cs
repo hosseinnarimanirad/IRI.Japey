@@ -20,7 +20,7 @@ namespace IRI.Ket.Common.Service.Google
         //}
 
         public async static Task<Response<GooglePlacesResult>> SearchAsync(string query, string key)
-        { 
+        {
             //var url = $"https://maps.googleapis.com/maps/api/directions/json?origin={startString}&destination={endString}&alternatives=true&departure_time={time}&key={key}";
 
             //return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<GoogleDirectionsResult>(url));
@@ -30,6 +30,11 @@ namespace IRI.Ket.Common.Service.Google
             //var result = await client.DownloadStringTaskAsync(new Uri($"{apiUrl}query={query}&key={key}"));
 
             //return Newtonsoft.Json.JsonConvert.DeserializeObject<GooglePlacesResult>(result);
+        }
+
+        public static Response<GooglePlacesResult> Search(string query, string key)
+        {
+            return ResponseFactory.Create(Helpers.NetHelper.HttpGet<GooglePlacesResult>($"{apiUrl}query={query}&key={key}"));
         }
     }
 }

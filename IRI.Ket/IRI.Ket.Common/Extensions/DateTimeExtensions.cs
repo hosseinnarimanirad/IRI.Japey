@@ -22,7 +22,7 @@ namespace IRI.Ket.Common.Extensions
             return dateTime.IsAM() ? "ق.ظ" : "ب.ظ";
         }
 
-        public static string ToPersianAlphabeticDate(this DateTime dateTime)
+        public static string ToPersianAlphabeticDate(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
@@ -34,10 +34,12 @@ namespace IRI.Ket.Common.Extensions
 
             var day = _calendar.GetDayOfMonth(dateTime);
 
-            return $"{day:00} {month} {year:0000}";
+            var result = FormattableString.Invariant($"{day:00} {month} {year:0000}");
+
+            return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
         }
 
-        public static string ToLongPersianDateTime(this DateTime dateTime)
+        public static string ToLongPersianDateTime(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
@@ -49,36 +51,44 @@ namespace IRI.Ket.Common.Extensions
 
             var day = _calendar.GetDayOfMonth(dateTime);
 
-            return $" تاریخ {day:00}-{month:00}-{year:0000}  ساعت {dateTime.Hour:00}:{dateTime.Minute:00}  {dateTime.GetPersianAmPm()} ";
+            var result = FormattableString.Invariant($" تاریخ {day:00}-{month:00}-{year:0000}  ساعت {dateTime.Hour:00}:{dateTime.Minute:00}  {dateTime.GetPersianAmPm()} ");
+
+            return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
 
         }
 
-        public static string ToLongPersianDateTimeSimple(this DateTime dateTime)
+        public static string ToLongPersianDateTimeSimple(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
                 return ToLongPersianDateTimeSimple(_midValidPersianDateTime);
 
-            return FormattableString.Invariant(
+            var result = FormattableString.Invariant(
                 $"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}-{_calendar.GetHour(dateTime):00}:{_calendar.GetMinute(dateTime):00}:{_calendar.GetSecond(dateTime):00}");
+
+            return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
         }
 
-        public static string ToPersianDate(this DateTime dateTime)
+        public static string ToPersianDate(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
                 return ToPersianDate(_midValidPersianDateTime);
 
-            return FormattableString.Invariant($"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}");
+            var result = FormattableString.Invariant($"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}");
+
+            return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
         }
 
-        public static string ToPersianYearMonth(this DateTime dateTime)
+        public static string ToPersianYearMonth(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
                 return ToPersianYearMonth(_midValidPersianDateTime);
 
-            return $"{GetPersianMonthName(dateTime)} {_calendar.GetYear(dateTime)}";
+            var result = FormattableString.Invariant($"{GetPersianMonthName(dateTime)} {_calendar.GetYear(dateTime)}");
+
+            return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result; ;
         }
 
         public static DateTime GetBeginningOfThePersianYear(this DateTime dateTime)
