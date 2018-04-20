@@ -8,7 +8,7 @@ namespace IRI.Ket.Common.Service
 {
     public class Response<T>
     {
-        public bool IsSuccessful { get; set; }
+        public bool IsFailed { get; set; }
 
         public string ErrorMessage { get; set; }
 
@@ -21,12 +21,12 @@ namespace IRI.Ket.Common.Service
     {
         public static Response<T> Create<T>(T result)
         {
-            return new Response<T>() { Result = result, ErrorMessage = string.Empty, IsSuccessful = true };
+            return new Response<T>() { Result = result, ErrorMessage = string.Empty, IsFailed = false };
         }
 
         public static Response<T> CreateError<T>(string errorMessage)
         {
-            return new Response<T> { ErrorMessage = errorMessage, IsSuccessful = false };
+            return new Response<T> { ErrorMessage = errorMessage, IsFailed = true };
         }
     }
 }

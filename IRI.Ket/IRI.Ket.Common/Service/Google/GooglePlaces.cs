@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Service.Google
 {
-    public static class GooglePlaces
+    public static class GooglePlacesService
     {
         const string apiUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
 

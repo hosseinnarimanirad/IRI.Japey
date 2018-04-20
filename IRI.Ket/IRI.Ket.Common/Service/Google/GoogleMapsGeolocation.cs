@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Service.Google
 {
-    public static class GoogleMapsGeolocation
+    public static class GoogleMapsGeolocationService
     {
         public static async Task<Response<GoogleGeolocationResult>> GetLocationAsync(string key)
         {

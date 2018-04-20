@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Service.Google
 {
-    public static class GoogleDirectionsApi
+    public static class GoogleDirectionsService
     {
         public static async Task<Response<GoogleDirectionsResult>> GetDirectionAsync(Point start, Point end, string key)
         {

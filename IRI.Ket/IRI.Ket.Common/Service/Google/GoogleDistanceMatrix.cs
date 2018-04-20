@@ -1,6 +1,7 @@
 ﻿
 using IRI.Ham.SpatialBase;
 using IRI.Ham.SpatialBase.Model.Google;
+using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Service.Google
 {
-    public static class GoogleDistanceMatrix
+    public static class GoogleDistanceMatrixService
     {
         public static async Task<Response<GoogleDistanceMatrixResult>> GetDistanceMatrixAsync(List<Point> origins, List<Point> destinations, string key)
         {
@@ -30,7 +31,8 @@ namespace IRI.Ket.Common.Service.Google
             {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
 
-                return new Response<GoogleDistanceMatrixResult>() { Result = new GoogleDistanceMatrixResult() { rows = new Row[0] }, IsSuccessful = false, ErrorMessage = ex.Message };
+                return ResponseFactory.CreateError<GoogleDistanceMatrixResult>(ex.GetMessagePlus());
+                //return new Response<GoogleDistanceMatrixResult>() { Result = new GoogleDistanceMatrixResult() { rows = new Row[0] }, IsFailed = true, ErrorMessage = ex.Message };
             }
         }
 
