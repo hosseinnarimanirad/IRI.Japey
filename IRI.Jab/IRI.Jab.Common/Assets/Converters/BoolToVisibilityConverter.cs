@@ -18,6 +18,11 @@ namespace IRI.Jab.Common.Assets.Converters
                 target = bool.Parse(parameter.ToString());
             }
 
+            if (!(value is bool))
+            {
+                return Visibility.Collapsed;
+            }
+
             if ((bool)value == target)
             {
                 return Visibility.Visible;

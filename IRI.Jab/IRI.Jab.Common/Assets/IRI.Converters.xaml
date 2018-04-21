@@ -22,6 +22,8 @@
     <converters:StreamGeometryToPathConverter x:Key="streamGeometryToPathConverter"/>
     <converters:StringToFarsiStringConverter x:Key="stringToFarsiStringConverter"/>
     <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
+    <converters:StringToShapeConverter x:Key="stringToShapeConverter"/>
+    
     <converters:SubtractConstantConverter x:Key="subtractConstantConverter"/>
 
     <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>

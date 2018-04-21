@@ -107,6 +107,7 @@
     <Compile Include="Assets\Converters\StreamGeometryToPathConverter.cs" />
     <Compile Include="Assets\Converters\StringToFarsiStringConverter.cs" />
     <Compile Include="Assets\Converters\StringToRtlFlowDirection.cs" />
+    <Compile Include="Assets\Converters\StringToShapeConverter.cs" />
     <Compile Include="Assets\Converters\SubtractConstantConverter.cs" />
     <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
