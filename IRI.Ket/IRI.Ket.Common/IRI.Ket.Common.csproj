@@ -154,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Deploy\" />
-    <Folder Include="Devices\WiFi\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
