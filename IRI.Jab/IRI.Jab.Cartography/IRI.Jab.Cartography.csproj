@@ -210,7 +210,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Geometries\" />
     <Folder Include="Deploy\" />
   </ItemGroup>
   <ItemGroup>

@@ -22,11 +22,11 @@ namespace IRI.Ket.Common.Extensions
             return dateTime.IsAM() ? "ق.ظ" : "ب.ظ";
         }
 
-        public static string ToPersianAlphabeticDate(this DateTime dateTime, bool useFarsiNumbers = true)
+        public static string ToPersianAlphabeticDate(this DateTime dateTime, bool includeDayOfWeek = true, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
-                return ToPersianAlphabeticDate(_midValidPersianDateTime);
+                return ToPersianAlphabeticDate(_midValidPersianDateTime, includeDayOfWeek, useFarsiNumbers);
 
             var year = _calendar.GetYear(dateTime);
 
@@ -34,7 +34,9 @@ namespace IRI.Ket.Common.Extensions
 
             var day = _calendar.GetDayOfMonth(dateTime);
 
-            var result = FormattableString.Invariant($"{day:00} {month} {year:0000}");
+            var result = includeDayOfWeek ?
+                FormattableString.Invariant($"{GetPersianDayOfWeekName(dateTime)} {day:00} {month} {year:0000}") :
+                FormattableString.Invariant($"{day:00} {month} {year:0000}");
 
             return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
         }
@@ -84,7 +86,7 @@ namespace IRI.Ket.Common.Extensions
         {
             //to avoid ArgumentOutOfRangeException
             if (dateTime < _midValidPersianDateTime)
-                return ToPersianYearMonth(_midValidPersianDateTime);
+                return ToPersianYearMonth(_midValidPersianDateTime, useFarsiNumbers);
 
             var result = FormattableString.Invariant($"{GetPersianMonthName(dateTime)} {_calendar.GetYear(dateTime)}");
 
@@ -137,6 +139,22 @@ namespace IRI.Ket.Common.Extensions
             return persianMonths[monthIndex];
         }
 
+        public static string GetPersianDayOfWeekName(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetPersianDayOfWeekName(_midValidPersianDateTime);
+
+            var dayOfWeek = _calendar.GetDayOfWeek(dateTime);
+
+            return GetPersianDayOfWeekName(dayOfWeek);
+        }
+
+        public static string GetPersianDayOfWeekName(DayOfWeek dayOfWeek)
+        {
+            return persianDaysOfWeek[((int)dayOfWeek + 1) % 7];
+        }
+
         static readonly string[] persianMonths = new string[]
         {
             "فروردین",
@@ -151,6 +169,17 @@ namespace IRI.Ket.Common.Extensions
             "دی",
             "بهمن",
             "اسفند",
+        };
+
+        static readonly string[] persianDaysOfWeek = new string[]
+        {
+            "شنبه",
+            "یک‌شنبه",
+            "دوشنبه",
+            "سه‌شنبه",
+            "چهارشنبه",
+            "پنج‌شنبه",
+            "جمعه",
         };
 
         public static readonly DateTime JulianDate = new DateTime(1970, 1, 1, 0, 0, 0);

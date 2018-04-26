@@ -142,7 +142,6 @@
     <Compile Include="Service\DateTime\DateTimeServices.cs" />
     <Compile Include="Service\Google\GooglePlaces.cs" />
     <Compile Include="Service\Google\GoogleStaticMapProvider.cs" />
-    <Compile Include="Web\MessageResult.cs" />
     <Compile Include="Web\SpatialQueryParameters.cs" />
     <Compile Include="Worldfile\Worldfile.cs" />
     <Compile Include="Worldfile\WorldfileManager.cs" />
