@@ -48,8 +48,8 @@ namespace IRI.Jab.Cartography
         {
 
             return new VisualParameters(
-                BrushHelper.Create(ColorHelper.ToWpfColor("#FBB03B"), 0.3),
-                BrushHelper.Create("#FBB03B"),
+                BrushHelper.CreateBrush(ColorHelper.ToWpfColor("#FBB03B"), 0.3),
+                BrushHelper.CreateBrush("#FBB03B"),
                 3,
                 1,
                 System.Windows.Visibility.Visible)

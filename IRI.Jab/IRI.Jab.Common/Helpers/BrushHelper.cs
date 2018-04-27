@@ -47,7 +47,7 @@ namespace IRI.Jab.Common.Helpers
             return result;
         }
 
-        public static Brush Create(string hexColor)
+        public static Brush CreateBrush(string hexColor)
         {
             if (hexColor == null)
             {
@@ -62,7 +62,7 @@ namespace IRI.Jab.Common.Helpers
             return (SolidColorBrush)(new BrushConverter().ConvertFrom(hexColor));
         }
 
-        public static Brush Create(string hexColor, double opacity)
+        public static Brush CreateBrush(string hexColor, double opacity)
         {
             if (!hexColor.StartsWith("#"))
             {
@@ -76,19 +76,19 @@ namespace IRI.Jab.Common.Helpers
             return new SolidColorBrush(Color.FromArgb((byte)alpha, r: color.R, g: color.G, b: color.B));
         }
 
-        public static Brush Create(Color color, double opacity)
+        public static Brush CreateBrush(Color color, double opacity)
         {
             var alpha = opacity > 1 ? color.A : (opacity < 0 ? 0 : opacity * color.A);
 
             return new SolidColorBrush(Color.FromArgb((byte)alpha, r: color.R, g: color.G, b: color.B));
         }
 
-        public static System.Drawing.Brush AsGdiBrush(string hexColor)
+        public static System.Drawing.Brush CreateGdiBrush(string hexColor)
         {
             return new System.Drawing.SolidBrush(ColorHelper.ToGdiColor(hexColor));
         }
 
-        public static System.Drawing.Brush AsGdiBrush(string hexColor, double opacity)
+        public static System.Drawing.Brush CreateGdiBrush(string hexColor, double opacity)
         {
             var color = ColorHelper.ToGdiColor(hexColor);
 
@@ -96,10 +96,10 @@ namespace IRI.Jab.Common.Helpers
 
             //return new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(alpha: (int)alpha, red: color.R, green: color.G, blue: color.B));
 
-            return AsGdiBrush(color, opacity);
+            return CreateGdiBrush(color, opacity);
         }
 
-        public static System.Drawing.Brush AsGdiBrush(System.Drawing.Color color, double opacity)
+        public static System.Drawing.Brush CreateGdiBrush(System.Drawing.Color color, double opacity)
         {
             var alpha = opacity > 1 ? color.A : (opacity < 0 ? 0 : opacity * color.A);
 

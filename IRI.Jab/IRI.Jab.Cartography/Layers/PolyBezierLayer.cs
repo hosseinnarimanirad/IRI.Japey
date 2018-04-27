@@ -24,7 +24,7 @@ namespace IRI.Jab.Cartography
 {
     public class PolyBezierLayer : BaseLayer
     {
-        static readonly Brush _stroke = BrushHelper.Create("#FF1CA1E2");
+        static readonly Brush _stroke = BrushHelper.CreateBrush("#FF1CA1E2");
 
         #region ILayerMembers
 

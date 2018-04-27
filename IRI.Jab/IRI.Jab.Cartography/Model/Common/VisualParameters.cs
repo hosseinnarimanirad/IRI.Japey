@@ -158,7 +158,7 @@ namespace IRI.Jab.Cartography
         }
 
         public VisualParameters(string hexFill, string hexStroke, double strokeThickness = 1, double opacity = 1) :
-            this(BrushHelper.Create(hexFill), BrushHelper.Create(hexStroke), strokeThickness, opacity)
+            this(BrushHelper.CreateBrush(hexFill), BrushHelper.CreateBrush(hexStroke), strokeThickness, opacity)
         {
 
         }

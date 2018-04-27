@@ -14,8 +14,8 @@ namespace IRI.Jab.Cartography.Model
 {
     public class EditableFeatureLayerOptions : Notifier
     {
-        static readonly Brush _stroke = BrushHelper.Create("#FF1CA1E2");
-        static readonly Brush _fill = BrushHelper.Create("#661CA1E2");
+        static readonly Brush _stroke = BrushHelper.CreateBrush("#FF1CA1E2");
+        static readonly Brush _fill = BrushHelper.CreateBrush("#661CA1E2");
 
         public bool IsNewDrawing { get; set; } = false;
 
