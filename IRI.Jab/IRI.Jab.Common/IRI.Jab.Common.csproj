@@ -133,6 +133,7 @@
     <Compile Include="Extensions\BoundingBoxExtensions.cs" />
     <Compile Include="Extensions\BrushExtensions.cs" />
     <Compile Include="Extensions\ColorExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EventHandlerExtensions.cs" />
     <Compile Include="Extensions\PenExtensions.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Helpers\WorldfilePyramid.cs" />
     <Compile Include="Model\Common\IProxySettings.cs" />
     <Compile Include="Model\Common\ProxySettingsModel.cs" />
+    <Compile Include="Model\Common\SpecialDateTime.cs" />
     <Compile Include="Model\EditableItem.cs" />
     <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
     <Compile Include="Model\Globalization\Language.cs" />

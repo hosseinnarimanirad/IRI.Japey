@@ -12,10 +12,83 @@ namespace IRI.Ket.OfficeFormat
     {
         public static void Write<T>(List<T> rows, List<string> headers, List<Func<T, string>> mapFuncs, string outputFileName, string sheetName)
         {
-            if (headers.Count != mapFuncs.Count)
-            {
+            var defaultTypes = headers.Select(h => CellValues.String).ToList();
+
+            Write(rows, headers, defaultTypes, mapFuncs, outputFileName, sheetName);
+
+            //if (headers.Count != mapFuncs.Count)
+            //{
+            //    throw new NotImplementedException();
+            //}
+
+            //using (SpreadsheetDocument document = SpreadsheetDocument.Create(outputFileName, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
+            //{
+            //    WorkbookPart workbookPart = document.AddWorkbookPart();
+            //    workbookPart.Workbook = new Workbook();
+
+            //    WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+            //    worksheetPart.Worksheet = new Worksheet();
+
+            //    Sheets sheets = workbookPart.Workbook.AppendChild(new Sheets());
+
+            //    Sheet sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = sheetName };
+
+            //    sheets.Append(sheet);
+
+            //    workbookPart.Workbook.Save();
+
+            //    SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
+
+            //    // Constructing header
+            //    Row row = new Row();
+
+            //    List<Cell> headerCells = new List<Cell>();
+
+            //    for (int i = 0; i < headers.Count; i++)
+            //    {
+            //        headerCells.Add(ConstructCell(headers[i], CellValues.String));
+            //    }
+
+            //    row.Append(headerCells);
+
+            //    // Insert the header row to the Sheet Data
+            //    sheetData.AppendChild(row);
+
+            //    try
+            //    {
+            //        //var karevan = karevanha.Single(i => i.Id == item.KarevanId);
+            //        foreach (var item in rows)
+            //        {
+
+            //            List<Cell> cells = new List<Cell>();
+
+            //            for (int i = 0; i < headers.Count; i++)
+            //            {
+            //                cells.Add(ConstructCell(mapFuncs[i](item), CellValues.String));
+            //            }
+
+            //            //Header
+            //            //Row temporaryRow = new Row(cells);
+
+            //            //temporaryRow.Append(cells);
+
+            //            //sheetData.AppendChild(temp);
+            //            sheetData.AppendChild(new Row(cells));
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //    }
+
+            //    worksheetPart.Worksheet.Save();
+            //}
+        }
+         
+        public static void Write<T>(List<T> rows, List<string> headers, List<CellValues> types, List<Func<T, string>> mapFuncs, string outputFileName, string sheetName)
+        {
+            if (headers.Count != mapFuncs.Count || headers.Count != types.Count)
                 throw new NotImplementedException();
-            }
 
             using (SpreadsheetDocument document = SpreadsheetDocument.Create(outputFileName, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
             {
@@ -42,7 +115,7 @@ namespace IRI.Ket.OfficeFormat
 
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    headerCells.Add(ConstructCell(headers[i], CellValues.String));
+                    headerCells.Add(ConstructCell(headers[i], types[i]));
                 }
 
                 row.Append(headerCells);
@@ -60,7 +133,7 @@ namespace IRI.Ket.OfficeFormat
 
                         for (int i = 0; i < headers.Count; i++)
                         {
-                            cells.Add(ConstructCell(mapFuncs[i](item), CellValues.String));
+                            cells.Add(ConstructCell(mapFuncs[i](item), types[i]));
                         }
 
                         //Header
@@ -76,7 +149,7 @@ namespace IRI.Ket.OfficeFormat
                 {
 
                 }
-                 
+
                 worksheetPart.Worksheet.Save();
             }
         }
