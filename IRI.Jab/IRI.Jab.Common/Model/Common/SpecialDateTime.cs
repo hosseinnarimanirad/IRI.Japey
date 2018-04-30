@@ -34,39 +34,68 @@ namespace IRI.Jab.Common.Model.Common
                     return;
 
                 _adDate = value;
+
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(FullPersianAlphabeticDate));
-                RaisePropertyChanged(nameof(LongPersianDateTime));
+
+                FullPersianAlphabeticDate = value?.ToPersianAlphabeticDate() ?? string.Empty;
+
+                PersianDate = value?.ToPersianDate() ?? string.Empty; ;
+
+                LongPersianDateTime = value?.ToLongPersianDateTime() ?? string.Empty;
+
                 RaisePropertyChanged(nameof(Ticks));
 
                 this.ChangeAction?.Invoke(this);
             }
         }
 
+        private string _fullPersianAlphabeticDate;
+
         public string FullPersianAlphabeticDate
         {
             get
             {
-                return ADDate?.ToPersianAlphabeticDate() ?? string.Empty;
+                return _fullPersianAlphabeticDate;
+            }
+            private set
+            {
+                _fullPersianAlphabeticDate = value;
+                RaisePropertyChanged();
             }
         }
+
+
+        private string _persianDate;
 
         public string PersianDate
         {
             get
             {
-                return ADDate?.ToPersianDate() ?? string.Empty;
+                return _persianDate;
+            }
+            private set
+            {
+                _persianDate = value;
+                RaisePropertyChanged();
             }
         }
 
+
+        private string _longPersianDateTime;
 
         public string LongPersianDateTime
         {
             get
             {
-                return ADDate?.ToLongPersianDateTime() ?? string.Empty;
+                return _longPersianDateTime;
+            }
+            private set
+            {
+                _longPersianDateTime = value;
+                RaisePropertyChanged();
             }
         }
+
 
         public long Ticks
         {
@@ -79,6 +108,23 @@ namespace IRI.Jab.Common.Model.Common
         public bool HasValue
         {
             get { return this.ADDate.HasValue; }
+        }
+
+        public override int GetHashCode()
+        {
+            return ADDate.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as SpecialDateTime;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.ADDate.Equals(item.ADDate);
         }
 
         public Action<SpecialDateTime> ChangeAction;
