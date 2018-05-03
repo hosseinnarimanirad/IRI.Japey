@@ -74,7 +74,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             string whereClause = string.Format(System.Globalization.CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
 
-            return GetEntireFeature(whereClause);
+            return GetEntireFeatures(whereClause);
         }
 
         public DataTable GetEntireFeaturesThatIntersects(List<Point> region)
@@ -140,7 +140,7 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         //WHERE ST_INTERSECTS(A,B)
-        public override DataTable GetEntireFeature(string whereClause)
+        public override DataTable GetEntireFeatures(string whereClause)
         {
             List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema, _tableName);
 
@@ -208,28 +208,34 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable GetEntireFeatures(BoundingBox geometry)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 
-
-        //#region Async Methods
-
-        //public Task<IEnumerable<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<DataTable> GetEntireFeatureAsync(string whereClause)
-        //{
-        //    return Task.Run(() => { return GetEntireFeature(whereClause); });
-        //}
-
-        //public Task<List<SqlGeometry>> GetGeometriesAsync(BoundingBox boundingBox)
-        //{
-        //    return Task.Run(() => { return GetGeometries(boundingBox); });
-        //}
-
-        //#endregion
-
+         
     }
 }

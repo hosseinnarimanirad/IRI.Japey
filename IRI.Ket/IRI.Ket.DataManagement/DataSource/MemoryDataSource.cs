@@ -7,6 +7,7 @@ using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.SpatialExtensions;
+using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -131,7 +132,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //    throw new NotImplementedException();
         //}
 
-        public override DataTable GetEntireFeature(string whereClause)
+        public override DataTable GetEntireFeatures(string whereClause)
         {
             throw new NotImplementedException();
         }
@@ -169,12 +170,10 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometryLabelPairs(boundary);
         }
 
-        public List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
         {
             return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(geometry).IsTrue).ToList();
         }
-
-
 
         public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
         {
@@ -210,6 +209,26 @@ namespace IRI.Ket.DataManagement.DataSource
             }
 
             return result;
+        }
+
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable GetEntireFeatures(BoundingBox geometry)
+        {
+            throw new NotImplementedException();
         }
 
         //public Task<IEnumerable<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)

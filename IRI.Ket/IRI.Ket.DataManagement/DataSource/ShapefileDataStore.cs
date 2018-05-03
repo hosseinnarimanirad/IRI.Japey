@@ -62,9 +62,6 @@ namespace IRI.Ket.DataManagement.DataSource
 
             await Shapefile.CreateIndex(_shpFileName);
         }
-
-
-
-
+         
     }
 }

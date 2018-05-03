@@ -14,6 +14,7 @@ namespace IRI.Ket.DataManagement.Model
 
         List<SqlGeometry> GetGeometries(double mapScale, BoundingBox boundingBox);
 
-        Task<List<SqlGeometry>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox); 
+        Task<List<SqlGeometry>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox);
+         
     }
 }

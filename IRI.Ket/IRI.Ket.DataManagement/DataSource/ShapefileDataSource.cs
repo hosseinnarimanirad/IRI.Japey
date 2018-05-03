@@ -171,7 +171,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return this._table.Select()
                                   .Select(i => i[_spatialColumnName])
                                   .Cast<SqlGeometry>()
-                                  .Where(i => !i.IsNull && bound.STIntersects(i.MakeValid()).IsTrue)
+                                  .Where(i => !i.IsNotValidOrEmpty() && bound.STIntersects(i.MakeValid()).IsTrue)
                                   .ToList();
         }
 
@@ -200,12 +200,7 @@ namespace IRI.Ket.DataManagement.DataSource
                                .Select(i => i[attributeColumn]).OfType<object>().ToList();
         }
 
-        //public Task<DataTable> GetEntireFeatureAsync(string whereClause)
-        //{
-        //    return Task.Run(() => { return GetEntireFeature(whereClause); });
-        //}
-
-        public override DataTable GetEntireFeature(string filterExpression)
+        public override DataTable GetEntireFeatures(string filterExpression)
         {
             return this._table.Select(filterExpression).CopyToDataTable();
         }
@@ -221,6 +216,11 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             var bound = boundingBox.AsSqlGeometry().MakeValid();
 
+            return GetGeometryLabelPairs(bound);
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
             if (string.IsNullOrEmpty(_labelColumnName) && _table.Columns.Contains(_labelColumnName))
                 return new List<NamedSqlGeometry>();
 
@@ -228,14 +228,14 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 return this._table.Select()
                                    .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], string.Empty))
-                                   .Where(i => !i.Geometry.IsNull && bound.STIntersects(i.Geometry.MakeValid()).IsTrue)
+                                   .Where(i => !i.Geometry.IsNull && geometry.STIntersects(i.Geometry.MakeValid()).IsTrue)
                                    .ToList();
             }
             else
             {
                 return this._table.Select()
                                       .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], i[_labelColumnName]?.ToString()))
-                                      .Where(i => !i.Geometry.IsNull && bound.STIntersects(i.Geometry.MakeValid()).IsTrue)
+                                      .Where(i => !i.Geometry.IsNull && geometry.STIntersects(i.Geometry.MakeValid()).IsTrue)
                                       .ToList();
             }
         }
@@ -254,9 +254,24 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
-        //public Task<IEnumerable<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable GetEntireFeatures(BoundingBox geometry)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

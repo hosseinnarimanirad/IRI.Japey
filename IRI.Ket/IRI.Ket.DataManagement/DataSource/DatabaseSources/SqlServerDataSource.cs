@@ -528,7 +528,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Get Geometry Label Pair
 
-        public List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
@@ -631,6 +631,21 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #endregion
 
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
 
         #region Get Entire Feature
 
@@ -668,10 +683,10 @@ namespace IRI.Ket.DataManagement.DataSource
             //    query = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM {0}", GetTable());
             //}
             //return ExecuteSql(query);
-            return GetEntireFeature(string.Empty);
+            return GetEntireFeatures(string.Empty);
         }
 
-        public override DataTable GetEntireFeature(string whereClause)
+        public override DataTable GetEntireFeatures(string whereClause)
         {
             //return ExecuteSql(string.Format(CultureInfo.InvariantCulture, "SELECT * FROM {0} {1} ", GetTable(), whereClause ?? string.Empty));
             return ExecuteSql(FormattableString.Invariant($"SELECT * FROM {GetTable()} {MakeWhereClause(whereClause)} "));
@@ -681,6 +696,12 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             throw new NotImplementedException();
         }
+
+        public override DataTable GetEntireFeatures(BoundingBox geometry)
+        {
+            throw new NotImplementedException();
+        }
+         
 
         #endregion
     }

@@ -31,12 +31,20 @@ namespace IRI.Ket.DataManagement.Model
 
         public abstract List<SqlGeometry> GetGeometries(BoundingBox boundingBox);
 
+        public abstract List<SqlGeometry> GetGeometries(SqlGeometry geometry);
+
         #endregion
 
 
         #region Get Geometry Label Pairs
 
+        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs();
+
+        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause);
+
         public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox);
+
+        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry);
 
         #endregion
 
@@ -55,7 +63,9 @@ namespace IRI.Ket.DataManagement.Model
 
         #region GetEntireFeature
 
-        public abstract DataTable GetEntireFeature(string whereClause);
+        public abstract DataTable GetEntireFeatures(string whereClause);
+
+        public abstract DataTable GetEntireFeatures(BoundingBox geometry);
 
         public abstract DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry);
 
@@ -63,9 +73,20 @@ namespace IRI.Ket.DataManagement.Model
 
 
         #region Async Methods
+
         public Task<List<SqlGeometry>> GetGeometriesAsync()
         {
             return Task.Run(() => { return GetGeometries(); });
+        }
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(string whereClause)
+        {
+            return Task.Run(() => { return GetGeometries(whereClause); });
+        }
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(SqlGeometry geometry)
+        {
+            return Task.Run(() => { return GetGeometries(geometry); });
         }
 
         public Task<List<SqlGeometry>> GetGeometriesAsync(BoundingBox boundingBox)
@@ -73,14 +94,41 @@ namespace IRI.Ket.DataManagement.Model
             return Task.Run(() => { return GetGeometries(boundingBox); });
         }
 
-        public Task<DataTable> GetEntireFeatureAsync(string whereClause)
+
+        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync()
         {
-            return Task.Run(() => { return GetEntireFeature(whereClause); });
+            return Task.Run(() => { return GetGeometryLabelPairs(); });
+        }
+
+        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(string whereClause)
+        {
+            return Task.Run(() => { return GetGeometryLabelPairs(whereClause); });
         }
 
         public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetGeometryLabelPairs(boundingBox); });
+        }
+
+        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(SqlGeometry geometry)
+        {
+            return Task.Run(() => { return GetGeometryLabelPairs(geometry); });
+        }
+
+
+        public Task<DataTable> GetEntireFeatureAsync(string whereClause)
+        {
+            return Task.Run(() => { return GetEntireFeatures(whereClause); });
+        }
+
+        public Task<DataTable> GetEntireFeatureAsync(BoundingBox geometry)
+        {
+            return Task.Run(() => { return GetEntireFeatures(geometry); });
+        }
+
+        public Task<DataTable> GetEntireFeaturesWhereIntersectsAsync(SqlGeometry geometry)
+        {
+            return Task.Run(() => { return GetEntireFeaturesWhereIntersects(geometry); });
         }
 
         #endregion

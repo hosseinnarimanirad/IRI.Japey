@@ -43,15 +43,11 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public List<SqlGeometry> GetGeometries(double scale)
-        {
-            //Debug.Print($"map scale: {1.0 / scale}");
+        { 
+            var availableScales = source.Select(k => k.Key).ToList();
 
-            var selectedScale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetUpperLevel(scale, source.Select(i => i.Key).ToList());
-            //Debug.Print($"selected scale: {selectedScale}");
-
-            //Debug.Print($"level lower: {IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetLowerLevel(scale)}");
-            //Debug.Print($"level upper: {IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetUpperLevel(scale)}");
-
+            var selectedScale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
+             
             return source[selectedScale];
         }
 

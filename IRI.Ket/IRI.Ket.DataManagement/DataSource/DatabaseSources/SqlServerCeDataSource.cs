@@ -203,7 +203,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0}", this._tableName));
         }
 
-        public override System.Data.DataTable GetEntireFeature(string whereClause)
+        public override System.Data.DataTable GetEntireFeatures(string whereClause)
         {
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, MakeWhereClause(whereClause)));
         }
@@ -239,6 +239,31 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
             throw new NotImplementedException();
         }
