@@ -256,22 +256,67 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
         {
-            throw new NotImplementedException();
+            return this._table.Select()
+                                .Select(i => i[_spatialColumnName])
+                                .Cast<SqlGeometry>()
+                                .Where(i => !i.IsNotValidOrEmpty() && geometry.STIntersects(i.MakeValid()).IsTrue)
+                                .ToList();
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(_labelColumnName) && _table.Columns.Contains(_labelColumnName))
+                return new List<NamedSqlGeometry>();
+
+            if (this._labelColumnName == null)
+            {
+                return this._table.Select()
+                                   .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], string.Empty))
+                                   .Where(i => !i.Geometry.IsNull)
+                                   .ToList();
+            }
+            else
+            {
+                return this._table.Select()
+                                      .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], i[_labelColumnName]?.ToString()))
+                                      .Where(i => !i.Geometry.IsNull)
+                                      .ToList();
+            }
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
         {
-            throw new NotImplementedException();
+            if (this._labelColumnName == null)
+            {
+                return this._table.Select(whereClause)
+                                   .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], string.Empty))
+                                   .Where(i => !i.Geometry.IsNull)
+                                   .ToList();
+            }
+            else
+            {
+                return this._table.Select(whereClause)
+                                      .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], i[_labelColumnName]?.ToString()))
+                                      .Where(i => !i.Geometry.IsNull)
+                                      .ToList();
+            }
+             
         }
 
-        public override DataTable GetEntireFeatures(BoundingBox geometry)
+        public override DataTable GetEntireFeatures(BoundingBox boundingBox)
         {
-            throw new NotImplementedException();
+            var bound = boundingBox.AsSqlGeometry().MakeValid();
+
+            var result = _table.Select().Where(i => (i[_spatialColumnName] as SqlGeometry).STIntersects(bound).IsTrue);
+
+            if (result == null || result.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return result.CopyToDataTable();
+            }
         }
     }
 }
