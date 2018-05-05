@@ -69,6 +69,7 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = geometries.GetBoundingBox();
         }
 
+        //GetGeometries
         public override List<SqlGeometry> GetGeometries()
         {
             if (this._geometries == null)
@@ -98,86 +99,37 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
         }
 
-        //public virtual Task<List<SqlGeometry>> GetGeometriesAsync(BoundingBox boundingBox)
-        //{
-        //    return Task.Run<List<SqlGeometry>>(() => { return GetGeometries(boundingBox); });
-        //}
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+        }
 
+        //GetAttributes
         public List<object> GetAttributes()
         {
             return this._attributes.Cast<object>().ToList();
         }
-
-        //public override List<object> GetAttributes(string attributeColumn)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+         
         public override List<object> GetAttributes(string attributeColumn, string whereClause)
         {
             throw new NotImplementedException();
         }
 
-        //public System.Data.DataTable ExecuteSql(string commandString)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public System.Data.DataTable GetEntireFeature()
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //public Task<DataTable> GetEntireFeatureAsync(string whereClause)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+        //GetEntireFeatures
         public override DataTable GetEntireFeatures(string whereClause)
         {
             throw new NotImplementedException();
         }
 
-        //public List<string> GetLabels()
-        //{
-        //    //return this._attributes.Select(i => i.ToString()).ToList();
-        //    return this.geometryAttributePairs.Select(i => i.Item2.ToString()).ToList();
-        //}
-
-        //public IEnumerable<Tuple<SqlGeometry, string>> GetGeometryLabelPairs()
-        //{
-        //    //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).ToList();
-        //    return this.geometryAttributePairs;
-        //}
-
-        //public IEnumerable<Tuple<SqlGeometry, string>> GetGeometryLabelPairs(string whereClause)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
+        public override DataTable GetEntireFeatures(BoundingBox boundary)
         {
-            //SqlGeometry boundary =
-            //    SqlGeometry.Parse(
-            //        string.Format("POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))", boundingBox.XMin, boundingBox.YMin, boundingBox.YMax, boundingBox.XMax));
+            SqlGeometry geometry = boundary.AsSqlGeometry();
 
-            //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STWithin(boundary).Value).ToList();
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
-
-            //93.01.18
-            //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STIntersects(boundary).Value).ToList();
-
-            //return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(boundary).IsTrue).ToList();
-            return GetGeometryLabelPairs(boundary);
-        }
-
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
-        {
-            return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(geometry).IsTrue).ToList();
+            return GetEntireFeaturesWhereIntersects(geometry);
         }
 
         public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
         {
-
             if (geometry?.STSrid.Value != this.Srid)
             {
                 throw new NotImplementedException();
@@ -211,33 +163,37 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
-        {
-            throw new NotImplementedException();
-        }
-
+        //GetGeometryLabelPairs
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
-            throw new NotImplementedException();
+            return this.geometryAttributePairs;
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
+        {
+            //SqlGeometry boundary =
+            //    SqlGeometry.Parse(
+            //        string.Format("POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))", boundingBox.XMin, boundingBox.YMin, boundingBox.YMax, boundingBox.XMax));
+
+            //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STWithin(boundary).Value).ToList();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+
+            //93.01.18
+            //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STIntersects(boundary).Value).ToList();
+
+            //return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(boundary).IsTrue).ToList();
+            return GetGeometryLabelPairs(boundary);
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            return this.geometryAttributePairs.Where(i => i.Geometry.STIntersects(geometry).IsTrue).ToList();
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
         {
             throw new NotImplementedException();
         }
-
-        public override DataTable GetEntireFeatures(BoundingBox geometry)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public Task<IEnumerable<NamedSqlGeometry>> GetGeometryLabelPairsAsync(BoundingBox boundingBox)
-        //{
-        //    return Task.Run(() => { return GetGeometryLabelPairs(boundingBox); });
-        //}
-
-
-
-
+         
     }
 }
