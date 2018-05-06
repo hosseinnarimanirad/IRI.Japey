@@ -70,19 +70,19 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public DataTable GetEntireFeaturesThatIntersects(string wktRegion)
+        public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
         {
             string whereClause = string.Format(System.Globalization.CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
 
             return GetEntireFeatures(whereClause);
         }
 
-        public DataTable GetEntireFeaturesThatIntersects(List<Point> region)
+        public DataTable GetEntireFeaturesWhereIntersects(List<Point> region)
         {
             string wktRegion = string.Format(System.Globalization.CultureInfo.InvariantCulture, " POLYGON(({0})) ",
                 string.Join(",", region.Select(i => string.Format(" {0} {1}", i.X, i.Y))));
 
-            return GetEntireFeaturesThatIntersects(wktRegion);
+            return GetEntireFeaturesWhereIntersects(wktRegion);
         }
 
         public DataTable GetAttributeColumns(string whereClause)
@@ -190,7 +190,12 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             SqlGeometry boundary = boundingBox.AsSqlGeometry();
 
-            return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
+            return GetGeometries(boundary);
+        }
+
+        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
         }
 
         //public override List<object> GetAttributes(string attributeColumn)
@@ -205,12 +210,9 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
         {
-            throw new NotImplementedException();
-        }
+            string wkt = new string(geometry.STAsText().Value);
 
-        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
-        {
-            throw new NotImplementedException();
+            return GetEntireFeaturesWhereIntersects(wkt);
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
@@ -230,12 +232,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
-            throw new NotImplementedException();
+            var boundary = geometry.AsSqlGeometry();
+
+            return GetEntireFeaturesWhereIntersects(boundary);
         }
 
         #endregion
 
 
-         
+
     }
 }
