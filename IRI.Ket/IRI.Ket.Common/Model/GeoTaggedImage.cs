@@ -14,7 +14,7 @@ namespace IRI.Ket.Common.Model
     {
         public Point3D GeographicLocation { get; set; }
 
-        public Point3D MercatorLocation { get; set; }
+        public Point3D WebMercatorLocation { get; set; }
 
         public string ImageFileName { get; set; }
 
@@ -32,7 +32,7 @@ namespace IRI.Ket.Common.Model
 
                     var webMercator = MapProjects.GeodeticWgs84ToWebMercator((Point)GeographicLocation);
 
-                    this.MercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
+                    this.WebMercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
                 }
                 else
                 {
@@ -42,7 +42,7 @@ namespace IRI.Ket.Common.Model
 
                         var webMercator = MapProjects.GeodeticWgs84ToWebMercator((Point)GeographicLocation);
 
-                        this.MercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
+                        this.WebMercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
 
                         System.IO.File.WriteAllText(location, JsonConvert.SerializeObject(this.GeographicLocation));
                     }
@@ -52,7 +52,7 @@ namespace IRI.Ket.Common.Model
             {
                 this.GeographicLocation = Point3D.NaN;
 
-                this.MercatorLocation = Point3D.NaN;
+                this.WebMercatorLocation = Point3D.NaN;
             }
         }
     }

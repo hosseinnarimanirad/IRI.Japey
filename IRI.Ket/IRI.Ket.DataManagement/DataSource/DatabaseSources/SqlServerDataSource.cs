@@ -692,7 +692,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(FormattableString.Invariant($"SELECT * FROM {GetTable()} {MakeWhereClause(whereClause)} "));
         }
 
-        public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
             throw new NotImplementedException();
         }

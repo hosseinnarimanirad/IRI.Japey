@@ -125,10 +125,10 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             SqlGeometry geometry = boundary.AsSqlGeometry();
 
-            return GetEntireFeaturesWhereIntersects(geometry);
+            return GetEntireFeatures(geometry);
         }
 
-        public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
             if (geometry?.STSrid.Value != this.Srid)
             {

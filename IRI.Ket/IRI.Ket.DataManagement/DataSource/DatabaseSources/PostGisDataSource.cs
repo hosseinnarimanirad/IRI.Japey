@@ -208,7 +208,7 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
             string wkt = new string(geometry.STAsText().Value);
 
@@ -234,7 +234,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             var boundary = geometry.AsSqlGeometry();
 
-            return GetEntireFeaturesWhereIntersects(boundary);
+            return GetEntireFeatures(boundary);
         }
 
         #endregion

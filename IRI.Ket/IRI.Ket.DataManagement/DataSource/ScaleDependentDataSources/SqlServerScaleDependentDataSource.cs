@@ -134,6 +134,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             return spatialColumn;
         }
 
+
         public List<SqlGeometry> GetGeometries(double mapScale)
         {
             return GetGeometries(mapScale, string.Empty);
@@ -231,6 +232,13 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             //return GetGeometryLabelPairs(whereClause);
             //throw new Exception("label column not available in _P table");
             return SelectGeometryLabelPairs(FormattableString.Invariant($"SELECT {_pyramidTableSpatialColumn} FROM {_pyramidParameters.TableName} {MakeWhereClause(whereClause)} "), _pyramidParameters.ConnectionString);
+        }
+
+
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(double scale)
+        {
+            return Task.Run(() => { return GetGeometries(scale); });
         }
 
         public Task<List<SqlGeometry>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox)

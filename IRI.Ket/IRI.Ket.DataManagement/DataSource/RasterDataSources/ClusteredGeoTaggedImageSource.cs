@@ -59,7 +59,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     {
                         var geoTaggedImage = new GeoTaggedImage(file.FullName);
 
-                        if (double.IsNaN(geoTaggedImage.MercatorLocation.X))
+                        if (double.IsNaN(geoTaggedImage.WebMercatorLocation.X))
                             continue;
 
                         this._images.Add(geoTaggedImage);
@@ -83,7 +83,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var logic = new Func<GeoTaggedImage, GeoTaggedImage, bool>((first, second) =>
                 {
-                    var distance = Point.EuclideanDistance(first.MercatorLocation, second.MercatorLocation);
+                    var distance = Point.EuclideanDistance(first.WebMercatorLocation, second.WebMercatorLocation);
 
                     var tolerance = 50 * ConversionHelper.InchToMeterFactor / 96.0;
 
@@ -109,7 +109,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     return BoundingBox.NaN;
                 }
 
-                return BoundingBox.CalculateBoundingBox(_images.Select(i => i.MercatorLocation));
+                return BoundingBox.CalculateBoundingBox(_images.Select(i => i.WebMercatorLocation));
             }
         }
 

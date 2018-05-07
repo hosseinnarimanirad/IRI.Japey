@@ -67,7 +67,7 @@ namespace IRI.Ket.DataManagement.Model
 
         public abstract DataTable GetEntireFeatures(BoundingBox geometry);
 
-        public abstract DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry);
+        public abstract DataTable GetEntireFeatures(SqlGeometry geometry);
 
         #endregion
 
@@ -128,7 +128,7 @@ namespace IRI.Ket.DataManagement.Model
 
         public Task<DataTable> GetEntireFeaturesWhereIntersectsAsync(SqlGeometry geometry)
         {
-            return Task.Run(() => { return GetEntireFeaturesWhereIntersects(geometry); });
+            return Task.Run(() => { return GetEntireFeatures(geometry); });
         }
 
         #endregion

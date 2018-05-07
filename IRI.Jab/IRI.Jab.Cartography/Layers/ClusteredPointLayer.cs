@@ -58,9 +58,9 @@ namespace IRI.Jab.Cartography
 
                 locatable.AncherFunction = AncherFunctionHandlers.CenterCenter;
 
-                locatable.X = imageGroup.Center.MercatorLocation.X;
+                locatable.X = imageGroup.Center.WebMercatorLocation.X;
 
-                locatable.Y = imageGroup.Center.MercatorLocation.Y;
+                locatable.Y = imageGroup.Center.WebMercatorLocation.Y;
 
                 //locatable.Element = new Common.View.MapMarkers.CountableImageMarker(imageSymbol, imageGroup.Frequency.ToString());
 

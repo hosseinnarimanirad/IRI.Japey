@@ -205,7 +205,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometryLabelPairs(boundary);
         }
 
-        public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
             throw new NotImplementedException();
         }

@@ -10,6 +10,7 @@ using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.DataManagement.Model;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -43,11 +44,11 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public List<SqlGeometry> GetGeometries(double scale)
-        { 
+        {
             var availableScales = source.Select(k => k.Key).ToList();
 
             var selectedScale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
-             
+
             return source[selectedScale];
         }
 
@@ -55,8 +56,20 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             SqlGeometry boundary = boundingBox.AsSqlGeometry();
 
-            return GetGeometries(scale).AsParallel().Where(i => i.STIntersects(boundary).IsTrue).ToList();
+            return GetGeometries(scale, boundary);
 
+        }
+
+        public List<SqlGeometry> GetGeometries(double scale, SqlGeometry geometry)
+        {
+            return GetGeometries(scale).AsParallel().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+        }
+
+         
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(double scale)
+        {
+            return Task.Run(() => { return GetGeometries(scale); });
         }
 
         public Task<List<SqlGeometry>> GetGeometriesAsync(double scale, BoundingBox boundingBox)

@@ -240,7 +240,7 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
-        public override DataTable GetEntireFeaturesWhereIntersects(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
             var result = _table.Select().Where(i => (i[_spatialColumnName] as SqlGeometry).STIntersects(geometry).IsTrue);
 

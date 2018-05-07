@@ -4092,7 +4092,7 @@ namespace IRI.Jab.MapViewer
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))
                     continue;
 
-                var features = layer.DataSource.GetEntireFeaturesWhereIntersects(geometry);
+                var features = layer.DataSource.GetEntireFeatures(geometry);
 
                 if (features != null)
                 {
