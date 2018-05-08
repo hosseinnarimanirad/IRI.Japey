@@ -31,6 +31,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         bool isGeometry;
 
+        public override int GetSrid()
+        {
+            return _srid;
+        }
+
         public ShapefileDataSource(string shapeFileName, string spatialColumnName, int srid, bool isGeometry = true, string labelColumnName = null)
             : this(shapeFileName, spatialColumnName, srid, DbfFile.ArabicEncoding, isGeometry, labelColumnName)
         {
@@ -166,7 +171,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //POTENTIALLY ERROR PRONOUN: Check SqlGeometry special cases: IsNull, ...
         public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
         {
-            var bound = boundingBox.AsSqlGeometry().MakeValid();
+            var bound = boundingBox.AsSqlGeometry(_srid).MakeValid();
 
             return this._table.Select()
                                   .Select(i => i[_spatialColumnName])
@@ -214,7 +219,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
         {
-            var bound = boundingBox.AsSqlGeometry().MakeValid();
+            var bound = boundingBox.AsSqlGeometry(_srid).MakeValid();
 
             return GetGeometryLabelPairs(bound);
         }
@@ -305,7 +310,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(BoundingBox boundingBox)
         {
-            var bound = boundingBox.AsSqlGeometry().MakeValid();
+            var bound = boundingBox.AsSqlGeometry(_srid).MakeValid();
 
             var result = _table.Select().Where(i => (i[_spatialColumnName] as SqlGeometry).STIntersects(bound).IsTrue);
 

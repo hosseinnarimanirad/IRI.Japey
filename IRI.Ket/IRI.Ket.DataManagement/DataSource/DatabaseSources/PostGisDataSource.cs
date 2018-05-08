@@ -44,8 +44,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             this.Extent = GetGeometries().GetBoundingBox();
         }
-
-
+         
         private string GetProperSelectForSpatialColumn(string columnName)
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "encode(ST_AsBinary({0}),'hex')", _spatialColumnName);
@@ -188,7 +187,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             return GetGeometries(boundary);
         }
@@ -232,7 +231,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
-            var boundary = geometry.AsSqlGeometry();
+            var boundary = geometry.AsSqlGeometry(GetSrid());
 
             return GetEntireFeatures(boundary);
         }

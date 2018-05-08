@@ -62,7 +62,7 @@ namespace IRI.Ket.DataManagement.DataSource
         }
          
         /// <summary>
-        /// 
+        /// s
         /// </summary>
         /// <param name="whereClause"> forget the "WHERE", e.g.   coulumn01 = someValue</param>
         /// <returns></returns>
@@ -122,7 +122,7 @@ namespace IRI.Ket.DataManagement.DataSource
             //      "POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))", boundingBox.XMin, boundingBox.YMin, boundingBox.YMax, boundingBox.XMax));
 
             //return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             return GetGeometries(boundary);
         }
@@ -200,7 +200,7 @@ namespace IRI.Ket.DataManagement.DataSource
          
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             return GetGeometryLabelPairs(boundary);
         }

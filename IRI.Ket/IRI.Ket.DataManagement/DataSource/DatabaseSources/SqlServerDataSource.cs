@@ -314,7 +314,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return SelectFeatures(GetCommandString(wktGeometryFilter, false), returnWkt);
         }
 
-        public int GetSrid()
+        public override int GetSrid()
         {
             SqlConnection connection = null;
 

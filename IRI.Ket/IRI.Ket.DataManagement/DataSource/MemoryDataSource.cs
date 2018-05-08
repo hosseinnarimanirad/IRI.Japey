@@ -23,7 +23,12 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected List<NamedSqlGeometry> geometryAttributePairs;
 
-        private int Srid { get { return this._geometries == null || this._geometries.Count == 0 ? 0 : this._geometries.First().GetSrid(); } }
+
+
+        public override int GetSrid()
+        {
+            return this._geometries?.SkipWhile(g => g.IsNotValidOrEmpty())?.FirstOrDefault().GetSrid() ?? 0;
+        }
 
         private bool HasAttribute
         {
@@ -94,7 +99,7 @@ namespace IRI.Ket.DataManagement.DataSource
             //         string.Format("POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))", boundingBox.XMin, boundingBox.YMin, boundingBox.YMax, boundingBox.XMax));
 
             //return GetGeometries().Where(i => i.STWithin(boundary).Value).ToList();
-            SqlGeometry boundary = boundingBox.AsSqlGeometry(this.Srid).MakeValid();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(this.GetSrid()).MakeValid();
 
             return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
         }
@@ -109,7 +114,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return this._attributes.Cast<object>().ToList();
         }
-         
+
         public override List<object> GetAttributes(string attributeColumn, string whereClause)
         {
             throw new NotImplementedException();
@@ -123,14 +128,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(BoundingBox boundary)
         {
-            SqlGeometry geometry = boundary.AsSqlGeometry();
+            SqlGeometry geometry = boundary.AsSqlGeometry(GetSrid());
 
             return GetEntireFeatures(geometry);
         }
 
         public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
-            if (geometry?.STSrid.Value != this.Srid)
+            if (geometry?.STSrid.Value != this.GetSrid())
             {
                 throw new NotImplementedException();
             }
@@ -176,7 +181,7 @@ namespace IRI.Ket.DataManagement.DataSource
             //        string.Format("POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))", boundingBox.XMin, boundingBox.YMin, boundingBox.YMax, boundingBox.XMax));
 
             //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STWithin(boundary).Value).ToList();
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             //93.01.18
             //return _geometries.Zip(_attributes, (a, b) => Tuple.Create(a, _labelFunc(b))).Where(i => i.Item1.STIntersects(boundary).Value).ToList();
@@ -194,6 +199,6 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             throw new NotImplementedException();
         }
-         
+
     }
 }

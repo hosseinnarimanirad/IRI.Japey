@@ -49,7 +49,7 @@ namespace IRI.Ket.DataManagement.DataSource
             this._srid = srid;
 
 
-        }
+        }        
 
         public async Task MakeIndex(bool overwrite = true)
         {

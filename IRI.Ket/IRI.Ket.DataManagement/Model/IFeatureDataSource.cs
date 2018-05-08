@@ -1,5 +1,6 @@
 ﻿using IRI.Ham.SpatialBase;
 using IRI.Ket.DataManagement.DataSource;
+using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using Microsoft.SqlServer.Types;
 using System;
@@ -18,6 +19,11 @@ namespace IRI.Ket.DataManagement.Model
         protected string MakeWhereClause(string whereClause)
         {
             return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");
+        }
+
+        public virtual int GetSrid()
+        {
+            return GetGeometries()?.SkipWhile(g => g.IsNotValidOrEmpty())?.FirstOrDefault()?.GetSrid() ?? 0;
         }
 
         #region Get Geometries
