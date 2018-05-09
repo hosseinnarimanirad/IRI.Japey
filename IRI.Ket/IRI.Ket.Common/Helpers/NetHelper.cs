@@ -13,6 +13,8 @@ namespace IRI.Ket.Common.Helpers
     {
         const string _defaulHost = "www.google.com";
 
+        const string contentTypeJson = "application/json";
+
         const string _defaultUri = "https://google.com";
 
         public static bool PingHost(string nameOrAddress, int timeout = 3000)
@@ -101,7 +103,14 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
+
+        //Http Get
         public static async Task<T> HttpGetAsync<T>(string address) where T : class
+        {
+            return await HttpGetAsync<T>(address, Encoding.UTF8);
+        }
+
+        public static async Task<T> HttpGetAsync<T>(string address, Encoding encoding) where T : class
         {
             try
             {
@@ -109,6 +118,8 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                client.Encoding = encoding;
 
                 var stringResult = await client.DownloadStringTaskAsync(address);
 
@@ -120,7 +131,14 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static async Task<T> HttpPostAsync<T>(string address, object data, string contentType = "application/json") where T : class
+
+        //Http Post
+        public static async Task<T> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        {
+            return await HttpPostAsync<T>(address, data, Encoding.UTF8, contentType);
+        }
+
+        public static async Task<T> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -128,6 +146,8 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                client.Encoding = encoding;
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -145,7 +165,13 @@ namespace IRI.Ket.Common.Helpers
         }
 
 
-        public static T HttpGet<T>(string address, string contentType = "application/json") where T : class
+        //Http Get
+        public static T HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
+        {
+            return HttpGet<T>(address, Encoding.UTF8, contentType);
+        }
+
+        public static T HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -153,6 +179,9 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                client.Encoding = encoding;
+
 
                 var stringResult = client.DownloadString(address);
 
@@ -164,7 +193,14 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static T HttpPost<T>(string address, object data, string contentType = "application/json") where T : class
+
+        //Http Post
+        public static T HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        {
+            return HttpPost<T>(address, data, Encoding.UTF8, contentType);
+        }
+
+        public static T HttpPost<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -172,6 +208,8 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                client.Encoding = encoding;
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {

@@ -127,6 +127,11 @@ namespace IRI.Jab.Common.Model.Common
             return this.ADDate.Equals(item.ADDate);
         }
 
+        public override string ToString()
+        {
+            return LongPersianDateTime;
+        }
+
         public Action<SpecialDateTime> ChangeAction;
 
         public event EventHandler<CustomEventArgs<SpecialDateTime>> OnChanged;
