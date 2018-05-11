@@ -407,6 +407,8 @@ namespace IRI.Jab.MapViewer
 
             _presenter = presenter;
 
+            presenter.RequestPrint = () => this.Print();
+
             presenter.RequestGetProxy = () => this.Proxy;
 
             presenter.RequestSetProxy = (p) => this.Proxy = p;
@@ -2754,6 +2756,14 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+        #region Print
+
+       public void Print()
+        {
+            IRI.Jab.Common.Helpers.PrintHelper.Print(this.mapView);
+        }
+
+        #endregion
 
 
         #region Pan

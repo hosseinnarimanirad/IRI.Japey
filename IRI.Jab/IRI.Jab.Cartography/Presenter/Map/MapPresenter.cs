@@ -510,6 +510,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Actions & Funcs
 
+        public Action RequestPrint;
+
         public Action<System.Net.WebProxy> RequestSetProxy;
 
         public Func<System.Net.WebProxy> RequestGetProxy;
@@ -653,6 +655,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
         #endregion
 
         #region Methods
+
+        public void Print()
+        {
+            this.RequestPrint?.Invoke();
+        }
 
         private async void DrawAsync(DrawMode mode)
         {

@@ -485,7 +485,7 @@ namespace IRI.Jab.Common.Helpers
         }
 
 
-        private static System.Drawing.Image AsGdiPlusImage(this System.Windows.Media.ImageSource image)
+        public static System.Drawing.Image AsGdiPlusImage(this System.Windows.Media.ImageSource image)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -496,6 +496,28 @@ namespace IRI.Jab.Common.Helpers
                 return System.Drawing.Image.FromStream(memoryStream);
             }
 
+        }
+
+        public static BitmapImage ParseToBitmapImage(this RenderTargetBitmap rtb)
+        {
+            var bitmapImage = new BitmapImage();
+
+            var bitmapEncoder = new PngBitmapEncoder();
+
+            bitmapEncoder.Frames.Add(BitmapFrame.Create(rtb));
+
+            using (var stream = new MemoryStream())
+            {
+                bitmapEncoder.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = stream;
+                bitmapImage.EndInit();
+            }
+
+            return bitmapImage;
         }
     }
 }
