@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:IRI.Jab.Common.Assets.Converters">
+    
     <converters:CountLessThanOneToBoolConverter x:Key="countLessThanOneToBoolConverter"/>
     <converters:ArabicStringToFarsiStringConverter x:Key="arabicToFarsiConverter"/>
     <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
@@ -23,6 +24,7 @@
     <converters:StringToFarsiStringConverter x:Key="stringToFarsiStringConverter"/>
     <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
     <converters:StringToShapeConverter x:Key="stringToShapeConverter"/>
+    <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>
     
     <converters:SubtractConstantConverter x:Key="subtractConstantConverter"/>
 

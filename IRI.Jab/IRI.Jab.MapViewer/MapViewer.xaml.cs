@@ -791,7 +791,7 @@ namespace IRI.Jab.MapViewer
         public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
         {
             var layer = new TileServiceLayer(provider, type) { VisibleRange = scaleInterval };
-
+            
             if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
             {
                 layer.EnableCaching(cacheDirectory);

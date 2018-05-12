@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
+using System.Xml;
 
 namespace IRI.Jab.Common.Helpers
 {
@@ -12,7 +17,6 @@ namespace IRI.Jab.Common.Helpers
     {
         public static void Print(FrameworkElement visual, bool applyRtl = true)
         {
-
             var printDlg = new System.Windows.Controls.PrintDialog();
 
             if (printDlg.ShowDialog() == true)
@@ -50,5 +54,35 @@ namespace IRI.Jab.Common.Helpers
                 visual.LayoutTransform = oldTransfomr;
             }
         }
+
+        //public static void PrintLargeObject(FrameworkElement visual, bool applyRtl = true)
+        //{
+        //    Print(GetLargeObject(visual));
+        //}
+
+        //private static FrameworkElement GetLargeObject(FrameworkElement element)
+        //{
+        //    FlowDocumentScrollViewer flowDocumentScrollViewer = new FlowDocumentScrollViewer();
+
+        //    FlowDocument doc = new FlowDocument();
+
+        //    doc.Blocks.Add(new Section(new BlockUIContainer(XamlClone(element))));
+
+        //    flowDocumentScrollViewer.Document = doc;
+
+        //    return flowDocumentScrollViewer;
+        //}
+
+        //public static UIElement XamlClone(UIElement original) 
+        //{
+        //    if (original == null)
+        //        return (null);
+
+        //    string s = XamlWriter.Save(original);
+        //    StringReader stringReader = new StringReader(s);
+        //    XmlReader xmlReader = XmlTextReader.Create(stringReader, new XmlReaderSettings());
+        //    return (UIElement)XamlReader.Load(xmlReader);
+
+        //}
     }
 }
