@@ -2760,7 +2760,8 @@ namespace IRI.Jab.MapViewer
 
        public void Print()
         {
-            IRI.Jab.Common.Helpers.PrintHelper.Print(this.mapView);
+            //IRI.Jab.Common.Helpers.PrintHelper.Print(this.mapView);
+            IRI.Jab.Common.Helpers.PrintHelper.Print(this);
         }
 
         #endregion

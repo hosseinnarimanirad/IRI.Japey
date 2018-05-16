@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace IRI.Jab.Common.Helpers
 {
     public static class PrintHelper
     {
-        public static void Print(FrameworkElement visual, bool applyRtl = true)
+        public static void Print1(FrameworkElement visual, bool applyRtl = true)
         {
             var printDlg = new System.Windows.Controls.PrintDialog();
 
@@ -49,10 +50,60 @@ namespace IRI.Jab.Common.Helpers
                 visual.Arrange(new Rect(new Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), size));
 
                 //now print the visual to printer to fit on the one page.
-                printDlg.PrintVisual(visual, "First Fit to Page WPF Print");
+                printDlg.PrintVisual(visual, "A1");
 
                 visual.LayoutTransform = oldTransfomr;
             }
+        }
+
+        public static void Print(FrameworkElement visual, bool applyRtl = true)
+        {
+            var printDlg = new System.Windows.Controls.PrintDialog();
+
+            if (printDlg.ShowDialog() == true)
+            {
+                //get selected printer capabilities
+                System.Printing.PrintCapabilities capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
+                 
+                var drawingVisual = BuildGraphVisual(new PageMediaSize(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight), visual, applyRtl);
+                 
+                //now print the visual to printer to fit on the one page.
+                printDlg.PrintVisual(drawingVisual, "A1");                 
+            }
+        }
+         
+        private static DrawingVisual BuildGraphVisual(PageMediaSize pageSize, Visual visual, bool applyRtl = true)
+        {
+            var drawingVisual = new DrawingVisual();
+
+            //drawingVisual.Transform = new ScaleTransform(-1, 1);
+            using (var drawingContext = drawingVisual.RenderOpen())
+            {
+                var visualContent = visual;
+
+                var rect = new Rect
+                {
+                    X = 0,
+                    Y = 0,
+                    Width = pageSize.Width.Value,
+                    Height = pageSize.Height.Value
+                };
+
+                var stretch = Stretch.None;
+                var visualBrush = new VisualBrush(visualContent) { Stretch = stretch };
+
+                if (applyRtl)
+                {
+                    TransformGroup group = new TransformGroup();
+                    group.Children.Add(new ScaleTransform(-1, 1));
+                    group.Children.Add(new TranslateTransform(rect.Width, 0));
+                    visualBrush.Transform = group;
+                }
+
+                drawingContext.DrawRectangle(visualBrush, null, rect);
+                drawingContext.PushOpacityMask(Brushes.White);
+            }
+            return drawingVisual;
         }
 
         //public static void PrintLargeObject(FrameworkElement visual, bool applyRtl = true)

@@ -1582,6 +1582,21 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private RelayCommand _printCommand;
+
+        public RelayCommand PrintCommand
+        {
+            get
+            {
+                if (_printCommand == null)
+                {
+                    _printCommand = new RelayCommand(param => this.Print());
+                }
+
+                return _printCommand;
+            }
+        }
+
         #endregion
 
 
