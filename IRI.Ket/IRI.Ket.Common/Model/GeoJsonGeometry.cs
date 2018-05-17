@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IRI.Ham.SpatialBase.Primitives;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +12,56 @@ namespace IRI.Ket.Common.Model
     [JsonObject]
     public class GeoJsonGeometry
     {
+        [JsonProperty("type")]
+        public string Type { get; set; }
 
-        //[DataMember(Name = "coordinates")]
         [JsonProperty("coordinates")]
-        public double[][] Points { get; set; }
+        public Newtonsoft.Json.Linq.JArray Coordinates { get; set; }
 
-        private void ShouldSerializePoints()
+        public GeoJsonType GeometryType
         {
+            get
+            {
+                GeoJsonType result;
 
+                if (Enum.TryParse<GeoJsonType>(Type, out result))
+                    return result;
+
+                else
+                    throw new NotImplementedException();
+            }
         }
 
+        [JsonIgnore()]
+        public double[][] Points
+        {
+            get { return Coordinates.ToObject<double[][]>(); }
+            set { Coordinates = new Newtonsoft.Json.Linq.JArray(value); }
+        }
 
-        //polygon
-        //[DataMember(Name = "coordinates")]
-        [JsonProperty("coordinates")]
-        public double[][][] Rings { get; set; }
+        //polygon 
+        [JsonIgnore()]
+        public double[][][] Rings
+        {
+            get { return Coordinates.ToObject<double[][][]>(); }
+            set { Coordinates = new Newtonsoft.Json.Linq.JArray(value); }
+        }
 
-        //polyline
-        //[DataMember(Name = "coordinates")]
-        [JsonProperty("coordinates")]
-        public double[][][] Paths { get; set; }
+        //polyline 
+        [JsonIgnore()]
+        public double[][][] Paths
+        {
+            get { return Coordinates.ToObject<double[][][]>(); }
+            set { Coordinates = new Newtonsoft.Json.Linq.JArray(value); }
+        }
 
+        //multipolygon
+        [JsonIgnore()]
+        public double[][][][] Polygons
+        {
+            get { return Coordinates.ToObject<double[][][][]>(); }
+            set { Coordinates = new Newtonsoft.Json.Linq.JArray(value); }
+        }
+ 
     }
 }

@@ -63,6 +63,16 @@
     <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
+    <Compile Include="Model\GeoJsonFeature.cs" />
+    <Compile Include="Model\GeoJsonTypes.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonGeometryConverter.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonLineString.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonMultiLineString.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonMultiPoint.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonMultiPolygon.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonPoint.cs" />
+    <Compile Include="Model\GeoJson\GeoJsonPolygon.cs" />
+    <Compile Include="Model\GeoJson\IGeoJsonGeometry.cs" />
     <Compile Include="Service\Bing\BingMap.cs" />
     <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
     <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
