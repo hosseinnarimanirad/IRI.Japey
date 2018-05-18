@@ -42,7 +42,8 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -68,8 +69,8 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -114,17 +115,16 @@
     <Compile Include="WMS\WmsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="HosseinNarimaniRad.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{A0FA9D68-FD58-42E9-B994-1547BFFDB5A0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

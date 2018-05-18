@@ -22,6 +22,12 @@ using IRI.Ham.SpatialBase.Mapping;
 using spatial = IRI.Ham.SpatialBase;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
+using Microsoft.SqlServer.Types;
+using System.Data;
+using Newtonsoft.Json;
+using IRI.Ket.Common.Extensions;
+using IRI.Ket.Common.Model;
+using IRI.Ket.Common.Model.GeoJson;
 
 namespace MainProject
 {
@@ -32,59 +38,77 @@ namespace MainProject
         [STAThread()]
         static void Main()
         {
+            //TestGeolocation();
+             
+            var jsonString = System.IO.File.ReadAllText(@"E:\Data\Iran\Railway\networkblock.json");
+            var jsonStringOne = System.IO.File.ReadAllText(@"C:\Users\Hossein\Desktop\New Text Document.txt");
+
+            var one = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeature>(jsonStringOne);
+            //GeoJsonGeometry geo = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonGeometry>();
+
+            var parsedObject = Newtonsoft.Json.Linq.JObject.Parse(jsonString);
+            var temp = parsedObject["features"].Select(f => Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonGeometry>(f["geometry"]?.ToString())).ToList();
+
+            var c = temp.Count;
+            //TestGeolocation();
+
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new MainForm());
+            //var temp = IRI.Ket.Common.Extensions.DateTimeExtensions._midValidDateTime.ToPersianAlphabeticDate();
+            //new DateTime().ToPersianAlphabeticDate();
 
-            var wgsGeodeticPoint = new spatial.Point(51 + 22.0 / 60.0 + 12.72 / 3600.0, 29 + 14.0 / 60.0 + 14.68 / 3600.0);
-            var nahrawanGeodeticPoint = new spatial.Point(51 + 22.0 / 60.0 + 09.42 / 3600.0, 29 + 14.0 / 60.0 + 08.65 / 3600.0);
+            ////////var wgsGeodeticPoint = new spatial.Point(51 + 22.0 / 60.0 + 12.72 / 3600.0, 29 + 14.0 / 60.0 + 14.68 / 3600.0);
+            ////////var nahrawanGeodeticPoint = new spatial.Point(51 + 22.0 / 60.0 + 09.42 / 3600.0, 29 + 14.0 / 60.0 + 08.65 / 3600.0);
 
-            var lccNahrawanPoint = new spatial.Point(2119090.03, 823058.15);
-            var utmWgs84Point = new spatial.Point(535975, 3234346);
-
-
-            var result000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
-            var result0000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            var result00 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
-            var result01 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
-            var result001 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
+            ////////var lccNahrawanPoint = new spatial.Point(2119090.03, 823058.15);
+            ////////var utmWgs84Point = new spatial.Point(535975, 3234346);
 
 
+            ////////var result000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result0000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
 
-            var result3 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
-            var result003 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            var result4 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
-            var result004 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            var temp = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
+            ////////var result00 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
+            ////////var result01 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result001 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
 
 
-            var result30 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
 
-            var nahrawanCalculatedClarke = $"{DegreeHelper.ToDms(result30.X)} - {DegreeHelper.ToDms(result30.Y)}";
+            ////////var result3 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result003 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
 
-            var result20 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.Nahrawan);
+            ////////var result4 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result004 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
 
-            var nahrawanCalculatedNahrawan = $"{DegreeHelper.ToDms(result20.X)} - {DegreeHelper.ToDms(result20.Y)}";
+            ////////var temp = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
 
-            var result40 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.NahrawanIraq);
 
-            var nahrawanCalculatedNahrawanIraq = $"{DegreeHelper.ToDms(result40.X)} - {DegreeHelper.ToDms(result40.Y)}";
+            ////////var result30 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
 
-            var result50 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-                            IRI.Ham.CoordinateSystem.Ellipsoids.FD58);
+            ////////var nahrawanCalculatedClarke = $"{DegreeHelper.ToDms(result30.X)} - {DegreeHelper.ToDms(result30.Y)}";
 
-            var nahrawanCalculatedFD58 = $"{DegreeHelper.ToDms(result50.X)} - {DegreeHelper.ToDms(result50.Y)}";
+            ////////var result20 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.Nahrawan);
 
+            ////////var nahrawanCalculatedNahrawan = $"{DegreeHelper.ToDms(result20.X)} - {DegreeHelper.ToDms(result20.Y)}";
+
+            ////////var result40 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.NahrawanIraq);
+
+            ////////var nahrawanCalculatedNahrawanIraq = $"{DegreeHelper.ToDms(result40.X)} - {DegreeHelper.ToDms(result40.Y)}";
+
+            ////////var result50 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.FD58);
+
+            ////////var nahrawanCalculatedFD58 = $"{DegreeHelper.ToDms(result50.X)} - {DegreeHelper.ToDms(result50.Y)}";
+
+
+            //var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(@"C:\Users\YAMORTAZAALI\Desktop\Export_Output.shp").Select(i => i.AsSqlGeometry(0).MakeValid().ParseToPathMarkup(4)).ToList();
 
             //var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(@"C:\Users\Hossein\Desktop\93.PolygonGeo\Province.shp").Select(i => i.AsSqlGeometry(0).MakeValid().ParseToPathMarkup(4)).ToList();
             //var dbf = IRI.Ket.ShapefileFormat.Dbf.DbfFile.Read(@"C:\Users\Hossein\Desktop\93.PolygonGeo\Province.dbf", "t", Encoding.UTF8, Encoding.Unicode, false);
@@ -96,13 +120,109 @@ namespace MainProject
             //}
             //System.IO.File.WriteAllLines(@"C:\Users\Hossein\Desktop\93.PolygonGeo\markup.txt", result);
 
-            var utmPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
-            var geodeticPoint0 = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
+            ////////var utmPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
+            ////////var geodeticPoint0 = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
 
+            //ReadAdmin();
+            //IRI.Ket.Data.Feeds.AdminFeeder.GetProvinces();
+            var p1 = GetP(new spatial.Point(2702697, 777753), 39);
+            var p2 = GetP(new spatial.Point(1695799, 1548481), 39);
+            var p3 = GetP(new spatial.Point(2377182, 351233), 39);
+            var p4 = GetP(new spatial.Point(1369727, 1120365), 39);
+
+            Debug.WriteLine($"{p1.X},{p1.Y}");
+            Debug.WriteLine($"{p2.X},{p2.Y}");
+            Debug.WriteLine($"{p3.X},{p3.Y}");
+            Debug.WriteLine($"{p4.X},{p4.Y}");
 
             Console.Read();
         }
 
+        static async void LoadLive()
+        {
+            //var geo = fields.Select(f => f.AsSqlGeometry()).ToList();
+
+            //var count = geo.Count;
+        }
+
+        static async void TestGeolocation()
+        {
+            var location = await IRI.Ket.Common.Service.Google.GoogleMapsGeolocationService.GetLocationAsync("AIzaSyCC43GEQQv3cqK6Aea7XlHQb0bhjt3FQpE");
+        }
+
+        static spatial.Point GetP(spatial.Point point, int zone)
+        {
+            var geo = IRI.Ham.CoordinateSystem.MapProjection.DefaultMapProjections.LccNiocWithClarcke1880Rgs.ToWgs84Geodetic(point);
+
+            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geo, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84, zone, true);
+        }
+
+
+        static void ReadAdmin()
+        {
+            var connectionString = "data source=DESKTOP-C459ACH;integrated security=true;initial catalog = MyGeodatabase";
+            IRI.Ket.DataManagement.DataSource.SqlServerDataSource s = new IRI.Ket.DataManagement.DataSource.SqlServerDataSource(connectionString, "TAGHSIMAT93WM", "[Shape]");
+            var table = s.GetEntireFeature();
+
+            List<prov> result = new List<prov>();
+
+            foreach (DataRow item in table.Rows)
+            {
+                result.Add(new prov()
+                {
+                    Ostan = item["Ostan"].ToString(),
+                    Shahrestan = item["Shahrestan"].ToString(),
+                    Bakhsh = item["Bakhsh"].ToString(),
+                    Markaz = item["Markaz"].ToString(),
+                    BorderGeo = (SqlGeometry)item["Shape"],
+                    //Border = Convert.ToBase64String(((SqlGeometry)item["Shape"]).AsWkb()),
+                    Envelope = Convert.ToBase64String(((SqlGeometry)item["Shape"]).STEnvelope().AsWkb()),
+
+                });
+            }
+
+            var ostanGroups = result.GroupBy(i => i.Ostan);
+
+            List<prov> ostanha = new List<prov>();
+
+            foreach (var ostan in ostanGroups)
+            {
+                var geo = IRI.Ket.SqlServerSpatialExtension.Utility.Union(ostan.Select(j => j.BorderGeo).ToList());
+                //ostanha.Add(new prov() { Ostan = ostan.Key, Border = Convert.ToBase64String(geo.AsWkb()), BorderGeo = geo });
+                ostanha.Add(new prov() { Ostan = ostan.Key, Envelope = Convert.ToBase64String(geo.STEnvelope().AsWkb()), BorderGeo = geo });
+            }
+
+            //var shahrestanGroups = result.GroupBy(i => new { i.Shahrestan, i.Ostan });
+
+            //List<prov> shahrestanha = new List<prov>();
+
+            //foreach (var shahrestan in shahrestanGroups)
+            //{
+            //    var geo = IRI.Ket.SqlServerSpatialExtension.Utility.Union(shahrestan.Select(j => j.BorderGeo).ToList());
+            //    shahrestanha.Add(new prov() { Ostan = shahrestan.Key.Ostan, Shahrestan = shahrestan.Key.Shahrestan, Border = Convert.ToBase64String(geo.AsWkb()), BorderGeo = geo });
+            //}
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(ostanha);
+            System.IO.File.WriteAllText("ostanEnvelope93Wm.txt", json);
+        }
+
+        public class prov
+        {
+            public string Ostan { get; set; }
+
+            public string Shahrestan { get; set; }
+
+            public string Bakhsh { get; set; }
+
+            public string Markaz { get; set; }
+
+            public string Border { get; set; }
+
+            public string Envelope { get; set; }
+
+            [JsonIgnore]
+            public SqlGeometry BorderGeo { get; set; }
+        }
 
         private static void GetCapabilities()
         {

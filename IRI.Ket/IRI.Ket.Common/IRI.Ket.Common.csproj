@@ -132,14 +132,6 @@
     <Compile Include="Helpers\UnitHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
     <Compile Include="Helpers\XsdHelper.cs" />
-    <Compile Include="Model\Esri\EsriJsonGeometry.cs" />
-    <Compile Include="Model\Esri\EsriJsonGeometryType.cs" />
-    <Compile Include="Model\Esri\EsriJsonHelper.cs" />
-    <Compile Include="Model\Esri\EsriJsonMultipoint.cs" />
-    <Compile Include="Model\Esri\EsriJsonPoint.cs" />
-    <Compile Include="Model\Esri\EsriJsonPolygon.cs" />
-    <Compile Include="Model\Esri\EsriJsonPolyline.cs" />
-    <Compile Include="Model\Esri\EsriJsonSpatialreference.cs" />
     <Compile Include="Model\GeoJsonGeometry.cs" />
     <Compile Include="Model\WiseWebClient.cs">
       <SubType>Component</SubType>
@@ -163,19 +155,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Deploy\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
-      <Name>IRI.Ham.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
-    </ProjectReference>
+    <Folder Include="Model\Esri\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ThirdPartyLibraries\ManagedNativeWifi\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

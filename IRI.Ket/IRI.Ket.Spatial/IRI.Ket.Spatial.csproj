@@ -106,13 +106,9 @@
     <Compile Include="Primitives\Transform.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
-      <Name>IRI.Ham.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
       <Project>{F420034F-75C8-448D-B11B-B8CBF26C8946}</Project>

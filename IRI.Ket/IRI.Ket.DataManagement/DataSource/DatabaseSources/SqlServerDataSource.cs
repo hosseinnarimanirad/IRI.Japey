@@ -14,7 +14,7 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System.Globalization;
 using IRI.Ket.SpatialExtensions;
-
+using IRI.Ham.SpatialBase.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

@@ -65,7 +65,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>HosseinNarimaniRad.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,8 +84,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -172,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="HosseinNarimaniRad.pfx" />
     <None Include="packages.config" />
     <None Include="Resources\Graphic12.jpg" />
   </ItemGroup>
@@ -223,14 +223,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
-      <Name>IRI.Ham.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
       <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
       <Name>IRI.Jab.Cartography</Name>
@@ -250,6 +242,10 @@
     <ProjectReference Include="..\IRI.Ket\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
       <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>
       <Name>IRI.Ket.DataStructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IRI.Ket\IRI.Ket.Data\IRI.Ket.Data.csproj">
+      <Project>{a7b3f1e0-9de3-44ff-8817-f56ed3e10c2f}</Project>
+      <Name>IRI.Ket.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket\IRI.Ket.DigitalImageProcessing\IRI.Ket.DigitalImageProcessing.csproj">
       <Project>{0662a1b4-12de-4e31-8bd3-db61baaf7d8d}</Project>
@@ -287,9 +283,16 @@
       <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
       <Name>IRI.Std.OGC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

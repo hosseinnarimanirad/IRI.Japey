@@ -1,4 +1,5 @@
-﻿using IRI.Ket.Common.Model.Esri;
+﻿using IRI.Ham.SpatialBase.Model.Esri;
+
 using IRI.Ket.SpatialExtensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

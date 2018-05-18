@@ -59,6 +59,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
+    <Content Include="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
+    <Content Include="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />
     <Content Include="readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr100.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -97,9 +100,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Deploy\MicrosoftSqlServerTypes\v13\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

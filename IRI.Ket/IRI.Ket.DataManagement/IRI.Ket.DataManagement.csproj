@@ -126,13 +126,9 @@
     <Compile Include="DataSource\DatabaseSources\SqlServerDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669E46-2465-40FF-88BA-BA6ABCA548AA}</Project>
-      <Name>IRI.Ham.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>

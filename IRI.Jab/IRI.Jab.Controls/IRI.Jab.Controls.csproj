@@ -160,14 +160,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669e46-2465-40ff-88ba-ba6abca548aa}</Project>
-      <Name>IRI.Ham.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.SpatialBase\IRI.Ham.SpatialBase.csproj">
-      <Project>{a0fa9d68-fd58-42e9-b994-1547bffdb5a0}</Project>
-      <Name>IRI.Ham.SpatialBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
@@ -187,6 +179,10 @@
     <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
       <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
       <Name>IRI.Std.OGC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
       <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>

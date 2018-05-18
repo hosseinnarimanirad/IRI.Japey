@@ -156,9 +156,9 @@
     <Folder Include="Object Recognition\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Ham\IRI.Ham.Common\IRI.Ham.Common.csproj">
-      <Project>{95669E46-2465-40FF-88BA-BA6ABCA548AA}</Project>
-      <Name>IRI.Ham.Common</Name>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
       <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>

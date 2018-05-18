@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
-using IRI.Ham.Common.Helpers;
-using IRI.Ket.Common.Model.Esri;
+using IRI.Ham.Common.Helpers; 
 using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
+using IRI.Ham.SpatialBase.Model.Esri;
 
 namespace IRI.Ket.SpatialExtensions
 {
