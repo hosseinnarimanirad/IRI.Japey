@@ -89,6 +89,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CoordinateSystemUnitTest.cs" />
     <Compile Include="SpatialBaseTest.cs" />
+    <Compile Include="SpatialConversions\TestGeoJsonToSqlGeometry.cs" />
     <Compile Include="SpatialConversions\TestShapefileToKml.cs" />
     <Compile Include="SpatialConversions\TestSqlSpatialToShapefile.cs" />
     <Compile Include="Spatial\KdTreeTest.cs" />
@@ -143,6 +144,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Assets\GeoJsonSamples\networkblock.json" />
+    <EmbeddedResource Include="Assets\GeoJsonSamples\stations.json" />
     <None Include="Assets\ShapefileSamples\sourceD900.dbf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
