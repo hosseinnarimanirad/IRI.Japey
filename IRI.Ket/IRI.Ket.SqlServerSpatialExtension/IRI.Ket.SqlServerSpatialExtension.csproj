@@ -76,6 +76,7 @@
     <Compile Include="Analysis\VisualSimplification.cs" />
     <Compile Include="Extensions\BoundingBoxExtensions.cs" />
     <Compile Include="Extensions\EsriExtensions.cs" />
+    <Compile Include="Extensions\GeoJsonExtensions.cs" />
     <Compile Include="Extensions\GmlExtensions.cs" />
     <Compile Include="Extensions\GpxExtensions.cs" />
     <Compile Include="GeoStatistics\Group.cs" />

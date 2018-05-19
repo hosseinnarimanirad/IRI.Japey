@@ -1,11 +1,6 @@
-﻿using IRI.Ket.Common.Model.GeoJson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace IRI.Ket.Common.Model
+namespace IRI.Sta.Common.Model.GeoJson
 {
     public class GeoJsonFeature
     {

@@ -807,33 +807,36 @@ namespace IRI.Ham.SpatialBase.Primitives
 
 
         #region Static Methods
-         
-        public static Geometry ParseToGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongFirst = false)
+
+
+        // To do: provide sample input and expected output for this method  
+        public static Geometry ParseToGeodeticGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = false)
         {
-            return new Geometry(geoCoordinates.Select(p => ParseToGeometry(p, isLongFirst)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
+            return new Geometry(geoCoordinates.Select(p => ParseLineStringToGeodeticGeometry(p, isLongitudeFirst)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
         }
 
-        private static Geometry ParseToGeometry(double[] values, bool isLongFirst)
+        // To do: provide sample input and expected output for this method
+        private static Geometry ParseLineStringToGeodeticGeometry(double[] values, bool isLongitudeFirst)
         {
             if (values == null || values.Count() % 2 != 0)
             {
                 throw new NotImplementedException();
             }
 
-            List<IRI.Ham.SpatialBase.Point> result = new List<IRI.Ham.SpatialBase.Point>(values.Length / 2);
+            List<Point> result = new List<Point>(values.Length / 2);
 
-            if (isLongFirst)
+            if (isLongitudeFirst)
             {
                 for (int i = 0; i < values.Length - 1; i += 2)
                 {
-                    result.Add(new IRI.Ham.SpatialBase.Point(values[i], values[i + 1]));
+                    result.Add(new Point(values[i], values[i + 1]));
                 }
             }
             else
             {
                 for (int i = 0; i < values.Length - 1; i += 2)
                 {
-                    result.Add(new IRI.Ham.SpatialBase.Point(values[i + 1], values[i]));
+                    result.Add(new Point(values[i + 1], values[i]));
                 }
             }
 
@@ -842,32 +845,36 @@ namespace IRI.Ham.SpatialBase.Primitives
         }
 
 
-        public static Geometry ParseLineStringToGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongFirst = false)
+        //public static Point ParsePointToGeometry(double[] values, bool isLongitudeFirst)
+        //{
+        //    if (values == null || values.Count() != 2)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+
+        //    if (isLongitudeFirst)
+        //    {
+        //        return new Point(values[0], values[1]);
+        //    }
+        //    else
+        //    {
+        //        return new Point(values[1], values[0]);
+        //    }
+        //}
+
+        public static Geometry ParsePointToGeometry(double[] xy, bool isLongitudeFirst, int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry(geoCoordinates.Select(p => ParsePointToGeometry(p, isLongFirst)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
+            return new Geometry(new Point[] { Point.Parse(xy, isLongitudeFirst) }, GeometryType.Point) { Srid = srid };
         }
 
-        private static Ham.SpatialBase.Point ParsePointToGeometry(double[] values, bool isLongFirst)
+        public static Geometry ParseLineStringToGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)
         {
-            if (values == null || values.Count() != 2)
-            {
-                throw new NotImplementedException();
-            }
-
-            if (isLongFirst)
-            {
-                return new Ham.SpatialBase.Point(values[0], values[1]);
-            }
-            else
-            {
-                return new Ham.SpatialBase.Point(values[1], values[0]);
-            }
-
+            return new Geometry(geoCoordinates.Select(p => Point.Parse(p, isLongitudeFirst)).ToArray(), geometryType, srid);
         }
 
-        public static Geometry ParsePolygonToGeometry(double[][][] rings, GeometryType geometryType, bool isLongFirst)
+        public static Geometry ParsePolygonToGeometry(double[][][] rings, GeometryType geometryType, bool isLongFirst, int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, isLongFirst)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
+            return new Geometry(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, isLongFirst)).ToArray(), geometryType, srid);
         }
 
         #endregion

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Model.GeoJson
+namespace IRI.Sta.Common.Model.GeoJson
 {
 
     [JsonConverter(typeof(GeoJsonGeometryConverter))]
@@ -19,11 +19,16 @@ namespace IRI.Ket.Common.Model.GeoJson
         [JsonProperty("coordinates")]
         public double[][][] Coordinates { get; set; }
 
-        public GeoJsonType GeometryType { get => GeoJsonType.Polygon; }
+        public GeometryType GeometryType { get => GeometryType.Polygon; }
 
-        public Geometry Parse()
+        public bool IsNullOrEmpty()
         {
-            throw new NotImplementedException();
+            return Coordinates == null || Coordinates.Length < 1;
+        }
+
+        public Geometry Parse(bool isLongitudeFirst = false, int srid = 0)
+        {
+            return Geometry.ParsePolygonToGeometry(Coordinates, this.GeometryType, isLongitudeFirst, srid);
         }
     }
 }

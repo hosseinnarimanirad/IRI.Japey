@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IRI.Ham.SpatialBase.Primitives;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Model.GeoJson
+namespace IRI.Sta.Common.Model.GeoJson
 {
     public class GeoJsonGeometryConverter : JsonConverter
     {
@@ -25,31 +26,31 @@ namespace IRI.Ket.Common.Model.GeoJson
 
             var type = jObject[typeKey]?.ToString();
 
-            GeoJsonType geometryType;
+            GeometryType geometryType;
 
-            if (!Enum.TryParse<GeoJsonType>(type, out geometryType))
+            if (!Enum.TryParse<GeometryType>(type, out geometryType))
             {
                 return null;
             }
 
             switch (geometryType)
             {
-                case GeoJsonType.Point:
+                case GeometryType.Point:
                     return new GeoJsonPoint() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[]>() };  
 
-                case GeoJsonType.MultiPoint:
+                case GeometryType.MultiPoint:
                     return new GeoJsonMultiPoint() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[][]>() };   
 
-                case GeoJsonType.LineString:
+                case GeometryType.LineString:
                     return new GeoJsonLineString() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[][]>() };
 
-                case GeoJsonType.MultiLineString:
+                case GeometryType.MultiLineString:
                     return new GeoJsonMultiLineString() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[][][]>() };                    
 
-                case GeoJsonType.Polygon:
+                case GeometryType.Polygon:
                     return new GeoJsonPolygon() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[][][]>() }; 
 
-                case GeoJsonType.MultiPolygon:
+                case GeometryType.MultiPolygon:
                     return new GeoJsonMultiPolygon() { Type = type, Coordinates = jObject[coordinateKey].ToObject<double[][][][]>() };
                    
                 default:

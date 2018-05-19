@@ -7,15 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Model.GeoJson
+namespace IRI.Sta.Common.Model.GeoJson
 {
     [JsonConverter(typeof(GeoJsonGeometryConverter))]
     public interface IGeoJsonGeometry
     {
         string Type { get; set; }
 
-        GeoJsonType GeometryType { get; }
+        GeometryType GeometryType { get; }
 
-        Geometry Parse();
+        Geometry Parse(bool isLongitudeFirst = false, int srid = 0);
+
+        bool IsNullOrEmpty();
     }
 }

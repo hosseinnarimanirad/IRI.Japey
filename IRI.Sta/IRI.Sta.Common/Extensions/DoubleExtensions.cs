@@ -22,5 +22,10 @@ namespace System
         {
             return value.ToString(CultureInfo.InvariantCulture);
         }
+
+        public static string AsExactString(this double value)
+        {
+            return value.ToString("G17", System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 }

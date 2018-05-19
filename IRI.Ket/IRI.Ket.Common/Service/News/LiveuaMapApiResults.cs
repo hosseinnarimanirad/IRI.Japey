@@ -13,7 +13,7 @@ namespace IRI.Ket.Common.Service.News
     {
         public int last { get; set; }
         public Venue[] venues { get; set; }
-        public Field[] fields { get; set; }
+        public LiveuaMapField[] fields { get; set; }
         public int datats { get; set; }
         public string datac { get; set; }
         public string datamn { get; set; }
@@ -68,7 +68,7 @@ namespace IRI.Ket.Common.Service.News
     {
     }
 
-    public class Field
+    public class LiveuaMapField
     {
         public string description { get; set; }
         public int type_id { get; set; }
@@ -81,28 +81,10 @@ namespace IRI.Ket.Common.Service.News
         public double[][] points { get; set; }
 
         public Geometry ParseToGeometry(GeometryType geometryType)
-        {
-            //return new Geometry(this.points.Select(p => ParseToGeometry(p)).ToArray(), geometryType, SridHelper.GeodeticWGS84);
-            return Geometry.ParseToGeometry(this.points, geometryType);
+        { 
+            return Geometry.ParseToGeodeticGeometry(this.points, geometryType);
         }
-
-        //private Geometry ParseToGeometry(float[] values)
-        //{
-        //    if (values == null || values.Count() % 2 != 0)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-
-        //    List<IRI.Ham.SpatialBase.Point> result = new List<IRI.Ham.SpatialBase.Point>(values.Length / 2);
-
-        //    for (int i = 0; i < values.Length - 1; i += 2)
-        //    {
-        //        result.Add(new IRI.Ham.SpatialBase.Point(values[i + 1], values[i]));
-        //    }
-
-        //    return new Geometry(result.ToArray(), GeometryType.LineString, SridHelper.GeodeticWGS84);
-
-        //}
+         
     }
 
 }

@@ -498,7 +498,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         }
 
         public static void Write<T>(string fileName,
-                                        List<T> values,
+                                        IEnumerable<T> values,
                                         List<Func<T, object>> mapping,
                                         List<DbfFieldDescriptor> columns,
                                         Encoding encoding,
@@ -520,7 +520,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-                DbfHeader header = new DbfHeader(values.Count, mapping.Count, GetRecordLength(columns), encoding);
+                DbfHeader header = new DbfHeader(values.Count(), mapping.Count, GetRecordLength(columns), encoding);
 
                 writer.Write(IRI.Ket.Common.Helpers.StreamHelper.StructureToByteArray(header));
 
@@ -532,7 +532,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 //Terminator
                 writer.Write(byte.Parse("0D", System.Globalization.NumberStyles.HexNumber));
 
-                for (int i = 0; i < values.Count; i++)
+                for (int i = 0; i < values.Count(); i++)
                 {
                     control = i;
                     // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
@@ -542,7 +542,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                     {
                         byte[] temp = new byte[columns[j].Length];
 
-                        object value = mapping[j](values[i]);
+                        object value = mapping[j](values.ElementAt(i));
 
                         if (value != null)
                         {

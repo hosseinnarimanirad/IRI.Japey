@@ -8,25 +8,10 @@ namespace IRI.Ham.SpatialBase
 {
     public class Point : IPoint
     {
-        static readonly Point _naN = new Point(double.NaN, double.NaN);
 
-        static readonly Point _positiveInfinity = new Point(double.PositiveInfinity, double.PositiveInfinity);
+        public double X { get; set; }
 
-        private double _x;
-
-        public double X
-        {
-            get { return _x; }
-            set { _x = value; }
-        }
-
-        private double _y;
-
-        public double Y
-        {
-            get { return _y; }
-            set { _y = value; }
-        }
+        public double Y { get; set; }
 
         public Point(double x, double y)
         {
@@ -94,15 +79,9 @@ namespace IRI.Ham.SpatialBase
             return new Point(p1.X + p2.X, p1.Y + p2.Y);
         }
 
-        public static Point NaN
-        {
-            get { return _naN; }
-        }
+        public static Point NaN { get; } = new Point(double.NaN, double.NaN);
 
-        public static Point PositiveInfinity
-        {
-            get { return _positiveInfinity; }
-        }
+        public static Point PositiveInfinity { get; } = new Point(double.PositiveInfinity, double.PositiveInfinity);
 
         public override bool Equals(object obj)
         {
@@ -126,6 +105,23 @@ namespace IRI.Ham.SpatialBase
             return Extensions.PointHelper.AsWkb(this);
         }
 
+
+        public static Point Parse(double[] values, bool isLongitudeFirst)
+        {
+            if (values == null || values.Count() != 2)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (isLongitudeFirst)
+            {
+                return new Point(values[0], values[1]);
+            }
+            else
+            {
+                return new Point(values[1], values[0]);
+            }
+        }
 
 
         //public Microsoft.SqlServer.Types.SqlGeometry AsSqlGeometry()

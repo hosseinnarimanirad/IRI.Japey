@@ -11,7 +11,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 {
     public static class EsriExtensions
     {
-        public static   EsriFeatureSet Parse(this FeatureSet featureSet)
+        public static EsriFeatureSet Parse(this FeatureSet featureSet)
         {
             var result = new EsriFeatureSet();
 

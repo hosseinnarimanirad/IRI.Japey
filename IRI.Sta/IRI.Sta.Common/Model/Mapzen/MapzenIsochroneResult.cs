@@ -17,7 +17,7 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
     {
         public Properties properties { get; set; }
         public string type { get; set; }
-        public Geometry geometry { get; set; }
+        public MapzenGeometry geometry { get; set; }
     }
 
     public class Properties
@@ -31,7 +31,7 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
         public float fillopacity { get; set; }
     }
 
-    public class Geometry
+    public class MapzenGeometry
     {
         public object coordinates { get; set; }
         public string type { get; set; }
