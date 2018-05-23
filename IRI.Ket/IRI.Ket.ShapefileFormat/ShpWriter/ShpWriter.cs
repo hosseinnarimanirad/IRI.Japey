@@ -13,12 +13,17 @@ namespace IRI.Ket.ShapefileFormat.Writer
     {
         public static void Write(string shpFileName, IEnumerable<IShape> shapes, bool createDbf = false, bool overwrite = false)
         {
+            if (shapes == null || shapes.Count() < 1)
+            {
+                return;
+            }
+
             if (shapes.Select(i => i.Type).Distinct().Count() > 1)
             {
                 throw new NotImplementedException();
             }
 
-            IShapeCollection collection = new ShapeCollection<IShape>(shapes.ToList());
+            IShapeCollection collection = new ShapeCollection<IShape>(shapes?.ToList());
 
             Write(shpFileName, collection, createDbf, overwrite);
         }
@@ -32,7 +37,7 @@ namespace IRI.Ket.ShapefileFormat.Writer
 
             var directory = System.IO.Path.GetDirectoryName(shpFileName);
 
-            if (!System.IO.Directory.Exists(directory))
+            if (!System.IO.Directory.Exists(directory) && !string.IsNullOrEmpty(directory))
             {
                 System.IO.Directory.CreateDirectory(directory);
             }
