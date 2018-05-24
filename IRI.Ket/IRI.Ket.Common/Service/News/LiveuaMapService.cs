@@ -19,7 +19,7 @@ namespace IRI.Ket.Common.Service.News
 
             var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<LiveuaMapApiResults>(url);
               
-            return result;
+            return result?.Result;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace IRI.Ket.Common.Service.Mapzen
     {
         public static async Task<MapzenIsochroneResult> GetIsochroneAsync(Point geodeticPoint, string apiKey)
         {
-          //  var url = $"matrix.mapzen.com/isochrone?json={{\"locations\":[{{\"lat\":{geodeticPoint.Y},\"lon\":{geodeticPoint.X}}}],\"costing\":\"bicycle\",\"contours\":[{{\"time\":15,\"color\":\"ff0000\"}}]}}&id=Walk_From_Office&api_key={apiKey}";
+            //  var url = $"matrix.mapzen.com/isochrone?json={{\"locations\":[{{\"lat\":{geodeticPoint.Y},\"lon\":{geodeticPoint.X}}}],\"costing\":\"bicycle\",\"contours\":[{{\"time\":15,\"color\":\"ff0000\"}}]}}&id=Walk_From_Office&api_key={apiKey}";
 
             var parameter = new MapzenRouteCostingModel()
             {
@@ -24,7 +24,19 @@ namespace IRI.Ket.Common.Service.Mapzen
 
             var url = $"http://matrix.mapzen.com/isochrone?id=Walk_From_Office&api_key={apiKey}";
 
-            return await Helpers.NetHelper.HttpPostAsync<MapzenIsochroneResult>(url, parameter);
+            var result = await Helpers.NetHelper.HttpPostAsync<MapzenIsochroneResult>(url, parameter);
+
+            if (result == null)
+            {
+                ResponseFactory.CreateError<string>("NULL VALUE");
+
+                return null;
+            }
+            else
+            {
+                return ResponseFactory.Create(result?.Result)?.Result;
+            }
+
         }
     }
 

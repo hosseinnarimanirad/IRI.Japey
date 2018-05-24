@@ -25,7 +25,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins={originString}&destinations={destinationString}&departure_time={time}&key={key}";
 
-                return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<GoogleDistanceMatrixResult>(url));
+                return await Helpers.NetHelper.HttpGetAsync<GoogleDistanceMatrixResult>(url);
             }
             catch (Exception ex)
             {

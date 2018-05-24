@@ -19,7 +19,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://maps.googleapis.com/maps/api/directions/json?origin={startString}&destination={endString}&alternatives=true&departure_time={time}&key={key}";
 
-                return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<GoogleDirectionsResult>(url));
+                return await Helpers.NetHelper.HttpGetAsync<GoogleDirectionsResult>(url);
             }
             catch (Exception ex)
             {

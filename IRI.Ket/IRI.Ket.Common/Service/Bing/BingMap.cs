@@ -17,7 +17,7 @@ namespace IRI.Ket.Common.Service.Bing
 
                 var url = $"https://dev.virtualearth.net/REST/v1/Routes/Isochrones?waypoint={pointString}&maxTime={timeLimit}&timeUnit=second&key={key}";
 
-                return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<BingIsolineResult>(url));
+                return await Helpers.NetHelper.HttpGetAsync<BingIsolineResult>(url);
             }
             catch (Exception ex)
             {

@@ -25,7 +25,7 @@ namespace IRI.Ket.Common.Service.Google
 
             //return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<GoogleDirectionsResult>(url));
 
-            return ResponseFactory.Create(await Helpers.NetHelper.HttpGetAsync<GooglePlacesResult>($"{apiUrl}query={query}&key={key}"));
+            return await Helpers.NetHelper.HttpGetAsync<GooglePlacesResult>($"{apiUrl}query={query}&key={key}");
 
             //var result = await client.DownloadStringTaskAsync(new Uri($"{apiUrl}query={query}&key={key}"));
 
@@ -34,7 +34,7 @@ namespace IRI.Ket.Common.Service.Google
 
         public static Response<GooglePlacesResult> Search(string query, string key)
         {
-            return ResponseFactory.Create(Helpers.NetHelper.HttpGet<GooglePlacesResult>($"{apiUrl}query={query}&key={key}"));
+            return Helpers.NetHelper.HttpGet<GooglePlacesResult>($"{apiUrl}query={query}&key={key}");
         }
     }
 }

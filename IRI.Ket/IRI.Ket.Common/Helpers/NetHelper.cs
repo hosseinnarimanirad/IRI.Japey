@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Ket.Common.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -105,12 +106,12 @@ namespace IRI.Ket.Common.Helpers
 
 
         //Http Get
-        public static async Task<T> HttpGetAsync<T>(string address) where T : class
+        public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class
         {
             return await HttpGetAsync<T>(address, Encoding.UTF8);
         }
 
-        public static async Task<T> HttpGetAsync<T>(string address, Encoding encoding) where T : class
+        public static async Task<Response<T>> HttpGetAsync<T>(string address, Encoding encoding) where T : class
         {
             try
             {
@@ -123,22 +124,22 @@ namespace IRI.Ket.Common.Helpers
 
                 var stringResult = await client.DownloadStringTaskAsync(address);
 
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
 
 
         //Http Post
-        public static async Task<T> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson) where T : class
         {
             return await HttpPostAsync<T>(address, data, Encoding.UTF8, contentType);
         }
 
-        public static async Task<T> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -156,7 +157,7 @@ namespace IRI.Ket.Common.Helpers
 
                 var stringResult = await client.UploadStringTaskAsync(address, stringData);
 
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
             }
             catch (Exception ex)
             {
@@ -166,12 +167,12 @@ namespace IRI.Ket.Common.Helpers
 
 
         //Http Get
-        public static T HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
         {
             return HttpGet<T>(address, Encoding.UTF8, contentType);
         }
 
-        public static T HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -185,7 +186,7 @@ namespace IRI.Ket.Common.Helpers
 
                 var stringResult = client.DownloadString(address);
 
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
             }
             catch (Exception ex)
             {
@@ -195,12 +196,12 @@ namespace IRI.Ket.Common.Helpers
 
 
         //Http Post
-        public static T HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
         {
             return HttpPost<T>(address, data, Encoding.UTF8, contentType);
         }
 
-        public static T HttpPost<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpPost<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -218,7 +219,7 @@ namespace IRI.Ket.Common.Helpers
 
                 var stringResult = client.UploadString(address, stringData);
 
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult);
+                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
             }
             catch (Exception ex)
             {
