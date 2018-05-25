@@ -10,19 +10,19 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolygonZReader : zReader<PolygonZ>
+    public class PolygonZReader : zReader<EsriPolygonZ>
     {
         public PolygonZReader(string fileName)
-            : base(fileName, ShapeType.PolygonZ)
+            : base(fileName, EsriShapeType.EsriPolygonZ)
         {
 
         }
 
-        protected override PolygonZ ReadElement()
+        protected override EsriPolygonZ ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)shapeType != ShapeType.PolygonZ)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPolygonZ)
             {
                 throw new NotImplementedException();
             }
@@ -57,11 +57,11 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
             }
 
-            return new PolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
+            return new EsriPolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
 
         }
 
-        public static PolygonZ Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolygonZ Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -98,7 +98,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
             }
 
-            return new PolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
+            return new EsriPolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
         }
     }
 }

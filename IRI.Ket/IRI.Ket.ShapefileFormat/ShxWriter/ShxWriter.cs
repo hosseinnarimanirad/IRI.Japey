@@ -8,13 +8,13 @@ namespace IRI.Ket.ShapefileFormat.Writer
     internal static class ShxWriter
     {
 
-        public static void Write(string fileName, IShapeCollection shapes, ShapeType shapeType, bool overwrite = false)
+        public static void Write(string fileName, IEsriShapeCollection shapes, EsriShapeType shapeType, bool overwrite = false)
         {
             System.IO.MemoryStream shxWriter = new System.IO.MemoryStream();
 
             int offset = 50;
 
-            foreach (IShape item in shapes)
+            foreach (IEsriShape item in shapes)
             {
                 shxWriter.Write(WriteHeaderToByte(offset, item.ContentLength), 0, 2 * ShapeConstants.IntegerSize);
 
@@ -43,7 +43,7 @@ namespace IRI.Ket.ShapefileFormat.Writer
             stream.Close();
         }
 
-        internal static byte[] WriteMainHeader(IShapeCollection shapes, int fileLength, ShapeType shapeType)
+        internal static byte[] WriteMainHeader(IEsriShapeCollection shapes, int fileLength, EsriShapeType shapeType)
         {
             return ShpWriter.WriteMainHeader(shapes, fileLength, shapeType);
             //System.IO.MemoryStream result = new System.IO.MemoryStream();

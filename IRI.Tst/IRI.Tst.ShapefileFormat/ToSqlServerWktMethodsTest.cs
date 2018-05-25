@@ -19,7 +19,7 @@ namespace IRI.Test.ShapefileFormatTest
         IRI.Ket.ShapefileFormat.EsriType.EsriPointM[][] pointCollectionM;
         IRI.Ket.ShapefileFormat.EsriType.EsriPointZ[][] pointCollectionZ;
 
-        IShapeCollection polygons;
+        IEsriShapeCollection polygons;
 
         [TestInitialize]
         public void InitializeTest()
@@ -89,22 +89,22 @@ namespace IRI.Test.ShapefileFormatTest
         public void TestEsriPointCollectionAsSqlServerWkt()
         {
             //Test MultiEsriPoint
-            MultiPoint multiEsriPoint = new MultiPoint(points);
+            EsriMultiPoint multiEsriPoint = new EsriMultiPoint(points);
             SqlGeometry.STPointFromText(new SqlChars(new SqlString(multiEsriPoint.AsSqlServerWkt())), 0);
 
             //Test MultiEsriPointM
-            MultiPointM multiEsriPointM = new MultiPointM(pointsM);
+            EsriMultiPointM multiEsriPointM = new EsriMultiPointM(pointsM);
             SqlGeometry.STPointFromText(new SqlChars(new SqlString(multiEsriPointM.AsSqlServerWkt())), 0);
 
             //Test MultiEsriPointZ
-            MultiPointZ multiEsriPointZ = new MultiPointZ(pointsZ);
+            EsriMultiPointZ multiEsriPointZ = new EsriMultiPointZ(pointsZ);
             SqlGeometry.STPointFromText(new SqlChars(new SqlString(multiEsriPointZ.AsSqlServerWkt())), 0);
         }
 
         [TestMethod]
         public void TestPolylineAsSqlServerWktStringMethod()
         {
-            PolyLine polyLine = new PolyLine(this.pointCollection);
+            EsriPolyLine polyLine = new EsriPolyLine(this.pointCollection);
 
             SqlGeometry sqlPolyline = SqlGeometry.STMLineFromText(new SqlChars(new SqlString(polyLine.AsSqlServerWkt())), 0);
 
@@ -126,7 +126,7 @@ namespace IRI.Test.ShapefileFormatTest
         public void TestPolygonAsSqlServerWktStringMethod()
         {
 
-            foreach (Polygon item in this.polygons)
+            foreach (EsriPolygon item in this.polygons)
             {
                 SqlGeometry geometry = SqlGeometry.STPolyFromText(new SqlChars(new SqlString(item.AsSqlServerWkt())), 0);
 

@@ -11,23 +11,23 @@ namespace IRI.Ket.SpatialExtensions
 {
     public static class ShapefileExtention
     { 
-        private static bool AreConsistent(ShapeType esriType, OpenGisGeometryType ogcType)
+        private static bool AreConsistent(EsriShapeType esriType, OpenGisGeometryType ogcType)
         {
             switch (ogcType)
             {
                 case OpenGisGeometryType.Point:
-                    return esriType == ShapeType.Point || esriType == ShapeType.PointM || esriType == ShapeType.PointZ;
+                    return esriType == EsriShapeType.EsriPoint || esriType == EsriShapeType.EsriPointM || esriType == EsriShapeType.EsriPointZ;
 
                 case OpenGisGeometryType.MultiLineString:
                 case OpenGisGeometryType.LineString:
-                    return esriType == ShapeType.PolyLine || esriType == ShapeType.PolyLineM || esriType == ShapeType.PolyLineZ;
+                    return esriType == EsriShapeType.EsriPolyLine || esriType == EsriShapeType.EsriPolyLineM || esriType == EsriShapeType.EsriPolyLineZ;
 
                 case OpenGisGeometryType.Polygon:
                 case OpenGisGeometryType.MultiPolygon:
-                    return esriType == ShapeType.Polygon || esriType == ShapeType.PolygonM || esriType == ShapeType.PolygonZ;
+                    return esriType == EsriShapeType.EsriPolygon || esriType == EsriShapeType.EsriPolygonM || esriType == EsriShapeType.EsriPolygonZ;
 
                 case OpenGisGeometryType.MultiPoint:
-                    return esriType == ShapeType.MultiPoint || esriType == ShapeType.MultiPointM || esriType == ShapeType.MultiPointZ;
+                    return esriType == EsriShapeType.EsriMultiPoint || esriType == EsriShapeType.EsriMultiPointM || esriType == EsriShapeType.EsriMultiPointZ;
 
                 case OpenGisGeometryType.GeometryCollection:
                 case OpenGisGeometryType.CircularString:
@@ -44,7 +44,7 @@ namespace IRI.Ket.SpatialExtensions
         /// <param name="esriType"></param>
         /// <param name="geometry"></param>
         /// <returns></returns>
-        private static SqlGeometry ClearGeometry(ShapeType esriType, SqlGeometry geometry, int srid)
+        private static SqlGeometry ClearGeometry(EsriShapeType esriType, SqlGeometry geometry, int srid)
         {
             var collection = new List<SqlGeometry>();
 
@@ -68,38 +68,38 @@ namespace IRI.Ket.SpatialExtensions
             return result;
         }
 
-        private static SqlGeometry CreateDefault(ShapeType esriType, int srid)
+        private static SqlGeometry CreateDefault(EsriShapeType esriType, int srid)
         {
             switch (esriType)
             {
-                case ShapeType.Point:
-                case ShapeType.PointM:
-                case ShapeType.PointZ:
+                case EsriShapeType.EsriPoint:
+                case EsriShapeType.EsriPointM:
+                case EsriShapeType.EsriPointZ:
                     return SqlSpatialExtensions.CreateEmptyPoint(srid);
 
-                case ShapeType.MultiPoint:
-                case ShapeType.MultiPointM:
-                case ShapeType.MultiPointZ:
+                case EsriShapeType.EsriMultiPoint:
+                case EsriShapeType.EsriMultiPointM:
+                case EsriShapeType.EsriMultiPointZ:
                     return SqlSpatialExtensions.CreateEmptyMultipoint(srid);
 
-                case ShapeType.PolyLine:
-                case ShapeType.PolyLineM:
-                case ShapeType.PolyLineZ:
+                case EsriShapeType.EsriPolyLine:
+                case EsriShapeType.EsriPolyLineM:
+                case EsriShapeType.EsriPolyLineZ:
                     return SqlSpatialExtensions.CreateEmptyLineString(srid);
 
-                case ShapeType.Polygon:
-                case ShapeType.PolygonM:
-                case ShapeType.PolygonZ:
+                case EsriShapeType.EsriPolygon:
+                case EsriShapeType.EsriPolygonM:
+                case EsriShapeType.EsriPolygonZ:
                     return SqlSpatialExtensions.CreateEmptyPolygon(srid);
 
-                case ShapeType.NullShape:
-                case ShapeType.MultiPatch:
+                case EsriShapeType.NullShape:
+                case EsriShapeType.EsriMultiPatch:
                 default:
                     return SqlGeometry.Null;
             }
         }
 
-        public static List<SqlGeometry > AsSqlGeometry(this IShapeCollection shapes, int srid)
+        public static List<SqlGeometry > AsSqlGeometry(this IEsriShapeCollection shapes, int srid)
         {
             var count = shapes.Count();
 
@@ -113,7 +113,7 @@ namespace IRI.Ket.SpatialExtensions
             return result;
         }
 
-        public static SqlGeometry AsSqlGeometry(this IShape shape, int srid)
+        public static SqlGeometry AsSqlGeometry(this IEsriShape shape, int srid)
         {
             //try
             //{
@@ -132,34 +132,34 @@ namespace IRI.Ket.SpatialExtensions
             {
                 switch (shape.Type)
                 {
-                    case ShapeType.NullShape:
+                    case EsriShapeType.NullShape:
                         return SqlGeometry.Null;
 
-                    case ShapeType.Point:
-                    case ShapeType.PointM:
-                    case ShapeType.PointZ:
+                    case EsriShapeType.EsriPoint:
+                    case EsriShapeType.EsriPointM:
+                    case EsriShapeType.EsriPointZ:
                         WriteEsriPoint(builder, (IPoint)shape);
                         break;
 
-                    case ShapeType.MultiPoint:
-                    case ShapeType.MultiPointM:
-                    case ShapeType.MultiPointZ:
-                        WriteEsriMultiPoint(builder, (ISimplePoints)shape);
+                    case EsriShapeType.EsriMultiPoint:
+                    case EsriShapeType.EsriMultiPointM:
+                    case EsriShapeType.EsriMultiPointZ:
+                        WriteEsriMultiPoint(builder, (IEsriSimplePoints)shape);
                         break;
 
-                    case ShapeType.PolyLine:
-                    case ShapeType.PolyLineM:
-                    case ShapeType.PolyLineZ:
-                        WriteEsriPolyline(builder, (ISimplePoints)shape);
+                    case EsriShapeType.EsriPolyLine:
+                    case EsriShapeType.EsriPolyLineM:
+                    case EsriShapeType.EsriPolyLineZ:
+                        WriteEsriPolyline(builder, (IEsriSimplePoints)shape);
                         break;
 
-                    case ShapeType.Polygon:
-                    case ShapeType.PolygonM:
-                    case ShapeType.PolygonZ:
-                        WriteEsriPolygon(builder, (ISimplePoints)shape);
+                    case EsriShapeType.EsriPolygon:
+                    case EsriShapeType.EsriPolygonM:
+                    case EsriShapeType.EsriPolygonZ:
+                        WriteEsriPolygon(builder, (IEsriSimplePoints)shape);
                         break;
 
-                    case ShapeType.MultiPatch:
+                    case EsriShapeType.EsriMultiPatch:
                     default:
                         break;
                 }
@@ -190,7 +190,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeometry();
         }
 
-        private static void WriteEsriMultiPoint(SqlGeometryBuilder builder, ISimplePoints points)
+        private static void WriteEsriMultiPoint(SqlGeometryBuilder builder, IEsriSimplePoints points)
         {
             builder.BeginGeometry(OpenGisGeometryType.MultiPoint);
 
@@ -202,7 +202,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeometry();
         }
 
-        private static void WriteEsriPolyline(SqlGeometryBuilder builder, ISimplePoints points)
+        private static void WriteEsriPolyline(SqlGeometryBuilder builder, IEsriSimplePoints points)
         {
             if (points.NumberOfParts == 1)
             {
@@ -234,7 +234,7 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        private static void WriteEsriPolygon(SqlGeometryBuilder builder, ISimplePoints points)
+        private static void WriteEsriPolygon(SqlGeometryBuilder builder, IEsriSimplePoints points)
         {
             if (points.NumberOfParts == 1)
             {
@@ -277,11 +277,11 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndFigure();
         }
 
-        public static List<EsriPoint> ExtractPoints(this IShapeCollection shapes)
+        public static List<EsriPoint> ExtractPoints(this IEsriShapeCollection shapes)
         {
             List<EsriPoint> result = new List<EsriPoint>();
 
-            foreach (ISimplePoints shape in shapes)
+            foreach (IEsriSimplePoints shape in shapes)
             {
                 result.AddRange(shape.Points);
             }
@@ -308,7 +308,7 @@ namespace IRI.Ket.SpatialExtensions
 
 
 
-        public static IShape ParseToEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
+        public static IEsriShape ParseToEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
         {
             if (geometry.IsNotValidOrEmpty())
             {
@@ -356,11 +356,11 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supportig Z and M Values
-        private static MultiPoint MultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriMultiPoint MultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
             {
-                return new MultiPoint();
+                return new EsriMultiPoint();
             }
 
             int numberOfGeometries = geometry.STNumGeometries().Value;
@@ -382,15 +382,15 @@ namespace IRI.Ket.SpatialExtensions
                 points.Add(point);
             }
 
-            return new MultiPoint(points.ToArray());
+            return new EsriMultiPoint(points.ToArray());
         }
 
         //Not supporting Z and M values
-        private static PolyLine LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPolyLine LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty())
             {
-                return new PolyLine();
+                return new EsriPolyLine();
             }
 
             int numberOfGeometries = geometry.STNumGeometries().Value;
@@ -408,17 +408,17 @@ namespace IRI.Ket.SpatialExtensions
                 points.AddRange(GetPoints(geometry.STGeometryN(index), mapFunction));
             }
 
-            return new PolyLine(points.ToArray(), parts.ToArray());
+            return new EsriPolyLine(points.ToArray(), parts.ToArray());
         }
 
 
         //Not supporting Z and M values
         //check for cw and cww criteria
-        private static Polygon PolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPolygon PolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty())
             {
-                return new Polygon();
+                return new EsriPolygon();
             }
 
             int numberOfGeometries = geometry.STNumGeometries().Value;
@@ -455,7 +455,7 @@ namespace IRI.Ket.SpatialExtensions
                 }
             }
 
-            return new Polygon(points.ToArray(), parts.ToArray());
+            return new EsriPolygon(points.ToArray(), parts.ToArray());
         }
 
         private static EsriPoint[] GetPoints(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)

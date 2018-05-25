@@ -9,20 +9,20 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolygonMReader : MeasuresReader<PolygonM>
+    public class PolygonMReader : MeasuresReader<EsriPolygonM>
     {
         public PolygonMReader(string fileName)
-            : base(fileName, ShapeType.PolygonM)
+            : base(fileName, EsriShapeType.EsriPolygonM)
         {
            
         }
 
-        protected override PolygonM ReadElement()
+        protected override EsriPolygonM ReadElement()
         {
 
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)this.MainHeader.ShapeType != ShapeType.PolygonM)
+            if ((EsriShapeType)this.MainHeader.ShapeType != EsriShapeType.EsriPolygonM)
             {
                 throw new NotImplementedException();
             }
@@ -48,10 +48,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new PolygonM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolygonM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
 
-        public static PolygonM Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolygonM Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -79,7 +79,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new PolygonM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolygonM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
 
     }

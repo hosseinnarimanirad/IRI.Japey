@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolygonReader : PointsReader<Polygon>
+    public class PolygonReader : PointsReader<EsriPolygon>
     {
         //A polygon consists of one or more rings. A ring is a connected sequence of four or more
         //points that form a closed, non-self-intersecting loop. A polygon may contain multiple
@@ -23,17 +23,17 @@ namespace IRI.Ket.ShapefileFormat.Reader
         //shapefile readers must handle such cases. On the other hand, the degenerate, zero length
         //or zero area parts that might result are not allowed.
         public PolygonReader(string fileName)
-            : base(fileName, ShapeType.Polygon)
+            : base(fileName, EsriShapeType.EsriPolygon)
         {
 
         }
 
 
-        protected override Polygon ReadElement()
+        protected override EsriPolygon ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)shapeType != ShapeType.Polygon)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPolygon)
             {
                 throw new NotImplementedException();
             }
@@ -53,10 +53,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             EsriPoint[] points = this.ReadPoints(numPoints);
 
-            return new Polygon(boundingBox, parts, points);
+            return new EsriPolygon(boundingBox, parts, points);
         }
 
-        public static Polygon Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolygon Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -78,7 +78,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var points = ShpBinaryReader.ReadPoints(reader, numPoints);
 
-            return new Polygon(boundingBox, parts, points);
+            return new EsriPolygon(boundingBox, parts, points);
         }
     }
 }

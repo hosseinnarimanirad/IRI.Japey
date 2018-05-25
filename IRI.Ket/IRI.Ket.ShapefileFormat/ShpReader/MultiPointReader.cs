@@ -9,19 +9,19 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class MultiPointReader : PointsReader<MultiPoint>
+    public class MultiPointReader : PointsReader<EsriMultiPoint>
     {
         public MultiPointReader(string fileName)
-            : base(fileName, ShapeType.MultiPoint)
+            : base(fileName, EsriShapeType.EsriMultiPoint)
         {
 
         }
 
-        protected override MultiPoint ReadElement()
+        protected override EsriMultiPoint ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)shapeType != ShapeType.MultiPoint)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPoint)
             {
                 throw new NotImplementedException();
             }
@@ -32,10 +32,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             EsriPoint[] points = this.ReadPoints(numPoints);
 
-            return new MultiPoint(boundingBox, points);
+            return new EsriMultiPoint(boundingBox, points);
         }
 
-        public static MultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -48,7 +48,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var points = ShpBinaryReader.ReadPoints(reader, numPoints);
 
-            return new MultiPoint(boundingBox, points);
+            return new EsriMultiPoint(boundingBox, points);
         }
 
         

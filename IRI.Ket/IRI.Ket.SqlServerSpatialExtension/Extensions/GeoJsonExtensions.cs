@@ -244,7 +244,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
         #region Shapefile
 
-        public static IShape AsToShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
+        public static IEsriShape AsToShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
         {
             return geometry.AsSqlGeometry(isLongitudeFirst, srid).ParseToEsriShape();
         }
@@ -253,7 +253,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
         {
             var shapes = features.Select(f => f.geometry.AsToShapefileShape(isLongitudeFirst));
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(shpFileName, shapes, false, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true);
 
             List<Func<GeoJsonFeature, object>> maps = new List<Func<GeoJsonFeature, object>>();
 

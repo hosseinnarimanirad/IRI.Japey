@@ -8,30 +8,30 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
     
   
-    public class ShapeCollection<T> : List<T>, IShapeCollection where T : IShape
+    public class EsriShapeCollection<T> : List<T>, IEsriShapeCollection where T : IEsriShape
     {
         private MainFileHeader mainHeader;
 
-        public ShapeCollection()
+        public EsriShapeCollection()
         {
            
         }
         
-        public ShapeCollection(MainFileHeader header)
+        public EsriShapeCollection(MainFileHeader header)
         {
             this.mainHeader = header;
         }
 
-        public ShapeCollection(MainFileHeader header, List<T> values)
+        public EsriShapeCollection(MainFileHeader header, List<T> values)
         {
             this.AddRange(values);
 
             this.mainHeader = header;
         }
 
-        public ShapeCollection(List<T> values)
+        public EsriShapeCollection(IEnumerable<T> values)
         {
-            if (typeof(T) is IRI.Ket.ShapefileFormat.EsriType.IPointsWithMeasure)
+            if (typeof(T) is IRI.Ket.ShapefileFormat.EsriType.IEsriPointsWithMeasure)
             {
                 throw new NotImplementedException();
             }
@@ -54,14 +54,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             this.mainHeader = new MainFileHeader(length, values.First().Type, minimumBoundingBox);
         }
-         
+          
         #region IShapeCollection Members
 
-        public new IShape this[int index]
+        public new IEsriShape this[int index]
         {
             get
             {
-                return (IShape)base[index];
+                return (IEsriShape)base[index];
             }
             set
             {
@@ -93,7 +93,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         #region IEnumerable<IShape> Members
 
-        public new IEnumerator<IShape> GetEnumerator()
+        public new IEnumerator<IEsriShape> GetEnumerator()
         {
             for (int i = 0; i < this.Count; i++)
             {

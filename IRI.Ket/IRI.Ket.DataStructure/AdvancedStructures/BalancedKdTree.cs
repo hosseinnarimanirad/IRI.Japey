@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IRI.Sta.Common.Extensions;
 
 namespace IRI.Ket.DataStructure.AdvancedStructures
 {

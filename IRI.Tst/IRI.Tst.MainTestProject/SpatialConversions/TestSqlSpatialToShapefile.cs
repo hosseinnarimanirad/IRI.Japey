@@ -132,8 +132,8 @@ namespace IRI.Test.FileFormats
 
             var shape = polygon.ParseToEsriShape();
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(@"D:\test5.shp", new ShapeCollection<Polygon>(
-                new List<Polygon>() { (Polygon)shape }), true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(@"D:\test5.shp", new EsriShapeCollection<EsriPolygon>(
+                new List<EsriPolygon>() { (EsriPolygon)shape }), true);
         }
     }
 }

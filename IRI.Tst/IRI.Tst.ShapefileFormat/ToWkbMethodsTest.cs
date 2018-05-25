@@ -19,8 +19,8 @@ namespace IRI.Test.ShapefileFormat
         EsriPointM[][] pointCollectionM;
         EsriPointZ[][] pointCollectionZ;
 
-        IShapeCollection polygons;
-        IShapeCollection polygonsZ;
+        IEsriShapeCollection polygons;
+        IEsriShapeCollection polygonsZ;
 
         [TestInitialize]
         public void InitializeTest()
@@ -105,7 +105,7 @@ namespace IRI.Test.ShapefileFormat
         public void TestEsriMultiPointToSqlServerWkb()
         {
             //Test MultiPoint
-            MultiPoint multiEsriPoint = new IRI.Ket.ShapefileFormat.EsriType.MultiPoint(points);
+            EsriMultiPoint multiEsriPoint = new IRI.Ket.ShapefileFormat.EsriType.EsriMultiPoint(points);
             SqlGeometry sqlEsriPoint =
                SqlGeometry.STPointFromText(
                new System.Data.SqlTypes.SqlChars(
@@ -114,7 +114,7 @@ namespace IRI.Test.ShapefileFormat
             CollectionAssert.AreEqual(multiEsriPoint.AsWkb(), sqlEsriPoint.STAsBinary().Buffer);
 
             //Test MultiPointM
-            IRI.Ket.ShapefileFormat.EsriType.MultiPointM multiEsriPointM = new IRI.Ket.ShapefileFormat.EsriType.MultiPointM(pointsM);
+            IRI.Ket.ShapefileFormat.EsriType.EsriMultiPointM multiEsriPointM = new IRI.Ket.ShapefileFormat.EsriType.EsriMultiPointM(pointsM);
             SqlGeometry sqlMultiPointM =
                SqlGeometry.STPointFromText(
                new System.Data.SqlTypes.SqlChars(
@@ -123,7 +123,7 @@ namespace IRI.Test.ShapefileFormat
             CollectionAssert.AreEqual(multiEsriPointM.AsWkb(), sqlMultiPointM.STAsBinary().Buffer);
 
             //Test EsriPointZ
-            IRI.Ket.ShapefileFormat.EsriType.MultiPointZ multiEsriPointZ = new MultiPointZ(pointsZ);
+            IRI.Ket.ShapefileFormat.EsriType.EsriMultiPointZ multiEsriPointZ = new EsriMultiPointZ(pointsZ);
             SqlGeometry sqlEsriPointZ =
                SqlGeometry.STPointFromText(
                new System.Data.SqlTypes.SqlChars(
@@ -137,7 +137,7 @@ namespace IRI.Test.ShapefileFormat
         public void TestPolylineToSqlServerWkb()
         {
             //Test Polyline
-            PolyLine polyline = new PolyLine(pointCollection);
+            EsriPolyLine polyline = new EsriPolyLine(pointCollection);
             SqlGeometry sqlPolyline =
                SqlGeometry.STMLineFromText(
                new System.Data.SqlTypes.SqlChars(
@@ -166,7 +166,7 @@ namespace IRI.Test.ShapefileFormat
         public void TestPolygonToSqlServerWkb()
         {
 
-            foreach (Polygon item in this.polygons)
+            foreach (EsriPolygon item in this.polygons)
             {
                 SqlGeometry geometry = SqlGeometry.STPolyFromWKB(new SqlBytes(item.AsWkb()), 0);
 

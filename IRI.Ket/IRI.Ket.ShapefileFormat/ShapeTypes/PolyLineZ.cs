@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct PolyLineZ : IPointsWithZ
+    public struct EsriPolyLineZ : IEsriPointsWithZ
     {
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.zValues; }
         }
 
-        public PolyLineZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
+        public EsriPolyLineZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
         {
             if (points.Length != zValues.Length || points.Length != measures.Length)
             {
@@ -134,7 +134,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
               
         }
 
-        public PolyLineZ(IRI.Ham.SpatialBase.BoundingBox boundingBox,
+        public EsriPolyLineZ(IRI.Ham.SpatialBase.BoundingBox boundingBox,
                             int[] parts,
                             EsriPoint[] points,
                             double minZ,
@@ -206,7 +206,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.PolyLineZ), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolyLineZ), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -242,9 +242,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return 22 + 2 * NumberOfParts + 8 * NumberOfPoints + 2 * (8 + 4 * NumberOfPoints); }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.PolyLineZ; }
+            get { return EsriShapeType.EsriPolyLineZ; }
         }
 
         public EsriPoint[] GetPart(int partNo)
@@ -316,7 +316,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Z,M values are igonred
         /// </summary>
         /// <returns></returns>
-        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(PolyLineZ polyline, Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null, byte[] color = null)
+        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyLineZ polyline, Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
                new KmlFormat.Primitives.PlacemarkType();
@@ -370,9 +370,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
-            return new PolyLineZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
+            return new EsriPolyLineZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }
     }
 }

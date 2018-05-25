@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct EsriPointM : IRI.Ham.SpatialBase.IPoint, IShape
+    public struct EsriPointM : IRI.Ham.SpatialBase.IPoint, IEsriShape
     {
         private double x, y, measure;
 
@@ -66,7 +66,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.PointM), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPointM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.CheckNoDataAndGetByteValue(this.X), 0, ShapeConstants.DoubleSize);
 
@@ -82,9 +82,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return ShapeConstants.PointMContentLengthInWords; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.PointM; }
+            get { return EsriShapeType.EsriPointM; }
         }
 
         public string AsSqlServerWkt()
@@ -116,7 +116,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17}", this.X, this.Y, this.Measure);
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
             var result = transform(this);
 

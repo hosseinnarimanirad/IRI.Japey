@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
-
+using IRI.Ket.ShapefileFormat.Model;
 
 namespace IRI.Ket.ShapefileFormat.Dbf
 {
@@ -497,7 +497,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             stream.Close();
         }
 
-        public static void Write<T>(string fileName,
+        public static void Write<T>(string dbfFileName,
                                         IEnumerable<T> values,
                                         List<Func<T, object>> mapping,
                                         List<DbfFieldDescriptor> columns,
@@ -506,17 +506,16 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         {
             int control = 0;
             try
-            {
-
+            { 
                 if (columns.Count != mapping.Count)
                 {
                     throw new NotImplementedException();
                 }
 
                 //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
-                var mode = Shapefile.GetMode(fileName, overwrite);
+                var mode = Shapefile.GetMode(dbfFileName, overwrite);
 
-                System.IO.Stream stream = new System.IO.FileStream(fileName, mode);
+                System.IO.Stream stream = new System.IO.FileStream(dbfFileName, mode);
 
                 System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
@@ -563,7 +562,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 stream.Close();
 
-                System.IO.File.WriteAllText(Shapefile.GetCpgFileName(fileName), encoding.BodyName);
+                System.IO.File.WriteAllText(Shapefile.GetCpgFileName(dbfFileName), encoding.BodyName);
 
             }
             catch (Exception ex)
@@ -573,6 +572,15 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 string m2 = message + " " + control.ToString();
 
             }
+        }
+
+        public static void Write<T>(string dbfFileName,
+                                        IEnumerable<T> values,
+                                        List<ObjectToDbfTypeMap<T>> mapping,
+                                        Encoding encoding,
+                                        bool overwrite = false)
+        {
+            Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
         }
 
         private static byte[] GetBytes(string value, byte[] array, Encoding encoding)

@@ -9,7 +9,7 @@ using System.Text;
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
-    public interface IShape
+    public interface IEsriShape
     {
         IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox { get; }
 
@@ -20,7 +20,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// </summary>
         int ContentLength { get; }
 
-        ShapeType Type { get; }
+        EsriShapeType Type { get; }
 
         string AsSqlServerWkt();
 
@@ -30,6 +30,6 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         string AsKml(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null);
 
-        IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform);
+        IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform);
     }
 }

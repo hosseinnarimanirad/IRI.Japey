@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct MultiPointM : IPointsWithMeasure
+    public struct EsriMultiPointM : IEsriPointsWithMeasure
     {
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measures; }
         }
 
-        public MultiPointM(EsriPoint[] points, double[] measures)
+        public EsriMultiPointM(EsriPoint[] points, double[] measures)
         {
             if (points.Length != measures.Length)
             {
@@ -89,7 +89,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
              
         }
 
-        internal MultiPointM(IRI.Ham.SpatialBase.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriMultiPointM(IRI.Ham.SpatialBase.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
             this.boundingBox = boundingBox;
 
@@ -102,7 +102,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             this.measures = measures;
         }
 
-        public MultiPointM(EsriPointM[] points)
+        public EsriMultiPointM(EsriPointM[] points)
         {
             //this.boundingBox = new IRI.Ham.SpatialBase.BoundingBox(xMin: MapStatistics.GetMinX(points),
             //                                    yMin: MapStatistics.GetMinY(points),
@@ -143,7 +143,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.MultiPointM), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriMultiPointM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -166,9 +166,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return 20 + 8 * NumberOfPoints + 8 + 4 * NumberOfPoints; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.MultiPointM; }
+            get { return EsriShapeType.EsriMultiPointM; }
         }
 
         /// <summary>
@@ -240,9 +240,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
-            return new MultiPointM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.measures);
+            return new EsriMultiPointM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.measures);
         }
 
         #endregion

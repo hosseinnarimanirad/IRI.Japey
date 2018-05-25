@@ -650,7 +650,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.Ostanha = Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
             {
-                this.ZoomToExtent(a.Parse(3857));
+                this.ZoomToExtent(a.GetBoundingBox(3857));
             });
 
             presenter.ZoomToExtent(sb.Primitives.BoundingBoxes.IranMercatorBoundingBox);
@@ -3347,6 +3347,11 @@ namespace IRI.Jab.MapViewer
                 double yScale = (isExactExtent ? this.mapView.ActualHeight : this.mapView.ActualHeight - 20) / mapBoundingBox.Height;
 
                 double scale = xScale > yScale ? yScale : xScale;
+
+                if (double.IsNaN(scale))
+                {
+                    return;
+                }
 
                 double pointScale = ToMapScale(scale) / this.MapScale;
 

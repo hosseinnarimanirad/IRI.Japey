@@ -7,21 +7,21 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public enum ShapeType : int
+    public enum EsriShapeType : int
     {
         NullShape = 0,
-        Point = 1,
-        PolyLine = 3,
-        Polygon = 5,
-        MultiPoint = 8,
-        PointZ = 11,
-        PolyLineZ = 13,
-        PolygonZ = 15,
-        MultiPointZ = 18,
-        PointM = 21,
-        PolyLineM = 23,
-        PolygonM = 25,
-        MultiPointM = 28,
-        MultiPatch = 31
+        EsriPoint = 1,
+        EsriPolyLine = 3,
+        EsriPolygon = 5,
+        EsriMultiPoint = 8,
+        EsriPointZ = 11,
+        EsriPolyLineZ = 13,
+        EsriPolygonZ = 15,
+        EsriMultiPointZ = 18,
+        EsriPointM = 21,
+        EsriPolyLineM = 23,
+        EsriPolygonM = 25,
+        EsriMultiPointM = 28,
+        EsriMultiPatch = 31
     }
 }

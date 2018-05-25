@@ -13,7 +13,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct PolygonM : IPointsWithMeasure
+    public struct EsriPolygonM : IEsriPointsWithMeasure
     {
 
         private IRI.Ham.SpatialBase.BoundingBox boundingBox;
@@ -69,7 +69,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public PolygonM(EsriPoint[] points, int[] parts, double[] measures)
+        public EsriPolygonM(EsriPoint[] points, int[] parts, double[] measures)
         {
             if (points.Length != measures.Length)
             {
@@ -99,7 +99,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
              
         }
 
-        internal PolygonM(IRI.Ham.SpatialBase.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriPolygonM(IRI.Ham.SpatialBase.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
             this.boundingBox = boundingBox;
 
@@ -118,7 +118,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.PolygonM), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolygonM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -150,9 +150,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return 22 + 2 * NumberOfParts + 8 * NumberOfPoints + 8 + 4 * NumberOfPoints; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.PolygonM; }
+            get { return EsriShapeType.EsriPolygonM; }
         }
 
         public EsriPoint[] GetPart(int partNo)
@@ -218,9 +218,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
-            return new PolygonM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
+            return new EsriPolygonM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
         }
     }
 }

@@ -10,9 +10,9 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public abstract class PointsReader<T> : ShpReader<T> where T : IShape
+    public abstract class PointsReader<T> : ShpReader<T> where T : IEsriShape
     {
-        public PointsReader(string fileName, ShapeType type)
+        public PointsReader(string fileName, EsriShapeType type)
             : base(fileName, type)
         {
 

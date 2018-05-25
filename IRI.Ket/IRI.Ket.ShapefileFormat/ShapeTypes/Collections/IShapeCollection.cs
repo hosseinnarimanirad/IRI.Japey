@@ -4,11 +4,11 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public interface IShapeCollection : IEnumerable<IShape>
+    public interface IEsriShapeCollection : IEnumerable<IEsriShape>
     {
         MainFileHeader MainHeader { get; }
 
-        IShape this[int index] { get; set; }
+        IEsriShape this[int index] { get; set; }
 
         int Count { get; }
 

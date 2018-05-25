@@ -1,4 +1,5 @@
 ﻿using IRI.Ham.SpatialBase;
+using IRI.Ket.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,26 @@ namespace IRI.Ket.SpatialExtensions
             SqlGeometry boundary = boundingBox.AsSqlGeometry(geometry.GetSrid());
 
             return geometry.STIntersects(boundary).IsTrue;
+        }
+
+        public static List<EsriPoint> GetClockWiseOrderOfEsriPoints(this BoundingBox boundingBox)
+        {
+            return new List<EsriPoint>
+            {
+                new EsriPoint(boundingBox.XMin, boundingBox.YMin),
+                new EsriPoint(boundingBox.XMin, boundingBox.YMax),
+                new EsriPoint(boundingBox.XMax, boundingBox.YMax),
+                new EsriPoint(boundingBox.XMax, boundingBox.YMin)
+            };
+        }
+
+        public static EsriPolygon AsEsriShape(this BoundingBox boundingBox)
+        {
+            var polygon = boundingBox.GetClockWiseOrderOfEsriPoints();
+
+            polygon.Add(polygon.First()); //first point and last point must be the same
+
+            return new EsriPolygon(polygon.ToArray());
         }
     }
 }

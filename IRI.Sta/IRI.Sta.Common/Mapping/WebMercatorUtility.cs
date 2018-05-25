@@ -344,7 +344,6 @@ namespace IRI.Ham.SpatialBase.Mapping
 
             //var upperRight = GoogleMapProvider.LatLonToImageNumber(geocentricTopLeft.Y, geocentricBottomRight.X, zoomLevel);
 
-
             var lowerLeft = LatLonToImageNumber(geodeticBoundingBox.BottomRight.Y, geodeticBoundingBox.TopLeft.X, zoomLevel);
 
             var upperRight = LatLonToImageNumber(geodeticBoundingBox.TopLeft.Y, geodeticBoundingBox.BottomRight.X, zoomLevel);
@@ -363,24 +362,46 @@ namespace IRI.Ham.SpatialBase.Mapping
             return result;
         }
 
-        //public static List<TileInfo> MercatorBoundingBoxToGoogleTileRegions(BoundingBox mercatorBoundingBox, int zoomLevel)
-        //{
-        //    //var topLeft = Projection.MercatorToGeodetic(mercatorBoundingBox.TopLeft);
-
-        //    //var bottomRigth = Projection.MercatorToGeodetic(mercatorBoundingBox.BottomRigth);
-
-        //    //var geographicBoundingBox = new BoundingBox(topLeft.X, bottomRigth.Y, bottomRigth.X, topLeft.Y);
-
-        //    var geographicBoundingBox = mercatorBoundingBox.Transform(i => MapProjects.MercatorToGeodetic(i));
-
-        //    return GeodeticBoundingBoxToGoogleTileRegions(geographicBoundingBox, zoomLevel);
-        //}
-
         public static List<TileInfo> WebMercatorBoundingBoxToGoogleTileRegions(BoundingBox webMercatorBoundingBox, int zoomLevel)
         {
             var geographicBoundingBox = webMercatorBoundingBox.Transform(i => MapProjects.WebMercatorToGeodeticWgs84(i));
 
             return GeodeticBoundingBoxToGoogleTileRegions(geographicBoundingBox, zoomLevel);
+        }
+
+        public static void WriteGeodeticBoundingBoxToGoogleTileRegions(string fileName, BoundingBox geodeticBoundingBox, int zoomLevel)
+        {
+            var lowerLeft = LatLonToImageNumber(geodeticBoundingBox.BottomRight.Y, geodeticBoundingBox.TopLeft.X, zoomLevel);
+
+            var upperRight = LatLonToImageNumber(geodeticBoundingBox.TopLeft.Y, geodeticBoundingBox.BottomRight.X, zoomLevel);
+
+            var result = new List<string>();
+
+            result.Add("ZoomLevel ; RowNumber ;  ColumnNumber ; XMin ; XMax ; YMin ; YMax");
+
+            System.IO.File.AppendAllLines(fileName, result);
+
+            for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
+            {
+                result = new List<string>();
+
+                for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
+                {
+                    var tile = new TileInfo(j, i, zoomLevel);
+
+                    result.Add($"{tile.ZoomLevel} ; {tile.RowNumber} ; {tile.ColumnNumber} ; {tile.GeodeticExtent.XMin} ; {tile.GeodeticExtent.XMax} ; {tile.GeodeticExtent.YMin} ; {tile.GeodeticExtent.YMax}");
+                }
+
+                System.IO.File.AppendAllLines(fileName, result);
+            }
+
+        }
+         
+        public static void WriteWebMercatorBoundingBoxToGoogleTileRegions(string fileName, BoundingBox webMercatorBoundingBox, int zoomLevel)
+        {
+            var geographicBoundingBox = webMercatorBoundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
+
+            WriteGeodeticBoundingBoxToGoogleTileRegions(fileName, geographicBoundingBox, zoomLevel);
         }
 
         public static BoundingBox GetWgs84ImageBoundingBox(int row, int column, int zoom)

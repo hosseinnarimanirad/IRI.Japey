@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public struct EsriPointZ : IRI.Ham.SpatialBase.IPoint, IShape
+    public struct EsriPointZ : IRI.Ham.SpatialBase.IPoint, IEsriShape
     {
         private double x, y, z, measure;
 
@@ -81,7 +81,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.PointZ), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPointZ), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.CheckNoDataAndGetByteValue(this.X), 0, ShapeConstants.DoubleSize);
 
@@ -99,9 +99,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return ShapeConstants.PointZContentLengthInWords; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.PointZ; }
+            get { return EsriShapeType.EsriPointZ; }
         }
 
         public string AsSqlServerWkt()
@@ -143,7 +143,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
             var result = transform(this);
 

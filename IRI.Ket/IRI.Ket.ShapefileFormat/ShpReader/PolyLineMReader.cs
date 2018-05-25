@@ -10,18 +10,18 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolyLineMReader : MeasuresReader<PolyLineM>
+    public class PolyLineMReader : MeasuresReader<EsriPolyLineM>
     { 
         public PolyLineMReader(string fileName)
-            : base(fileName, ShapeType.PolyLineM)
+            : base(fileName, EsriShapeType.EsriPolyLineM)
         {
         }
 
-        protected override PolyLineM ReadElement()
+        protected override EsriPolyLineM ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)shapeType != ShapeType.PolyLineM)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPolyLineM)
             {
                 throw new NotImplementedException();
             }
@@ -47,10 +47,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new PolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
 
-        public static PolyLineM Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolyLineM Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             if (contentLength == 38)
             {
@@ -83,7 +83,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new PolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
     }
 }

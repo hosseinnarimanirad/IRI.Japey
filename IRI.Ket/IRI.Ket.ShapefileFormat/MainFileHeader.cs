@@ -33,9 +33,9 @@ namespace IRI.Ket.ShapefileFormat
             get { return this.m_Version; }
         }
 
-        public ShapeType ShapeType
+        public EsriShapeType ShapeType
         {
-            get { return (ShapeType)this.m_ShapeType; }
+            get { return (EsriShapeType)this.m_ShapeType; }
         }
 
         public double XMin
@@ -135,7 +135,7 @@ namespace IRI.Ket.ShapefileFormat
             this.m_MMax = IRI.Ket.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMaxOffset);
         }
 
-        internal MainFileHeader(int fileLength, ShapeType type, IRI.Ham.SpatialBase.BoundingBox minimumnBoundingBox)
+        internal MainFileHeader(int fileLength, EsriShapeType type, IRI.Ham.SpatialBase.BoundingBox minimumnBoundingBox)
         {
             this.m_Version = 9994;
 

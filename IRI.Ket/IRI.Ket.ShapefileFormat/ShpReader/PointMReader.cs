@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
     public class PointMReader : ShpReader<EsriPointM>
     {
         public PointMReader(string fileName)
-            : base(fileName, ShapeType.PointM)
+            : base(fileName, EsriShapeType.EsriPointM)
         {
         }
 
@@ -19,7 +19,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((ShapeType)shapeType != ShapeType.PointM)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPointM)
             {
                 throw new NotImplementedException();
             }

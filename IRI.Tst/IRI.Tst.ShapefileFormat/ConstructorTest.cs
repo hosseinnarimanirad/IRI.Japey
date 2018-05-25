@@ -29,7 +29,7 @@ namespace IRI.Test.ShapefileFormatTest
         [TestMethod]
         public void TestPolylineConstructor()
         {
-            PolyLine polyLine = new PolyLine(this.points);
+            EsriPolyLine polyLine = new EsriPolyLine(this.points);
 
             Assert.AreEqual(polyLine.Parts[0], 0);
 

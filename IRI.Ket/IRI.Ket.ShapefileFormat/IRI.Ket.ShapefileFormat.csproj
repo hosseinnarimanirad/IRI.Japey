@@ -88,7 +88,7 @@
     <Compile Include="Indexing\IndexIO.cs" />
     <Compile Include="Indexing\ShpIndex.cs" />
     <Compile Include="MainFileHeader.cs" />
-    <Compile Include="MapStatistics.cs" />
+    <Compile Include="Model\ObjectToDbfTypeMap.cs" />
     <Compile Include="OgcKmlMapFunctions.cs" />
     <Compile Include="OgcWkbMapFunctions.cs" />
     <Compile Include="Prj\CoordinateSystemExtensions.cs" />

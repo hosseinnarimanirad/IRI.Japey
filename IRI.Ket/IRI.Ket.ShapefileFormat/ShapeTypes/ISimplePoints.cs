@@ -3,7 +3,7 @@
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public interface ISimplePoints : IShape
+    public interface IEsriSimplePoints : IEsriShape
     {
         EsriPoint[] Points { get; }
 

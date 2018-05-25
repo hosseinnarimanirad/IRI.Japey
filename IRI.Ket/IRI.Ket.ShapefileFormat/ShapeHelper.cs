@@ -8,7 +8,7 @@ namespace IRI.Ket.ShapefileFormat
 {
     static class ShapeHelper
     {
-        internal static EsriPoint[] GetPoints(ISimplePoints shape, int startIndex)
+        internal static EsriPoint[] GetPoints(IEsriSimplePoints shape, int startIndex)
         {
             int partNumber = Array.IndexOf(shape.Parts, startIndex);
 
@@ -23,7 +23,7 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        internal static double[] GetMeasures(IPointsWithMeasure shape, int startIndex)
+        internal static double[] GetMeasures(IEsriPointsWithMeasure shape, int startIndex)
         {
             int partNumber = Array.IndexOf(shape.Parts, startIndex);
 
@@ -38,7 +38,7 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        internal static double[] GetZValues(IPointsWithZ shape, int startIndex)
+        internal static double[] GetZValues(IEsriPointsWithZ shape, int startIndex)
         {
             int partNumber = Array.IndexOf(shape.Parts, startIndex);
 

@@ -11,7 +11,7 @@ namespace IRI.Jab.Common.Model.Spatialable
 {
     public static class EnvelopeMarkupLabelTripleExtension
     {
-        public static BoundingBox Parse(this EnvelopeMarkupLabelTriple value, int srid)
+        public static BoundingBox GetBoundingBox(this EnvelopeMarkupLabelTriple value, int srid)
         {
             var geometry = SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(value.GetEnvelopeWkbWm()), srid);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    interface IPointsWithZ : IPointsWithMeasure
+    interface IEsriPointsWithZ : IEsriPointsWithMeasure
     {
         double MaxZ { get; }
         double MinZ { get; }

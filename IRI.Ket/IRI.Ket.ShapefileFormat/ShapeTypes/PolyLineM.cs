@@ -11,10 +11,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
   
     
-    public struct PolyLineM : IPointsWithMeasure
+    public struct EsriPolyLineM : IEsriPointsWithMeasure
     {
-       
-
+        
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
@@ -70,7 +69,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measures; }
         }
 
-        public PolyLineM(EsriPoint[] points, int[] parts, double[] measures)
+        public EsriPolyLineM(EsriPoint[] points, int[] parts, double[] measures)
         {
             if (points.Length != measures.Length)
             {
@@ -100,7 +99,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
              
         }
 
-        internal PolyLineM(IRI.Ham.SpatialBase.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriPolyLineM(IRI.Ham.SpatialBase.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
             this.boundingBox = boundingBox;
 
@@ -119,7 +118,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.PolyLineM), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolyLineM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -151,9 +150,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return 22 + 2 * NumberOfParts + 8 * NumberOfPoints + 8 + 4 * NumberOfPoints; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.PolyLineM; }
+            get { return EsriShapeType.EsriPolyLineM; }
         }
 
         public EsriPoint[] GetPart(int partNo)
@@ -219,7 +218,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: M values are igonred
         /// </summary>
         /// <returns></returns>
-        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(PolyLineM polyline, Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null, byte[] color = null)
+        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyLineM polyline, Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
                new KmlFormat.Primitives.PlacemarkType();
@@ -273,9 +272,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
         {
-            return new PolyLineM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
+            return new EsriPolyLineM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
         }
 
     }

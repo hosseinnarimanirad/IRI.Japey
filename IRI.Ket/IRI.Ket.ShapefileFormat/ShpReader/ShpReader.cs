@@ -8,7 +8,7 @@ using IRI.Ket.ShapefileFormat.EsriType;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public abstract class ShpReader<T> : IEnumerable<T> where T : IShape
+    public abstract class ShpReader<T> : IEnumerable<T> where T : IEsriShape
     {
         //private string directoryName;
 
@@ -23,9 +23,9 @@ namespace IRI.Ket.ShapefileFormat.Reader
         /// </summary>
         //protected int tempPosition;
 
-        public ShapeCollection<T> elements;
+        public EsriShapeCollection<T> elements;
 
-        protected ShpReader(string fileName, ShapeType type)
+        protected ShpReader(string fileName, EsriShapeType type)
         {
             //this.directoryName = System.IO.Path.GetDirectoryName(fileName);
 
@@ -44,7 +44,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 {
                     this.MainHeader = new MainFileHeader(this.shpReader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
 
-                    if ((ShapeType)this.MainHeader.ShapeType != type)
+                    if ((EsriShapeType)this.MainHeader.ShapeType != type)
                     {
                         throw new NotImplementedException();
                     }
@@ -54,7 +54,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                         throw new NotImplementedException();
                     }
 
-                    this.elements = new ShapeCollection<T>(this.MainHeader);
+                    this.elements = new EsriShapeCollection<T>(this.MainHeader);
 
                     int numberOfRecords = shxFile.NumberOfRecords;
 

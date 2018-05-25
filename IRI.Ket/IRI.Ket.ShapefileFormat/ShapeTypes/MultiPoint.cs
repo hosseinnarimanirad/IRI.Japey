@@ -13,7 +13,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct MultiPoint : IRI.Ket.ShapefileFormat.EsriType.ISimplePoints
+    public struct EsriMultiPoint : IRI.Ket.ShapefileFormat.EsriType.IEsriSimplePoints
     {
 
         /// <summary>
@@ -43,14 +43,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return new int[] { 0 }; }
         }
 
-        public MultiPoint(EsriPoint[] points)
+        public EsriMultiPoint(EsriPoint[] points)
         {
             this.boundingBox = IRI.Ham.SpatialBase.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Ham.SpatialBase.IPoint>());
 
             this.points = points;
         }
 
-        internal MultiPoint(IRI.Ham.SpatialBase.BoundingBox boundingBox, EsriPoint[] points)
+        internal EsriMultiPoint(IRI.Ham.SpatialBase.BoundingBox boundingBox, EsriPoint[] points)
         {
             this.boundingBox = boundingBox;
 
@@ -61,7 +61,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)ShapeType.MultiPoint), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriMultiPoint), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -79,9 +79,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return 20 + 8 * NumberOfPoints; }
         }
 
-        public ShapeType Type
+        public EsriShapeType Type
         {
-            get { return ShapeType.MultiPoint; }
+            get { return EsriShapeType.EsriMultiPoint; }
         }
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IShape Transform(Func<IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, Ham.SpatialBase.IPoint> transform)
         {
-            return new MultiPoint(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray());
+            return new EsriMultiPoint(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray());
         }
     }
 }
