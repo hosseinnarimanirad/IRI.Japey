@@ -1,7 +1,7 @@
 ﻿
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Mapping;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Ket.Common.Helpers;
 using IRI.Ket.WorldfileFormat;
 using System;

@@ -2,11 +2,11 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.MeasurementUnit;
+using IRI.Sta.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
-namespace IRI.Ham.CoordinateSystem
+namespace IRI.Sta.CoordinateSystem
 {
     public class Polar<TLinear, TAngular> : IPolar
         where TLinear : LinearUnit, new()

@@ -1,13 +1,14 @@
-﻿using IRI.Ham.CoordinateSystem;
-using IRI.Ham.MeasurementUnit;
-using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.CoordinateSystem;
+using IRI.Sta.MeasurementUnit;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public class LambertConformalConic : MapProjectionBase
     {

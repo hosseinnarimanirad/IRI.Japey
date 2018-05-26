@@ -1,5 +1,5 @@
 ﻿using System;
-namespace IRI.Ham.SpatialBase
+namespace IRI.Sta.Common.Primitives
 {
     public interface IPoint
     {

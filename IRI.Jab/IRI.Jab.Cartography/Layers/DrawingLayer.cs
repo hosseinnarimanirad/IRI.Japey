@@ -3,7 +3,7 @@ using IRI.Jab.Common;
 using System;
 using System.Collections.Generic;
 using System.Windows.Media;
-using sb = IRI.Ham.SpatialBase;
+using sb = IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Cartography
@@ -72,18 +72,18 @@ namespace IRI.Jab.Cartography
         {
             this._mode = mode;
 
-            sb.Primitives.GeometryType type;
+            sb.GeometryType type;
 
             switch (mode)
             {
                 case DrawMode.Point:
-                    type = sb.Primitives.GeometryType.Point;
+                    type = sb.GeometryType.Point;
                     break;
                 case DrawMode.Polyline:
-                    type = sb.Primitives.GeometryType.LineString;
+                    type = sb.GeometryType.LineString;
                     break;
                 case DrawMode.Polygon:
-                    type = sb.Primitives.GeometryType.Polygon;
+                    type = sb.GeometryType.Polygon;
                     break;
                 case DrawMode.Rectange:
                 case DrawMode.Freehand:
@@ -110,7 +110,7 @@ namespace IRI.Jab.Cartography
 
         }
 
-        public Action<sb.Primitives.Geometry> RequestFinishEditing;
+        public Action<sb.Geometry> RequestFinishEditing;
 
         public Action RequestCancelDrawing { get; set; }
 
@@ -136,7 +136,7 @@ namespace IRI.Jab.Cartography
             this._editableFeatureLayer.AddSemiVertex(webMercatorPoint);
         }
 
-        public sb.Primitives.Geometry GetFinalGeometry()
+        public sb.Geometry GetFinalGeometry()
         {
             return this._editableFeatureLayer.GetFinalGeometry();
         }

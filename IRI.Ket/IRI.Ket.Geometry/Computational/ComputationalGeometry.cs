@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using IRI.Ket.DataStructure;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
 namespace IRI.Ket.Geometry
 {

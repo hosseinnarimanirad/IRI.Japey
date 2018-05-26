@@ -1,10 +1,10 @@
-﻿using IRI.Ham.SpatialBase.Ogc;
+﻿using IRI.Sta.Common.Ogc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase
+namespace IRI.Sta.Common.Primitives
 {
     public class Point : IPoint
     {
@@ -102,7 +102,7 @@ namespace IRI.Ham.SpatialBase
 
         public byte[] AsWkb()
         {
-            return Extensions.PointHelper.AsWkb(this);
+            return this.AsWkb();
         }
 
 

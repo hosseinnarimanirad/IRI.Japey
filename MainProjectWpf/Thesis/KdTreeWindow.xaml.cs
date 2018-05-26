@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using spatial = IRI.Ham.SpatialBase;
+using spatial = IRI.Sta.Common.Primitives;
 
 namespace IRI.MainProjectWPF
 {

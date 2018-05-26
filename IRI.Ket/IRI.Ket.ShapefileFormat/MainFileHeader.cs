@@ -87,9 +87,9 @@ namespace IRI.Ket.ShapefileFormat
         }
 
        
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Ham.SpatialBase.BoundingBox(xMin: XMin, yMin: YMin, xMax: XMax, yMax: YMax); }
+            get { return new IRI.Sta.Common.Primitives.BoundingBox(xMin: XMin, yMin: YMin, xMax: XMax, yMax: YMax); }
         }
 
         public MainFileHeader(byte[] values)
@@ -135,7 +135,7 @@ namespace IRI.Ket.ShapefileFormat
             this.m_MMax = IRI.Ket.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMaxOffset);
         }
 
-        internal MainFileHeader(int fileLength, EsriShapeType type, IRI.Ham.SpatialBase.BoundingBox minimumnBoundingBox)
+        internal MainFileHeader(int fileLength, EsriShapeType type, IRI.Sta.Common.Primitives.BoundingBox minimumnBoundingBox)
         {
             this.m_Version = 9994;
 

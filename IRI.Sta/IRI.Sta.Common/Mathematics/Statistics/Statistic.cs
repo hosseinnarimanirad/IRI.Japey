@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
-namespace IRI.Ham.Statistics
+namespace IRI.Sta.Statistics
 {
     public static class Statistics
     {

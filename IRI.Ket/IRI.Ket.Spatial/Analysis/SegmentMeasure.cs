@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Ket.Spatial.Primitives;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Spatial. Analysis
 {

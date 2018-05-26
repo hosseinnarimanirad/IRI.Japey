@@ -6,12 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Windows;
+using System.Text; 
 using System.Windows.Data;
-using System.Windows.Shapes;
-using spatialBase = IRI.Ham.SpatialBase;
+using System.Windows.Shapes; 
 using IRI.Jab.Common.Model;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Cartography
 {
@@ -30,16 +29,16 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public override spatialBase.BoundingBox Extent
+        public override BoundingBox Extent
         {
             get
             {
                 if (this.Items.Count < 1)
                 {
-                    return new spatialBase.BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
+                    return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
                 }
 
-                return spatialBase.BoundingBox.CalculateBoundingBox(this.Items.Select(i => new spatialBase.Point(i.X, i.Y)));
+                return BoundingBox.CalculateBoundingBox(this.Items.Select(i => new Point(i.X, i.Y)));
             }
             protected set
             {
@@ -197,7 +196,7 @@ namespace IRI.Jab.Cartography
                 VisibleRange = visibleRange;
             }
 
-            this.VisualParameters = new VisualParameters(null, null, 0, opacity, Visibility.Visible);
+            this.VisualParameters = new VisualParameters(null, null, 0, opacity, System.Windows.Visibility.Visible);
 
             if (items == null)
             {
@@ -221,7 +220,7 @@ namespace IRI.Jab.Cartography
 
         public Action<System.Collections.Specialized.NotifyCollectionChangedEventArgs> HandleCollectionChanged;
 
-        public Locateable Get(FrameworkElement element)
+        public Locateable Get(System.Windows.FrameworkElement element)
         {
             for (int i = 0; i < Items.Count; i++)
             {
@@ -255,7 +254,7 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public void Remove(spatialBase.IPoint[] points)
+        public void Remove(IPoint[] points)
         {
             for (int i = Items.Count - 1; i >= 0; i--)
             {
@@ -272,7 +271,7 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public void SelectLocatable(FrameworkElement element)
+        public void SelectLocatable(System.Windows.FrameworkElement element)
         {
             for (int i = 0; i < Items.Count; i++)
             {
@@ -414,7 +413,7 @@ namespace IRI.Jab.Cartography
         //    bmp.Render(drawingVisual);
         //}
 
-        //public System.Windows.Controls.Image AsDrawing(double mapScale, spatialBase.BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen)
+        //public System.Windows.Controls.Image AsDrawing(double mapScale, BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen)
         //{
         //    List<SqlGeometry> geometries = new List<SqlGeometry>();
 
@@ -463,7 +462,7 @@ namespace IRI.Jab.Cartography
         //    return image;
         //}
 
-        //public Tuple<Image, Path> AsShape(double mapScale, spatialBase.BoundingBox exactCurrentExtent, TransformGroup viewTransform,
+        //public Tuple<Image, Path> AsShape(double mapScale, BoundingBox exactCurrentExtent, TransformGroup viewTransform,
         //    TransformGroup viewTransformForPoints, Func<Point, Point> mapToScreen, Func<Point, Point> mapToIntermidiate,
         //    double width, double height)
         //{

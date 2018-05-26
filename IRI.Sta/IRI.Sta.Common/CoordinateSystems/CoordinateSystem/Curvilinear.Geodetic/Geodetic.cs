@@ -2,12 +2,12 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.MeasurementUnit;
+using IRI.Sta.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Ham.Algebra;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Algebra;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.CoordinateSystem
+namespace IRI.Sta.CoordinateSystem
 {
     public class Geodetic<TLinear, TAngular> : IGeodetic
         where TLinear : LinearUnit, new()

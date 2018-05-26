@@ -1,4 +1,4 @@
-﻿using IRI.Ham.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Ket.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Prj;
 using System;
@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ellipsoid = IRI.Ham.CoordinateSystem.Ellipsoid<IRI.Ham.MeasurementUnit.Meter, IRI.Ham.MeasurementUnit.Degree>;
+using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
 
 namespace IRI.Ket.ShapefileFormat.Prj
 {
@@ -176,7 +176,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
                 var values = Datum.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
 
                 return new Ellipsoid(values.First(),
-                                        new Ham.MeasurementUnit.Meter(double.Parse(values.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        new Sta.MeasurementUnit.Meter(double.Parse(values.Skip(1).First(), CultureInfo.InvariantCulture)),
                                         double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture), int.MaxValue)
                 {
                     EsriName = values.First()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase
+namespace IRI.Sta.Common.Primitives
 {
     [DataContract]
     public struct BoundingBox

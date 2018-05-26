@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
 
 namespace IRI.Ket.SqlServerSpatialExtension
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public enum MapProjectionType
     {

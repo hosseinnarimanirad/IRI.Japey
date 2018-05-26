@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Ket.SpatialExtensions;
 using Microsoft.SqlServer.Types;
 using System;
@@ -52,18 +52,18 @@ namespace IRI.Ket.DataManagement.DataSource
 
         //    var boundingBox = geometries.GetBoundingBox();
 
-        //    var fitLevel = IRI.Ham.SpatialBase.Mapping.GoogleMapsUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height));
+        //    var fitLevel = IRI.Sta.Common.Mapping.GoogleMapsUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height));
 
         //    var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveSimplifyByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
         //    for (int i = fitLevel; i < 18; i += 4)
         //    {
-        //        var threshold = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+        //        var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
 
         //        Debug.Print($"threshold: {threshold}, level:{i}");
 
-        //        //var scale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.CalculateMapScale(i, 30);
-        //        var inverseScale = IRI.Ham.SpatialBase.Mapping.GoogleMapsUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+        //        //var scale = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateMapScale(i, 30);
+        //        var inverseScale = IRI.Sta.Common.Mapping.GoogleMapsUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
         //        source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveSimplifyByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
         //    }
@@ -74,7 +74,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             var srid = GetSrid();
 
-            var properLevel = Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), 30, 1500);
+            var properLevel = Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), 30, 1500);
 
             var levels = GetLevels();
 

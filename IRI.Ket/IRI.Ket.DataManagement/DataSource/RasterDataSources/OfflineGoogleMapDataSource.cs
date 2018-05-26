@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Mapping;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -41,9 +41,9 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             //94.12.17
             //int zoomLevel = GetZoomLevel(mapScale);
-            int zoomLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
-            var result = new List<IRI.Ham.SpatialBase.GeoReferencedImage>();
+            var result = new List<GeoReferencedImage>();
 
             //What if there were no imagesource for this zoom level
             if (!this.ImageSources.Any(i => i.ZoomLevel == zoomLevel))
@@ -78,7 +78,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                     if (System.IO.File.Exists(fileName))
                     {
-                        result.Add(new IRI.Ham.SpatialBase.GeoReferencedImage(
+                        result.Add(new GeoReferencedImage(
                             System.IO.File.ReadAllBytes(fileName),
                             WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
                     }

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using IRI.Ket.Geometry;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 using IRI.Ket.DataStructure;
 
 namespace IRI.Ket.DigitalTerrainModeling
@@ -22,7 +22,7 @@ namespace IRI.Ket.DigitalTerrainModeling
         //coordinate of the center of upper left cell
         private Point lowerLeftCoordinate;
 
-        protected IRI.Ham.Algebra.Matrix values;
+        protected IRI.Sta.Algebra.Matrix values;
 
         public double CellWidth
         {
@@ -241,7 +241,7 @@ namespace IRI.Ket.DigitalTerrainModeling
                     ((4 + 2 * coef) * cellHeight);
         }
 
-        public IRI.Ham.Algebra.Matrix GetSlopeMatrix()
+        public IRI.Sta.Algebra.Matrix GetSlopeMatrix()
         {
             Matrix result = new Matrix(this.NumberOfRows - 2, this.NumberOfColumns - 2);
 
@@ -260,7 +260,7 @@ namespace IRI.Ket.DigitalTerrainModeling
             return result;
         }
 
-        public IRI.Ham.Algebra.Matrix GetAspectMatrix()
+        public IRI.Sta.Algebra.Matrix GetAspectMatrix()
         {
             Matrix result = new Matrix(this.NumberOfRows - 2, this.NumberOfColumns - 2);
 

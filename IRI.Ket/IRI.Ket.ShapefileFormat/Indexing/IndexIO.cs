@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Sta.Common.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,7 +52,7 @@ namespace IRI.Ket.ShapefileFormat.Indexing
                             result.Add(new ShpIndex()
                             {
                                 RecordNumber = reader.ReadInt32(),
-                                MinimumBoundingBox = new Ham.SpatialBase.BoundingBox(reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble())
+                                MinimumBoundingBox = new BoundingBox(reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble(), reader.ReadDouble())
                             });
                         }
                     };

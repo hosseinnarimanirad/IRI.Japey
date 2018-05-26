@@ -68,9 +68,9 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
         public List<SqlGeometry> Geometries { get; set; }
 
-        public IShapeCollection Shapes { get; set; }
+        public IEsriShapeCollection Shapes { get; set; }
 
-        public ShapeCollection(IShapeCollection shapes, string title)
+        public ShapeCollection(IEsriShapeCollection shapes, string title)
         {
             this.Title = title;
 

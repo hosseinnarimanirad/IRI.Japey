@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Analysis;
 using IRI.Ket.SqlServerSpatialExtension.GeoStatistics;
@@ -24,25 +24,25 @@ namespace Microsoft.SqlServer.Types
             switch (type)
             {
                 case SimplificationType.ByArea:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.SimplifyByArea(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold));
 
                 case SimplificationType.AdditiveByArea:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold));
 
                 case SimplificationType.AdditiveByAreaPlus:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold));
 
                 case SimplificationType.ByAngle:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold));
 
                 case SimplificationType.AdditiveByAngle:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold));
 
                 case SimplificationType.AdditiveByDistance:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    return Process(geometry, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold));
+                    return Process(geometry, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold));
 
                 default:
                     throw new NotImplementedException();
@@ -60,7 +60,7 @@ namespace Microsoft.SqlServer.Types
                     return null;
                 }
 
-                var threshold = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, averageLatitude); //0 seconds!
+                var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, averageLatitude); //0 seconds!
 
                 //watch.Stop();
                 //System.Diagnostics.Debug.WriteLine($"CALCULATE threshold {watch.ElapsedMilliseconds / 1000} s", "PYRAMID");
@@ -79,25 +79,25 @@ namespace Microsoft.SqlServer.Types
                 switch (type)
                 {
                     case SimplificationType.ByArea:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.SimplifyByArea(pList, areaThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.SimplifyByArea(pList, areaThreshold));
                         break;
                     case SimplificationType.AdditiveByArea:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, areaThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, areaThreshold));
                         break;
                     case SimplificationType.AdditiveByAreaPlus:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, areaThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, areaThreshold));
                         break;
                     case SimplificationType.ByAngle:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.SimplifyByAngle(pList, angleThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, angleThreshold));
                         break;
                     case SimplificationType.AdditiveByAngle:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, angleThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, angleThreshold));
                         break;
                     case SimplificationType.AdditiveByDistance:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
                         break;
                     case SimplificationType.AdditiveByAreaAngle:
-                        result = Process(geometries, pList => IRI.Ham.SpatialBase.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, angleThreshold, areaThreshold));
+                        result = Process(geometries, pList => IRI.Sta.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, angleThreshold, areaThreshold));
                         break;
                     default:
                         throw new NotImplementedException();
@@ -199,17 +199,17 @@ namespace Microsoft.SqlServer.Types
         {
             var boundingBox = source.GetBoundingBox();
 
-            var fitLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(Math.Max(boundingBox.Width, boundingBox.Height), 30, 1500);
+            var fitLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(Math.Max(boundingBox.Width, boundingBox.Height), 30, 1500);
 
             var simplifiedByAngleGeometries = source.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
             //for (int i = fitLevel; i < 18; i += 4)
             //{
-            var threshold = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.CalculateGroundResolution(fitLevel, 40);
+            var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(fitLevel, 40);
 
             //Debug.Print($"threshold: {threshold}, level:{i}");
 
-            //var inverseScale = IRI.Ham.SpatialBase.Mapping.GoogleMapsUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+            //var inverseScale = IRI.Sta.Common.Mapping.GoogleMapsUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
             //source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveSimplifyByArea)).Where(g => g.IsValid()).ToList());
 

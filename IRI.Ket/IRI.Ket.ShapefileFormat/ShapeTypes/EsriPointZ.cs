@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public struct EsriPointZ : IRI.Ham.SpatialBase.IPoint, IEsriShape
+    public struct EsriPointZ : IRI.Sta.Common.Primitives.IPoint, IEsriShape
     {
         private double x, y, z, measure;
 
@@ -55,9 +55,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         #region IShape Members
 
 
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Ham.SpatialBase.BoundingBox(this.X, this.Y, this.X, this.Y); }
+            get { return new IRI.Sta.Common.Primitives.BoundingBox(this.X, this.Y, this.X, this.Y); }
         }
 
         //public byte[] WriteContentsToByte()
@@ -133,17 +133,17 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform)
         {
             var result = transform(this);
 

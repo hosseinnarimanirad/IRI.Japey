@@ -5,7 +5,7 @@ using System.Text;
 using IRI.Ket.Spatial.Primitives;
 using IRI.Ket.Spatial;
 using IRI.Ket.DataStructure;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Spatial.PointSorting
 {

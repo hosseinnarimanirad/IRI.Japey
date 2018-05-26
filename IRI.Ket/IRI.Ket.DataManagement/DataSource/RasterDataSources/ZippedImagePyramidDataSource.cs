@@ -4,11 +4,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 
 using IRI.Ket.DataManagement.Model;
-using IRI.Ham.SpatialBase.Mapping;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model; 
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -39,9 +40,9 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             //94.12.17
             //int zoomLevel = GetZoomLevel(mapScale);
-            int zoomLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
-            var result = new List<IRI.Ham.SpatialBase.GeoReferencedImage>();
+            var result = new List<GeoReferencedImage>();
 
             //What if there were no imagesource for this zoom level
             if (!_archive.Entries.Any(i => i.FullName.StartsWith(zoomLevel.ToString(), StringComparison.OrdinalIgnoreCase)))

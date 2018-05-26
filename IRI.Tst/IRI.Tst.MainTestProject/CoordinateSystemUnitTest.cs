@@ -3,8 +3,8 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.CoordinateSystem;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystem;
 
 namespace IRI.Test.MainTestProject
 {
@@ -26,7 +26,7 @@ namespace IRI.Test.MainTestProject
             double expectedResultForY = 1535925.0;     //Meter
             const double delta = 0.1;
 
-            double[][] actualResult = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToAlbersEqualAreaConic(
+            double[][] actualResult = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToAlbersEqualAreaConic(
                 new double[] { lambda },
                 new double[] { phi },
                 Ellipsoids.Clarke1866,
@@ -68,7 +68,7 @@ namespace IRI.Test.MainTestProject
             var lccNahrawanPoint = new Point(2119090.03, 823058.15);
 
 
-            var result = IRI.Ham.CoordinateSystem.MapProjection.DefaultMapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
+            var result = IRI.Sta.CoordinateSystem.MapProjection.DefaultMapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
 
             Assert.AreEqual(lccNahrawanPoint.X, result.X, 1);
             Assert.AreEqual(lccNahrawanPoint.Y, result.Y, 2);

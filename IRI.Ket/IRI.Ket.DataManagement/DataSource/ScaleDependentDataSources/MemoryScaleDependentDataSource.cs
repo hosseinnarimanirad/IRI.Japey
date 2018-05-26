@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Ket.SpatialExtensions;
@@ -27,17 +27,17 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var boundingBox = geometries.GetBoundingBox();
 
-            var fitLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
+            var fitLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
 
             var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
             for (int i = fitLevel; i < 18; i += 4)
             {
-                var threshold = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+                var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
 
                 Debug.Print($"threshold: {threshold}, level:{i}");
 
-                var inverseScale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+                var inverseScale = IRI.Sta.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
                 source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
             }
@@ -47,7 +47,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             var availableScales = source.Select(k => k.Key).ToList();
 
-            var selectedScale = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
+            var selectedScale = IRI.Sta.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
 
             return source[selectedScale];
         }

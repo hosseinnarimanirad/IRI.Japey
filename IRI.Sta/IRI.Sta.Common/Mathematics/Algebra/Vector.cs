@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 
 [assembly: CLSCompliant(true)]
 
-namespace IRI.Ham.Algebra
+namespace IRI.Sta.Algebra
 {
     [DataContract]
     public class UnequalVectorSizeException : Exception

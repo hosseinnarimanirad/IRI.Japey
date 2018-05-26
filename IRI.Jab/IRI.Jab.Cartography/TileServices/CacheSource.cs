@@ -1,6 +1,6 @@
 ﻿
-using IRI.Ham.Common.Helpers;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Model;
 using IRI.Jab.Common;
 using System;
 using System.Collections.Generic;

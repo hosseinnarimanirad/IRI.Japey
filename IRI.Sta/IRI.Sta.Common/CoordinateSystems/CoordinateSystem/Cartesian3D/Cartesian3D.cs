@@ -2,11 +2,11 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.MeasurementUnit;
+using IRI.Sta.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
-namespace IRI.Ham.CoordinateSystem
+namespace IRI.Sta.CoordinateSystem
 {
     public class Cartesian3D<T> : ICartesian3D
         where T : LinearUnit, new()

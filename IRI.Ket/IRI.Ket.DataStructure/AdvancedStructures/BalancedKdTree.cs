@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Analysis;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -338,11 +338,11 @@ namespace IRI.Ket.DataStructure.AdvancedStructures
             {
                 var relation = SpatialUtility.CalculateAxisAlignedRectangleRelationToCircle(PointFunc(point), radius, node.LeftChild.MinimumBoundingBox);
 
-                if (relation == Ham.SpatialBase.Model.SpatialRelation.Contained)
+                if (relation == Sta.Common.Model.SpatialRelation.Contained)
                 {
                     result.AddRange(GetAllValues(node.LeftChild));
                 }
-                else if (relation == Ham.SpatialBase.Model.SpatialRelation.Intersects)
+                else if (relation == Sta.Common.Model.SpatialRelation.Intersects)
                 {
                     result.AddRange(FindNeighbours(point, radius, node.LeftChild, distanceFunc));
                 }
@@ -352,11 +352,11 @@ namespace IRI.Ket.DataStructure.AdvancedStructures
             {
                 var relation = SpatialUtility.CalculateAxisAlignedRectangleRelationToCircle(PointFunc(point), radius, node.RightChild.MinimumBoundingBox);
 
-                if (relation == Ham.SpatialBase.Model.SpatialRelation.Contained)
+                if (relation == Sta.Common.Model.SpatialRelation.Contained)
                 {
                     result.AddRange(GetAllValues(node.RightChild));
                 }
-                else if (relation == Ham.SpatialBase.Model.SpatialRelation.Intersects)
+                else if (relation == Sta.Common.Model.SpatialRelation.Intersects)
                 {
                     result.AddRange(FindNeighbours(point, radius, node.RightChild, distanceFunc));
                 }

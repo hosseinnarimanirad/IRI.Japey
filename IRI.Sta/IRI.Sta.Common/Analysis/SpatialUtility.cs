@@ -1,11 +1,12 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Model;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Analysis
+namespace IRI.Sta.Common.Analysis
 {
     public class SpatialUtility
     {

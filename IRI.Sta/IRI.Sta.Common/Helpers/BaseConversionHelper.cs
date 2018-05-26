@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Text;
 using System.Collections.Generic;
 
-namespace IRI.Ham.Common
+namespace IRI.Sta.Common.Helpers
 {
     #region 1
 

@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct EsriPointM : IRI.Ham.SpatialBase.IPoint, IEsriShape
+    public struct EsriPointM : IRI.Sta.Common.Primitives.IPoint, IEsriShape
     {
         private double x, y, measure;
 
@@ -42,9 +42,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Ham.SpatialBase.BoundingBox(this.X, this.Y, this.X, this.Y); }
+            get { return new IRI.Sta.Common.Primitives.BoundingBox(this.X, this.Y, this.X, this.Y); }
         }
 
         //public byte[] WriteContentsToByte()
@@ -101,12 +101,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
@@ -116,7 +116,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17}", this.X, this.Y, this.Measure);
         }
 
-        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform)
         {
             var result = transform(this);
 

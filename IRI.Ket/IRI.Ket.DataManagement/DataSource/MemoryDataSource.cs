@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.SqlServer.Types;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;

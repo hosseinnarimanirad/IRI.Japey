@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Types;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 
-using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource
@@ -89,7 +89,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     }
                     else
                     {
-                        _table.Rows[i][geoColumn] = SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(geometries[i].AsWkb()), srid).MakeValid().Transform(p => mapFunc((Point)p));
+                        _table.Rows[i][geoColumn] = SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(geometries[i].AsWkb()), srid).MakeValid().Transform(p => mapFunc((Point)p), srid);
                     }
                 }
             }
@@ -305,7 +305,7 @@ namespace IRI.Ket.DataManagement.DataSource
                                       .Where(i => !i.Geometry.IsNull)
                                       .ToList();
             }
-             
+
         }
 
         public override DataTable GetEntireFeatures(BoundingBox boundingBox)

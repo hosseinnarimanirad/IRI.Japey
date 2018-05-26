@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model
+namespace IRI.Sta.Common.Model
 {
     public enum SpatialRelation
     { 

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
 
 using System.Net;
-using IRI.Ham.CoordinateSystem;
+using IRI.Sta.CoordinateSystem;
 using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Data;
 using IRI.Ket.Common.Model;
 using IRI.Jab.Common.Model;
-using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Jab.Cartography
 {
@@ -206,7 +206,7 @@ namespace IRI.Jab.Cartography
 
                 client.Headers.Add("user-agent", "App!");
 
-                //var zoom = IRI.Ham.SpatialBase.Mapping.GoogleMapsUtility.GetGoogleZoomLevel(mapScale);
+                //var zoom = IRI.Sta.Common.Mapping.GoogleMapsUtility.GetGoogleZoomLevel(mapScale);
 
                 //google map
                 //var url = $@"https://mt0.google.com/vt?x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
@@ -261,7 +261,7 @@ namespace IRI.Jab.Cartography
 
                 client.Headers.Add("user-agent", "App!");
 
-                //var zoom = IRI.Ham.SpatialBase.Mapping.GoogleMapsUtility.GetGoogleZoomLevel(mapScale);
+                //var zoom = IRI.Sta.Common.Mapping.GoogleMapsUtility.GetGoogleZoomLevel(mapScale);
 
                 //google map
                 //var url = $@"https://mt0.google.com/vt?x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";

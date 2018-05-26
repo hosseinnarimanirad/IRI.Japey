@@ -1,6 +1,6 @@
 ﻿using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.MainProjectWPF.LargeData.Model;
-using IRI.Ham.SpatialBase.Mapping;
+using IRI.Sta.Common.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +12,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
 {
     public static class SimplifyAlgorithms
     {
-        public static IShapeCollection AdditiveSimplifyByArea(IShapeCollection shapes, int zoomLevel)
+        public static IEsriShapeCollection AdditiveSimplifyByArea(IEsriShapeCollection shapes, int zoomLevel)
         {
             var unitDistance = WebMercatorUtility.CalculateGroundResolution(zoomLevel, 35);
 
@@ -21,7 +21,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             return AdditiveSimplifyByArea(shapes, unitArea);
         }
 
-        public static IShapeCollection AdditiveSimplifyByArea(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection AdditiveSimplifyByArea(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.AdditiveSimplifyByArea(i, t));
 
@@ -40,12 +40,12 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             //return result;
         }
 
-        public static IShapeCollection AdditiveSimplifyByAreaPlus(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection AdditiveSimplifyByAreaPlus(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.AdditiveSimplifyByAreaPlus(i, t));
         }
 
-        public static IShapeCollection SimplifyByArea(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection SimplifyByArea(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.SimplifyByArea(i, t));
 
@@ -67,7 +67,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             //return result;
         }
 
-        public static IShapeCollection SimplifyByArea(IShapeCollection shapes, int zoomLevel)
+        public static IEsriShapeCollection SimplifyByArea(IEsriShapeCollection shapes, int zoomLevel)
         {
             var unitDistance = WebMercatorUtility.CalculateGroundResolution(zoomLevel, 35);
 
@@ -76,7 +76,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             return SimplifyByArea(shapes, unitArea);
         }
 
-        public static IShapeCollection SimplifyByAngle(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection SimplifyByAngle(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.SimplifyByAngle(i, t));
 
@@ -125,7 +125,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             //}
         }
 
-        public static IShapeCollection AdditiveSimplifyByAngle(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection AdditiveSimplifyByAngle(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.AdditiveSimplifyByAngle(i, t));
 
@@ -176,7 +176,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
 
         }
 
-        public static IShapeCollection AdditiveSimplifyByDistance(IShapeCollection shapes, double threshold)
+        public static IEsriShapeCollection AdditiveSimplifyByDistance(IEsriShapeCollection shapes, double threshold)
         {
             return Process(shapes, threshold, (i, t) => ShapeUtility.AdditiveSimplifyByDistance(i, t));
         }
@@ -187,13 +187,13 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
         {
             var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(file);
 
-            ShapeCollection<Polygon> polygons = new ShapeCollection<Polygon>();
+            EsriShapeCollection<EsriPolygon> polygons = new EsriShapeCollection<EsriPolygon>();
 
             //var stat = new FeatureStatistics[120];
 
             int index = 0;
 
-            foreach (Polygon feature in shapes)
+            foreach (EsriPolygon feature in shapes)
             {
                 index = 0;
 
@@ -253,11 +253,11 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
 
                 if (temp.Length > 0)
                 {
-                    polygons.Add(new Polygon(temp));
+                    polygons.Add(new EsriPolygon(temp));
                 }
             }
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(@"E:\Data\0. Test\Large Data\94.04.10\IRI1OstanMercatorSuperSlim.shp", polygons, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(@"E:\Data\0. Test\Large Data\94.04.10\IRI1OstanMercatorSuperSlim.shp", polygons, true);
 
             //Debug.Print("\n****************\n");
 
@@ -275,39 +275,39 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
 
         }
 
-        public static IShapeCollection Process(IShapeCollection shapes, double threshold, Func<EsriPoint[], double, EsriPoint[]> method)
+        public static IEsriShapeCollection Process(IEsriShapeCollection shapes, double threshold, Func<EsriPoint[], double, EsriPoint[]> method)
         {
-            if (shapes.First().Type == ShapeType.Polygon || shapes.First().Type == ShapeType.PolygonZ)
+            if (shapes.First().Type == EsriShapeType.EsriPolygon || shapes.First().Type == EsriShapeType.EsriPolygonZ)
             {
-                var result = new List<Polygon>();
+                var result = new List<EsriPolygon>();
 
-                foreach (ISimplePoints feature in shapes)
+                foreach (IEsriSimplePoints feature in shapes)
                 {
                     var temp = feature.Parts.Select((i, index) => method(feature.GetPart(index), threshold)).Where(i => i != null && i.Length > 3).ToArray();
 
                     if (temp == null || temp.Length == 0 || temp.Sum(i => i.Length) == 0)
                         continue;
 
-                    result.Add(new Polygon(temp));
+                    result.Add(new EsriPolygon(temp));
                 }
 
-                return new ShapeCollection<Polygon>(result);
+                return new EsriShapeCollection<EsriPolygon>(result);
             }
-            else if (shapes.First().Type == ShapeType.PolyLine || shapes.First().Type == ShapeType.PolyLineZ || shapes.First().Type == ShapeType.PolyLineM)
+            else if (shapes.First().Type == EsriShapeType.EsriPolyLine || shapes.First().Type == EsriShapeType.EsriPolyLineZ || shapes.First().Type == EsriShapeType.EsriPolyLineM)
             {
-                var result = new List<PolyLine>();
+                var result = new List<EsriPolyLine>();
 
-                foreach (ISimplePoints feature in shapes)
+                foreach (IEsriSimplePoints feature in shapes)
                 {
                     var temp = feature.Parts.Select((i, index) => method(feature.GetPart(index), threshold)).Where(i => i != null && i.Length > 1).ToArray();
 
                     if (temp == null || temp.Length == 0 || temp.Sum(i => i.Length) == 0)
                         continue;
 
-                    result.Add(new PolyLine(temp));
+                    result.Add(new EsriPolyLine(temp));
                 }
 
-                return new ShapeCollection<PolyLine>(result);
+                return new EsriShapeCollection<EsriPolyLine>(result);
             }
             else
             {

@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Ham.MeasurementUnit;
-using IRI.Ham.SpatialBase;
-using Ellipsoid = IRI.Ham.CoordinateSystem.Ellipsoid<IRI.Ham.MeasurementUnit.Meter, IRI.Ham.MeasurementUnit.Degree>;
+using IRI.Sta.MeasurementUnit;
+using IRI.Sta.Common.Primitives;
+using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
 using System.Linq;
-using IRI.Ham.SpatialBase.CoordinateSystems;
+using IRI.Sta.Common.CoordinateSystems;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public static class MapProjects
     {

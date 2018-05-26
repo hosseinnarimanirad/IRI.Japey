@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Windows.Media.Imaging;
 using IRI.Jab.Common;
@@ -158,11 +158,11 @@ namespace IRI.Jab.Cartography
             {
                 var googleDataSource = this.DataSource as OfflineGoogleMapDataSource<object>;
 
-                var tiles = googleDataSource.GetTiles(region.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator), mapScale);
+                var tiles = googleDataSource.GetTiles(region.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator), mapScale);
 
                 foreach (var item in tiles)
                 {
-                    var boundingBox = item.GeodeticWgs84BoundingBox.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
+                    var boundingBox = item.GeodeticWgs84BoundingBox.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
 
                     //94.12.16
                     //int width = (int)(boundingBox.Width * mapScale / unitDistance);
@@ -180,11 +180,11 @@ namespace IRI.Jab.Cartography
             {
                 var pyramidDataSource = this.DataSource as ZippedImagePyramidDataSource;
 
-                var tiles = pyramidDataSource.GetTiles(region.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84), mapScale);
+                var tiles = pyramidDataSource.GetTiles(region.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
                 foreach (var item in tiles)
                 {
-                    var boundingBox = item.GeodeticWgs84BoundingBox.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
+                    var boundingBox = item.GeodeticWgs84BoundingBox.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
 
                     RasterLayer layer =
                         new RasterLayer(this, this.LayerName, Common.Helpers.ImageUtility.ToImage(item.Image), this.VisualParameters.Opacity,
@@ -201,7 +201,7 @@ namespace IRI.Jab.Cartography
 
                 foreach (var item in tiles)
                 {
-                    var boundingBox = item.Item2.GeodeticWgs84BoundingBox.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
+                    var boundingBox = item.Item2.GeodeticWgs84BoundingBox.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
 
                     //94.12.16
                     //int width = (int)(boundingBox.Width * mapScale / unitDistance);
@@ -219,7 +219,7 @@ namespace IRI.Jab.Cartography
             else if (this.DataSource.GetType() == typeof(GeoRasterFileDataSource))
             {
                 //95.01.18
-                //var geodeticBoundingBox = region.Transform(i => Ham.CoordinateSystem.Projection.MercatorToGeodetic(i));
+                //var geodeticBoundingBox = region.Transform(i => Sta.CoordinateSystem.Projection.MercatorToGeodetic(i));
 
                 //var geo = (this.DataSource as GeoRasterFileDataSource).Get(geodeticBoundingBox);
 
@@ -227,7 +227,7 @@ namespace IRI.Jab.Cartography
 
                 if (geo != null)
                 {
-                    var boundingBox = geo.GeodeticWgs84BoundingBox.Transform(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
+                    var boundingBox = geo.GeodeticWgs84BoundingBox.Transform(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator);
 
                     //94.12.16
                     //int width = (int)(boundingBox.Width * mapScale / unitDistance);

@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 using IRI.Ket.DataStructure;
 using System.Xml.Serialization;
 

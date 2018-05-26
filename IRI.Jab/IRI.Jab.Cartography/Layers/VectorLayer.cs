@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Types;
 
-using sb = IRI.Ham.SpatialBase;
+using sb = IRI.Sta.Common.Primitives;
 
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common.Extensions;
@@ -21,8 +21,8 @@ using media = System.Windows.Media;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Jab.Common.Model;
-using IRI.Ham.SpatialBase.Mapping;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Cartography.Model.Symbology;
 using IRI.Jab.Common.Helpers;
@@ -742,7 +742,7 @@ namespace IRI.Jab.Cartography
                 {
                     var geometries = this.GetGeometries(scale, tile.WebMercatorExtent);
 
-                    var transform = IRI.Ham.SpatialBase.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+                    var transform = IRI.Sta.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
                     Func<Point, Point> mapToScreen = p =>
                     {

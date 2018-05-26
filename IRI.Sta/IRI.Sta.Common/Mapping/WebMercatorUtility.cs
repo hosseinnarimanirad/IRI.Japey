@@ -1,12 +1,14 @@
-﻿using IRI.Ham.Common;
-using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase.Model;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.SpatialBase.Mapping
+namespace IRI.Sta.Common.Mapping
 {
     public static class WebMercatorUtility
     {

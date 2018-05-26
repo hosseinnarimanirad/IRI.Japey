@@ -1,9 +1,10 @@
-﻿using System;
+﻿using IRI.Sta.Common.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Mapping
+namespace IRI.Sta.Common.Mapping
 {
     public class MapUtility
     {

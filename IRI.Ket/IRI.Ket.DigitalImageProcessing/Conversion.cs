@@ -2,7 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -45,9 +45,9 @@ namespace IRI.Ket.DigitalImageProcessing
 
             Bitmap result = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 
-            double max = IRI.Ham.Statistics.Statistics.GetMax(values);
+            double max = IRI.Sta.Statistics.Statistics.GetMax(values);
 
-            double min = IRI.Ham.Statistics.Statistics.GetMin(values);
+            double min = IRI.Sta.Statistics.Statistics.GetMin(values);
 
             for (int i = 0; i < height; i++)
             {

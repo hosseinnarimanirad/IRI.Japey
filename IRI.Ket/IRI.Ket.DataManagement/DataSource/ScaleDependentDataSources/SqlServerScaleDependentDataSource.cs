@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Data;
 using System.Globalization;
@@ -152,7 +152,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
         public List<SqlGeometry> GetGeometries(double mapScale, string whereClause)
         {
-            int zoomLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
             if (zoomLevel > _levels.Max())
             {
@@ -187,7 +187,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             //var whereClause = $" (GEO.STIntersects(GEOMETRY::STPolyFromText('{boundingBox.AsWkt()}',{srid})) = 1) ";
             var whereClause = GetWhereClause(_pyramidTableSpatialColumn, boundingBox, srid);
 
-            int zoomLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
             if (!(_levels?.Count < 1) && zoomLevel > _levels.Max())
             {
@@ -203,7 +203,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
         public List<NamedSqlGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
         {
-            int zoomLevel = IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
             if (zoomLevel > _levels.Max())
             {

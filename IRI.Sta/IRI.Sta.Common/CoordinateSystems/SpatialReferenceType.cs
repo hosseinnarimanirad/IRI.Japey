@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.CoordinateSystems
+namespace IRI.Sta.CoordinateSystems
 {
     public enum SpatialReferenceType
     { 

@@ -1,15 +1,16 @@
-﻿using IRI.Ham.CoordinateSystem;
-using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Mapping;
+﻿using IRI.Sta.CoordinateSystem;
+using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.SpatialBase.Model
+namespace IRI.Sta.Common.Model
 {
     public class TileInfo
     {
@@ -27,8 +28,8 @@ namespace IRI.Ham.SpatialBase.Model
         //{
         //    get
         //    {
-        //        //var topLeft = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
-        //        //var bottomRight = IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
+        //        //var topLeft = IRI.Sta.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
+        //        //var bottomRight = IRI.Sta.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
 
         //        //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
         //        return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));

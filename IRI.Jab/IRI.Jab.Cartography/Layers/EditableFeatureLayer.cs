@@ -5,24 +5,25 @@ using IRI.Jab.Common;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using IRI.Jab.Common.Extensions;
-using IRI.Ham.CoordinateSystem;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.CoordinateSystem;
+using IRI.Sta.Common.Primitives;
 using System.Windows;
 using System.Windows.Input;
 using IRI.Jab.Cartography.Model.DataStructure;
 using WpfPoint = System.Windows.Point;
 using WpfGeometry = System.Windows.Media.Geometry;
-using Geometry = IRI.Ham.SpatialBase.Primitives.Geometry;
-using Point = IRI.Ham.SpatialBase.Point;
+using Geometry = IRI.Sta.Common.Primitives.Geometry;
+using Point = IRI.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
-using IRI.Ham.SpatialBase.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
-using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
 using System.Collections.ObjectModel;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.MapMarkers;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
 
 namespace IRI.Jab.Cartography
 {
@@ -41,7 +42,7 @@ namespace IRI.Jab.Cartography
 
         public Model.EditableFeatureLayerOptions Options { get => _options; }
 
-        private Geometry _mercatorGeometry;
+        private Geometry _webMercatorGeometry;
 
         private Path _feature;
 
@@ -95,7 +96,7 @@ namespace IRI.Jab.Cartography
         {
             get
             {
-                return _mercatorGeometry.GetBoundingBox();
+                return _webMercatorGeometry.GetBoundingBox();
             }
 
             protected set
@@ -143,7 +144,7 @@ namespace IRI.Jab.Cartography
         /// <param name="mercatorPoints"></param>
         /// <param name="isClosed"></param>
         public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, Func<double, double> screenToMap, GeometryType type, Model.EditableFeatureLayerOptions options = null)
-            : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type), toScreen, screenToMap, options)
+            : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type, SridHelper.WebMercator), toScreen, screenToMap, options)
         {
 
         }
@@ -163,7 +164,7 @@ namespace IRI.Jab.Cartography
 
             this.LayerName = name;
 
-            this._mercatorGeometry = mercatorGeometry;
+            this._webMercatorGeometry = mercatorGeometry;
 
             this.Id = Guid.NewGuid();
 
@@ -216,7 +217,7 @@ namespace IRI.Jab.Cartography
 
         internal void StartNewPart(Point webMercatorPoint)
         {
-            this._mercatorGeometry.Geometries.Last().AddLastPoint(webMercatorPoint);
+            this._webMercatorGeometry.Geometries.Last().AddLastPoint(webMercatorPoint);
             //this.AddVertex(webMercatorPoint);
             MakePathGeometry();
 
@@ -230,7 +231,7 @@ namespace IRI.Jab.Cartography
 
         internal void FinishDrawingPart()
         {
-            this._mercatorGeometry.AddNewPart();
+            this._webMercatorGeometry.AddNewPart();
 
             MakePathGeometry();
 
@@ -254,7 +255,7 @@ namespace IRI.Jab.Cartography
                 StrokeLineJoin = PenLineJoin.Round,
             };
 
-            if (_mercatorGeometry.IsRingBase())
+            if (_webMercatorGeometry.IsRingBase())
             {
                 result.Fill = this.Options.Visual.Fill;
             }
@@ -268,7 +269,7 @@ namespace IRI.Jab.Cartography
 
             this._midVertices = new RecursiveCollection<Locateable>();
 
-            MakeLocateables(this._mercatorGeometry, _vertices, _midVertices);
+            MakeLocateables(this._webMercatorGeometry, _vertices, _midVertices);
 
             this._primaryVerticesLayer.Items.Clear();
 
@@ -299,7 +300,7 @@ namespace IRI.Jab.Cartography
 
             if (Options.IsEdgeLabelVisible)
             {
-                var edges = _mercatorGeometry.GetLineSegments().Select(i => ToEdgeLengthLocatable(i.Start, i.End));
+                var edges = _webMercatorGeometry.GetLineSegments().Select(i => ToEdgeLengthLocatable(i.Start, i.End));
 
                 foreach (var item in edges)
                 {
@@ -310,7 +311,7 @@ namespace IRI.Jab.Cartography
 
             if (Options.IsMeasureVisible)
             {
-                var point = this._mercatorGeometry?.GetMeanOrLastPoint();
+                var point = this._webMercatorGeometry?.GetMeanOrLastPoint();
 
                 if (point == null)
                     return;
@@ -376,7 +377,7 @@ namespace IRI.Jab.Cartography
 
                     if (i == geometry.Points.Length - 1)
                     {
-                        if (_mercatorGeometry.IsRingBase())
+                        if (_webMercatorGeometry.IsRingBase())
                         {
                             midCollection.Values.Add(ToSecondaryLocateable(geometry.Points[i], geometry.Points[0]));
                         }
@@ -426,14 +427,14 @@ namespace IRI.Jab.Cartography
         {
             _pathGeometry.Figures.Clear();
 
-            MakePathGeometry(this._mercatorGeometry);
+            MakePathGeometry(this._webMercatorGeometry);
         }
 
         private void MakePathGeometry(Geometry geometry)
         {
             if (geometry.Points != null)
             {
-                PathFigure pathFigure = new PathFigure() { IsClosed = _mercatorGeometry.IsRingBase() };
+                PathFigure pathFigure = new PathFigure() { IsClosed = _webMercatorGeometry.IsRingBase() };
 
                 if (geometry.Points.Length > 0)
                 {
@@ -537,7 +538,7 @@ namespace IRI.Jab.Cartography
 
                 webMercatorPoint.Y = locateable.Y;
 
-                if (!TryInsertPoint(webMercatorPoint, first, second, this._mercatorGeometry))
+                if (!TryInsertPoint(webMercatorPoint, first, second, this._webMercatorGeometry))
                     throw new NotImplementedException();
 
                 RequestRefresh?.Invoke(this);
@@ -589,7 +590,7 @@ namespace IRI.Jab.Cartography
             {
                 this._primaryVerticesLabelLayer.Remove(locateable.Id);
 
-                TryDeleteVertex(point, this._mercatorGeometry, _mercatorGeometry.Type == GeometryType.Polygon);
+                TryDeleteVertex(point, this._webMercatorGeometry, _webMercatorGeometry.Type == GeometryType.Polygon);
 
                 this.RequestRefresh?.Invoke(this);
 
@@ -636,7 +637,7 @@ namespace IRI.Jab.Cartography
 
             presenter.RightCommandAction = i =>
             {
-                RequestFinishEditing?.Invoke(this._mercatorGeometry);
+                RequestFinishEditing?.Invoke(this._webMercatorGeometry);
 
                 this.RemoveMapOptions();
             };
@@ -670,11 +671,11 @@ namespace IRI.Jab.Cartography
         {
             int left;
 
-            if (primaryIndex == 0 && _mercatorGeometry.IsRingBase())
+            if (primaryIndex == 0 && _webMercatorGeometry.IsRingBase())
             {
                 left = length - 1;
             }
-            else if (primaryIndex == 0 && !_mercatorGeometry.IsRingBase())
+            else if (primaryIndex == 0 && !_webMercatorGeometry.IsRingBase())
             {
                 left = int.MinValue;
             }
@@ -690,7 +691,7 @@ namespace IRI.Jab.Cartography
         {
             int right;
 
-            if (primaryIndex == length && !_mercatorGeometry.IsRingBase())
+            if (primaryIndex == length && !_webMercatorGeometry.IsRingBase())
             {
                 right = int.MinValue;
             }
@@ -844,7 +845,7 @@ namespace IRI.Jab.Cartography
                 }
             }
 
-            var matched = UpdateLineSegment(point, newValue, this._mercatorGeometry, this._midVertices);
+            var matched = UpdateLineSegment(point, newValue, this._webMercatorGeometry, this._midVertices);
 
             if (!matched)
             {
@@ -949,7 +950,7 @@ namespace IRI.Jab.Cartography
         {
             Func<IPoint, IPoint> toGeodeticWgs84 = p => MapProjects.WebMercatorToGeodeticWgs84(p);
 
-            var edge = new IRI.Ham.SpatialBase.Primitives.LineSegment(first, second);
+            var edge = new IRI.Sta.Common.Primitives.LineSegment(first, second);
 
             var element = new Common.View.MapMarkers.RectangleLabelMarker(edge.GetLengthLabel(toGeodeticWgs84));
 
@@ -965,22 +966,22 @@ namespace IRI.Jab.Cartography
 
         public bool HasAnyPoint()
         {
-            return this._mercatorGeometry != null ? this._mercatorGeometry.HasAnyPoint() : false;
+            return this._webMercatorGeometry != null ? this._webMercatorGeometry.HasAnyPoint() : false;
         }
 
         public string MeasureLabel
         {
-            get { return _mercatorGeometry.GetMeasureLabel(MapProjects.WebMercatorToGeodeticWgs84); }
+            get { return _webMercatorGeometry.GetMeasureLabel(MapProjects.WebMercatorToGeodeticWgs84); }
         }
 
         public string AreaLabel
         {
-            get { return UnitHelper.GetAreaLabel(_mercatorGeometry.GetArea(MapProjects.WebMercatorToGeodeticWgs84)); }
+            get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetArea(MapProjects.WebMercatorToGeodeticWgs84)); }
         }
 
         public string LengthLabel
         {
-            get { return UnitHelper.GetAreaLabel(_mercatorGeometry.GetLength(MapProjects.WebMercatorToGeodeticWgs84)); }
+            get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetLength(MapProjects.WebMercatorToGeodeticWgs84)); }
         }
 
         public Path GetPath(Transform transform)
@@ -1018,12 +1019,12 @@ namespace IRI.Jab.Cartography
 
         public Geometry GetFinalGeometry()
         {
-            return this._mercatorGeometry;
+            return this._webMercatorGeometry;
         }
 
         public void AddVertex(Point webMercatorPoint)
         {
-            AddVertex(webMercatorPoint, this._mercatorGeometry, this._vertices);
+            AddVertex(webMercatorPoint, this._webMercatorGeometry, this._vertices);
         }
 
         public void AddSemiVertex(Point webMercatorPoint)
@@ -1038,7 +1039,7 @@ namespace IRI.Jab.Cartography
             if (_pathGeometry.Figures?.Last()?.Segments?.Count() < 1)
                 AddSemiVertex(newMercatorPoint);
 
-            if (_pathGeometry.Figures.Last().Segments.Count < this._mercatorGeometry.GetLastPart().Length)
+            if (_pathGeometry.Figures.Last().Segments.Count < this._webMercatorGeometry.GetLastPart().Length)
             {
                 AddSemiVertex(newMercatorPoint);
             }
@@ -1050,9 +1051,9 @@ namespace IRI.Jab.Cartography
 
         public void FinishEditing()
         {
-            this._mercatorGeometry.ClearEmptyGeometries();
+            this._webMercatorGeometry.ClearEmptyGeometries();
 
-            this.RequestFinishEditing?.Invoke(this._mercatorGeometry);
+            this.RequestFinishEditing?.Invoke(this._webMercatorGeometry);
         }
 
         private void GoToPreviousPoint()
@@ -1074,7 +1075,7 @@ namespace IRI.Jab.Cartography
 
             this._primaryVerticesLabelLayer.Remove(locateable.Id);
 
-            TryDeleteVertex(locateable.X, locateable.Y, this._mercatorGeometry, _mercatorGeometry.Type == GeometryType.Polygon || _mercatorGeometry.Type == GeometryType.MultiPolygon);
+            TryDeleteVertex(locateable.X, locateable.Y, this._webMercatorGeometry, _webMercatorGeometry.Type == GeometryType.Polygon || _webMercatorGeometry.Type == GeometryType.MultiPolygon);
 
             this.RequestRefresh?.Invoke(this);
         }
@@ -1109,7 +1110,7 @@ namespace IRI.Jab.Cartography
             if (currentPoint == null)
                 return;
 
-            _mercatorGeometry.TryRemoveEntireRingOrLineString(currentPoint.X, currentPoint.Y);
+            _webMercatorGeometry.TryRemoveEntireRingOrLineString(currentPoint.X, currentPoint.Y);
 
             ReconstructLocateables();
 
@@ -1123,7 +1124,7 @@ namespace IRI.Jab.Cartography
             if (currentPoint == null)
                 return;
 
-            var part = _mercatorGeometry.GetRingOrLineStringPassingPoint(currentPoint.X, currentPoint.Y);
+            var part = _webMercatorGeometry.GetRingOrLineStringPassingPoint(currentPoint.X, currentPoint.Y);
 
             this.RequestZoomToGeometry?.Invoke(part);
         }
@@ -1140,7 +1141,7 @@ namespace IRI.Jab.Cartography
             {
                 if (_finishEditingCommand == null)
                 {
-                    _finishEditingCommand = new RelayCommand(param => this.RequestFinishEditing?.Invoke(this._mercatorGeometry));
+                    _finishEditingCommand = new RelayCommand(param => this.RequestFinishEditing?.Invoke(this._webMercatorGeometry));
                 }
 
                 return _finishEditingCommand;

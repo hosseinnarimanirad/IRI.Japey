@@ -4,8 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Threading.Tasks; 
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -15,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model.MapMarkers;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {
@@ -83,9 +83,9 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         private coordinates _current;
 
-        private Ham.SpatialBase.Point _mercatorLocation;
+        private Point _mercatorLocation;
 
-        public Ham.SpatialBase.Point MercatorLocation
+        public Point MercatorLocation
         {
             get { return _mercatorLocation; }
             set
@@ -105,7 +105,7 @@ namespace IRI.Jab.Common.View.MapMarkers
 
             this.ChangeToDms = changeToDms;
 
-            this.MercatorLocation = new IRI.Ham.SpatialBase.Point(mercatorX, mercatorY);
+            this.MercatorLocation = new Point(mercatorX, mercatorY);
 
             //this.X = mercatorX;
 
@@ -122,11 +122,11 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         public void UpdateCoordinates()
         {
-            var value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
+            var value = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
 
             if (_current == coordinates.Utm)
             {
-                value = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(value);
+                value = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(value);
             }
 
             if (_current == coordinates.GeodeticDms)

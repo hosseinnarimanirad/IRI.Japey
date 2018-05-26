@@ -4,9 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using IRI.Ket.DataManagement.Model;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -28,7 +29,7 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName);
 
-                this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+                this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
             }
             catch (Exception ex)
             {
@@ -51,7 +52,7 @@ namespace IRI.Ket.DataManagement.DataSource
             //{
             //    var result = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(this.imageFileName);
 
-            //    this.Extent = result.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.Projection.GeodeticToMercator(i));
+            //    this.Extent = result.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystem.Projection.GeodeticToMercator(i));
 
             //    return result;
             //}

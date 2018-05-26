@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Types;
 using IRI.Jab.Cartography.Extensions;
-//using sb = IRI.Ham.SpatialBase;
+//using sb = IRI.Sta.Common;
 using System.Windows.Media;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Common.Extensions;

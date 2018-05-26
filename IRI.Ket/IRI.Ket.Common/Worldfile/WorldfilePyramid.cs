@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Compression;
-using IRI.Ham.SpatialBase.Mapping;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.WorldfileFormat
 {

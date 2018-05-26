@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
 namespace IRI.Ket.DigitalImageProcessing.SpatialDomainEnhancement
 {

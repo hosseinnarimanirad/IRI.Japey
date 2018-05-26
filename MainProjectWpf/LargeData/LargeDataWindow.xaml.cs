@@ -2,7 +2,7 @@
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.MainProjectWPF.LargeData.Model;
 using IRI.MainProjectWPF.LargeData.Utilities;
-using IRI.Ham.SpatialBase.Mapping;
+using IRI.Sta.Common.Mapping;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -73,13 +73,13 @@ namespace IRI.MainProjectWPF.LargeData
 
         }
 
-        private void AddShapefile(IShapeCollection shapes, string title)
+        private void AddShapefile(IEsriShapeCollection shapes, string title)
         {
             this.Presenter.ShapeCollections.Add(new ShapeCollection(shapes, title));
 
             var geometries = shapes.Select(i => i.AsSqlGeometry(0)).ToList();
 
-            var vertexes = shapes.ExtractPoints().Select(i => (((Ham.SpatialBase.IPoint)i).AsSqlGeometry(0))).ToList();
+            var vertexes = shapes.ExtractPoints().Select(i => (((Sta.Common.Primitives.IPoint)i).AsSqlGeometry(0))).ToList();
 
             this.map.DrawGeometries(geometries, Guid.NewGuid().ToString(), VisualParameters.CreateNew(.7));
 
@@ -211,7 +211,7 @@ namespace IRI.MainProjectWPF.LargeData
                 output = TodayDirectory + System.IO.Path.GetFileNameWithoutExtension(fileName) + "AreaSimple" + Presenter.AreaThreshold + ".shp";
             }
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(output, result, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(output, result, true);
         }
 
         private void GeneralizeByAreaSimpleIterative_Click(object sender, RoutedEventArgs e)
@@ -243,7 +243,7 @@ namespace IRI.MainProjectWPF.LargeData
                 output = TodayDirectory + System.IO.Path.GetFileNameWithoutExtension(fileName) + "AreaAdditive" + Presenter.AreaThreshold + ".shp";
             }
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(output, result, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(output, result, true);
         }
 
         private void GeneralizeByAreaAdditivePlus_Click(object sender, RoutedEventArgs e)
@@ -270,7 +270,7 @@ namespace IRI.MainProjectWPF.LargeData
                 output = TodayDirectory + System.IO.Path.GetFileNameWithoutExtension(fileName) + "AreaAdditivePlus" + Presenter.AreaThreshold + ".shp";
             }
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(output, result, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(output, result, true);
         }
 
         private void GeneralizeByAngleSimple_Click(object sender, RoutedEventArgs e)
@@ -288,7 +288,7 @@ namespace IRI.MainProjectWPF.LargeData
 
             var output = TodayDirectory + System.IO.Path.GetFileNameWithoutExtension(fileName) + "AngleSimple" + threshold + ".shp";
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(output, result, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(output, result, true);
         }
 
         private void GeneralizeByAngleAdditive_Click(object sender, RoutedEventArgs e)
@@ -306,7 +306,7 @@ namespace IRI.MainProjectWPF.LargeData
 
             var output = TodayDirectory + System.IO.Path.GetFileNameWithoutExtension(fileName) + "AngleAdditive" + threshold + ".shp";
 
-            IRI.Ket.ShapefileFormat.Writer.ShpWriter.Write(output, result, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(output, result, true);
         }
 
 
@@ -324,7 +324,7 @@ namespace IRI.MainProjectWPF.LargeData
             }
         }
 
-        private IShapeCollection GetShapes(string fileName)
+        private IEsriShapeCollection GetShapes(string fileName)
         {
             var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(fileName);
 

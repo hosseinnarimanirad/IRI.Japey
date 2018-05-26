@@ -2,13 +2,14 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.Algebra;
-using IRI.Ham.MeasurementUnit;
+using IRI.Sta.Algebra;
+using IRI.Sta.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Ham.CoordinateSystem;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.CoordinateSystem;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.CoordinateSystem
+namespace IRI.Sta.CoordinateSystem
 {
     public static class Transformation
     {
@@ -334,7 +335,7 @@ namespace IRI.Ham.CoordinateSystem
             if (latitudeTempValue1.Equals(double.NaN))
             {
                 //return new GeodeticPoint<TLinear, TAngular>(ellipsoid, new TLinear() { Value = 0 }, tempValue.Angle, (new Radian(0, longitudinalRange)));
-                return new Ham.SpatialBase.Point(0, 0);
+                return new Point(0, 0);
             }
 
             double hTempValue2 = 0, latitudeTempValue2 = 0;

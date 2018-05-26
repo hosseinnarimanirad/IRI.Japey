@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using WpfPoint = System.Windows.Point;
+using GdiPoint = System.Drawing.Point;
+
 using System.Windows.Media;
-using IRI.Ham.CoordinateSystem;
+using IRI.Sta.CoordinateSystem;
 using IRI.Jab.Common.View.MapMarkers;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
-using System.Windows;
-using System.Windows.Input;
-using IRI.Ham.SpatialBase.Primitives;
-using IRI.Ham.CoordinateSystem.MapProjection;
+//using System.Windows;
+using System.Windows.Input; 
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Jab.Common.Extensions;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Jab.Common.Helpers;
@@ -45,7 +46,7 @@ namespace IRI.Jab.Cartography
         {
             get
             {
-                return IRI.Ham.SpatialBase.BoundingBox.CalculateBoundingBox(mercatorPolyline);
+                return IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(mercatorPolyline);
             }
 
             protected set
@@ -87,13 +88,13 @@ namespace IRI.Jab.Cartography
 
         Path _controlPath;
 
-        List<Ham.SpatialBase.Point> mercatorPolyline;
+        List<Point> mercatorPolyline;
 
         private SpecialLineLayer _decorateLayer;
 
         public Action<PolyBezierLayer> RequestRefresh;
 
-        public Action<FrameworkElement, MouseButtonEventArgs, ILocateable> RequestRightClickOptions;
+        public Action<System.Windows.FrameworkElement, MouseButtonEventArgs, ILocateable> RequestRightClickOptions;
 
         public Action RequestRemoveRightClickOptions;
 
@@ -119,7 +120,7 @@ namespace IRI.Jab.Cartography
             this.VisualParameters = parameters ?? VisualParameters.CreateNew(1);
         }
 
-        public PolyBezierLayer(List<Ham.SpatialBase.Point> mercatorPolyline, Transform toScreen, System.Windows.Media.Geometry decoration, VisualParameters parameters) : this(parameters)
+        public PolyBezierLayer(List<Point> mercatorPolyline, Transform toScreen, System.Windows.Media.Geometry decoration, VisualParameters parameters) : this(parameters)
         {
             this._toScreen = toScreen;
 
@@ -135,7 +136,7 @@ namespace IRI.Jab.Cartography
             Initialize();
         }
 
-        public static PolyBezierLayer Create(string name, List<Ham.SpatialBase.Point> mercatorPolyBezierPoints, Transform toScreen, System.Windows.Media.Geometry decoration, VisualParameters parameters)
+        public static PolyBezierLayer Create(string name, List<Point> mercatorPolyBezierPoints, Transform toScreen, System.Windows.Media.Geometry decoration, VisualParameters parameters)
         {
             if (mercatorPolyBezierPoints?.Count() < 2)
                 throw new NotImplementedException();
@@ -149,7 +150,7 @@ namespace IRI.Jab.Cartography
 
             result._toScreen = toScreen;
 
-            result.mercatorPolyline = new List<Ham.SpatialBase.Point>();
+            result.mercatorPolyline = new List<Point>();
 
             //this.mercatorPolyline = mercatorPolyline;
 
@@ -278,7 +279,7 @@ namespace IRI.Jab.Cartography
             {
                 var geodetic = MapProjects.WebMercatorToGeodeticWgs84(mainLocateable.Location.AsPoint());
 
-                Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
+                System.Windows.Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
 
                 this.RemoveMapOptions();
             };
@@ -311,7 +312,7 @@ namespace IRI.Jab.Cartography
             if (index == 0)
                 return;
 
-            var point = new Ham.SpatialBase.Point((mainLocateable.X + _mainLocateables[index - 1].X) / 2.0, (mainLocateable.Y + _mainLocateables[index - 1].Y) / 2.0);
+            var point = new Point((mainLocateable.X + _mainLocateables[index - 1].X) / 2.0, (mainLocateable.Y + _mainLocateables[index - 1].Y) / 2.0);
 
             var newMainLocateable = AsLocateable(point, Colors.Green);
 
@@ -483,7 +484,7 @@ namespace IRI.Jab.Cartography
             {
                 this.IsControlsShown = !this.IsControlsShown;
 
-                var newVisibility = this.IsControlsShown ? Visibility.Visible : Visibility.Collapsed;
+                var newVisibility = this.IsControlsShown ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
 
                 this.GetControlPath().Visibility = newVisibility;
 
@@ -555,9 +556,9 @@ namespace IRI.Jab.Cartography
         /// </summary>
         /// <param name="toScreen"></param>
         /// <returns></returns>
-        public List<Ham.SpatialBase.Point> GetPolyBezierMapPoints()
+        public List<Point> GetPolyBezierMapPoints()
         {
-            List<Ham.SpatialBase.Point> result = new List<Ham.SpatialBase.Point>();
+            List<Point> result = new List<Point>();
 
             var inverse = _toScreen.Inverse;
 
@@ -590,7 +591,7 @@ namespace IRI.Jab.Cartography
             //}
         }
 
-        private void mainLocateable_OnPositionChanged(object sender, ChangeEventArgs<System.Windows.Point> e)
+        private void mainLocateable_OnPositionChanged(object sender, ChangeEventArgs<WpfPoint> e)
         {
             var locateable = sender as Locateable;
 
@@ -639,7 +640,7 @@ namespace IRI.Jab.Cartography
             //}
         }
 
-        private Locateable AsLocateable(Ham.SpatialBase.Point webMercatorPoint, Color color)
+        private Locateable AsLocateable(Point webMercatorPoint, Color color)
         {
             return new Locateable(MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint)) { Element = new Circle(1, new SolidColorBrush(color)) };
         }

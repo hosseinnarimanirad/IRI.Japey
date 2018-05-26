@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Ket.DataStructure.AdvancedStructures;
 using System;
 using System.Collections.Generic;

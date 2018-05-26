@@ -11,7 +11,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 {
     public class AngleStatistics : Notifier
     {
-        public AngleStatistics(IShapeCollection shapes)
+        public AngleStatistics(IEsriShapeCollection shapes)
         {
             this.Angles = new List<double>();
 
@@ -19,7 +19,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
             Threshold = 0;
 
-            foreach (ISimplePoints item in shapes)
+            foreach (IEsriSimplePoints item in shapes)
             {
                 this.NumberOfPoints += item.Points.Length;
 
@@ -81,7 +81,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
         public double StandardDeviation
         {
-            get { return IRI.Ham.Statistics.Statistics.CalculateStandardDeviation(this.Angles); }
+            get { return IRI.Sta.Statistics.Statistics.CalculateStandardDeviation(this.Angles); }
         }
 
 

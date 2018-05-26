@@ -1,5 +1,5 @@
-﻿using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase.CoordinateSystems;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.CoordinateSystems;
 using IRI.Jab.Common;
 using IRI.Jab.Controls.Presenter;
 using System;
@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Controls.Model.GoTo
 {

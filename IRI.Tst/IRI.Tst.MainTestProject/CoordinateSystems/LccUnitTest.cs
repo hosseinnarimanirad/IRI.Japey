@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IRI.Ham.MeasurementUnit;
-using IRI.Ham.CoordinateSystem;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Sta.MeasurementUnit;
+using IRI.Sta.CoordinateSystem;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Test.CoordinateSystem
 {
@@ -20,7 +20,7 @@ namespace IRI.Test.CoordinateSystem
             Assert.AreEqual(result.Y, 1564649.5, .1);
 
 
-            var ellipse = IRI.Ham.CoordinateSystem.Ellipsoids.GRS80;
+            var ellipse = IRI.Sta.CoordinateSystem.Ellipsoids.GRS80;
 
             double phi0 = 52;
             double phi1 = 35;
@@ -78,7 +78,7 @@ namespace IRI.Test.CoordinateSystem
             double expectedLambda = -75.0;
 
             var result = new LambertConformalConic(
-                            IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1866,
+                            IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1866,
                             33.0,
                             45.0,
                             -96.0,
@@ -87,7 +87,7 @@ namespace IRI.Test.CoordinateSystem
             Assert.AreEqual(result.X, expectedLambda, .00001);
             Assert.AreEqual(result.Y, expectedPhi, .00001);
 
-            var ellipse = IRI.Ham.CoordinateSystem.Ellipsoids.GRS80;
+            var ellipse = IRI.Sta.CoordinateSystem.Ellipsoids.GRS80;
 
             double phi0 = 52;
             double phi1 = 35;
@@ -152,7 +152,7 @@ namespace IRI.Test.CoordinateSystem
             double expectedLambda = -75.0;
 
             var projection = new LambertConformalConic(
-                IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1866,
+                IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1866,
                 phi1,
                 phi2,
                 lambda0,

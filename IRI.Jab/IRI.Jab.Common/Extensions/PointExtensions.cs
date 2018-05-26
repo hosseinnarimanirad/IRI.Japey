@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Windows
+namespace IRI.Jab.Common.Extensions
 {
     public static class PointExtensions
     {
@@ -18,9 +18,9 @@ namespace System.Windows
             return new System.Drawing.Point(Convert.ToInt32(Math.Round(point.X)), Convert.ToInt32(Math.Round(point.Y)));
         }
 
-        public static IRI.Ham.SpatialBase.Point AsPoint(this System.Windows.Point point)
+        public static IRI.Sta.Common.Primitives.Point AsPoint(this System.Windows.Point point)
         {
-            return new IRI.Ham.SpatialBase.Point(point.X, point.Y);
+            return new IRI.Sta.Common.Primitives.Point(point.X, point.Y);
         }
     }
 }

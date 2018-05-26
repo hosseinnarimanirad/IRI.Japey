@@ -6,7 +6,7 @@ using IRI.Ket.ShapefileFormat.EsriType;
 using System.Data.SqlTypes;
 using System.Threading.Tasks;
 using IRI.Ket.ShapefileFormat.Reader;
-using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Sta.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;
@@ -225,7 +225,7 @@ namespace IRI.Ket.ShapefileFormat
             return MainHeader;
         }
 
-        public static IRI.Ham.SpatialBase.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
+        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
         {
             double xMin = header.XMin;
 
@@ -257,10 +257,10 @@ namespace IRI.Ket.ShapefileFormat
                     }
                 }
             }
-            return new IRI.Ham.SpatialBase.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
-        public static IRI.Ham.SpatialBase.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
+        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
         {
             if (headers.Length < 1)
                 throw new NotImplementedException();
@@ -293,7 +293,7 @@ namespace IRI.Ket.ShapefileFormat
                 }
             }
 
-            return new IRI.Ham.SpatialBase.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
         public static string GetShxFileName(string shpFileName)
@@ -511,7 +511,7 @@ namespace IRI.Ket.ShapefileFormat
 
         }
 
-        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Ham.SpatialBase.BoundingBox boundingBox)
+        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Sta.Common.Primitives.BoundingBox boundingBox)
         {
             var indexFileName = GetIndexFileName(shpFileName);
 

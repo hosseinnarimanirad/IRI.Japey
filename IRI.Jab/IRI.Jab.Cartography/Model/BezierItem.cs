@@ -1,6 +1,5 @@
-﻿using IRI.Ham.CoordinateSystem;
-using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.CoordinateSystem;
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Jab.Common.Extensions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using sb = IRI.Ham.SpatialBase;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Cartography.Model
 {

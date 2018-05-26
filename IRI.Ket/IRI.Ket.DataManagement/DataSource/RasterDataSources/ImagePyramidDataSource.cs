@@ -4,9 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using IRI.Sta.Common.Primitives;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model.Google
+namespace IRI.Sta.Common.Model.Google
 {
     public class Location
     {
@@ -127,7 +128,7 @@ namespace IRI.Ham.SpatialBase.Model.Google
 
         public Point AsWebMercatorPoint()
         {
-            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
+            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
         }
 
         public BoundingBox AsGeodeticBoundingBox()
@@ -145,7 +146,7 @@ namespace IRI.Ham.SpatialBase.Model.Google
 
         public BoundingBox AsWebMercatorBoundingBox()
         {
-            return (AsGeodeticBoundingBox().Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
+            return (AsGeodeticBoundingBox().Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
         }
     }
 

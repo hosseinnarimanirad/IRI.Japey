@@ -2,10 +2,10 @@
 //Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 using System.Collections.Generic;
 
-namespace IRI.Ham.MeasurementUnit
+namespace IRI.Sta.MeasurementUnit
 {
     public class LinearCollection<T> : ILinearCollection  where T : LinearUnit, new()
     {

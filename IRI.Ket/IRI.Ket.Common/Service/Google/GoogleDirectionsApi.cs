@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Model.Google;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.Google;
 using System;
 using System.Threading.Tasks;
 

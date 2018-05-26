@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public class WebMercator : MapProjectionBase
     {

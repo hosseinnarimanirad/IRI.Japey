@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ham.MeasurementUnit
+namespace IRI.Sta.MeasurementUnit
 {
     public class Foot : LinearUnit
     {

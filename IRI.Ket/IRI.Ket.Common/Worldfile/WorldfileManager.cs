@@ -1,4 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -188,12 +189,12 @@ namespace IRI.Ket.WorldfileFormat
             return new Worldfile(xPixelSize, yPixelSize, new Point(mapBoundingBox.XMin + xPixelSize / 2.0, mapBoundingBox.YMax - yPixelSize / 2.0));
         }
 
-        public static Worldfile CreateByGeodeticValues(Ham.SpatialBase.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+        public static Worldfile CreateByGeodeticValues(Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
         {
             return Create(tile.GeodeticExtent, imagePixelWidth, imagePixelHeight);
         }
 
-        public static Worldfile CreateByWebMercatorValues(Ham.SpatialBase.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+        public static Worldfile CreateByWebMercatorValues(Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
         {
             return Create(tile.WebMercatorExtent, imagePixelWidth, imagePixelHeight);
         }

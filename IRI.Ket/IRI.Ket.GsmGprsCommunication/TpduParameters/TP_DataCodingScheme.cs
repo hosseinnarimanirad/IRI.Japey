@@ -2,6 +2,8 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 //To be implemented later
+using IRI.Sta.Common.Helpers;
+
 namespace IRI.Ket.GsmGprsCommunication.TpduParameters
 {
 
@@ -49,7 +51,7 @@ namespace IRI.Ket.GsmGprsCommunication.TpduParameters
         {
             this.value = binaryRepresentaion;
 
-            this.integerRepresentation = Ham.Common.BaseConversionHelper.BinaryToDecimal(this.value);
+            this.integerRepresentation = BaseConversionHelper.BinaryToDecimal(this.value);
 
             this.octetRepresentation = this.integerRepresentation.ToString("X2");
         }

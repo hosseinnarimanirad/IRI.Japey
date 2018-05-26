@@ -1,7 +1,7 @@
-﻿using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
-using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase.Model.Google;
+﻿using IRI.Sta.Common.Model.Google;
 using System;
 using System.Net;
 using System.Text;

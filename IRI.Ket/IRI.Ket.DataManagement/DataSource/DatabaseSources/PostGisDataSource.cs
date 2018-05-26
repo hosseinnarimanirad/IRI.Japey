@@ -8,7 +8,7 @@ using Microsoft.SqlServer.Types;
 using System.Threading.Tasks;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.SpatialExtensions;
 

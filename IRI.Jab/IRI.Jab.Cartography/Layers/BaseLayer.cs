@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using System.Windows;
 using IRI.Jab.Common.Model;

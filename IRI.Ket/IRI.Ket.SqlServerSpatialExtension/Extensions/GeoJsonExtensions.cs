@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.Ket.SpatialExtensions;
 using IRI.Sta.Common.Model.GeoJson;
@@ -78,7 +78,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
         {
             builder.BeginGeometry(OpenGisGeometryType.Point);
 
-            var temporaryPoint = IRI.Ham.SpatialBase.Point.Parse(point.Coordinates, isLongitudeFirst);
+            var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
 
             builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 
@@ -95,7 +95,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
             {
                 builder.BeginGeometry(OpenGisGeometryType.Point);
 
-                var temporaryPoint = IRI.Ham.SpatialBase.Point.Parse(item, isLongitudeFirst);
+                var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
 
                 builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 

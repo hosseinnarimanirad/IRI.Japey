@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase.Mapping;
+﻿using IRI.Sta.Common.Mapping;
 using IRI.Jab.Common;
 using System;
 using System.Collections.Generic;

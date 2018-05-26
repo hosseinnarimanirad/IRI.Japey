@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model.Bing
+namespace IRI.Sta.Common.Model.Bing
 {
     public class BingIsolineResult
     {

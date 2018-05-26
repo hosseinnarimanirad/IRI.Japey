@@ -7,14 +7,14 @@ using System.Data.SqlClient;
 using IRI.Ket.SqlServerSpatialExtension;
 
 using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
 
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System.Globalization;
 using IRI.Ket.SpatialExtensions;
-using IRI.Ham.SpatialBase.Model;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase.Model;
+﻿using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

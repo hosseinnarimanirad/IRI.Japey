@@ -26,17 +26,16 @@ using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.MapViewer.Model;
 using IRI.Jab.Common.Model;
-using sb = IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Mapping;
-using IRI.Ham.Common;
-using IRI.Ham.SpatialBase.Model;
+using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
-using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
 
 namespace IRI.Jab.MapViewer
 {
@@ -425,7 +424,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestRefresh = () => { this.Refresh(); };
 
-            presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.Primitives.BoundingBoxes.IranMercatorBoundingBox); };
+            presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox); };
 
             presenter.RequestFullExtent = () => this.FullExtent();
 
@@ -546,7 +545,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestAddPointToNewDrawing = p =>
             {
-                //AddPointToNewDrawing(Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+                //AddPointToNewDrawing(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
                 AddPointToNewDrawing((sb.Point)p);
             };
 
@@ -650,10 +649,10 @@ namespace IRI.Jab.MapViewer
 
             presenter.Ostanha = Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
             {
-                this.ZoomToExtent(a.GetBoundingBox(3857));
+                this.ZoomToExtent(a.GetBoundingBox(SridHelper.WebMercator));
             });
 
-            presenter.ZoomToExtent(sb.Primitives.BoundingBoxes.IranMercatorBoundingBox);
+            presenter.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox);
 
             presenter.Pan();
 
@@ -681,7 +680,7 @@ namespace IRI.Jab.MapViewer
                 double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
 
                 //size of each pixel (in meter)
-                _unitDistance = ConversionHelper.InchToMeterFactor / dpiX;
+                _unitDistance = Sta.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
             }
 
             return _unitDistance.Value;
@@ -696,7 +695,7 @@ namespace IRI.Jab.MapViewer
         {
             //PresentationSource source = PresentationSource.FromVisual(this.mapView);
             //double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-            //double unitDistance = IRI.Ham.SpatialBase.ConstantValues.InchToMeterFactor / dpiX; // Meter
+            //double unitDistance = IRI.Sta.Common.ConstantValues.InchToMeterFactor / dpiX; // Meter
             //return mapScale / unitDistance;
 
             return mapScale / GetUnitDistance();
@@ -714,7 +713,7 @@ namespace IRI.Jab.MapViewer
 
         public Point GeodeticToMap(Point point)
         {
-            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
+            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
         }
 
         public Point ScreenToGeodetic(Point point)
@@ -751,7 +750,7 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
+                return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
             }
             catch (Exception)
             {
@@ -791,7 +790,7 @@ namespace IRI.Jab.MapViewer
         public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
         {
             var layer = new TileServiceLayer(provider, type) { VisibleRange = scaleInterval };
-            
+
             if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
             {
                 layer.EnableCaching(cacheDirectory);
@@ -1616,7 +1615,7 @@ namespace IRI.Jab.MapViewer
                     return;
                 }
 
-                var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+                var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
 
                 Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
 
@@ -2312,7 +2311,7 @@ namespace IRI.Jab.MapViewer
 
         FrameworkElement rightClickOptions;
 
-        sb.Primitives.ILocateable rightClickDataContext;
+        sb.ILocateable rightClickDataContext;
 
         public void RemoveRightClickOptions()
         {
@@ -2324,7 +2323,7 @@ namespace IRI.Jab.MapViewer
             ClearLayer(LayerType.RightClickOption, true);
         }
 
-        public void RegisterRightClickContextOptions<T>(sb.Primitives.ILocateable context) where T : FrameworkElement, new()
+        public void RegisterRightClickContextOptions<T>(sb.ILocateable context) where T : FrameworkElement, new()
         {
             this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
             this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
@@ -2336,7 +2335,7 @@ namespace IRI.Jab.MapViewer
             this.rightClickOptions.DataContext = context;
         }
 
-        public void RegisterRightClickContextOptions(FrameworkElement view, sb.Primitives.ILocateable context)
+        public void RegisterRightClickContextOptions(FrameworkElement view, sb.ILocateable context)
         {
             this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
             this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
@@ -2379,7 +2378,7 @@ namespace IRI.Jab.MapViewer
             {
                 view = GetRightClickOptionsForDraw();
 
-                var context = (sb.Primitives.ILocateable)view.DataContext;
+                var context = (sb.ILocateable)view.DataContext;
 
                 context.Location = ScreenToMap(screenLocation).AsPoint();
 
@@ -2419,7 +2418,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public void AddRightClickOptions(FrameworkElement options, MouseButtonEventArgs e, sb.Primitives.ILocateable context)
+        public void AddRightClickOptions(FrameworkElement options, MouseButtonEventArgs e, sb.ILocateable context)
         {
             RemoveRightClickOptions();
 
@@ -2466,7 +2465,7 @@ namespace IRI.Jab.MapViewer
 
         #region Drawing & Anot
 
-        public void Flash(List<Ham.SpatialBase.Point> points)
+        public void Flash(List<Sta.Common.Primitives.Point> points)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2480,7 +2479,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        public void Flash(Ham.SpatialBase.Point mapPoint)
+        public void Flash(Sta.Common.Primitives.Point mapPoint)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2488,7 +2487,7 @@ namespace IRI.Jab.MapViewer
             AddFlash(mapPoint);
         }
 
-        private void AddFlash(Ham.SpatialBase.Point mapPoint)
+        private void AddFlash(Sta.Common.Primitives.Point mapPoint)
         {
             if (mapPoint == null || mapPoint.IsNaN())
             {
@@ -2758,7 +2757,7 @@ namespace IRI.Jab.MapViewer
 
         #region Print
 
-       public void Print()
+        public void Print()
         {
             //IRI.Jab.Common.Helpers.PrintHelper.Print(this.mapView);
             IRI.Jab.Common.Helpers.PrintHelper.Print(this);
@@ -3357,37 +3356,44 @@ namespace IRI.Jab.MapViewer
 
                 if (withAnimation)
                 {
+                    try
+                    {
+                        var duration = new Duration(TimeSpan.FromMilliseconds(100));
 
-                    var duration = new Duration(TimeSpan.FromMilliseconds(100));
+                        var fillBehavior = FillBehavior.Stop;
 
-                    var fillBehavior = FillBehavior.Stop;
+                        DoubleAnimation animationPanX = new DoubleAnimation(windowCenter.X - intermediateExtentCenter.X, duration, fillBehavior);
+                        var t1 = AnimateAsync(() => { this.panTransform.BeginAnimation(TranslateTransform.XProperty, animationPanX); }, animationPanX);
 
-                    DoubleAnimation animationPanX = new DoubleAnimation(windowCenter.X - intermediateExtentCenter.X, duration, fillBehavior);
-                    var t1 = AnimateAsync(() => { this.panTransform.BeginAnimation(TranslateTransform.XProperty, animationPanX); }, animationPanX);
+                        DoubleAnimation animationPanY = new DoubleAnimation(windowCenter.Y - intermediateExtentCenter.Y, duration, fillBehavior);
+                        var t2 = AnimateAsync(() => { this.panTransform.BeginAnimation(TranslateTransform.YProperty, animationPanY); }, animationPanY);
 
-                    DoubleAnimation animationPanY = new DoubleAnimation(windowCenter.Y - intermediateExtentCenter.Y, duration, fillBehavior);
-                    var t2 = AnimateAsync(() => { this.panTransform.BeginAnimation(TranslateTransform.YProperty, animationPanY); }, animationPanY);
+                        DoubleAnimation animationPanPX = new DoubleAnimation(windowCenter.X - screenExtentCenter.X, duration, fillBehavior);
+                        var t3 = AnimateAsync(() => { this.panTransformForPoints.BeginAnimation(TranslateTransform.XProperty, animationPanPX); }, animationPanPX);
 
-                    DoubleAnimation animationPanPX = new DoubleAnimation(windowCenter.X - screenExtentCenter.X, duration, fillBehavior);
-                    var t3 = AnimateAsync(() => { this.panTransformForPoints.BeginAnimation(TranslateTransform.XProperty, animationPanPX); }, animationPanPX);
-
-                    DoubleAnimation animationPanPY = new DoubleAnimation(windowCenter.Y - screenExtentCenter.Y, duration, fillBehavior);
-                    var t4 = AnimateAsync(() => { this.panTransformForPoints.BeginAnimation(TranslateTransform.YProperty, animationPanPY); }, animationPanPY);
+                        DoubleAnimation animationPanPY = new DoubleAnimation(windowCenter.Y - screenExtentCenter.Y, duration, fillBehavior);
+                        var t4 = AnimateAsync(() => { this.panTransformForPoints.BeginAnimation(TranslateTransform.YProperty, animationPanPY); }, animationPanPY);
 
 
-                    DoubleAnimation animationZoomX = new DoubleAnimation(this.mapView.ActualWidth / 2.0, duration, fillBehavior);
-                    var t5 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.CenterXProperty, animationZoomX); }, animationZoomX);
+                        DoubleAnimation animationZoomX = new DoubleAnimation(this.mapView.ActualWidth / 2.0, duration, fillBehavior);
+                        var t5 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.CenterXProperty, animationZoomX); }, animationZoomX);
 
-                    DoubleAnimation animationZoomY = new DoubleAnimation(this.mapView.ActualHeight / 2.0, duration, fillBehavior);
-                    var t6 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.CenterYProperty, animationZoomY); }, animationZoomY);
+                        DoubleAnimation animationZoomY = new DoubleAnimation(this.mapView.ActualHeight / 2.0, duration, fillBehavior);
+                        var t6 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.CenterYProperty, animationZoomY); }, animationZoomY);
 
-                    DoubleAnimation animationZoomSX = new DoubleAnimation(scale * baseScaleX, duration, fillBehavior);
-                    var t7 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animationZoomSX); }, animationZoomSX);
+                        DoubleAnimation animationZoomSX = new DoubleAnimation(scale * baseScaleX, duration, fillBehavior);
+                        var t7 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.ScaleXProperty, animationZoomSX); }, animationZoomSX);
 
-                    DoubleAnimation animationZoomSY = new DoubleAnimation(scale * baseScaleY, duration, fillBehavior);
-                    var t8 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animationZoomSY); }, animationZoomSY);
+                        DoubleAnimation animationZoomSY = new DoubleAnimation(scale * baseScaleY, duration, fillBehavior);
+                        var t8 = AnimateAsync(() => { this.zoomTransform.BeginAnimation(ScaleTransform.ScaleYProperty, animationZoomSY); }, animationZoomSY);
 
-                    await Task.WhenAll(t1, t2, t3, t4, t5, t6, t7, t8);
+                        await Task.WhenAll(t1, t2, t3, t4, t5, t6, t7, t8);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
 
                 this.panTransform.X = windowCenter.X - intermediateExtentCenter.X;
@@ -3659,7 +3665,7 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource drawingCancellationToken;
 
-        TaskCompletionSource<sb.Primitives.Geometry> drawingTcs;
+        TaskCompletionSource<sb.Geometry> drawingTcs;
 
         private void MapView_MouseDownForStartDrawing(object sender, MouseButtonEventArgs e)
         {
@@ -3962,9 +3968,9 @@ namespace IRI.Jab.MapViewer
             return view;
         }
 
-        private Task<sb.Primitives.Geometry> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
+        private Task<sb.Geometry> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
         {
-            drawingTcs = new TaskCompletionSource<sb.Primitives.Geometry>();
+            drawingTcs = new TaskCompletionSource<sb.Geometry>();
 
             drawingCancellationToken = new CancellationTokenSource();
 
@@ -4013,7 +4019,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<sb.Primitives.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
+        public async Task<sb.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
         {
             try
             {
@@ -4155,10 +4161,10 @@ namespace IRI.Jab.MapViewer
 
         //    var layer = new EditableFeatureLayer(
         //                    "edit",
-        //                    wgs84Points.Select(i => Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
+        //                    wgs84Points.Select(i => Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
         //                    this.viewTransform,
         //                    ScreenToMap,
-        //                    sb.Primitives.GeometryType.Polygon);
+        //                    sb.GeometryType.Polygon);
 
         //    layer.RequestRightClickOptions = (i1, i2, i3) =>
         //    {
@@ -4182,7 +4188,7 @@ namespace IRI.Jab.MapViewer
 
         //}
 
-        //public void Edit(sb.Primitives.Geometry geometry)
+        //public void Edit(sb.Geometry geometry)
         //{
         //    var layer = new EditableFeatureLayer(
         //                    "edit", geometry,
@@ -4209,11 +4215,11 @@ namespace IRI.Jab.MapViewer
         //    this.SetLayer(layer);
         //}
 
-        private Task<sb.Primitives.Geometry> EditGeometry(sb.Primitives.Geometry geometry, EditableFeatureLayerOptions options)
+        private Task<sb.Geometry> EditGeometry(sb.Geometry geometry, EditableFeatureLayerOptions options)
         {
             editingCancellationToken = new CancellationTokenSource();
 
-            var tcs = new TaskCompletionSource<sb.Primitives.Geometry>();
+            var tcs = new TaskCompletionSource<sb.Geometry>();
 
             if (CurrentEditingLayer != null)
             {
@@ -4285,7 +4291,7 @@ namespace IRI.Jab.MapViewer
             return tcs.Task;
         }
 
-        public async Task<sb.Primitives.Geometry> EditGeometryAsync(sb.Primitives.Geometry originalGeometry, EditableFeatureLayerOptions options)
+        public async Task<sb.Geometry> EditGeometryAsync(sb.Geometry originalGeometry, EditableFeatureLayerOptions options)
         {
             try
             {
@@ -4519,7 +4525,7 @@ namespace IRI.Jab.MapViewer
 
         Guid _measureId;
 
-        private async Task<sb.Primitives.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
+        private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
         {
             this._measureCancellationToken = new CancellationTokenSource();
 
@@ -4608,7 +4614,7 @@ namespace IRI.Jab.MapViewer
             return result;
         }
 
-        public async Task<sb.Primitives.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
+        public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
         {
             _measureId = Guid.NewGuid();
 

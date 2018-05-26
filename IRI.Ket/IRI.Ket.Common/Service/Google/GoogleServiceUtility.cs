@@ -1,4 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

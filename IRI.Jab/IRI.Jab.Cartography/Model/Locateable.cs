@@ -1,15 +1,15 @@
-﻿using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows;
+using System.Text; 
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
-using sb = IRI.Ham.SpatialBase;
+using WpfPoint = System.Windows.Point;
+
 
 namespace IRI.Jab.Cartography
 {
@@ -27,14 +27,14 @@ namespace IRI.Jab.Cartography
                 if (_x == value)
                     return;
 
-                var oldValue = new Point(_x, _y);
+                var oldValue = new WpfPoint(_x, _y);
 
                 _x = value;
                 RaisePropertyChanged();
 
                 this._location.X = value;
 
-                this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<Point>(oldValue, new Point(_x, _y)));
+                this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
             }
         }
 
@@ -48,27 +48,27 @@ namespace IRI.Jab.Cartography
                 if (_y == value)
                     return;
 
-                var oldValue = new Point(_x, _y);
+                var oldValue = new WpfPoint(_x, _y);
 
                 _y = value;
                 RaisePropertyChanged();
 
                 this._location.Y = value;
 
-                this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<Point>(oldValue, new Point(_x, _y)));
+                this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
             }
         }
 
-        private Point _location;
+        private System.Windows.Point _location;
 
-        public Point Location
+        public System.Windows.Point Location
         {
             get { return _location; }
         }
 
-        protected FrameworkElement _element;
+        protected System.Windows.FrameworkElement _element;
 
-        public virtual FrameworkElement Element
+        public virtual System.Windows.FrameworkElement Element
         {
             get { return _element; }
             set
@@ -98,12 +98,12 @@ namespace IRI.Jab.Cartography
                 this.AncherFunction = ancherFunction;
             }
 
-            this._location = new Point(0, 0);
+            this._location = new System.Windows.Point(0, 0);
         }
 
-        public Locateable(sb.Point wgs84GeodeticPosition, AncherFunctionHandler ancherFunction = null) : this(ancherFunction)
+        public Locateable(Point wgs84GeodeticPosition, AncherFunctionHandler ancherFunction = null) : this(ancherFunction)
         {
-            var webMercator = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
+            var webMercator = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
 
             this.X = webMercator.X;
 
@@ -172,7 +172,7 @@ namespace IRI.Jab.Cartography
             //storyBoard.Begin(this.Element);
             var element = ((Common.View.MapMarkers.MapMarker)(this.Element));
 
-            element.BeginAnimation(FrameworkElement.HeightProperty, new DoubleAnimation(250, new Duration(new TimeSpan(0, 0, 1))) { FillBehavior = FillBehavior.HoldEnd });
+            element.BeginAnimation(System.Windows.FrameworkElement.HeightProperty, new DoubleAnimation(250, new System.Windows.Duration(new TimeSpan(0, 0, 1))) { FillBehavior = FillBehavior.HoldEnd });
         }
 
         public void Unselect()
@@ -190,7 +190,7 @@ namespace IRI.Jab.Cartography
 
         public event EventHandler OnRequestHandleMouseDown;
 
-        public event EventHandler<ChangeEventArgs<Point>> OnPositionChanged;
+        public event EventHandler<ChangeEventArgs<WpfPoint>> OnPositionChanged;
 
         private bool _isSelected;
 

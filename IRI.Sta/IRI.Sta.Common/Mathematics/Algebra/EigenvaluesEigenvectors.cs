@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ham.Algebra
+namespace IRI.Sta.Algebra
 {
     public struct EigenvaluesEigenvectors
     {

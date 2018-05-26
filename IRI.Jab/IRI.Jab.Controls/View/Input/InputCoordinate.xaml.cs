@@ -12,7 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using IRI.Ham.SpatialBase.CoordinateSystems;
+using IRI.Sta.Common.CoordinateSystems;
+using IRI.Sta.CoordinateSystems;
 //using Microsoft.SqlServer.Types;
 
 namespace IRI.Jab.Controls.View.Input
@@ -40,7 +41,7 @@ namespace IRI.Jab.Controls.View.Input
 
             if (double.TryParse(this.x.Text, out x) && double.TryParse(this.y.Text, out y))
             {
-                this.Presenter.PointCollection.Add(new IRI.Ham.SpatialBase.Point(x, y));
+                this.Presenter.PointCollection.Add(new IRI.Sta.Common.Primitives.Point(x, y));
             }
 
             this.y.Text = string.Empty;
@@ -64,7 +65,7 @@ namespace IRI.Jab.Controls.View.Input
         {
             Button button = e.OriginalSource as Button;
 
-            this.Presenter.PointCollection.Remove(button.DataContext as IRI.Ham.SpatialBase.Point);
+            this.Presenter.PointCollection.Remove(button.DataContext as IRI.Sta.Common.Primitives.Point);
         }
 
         private void coordinateType_SelectionChanged(object sender, SelectionChangedEventArgs e)

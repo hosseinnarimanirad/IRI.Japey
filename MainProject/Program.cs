@@ -6,9 +6,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 using IRI.Ket.Geometry;
-using IRI.Ham.Statistics;
+using IRI.Sta.Statistics;
 using IRI.Ket.DigitalTerrainModeling;
 using IRI.Ket.Graph.GraphRepresentation;
 using IRI.Ket.Graph;
@@ -18,8 +18,8 @@ using IRI.Ket.GsmGprsCommunication1;
 using IRI.Ket.Spatial.Primitives;
 using Sfc = IRI.Ket.Spatial;
 using System.Diagnostics;
-using IRI.Ham.SpatialBase.Mapping;
-using spatial = IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Mapping;
+using spatial = IRI.Sta.Common.Primitives;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using Microsoft.SqlServer.Types;
@@ -27,7 +27,15 @@ using System.Data;
 using Newtonsoft.Json;
 using IRI.Ket.Common.Extensions;
 using IRI.Ket.Common.Model;
-using IRI.Ket.Common.Model.GeoJson;
+using IRI.Sta.Common.Model.GeoJson;
+using IRI.Ket.SqlServerSpatialExtension.Extensions;
+using System.Xml;
+using System.Text.RegularExpressions;
+using System.Net;
+using System.IO;
+using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Jab.Common.Model.Spatialable;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
 namespace MainProject
 {
@@ -39,17 +47,25 @@ namespace MainProject
         static void Main()
         {
             //TestGeolocation();
-             
-            var jsonString = System.IO.File.ReadAllText(@"E:\Data\Iran\Railway\networkblock.json");
-            var jsonStringOne = System.IO.File.ReadAllText(@"C:\Users\Hossein\Desktop\New Text Document.txt");
+            GetTiles18();
+            ////////var jsonString = System.IO.File.ReadAllText(@"E:\Data\Iran\Railway\networkblock.json");
+            ////////// var jsonStringOne = System.IO.File.ReadAllText(@"C:\Users\Hossein\Desktop\New Text Document.txt");
 
-            var one = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeature>(jsonStringOne);
-            //GeoJsonGeometry geo = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonGeometry>();
+            ////////var jsonStations = System.IO.File.ReadAllText(@"E:\Data\Iran\Railway\stations.json");
 
-            var parsedObject = Newtonsoft.Json.Linq.JObject.Parse(jsonString);
-            var temp = parsedObject["features"].Select(f => Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonGeometry>(f["geometry"]?.ToString())).ToList();
+            ////////// var one = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeature>(jsonStringOne);
+            //////////GeoJsonGeometry geo = Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonGeometry>();
 
-            var c = temp.Count;
+            ////////var parsedObject = Newtonsoft.Json.Linq.JObject.Parse(jsonStations);
+
+            ////////var temp = parsedObject["features"].Select(f => JsonConvert.DeserializeObject<GeoJsonFeature>(f.ToString())).ToList();
+
+            ////////GeoJsonExtensions.WriteAsShapefile(temp, @"C:\Users\Hossein\Desktop\stations.shp", true);
+
+            ////////var c = temp.Count;
+
+
+
             //TestGeolocation();
 
             //Application.EnableVisualStyles();
@@ -65,45 +81,45 @@ namespace MainProject
             ////////var utmWgs84Point = new spatial.Point(535975, 3234346);
 
 
-            ////////var result000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result0000 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
+            ////////var result000 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result0000 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
 
-            ////////var result00 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
-            ////////var result01 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result001 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-
-
-            ////////var result3 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result003 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            ////////var result4 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result004 = IRI.Ham.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            ////////var temp = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
+            ////////var result00 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
+            ////////var result01 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result001 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
 
 
-            ////////var result30 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
+
+            ////////var result3 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result003 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
+
+            ////////var result4 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result004 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
+
+            ////////var temp = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
+
+
+            ////////var result30 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
 
             ////////var nahrawanCalculatedClarke = $"{DegreeHelper.ToDms(result30.X)} - {DegreeHelper.ToDms(result30.Y)}";
 
-            ////////var result20 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.Nahrawan);
+            ////////var result20 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.Nahrawan);
 
             ////////var nahrawanCalculatedNahrawan = $"{DegreeHelper.ToDms(result20.X)} - {DegreeHelper.ToDms(result20.Y)}";
 
-            ////////var result40 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.NahrawanIraq);
+            ////////var result40 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.NahrawanIraq);
 
             ////////var nahrawanCalculatedNahrawanIraq = $"{DegreeHelper.ToDms(result40.X)} - {DegreeHelper.ToDms(result40.Y)}";
 
-            ////////var result50 = IRI.Ham.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Ham.CoordinateSystem.Ellipsoids.FD58);
+            ////////var result50 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.FD58);
 
             ////////var nahrawanCalculatedFD58 = $"{DegreeHelper.ToDms(result50.X)} - {DegreeHelper.ToDms(result50.Y)}";
 
@@ -120,8 +136,8 @@ namespace MainProject
             //}
             //System.IO.File.WriteAllLines(@"C:\Users\Hossein\Desktop\93.PolygonGeo\markup.txt", result);
 
-            ////////var utmPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
-            ////////var geodeticPoint0 = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
+            ////////var utmPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
+            ////////var geodeticPoint0 = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
 
             //ReadAdmin();
             //IRI.Ket.Data.Feeds.AdminFeeder.GetProvinces();
@@ -138,6 +154,262 @@ namespace MainProject
             Console.Read();
         }
 
+
+        static void GetTiles18()
+        {
+
+            //var wm = IRI.Jab.Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(null).First(i => i.Label == "اصفهان").GetBoundingBox(3857);
+
+            //IRI.Sta.Common.Mapping.WebMercatorUtility.WriteWebMercatorBoundingBoxToGoogleTileRegions(@"C:\Users\Hossein\Desktop\New Text Document.txt", wm, 18);
+
+
+            WebMercatorHelper.WriteWebMercatorBoundingBoxToGoogleTileRegionsAsShapefile(
+                @"C:\Users\Hossein\Desktop\Iran13v3.shp",
+                IRI.Sta.Common.Primitives.BoundingBoxes.IranWebMercatorBoundingBox, 13);
+             
+        }
+
+        class MetroStation
+        {
+            public string Title { get; set; }
+
+            public double Latitude { get; set; }
+
+            public double Longitude { get; set; }
+
+            public IEsriShape Point
+            {
+                get { return new IRI.Ket.ShapefileFormat.EsriType.EsriPoint(Longitude, Latitude); }
+            }
+        }
+
+        static async void GoForStations()
+        {
+            var firstArray = GetMetros(@"C:\Users\Hossein\Desktop\Input.txt", "AIzaSyCGpzS-UhqBW3n2MJbqfPalJs1qD3-DnKE");
+
+
+            System.IO.File.WriteAllLines("stations1.txt", firstArray.Select(r => $"{r.Longitude}; {r.Latitude}; {r.Title}"));
+
+            var secondArray = GetMetros(@"C:\Users\Hossein\Desktop\Input2.txt", "AIzaSyAw46PA2twfhyid0R5Vm8igszi56V36enQ");
+
+            var resultArray = firstArray.Union(secondArray).ToList();
+
+            System.IO.File.WriteAllLines("stations.txt", resultArray.Select(r => $"{r.Longitude}; {r.Latitude}; {r.Title}"));
+            IRI.Ket.ShapefileFormat.Shapefile.Save("stations.shp", resultArray.Select(r => r.Point), false, true);
+            IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<MetroStation>(
+                "stations.dbf",
+                resultArray,
+                new List<Func<MetroStation, object>>()
+                {
+                    m=>m.Title
+                },
+                new List<IRI.Ket.ShapefileFormat.Dbf.DbfFieldDescriptor>()
+                {
+                    IRI.Ket.ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField("station title",255)
+                },
+                Encoding.UTF8,
+                true);
+        }
+
+        static List<MetroStation> GetMetros(string fileName, string key)
+        {
+            var lines = System.IO.File.ReadAllLines(fileName).Select(l => l.Split('\t')).ToList();
+
+            List<MetroStation> resultArray = new List<MetroStation>();
+
+            foreach (var item in lines)
+            {
+                var id = item[0]?.ToString();
+                var field1 = item[1]?.ToString();
+                var field2 = item[2]?.ToString();
+                var field3 = item[3]?.ToString();
+                //var field4 = item[4]?.ToString();
+                //var field5 = item[5]?.ToString();
+
+                var fields = (new List<string>() { field1, field2, field3 }).Where(f => !string.IsNullOrWhiteSpace(f));
+
+                var query = string.Join(",", fields);
+
+                double Longitude, Latitude, XWebMercator, YWebMercator;
+
+                try
+                {
+                    var result = IRI.Ket.Common.Service.Google.GooglePlacesService.Search(query, key);
+
+                    if (!result.IsFailed && result.Result.Results.FirstOrDefault() != null)
+                    {
+                        var wgs84 = result.Result?.Results?.FirstOrDefault()?.AsGeodeticPoint();
+
+                        var webMercator = result.Result.Results.First().AsWebMercatorPoint();
+
+                        Longitude = wgs84.X;
+
+                        Latitude = wgs84.Y;
+
+                        XWebMercator = webMercator.X;
+
+                        YWebMercator = webMercator.Y;
+
+                        resultArray.Add(new MetroStation() { Latitude = Latitude, Longitude = Longitude, Title = field3 });
+                        //newRow["LocationWgs84Wkb"] = SqlGeography.Point(wgs84.Y, wgs84.X, IRI.Sta.Common.CoordinateSystems.MapProjection.SridHelper.GeodeticWGS84).STAsBinary().Value;
+
+                        //newRow["LocationWmWkb"] = SqlGeometry.Point(webMercator.X, webMercator.Y, IRI.Sta.Common.CoordinateSystems.MapProjection.SridHelper.WebMercator).STAsBinary().Value;
+                    }
+                    else
+                    {
+                        resultArray.Add(new MetroStation() { Latitude = 20, Longitude = 20, Title = field3 });
+                    }
+
+                }
+                catch
+                {
+
+                }
+            }
+
+            return resultArray;
+        }
+
+        static async void GoForZamin()
+        {
+            //var max = 1860;
+
+            WebClient client = new WebClient();
+
+            //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+            client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+            client.Encoding = Encoding.UTF8;
+
+            //Regex aTagRegex = new Regex("<(a|link).*?href=(\"|')(.+?)(\"|').*?>");
+            //Regex aTagRegex = new Regex("href=['\"]([^ '\"]+?)['\"]");
+            Regex aTagRegex = new Regex("href=\"(.*)\">");
+
+
+            for (int i = 0; i < 125; i++)
+            {
+                //i = 111;
+
+                System.IO.File.AppendAllText(@"E:\New folder\log2.txt", $"{System.Environment.NewLine}processing page {i}");
+
+                var temp = 15 * i;
+
+                var url = $"http://gsi.ir/fa/Maps/ListView/1/{temp}/All/All/All/All";
+
+
+                var stringResult = client.DownloadString(url);
+
+
+                //Regex r = new Regex("<(a|link).*?href=(\"|')(.+?)(\"|').*?>");
+
+                //Regex r2 = new Regex(@"((http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)");
+                //Regex r2 = new Regex("http://([\\w+?\\.\\w+])+([ا-یa-zA-Z0-9آء\\s\\~\\!\\@\\#\\$\\|\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?", RegexOptions.IgnoreCase);
+                Regex r2 = new Regex("ShowDetail(.*)html'");
+
+
+                var downloadPages = r2.Matches(stringResult).Cast<Match>().Where(a => a.Value.Contains("http://gsi.ir/fa/Maps/MoreInfo"))
+                    .Select(a => a.Value.Replace("ShowDetail(", string.Empty).Replace("\'", string.Empty))
+                    .ToList();
+
+
+                foreach (var item in downloadPages)
+                {
+                    try
+                    {
+
+                        System.Threading.Thread.Sleep(500);
+
+                        System.IO.File.AppendAllText(@"E:\New folder\log2.txt", $"{System.Environment.NewLine}processing item {i} {temp} {item}");
+
+                        var page = client.DownloadString(item);
+
+                        var matches = aTagRegex.Matches(page).Cast<Match>()
+                            .Where(a => a.Value?.Contains("http://gsi.ir/Files/Maps-PackFile") == true)
+                            .Select(a => a.Value?.ToString().Replace("href=", string.Empty).Replace("\"", string.Empty).Replace("class=HrefPackFile>", string.Empty)?.Trim())
+                            .ToList();
+
+                        if (matches.Count < 1)
+                        {
+                            continue;
+                        }
+
+                        if (matches.Count > 1)
+                        {
+                            System.IO.File.AppendAllText(@"E:\New folder\log2.txt", $"{System.Environment.NewLine}MORE MATCHES AT {i} {temp} {item}");
+                        }
+
+                        var index = item.LastIndexOf('/');
+
+                        var name = item.Substring(index).Replace("/", "").Replace(".html", "");
+
+                        var directory = CleanDirectory($@"E:\New folder\{name}").Replace(":", ".");
+
+                        var fileNameIndex = matches.First().LastIndexOf('/');
+
+                        var fileName = matches.First().Substring(fileNameIndex).Replace("/", "");
+
+                        var fullFileName = CleanFileName(System.IO.Path.Combine(directory, fileName));
+
+                        if (System.IO.File.Exists(fullFileName))
+                        {
+                            continue;
+                        }
+
+                        System.Threading.Thread.Sleep(3000);
+
+                        var downloadFile = client.DownloadData(matches.First());
+
+                        if (!System.IO.Directory.Exists(directory))
+                        {
+                            System.IO.Directory.CreateDirectory(directory);
+
+
+                            var di = new DirectoryInfo(directory);
+                            di.Attributes &= ~FileAttributes.ReadOnly;
+
+
+                        }
+                        System.IO.File.WriteAllBytes((fullFileName), downloadFile);
+
+                        var lengthCount = matches.Count;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.IO.File.AppendAllText(@"E:\New folder\log2.txt", $"{System.Environment.NewLine}Exception at {i} {i * 15} {item}");
+                        var exc = ex.Message;
+                    }
+                }
+
+
+
+                var length = downloadPages.Count;
+            }
+        }
+
+        private static string CleanFileName(string fileName)
+        {
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+        }
+
+        private static string CleanDirectory(string directory)
+        {
+            return Path.GetInvalidPathChars().Aggregate(directory, (current, c) => current.Replace(c.ToString(), string.Empty));
+        }
+
+        //private List<string> ExtractAllAHrefTags(HtmlDocument htmlSnippet)
+        //{
+        //    List<string> hrefTags = new List<string>();
+
+        //    foreach (var link in htmlSnippet.DocumentNode.SelectNodes("//a[@href]"))
+        //    {
+        //        HtmlAttribute att = link.Attributes["href"];
+        //        hrefTags.Add(att.Value);
+        //    }
+
+        //    return hrefTags;
+        //}
+
+
         static async void LoadLive()
         {
             //var geo = fields.Select(f => f.AsSqlGeometry()).ToList();
@@ -152,9 +424,9 @@ namespace MainProject
 
         static spatial.Point GetP(spatial.Point point, int zone)
         {
-            var geo = IRI.Ham.CoordinateSystem.MapProjection.DefaultMapProjections.LccNiocWithClarcke1880Rgs.ToWgs84Geodetic(point);
+            var geo = IRI.Sta.CoordinateSystem.MapProjection.DefaultMapProjections.LccNiocWithClarcke1880Rgs.ToWgs84Geodetic(point);
 
-            return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geo, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84, zone, true);
+            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geo, IRI.Sta.CoordinateSystem.Ellipsoids.WGS84, zone, true);
         }
 
 
@@ -496,9 +768,9 @@ namespace MainProject
 
             IRI.Ket.Graph.ShortestPaths.AllPairs.FloydWarshallProblem fwp = new IRI.Ket.Graph.ShortestPaths.AllPairs.FloydWarshallProblem(matrix);
 
-            double shortest = IRI.Ham.Statistics.Statistics.GetMin(new Matrix(fwp.shortestPaths));
-            double biggest = IRI.Ham.Statistics.Statistics.GetMax(new Matrix(fwp.shortestPaths));
-            double mean = IRI.Ham.Statistics.Statistics.CalculateMean(new Matrix(fwp.shortestPaths));
+            double shortest = IRI.Sta.Statistics.Statistics.GetMin(new Matrix(fwp.shortestPaths));
+            double biggest = IRI.Sta.Statistics.Statistics.GetMax(new Matrix(fwp.shortestPaths));
+            double mean = IRI.Sta.Statistics.Statistics.CalculateMean(new Matrix(fwp.shortestPaths));
         }
 
         private static void FloydWarshall()
@@ -2504,7 +2776,7 @@ namespace MainProject
 
         private static void Tests001()
         {
-            IRI.Ham.Algebra.Matrix m = new IRI.Ham.Algebra.Matrix(4, 4);
+            IRI.Sta.Algebra.Matrix m = new IRI.Sta.Algebra.Matrix(4, 4);
             m[2, 2] = 4;
             m[1, 0] = 2;
             m[2, 0] = 5;

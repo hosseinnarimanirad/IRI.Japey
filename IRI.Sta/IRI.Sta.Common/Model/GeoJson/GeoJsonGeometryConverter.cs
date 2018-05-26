@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

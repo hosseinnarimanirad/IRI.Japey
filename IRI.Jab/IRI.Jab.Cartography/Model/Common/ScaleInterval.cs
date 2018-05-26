@@ -68,9 +68,9 @@ namespace IRI.Jab.Cartography
                 throw new NotImplementedException();
             }
 
-            var minInverse = 1.0 / IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel);
+            var minInverse = 1.0 / IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel);
 
-            var maxInverse = 1.0 / IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel);
+            var maxInverse = 1.0 / IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel);
 
             return new ScaleInterval(maxInverse, minInverse);
         }

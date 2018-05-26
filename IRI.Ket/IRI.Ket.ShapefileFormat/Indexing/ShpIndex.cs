@@ -13,6 +13,6 @@ namespace IRI.Ket.ShapefileFormat.Indexing
         //public int ContentLength { get; set; }
         public int RecordNumber { get; set; }
 
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox { get; set; }
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox { get; set; }
     }
 }

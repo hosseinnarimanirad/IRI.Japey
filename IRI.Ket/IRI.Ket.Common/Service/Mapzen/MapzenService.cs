@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Model.Mapzen;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.Mapzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;

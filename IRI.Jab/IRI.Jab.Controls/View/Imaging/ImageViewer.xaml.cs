@@ -2,14 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-//using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-//using IRI.Jab.Cartography;
-using IRI.Ham.SpatialBase;
 using System.Windows.Media;
-using IRI.Ham.Common;
-//using Microsoft.SqlServer.Types;
+using IRI.Sta.Common.Helpers;
+using IRI.Jab.Common.Extensions;
 
 namespace IRI.Jab.Controls.View
 {
@@ -70,10 +67,10 @@ namespace IRI.Jab.Controls.View
 
         //public System.Windows.Point GeodeticToMap(System.Windows.Point point)
         //{
-        //    double[][] result = Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //    double[][] result = Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
         //                                                            new double[] { point.X },
         //                                                            new double[] { point.Y },
-        //                                                             Ham.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                             Sta.CoordinateSystem.Ellipsoids.WGS84);
 
         //    return new System.Windows.Point(result[0][0], result[1][0]);
         //}
@@ -90,7 +87,7 @@ namespace IRI.Jab.Controls.View
         {
             try
             {
-                var result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint());
+                var result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint());
 
                 return new System.Windows.Point(result.X, result.Y);
             }
@@ -106,7 +103,7 @@ namespace IRI.Jab.Controls.View
             try
             {
                 var result =
-                    Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Ham.SpatialBase.Point(point.X, point.Y), Ham.CoordinateSystem.Ellipsoids.WGS84);
+                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Sta.Common.Primitives.Point(point.X, point.Y), Sta.CoordinateSystem.Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result.X, result.Y);
             }
@@ -122,9 +119,9 @@ namespace IRI.Jab.Controls.View
             try
             {
                 double[][] result =
-                    Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
+                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
                         new double[] { point.X },
-                        new double[] { point.Y }, Ham.CoordinateSystem.Ellipsoids.WGS84,
+                        new double[] { point.Y }, Sta.CoordinateSystem.Ellipsoids.WGS84,
                         0, 0);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
@@ -140,10 +137,10 @@ namespace IRI.Jab.Controls.View
         {
             try
             {
-                double[][] result = Ham.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(
+                double[][] result = Sta.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(
                                                                     new double[] { point.X },
                                                                     new double[] { point.Y },
-                                                                    Ham.CoordinateSystem.Ellipsoids.WGS84);
+                                                                    Sta.CoordinateSystem.Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
             }

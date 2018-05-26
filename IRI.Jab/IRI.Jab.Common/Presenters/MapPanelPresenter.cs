@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.CoordinateSystems;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.CoordinateSystems;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using System;
@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Common.Presenters
 {
@@ -128,19 +129,19 @@ namespace IRI.Jab.Common.Presenters
         }
 
 
-        public Ham.SpatialBase.Point CurrentWebMercatorEditingPoint
+        public Point CurrentWebMercatorEditingPoint
         {
             get
             {
                 if (this.SpatialReference == SpatialReferenceType.UTM)
                 {
-                    var geodetic = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
+                    var geodetic = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
 
-                    return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+                    return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
                 }
                 else if (this.SpatialReference == SpatialReferenceType.Geodetic)
                 {
-                    return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+                    return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
                 }
                 else
                 {
@@ -155,15 +156,15 @@ namespace IRI.Jab.Common.Presenters
             //RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
         }
 
-        private Ham.SpatialBase.Point FromWebMercator(Ham.SpatialBase.Point webMercatorPoint)
+        private Point FromWebMercator(Point webMercatorPoint)
         {
-            var geodetic = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
+            var geodetic = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
 
             if (this.SpatialReference == SpatialReferenceType.UTM)
             {
-                this.CurrentEditingZone = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
+                this.CurrentEditingZone = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
 
-                return IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
+                return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
             }
             else if (this.SpatialReference == SpatialReferenceType.Geodetic)
             {

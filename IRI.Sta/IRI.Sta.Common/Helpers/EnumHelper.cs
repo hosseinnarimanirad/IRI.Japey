@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.Common.Helpers
+namespace IRI.Sta.Common.Helpers
 {
     public static class EnumHelper
     {

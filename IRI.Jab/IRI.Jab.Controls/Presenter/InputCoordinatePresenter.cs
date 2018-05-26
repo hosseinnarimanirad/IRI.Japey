@@ -1,29 +1,23 @@
 ﻿using IRI.Jab.Common;
-using IRI.Ham.CoordinateSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using IRI.Ham.SpatialBase.CoordinateSystems;
 using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
 using IRI.Jab.Controls.Extensions;
-using IRI.Ham.SpatialBase.Primitives;
-using IRI.Ket.SpatialExtensions;
-using Microsoft.SqlServer.Types;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Controls.Presenter
 {
     public class InputCoordinatePresenter : Notifier
     {
-        private ObservableCollection<IRI.Ham.SpatialBase.Point> _pointCollection;
+        private ObservableCollection<IRI.Sta.Common.Primitives.Point> _pointCollection;
 
         /// <summary>
         /// Geodetic points
         /// </summary>
-        public ObservableCollection<IRI.Ham.SpatialBase.Point> PointCollection
+        public ObservableCollection<IRI.Sta.Common.Primitives.Point> PointCollection
         {
             get { return _pointCollection; }
             set
@@ -47,7 +41,7 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> MapFunction = p => p;
+        Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> MapFunction = p => p;
 
         private int _zone;
 
@@ -79,7 +73,7 @@ namespace IRI.Jab.Controls.Presenter
                         MapFunction = p => p;
                         break;
                     case SpatialReferenceType.UTM:
-                        MapFunction = p => (IRI.Ham.SpatialBase.Point)IRI.Ham.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
+                        MapFunction = p => (IRI.Sta.Common.Primitives.Point)IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -88,21 +82,21 @@ namespace IRI.Jab.Controls.Presenter
         }
 
         public InputCoordinatePresenter()
-            : this(new List<IRI.Ham.SpatialBase.Point>())
+            : this(new List<IRI.Sta.Common.Primitives.Point>())
         {
 
         }
 
-        public InputCoordinatePresenter(List<IRI.Ham.SpatialBase.Point> geographicPoints)
+        public InputCoordinatePresenter(List<IRI.Sta.Common.Primitives.Point> geographicPoints)
         {
             this.Zone = 39;
 
             FeedGeographicPoints(geographicPoints);
         }
 
-        public void FeedGeographicPoints(List<IRI.Ham.SpatialBase.Point> geographicPoints)
+        public void FeedGeographicPoints(List<IRI.Sta.Common.Primitives.Point> geographicPoints)
         {
-            this.PointCollection = new ObservableCollection<IRI.Ham.SpatialBase.Point>();
+            this.PointCollection = new ObservableCollection<IRI.Sta.Common.Primitives.Point>();
 
             this.PointCollection.CollectionChanged += (sender, e) => PointCollectionChanged?.Invoke(null, null);
 
@@ -112,7 +106,7 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        //internal void AddPoint(IRI.Ham.SpatialBase.Point point)
+        //internal void AddPoint(IRI.Sta.Common.Primitives.Point point)
         //{
         //    this.PointCollection.Add(MapFunction(point));
 
@@ -122,12 +116,12 @@ namespace IRI.Jab.Controls.Presenter
         //    }
         //}
 
-        //internal void RemovePoint(IRI.Ham.SpatialBase.Point point)
+        //internal void RemovePoint(IRI.Sta.Common.Primitives.Point point)
         //{
         //    this.PointCollection.Remove(point);
         //}
 
-        public Func<Task<Ham.SpatialBase.Primitives.Geometry>> RequestGetGeometry;
+        public Func<Task<Sta.Common.Primitives.Geometry>> RequestGetGeometry;
 
         private RelayCommand _drawGeometryCommand;
 
@@ -164,7 +158,7 @@ namespace IRI.Jab.Controls.Presenter
 
             this.Coordinates = geometry.AsCoordinateEditor();
 
-            //FeedGeographicPoints(geometry.Transform(IRI.Ham.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Ham.SpatialBase.Point>().ToList());
+            //FeedGeographicPoints(geometry.Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Sta.Common.Primitives.Point>().ToList());
         }
 
 

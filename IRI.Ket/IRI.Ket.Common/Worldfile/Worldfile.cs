@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,21 +86,21 @@ namespace IRI.Ket.WorldfileFormat
         }
 
 
-        private IRI.Ham.SpatialBase.Point _centerOfUpperLeftPixel;
+        private Point _centerOfUpperLeftPixel;
 
-        public IRI.Ham.SpatialBase.Point CenterOfUpperLeftPixel
+        public Point CenterOfUpperLeftPixel
         {
             get { return _centerOfUpperLeftPixel; }
             set { _centerOfUpperLeftPixel = value; }
         }
 
-        public Worldfile(double xPixelSize, double yPixelSize, IRI.Ham.SpatialBase.Point centerOfUpperLeftPixel)
+        public Worldfile(double xPixelSize, double yPixelSize, Point centerOfUpperLeftPixel)
             : this(xPixelSize, yPixelSize, 0, 0, centerOfUpperLeftPixel)
         {
 
         }
 
-        public Worldfile(double xPixelSize, double yPixelSize, double xRotation, double yRotation, IRI.Ham.SpatialBase.Point centerOfUpperLeftPixel)
+        public Worldfile(double xPixelSize, double yPixelSize, double xRotation, double yRotation, Point centerOfUpperLeftPixel)
         {
             this._xPixelSize = xPixelSize;
 
@@ -131,7 +131,7 @@ namespace IRI.Ket.WorldfileFormat
 
             double yOfCenterOfUpperLeftPixel = double.Parse(lines[5]);
 
-            return new Worldfile(xPixelSize, yPixelSize, rotationAboutX, rotationAboutY, new Ham.SpatialBase.Point(xOfCenterOfUpperLeftPixel, yOfCenterOfUpperLeftPixel));
+            return new Worldfile(xPixelSize, yPixelSize, rotationAboutX, rotationAboutY, new Point(xOfCenterOfUpperLeftPixel, yOfCenterOfUpperLeftPixel));
         }
 
         public override string ToString()

@@ -1,11 +1,12 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Ellipsoid = IRI.Ham.CoordinateSystem.Ellipsoid<IRI.Ham.MeasurementUnit.Meter, IRI.Ham.MeasurementUnit.Degree>;
+using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public abstract class CoordinateReferenceSystemBase
     {

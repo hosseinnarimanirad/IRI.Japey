@@ -6,7 +6,7 @@ using IRI.Jab.Cartography;
 using Microsoft.SqlServer.Types;
 using IRI.Jab.Common;
 using System.Windows;
-using IRI.Ham.SpatialBase;
+using IRI.Sta.Common.Primitives;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Model;
 

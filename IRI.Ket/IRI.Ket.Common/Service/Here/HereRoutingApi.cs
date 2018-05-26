@@ -1,9 +1,10 @@
-﻿using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Model.Here;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.Here;
 using IRI.Ket.Common.Extensions;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Common.Service.Here
 {

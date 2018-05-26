@@ -1,6 +1,6 @@
-﻿using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.CoordinateSystems;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.CoordinateSystems;
 using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -128,17 +129,17 @@ namespace IRI.Jab.Controls.Presenter
 
         public void PanTo()
         {
-            this.RequestPanTo?.Invoke(new IRI.Ham.SpatialBase.Point(X, Y));
+            this.RequestPanTo?.Invoke(new IRI.Sta.Common.Primitives.Point(X, Y));
         }
 
-        public Ham.SpatialBase.IPoint GetWgs84Point()
+        public IRI.Sta.Common.Primitives.IPoint GetWgs84Point()
         {
-            var point = new IRI.Ham.SpatialBase.Point(X, Y);
+            var point = new IRI.Sta.Common.Primitives.Point(X, Y);
 
             switch (this.SelectedItem?.MenuType)
             {
                 case SpatialReferenceType.Geodetic:
-                    return point;//.Project( ,new IRI.Ham.CoordinateSystem.MapProjection.NoProjection());
+                    return point;//.Project( ,new IRI.Sta.CoordinateSystem.MapProjection.NoProjection());
 
                 case SpatialReferenceType.UTM:
                     return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
@@ -154,9 +155,9 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public Action<IRI.Ham.SpatialBase.IPoint> RequestZoomTo;
+        public Action<IRI.Sta.Common.Primitives.IPoint> RequestZoomTo;
 
-        public Action<IRI.Ham.SpatialBase.IPoint> RequestPanTo;
+        public Action<IRI.Sta.Common.Primitives.IPoint> RequestPanTo;
 
         public GoToPresenter(Action<IPoint> requestPanTo, Action<IPoint> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
         {
@@ -301,7 +302,7 @@ namespace IRI.Jab.Controls.Presenter
                },
                p =>
                {
-                   var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
+                   var webMercatorPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
 
                    mapPresenter.ZoomToLevelAndCenter(13, webMercatorPoint, () =>
                    {

@@ -1,6 +1,6 @@
-﻿using IRI.Ham.CoordinateSystem;
-using IRI.Ham.CoordinateSystem.MapProjection;
-using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.CoordinateSystem;
+using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Primitives;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

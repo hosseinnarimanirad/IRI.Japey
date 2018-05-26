@@ -59,7 +59,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             this.Values = values.ToList();
         }
 
-        public PrjTree(IRI.Ham.CoordinateSystem.IEllipsoid ellipsoid, string title = null)
+        public PrjTree(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title = null)
         {
             this.Name = PrjFile._geogcs;
 

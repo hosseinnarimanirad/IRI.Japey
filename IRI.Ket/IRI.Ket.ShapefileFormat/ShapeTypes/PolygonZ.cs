@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Ham.SpatialBase.BoundingBox boundingBox;
+        private IRI.Sta.Common.Primitives.BoundingBox boundingBox;
 
         private EsriPoint[] points;
 
@@ -98,7 +99,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = IRI.Ham.SpatialBase.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Ham.SpatialBase.IPoint>());
+            this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Sta.Common.Primitives.IPoint>());
 
             this.parts = parts;
 
@@ -135,7 +136,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
         }
 
-        internal EsriPolygonZ(IRI.Ham.SpatialBase.BoundingBox boundingBox,
+        internal EsriPolygonZ(IRI.Sta.Common.Primitives.BoundingBox boundingBox,
                             int[] parts,
                             EsriPoint[] points,
                             double minZ,
@@ -215,7 +216,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -262,17 +263,17 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform)
         {
             return new EsriPolygonZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }

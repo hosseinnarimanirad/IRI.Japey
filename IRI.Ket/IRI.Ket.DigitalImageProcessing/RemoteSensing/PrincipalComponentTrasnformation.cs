@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Ham.Algebra;
-using IRI.Ham.Statistics;
+using IRI.Sta.Algebra;
+using IRI.Sta.Statistics;
 
 namespace IRI.Ket.DigitalImageProcessing.Processing
 {

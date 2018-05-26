@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ham.SpatialBase.Model.Esri
+namespace IRI.Sta.Common.Model.Esri
 {
     //[DataContract]
     [JsonObject]

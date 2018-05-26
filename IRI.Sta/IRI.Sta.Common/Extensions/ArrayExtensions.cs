@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.Common.Extensions
+namespace IRI.Sta.Common.Extensions
 {
     public static class ArrayExtensions
     {

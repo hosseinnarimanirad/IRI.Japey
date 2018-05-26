@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model.Mapzen
+namespace IRI.Sta.Common.Model.Mapzen
 {
     public class MapzenIsochroneResult
     {
@@ -35,17 +35,17 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
     {
         public object coordinates { get; set; }
         public string type { get; set; }
-        public Ham.SpatialBase.Primitives.GeometryType Type
+        public Sta.Common.Primitives.GeometryType Type
         {
             get
             {
                 if (type.ToLower().Trim() == "linestring")
                 {
-                    return Ham.SpatialBase.Primitives.GeometryType.LineString;
+                    return Sta.Common.Primitives.GeometryType.LineString;
                 }
                 else if (type.ToLower().Trim() == "polygon")
                 {
-                    return Ham.SpatialBase.Primitives.GeometryType.Polygon;
+                    return Sta.Common.Primitives.GeometryType.Polygon;
                 }
                 else
                 {
@@ -58,7 +58,7 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
         {
             get
             {
-                if (Type == Ham.SpatialBase.Primitives.GeometryType.LineString)
+                if (Type == Sta.Common.Primitives.GeometryType.LineString)
                 {
                     return JsonConvert.DeserializeObject<double[][]>(coordinates.ToString());
                 }
@@ -71,7 +71,7 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
         {
             get
             {
-                if (Type == Ham.SpatialBase.Primitives.GeometryType.Polygon)
+                if (Type == Sta.Common.Primitives.GeometryType.Polygon)
                 {
                     return JsonConvert.DeserializeObject<double[][][]>(coordinates.ToString());
                 }
@@ -80,15 +80,15 @@ namespace IRI.Ham.SpatialBase.Model.Mapzen
             }
         }
 
-        public IRI.Ham.SpatialBase.Primitives.Geometry ParseToGeometry()
+        public IRI.Sta.Common.Primitives.Geometry ParseToGeometry()
         {
             if (type.ToLower().Trim() == "linestring")
             {
-                return IRI.Ham.SpatialBase.Primitives.Geometry.ParseLineStringToGeometry(Points, Ham.SpatialBase.Primitives.GeometryType.LineString, true);
+                return IRI.Sta.Common.Primitives.Geometry.ParseLineStringToGeometry(Points, Sta.Common.Primitives.GeometryType.LineString, true);
             }
             else if (type.ToLower().Trim() == "polygon")
             {
-                return IRI.Ham.SpatialBase.Primitives.Geometry.ParsePolygonToGeometry(Rings, Ham.SpatialBase.Primitives.GeometryType.Polygon, true);
+                return IRI.Sta.Common.Primitives.Geometry.ParsePolygonToGeometry(Rings, Sta.Common.Primitives.GeometryType.Polygon, true);
             }
             else
             {

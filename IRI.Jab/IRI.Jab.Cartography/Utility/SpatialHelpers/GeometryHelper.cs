@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using drawing = System.Drawing;
-using sb = IRI.Ham.SpatialBase;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Cartography.Convertor
 {
@@ -15,7 +15,7 @@ namespace IRI.Jab.Cartography.Convertor
     {
         static int pointSize = 4;
        
-        internal static void Transform(drawing.Graphics graphics, sb.Primitives.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        internal static void Transform(drawing.Graphics graphics, sb.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.Geometries != null)
             {
@@ -31,18 +31,18 @@ namespace IRI.Jab.Cartography.Convertor
 
                 var firstPoint = original.Points[0];
 
-                if (original.Type == sb.Primitives.GeometryType.Point)
+                if (original.Type == sb.GeometryType.Point)
                 {
                     graphics.DrawEllipse(pen, (float)(firstPoint.X + location.X), (float)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
-                else if (original.Type == Ham.SpatialBase.Primitives.GeometryType.LineString)
+                else if (original.Type == Sta.Common.Primitives.GeometryType.LineString)
                 {
                     AddLineString(graphics, original, location, pen, brush);
                 }
             }
         }
 
-        private static void AddLineString(drawing.Graphics graphics, sb.Primitives.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        private static void AddLineString(drawing.Graphics graphics, sb.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.NumberOfPoints < 1)
                 return;
@@ -58,7 +58,7 @@ namespace IRI.Jab.Cartography.Convertor
         }
 
 
-        internal static void Transform(WriteableBitmap context, sb.Primitives.Geometry original, sb.Point location, int border, int fill)
+        internal static void Transform(WriteableBitmap context, sb.Geometry original, sb.Point location, int border, int fill)
         {
             if (original.Geometries != null)
             {
@@ -74,18 +74,18 @@ namespace IRI.Jab.Cartography.Convertor
 
                 var firstPoint = original.Points[0];
 
-                if (original.Type == sb.Primitives.GeometryType.Point)
+                if (original.Type == sb.GeometryType.Point)
                 {
                     context.DrawEllipseCentered(border, (int)(firstPoint.X + location.X), (int)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
-                else if (original.Type == Ham.SpatialBase.Primitives.GeometryType.LineString)
+                else if (original.Type == Sta.Common.Primitives.GeometryType.LineString)
                 {
                     AddLineString(context, original, location, border, fill);
                 }
             }
         }
 
-        private static void AddLineString(WriteableBitmap context, sb.Primitives.Geometry original, sb.Point location, int border, int fill)
+        private static void AddLineString(WriteableBitmap context, sb.Geometry original, sb.Point location, int border, int fill)
         {
             if (original.NumberOfPoints < 1)
                 return;

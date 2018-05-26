@@ -1,23 +1,12 @@
 ﻿using IRI.Jab.Common.Model;
 using IRI.Jab.Controls.Presenter;
-using IRI.Ket.Common.Helpers;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using IRI.Jab.Common.Extensions;
 
 namespace IRI.Jab.Controls.View.Map
 {
@@ -155,9 +144,9 @@ namespace IRI.Jab.Controls.View.Map
 
             //if (geodeticDms.IsChecked == true)
             //{
-            //    IRI.Ham.MeasurementUnit.Degree longitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.X);
+            //    IRI.Sta.MeasurementUnit.Degree longitude = new IRI.Sta.MeasurementUnit.Degree(geodeticPoint.X);
 
-            //    IRI.Ham.MeasurementUnit.Degree latitude = new IRI.Ham.MeasurementUnit.Degree(geodeticPoint.Y);
+            //    IRI.Sta.MeasurementUnit.Degree latitude = new IRI.Sta.MeasurementUnit.Degree(geodeticPoint.Y);
 
             //    this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
 
@@ -185,7 +174,7 @@ namespace IRI.Jab.Controls.View.Map
 
             //    this.region.Visibility = System.Windows.Visibility.Visible;
 
-            //    this.zone.Content = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
+            //    this.zone.Content = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
             //}
             //else if (mercator.IsChecked == true)
             //{
@@ -218,10 +207,10 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        IRI.Ham.SpatialBase.Point result =
-        //            IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
-        //                    new IRI.Ham.SpatialBase.Point(geodeticPoint.X, geodeticPoint.Y),
-        //                    IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
+        //        IRI.Sta.Common.Primitives.Point result =
+        //            IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
+        //                    new IRI.Sta.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
+        //                    IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result.X, result.Y);
         //    }
@@ -235,10 +224,10 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //        double[][] result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
         //                                                                new double[] { point.X },
         //                                                                new double[] { point.Y },
-        //                                                                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result[0][0], result[1][0]);
         //    }
@@ -252,10 +241,10 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        double[][] result = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
+        //        double[][] result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
         //                                                                new double[] { point.X },
         //                                                                new double[] { point.Y },
-        //                                                                IRI.Ham.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result[0][0], result[1][0]);
         //    }
@@ -270,9 +259,9 @@ namespace IRI.Jab.Controls.View.Map
         //    try
         //    {
         //        double[][] result =
-        //            IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
+        //            IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
         //                new double[] { point.X },
-        //                new double[] { point.Y }, IRI.Ham.CoordinateSystem.Ellipsoids.WGS84,
+        //                new double[] { point.Y }, IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
         //                0, 0);
 
         //        return new Point(result[0][0], result[1][0]);

@@ -8,7 +8,7 @@ namespace IRI.Jab.Common.Extensions
 {
     public static class SpatialBaseExtensions
     {
-        public static System.Windows.Point AsWpfPoint(this IRI.Ham.SpatialBase.IPoint value)
+        public static System.Windows.Point AsWpfPoint(this IRI.Sta.Common.Primitives.IPoint value)
         {
             return new System.Windows.Point(value.X, value.Y);
         }

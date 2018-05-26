@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace IRI.Ham.Algebra
+namespace IRI.Sta.Algebra
 {
     [DataContract]
     public class NumberOfElementsException : Exception

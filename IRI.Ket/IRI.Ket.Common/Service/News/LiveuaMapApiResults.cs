@@ -1,5 +1,5 @@
-﻿using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
-using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Common.Helpers;
 using System;
 using System.Collections.Generic;

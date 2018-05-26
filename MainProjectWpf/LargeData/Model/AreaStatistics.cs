@@ -11,7 +11,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
     public struct AreaStatistics
     {
-        public AreaStatistics(IShapeCollection shapes)
+        public AreaStatistics(IEsriShapeCollection shapes)
         {
             this.Areas = new List<double>();
 
@@ -19,7 +19,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
             Threshold = 0;
 
-            foreach (ISimplePoints item in shapes)
+            foreach (IEsriSimplePoints item in shapes)
             {
                 this.NumberOfPoints += item.Points.Length;
 
@@ -56,7 +56,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
             if (this.NumberOfPoints == 0)
                 return 0;
   
-            return IRI.Ham.Statistics.Statistics.CalculateStandardDeviation(Areas);
+            return IRI.Sta.Statistics.Statistics.CalculateStandardDeviation(Areas);
         }
 
         public override string ToString()

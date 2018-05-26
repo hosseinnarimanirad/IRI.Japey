@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IRI.Ham.CoordinateSystem;
-using IRI.Ham.MeasurementUnit;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystem;
+using IRI.Sta.MeasurementUnit;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Test.CoordinateSystem
 {
@@ -13,7 +13,7 @@ namespace IRI.Test.CoordinateSystem
         [TestMethod]
         public void MainTest()
         {
-            var clarke = IRI.Ham.CoordinateSystem.Ellipsoids.Clarke1880Rgs;
+            var clarke = IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1880Rgs;
             double phi0 = 32.5;
             double phi1 = 29.65508274166;
             double phi2 = 35.31468809166;

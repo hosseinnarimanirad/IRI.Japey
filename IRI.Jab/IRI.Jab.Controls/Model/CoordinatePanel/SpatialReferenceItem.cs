@@ -1,5 +1,5 @@
-﻿using IRI.Ham.CoordinateSystem;
-using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.CoordinateSystem;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Globalization;
@@ -30,9 +30,9 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         //    }
         //}
 
-        //private IRI.Ham.SpatialBase.CoordinateSystems.SpatialReferenceType _spatialReference;
+        //private IRI.Sta.Common.CoordinateSystems.SpatialReferenceType _spatialReference;
 
-        //public IRI.Ham.SpatialBase.CoordinateSystems.SpatialReferenceType SpatialReference
+        //public IRI.Sta.Common.CoordinateSystems.SpatialReferenceType SpatialReference
         //{
         //    get { return _spatialReference; }
         //    set
@@ -74,7 +74,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
 
             this.YValue = _toString(point.Y);
 
-            this.ZoneNumber = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
+            this.ZoneNumber = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
 
             if (UILanguage == LanguageMode.Persian)
             {

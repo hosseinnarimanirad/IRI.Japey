@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using IRI.Ham.SpatialBase;
+using System.Threading.Tasks; 
 using IRI.Jab.Common.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Extensions;
+using IRI.Sta.Common.Primitives;
 using System.Diagnostics;
 
 namespace IRI.Jab.Cartography
@@ -61,16 +61,16 @@ namespace IRI.Jab.Cartography
 
         public const string DefaultArrowString = "F1 M 6.75,9L 8.75,11L 16,18L 9.5,18L 0,9L 9.5,0L 16,0L 8.75,7L 6.75,9 Z";
 
-        public static readonly Geometry DefaultArrow = Geometry.Parse(DefaultArrowString);
+        public static readonly System.Windows.Media.Geometry DefaultArrow = System.Windows.Media.Geometry.Parse(DefaultArrowString);
 
 
         List<Point> _pointCollection;
 
         bool _isPolyBezierMode;
 
-        Geometry _symbol;
+        System.Windows.Media.Geometry _symbol;
 
-        public Geometry Symbol
+        public System.Windows.Media.Geometry Symbol
         {
             get { return _symbol; }
             set { this._symbol = value; }
@@ -84,7 +84,7 @@ namespace IRI.Jab.Cartography
         /// <param name="pointCollection"></param>
         /// <param name="extent"></param>
         /// <param name="polyBezierMode"></param>
-        public SpecialLineLayer(Geometry symbol, VisualParameters parameters, List<Point> pointCollection, bool canEdit = true, bool polyBezierMode = true)
+        public SpecialLineLayer(System.Windows.Media.Geometry symbol, VisualParameters parameters, List<Point> pointCollection, bool canEdit = true, bool polyBezierMode = true)
         {
             if (!polyBezierMode)
                 throw new NotImplementedException();
@@ -108,7 +108,7 @@ namespace IRI.Jab.Cartography
 
         }
 
-        public void Update(Geometry symbol, List<Point> pointCollection, bool canEdit = true, bool polyBezierMode = true)
+        public void Update(System.Windows.Media.Geometry symbol, List<Point> pointCollection, bool canEdit = true, bool polyBezierMode = true)
         {
             this._symbol = symbol;
 

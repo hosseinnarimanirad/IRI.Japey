@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,8 +93,8 @@ namespace IRI.Ket.DataStructure.AdvancedStructures
         }
 
 
-        private IRI.Ham.SpatialBase.BoundingBox _minimumBoundingBox;
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        private IRI.Sta.Common.Primitives.BoundingBox _minimumBoundingBox;
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return _minimumBoundingBox; }
             set

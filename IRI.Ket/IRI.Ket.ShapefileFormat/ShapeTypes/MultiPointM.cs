@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
@@ -17,7 +18,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Ham.SpatialBase.BoundingBox boundingBox;
+        private IRI.Sta.Common.Primitives.BoundingBox boundingBox;
 
         private EsriPoint[] points;
 
@@ -67,7 +68,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = IRI.Ham.SpatialBase.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Ham.SpatialBase.IPoint>());
+            this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Sta.Common.Primitives.IPoint>());
 
             this.points = points;
 
@@ -89,7 +90,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
              
         }
 
-        internal EsriMultiPointM(IRI.Ham.SpatialBase.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriMultiPointM(IRI.Sta.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
             this.boundingBox = boundingBox;
 
@@ -104,11 +105,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriMultiPointM(EsriPointM[] points)
         {
-            //this.boundingBox = new IRI.Ham.SpatialBase.BoundingBox(xMin: MapStatistics.GetMinX(points),
+            //this.boundingBox = new IRI.Sta.Common.Primitives.BoundingBox(xMin: MapStatistics.GetMinX(points),
             //                                    yMin: MapStatistics.GetMinY(points),
             //                                    xMax: MapStatistics.GetMaxX(points),
             //                                    yMax: MapStatistics.GetMaxY(points));
-            this.boundingBox = IRI.Ham.SpatialBase.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Ham.SpatialBase.IPoint>());
+            this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Sta.Common.Primitives.IPoint>());
 
 
             this.points = new EsriPoint[points.Length];
@@ -182,7 +183,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Ham.SpatialBase.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -230,17 +231,17 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Ham.SpatialBase.Point, IRI.Ham.SpatialBase.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<Ham.SpatialBase.IPoint, Ham.SpatialBase.IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform)
         {
             return new EsriMultiPointM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.measures);
         }

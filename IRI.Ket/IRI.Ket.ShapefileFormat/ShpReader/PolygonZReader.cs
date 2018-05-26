@@ -27,7 +27,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 throw new NotImplementedException();
             }
 
-            IRI.Ham.SpatialBase.BoundingBox boundingBox = this.ReadBoundingBox();
+            IRI.Sta.Common.Primitives.BoundingBox boundingBox = this.ReadBoundingBox();
 
             int numParts = shpReader.ReadInt32();
 

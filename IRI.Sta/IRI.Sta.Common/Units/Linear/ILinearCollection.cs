@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Ham.Algebra;
+using IRI.Sta.Algebra;
 
-namespace IRI.Ham.MeasurementUnit
+namespace IRI.Sta.MeasurementUnit
 {
     public interface ILinearCollection : IEnumerable<LinearUnit>
     {

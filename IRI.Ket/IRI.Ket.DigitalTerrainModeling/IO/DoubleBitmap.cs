@@ -6,21 +6,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Collections;
-using IRI.Ham.Statistics;
+using IRI.Sta.Statistics;
 
 
 namespace IRI.Ket.DigitalTerrainModeling
 {
     public static class DoubleBitmap
     {
-        public static Bitmap DoubleToBitmapLinear(IRI.Ham.Algebra.Matrix data)
+        public static Bitmap DoubleToBitmapLinear(IRI.Sta.Algebra.Matrix data)
         {
 
             Bitmap result = new Bitmap(data.NumberOfColumns, data.NumberOfRows);
 
-            double Max = IRI.Ham.Statistics.Statistics.GetMax(data);
+            double Max = IRI.Sta.Statistics.Statistics.GetMax(data);
 
-            double Min = IRI.Ham.Statistics.Statistics.GetMin(data);
+            double Min = IRI.Sta.Statistics.Statistics.GetMin(data);
 
             for (int i = 0; i < data.NumberOfRows; i++)
             {
@@ -41,7 +41,7 @@ namespace IRI.Ket.DigitalTerrainModeling
             return result;
         }
 
-        public static Bitmap DoubleToBitmapSimple(IRI.Ham.Algebra.Matrix data)
+        public static Bitmap DoubleToBitmapSimple(IRI.Sta.Algebra.Matrix data)
         {
             Bitmap result = new Bitmap(data.NumberOfColumns, data.NumberOfRows);
 

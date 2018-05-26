@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model.Google
+namespace IRI.Sta.Common.Model.Google
 {
     public class GoogleDistanceMatrixResult
     {

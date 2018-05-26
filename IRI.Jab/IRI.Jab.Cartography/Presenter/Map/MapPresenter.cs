@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Cartography.Model.Map;
 using IRI.Jab.Cartography.TileServices;
@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static System.Windows.Media.Colors;
+using WpfPoint = System.Windows.Point;
 
 namespace IRI.Jab.Cartography.Presenter.Map
 {
@@ -136,9 +137,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
         //}
 
 
-        private Ham.SpatialBase.Point _currentPoint;
+        private Sta.Common.Primitives.Point _currentPoint;
 
-        public Ham.SpatialBase.Point CurrentPoint
+        public Sta.Common.Primitives.Point CurrentPoint
         {
             get { return _currentPoint; }
             set
@@ -339,7 +340,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
 
-        public IRI.Ham.SpatialBase.BoundingBox CurrentExtent
+        public IRI.Sta.Common.Primitives.BoundingBox CurrentExtent
         {
             get
             {
@@ -473,12 +474,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 {
                     _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
                     {
-                        this.UpdateCurrentEditingPoint(new Ham.SpatialBase.Point(l.X, l.Y));
+                        this.UpdateCurrentEditingPoint(new Sta.Common.Primitives.Point(l.X, l.Y));
                     };
 
                     _currentEditingLayer.RequestZoomToPoint = (p) =>
                     {
-                        this.Zoom(IRI.Ham.SpatialBase.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
+                        this.Zoom(IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
                     };
 
                     _currentEditingLayer.RequestZoomToGeometry = g =>
@@ -502,7 +503,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                       Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
                       return;
                   }
-                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Ham.SpatialBase.Point(param.X, param.Y));
+                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Sta.Common.Primitives.Point(param.X, param.Y));
                   this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
 
               });
@@ -538,7 +539,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Func<int> RequestCurrentZoomLevel;
 
-        public Func<Ham.SpatialBase.BoundingBox> RequestCurrentExtent;
+        public Func<Sta.Common.Primitives.BoundingBox> RequestCurrentExtent;
 
         public Action RequestRefresh;
 
@@ -554,11 +555,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<double> RequestZoomToScale;
 
-        public Action<Ham.SpatialBase.Point, double> RequestZoomToPoint;
+        public Action<Sta.Common.Primitives.Point, double> RequestZoomToPoint;
 
-        public Action<Ham.SpatialBase.Point, int, Action> RequestZoomToGoogleScale;
+        public Action<Sta.Common.Primitives.Point, int, Action> RequestZoomToGoogleScale;
 
-        public Action<Ham.SpatialBase.BoundingBox, Action> RequestZoomToExtent;
+        public Action<Sta.Common.Primitives.BoundingBox, Action> RequestZoomToExtent;
 
         public Action<SqlGeometry> RequestZoomToFeature;
 
@@ -568,9 +569,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestPan;
 
-        public Action<Ham.SpatialBase.Point, Action> RequestPanTo;
+        public Action<Sta.Common.Primitives.Point, Action> RequestPanTo;
 
-        public Action<int, Ham.SpatialBase.Point, Action, bool> RequestZoomToLevelAndCenter;
+        public Action<int, Sta.Common.Primitives.Point, Action, bool> RequestZoomToLevelAndCenter;
 
         public Action<MapOptionsEventArgs<FrameworkElement>> RequestRegisterMapOptions;
 
@@ -594,9 +595,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
 
 
-        public Action<List<Ham.SpatialBase.Point>> RequestFlashPoints;
+        public Action<List<Sta.Common.Primitives.Point>> RequestFlashPoints;
 
-        public Action<Ham.SpatialBase.Point> RequestFlashPoint;
+        public Action<Sta.Common.Primitives.Point> RequestFlashPoint;
 
 
         public Func<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
@@ -611,12 +612,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Func<VectorLayer, Task> RequestAddLayer;
 
-        public void UpdateCurrentEditingPoint(Ham.SpatialBase.Point webMercatorPoint)
+        public void UpdateCurrentEditingPoint(Sta.Common.Primitives.Point webMercatorPoint)
         {
             MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
         }
 
-        public Action<string, List<Ham.SpatialBase.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
+        public Action<string, List<Sta.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
 
         public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawingAsync;
@@ -641,7 +642,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action RequestGoTo;
 
-        public Action<Ham.SpatialBase.IPoint> RequestAddPointToNewDrawing;
+        public Action<IPoint> RequestAddPointToNewDrawing;
 
         public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
 
@@ -650,7 +651,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
 
-        public Func<Task<IRI.Ham.SpatialBase.Point>> RequestGetPoint;
+        public Func<Task<IRI.Sta.Common.Primitives.Point>> RequestGetPoint;
 
         #endregion
 
@@ -815,7 +816,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestAddLayer?.Invoke(layer);
         }
 
-        public void AddPolyBezierLayer(string name, List<Ham.SpatialBase.Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
+        public void AddPolyBezierLayer(string name, List<Sta.Common.Primitives.Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
         {
             this.RequestAddPolyBezier?.Invoke(name, bezierPoints, symbol, showSymbolOnly, decorationVisuals);
         }
@@ -845,29 +846,29 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestRemoveLayer?.Invoke(layer);
         }
 
-        public void FlashPoints(List<Ham.SpatialBase.Point> points)
+        public void FlashPoints(List<Sta.Common.Primitives.Point> points)
         {
             this.RequestFlashPoints?.Invoke(points);
         }
 
-        public void FlashPoint(Ham.SpatialBase.Point point)
+        public void FlashPoint(Sta.Common.Primitives.Point point)
         {
             this.RequestFlashPoint?.Invoke(point);
         }
 
-        public void PanTo(Ham.SpatialBase.Point point, Action callback)
+        public void PanTo(Sta.Common.Primitives.Point point, Action callback)
         {
             this.RequestPanTo?.Invoke(point, callback);
         }
 
-        public void ZoomToLevelAndCenter(int zoomLevel, Ham.SpatialBase.Point centerMapPoint, Action callback = null, bool withAnimation = true)
+        public void ZoomToLevelAndCenter(int zoomLevel, Sta.Common.Primitives.Point centerMapPoint, Action callback = null, bool withAnimation = true)
         {
             this.RequestZoomToLevelAndCenter?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
         }
 
-        public void PanToGeographicPoint(IRI.Ham.SpatialBase.IPoint point, Action callback = null)
+        public void PanToGeographicPoint(Sta.Common.Primitives.IPoint point, Action callback = null)
         {
-            var webMercatorPoint = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
+            var webMercatorPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 
             this.PanTo(webMercatorPoint, callback);
         }
@@ -912,17 +913,17 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestZoomToScale?.Invoke(mapScale);
         }
 
-        public void Zoom(double mapScale, Ham.SpatialBase.Point center)
+        public void Zoom(double mapScale, Sta.Common.Primitives.Point center)
         {
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleScale(int googleScale, Ham.SpatialBase.Point center, Action callback)
+        public void ZoomToGoogleScale(int googleScale, Sta.Common.Primitives.Point center, Action callback)
         {
             this.RequestZoomToGoogleScale?.Invoke(center, googleScale, callback);
         }
 
-        public void ZoomToExtent(Ham.SpatialBase.BoundingBox boundingBox, Action callback = null)
+        public void ZoomToExtent(Sta.Common.Primitives.BoundingBox boundingBox, Action callback = null)
         {
             this.RequestZoomToExtent?.Invoke(boundingBox, callback);
         }
@@ -1061,7 +1062,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             return result;
         }
 
-        public Task<Geometry> Edit(List<Ham.SpatialBase.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
+        public Task<Geometry> Edit(List<Sta.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
         {
             if (points == null || points.Count < 1)
             {
@@ -1090,21 +1091,21 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.MapAction = action;
         }
 
-        public void FireExtentChanged(Ham.SpatialBase.BoundingBox currentExtent)
+        public void FireExtentChanged(Sta.Common.Primitives.BoundingBox currentExtent)
         {
             this.RaisePropertyChanged(nameof(CurrentExtent));
 
             this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
         }
 
-        public void FireMouseMove(Point currentPoint)
+        public void FireMouseMove(WpfPoint currentPoint)
         {
-            this.CurrentPoint = new Ham.SpatialBase.Point(currentPoint.X, currentPoint.Y);
+            this.CurrentPoint = new Sta.Common.Primitives.Point(currentPoint.X, currentPoint.Y);
 
             this.OnMouseMove?.Invoke(this, currentPoint);
         }
 
-        public void FireMapMouseUp(Point currentPoint)
+        public void FireMapMouseUp(WpfPoint currentPoint)
         {
             this.OnMapMouseUp?.Invoke(this, currentPoint);
         }
@@ -1126,7 +1127,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestRemoveMapOptions?.Invoke();
         }
 
-        public ObservableCollection<System.Data.DataTable> Identify(IRI.Ham.SpatialBase.Point arg)
+        public ObservableCollection<System.Data.DataTable> Identify(IRI.Sta.Common.Primitives.Point arg)
         {
             if (RequestIdentify != null)
             {
@@ -1150,7 +1151,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        public Task<IRI.Ham.SpatialBase.Point> GetPoint()
+        public Task<IRI.Sta.Common.Primitives.Point> GetPoint()
         {
             if (RequestGetPoint != null)
             {
@@ -1158,7 +1159,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
             else
             {
-                return new Task<Ham.SpatialBase.Point>(() => Ham.SpatialBase.Point.NaN);
+                return new Task<Sta.Common.Primitives.Point>(() => Sta.Common.Primitives.Point.NaN);
             }
         }
 
@@ -1189,7 +1190,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 var dataSource = await Task.Run<IFeatureDataSource>(async () =>
                 {
-                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Ham.CoordinateSystem.MapProjection.WebMercator()))
+                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Sta.CoordinateSystem.MapProjection.WebMercator()))
                                     .Select(i => i.AsSqlGeometry(3857))
                                     .Where(i => !i.IsNotValidOrEmpty())
                                     .ToList();
@@ -1602,11 +1603,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         #region Events
 
-        public event EventHandler<Point> OnMouseMove;
+        public event EventHandler<WpfPoint> OnMouseMove;
 
         public event EventHandler<double> OnZoomChanged;
 
-        public event EventHandler<Point> OnMapMouseUp;
+        public event EventHandler<WpfPoint> OnMapMouseUp;
 
         public event EventHandler OnExtentChanged;
 

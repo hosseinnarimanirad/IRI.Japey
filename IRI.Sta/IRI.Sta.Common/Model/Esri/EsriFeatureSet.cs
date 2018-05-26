@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Model.Esri
+namespace IRI.Sta.Common.Model.Esri
 {
     public class EsriFeatureSet
     {

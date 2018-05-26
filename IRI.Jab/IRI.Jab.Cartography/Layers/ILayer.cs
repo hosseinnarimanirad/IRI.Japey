@@ -1,4 +1,4 @@
-﻿using IRI.Ham.SpatialBase;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
 using IRI.Ket.DataManagement;

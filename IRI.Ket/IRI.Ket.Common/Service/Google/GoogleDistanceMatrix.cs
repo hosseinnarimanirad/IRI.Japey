@@ -1,6 +1,6 @@
 ﻿
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Model.Google;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.Google;
 using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;

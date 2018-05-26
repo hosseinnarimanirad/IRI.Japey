@@ -1,5 +1,4 @@
-﻿//using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.Primitives;
+﻿ 
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;

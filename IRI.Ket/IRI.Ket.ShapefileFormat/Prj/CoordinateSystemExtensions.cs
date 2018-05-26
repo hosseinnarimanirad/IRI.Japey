@@ -1,4 +1,4 @@
-﻿using IRI.Ham.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Ket.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ namespace IRI.Ket.ShapefileFormat
 
             string ns = utm.FalseNorthing == 0 ? "N" : "S";
 
-            var zone = IRI.Ham.CoordinateSystem.MapProjection.MapProjects.FindZone(utm.CentralMeridian);
+            var zone = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(utm.CentralMeridian);
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(utm.Title) ? $"WGS_1984_UTM_Zone_{zone}{ns}" : utm.Title };
 

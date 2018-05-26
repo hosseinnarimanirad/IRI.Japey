@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using sfc = IRI.Ket.Spatial.Primitives;
-using spatial = IRI.Ham.SpatialBase;
+using spatial = IRI.Sta.Common.Primitives;
 
 namespace IRI.MainProjectWPF
 {

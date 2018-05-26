@@ -1,5 +1,5 @@
 ﻿
-using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
 using IRI.Ket.Common.Gpx;
 using Microsoft.SqlServer.Types;
 using System;

@@ -1,12 +1,12 @@
-﻿using IRI.Ham.Common.Extensions;
-using IRI.Ham.SpatialBase;
-using IRI.Ham.SpatialBase.CoordinateSystems.MapProjection;
+﻿using IRI.Sta.Common.Extensions;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.CoordinateSystems.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.SpatialBase.Primitives
+namespace IRI.Sta.Common.Primitives
 {
     public class Geometry
     {
@@ -193,7 +193,7 @@ namespace IRI.Ham.SpatialBase.Primitives
                 //return CreatePointOrLineString(points, srid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon);
+                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon) { Srid = srid };
 
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:

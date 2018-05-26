@@ -1,10 +1,10 @@
-﻿using IRI.Ham.MeasurementUnit;
+﻿using IRI.Sta.MeasurementUnit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ham.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystem.MapProjection
 {
     public static class DefaultMapProjections
     {
