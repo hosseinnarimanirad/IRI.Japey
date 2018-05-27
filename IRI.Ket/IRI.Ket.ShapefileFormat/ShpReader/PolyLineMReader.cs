@@ -10,14 +10,14 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolyLineMReader : MeasuresReader<EsriPolyLineM>
+    public class PolyLineMReader : MeasuresReader<EsriPolylineM>
     { 
         public PolyLineMReader(string fileName)
             : base(fileName, EsriShapeType.EsriPolyLineM)
         {
         }
 
-        protected override EsriPolyLineM ReadElement()
+        protected override EsriPolylineM ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
@@ -47,10 +47,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriPolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolylineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
 
-        public static EsriPolyLineM Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolylineM Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             if (contentLength == 38)
             {
@@ -83,7 +83,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriPolyLineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+            return new EsriPolylineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
     }
 }

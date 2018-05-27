@@ -595,7 +595,7 @@ namespace IRI.Ket.ShapefileFormat
 
         private static IEsriShapeCollection ExtractPolyLines(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)
         {
-            List<EsriPolyLine> geometries = new List<EsriPolyLine>(indexes.Count);
+            List<EsriPolyline> geometries = new List<EsriPolyline>(indexes.Count);
 
             for (int i = 0; i < indexes.Count; i++)
             {
@@ -606,7 +606,7 @@ namespace IRI.Ket.ShapefileFormat
                 geometries[i] = PolyLineReader.Read(shpReader, offset, contentLength);
             }
 
-            return new EsriShapeCollection<EsriPolyLine>(geometries);
+            return new EsriShapeCollection<EsriPolyline>(geometries);
         }
 
         private static IEsriShapeCollection ExtractPolygons(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)

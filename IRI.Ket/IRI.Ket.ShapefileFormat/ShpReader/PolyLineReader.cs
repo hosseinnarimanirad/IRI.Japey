@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PolyLineReader : PointsReader<EsriPolyLine>
+    public class PolyLineReader : PointsReader<EsriPolyline>
     {
         //Because this specification does not forbid consecutive points with identical coordinates,
         //shapefile readers must handle such cases. On the other hand, the degenerate, zero length
@@ -20,7 +20,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
         }
 
-        protected override EsriPolyLine ReadElement()
+        protected override EsriPolyline ReadElement()
         {
             int shapeType = shpReader.ReadInt32();
 
@@ -44,10 +44,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             EsriPoint[] points = this.ReadPoints(numPoints);
 
-            return new EsriPolyLine(boundingBox, parts, points);
+            return new EsriPolyline(boundingBox, parts, points);
         }
 
-        public static EsriPolyLine Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolyline Read(System.IO.BinaryReader reader, int offset, int contentLength)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -69,7 +69,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var points = ShpBinaryReader.ReadPoints(reader, numPoints);
 
-            return new EsriPolyLine(boundingBox, parts, points);
+            return new EsriPolyline(boundingBox, parts, points);
         }
     }
 }

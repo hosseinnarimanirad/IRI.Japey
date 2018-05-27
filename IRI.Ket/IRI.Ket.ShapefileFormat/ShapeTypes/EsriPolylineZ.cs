@@ -12,7 +12,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct EsriPolyLineZ : IEsriPointsWithZ
+    public struct EsriPolylineZ : IEsriPointsWithZ
     {
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.zValues; }
         }
 
-        public EsriPolyLineZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
+        public EsriPolylineZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
         {
             if (points.Length != zValues.Length || points.Length != measures.Length)
             {
@@ -135,7 +135,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
               
         }
 
-        public EsriPolyLineZ(IRI.Sta.Common.Primitives.BoundingBox boundingBox,
+        public EsriPolylineZ(IRI.Sta.Common.Primitives.BoundingBox boundingBox,
                             int[] parts,
                             EsriPoint[] points,
                             double minZ,
@@ -317,7 +317,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Z,M values are igonred
         /// </summary>
         /// <returns></returns>
-        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyLineZ polyline, Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
+        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolylineZ polyline, Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
                new KmlFormat.Primitives.PlacemarkType();
@@ -373,7 +373,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public IEsriShape Transform(Func<IPoint, IPoint> transform)
         {
-            return new EsriPolyLineZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
+            return new EsriPolylineZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }
     }
 }
