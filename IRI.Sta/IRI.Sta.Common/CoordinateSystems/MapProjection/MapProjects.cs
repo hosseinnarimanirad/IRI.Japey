@@ -4,9 +4,7 @@ using System.Text;
 using IRI.Sta.MeasurementUnit;
 using IRI.Sta.Common.Primitives;
 using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
-using System.Linq;
-using IRI.Sta.Common.CoordinateSystems;
-using IRI.Sta.Common.Primitives;
+using System.Linq; 
 
 namespace IRI.Sta.CoordinateSystem.MapProjection
 {

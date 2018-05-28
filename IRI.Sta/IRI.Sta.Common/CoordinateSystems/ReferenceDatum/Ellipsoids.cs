@@ -4,7 +4,7 @@
 using System;
 using IRI.Sta.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Sta.CoordinateSystem
 {

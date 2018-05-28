@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.CoordinateSystems.MapProjection;
+﻿using IRI.Sta.CoordinateSystem.MapProjection;
    
 using System;
 using System.Collections.Generic;

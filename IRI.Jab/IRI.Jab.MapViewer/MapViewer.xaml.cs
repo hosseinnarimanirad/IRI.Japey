@@ -35,7 +35,7 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
-using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.MapViewer
 {

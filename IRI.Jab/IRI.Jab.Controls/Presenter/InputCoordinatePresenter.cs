@@ -6,7 +6,7 @@ using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
 using IRI.Jab.Controls.Extensions;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystem;
 
 namespace IRI.Jab.Controls.Presenter
 {

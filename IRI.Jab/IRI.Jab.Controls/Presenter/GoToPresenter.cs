@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.CoordinateSystems;
+using IRI.Sta.Common.Primitives; 
 using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
@@ -14,7 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystem;
 
 namespace IRI.Jab.Controls.Presenter
 {

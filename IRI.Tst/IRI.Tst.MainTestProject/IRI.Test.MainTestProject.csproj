@@ -78,6 +78,7 @@
     <Compile Include="Assets\SqlGeometrySamples.cs" />
     <Compile Include="Assets\SqlSpatialSamples\SqlGeometrySamples.cs" />
     <Compile Include="Common\HexStringHelper.cs" />
+    <Compile Include="Common\WebMercatorUtilityTest.cs" />
     <Compile Include="Common\WorldfileFormatTest.cs" />
     <Compile Include="CoordinateSystems\ChangeDatumTest.cs" />
     <Compile Include="CoordinateSystems\FourInOneUnitTest.cs" />

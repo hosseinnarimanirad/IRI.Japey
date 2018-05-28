@@ -23,7 +23,7 @@ using System.Collections.ObjectModel;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.MapMarkers;
-using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Cartography
 {

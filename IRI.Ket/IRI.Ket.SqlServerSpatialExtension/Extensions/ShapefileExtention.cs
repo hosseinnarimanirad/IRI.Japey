@@ -386,11 +386,11 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static EsriPolyLine LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPolyline LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty())
             {
-                return new EsriPolyLine();
+                return new EsriPolyline();
             }
 
             int numberOfGeometries = geometry.STNumGeometries().Value;
@@ -408,7 +408,7 @@ namespace IRI.Ket.SpatialExtensions
                 points.AddRange(GetPoints(geometry.STGeometryN(index), mapFunction));
             }
 
-            return new EsriPolyLine(points.ToArray(), parts.ToArray());
+            return new EsriPolyline(points.ToArray(), parts.ToArray());
         }
 
 

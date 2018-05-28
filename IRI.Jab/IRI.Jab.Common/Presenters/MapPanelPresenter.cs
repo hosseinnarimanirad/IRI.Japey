@@ -1,5 +1,4 @@
-﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.CoordinateSystems;
+﻿using IRI.Sta.Common.Primitives; 
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystem;
 
 namespace IRI.Jab.Common.Presenters
 {

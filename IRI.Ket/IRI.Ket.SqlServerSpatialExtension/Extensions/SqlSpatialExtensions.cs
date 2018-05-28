@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
 using IRI.Sta.Common.Helpers; 
-using IRI.Sta.Common.CoordinateSystems.MapProjection;
+using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Sta.Common.Model.Esri;
 
 namespace IRI.Ket.SpatialExtensions
