@@ -106,6 +106,27 @@ namespace IRI.Ket.ShapefileFormat
 
         }
 
+
+        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        {
+            var shapes = Read(shpFileName);
+
+            var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            List<T> result = new List<T>(shapes.Count);
+
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                var feature = mapPropertiesFunc(attributes[i]);
+
+                updateGeometryAction(shapes[i], feature);
+
+                result.Add(feature);
+            }
+
+            return result;
+        }
+
         public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CoordinateReferenceSystemBase targetCrs)
         {
             return Task.Run(() => Project(shpFileName, targetCrs));
@@ -465,7 +486,7 @@ namespace IRI.Ket.ShapefileFormat
         public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
         {
             Save(shpFileName, data, map, createEmptyDbf, overwrite);
-             
+
             SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
         }
 

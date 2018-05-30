@@ -125,10 +125,15 @@ namespace IRI.Jab.Cartography.Convertor
             }
             else
             {
-                graphics.DrawEllipse(pen, (float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight / 2.0), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight);
-                graphics.FillEllipse(brush, (float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight / 2.0), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight);
+                if (pen != null)
+                {
+                    graphics.DrawEllipse(pen, (float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight / 2.0), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight);
+                }
+                if (brush != null)
+                {
+                    graphics.FillEllipse(brush, (float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight / 2.0), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight);
+                }                
             }
-
         }
 
         private static void AddMultiPoint(drawing.Graphics graphics, SqlGeometry multiPoint, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, double pointSize, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)

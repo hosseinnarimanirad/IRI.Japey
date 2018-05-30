@@ -155,6 +155,76 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         }
 
+        public static List<Dictionary<string, object>> Read(string dbfFileName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters = true)
+        {
+            ChangeEncoding(dataEncoding);
+
+            DbfFile.fieldsEncoding = fieldHeaderEncoding;
+
+            DbfFile.correctFarsiCharacters = correctFarsiCharacters;
+
+            System.IO.Stream stream = new System.IO.FileStream(dbfFileName, System.IO.FileMode.Open);
+
+            System.IO.BinaryReader reader = new System.IO.BinaryReader(stream);
+
+            byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
+
+            DbfHeader header = IRI.Ket.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+
+            List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
+
+            if ((header.LengthOfHeader - 33) % 32 != 0) { throw new NotImplementedException(); }
+
+            int numberOfFields = (header.LengthOfHeader - 33) / 32;
+
+            for (int i = 0; i < numberOfFields; i++)
+            {
+                buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfFieldDescriptor)));
+
+                columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile.fieldsEncoding));
+            }
+
+            //System.Data.DataTable result = MakeTableSchema(tableName, columns);
+
+            var result = new List<Dictionary<string, object>>(header.NumberOfRecords);
+
+            ((FileStream)reader.BaseStream).Seek(header.LengthOfHeader, SeekOrigin.Begin);
+
+            for (int i = 0; i < header.NumberOfRecords; i++)
+            {
+                // First we'll read the entire record into a buffer and then read each field from the buffer
+                // This helps account for any extra space at the end of each record and probably performs better
+                buffer = reader.ReadBytes(header.LengthOfEachRecord);
+                BinaryReader recordReader = new BinaryReader(new MemoryStream(buffer));
+
+                // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
+                if (recordReader.ReadChar() == '*')
+                {
+                    continue;
+                }
+
+                Dictionary<string, object> values = new Dictionary<string, object>();
+
+                for (int j = 0; j < columns.Count; j++)
+                {
+                    int fieldLenth = columns[j].Length;
+
+                    //values[j] = MapFunction[columns[j].Type](recordReader.ReadBytes(fieldLenth));
+                    values.Add(columns[j].Name, MapFunction[columns[j].Type](recordReader.ReadBytes(fieldLenth)));
+                }
+
+                recordReader.Close();
+
+                result.Add(values);
+            }
+
+            reader.Close();
+
+            stream.Close();
+
+            return result;
+        }
+
         public static System.Data.DataTable Read(string dbfFileName, string tableName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters)
         {
             ChangeEncoding(dataEncoding);
@@ -506,7 +576,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         {
             int control = 0;
             try
-            { 
+            {
                 if (columns.Count != mapping.Count)
                 {
                     throw new NotImplementedException();
