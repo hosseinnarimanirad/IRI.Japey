@@ -150,6 +150,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriPointZ(result.X, result.Y, this.Z, this.Measure);
         }
 
+        public Geometry AsGeometry()
+        {
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
+        }
+
         #endregion
 
         public string AsExactString()

@@ -212,7 +212,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPoint[] GetPart(int partNo)
         {
-            return ShapeHelper.GetPoints(this, Parts[partNo]);
+            return ShapeHelper.GetEsriPoints(this, Parts[partNo]);
         }
 
 
@@ -229,7 +229,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 result.Append(string.Format("{0},",
                     SqlServerWktMapFunctions.PointZGroupElementToWkt(
-                        ShapeHelper.GetPoints(this, this.Parts[i]),
+                        ShapeHelper.GetEsriPoints(this, this.Parts[i]),
                         ShapeHelper.GetZValues(this, this.Parts[i]),
                         ShapeHelper.GetMeasures(this, this.Parts[i]))));
             }
@@ -251,7 +251,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             for (int i = 0; i < this.parts.Length; i++)
             {
                 result.AddRange(OgcWkbMapFunctions.ToWkbLinearRingZM(
-                        ShapeHelper.GetPoints(this, this.Parts[i]),
+                        ShapeHelper.GetEsriPoints(this, this.Parts[i]),
                         ShapeHelper.GetZValues(this, this.Parts[i]),
                         ShapeHelper.GetMeasures(this, this.Parts[i])));
             }
@@ -277,5 +277,25 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             return new EsriPolygonZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }
+
+        public Geometry AsGeometry()
+        {
+            if (this.NumberOfParts > 1)
+            {
+                Geometry[] parts = new Geometry[this.NumberOfParts];
+
+                for (int i = 0; i < NumberOfParts; i++)
+                {
+                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.Polygon);
+                }
+
+                return new Geometry(parts, GeometryType.MultiLineString);
+            }
+            else
+            {
+                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.Polygon);
+            }
+        }
+
     }
 }

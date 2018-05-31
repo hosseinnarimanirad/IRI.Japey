@@ -236,7 +236,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
-            FeatureSet result = new FeatureSet() { Fields = new List<Field>(), Features = new List<Feature>() };
+            FeatureSet result = new FeatureSet() { Fields = new List<Field>(), Features = new List<SqlFeature>() };
 
             try
             {
@@ -265,7 +265,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 {
                     var dict = new Dictionary<string, object>();
 
-                    var feature = new Feature();
+                    var feature = new SqlFeature();
 
                     for (int i = 0; i < reader.FieldCount; i++)
                     {

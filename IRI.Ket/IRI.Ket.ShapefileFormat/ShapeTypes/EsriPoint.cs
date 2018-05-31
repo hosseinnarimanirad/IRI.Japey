@@ -136,6 +136,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriPoint(result.X, result.Y);
         }
 
+        public Geometry AsGeometry()
+        {
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
+        }
+
         public static explicit operator EsriPoint(Point value)
         {
             return new EsriPoint(value.X, value.Y);

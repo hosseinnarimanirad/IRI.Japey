@@ -8,19 +8,19 @@ namespace IRI.Sta.Common.Model.Mapzen
 {
     public class MapzenIsochroneResult
     {
-        public Feature[] features { get; set; }
+        public MapzenFeature[] features { get; set; }
         public string id { get; set; }
         public string type { get; set; }
     }
 
-    public class Feature
+    public class MapzenFeature
     {
-        public Properties properties { get; set; }
+        public MapzenProperties properties { get; set; }
         public string type { get; set; }
         public MapzenGeometry geometry { get; set; }
     }
 
-    public class Properties
+    public class MapzenProperties
     {
         public float fillOpacity { get; set; }
         public string color { get; set; }

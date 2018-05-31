@@ -123,6 +123,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriPointM(result.X, result.Y, this.Measure);
         }
 
+        public Geometry AsGeometry()
+        {
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
+        }
+
         public bool AreExactlyTheSame(object obj)
         {
             if (obj.GetType() != typeof(EsriPointM))

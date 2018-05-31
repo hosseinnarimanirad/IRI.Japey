@@ -32,8 +32,8 @@ namespace IRI.Sta.Common.Model.Google
 
     public class Bounds
     {
-        public Location northeast { get; set; }
-        public Location southwest { get; set; }
+        public GoogleLocation northeast { get; set; }
+        public GoogleLocation southwest { get; set; }
     }
 
     //public class Northeast
@@ -59,9 +59,9 @@ namespace IRI.Sta.Common.Model.Google
         public Duration duration { get; set; }
         public Duration duration_in_traffic { get; set; }
         public string end_address { get; set; }
-        public End_Location end_location { get; set; }
+        public GoogleLocation end_location { get; set; }
         public string start_address { get; set; }
-        public Start_Location start_location { get; set; }
+        public GoogleLocation start_location { get; set; }
         public Step[] steps { get; set; }
         public object[] traffic_speed_entry { get; set; }
         public object[] via_waypoint { get; set; }
@@ -79,56 +79,56 @@ namespace IRI.Sta.Common.Model.Google
     //    public int value { get; set; }
     //}
 
-    public class End_Location
-    {
-        public float lat { get; set; }
-        public float lng { get; set; }
-    }
+    //public class End_Location
+    //{
+    //    public float lat { get; set; }
+    //    public float lng { get; set; }
+    //}
 
-    public class Start_Location
-    {
-        public float lat { get; set; }
-        public float lng { get; set; }
-    }
+    //public class Start_Location
+    //{
+    //    public float lat { get; set; }
+    //    public float lng { get; set; }
+    //}
 
     public class Step
     {
-        public Distance1 distance { get; set; }
-        public Duration1 duration { get; set; }
-        public End_Location1 end_location { get; set; }
+        public Distance distance { get; set; }
+        public Duration duration { get; set; }
+        public GoogleLocation end_location { get; set; }
         public string html_instructions { get; set; }
         public Polyline polyline { get; set; }
-        public Start_Location1 start_location { get; set; }
+        public GoogleLocation start_location { get; set; }
         public string travel_mode { get; set; }
         public string maneuver { get; set; }
     }
 
-    public class Distance1
-    {
-        public string text { get; set; }
-        public int value { get; set; }
-    }
+    //public class Distance1
+    //{
+    //    public string text { get; set; }
+    //    public int value { get; set; }
+    //}
 
-    public class Duration1
-    {
-        public string text { get; set; }
-        public int value { get; set; }
-    }
+    //public class Duration1
+    //{
+    //    public string text { get; set; }
+    //    public int value { get; set; }
+    //}
 
-    public class End_Location1
-    {
-        public float lat { get; set; }
-        public float lng { get; set; }
-    }
+    //public class End_Location1
+    //{
+    //    public float lat { get; set; }
+    //    public float lng { get; set; }
+    //}
 
     public class Polyline
     {
         public string points { get; set; }
     }
 
-    public class Start_Location1
-    {
-        public float lat { get; set; }
-        public float lng { get; set; }
-    }
+    //public class Start_Location1
+    //{
+    //    public float lat { get; set; }
+    //    public float lng { get; set; }
+    //}
 }

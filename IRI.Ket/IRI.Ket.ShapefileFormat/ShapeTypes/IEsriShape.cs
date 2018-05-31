@@ -32,5 +32,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null);
 
         IEsriShape Transform(Func<IPoint, IPoint> transform);
+
+        Geometry AsGeometry();
     }
 }

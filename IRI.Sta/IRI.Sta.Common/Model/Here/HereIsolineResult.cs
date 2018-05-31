@@ -7,10 +7,10 @@ namespace IRI.Sta.Common.Model.Here
 {
     public class HereIsolineResult
     {
-        public Response response { get; set; }
+        public MapzenResponse response { get; set; }
     }
 
-    public class Response
+    public class MapzenResponse
     {
         public Metainfo metaInfo { get; set; }
         public Center center { get; set; }

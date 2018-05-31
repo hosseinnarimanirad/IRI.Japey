@@ -22,9 +22,9 @@ namespace IRI.Test.MainTestProject
                             IRI.Ket.Common.Helpers.ResourceHelper.ReadAllText(Assembly.GetExecutingAssembly(), "IRI.Test.MainTestProject.Assets.PrjSamples.WGS 1984 Web Mercator (auxiliary sphere).prj"))
                             .AsMapProjection();
              
-            var sourceShapes = Shapefile.Read($"Assets\\ShapefileSamples\\sourceD900.shp").ToList();  
+            var sourceShapes = Shapefile.ReadShapes($"Assets\\ShapefileSamples\\sourceD900.shp").ToList();  
 
-            var targetShapes = Shapefile.Read($"Assets\\ShapefileSamples\\targetWebMercator.shp").ToList(); 
+            var targetShapes = Shapefile.ReadShapes($"Assets\\ShapefileSamples\\targetWebMercator.shp").ToList(); 
 
             var projected = Shapefile.Project(sourceShapes, d900Prj, webMercator); 
 

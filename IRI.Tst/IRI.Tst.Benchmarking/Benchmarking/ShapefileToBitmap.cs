@@ -31,7 +31,7 @@ namespace IRI.Benchmarking.Benchmarking
             DateTime t1 = DateTime.Now;                             //*
             //*********************************************************
             //
-            var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(dialog.FileName);
+            var shapes = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(dialog.FileName);
             //
             //*********************************************************
             watch.Stop();                                           //*

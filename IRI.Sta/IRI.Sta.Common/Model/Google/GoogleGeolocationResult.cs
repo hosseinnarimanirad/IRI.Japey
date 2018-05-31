@@ -9,7 +9,7 @@ namespace IRI.Sta.Common.Model.Google
     {
         public double accuracy { get; set; }
 
-        public Location location { get; set; }
+        public GoogleLocation location { get; set; }
 
         //public class Location
         //{

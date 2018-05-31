@@ -13,7 +13,7 @@ namespace IRI.Test.FileFormats
         {
             string shpFileName = @"D:\Data\0. UnitTestData\Geographic Shapefiles\ArcMap Output\Point.shp";
 
-            var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(shpFileName);
+            var shapes = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(shpFileName);
 
             var IShape = shapes[0];
 
@@ -27,7 +27,7 @@ namespace IRI.Test.FileFormats
 
             string kmlFileName = @"D:\Data\0. UnitTestData\Geographic Shapefiles\My Output\Point.kml";
 
-            string computedKml = IRI.Ket.ShapefileFormat.Shapefile.Read(shpFileName).AsKml();
+            string computedKml = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(shpFileName).AsKml();
 
             string actualKml = System.IO.File.ReadAllText(kmlFileName);
 
@@ -41,7 +41,7 @@ namespace IRI.Test.FileFormats
 
             string kmlFileName = @"D:\Data\0. UnitTestData\Geographic Shapefiles\My Output\MultipartLinestring.kml";
 
-            string computedKml = IRI.Ket.ShapefileFormat.Shapefile.Read(shpFileName).AsKml();
+            string computedKml = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(shpFileName).AsKml();
 
             string actualKml = System.IO.File.ReadAllText(kmlFileName);
 

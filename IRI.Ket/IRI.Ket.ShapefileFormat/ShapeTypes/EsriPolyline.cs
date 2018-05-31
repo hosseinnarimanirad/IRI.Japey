@@ -10,11 +10,11 @@ using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-  
-    
+
+
     public struct EsriPolyline : IEsriSimplePoints
     {
-       
+
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
@@ -93,7 +93,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             var boundingBoxes = points.Select(i => IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(i.Cast<IRI.Sta.Common.Primitives.IPoint>()));
 
             this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.GetMergedBoundingBox(boundingBoxes);
-            
+
         }
 
         public byte[] WriteContentsToByte()
@@ -132,10 +132,10 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPoint[] GetPart(int partNo)
         {
-            return ShapeHelper.GetPoints(this, Parts[partNo]);
+            return ShapeHelper.GetEsriPoints(this, Parts[partNo]);
         }
 
-       
+
         public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
@@ -149,14 +149,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 for (int i = 0; i < NumberOfParts; i++)
                 {
-                    result.Append(string.Format("{0},", SqlServerWktMapFunctions.PointGroupElementToWkt(ShapeHelper.GetPoints(this, this.Parts[i]))));
+                    result.Append(string.Format("{0},", SqlServerWktMapFunctions.PointGroupElementToWkt(ShapeHelper.GetEsriPoints(this, this.Parts[i]))));
                 }
 
                 return result.Remove(result.Length - 1, 1).Append(")").ToString();
             }
             else
             {
-                return string.Format("LINESTRING{0}", SqlServerWktMapFunctions.PointGroupElementToWkt(ShapeHelper.GetPoints(this, this.Parts[0])));
+                return string.Format("LINESTRING{0}", SqlServerWktMapFunctions.PointGroupElementToWkt(ShapeHelper.GetEsriPoints(this, this.Parts[0])));
             }
 
         }
@@ -171,7 +171,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             if (this.Parts.Count() == 1)
             {
-                result.AddRange(OgcWkbMapFunctions.ToWkbLineString(ShapeHelper.GetPoints(this, 0)));
+                result.AddRange(OgcWkbMapFunctions.ToWkbLineString(ShapeHelper.GetEsriPoints(this, 0)));
             }
             else
             {
@@ -183,7 +183,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 for (int i = 0; i < this.parts.Length; i++)
                 {
-                    result.AddRange(OgcWkbMapFunctions.ToWkbLineString(ShapeHelper.GetPoints(this, this.Parts[i])));
+                    result.AddRange(OgcWkbMapFunctions.ToWkbLineString(ShapeHelper.GetEsriPoints(this, this.Parts[i])));
                 }
             }
 
@@ -216,7 +216,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 coordinates = polyline.parts
                     .Select(i =>
-                        string.Join(" ", ShapeHelper.GetPoints(polyline, i)
+                        string.Join(" ", ShapeHelper.GetEsriPoints(polyline, i)
                         .Select(j =>
                         {
                             var temp = projectToGeodeticFunc(new IRI.Sta.Common.Primitives.Point(j.X, j.Y));
@@ -227,7 +227,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 coordinates = polyline.parts
                     .Select(i =>
-                        string.Join(" ", ShapeHelper.GetPoints(polyline, i)
+                        string.Join(" ", ShapeHelper.GetEsriPoints(polyline, i)
                         .Select(j => string.Format("{0},{1}", j.X, j.Y))
                         .ToArray()));
             }
@@ -273,6 +273,26 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             return new EsriPolyline(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts);
         }
+
+        public Geometry AsGeometry()
+        {
+            if (this.NumberOfParts > 1)
+            {
+                Geometry[] parts = new Geometry[this.NumberOfParts];
+
+                for (int i = 0; i < NumberOfParts; i++)
+                {
+                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString);
+                }
+
+                return new Geometry(parts, GeometryType.MultiLineString);
+            }
+            else
+            {
+                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString);
+            }
+        }
+
     }
 
 }

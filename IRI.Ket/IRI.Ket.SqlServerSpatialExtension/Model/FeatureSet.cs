@@ -11,6 +11,6 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
     {
         public List<Field> Fields { get; set; }
 
-        public List<Feature> Features { get; set; }
+        public List<SqlFeature> Features { get; set; }
     }
 }

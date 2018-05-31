@@ -91,6 +91,7 @@
     <Compile Include="CoordinateSystemUnitTest.cs" />
     <Compile Include="SpatialBaseTest.cs" />
     <Compile Include="SpatialConversions\TestGeoJsonToSqlGeometry.cs" />
+    <Compile Include="SpatialConversions\TestShapefileToGeometry.cs" />
     <Compile Include="SpatialConversions\TestShapefileToKml.cs" />
     <Compile Include="SpatialConversions\TestSqlSpatialToShapefile.cs" />
     <Compile Include="Spatial\KdTreeTest.cs" />

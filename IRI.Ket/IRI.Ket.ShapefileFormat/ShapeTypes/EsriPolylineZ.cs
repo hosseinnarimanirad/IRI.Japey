@@ -250,7 +250,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPoint[] GetPart(int partNo)
         {
-            return ShapeHelper.GetPoints(this, Parts[partNo]);
+            return ShapeHelper.GetEsriPoints(this, Parts[partNo]);
         }
 
 
@@ -268,7 +268,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 result.Append(
                     string.Format("{0},",
                     SqlServerWktMapFunctions.PointZGroupElementToWkt(
-                        ShapeHelper.GetPoints(this, i), ShapeHelper.GetZValues(this, i), ShapeHelper.GetMeasures(this, this.Parts[i]))));
+                        ShapeHelper.GetEsriPoints(this, i), ShapeHelper.GetZValues(this, i), ShapeHelper.GetMeasures(this, this.Parts[i]))));
             }
 
             return result.Remove(result.Length - 1, 1).Append(")").ToString();
@@ -286,7 +286,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             if (this.Parts.Count() == 1)
             {
                 result.AddRange(OgcWkbMapFunctions.ToWkbLineStringZM(
-                    ShapeHelper.GetPoints(this, 0), ShapeHelper.GetZValues(this, 0), ShapeHelper.GetMeasures(this, 0)));
+                    ShapeHelper.GetEsriPoints(this, 0), ShapeHelper.GetZValues(this, 0), ShapeHelper.GetMeasures(this, 0)));
             }
             else
             {
@@ -300,7 +300,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 {
                     result.AddRange(
                         OgcWkbMapFunctions.ToWkbLineStringZM(
-                            ShapeHelper.GetPoints(this, this.Parts[i]), ShapeHelper.GetZValues(this, this.Parts[i]), ShapeHelper.GetMeasures(this, this.Parts[i])));
+                            ShapeHelper.GetEsriPoints(this, this.Parts[i]), ShapeHelper.GetZValues(this, this.Parts[i]), ShapeHelper.GetMeasures(this, this.Parts[i])));
                 }
             }
 
@@ -334,7 +334,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 coordinates = polyline.parts
                     .Select(i =>
-                        string.Join(" ", ShapeHelper.GetPoints(polyline, i)
+                        string.Join(" ", ShapeHelper.GetEsriPoints(polyline, i)
                         .Select(j =>
                         {
                             var temp = projectToGeodeticFunc(new IRI.Sta.Common.Primitives.Point(j.X, j.Y));
@@ -345,7 +345,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 coordinates = polyline.Parts
                     .Select(i =>
-                        string.Join(" ", ShapeHelper.GetPoints(polyline, i)
+                        string.Join(" ", ShapeHelper.GetEsriPoints(polyline, i)
                         .Select(j => string.Format("{0},{1}", j.X, j.Y))
                         .ToArray()));
             }
@@ -375,5 +375,25 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             return new EsriPolylineZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }
+
+        public Geometry AsGeometry()
+        {
+            if (this.NumberOfParts > 1)
+            {
+                Geometry[] parts = new Geometry[this.NumberOfParts];
+
+                for (int i = 0; i < NumberOfParts; i++)
+                {
+                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString);
+                }
+
+                return new Geometry(parts, GeometryType.MultiLineString);
+            }
+            else
+            {
+                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString);
+            }
+        }
+
     }
 }

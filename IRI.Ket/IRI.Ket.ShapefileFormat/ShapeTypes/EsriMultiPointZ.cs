@@ -313,6 +313,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriMultiPointZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.ZValues, this.Measures);
         }
 
+        public Geometry AsGeometry()
+        {
+            return new Geometry(points.Select(p => new Point(p.X, p.Y)).ToArray(), GeometryType.MultiPoint);
+        }
+
         #endregion
     }
 }

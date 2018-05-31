@@ -56,7 +56,7 @@ namespace IRI.Test.ShapefileFormatTest
 
             string fileName = string.Join("\\", info.Parent.Parent.FullName, "Resources\\regions.shp");
 
-            this.polygons = IRI.Ket.ShapefileFormat.Shapefile.Read(fileName);
+            this.polygons = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(fileName);
 
         }
 
@@ -104,7 +104,7 @@ namespace IRI.Test.ShapefileFormatTest
         [TestMethod]
         public void TestPolylineAsSqlServerWktStringMethod()
         {
-            EsriPolyLine polyLine = new EsriPolyLine(this.pointCollection);
+            EsriPolyline polyLine = new EsriPolyline(this.pointCollection);
 
             SqlGeometry sqlPolyline = SqlGeometry.STMLineFromText(new SqlChars(new SqlString(polyLine.AsSqlServerWkt())), 0);
 

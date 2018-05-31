@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Sta.Common.Model.Google
 {
-    public class Location
+    public class GoogleLocation
     {
 
         [JsonProperty("lat")]
@@ -41,17 +41,17 @@ namespace IRI.Sta.Common.Model.Google
     {
 
         [JsonProperty("northeast")]
-        public Location Northeast { get; set; }
+        public GoogleLocation Northeast { get; set; }
 
         [JsonProperty("southwest")]
-        public Location Southwest { get; set; }
+        public GoogleLocation Southwest { get; set; }
     }
 
     public class Geometry
     {
 
         [JsonProperty("location")]
-        public Location Location { get; set; }
+        public GoogleLocation Location { get; set; }
 
         [JsonProperty("viewport")]
         public Viewport Viewport { get; set; }

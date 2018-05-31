@@ -1,4 +1,5 @@
 ﻿using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,29 @@ namespace IRI.Ket.ShapefileFormat
 {
     static class ShapeHelper
     {
-        internal static EsriPoint[] GetPoints(IEsriSimplePoints shape, int startIndex)
+        internal static Point[] GetPoints(IEsriSimplePoints shape, int startIndex)
+        {
+            int partNumber = Array.IndexOf(shape.Parts, startIndex);
+
+            int lastIndex = (partNumber == shape.NumberOfParts - 1) ? shape.NumberOfPoints - 1 : shape.Parts[partNumber + 1] - 1;
+
+            //do not add last point for polygon
+            if (shape is EsriPolygon || shape is EsriPolygonM || shape is EsriPolygonZ)
+            {
+                lastIndex = lastIndex - 1;
+            }
+
+            Point[] result = new Point[lastIndex - startIndex + 1];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y);
+            }
+
+            return result;
+        }
+
+        internal static EsriPoint[] GetEsriPoints(IEsriSimplePoints shape, int startIndex)
         {
             int partNumber = Array.IndexOf(shape.Parts, startIndex);
 

@@ -63,7 +63,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             _table.Columns.Add(geoColumn);
 
-            var geometries = ShapefileFormat.Shapefile.Read(shapeFileName);
+            var geometries = ShapefileFormat.Shapefile.ReadShapes(shapeFileName);
 
             this.Extent = geometries.MainHeader.MinimumBoundingBox;
 

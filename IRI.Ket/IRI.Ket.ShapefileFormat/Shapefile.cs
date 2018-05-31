@@ -11,6 +11,7 @@ using IRI.Sta.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -19,12 +20,12 @@ namespace IRI.Ket.ShapefileFormat
     {
         //private static System.ComponentModel.License license = null;
 
-        public static Task<IEsriShapeCollection> ReadAsync(string fileName)
+        public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName)
         {
-            return Task.Run(() => { return Read(fileName); });
+            return Task.Run(() => { return ReadShapes(fileName); });
         }
 
-        public static IEsriShapeCollection Read(string shpFileName)
+        public static IEsriShapeCollection ReadShapes(string shpFileName)
         {
             //System.ComponentModel.LicenseManager.Validate(typeof(Shapefile));
 
@@ -102,14 +103,12 @@ namespace IRI.Ket.ShapefileFormat
                 default:
                     throw new NotImplementedException();
             }
-
-
         }
 
 
         public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
         {
-            var shapes = Read(shpFileName);
+            var shapes = ReadShapes(shpFileName);
 
             var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
 
@@ -121,6 +120,24 @@ namespace IRI.Ket.ShapefileFormat
 
                 updateGeometryAction(shapes[i], feature);
 
+                result.Add(feature);
+            }
+
+            return result;
+        }
+
+        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        {
+            var shapes = ReadShapes(shpFileName);
+
+            var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            List<Feature> result = new List<Feature>(shapes.Count);
+
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
+                 
                 result.Add(feature);
             }
 
@@ -393,7 +410,7 @@ namespace IRI.Ket.ShapefileFormat
 
             var sourceCrs = new Prj.PrjFile(sourcePrj).AsMapProjection();
 
-            var data = Read(shpFileName).ToList();
+            var data = ReadShapes(shpFileName).ToList();
 
             return Project(data, sourceCrs, targetCrs);
 
@@ -506,7 +523,7 @@ namespace IRI.Ket.ShapefileFormat
         {
             ShxReader shxFile = new ShxReader(Shapefile.GetShxFileName(shpFileName));
 
-            var shapes = await ReadAsync(shpFileName);
+            var shapes = await ReadShapesAsync(shpFileName);
 
             int numberOfRecords = shxFile.NumberOfRecords;
 

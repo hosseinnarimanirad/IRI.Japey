@@ -7,7 +7,7 @@ using Microsoft.SqlServer.Types;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Model
 {
-    public class Feature : ISqlGeometryAware
+    public class SqlFeature : ISqlGeometryAware
     {
         private SqlGeometry _geometry;
 
