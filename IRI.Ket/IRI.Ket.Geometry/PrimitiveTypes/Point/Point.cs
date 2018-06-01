@@ -4,11 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IRI.Sta.Common.Ogc;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Geometry
 {
     [Serializable]
-    public struct Point : IRI.Ket.Geometry.IPoint, IComparable<Point>
+    public struct Point : IRI.Sta.Common.Primitives.IPoint, IComparable<Point>
     {
         public static PointComparisonPriority ComparisonPriority = PointComparisonPriority.YBased;
 
@@ -116,5 +118,46 @@ namespace IRI.Ket.Geometry
         }
 
         #endregion
+
+        public byte[] AsWkb()
+        {
+            byte[] result = new byte[21];
+
+            result[0] = (byte)WkbByteOrder.WkbNdr;
+
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, 4);
+
+            Array.Copy(BitConverter.GetBytes(X), 0, result, 5, 8);
+
+            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, 8);
+
+            return result;
+        }
+
+        public string AsExactString()
+        {
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17}", this.X, this.Y);
+        }
+
+        public bool AreExactlyTheSame(object obj)
+        {
+            if (obj.GetType() != typeof(Point))
+            {
+                return false;
+            }
+
+            return this.AsExactString() == ((Point)obj).AsExactString();
+        }
+
+        public double DistanceTo(IPoint point)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static double GetDistance(Point first, Point second)
+        {
+            return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+        }
+
     }
 }

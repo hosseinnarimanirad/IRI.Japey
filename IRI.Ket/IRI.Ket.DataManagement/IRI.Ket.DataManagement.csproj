@@ -98,6 +98,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSource\JsonSource.cs" />
     <Compile Include="DataSource\DatabaseSources\SqlServerScaleDependentDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\ClusteredGeoTaggedImageSource.cs" />
     <Compile Include="DataSource\RasterDataSources\GeoRasterFileDataSource.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="DataSource\ShapefileDataStore.cs" />
     <Compile Include="DataSource\RasterDataSources\ZippedImagePyramidDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\ImagePyramidDataSource.cs" />
+    <Compile Include="Infrastructure\ZippedJsonArchiveInfrastructure.cs" />
     <Compile Include="Model\IDataSource.cs" />
     <Compile Include="Model\IFeatureDataSource.cs" />
     <Compile Include="Model\IScaleDependentDataSource.cs" />

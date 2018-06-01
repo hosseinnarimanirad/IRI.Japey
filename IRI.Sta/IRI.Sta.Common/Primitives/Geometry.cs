@@ -168,6 +168,12 @@ namespace IRI.Sta.Common.Primitives
 
         }
 
+
+        public static Geometry Create(double x, double y, int srid = 0)
+        {
+            return new Geometry(new Point[] { new Point(x, y) }, GeometryType.Point, srid);
+        }
+
         /// <summary>
         /// For Polygons do not repeat first point in the last point
         /// </summary>

@@ -190,5 +190,19 @@ namespace IRI.Ket.Common.Helpers
 
             return bytes;
         }
+
+        public static string ToString(Stream stream, Encoding encoding)
+        {
+            //return encoding.GetString(ToByteArray(stream));
+
+            string result;
+
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                result = reader.ReadToEnd();
+            }
+
+            return result;
+        }
     }
 }

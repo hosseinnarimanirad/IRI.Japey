@@ -64,6 +64,12 @@ namespace IRI.Sta.Common.Primitives
             return this.AsExactString() == ((Point)obj).AsExactString();
         }
 
+        public bool AreTheSame(Point point, int precision)
+        {
+            return Math.Round(this.X, precision).Equals(Math.Round(point.X, precision)) &&
+                    Math.Round(this.Y, precision).Equals(Math.Round(point.Y, precision));
+        }
+
         public double DistanceTo(IPoint point)
         {
             return GetDistance(this, new Point(point.X, point.Y));
@@ -102,7 +108,17 @@ namespace IRI.Sta.Common.Primitives
 
         public byte[] AsWkb()
         {
-            return this.AsWkb();
+            byte[] result = new byte[21];
+
+            result[0] = (byte)WkbByteOrder.WkbNdr;
+
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, 4);
+
+            Array.Copy(BitConverter.GetBytes(X), 0, result, 5, 8);
+
+            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, 8); 
+
+            return result;
         }
 
 
@@ -121,6 +137,16 @@ namespace IRI.Sta.Common.Primitives
             {
                 return new Point(values[1], values[0]);
             }
+        }
+
+        public static bool operator ==(Point first, Point second)
+        {
+            return first.Equals(second);
+        }
+
+        public static bool operator !=(Point first, Point second)
+        {
+            return !first.Equals(second);
         }
 
 

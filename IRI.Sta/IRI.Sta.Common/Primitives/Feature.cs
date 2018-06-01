@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IRI.Sta.Common.Primitives
 {
-    public class Feature
+    public class Feature : IGeometryAware
     {
         public Geometry Geometry { get; set; }
 
