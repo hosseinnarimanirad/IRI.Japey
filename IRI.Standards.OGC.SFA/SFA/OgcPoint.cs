@@ -57,7 +57,7 @@ namespace IRI.Standards.OGC.SFA
 
             int length = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
 
-            point = IRI.Ket.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
+            point = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
                                 reader.ReadBytes(length));
         }
 
@@ -71,7 +71,7 @@ namespace IRI.Standards.OGC.SFA
 
                 writer.Write(type);
 
-                writer.Write(IRI.Ket.Common.Helpers.StreamHelper.StructureToByteArray(point));
+                writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(point));
 
                 writer.Close();
 

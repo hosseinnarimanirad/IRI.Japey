@@ -207,9 +207,9 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        IRI.Sta.Common.Primitives.Point result =
+        //        IRI.Msh.Common.Primitives.Point result =
         //            IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
-        //                    new IRI.Sta.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
+        //                    new IRI.Msh.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
         //                    IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result.X, result.Y);

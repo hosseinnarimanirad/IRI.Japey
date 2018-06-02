@@ -44,7 +44,7 @@ namespace IRI.Standards.OGC.SFA
 
                 foreach (T item in points)
                 {
-                    writer.Write(IRI.Ket.Common.Helpers.StreamHelper.StructureToByteArray(item));
+                    writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
                 }
 
                 writer.Close();
@@ -77,7 +77,7 @@ namespace IRI.Standards.OGC.SFA
 
             for (int i = 0; i < this.numPoints; i++)
             {
-                this.points.Add(IRI.Ket.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
+                this.points.Add(IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
                                     reader.ReadBytes(length)));
             }
         }

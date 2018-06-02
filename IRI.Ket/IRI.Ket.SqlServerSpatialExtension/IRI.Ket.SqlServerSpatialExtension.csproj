@@ -95,10 +95,6 @@
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
       <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>
       <Name>IRI.Ket.DataStructure</Name>

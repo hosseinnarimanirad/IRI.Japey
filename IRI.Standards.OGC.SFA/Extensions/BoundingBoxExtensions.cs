@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
 using IRI.Standards.OGC.WMS;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Model.Google;
+﻿using IRI.Msh.Common.Model.Google;
 using IRI.Ket.Common.Devices.ManagedNativeWifi;
 using IRI.Ket.Common.Extensions;
 using System;

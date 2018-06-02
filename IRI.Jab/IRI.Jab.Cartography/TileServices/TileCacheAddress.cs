@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Model;
+using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Jab.Cartography.TileServices
 {

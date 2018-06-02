@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Mapping;
+using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -41,7 +41,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             //94.12.17
             //int zoomLevel = GetZoomLevel(mapScale);
-            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var result = new List<GeoReferencedImage>();
 

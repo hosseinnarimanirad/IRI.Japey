@@ -17,7 +17,7 @@ namespace IRI.Test.MainTestProject.SpatialConversions
         [TestMethod]
         public void TestParseToString()
         { 
-            var networkblocks = IRI.Sta.Common.Model.GeoJson.GeoJson.ParseToGeoJsonFeatures(ReadFile("networkblock.json"));
+            var networkblocks = IRI.Msh.Common.Model.GeoJson.GeoJson.ParseToGeoJsonFeatures(ReadFile("networkblock.json"));
 
             var checkSqlGeometryAndGeometryConversions = networkblocks.Select(f => f.geometry.AsSqlGeometry().AsWkt() == f.geometry.Parse().AsSqlGeometry().AsWkt());
 
@@ -35,7 +35,7 @@ namespace IRI.Test.MainTestProject.SpatialConversions
 
 
 
-            var stations = IRI.Sta.Common.Model.GeoJson.GeoJson.ParseToGeoJsonFeatures(ReadFile("stations.json"));
+            var stations = IRI.Msh.Common.Model.GeoJson.GeoJson.ParseToGeoJsonFeatures(ReadFile("stations.json"));
 
             var checkSqlGeometryAndGeometryConversions2 = stations.Select(f => f.geometry.AsSqlGeometry().AsWkt() == f.geometry.Parse().AsSqlGeometry().AsWkt());
 

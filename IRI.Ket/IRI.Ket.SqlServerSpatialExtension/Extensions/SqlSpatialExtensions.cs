@@ -1,5 +1,5 @@
-﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
-using IRI.Sta.Common.Helpers; 
+using IRI.Msh.Common.Helpers; 
 using IRI.Sta.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Model.Esri;
+using IRI.Msh.Common.Model.Esri;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -526,7 +526,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             return geography.STPointN(index).AsPoint();
 
-            //return new IRI.Sta.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
+            //return new IRI.Msh.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
         }
 
         public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
@@ -704,7 +704,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             return geometry.STPointN(index).AsPoint();
 
-            //return new IRI.Sta.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
+            //return new IRI.Msh.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
         }
 
         public static SqlGeography WebMercatorToGeographic(this SqlGeometry geometry)
@@ -1294,7 +1294,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Model
 
-        public static SqlGeometry AsSqlGeometry(this IRI.Sta.Common.Model.TileInfo tile)
+        public static SqlGeometry AsSqlGeometry(this IRI.Msh.Common.Model.TileInfo tile)
         {
             return tile.WebMercatorExtent.AsSqlGeometry();
         }

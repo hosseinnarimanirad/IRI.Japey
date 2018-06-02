@@ -345,7 +345,7 @@ namespace IRI.Jab.Cartography.Convertor
 
         //        var geometry = SqlSpatialToStreamGeometry.Transform(
         //                            geometrySymbol,
-        //                            new IRI.Sta.Common.Primitives.Point(temp.X - pointSymbolMinX - pointSymbolWidth / 2.0, temp.Y - pointSymbolMinY + pointSymbolHeight / 2.0));
+        //                            new IRI.Msh.Common.Primitives.Point(temp.X - pointSymbolMinX - pointSymbolWidth / 2.0, temp.Y - pointSymbolMinY + pointSymbolHeight / 2.0));
 
         //        context.DrawGeometry(brush, pen, geometry);
         //    }

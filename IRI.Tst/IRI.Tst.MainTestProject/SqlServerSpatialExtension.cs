@@ -3,7 +3,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 
 using System.Reflection;

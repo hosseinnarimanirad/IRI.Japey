@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Types;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;

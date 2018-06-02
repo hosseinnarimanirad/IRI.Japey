@@ -2,7 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 //To be implemented later
-using IRI.Sta.Common.Helpers;
+using IRI.Msh.Common.Helpers;
 
 namespace IRI.Ket.GsmGprsCommunication.TpduParameters
 {

@@ -26,9 +26,9 @@ using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.MapViewer.Model;
 using IRI.Jab.Common.Model;
-using sb = IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model;
+using sb = IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Mapping;
+using IRI.Msh.Common.Model;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
@@ -680,7 +680,7 @@ namespace IRI.Jab.MapViewer
                 double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
 
                 //size of each pixel (in meter)
-                _unitDistance = Sta.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
+                _unitDistance = IRI.Msh.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
             }
 
             return _unitDistance.Value;
@@ -695,7 +695,7 @@ namespace IRI.Jab.MapViewer
         {
             //PresentationSource source = PresentationSource.FromVisual(this.mapView);
             //double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-            //double unitDistance = IRI.Sta.Common.ConstantValues.InchToMeterFactor / dpiX; // Meter
+            //double unitDistance = IRI.Msh.Common.ConstantValues.InchToMeterFactor / dpiX; // Meter
             //return mapScale / unitDistance;
 
             return mapScale / GetUnitDistance();
@@ -2465,7 +2465,7 @@ namespace IRI.Jab.MapViewer
 
         #region Drawing & Anot
 
-        public void Flash(List<Sta.Common.Primitives.Point> points)
+        public void Flash(List<IRI.Msh.Common.Primitives.Point> points)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2479,7 +2479,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        public void Flash(Sta.Common.Primitives.Point mapPoint)
+        public void Flash(IRI.Msh.Common.Primitives.Point mapPoint)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2487,7 +2487,7 @@ namespace IRI.Jab.MapViewer
             AddFlash(mapPoint);
         }
 
-        private void AddFlash(Sta.Common.Primitives.Point mapPoint)
+        private void AddFlash(IRI.Msh.Common.Primitives.Point mapPoint)
         {
             if (mapPoint == null || mapPoint.IsNaN())
             {

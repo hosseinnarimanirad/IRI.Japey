@@ -98,7 +98,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSource\JsonSource.cs" />
+    <Compile Include="DataSource\GeoJsonSource.cs" />
     <Compile Include="DataSource\DatabaseSources\SqlServerScaleDependentDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\ClusteredGeoTaggedImageSource.cs" />
     <Compile Include="DataSource\RasterDataSources\GeoRasterFileDataSource.cs" />
@@ -128,10 +128,6 @@
     <Compile Include="DataSource\DatabaseSources\SqlServerDataSource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>

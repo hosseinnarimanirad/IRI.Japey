@@ -4,11 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.DigitalTerrainModeling
 {
     [Serializable]
-    public struct AttributedPoint : IRI.Ket.Geometry.IPoint
+    public struct AttributedPoint : IRI.Msh.Common.Primitives.IPoint
     {
         private double m_X, m_Y, m_Value;
 
@@ -81,6 +82,21 @@ namespace IRI.Ket.DigitalTerrainModeling
         public double CalculateDistance(AttributedPoint nextPoint)
         {
             return Math.Sqrt((this.X - nextPoint.X) * (this.X - nextPoint.X) + (this.Y - nextPoint.Y) * (this.Y - nextPoint.Y));
+        }
+
+        public bool AreExactlyTheSame(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double DistanceTo(IPoint point)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] AsWkb()
+        {
+            throw new NotImplementedException();
         }
     }
 }

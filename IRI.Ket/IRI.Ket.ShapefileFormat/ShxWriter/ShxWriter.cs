@@ -109,9 +109,9 @@ namespace IRI.Ket.ShapefileFormat.Writer
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(IRI.Ket.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(offset), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(offset), 0, ShapeConstants.IntegerSize);
 
-            result.Write(IRI.Ket.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(contentLength), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(contentLength), 0, ShapeConstants.IntegerSize);
 
             return result.ToArray();
         }

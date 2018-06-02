@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IRI.Sta.CoordinateSystem;
 using IRI.Sta.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Mapping;
+using IRI.Msh.Common.Mapping;
 
 namespace IRI.Test.MainTestProject
 {
@@ -12,39 +12,39 @@ namespace IRI.Test.MainTestProject
         [TestMethod]
         public void TestGeodeticToGoogleRowColumn()
         {
-            var rowColumn01 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 60, geocentricLongitude: -140, zoom: 3);
+            var rowColumn01 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 60, geocentricLongitude: -140, zoom: 3);
             Assert.AreEqual(0, rowColumn01.X);
             Assert.AreEqual(2, rowColumn01.Y);
 
-            var rowColumn02 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -60, geocentricLongitude: -140, zoom: 3);
+            var rowColumn02 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -60, geocentricLongitude: -140, zoom: 3);
             Assert.AreEqual(0, rowColumn02.X);
             Assert.AreEqual(5, rowColumn02.Y);
 
-            var rowColumn03 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -84, geocentricLongitude: 40, zoom: 3);
+            var rowColumn03 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -84, geocentricLongitude: 40, zoom: 3);
             Assert.AreEqual(4, rowColumn03.X);
             Assert.AreEqual(7, rowColumn03.Y);
 
-            var rowColumn04 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 31.1, geocentricLongitude: 42.5, zoom: 8);
+            var rowColumn04 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 31.1, geocentricLongitude: 42.5, zoom: 8);
             Assert.AreEqual(158, rowColumn04.X);
             Assert.AreEqual(104, rowColumn04.Y);
 
-            var rowColumn05 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 84.6, geocentricLongitude: -179.3, zoom: 6);
+            var rowColumn05 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 84.6, geocentricLongitude: -179.3, zoom: 6);
             Assert.AreEqual(0, rowColumn05.X);
             Assert.AreEqual(0, rowColumn05.Y);
 
-            var rowColumn06 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 4.6, geocentricLongitude: -170.3, zoom: 6);
+            var rowColumn06 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 4.6, geocentricLongitude: -170.3, zoom: 6);
             Assert.AreEqual(1, rowColumn06.X);
             Assert.AreEqual(31, rowColumn06.Y);
 
-            var rowColumn07 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -4.3, geocentricLongitude: -170.3, zoom: 6);
+            var rowColumn07 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -4.3, geocentricLongitude: -170.3, zoom: 6);
             Assert.AreEqual(1, rowColumn07.X);
             Assert.AreEqual(32, rowColumn07.Y);
 
-            var rowColumn08 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -79.5, geocentricLongitude: -2, zoom: 6);
+            var rowColumn08 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: -79.5, geocentricLongitude: -2, zoom: 6);
             Assert.AreEqual(31, rowColumn08.X);
             Assert.AreEqual(56, rowColumn08.Y);
 
-            var rowColumn09 = Sta.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 22.5, geocentricLongitude: 2, zoom: 6);
+            var rowColumn09 = IRI.Msh.Common.Mapping.WebMercatorUtility.LatLonToImageNumber(geocentricLatitude: 22.5, geocentricLongitude: 2, zoom: 6);
             Assert.AreEqual(32, rowColumn09.X);
             Assert.AreEqual(27, rowColumn09.Y);
 
@@ -54,7 +54,7 @@ namespace IRI.Test.MainTestProject
         [TestMethod]
         public void TestGoogleImageNumberToBoundingBox()
         {
-            var boundingBox01 = Sta.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(6, 0, 3);
+            var boundingBox01 = IRI.Msh.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(6, 0, 3);
 
             Assert.AreEqual(-180, boundingBox01.XMin);
             Assert.AreEqual(-135, boundingBox01.XMax);
@@ -64,7 +64,7 @@ namespace IRI.Test.MainTestProject
             //-180     -  79.17133464081945
             //- 135     - 66.51326044311185
 
-            var boundingBox02 = Sta.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(1, 5, 3);
+            var boundingBox02 = IRI.Msh.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(1, 5, 3);
 
             Assert.AreEqual(45, boundingBox02.XMin);
             Assert.AreEqual(90, boundingBox02.XMax);
@@ -74,7 +74,7 @@ namespace IRI.Test.MainTestProject
 
 
 
-            var boundingBox03 = Sta.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(100, 164, 8);
+            var boundingBox03 = IRI.Msh.Common.Mapping.WebMercatorUtility.GetWgs84ImageBoundingBox(100, 164, 8);
 
             //WGS84 Actual bounding box based on http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/
             //50.625        35.460669951495305
@@ -89,7 +89,7 @@ namespace IRI.Test.MainTestProject
             //5635549.221409474 4226661.916057106
             //5792092.255337514 4383204.9499851465
 
-            var geocentricBL = MapProjects.GeodeticToMercator(new Sta.Common.Primitives.Point(boundingBox03.XMin, boundingBox03.YMin), Ellipsoids.Sphere);
+            var geocentricBL = MapProjects.GeodeticToMercator(new IRI.Msh.Common.Primitives.Point(boundingBox03.XMin, boundingBox03.YMin), Ellipsoids.Sphere);
 
         }
 

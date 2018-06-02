@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Presenters.MapOptions
 {
-    public class MapOptionsPresenter : Notifier, IRI.Sta.Common.Primitives.ILocateable
+    public class MapOptionsPresenter : Notifier, IRI.Msh.Common.Primitives.ILocateable
     {
         private Point _point;
 

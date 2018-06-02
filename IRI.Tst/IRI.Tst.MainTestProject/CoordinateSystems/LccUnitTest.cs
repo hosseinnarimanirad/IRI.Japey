@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IRI.Sta.MeasurementUnit;
 using IRI.Sta.CoordinateSystem;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using IRI.Sta.CoordinateSystem.MapProjection;
 
 namespace IRI.Test.CoordinateSystem

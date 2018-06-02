@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using drawing = System.Drawing;
-using sb = IRI.Sta.Common.Primitives;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Cartography.Convertor
 {
@@ -35,7 +35,7 @@ namespace IRI.Jab.Cartography.Convertor
                 {
                     graphics.DrawEllipse(pen, (float)(firstPoint.X + location.X), (float)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
-                else if (original.Type == Sta.Common.Primitives.GeometryType.LineString)
+                else if (original.Type == IRI.Msh.Common.Primitives.GeometryType.LineString)
                 {
                     AddLineString(graphics, original, location, pen, brush);
                 }
@@ -78,7 +78,7 @@ namespace IRI.Jab.Cartography.Convertor
                 {
                     context.DrawEllipseCentered(border, (int)(firstPoint.X + location.X), (int)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
-                else if (original.Type == Sta.Common.Primitives.GeometryType.LineString)
+                else if (original.Type == IRI.Msh.Common.Primitives.GeometryType.LineString)
                 {
                     AddLineString(context, original, location, border, fill);
                 }

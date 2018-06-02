@@ -29,7 +29,7 @@ namespace IRI.Jab.Controls.View.Input
 
             if (double.TryParse(this.x.Text, out x) && double.TryParse(this.y.Text, out y))
             {
-                this.Presenter.PointCollection.Add(new IRI.Sta.Common.Primitives.Point(x, y));
+                this.Presenter.PointCollection.Add(new IRI.Msh.Common.Primitives.Point(x, y));
             }
 
             this.y.Text = string.Empty;
@@ -53,7 +53,7 @@ namespace IRI.Jab.Controls.View.Input
         {
             Button button = e.OriginalSource as Button;
 
-            this.Presenter.PointCollection.Remove(button.DataContext as IRI.Sta.Common.Primitives.Point);
+            this.Presenter.PointCollection.Remove(button.DataContext as IRI.Msh.Common.Primitives.Point);
         }
 
         private void coordinateType_SelectionChanged(object sender, SelectionChangedEventArgs e)

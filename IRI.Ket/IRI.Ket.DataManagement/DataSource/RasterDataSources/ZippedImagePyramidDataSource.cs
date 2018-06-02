@@ -4,12 +4,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 
 using IRI.Ket.DataManagement.Model;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model; 
+using IRI.Msh.Common.Mapping;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -40,7 +40,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             //94.12.17
             //int zoomLevel = GetZoomLevel(mapScale);
-            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var result = new List<GeoReferencedImage>();
 
@@ -63,14 +63,14 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
                 {
-                     
+
                     //var zipArchive = new System.IO.Compression.ZipArchive(archive.Open());
 
                     if (_archive.Entries.Any(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i), StringComparison.OrdinalIgnoreCase)))
                     {
                         var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i), StringComparison.OrdinalIgnoreCase)).Open();
 
-                        byte[] bytes = Common.Helpers.StreamHelper.ToByteArray(stream);
+                        byte[] bytes = IRI.Msh.Common.Helpers.StreamHelper.ToByteArray(stream);
 
                         //using (var memoryStream = new System.IO.MemoryStream())
                         //{

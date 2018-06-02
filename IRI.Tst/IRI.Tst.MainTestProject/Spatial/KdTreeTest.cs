@@ -1,5 +1,5 @@
-﻿using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Helpers;
+using IRI.Msh.Common.Primitives;
 using IRI.Ket.DataStructure.AdvancedStructures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

@@ -15,7 +15,7 @@ namespace IRI.Test.CoordinateSystem
 
             var lambda = 51.123456;
 
-            var testPoint = new IRI.Sta.Common.Primitives.Point(lambda, phi);
+            var testPoint = new IRI.Msh.Common.Primitives.Point(lambda, phi);
 
             var result1 = IRI.Sta.CoordinateSystem.Transformation.ToCartesian(testPoint, ellipsoid);
 

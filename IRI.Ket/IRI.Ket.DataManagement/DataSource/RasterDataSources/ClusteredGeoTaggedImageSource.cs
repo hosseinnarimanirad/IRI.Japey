@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 
-using IRI.Sta.Common.Mapping;
+using IRI.Msh.Common.Mapping;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.Common.Model;
 using IRI.Ket.SqlServerSpatialExtension.GeoStatistics;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Helpers;
+using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Helpers;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

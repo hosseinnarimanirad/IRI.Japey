@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media;
-using IRI.Sta.Common.Helpers;
+using IRI.Msh.Common.Helpers;
 using IRI.Jab.Common.Extensions;
 
 namespace IRI.Jab.Controls.View
@@ -103,7 +103,7 @@ namespace IRI.Jab.Controls.View
             try
             {
                 var result =
-                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Sta.Common.Primitives.Point(point.X, point.Y), Sta.CoordinateSystem.Ellipsoids.WGS84);
+                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Msh.Common.Primitives.Point(point.X, point.Y), Sta.CoordinateSystem.Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result.X, result.Y);
             }

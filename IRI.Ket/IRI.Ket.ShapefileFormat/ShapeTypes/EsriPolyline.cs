@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
@@ -18,7 +18,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Sta.Common.Primitives.BoundingBox boundingBox;
+        private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
 
         private EsriPoint[] points;
 
@@ -51,7 +51,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.parts.Length; }
         }
 
-        internal EsriPolyline(IRI.Sta.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points)
+        internal EsriPolyline(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points)
         {
             this.boundingBox = boundingBox;
 
@@ -68,11 +68,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPolyline(EsriPoint[] points, int[] parts)
         {
-            //this.boundingBox = new IRI.Sta.Common.Primitives.BoundingBox(xMin: MapStatistics.GetMinX(points),
+            //this.boundingBox = new IRI.Msh.Common.Primitives.BoundingBox(xMin: MapStatistics.GetMinX(points),
             //                                 yMin: MapStatistics.GetMinY(points),
             //                                 xMax: MapStatistics.GetMaxX(points),
             //                                 yMax: MapStatistics.GetMaxY(points));
-            this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Sta.Common.Primitives.IPoint>());
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
             this.points = points;
 
@@ -90,9 +90,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 parts[i] = points.Where((array, index) => index < i).Sum(array => array.Length);
             }
 
-            var boundingBoxes = points.Select(i => IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(i.Cast<IRI.Sta.Common.Primitives.IPoint>()));
+            var boundingBoxes = points.Select(i => IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(i.Cast<IRI.Msh.Common.Primitives.IPoint>()));
 
-            this.boundingBox = IRI.Sta.Common.Primitives.BoundingBox.GetMergedBoundingBox(boundingBoxes);
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.GetMergedBoundingBox(boundingBoxes);
 
         }
 
@@ -136,7 +136,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
+        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -190,7 +190,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return result.ToArray();
         }
 
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             return AsPlacemark(this, projectToGeodeticFunc, color);
         }
@@ -199,7 +199,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyline polyline, Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
+        static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyline polyline, Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
                 new KmlFormat.Primitives.PlacemarkType();
@@ -219,7 +219,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                         string.Join(" ", ShapeHelper.GetEsriPoints(polyline, i)
                         .Select(j =>
                         {
-                            var temp = projectToGeodeticFunc(new IRI.Sta.Common.Primitives.Point(j.X, j.Y));
+                            var temp = projectToGeodeticFunc(new IRI.Msh.Common.Primitives.Point(j.X, j.Y));
                             return string.Format("{0},{1}", temp.X, temp.Y);
                         }).ToArray()));
             }
@@ -264,7 +264,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return placemark;
         }
 
-        public string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

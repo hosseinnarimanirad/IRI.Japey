@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using System.Collections.Generic;
-using IRI.Sta.Common.Model;
-using IRI.Sta.Common.Analysis;
-using static IRI.Sta.Common.Model.SpatialRelation;
+using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Analysis;
+using static IRI.Msh.Common.Model.SpatialRelation;
 
 namespace IRI.Test.MainTestProject
 {

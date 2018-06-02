@@ -3,7 +3,7 @@ using IRI.Jab.Common;
 using System;
 using System.Collections.Generic;
 using System.Windows.Media;
-using sb = IRI.Sta.Common.Primitives;
+using sb = IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Cartography

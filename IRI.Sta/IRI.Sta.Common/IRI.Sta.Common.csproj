@@ -2,17 +2,48 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>hosseinnarimanirad.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <Compile Remove="Analysis\**" />
+    <Compile Remove="CoordinateSystems\**" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Helpers\**" />
+    <Compile Remove="Mapping\**" />
+    <Compile Remove="Mathematics\**" />
+    <Compile Remove="Model\**" />
+    <Compile Remove="Ogc\**" />
+    <Compile Remove="Primitives\**" />
+    <Compile Remove="Units\**" />
+    <EmbeddedResource Remove="Analysis\**" />
+    <EmbeddedResource Remove="CoordinateSystems\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <EmbeddedResource Remove="Mapping\**" />
+    <EmbeddedResource Remove="Mathematics\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <EmbeddedResource Remove="Ogc\**" />
+    <EmbeddedResource Remove="Primitives\**" />
+    <EmbeddedResource Remove="Units\**" />
+    <None Remove="Analysis\**" />
+    <None Remove="CoordinateSystems\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Helpers\**" />
+    <None Remove="Mapping\**" />
+    <None Remove="Mathematics\**" />
+    <None Remove="Model\**" />
+    <None Remove="Ogc\**" />
+    <None Remove="Primitives\**" />
+    <None Remove="Units\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CoordinateSystems\CoordinateSystem\Orbital\" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+
+  <Import Project="..\..\IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems" Label="Shared" />
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.DataManagement.Model
 {

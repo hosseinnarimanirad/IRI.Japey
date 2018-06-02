@@ -116,9 +116,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
+    <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
+      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
+      <Name>IRI.Ket.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
       <Project>{F420034F-75C8-448D-B11B-B8CBF26C8946}</Project>

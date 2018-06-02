@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
-using spatialBase = IRI.Sta.Common;
+using spatialBase = IRI.Msh.Common;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Jab.Common.Model;
 

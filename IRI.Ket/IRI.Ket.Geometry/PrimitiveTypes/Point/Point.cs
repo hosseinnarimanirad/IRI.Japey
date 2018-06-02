@@ -4,13 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Sta.Common.Ogc;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Ogc;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.Geometry
 {
     [Serializable]
-    public struct Point : IRI.Sta.Common.Primitives.IPoint, IComparable<Point>
+    public struct Point : IRI.Msh.Common.Primitives.IPoint, IComparable<Point>
     {
         public static PointComparisonPriority ComparisonPriority = PointComparisonPriority.YBased;
 

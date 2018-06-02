@@ -18,9 +18,9 @@ namespace IRI.Jab.Common.Extensions
             return new System.Drawing.Point(Convert.ToInt32(Math.Round(point.X)), Convert.ToInt32(Math.Round(point.Y)));
         }
 
-        public static IRI.Sta.Common.Primitives.Point AsPoint(this System.Windows.Point point)
+        public static IRI.Msh.Common.Primitives.Point AsPoint(this System.Windows.Point point)
         {
-            return new IRI.Sta.Common.Primitives.Point(point.X, point.Y);
+            return new IRI.Msh.Common.Primitives.Point(point.X, point.Y);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Model.Bing;
+﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Model.Bing;
 using IRI.Ket.Common.Extensions;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.Common.Service.Bing
 {

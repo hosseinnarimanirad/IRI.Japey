@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using sb = IRI.Sta.Common.Primitives;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Cartography.Model
 {

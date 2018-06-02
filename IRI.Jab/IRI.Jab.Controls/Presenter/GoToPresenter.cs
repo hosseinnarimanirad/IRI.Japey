@@ -1,5 +1,5 @@
 ﻿using IRI.Sta.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Primitives; 
+using IRI.Msh.Common.Primitives; 
 using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
@@ -128,12 +128,12 @@ namespace IRI.Jab.Controls.Presenter
 
         public void PanTo()
         {
-            this.RequestPanTo?.Invoke(new IRI.Sta.Common.Primitives.Point(X, Y));
+            this.RequestPanTo?.Invoke(new IRI.Msh.Common.Primitives.Point(X, Y));
         }
 
-        public IRI.Sta.Common.Primitives.IPoint GetWgs84Point()
+        public IRI.Msh.Common.Primitives.IPoint GetWgs84Point()
         {
-            var point = new IRI.Sta.Common.Primitives.Point(X, Y);
+            var point = new IRI.Msh.Common.Primitives.Point(X, Y);
 
             switch (this.SelectedItem?.MenuType)
             {
@@ -154,9 +154,9 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public Action<IRI.Sta.Common.Primitives.IPoint> RequestZoomTo;
+        public Action<IRI.Msh.Common.Primitives.IPoint> RequestZoomTo;
 
-        public Action<IRI.Sta.Common.Primitives.IPoint> RequestPanTo;
+        public Action<IRI.Msh.Common.Primitives.IPoint> RequestPanTo;
 
         public GoToPresenter(Action<IPoint> requestPanTo, Action<IPoint> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
         {

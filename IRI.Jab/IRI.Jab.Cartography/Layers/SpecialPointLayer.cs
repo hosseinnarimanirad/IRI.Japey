@@ -10,7 +10,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows.Shapes; 
 using IRI.Jab.Common.Model;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Cartography
 {

@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -12,7 +12,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
     public interface IEsriShape
     {
-        IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox { get; }
+        IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox { get; }
 
         byte[] WriteContentsToByte();
 
@@ -27,9 +27,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         byte[] AsWkb();
 
-        IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectFunc = null, byte[] color = null);
+        IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null);
 
-        string AsKml(Func<IRI.Sta.Common.Primitives.Point, IRI.Sta.Common.Primitives.Point> projectToGeodeticFunc = null);
+        string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null);
 
         IEsriShape Transform(Func<IPoint, IPoint> transform);
 

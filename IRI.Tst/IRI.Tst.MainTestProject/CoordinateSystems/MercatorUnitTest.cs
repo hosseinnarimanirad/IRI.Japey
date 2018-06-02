@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

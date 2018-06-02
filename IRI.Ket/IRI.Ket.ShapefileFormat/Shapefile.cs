@@ -7,11 +7,11 @@ using System.Data.SqlTypes;
 using System.Threading.Tasks;
 using IRI.Ket.ShapefileFormat.Reader;
 using IRI.Sta.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Extensions;
+using IRI.Msh.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -263,7 +263,7 @@ namespace IRI.Ket.ShapefileFormat
             return MainHeader;
         }
 
-        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
+        public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
         {
             double xMin = header.XMin;
 
@@ -295,10 +295,10 @@ namespace IRI.Ket.ShapefileFormat
                     }
                 }
             }
-            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
-        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
+        public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
         {
             if (headers.Length < 1)
                 throw new NotImplementedException();
@@ -331,7 +331,7 @@ namespace IRI.Ket.ShapefileFormat
                 }
             }
 
-            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
         public static string GetShxFileName(string shpFileName)
@@ -549,7 +549,7 @@ namespace IRI.Ket.ShapefileFormat
 
         }
 
-        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Sta.Common.Primitives.BoundingBox boundingBox)
+        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Msh.Common.Primitives.BoundingBox boundingBox)
         {
             var indexFileName = GetIndexFileName(shpFileName);
 

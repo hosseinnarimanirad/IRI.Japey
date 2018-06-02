@@ -4,10 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using IRI.Ket.DataManagement.Model;
-using IRI.Sta.Common.Model;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

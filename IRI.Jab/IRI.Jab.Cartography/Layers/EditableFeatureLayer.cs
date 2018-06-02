@@ -6,16 +6,16 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using IRI.Jab.Common.Extensions;
 using IRI.Sta.CoordinateSystem;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using System.Windows;
 using System.Windows.Input;
 using IRI.Jab.Cartography.Model.DataStructure;
 using WpfPoint = System.Windows.Point;
 using WpfGeometry = System.Windows.Media.Geometry;
-using Geometry = IRI.Sta.Common.Primitives.Geometry;
-using Point = IRI.Sta.Common.Primitives.Point;
+using Geometry = IRI.Msh.Common.Primitives.Geometry;
+using Point = IRI.Msh.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Sta.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
@@ -950,7 +950,7 @@ namespace IRI.Jab.Cartography
         {
             Func<IPoint, IPoint> toGeodeticWgs84 = p => MapProjects.WebMercatorToGeodeticWgs84(p);
 
-            var edge = new IRI.Sta.Common.Primitives.LineSegment(first, second);
+            var edge = new IRI.Msh.Common.Primitives.LineSegment(first, second);
 
             var element = new Common.View.MapMarkers.RectangleLabelMarker(edge.GetLengthLabel(toGeodeticWgs84));
 

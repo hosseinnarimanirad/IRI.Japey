@@ -21,7 +21,7 @@ namespace IRI.Ket.DataManagement.Infrastructure
 
             var stream = file.First().Open();
 
-            return Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
+            return IRI.Msh.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
 
         }
     }

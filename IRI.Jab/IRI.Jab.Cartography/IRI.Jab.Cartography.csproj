@@ -196,10 +196,6 @@
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
       <Name>IRI.Jab.Common</Name>

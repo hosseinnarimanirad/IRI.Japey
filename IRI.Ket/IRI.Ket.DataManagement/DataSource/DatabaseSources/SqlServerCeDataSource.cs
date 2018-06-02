@@ -7,7 +7,7 @@ using System.Data.SqlServerCe;
 using System.IO;
 using IRI.Ket.SqlServerSpatialExtension;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;

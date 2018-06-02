@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
 using IRI.Ket.Common.Extensions;
 using System;
 using System.Collections.Generic;
@@ -6,8 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Model;
-using IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.Common.Service.Google
 {

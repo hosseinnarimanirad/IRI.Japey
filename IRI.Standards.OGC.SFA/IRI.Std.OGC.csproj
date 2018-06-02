@@ -122,10 +122,6 @@
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SLD\" />

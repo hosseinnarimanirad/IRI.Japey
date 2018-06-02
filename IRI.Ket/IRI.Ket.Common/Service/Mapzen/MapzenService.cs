@@ -1,5 +1,5 @@
-﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Model.Mapzen;
+﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Model.Mapzen;
 using System;
 using System.Collections.Generic;
 using System.Linq;

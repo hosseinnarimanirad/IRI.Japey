@@ -180,10 +180,6 @@
       <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
       <Name>IRI.Std.OGC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
       <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
       <Name>IRI.Jab.Cartography</Name>
