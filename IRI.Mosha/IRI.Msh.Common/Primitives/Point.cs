@@ -43,7 +43,7 @@ namespace IRI.Msh.Common.Primitives
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1}", this.X, this.Y);
         }
-         
+
         public bool IsNaN()
         {
             return double.IsNaN(X) || double.IsNaN(Y);
@@ -90,8 +90,8 @@ namespace IRI.Msh.Common.Primitives
         public static Point PositiveInfinity { get; } = new Point(double.PositiveInfinity, double.PositiveInfinity);
 
         public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(Point))
+        { 
+            if (obj?.GetType() == typeof(Point))
             {
                 Point temp = (Point)obj;
 
@@ -116,7 +116,7 @@ namespace IRI.Msh.Common.Primitives
 
             Array.Copy(BitConverter.GetBytes(X), 0, result, 5, 8);
 
-            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, 8); 
+            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, 8);
 
             return result;
         }

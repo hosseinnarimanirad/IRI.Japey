@@ -58,21 +58,23 @@ namespace IRI.Jab.Common.Helpers
 
         public static void Print(FrameworkElement visual, bool applyRtl = true)
         {
-            var printDlg = new System.Windows.Controls.PrintDialog();
+            var printDlg = new PrintDialog();
 
             if (printDlg.ShowDialog() == true)
             {
                 //get selected printer capabilities
-                System.Printing.PrintCapabilities capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
-                 
-                var drawingVisual = BuildGraphVisual(new PageMediaSize(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight), visual, applyRtl);
-                 
+                PrintCapabilities capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
+
+                double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / visual.ActualWidth, capabilities.PageImageableArea.ExtentHeight / visual.ActualHeight);
+
+                var drawingVisual = BuildGraphVisual(new PageMediaSize(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight), visual, scale, applyRtl);
+
                 //now print the visual to printer to fit on the one page.
-                printDlg.PrintVisual(drawingVisual, "A1");                 
+                printDlg.PrintVisual(drawingVisual, "A1");
             }
         }
-         
-        private static DrawingVisual BuildGraphVisual(PageMediaSize pageSize, Visual visual, bool applyRtl = true)
+
+        private static DrawingVisual BuildGraphVisual(PageMediaSize pageSize, Visual visual, double scale, bool applyRtl = true)
         {
             var drawingVisual = new DrawingVisual();
 
@@ -89,13 +91,13 @@ namespace IRI.Jab.Common.Helpers
                     Height = pageSize.Height.Value
                 };
 
-                var stretch = Stretch.None;
+                var stretch = Stretch.Uniform;
                 var visualBrush = new VisualBrush(visualContent) { Stretch = stretch };
 
                 if (applyRtl)
                 {
                     TransformGroup group = new TransformGroup();
-                    group.Children.Add(new ScaleTransform(-1, 1));
+                    group.Children.Add(new ScaleTransform(-1, 1)); 
                     group.Children.Add(new TranslateTransform(rect.Width, 0));
                     visualBrush.Transform = group;
                 }
