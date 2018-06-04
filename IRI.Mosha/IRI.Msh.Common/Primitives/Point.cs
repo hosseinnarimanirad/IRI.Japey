@@ -139,15 +139,15 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public static bool operator ==(Point first, Point second)
-        {
-            return first.Equals(second);
-        }
+        //public static bool operator ==(Point first, Point second)
+        //{
+        //    return first.Equals(second);
+        //}
 
-        public static bool operator !=(Point first, Point second)
-        {
-            return !first.Equals(second);
-        }
+        //public static bool operator !=(Point first, Point second)
+        //{
+        //    return !first.Equals(second);
+        //}
 
 
         //public Microsoft.SqlServer.Types.SqlGeometry AsSqlGeometry()

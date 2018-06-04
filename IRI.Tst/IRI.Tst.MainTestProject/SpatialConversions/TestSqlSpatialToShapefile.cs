@@ -114,7 +114,7 @@ namespace IRI.Test.FileFormats
             SqlGeometry polygon = SqlGeometry.Parse(
                 new System.Data.SqlTypes.SqlString(wktRepresentation));
 
-            var shape = polygon.ParseToEsriShape();
+            var shape = polygon.AsEsriShape();
 
             return shape.AsSqlServerWkt();
         }
@@ -130,7 +130,7 @@ namespace IRI.Test.FileFormats
             SqlGeometry polygon = SqlGeometry.Parse(
                            new System.Data.SqlTypes.SqlString(polygonString));
 
-            var shape = polygon.ParseToEsriShape();
+            var shape = polygon.AsEsriShape();
 
             IRI.Ket.ShapefileFormat.Shapefile.Save(@"D:\test5.shp", new EsriShapeCollection<EsriPolygon>(
                 new List<EsriPolygon>() { (EsriPolygon)shape }), true);

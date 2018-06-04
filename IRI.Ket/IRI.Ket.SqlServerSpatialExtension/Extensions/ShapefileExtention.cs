@@ -308,7 +308,7 @@ namespace IRI.Ket.SpatialExtensions
 
 
 
-        public static IEsriShape ParseToEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
+        public static IEsriShape AsEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
         {
             if (geometry.IsNotValidOrEmpty())
             {

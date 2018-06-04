@@ -44,9 +44,21 @@ namespace IRI.Ket.SpatialExtensions
 
         public static bool Intersects(this BoundingBox boundingBox, SqlGeometry geometry)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry(geometry.GetSrid());
+            if (geometry.IsNullOrEmpty())
+            {
+                return false;
+            }
 
-            return geometry.STIntersects(boundary).IsTrue;
+            var geometryBoundingBox = geometry.GetBoundingBox();
+
+            if (boundingBox.Intersects(geometryBoundingBox))
+            {
+                SqlGeometry boundary = boundingBox.AsSqlGeometry(geometry.GetSrid());
+
+                return geometry.STIntersects(boundary).IsTrue;
+            }
+
+            return false;
         }
 
         public static List<EsriPoint> GetClockWiseOrderOfEsriPoints(this BoundingBox boundingBox)

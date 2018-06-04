@@ -82,6 +82,7 @@
     <Compile Include="GeoStatistics\Group.cs" />
     <Compile Include="GeoStatistics\KdTreePointClusters.cs" />
     <Compile Include="GeoStatistics\PointClusters.cs" />
+    <Compile Include="Helpers\IndexHelper.cs" />
     <Compile Include="Helpers\WebMercatorHelper.cs" />
     <Compile Include="Model\EsriFeatureSet.cs" />
     <Compile Include="Model\Feature.cs" />

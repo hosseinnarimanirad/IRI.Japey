@@ -151,7 +151,8 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 attributes,
                 new List<Func<int, object>>() { i => i },
                 new List<DbfFieldDescriptor>() { DbfFieldDescriptors.GetIntegerField("Id") },
-                Encoding.ASCII);
+                Encoding.ASCII, 
+                overwrite);
 
         }
 

@@ -33,7 +33,7 @@ namespace IRI.Test.MainTestProject.SpatialConversions
 
         private void Test(SqlGeometry sqlGeometry)
         {
-            var esriShape = sqlGeometry.ParseToEsriShape();
+            var esriShape = sqlGeometry.AsEsriShape();
 
             var geometry = esriShape.AsGeometry();
 

@@ -246,7 +246,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
         public static IEsriShape AsToShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
         {
-            return geometry.AsSqlGeometry(isLongitudeFirst, srid).ParseToEsriShape();
+            return geometry.AsSqlGeometry(isLongitudeFirst, srid).AsEsriShape();
         }
 
         public static void WriteAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = false)
