@@ -12,8 +12,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PolyLineMReader : MeasuresReader<EsriPolylineM>
     { 
-        public PolyLineMReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPolyLineM)
+        public PolyLineMReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPolyLineM, srid)
         {
         }
 

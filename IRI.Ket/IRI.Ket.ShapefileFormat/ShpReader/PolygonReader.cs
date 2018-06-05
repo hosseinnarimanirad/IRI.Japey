@@ -22,8 +22,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
         //Because this specification does not forbid consecutive points with identical coordinates,
         //shapefile readers must handle such cases. On the other hand, the degenerate, zero length
         //or zero area parts that might result are not allowed.
-        public PolygonReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPolygon)
+        public PolygonReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPolygon, srid)
         {
 
         }

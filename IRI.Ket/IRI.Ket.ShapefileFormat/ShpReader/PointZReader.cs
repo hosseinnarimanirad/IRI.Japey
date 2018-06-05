@@ -10,8 +10,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PointZReader : ShpReader<EsriPointZ> 
     {
-        public PointZReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPointZ)
+        public PointZReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPointZ, srid)
         {
 
         }

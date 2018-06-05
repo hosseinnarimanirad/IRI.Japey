@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
 using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
 
 namespace IRI.Sta.CoordinateSystem.MapProjection
@@ -26,7 +25,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         {
         }
 
-        public NoProjection(string title, Ellipsoid ellipsoid) : base(title, ellipsoid)
+        public NoProjection(string title, Ellipsoid ellipsoid) : base(title, ellipsoid, ellipsoid.Srid)
         {
 
         }
@@ -39,6 +38,11 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         public override IPoint ToGeodetic(IPoint point)
         {
             return point;
+        }
+
+        protected override int GetSrid()
+        {
+            return Ellipsoid.Srid;
         }
     }
 }

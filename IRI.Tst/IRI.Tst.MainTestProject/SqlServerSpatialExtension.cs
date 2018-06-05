@@ -84,7 +84,7 @@ namespace IRI.Test.MainTestProject.SqlServerSpatialExtension
         {
             var prjString = ReadFile("Clarke 1880 (RGS).prj");
 
-            PrjFile prjFile = PrjFile.Parse(prjString);
+            EsriPrjFile prjFile = EsriPrjFile.Parse(prjString);
 
             var prjFile2 = prjFile.AsMapProjection().AsEsriPrj();
 

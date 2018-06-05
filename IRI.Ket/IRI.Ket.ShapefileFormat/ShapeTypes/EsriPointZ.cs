@@ -35,13 +35,17 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measure; }
         }
 
+        public int Srid { get; private set; }
+
         public EsriPointZ(double x, double y, double z)
             : this(x, y, z, ShapeConstants.NoDataValue)
         {
         }
 
-        public EsriPointZ(double x, double y, double z, double measure)
+        public EsriPointZ(double x, double y, double z, double measure, int srid)
         {
+            this.Srid = srid;
+
             this.x = x;
 
             this.y = y;
@@ -51,6 +55,34 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             this.measure = measure;
         }
 
+
+        public string AsExactString()
+        {
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3:G17}", this.X, this.Y, this.Z, this.Measure);
+        }
+
+        public bool AreExactlyTheSame(object obj)
+        {
+            if (obj.GetType() != typeof(EsriPointZ))
+            {
+                return false;
+            }
+
+            return this.AsExactString() == ((EsriPointZ)obj).AsExactString();
+        }
+
+        public double DistanceTo(IPoint point)
+        {
+            if (point is EsriPointZ)
+            {
+                return Point3D.GetDistance(new Point3D(this.X, this.Y, this.Z), new Point3D(point.X, point.Y, ((EsriPointZ)point).Z));
+            }
+            else
+            {
+                return new Point3D(this.X, this.Y, this.Z).DistanceTo(point);
+            }
+
+        }
 
         #region IShape Members
 
@@ -143,47 +175,19 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
             var result = transform(this);
 
-            return new EsriPointZ(result.X, result.Y, this.Z, this.Measure);
+            return new EsriPointZ(result.X, result.Y, this.Z, this.Measure, newSrid);
         }
 
         public Geometry AsGeometry()
         {
-            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
         #endregion
-
-        public string AsExactString()
-        {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3:G17}", this.X, this.Y, this.Z, this.Measure);
-        }
-
-        public bool AreExactlyTheSame(object obj)
-        {
-            if (obj.GetType() != typeof(EsriPointZ))
-            {
-                return false;
-            }
-
-            return this.AsExactString() == ((EsriPointZ)obj).AsExactString();
-        }
-
-        public double DistanceTo(IPoint point)
-        {
-            if (point is EsriPointZ)
-            {
-                return Point3D.GetDistance(new Point3D(this.X, this.Y, this.Z), new Point3D(point.X, point.Y, ((EsriPointZ)point).Z));
-            }
-            else
-            {
-                return new Point3D(this.X, this.Y, this.Z).DistanceTo(point);
-            }
-
-        }
 
     }
 

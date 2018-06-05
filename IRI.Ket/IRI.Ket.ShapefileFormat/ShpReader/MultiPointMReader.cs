@@ -11,8 +11,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class MultiPointMReader : MeasuresReader<EsriMultiPointM>
     {
-        public MultiPointMReader(string fileName)
-            : base(fileName, EsriShapeType.EsriMultiPointM)
+        public MultiPointMReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriMultiPointM, srid)
         {
         }
 
@@ -37,11 +37,11 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
+            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures, this._srid);
         }
 
 
-        public static EsriMultiPointM Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriMultiPointM Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -60,7 +60,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
+            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures, srid);
         }
  
     }

@@ -19,6 +19,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
 
+        public int Srid { get; private set; }
+
         private EsriPoint[] points;
 
         public int NumberOfPoints
@@ -70,7 +72,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public EsriPolygonM(EsriPoint[] points, int[] parts, double[] measures)
+        public EsriPolygonM(EsriPoint[] points, int[] parts, double[] measures, int srid)
         {
             if (points.Length != measures.Length)
             {
@@ -78,6 +80,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+
+            this.Srid = srid;
 
             this.parts = parts;
 
@@ -97,12 +101,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 this.maxMeasure = ShapeConstants.NoDataValue;
             }
-             
+
         }
 
-        internal EsriPolygonM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriPolygonM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures, int srid)
         {
             this.boundingBox = boundingBox;
+
+            this.Srid = srid;
 
             this.parts = parts;
 
@@ -219,11 +225,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriPolygonM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
+            return new EsriPolygonM(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures, newSrid);
         }
 
+        //always returns polygon not multi polygon
         public Geometry AsGeometry()
         {
             if (this.NumberOfParts > 1)
@@ -232,14 +239,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 for (int i = 0; i < NumberOfParts; i++)
                 {
-                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.Polygon);
+                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
                 }
 
-                return new Geometry(parts, GeometryType.MultiLineString);
+                return new Geometry(parts, GeometryType.Polygon);
             }
             else
             {
-                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.Polygon);
+                return new Geometry(new Geometry[] { new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid) }, GeometryType.Polygon, Srid);
             }
         }
 

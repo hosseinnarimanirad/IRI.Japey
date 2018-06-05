@@ -26,7 +26,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         {
         }
 
-        public CylindricalEqualArea(string title, Ellipsoid ellipsoid) : base(title, ellipsoid)
+        public CylindricalEqualArea(string title, Ellipsoid ellipsoid, int srid = 0) : base(title, ellipsoid, srid)
         {
 
         }
@@ -39,6 +39,11 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         public override IPoint ToGeodetic(IPoint point)
         {
             return MapProjects.CylindricalEqualAreaToGeodetic(point, this._ellipsoid);
+        }
+
+        protected override int GetSrid()
+        {
+            return _srid;
         }
     }
 }

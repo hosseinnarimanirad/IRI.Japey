@@ -14,6 +14,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
         //private string fileNameWithoutExtension;
 
+        protected int _srid = 0;
+
         protected MainFileHeader MainHeader;
 
         protected System.IO.BinaryReader shpReader;
@@ -25,8 +27,9 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
         public EsriShapeCollection<T> elements;
 
-        protected ShpReader(string fileName, EsriShapeType type)
+        protected ShpReader(string fileName, EsriShapeType type, int srid)
         {
+            this._srid = srid;
             //this.directoryName = System.IO.Path.GetDirectoryName(fileName);
 
             //this.fileNameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(fileName);
@@ -35,7 +38,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
             {
                 throw new NotImplementedException();
             }
-
+             
             ShxReader shxFile = new ShxReader(Shapefile.GetShxFileName(fileName));
 
             using (System.IO.FileStream shpStream = new System.IO.FileStream(fileName, System.IO.FileMode.Open))

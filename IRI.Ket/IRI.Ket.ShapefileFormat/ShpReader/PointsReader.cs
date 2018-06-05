@@ -12,8 +12,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public abstract class PointsReader<T> : ShpReader<T> where T : IEsriShape
     {
-        public PointsReader(string fileName, EsriShapeType type)
-            : base(fileName, type)
+        public PointsReader(string fileName, EsriShapeType type, int srid)
+            : base(fileName, type, srid)
         {
 
         }

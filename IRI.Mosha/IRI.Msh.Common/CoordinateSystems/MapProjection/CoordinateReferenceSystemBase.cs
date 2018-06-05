@@ -18,22 +18,14 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
             set { _title = value; }
         }
 
-        private int _srid;
-
         public int Srid
         {
-            get { return _srid; }
-            set { _srid = value; }
+            get { return GetSrid(); }
         }
 
+        protected abstract int GetSrid();
 
-        private string _datumName;
-
-        public string DatumName
-        {
-            get { return _datumName; }
-            set { _datumName = value; }
-        }
+        public string DatumName { get; set; }
 
         protected Ellipsoid _ellipsoid;
 
@@ -139,5 +131,40 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
                 return point;
             }
         }
+
+
+        //private int GetSrid()
+        //{
+        //    switch (this.Type)
+        //    {
+        //        case MapProjectionType.None:
+        //            return Ellipsoid.Srid;
+
+        //        case MapProjectionType.AlbersEqualAreaConic:
+        //            break;
+        //        case MapProjectionType.AzimuthalEquidistant:
+        //            break;
+        //        case MapProjectionType.CylindricalEqualArea:
+        //            break;
+        //        case MapProjectionType.LambertConformalConic:
+        //            break;
+        //        case MapProjectionType.Mercator:
+        //            break;
+
+        //        case MapProjectionType.TransverseMercator:
+        //            break;
+
+        //        case MapProjectionType.UTM:
+        //            return (this as UTM).GetSrid(true);
+                    
+        //        case MapProjectionType.WebMercator:
+        //            return SridHelper.WebMercator;
+
+        //        default:
+        //            break;
+        //    }
+
+        //    return 0;
+        //}
     }
 }

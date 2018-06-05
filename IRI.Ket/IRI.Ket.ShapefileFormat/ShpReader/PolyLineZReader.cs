@@ -9,8 +9,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PolyLineZReader : zReader<EsriPolylineZ>
     {
-        public PolyLineZReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPolyLineZ)
+        public PolyLineZReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPolyLineZ, srid)
         {
 
         }

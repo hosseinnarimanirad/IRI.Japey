@@ -10,15 +10,17 @@ using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-  
-    
+
+
     public struct EsriPolylineM : IEsriPointsWithMeasure
     {
-        
+
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
         private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
+
+        public int Srid { get; private set; }
 
         private EsriPoint[] points;
 
@@ -70,7 +72,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measures; }
         }
 
-        public EsriPolylineM(EsriPoint[] points, int[] parts, double[] measures)
+        public EsriPolylineM(EsriPoint[] points, int[] parts, double[] measures, int srid)
         {
             if (points.Length != measures.Length)
             {
@@ -78,6 +80,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+
+            this.Srid = srid;
 
             this.parts = parts;
 
@@ -97,12 +101,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 this.maxMeasure = ShapeConstants.NoDataValue;
             }
-             
+
         }
 
-        internal EsriPolylineM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriPolylineM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures, int srid)
         {
             this.boundingBox = boundingBox;
+
+            this.Srid = srid;
 
             this.parts = parts;
 
@@ -161,7 +167,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return ShapeHelper.GetEsriPoints(this, Parts[partNo]);
         }
 
-       
+
         public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
@@ -273,9 +279,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriPolylineM(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
+            return new EsriPolylineM(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures, newSrid);
         }
 
         public Geometry AsGeometry()
@@ -286,16 +292,17 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 for (int i = 0; i < NumberOfParts; i++)
                 {
-                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString);
+                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
                 }
 
-                return new Geometry(parts, GeometryType.MultiLineString);
+                return new Geometry(parts, GeometryType.MultiLineString, Srid);
             }
             else
             {
-                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString);
+                return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid);
             }
         }
+
 
     }
 }

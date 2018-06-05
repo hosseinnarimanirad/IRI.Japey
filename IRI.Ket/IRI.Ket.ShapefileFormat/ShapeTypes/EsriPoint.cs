@@ -28,8 +28,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             set { this.y = value; }
         }
 
-        public EsriPoint(double x, double y)
+        public int Srid { get; private set; }
+
+        public EsriPoint(double x, double y, int srid)
         {
+            this.Srid = srid;
+
             this.x = x;
 
             this.y = y;
@@ -78,6 +82,52 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             get { return EsriShapeType.EsriPoint; }
         }
+
+        public static explicit operator EsriPoint(Point value)
+        {
+            return new EsriPoint(value.X, value.Y);
+        }
+
+        public string AsExactString()
+        {
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17}", this.X, this.Y);
+        }
+
+        public bool AreExactlyTheSame(object obj)
+        {
+            if (obj.GetType() != typeof(EsriPoint))
+            {
+                return false;
+            }
+
+            return this.AsExactString() == ((EsriPoint)obj).AsExactString();
+        }
+
+        public double DistanceTo(IPoint point)
+        {
+            return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+        }
+
+        public override string ToString()
+        {
+            return $"X: {X}, Y:{Y}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != typeof(EsriPoint))
+            {
+                return false;
+            }
+
+            return ((EsriPoint)obj).AsExactString() == this.AsExactString();
+        }
+
+        public override int GetHashCode()
+        {
+            return this.AsExactString().GetHashCode();
+        }
+
 
         public string AsSqlServerWkt()
         {
@@ -129,61 +179,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
             var result = transform(this);
 
-            return new EsriPoint(result.X, result.Y);
+            return new EsriPoint(result.X, result.Y, newSrid);
         }
 
         public Geometry AsGeometry()
         {
-            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
-        }
-
-        public static explicit operator EsriPoint(Point value)
-        {
-            return new EsriPoint(value.X, value.Y);
-        }
-
-        public string AsExactString()
-        {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17}", this.X, this.Y);
-        }
-
-        public bool AreExactlyTheSame(object obj)
-        {
-            if (obj.GetType() != typeof(EsriPoint))
-            {
-                return false;
-            }
-
-            return this.AsExactString() == ((EsriPoint)obj).AsExactString();
-        }
-
-        public double DistanceTo(IPoint point)
-        {
-            return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
-        }
-
-        public override string ToString()
-        {
-            return $"X: {X}, Y:{Y}";
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() != typeof(EsriPoint))
-            {
-                return false;
-            }
-
-            return ((EsriPoint)obj).AsExactString() == this.AsExactString();
-        }
-
-        public override int GetHashCode()
-        {
-            return this.AsExactString().GetHashCode();
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
     }

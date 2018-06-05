@@ -32,8 +32,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measure; }
         }
 
-        public EsriPointM(double x, double y, double measure)
+        public int Srid { get; private set; }
+
+        public EsriPointM(double x, double y, double measure, int srid)
         {
+            this.Srid = srid;
+
             this.x = x;
 
             this.y = y;
@@ -87,6 +91,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return EsriShapeType.EsriPointM; }
         }
 
+        public bool AreExactlyTheSame(object obj)
+        {
+            if (obj.GetType() != typeof(EsriPointM))
+            {
+                return false;
+            }
+
+            return this.AsExactString() == ((EsriPointM)obj).AsExactString();
+        }
+
+        public double DistanceTo(IPoint point)
+        {
+            return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+        }
+
+
         public string AsSqlServerWkt()
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "POINT({0:G17} {1:G17} NULL {2:G17})", this.X, this.Y, this.Measure);
@@ -116,31 +136,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17}", this.X, this.Y, this.Measure);
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
             var result = transform(this);
 
-            return new EsriPointM(result.X, result.Y, this.Measure);
+            return new EsriPointM(result.X, result.Y, this.Measure, newSrid);
         }
 
         public Geometry AsGeometry()
         {
-            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point);
-        }
-
-        public bool AreExactlyTheSame(object obj)
-        {
-            if (obj.GetType() != typeof(EsriPointM))
-            {
-                return false;
-            }
-
-            return this.AsExactString() == ((EsriPointM)obj).AsExactString();
-        }
-         
-        public double DistanceTo(IPoint point)
-        {
-            return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
     }

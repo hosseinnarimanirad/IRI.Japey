@@ -12,8 +12,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PolygonZReader : zReader<EsriPolygonZ>
     {
-        public PolygonZReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPolygonZ)
+        public PolygonZReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPolygonZ, srid)
         {
 
         }

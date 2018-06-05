@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Primitives; 
 
 namespace IRI.Sta.CoordinateSystem.MapProjection
 {
@@ -38,6 +37,11 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         public override IPoint ToGeodetic(IPoint webMercator)
         {
             return MapProjects.WebMercatorToGeodeticWgs84(webMercator);
+        }
+
+        protected override int GetSrid()
+        {
+            return SridHelper.WebMercator;
         }
     }
 }

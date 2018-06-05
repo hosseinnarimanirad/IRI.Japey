@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.ShapefileFormat.Prj
 {
-    public class PrjTree
+    public class EsriPrjTreeNode
     {
         const string specialCharacter = "~";
 
@@ -15,7 +15,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
         //e.g. GEOGCS
         public string Name { get; set; }
 
-        public List<PrjTree> Children { get; set; }
+        public List<EsriPrjTreeNode> Children { get; set; }
 
         public List<string> Values { get; set; }
 
@@ -32,7 +32,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
-        public static PrjTree Parse(string wktString)
+        public static EsriPrjTreeNode Parse(string wktString)
         {
             wktString = wktString.Replace(Environment.NewLine, string.Empty).Trim();
 
@@ -44,49 +44,49 @@ namespace IRI.Ket.ShapefileFormat.Prj
 
             var name = wktString.Replace($"[{content}]", string.Empty);
 
-            return new PrjTree(name, content);
+            return new EsriPrjTreeNode(name, content);
         }
 
-        public PrjTree()
+        public EsriPrjTreeNode()
         {
 
         }
 
-        public PrjTree(string name, params string[] values)
+        public EsriPrjTreeNode(string name, params string[] values)
         {
             this.Name = name;
 
             this.Values = values.ToList();
         }
 
-        public PrjTree(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title = null)
+        public EsriPrjTreeNode(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title = null)
         {
-            this.Name = PrjFile._geogcs;
+            this.Name = EsriPrjFile._geogcs;
 
             this.Values = new List<string>() { title ?? $"GCS_{ellipsoid.EsriName}" };
 
             //esri write zero for Inverse Flattening of shperes!
             var inverseFlattening = double.IsInfinity(ellipsoid.InverseFlattening) ? 0 : ellipsoid.InverseFlattening;
 
-            var spheroid = new PrjTree(PrjFile._spheroid, ellipsoid.EsriName, ellipsoid.SemiMajorAxis.Value.AsExactString(), inverseFlattening.AsExactString());
+            var spheroid = new EsriPrjTreeNode(EsriPrjFile._spheroid, ellipsoid.EsriName, ellipsoid.SemiMajorAxis.Value.AsExactString(), inverseFlattening.AsExactString());
 
-            var datum = new PrjTree(PrjFile._datum, $"D_{ellipsoid.EsriName}")
+            var datum = new EsriPrjTreeNode(EsriPrjFile._datum, $"D_{ellipsoid.EsriName}")
             {
-                Children = new List<PrjTree>() { spheroid }
+                Children = new List<EsriPrjTreeNode>() { spheroid }
             };
 
-            var primem = new PrjTree(PrjFile._primem, PrjFile._greenwich, "0.0");
+            var primem = new EsriPrjTreeNode(EsriPrjFile._primem, EsriPrjFile._greenwich, "0.0");
 
-            var unit = new PrjTree(PrjFile._unit, PrjFile._degree, PrjFile._degreeValue);
+            var unit = new EsriPrjTreeNode(EsriPrjFile._unit, EsriPrjFile._degree, EsriPrjFile._degreeValue);
 
-            this.Children = new List<PrjTree>() { datum, primem, unit };
+            this.Children = new List<EsriPrjTreeNode>() { datum, primem, unit };
         }
 
-        private PrjTree(string name, string content)
+        private EsriPrjTreeNode(string name, string content)
         {
             this.Name = name.Replace(specialCharacter, string.Empty).Trim(trimCharacters);
 
-            this.Children = new List<PrjTree>();
+            this.Children = new List<EsriPrjTreeNode>();
 
             this.Values = new List<string>();
 
@@ -107,7 +107,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             {
                 if (parts[i].Contains(specialCharacter))
                 {
-                    this.Children.Add(new PrjTree(parts[i], matches[matchIndex]));
+                    this.Children.Add(new EsriPrjTreeNode(parts[i], matches[matchIndex]));
 
                     matchIndex++;
                 }
@@ -170,17 +170,17 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
-        private static PrjTree _meter;
+        private static EsriPrjTreeNode _meter;
 
-        public static PrjTree MeterUnit
+        public static EsriPrjTreeNode MeterUnit
         {
             get
             {
                 if (_meter == null)
                 {
-                    _meter = new PrjTree()
+                    _meter = new EsriPrjTreeNode()
                     {
-                        Name = PrjFile._unit,
+                        Name = EsriPrjFile._unit,
                         Values = new List<string>() { "Meter", "1.0" }
                     };
                 }

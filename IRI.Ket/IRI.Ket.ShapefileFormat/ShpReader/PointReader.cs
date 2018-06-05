@@ -10,8 +10,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PointReader : ShpReader<EsriPoint>
     {
-        public PointReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPoint)
+        public PointReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPoint, srid)
         {
 
         }
@@ -43,7 +43,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
             double x = reader.ReadDouble();
 
             double y = reader.ReadDouble();
-             
+
             return new EsriPoint(x, y);
         }
     }

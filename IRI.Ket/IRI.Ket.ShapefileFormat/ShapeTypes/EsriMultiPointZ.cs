@@ -20,6 +20,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// </summary>
         private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
 
+        public int Srid { get; private set; }
+
         private EsriPoint[] points;
 
         public int NumberOfPoints
@@ -81,7 +83,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.zValues; }
         }
 
-        public EsriMultiPointZ(EsriPoint[] points, double[] zValues, double[] measures)
+        public EsriMultiPointZ(EsriPoint[] points, double[] zValues, double[] measures, int srid)
         {
             if (points.Length != zValues.Length || points.Length != measures.Length)
             {
@@ -90,12 +92,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
+            this.Srid = srid;
+
             this.points = points;
 
             this.measures = measures;
-             
+
             this.zValues = zValues;
-              
+
             if (measures?.Count() > 0)
             {
                 this.minMeasure = measures.Min();
@@ -130,9 +134,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                                 double[] zValues,
                                 double minMeasure,
                                 double maxMeasure,
-                                double[] measures)
+                                double[] measures, 
+                                int srid)
         {
             this.boundingBox = boundingBox;
+
+            this.Srid = srid;
 
             this.points = points;
 
@@ -149,13 +156,15 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             this.measures = measures;
         }
 
-        public EsriMultiPointZ(EsriPointZ[] points)
+        public EsriMultiPointZ(EsriPointZ[] points, int srid)
         {
             //this.boundingBox = new IRI.Msh.Common.Primitives.BoundingBox(xMin: MapStatistics.GetMinX(points),
             //                                    yMin: MapStatistics.GetMinY(points),
             //                                    xMax: MapStatistics.GetMaxX(points),
             //                                    yMax: MapStatistics.GetMaxY(points));
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+
+            this.Srid = srid;
 
             this.points = new EsriPoint[points.Length];
 
@@ -308,14 +317,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriMultiPointZ(this.Points.Select(i => i.Transform(transform)).Cast<EsriPoint>().ToArray(), this.ZValues, this.Measures);
+            return new EsriMultiPointZ(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.ZValues, this.Measures, newSrid);
         }
 
         public Geometry AsGeometry()
         {
-            return new Geometry(points.Select(p => new Point(p.X, p.Y)).ToArray(), GeometryType.MultiPoint);
+            return new Geometry(points.Select(p => new Point(p.X, p.Y)).ToArray(), GeometryType.MultiPoint, Srid);
         }
 
         #endregion

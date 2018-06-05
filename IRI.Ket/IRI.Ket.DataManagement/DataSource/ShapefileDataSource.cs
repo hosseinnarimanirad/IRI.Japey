@@ -132,7 +132,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
                 }
 
-                var sourceCrs = new ShapefileFormat.Prj.PrjFile(sourcePrj).AsMapProjection();
+                var sourceCrs = new ShapefileFormat.Prj.EsriPrjFile(sourcePrj).AsMapProjection();
 
                 Func<Point, Point> func = null;
 

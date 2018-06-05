@@ -11,8 +11,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PolygonMReader : MeasuresReader<EsriPolygonM>
     {
-        public PolygonMReader(string fileName)
-            : base(fileName, EsriShapeType.EsriPolygonM)
+        public PolygonMReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriPolygonM, srid)
         {
            
         }

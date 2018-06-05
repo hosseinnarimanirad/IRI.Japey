@@ -23,7 +23,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         {
         }
 
-        public Mercator(Ellipsoid ellipsoid) : base(string.Empty, ellipsoid)
+        public Mercator(Ellipsoid ellipsoid, int srid = 0) : base(string.Empty, ellipsoid, srid)
         {
         }
 
@@ -37,5 +37,9 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
             return MapProjects.MercatorToGeodetic(point, this._ellipsoid);
         }
 
+        protected override int GetSrid()
+        {
+            return _srid;
+        }
     }
 }

@@ -10,8 +10,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public abstract class zReader<T> : MeasuresReader<T> where T : IEsriShape
     {
-        public zReader(string fileName, EsriShapeType type)
-            : base(fileName, type)
+        public zReader(string fileName, EsriShapeType type, int srid)
+            : base(fileName, type, srid)
         {
 
         }

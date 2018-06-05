@@ -94,8 +94,8 @@
     <Compile Include="Prj\CoordinateSystemExtensions.cs" />
     <Compile Include="Prj\EsriPrjParameterType.cs" />
     <Compile Include="Prj\EsriSrType.cs" />
-    <Compile Include="Prj\PrjFile.cs" />
-    <Compile Include="Prj\PrjTree.cs" />
+    <Compile Include="Prj\EsriPrjFile.cs" />
+    <Compile Include="Prj\EsriPrjTreeNode.cs" />
     <Compile Include="ShapeConstants.cs" />
     <Compile Include="Shapefile.cs" />
     <Compile Include="ShapeHelper.cs" />

@@ -24,9 +24,19 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
                 return MapProjectionType.LambertConformalConic;
             }
         }
-         
-        public LambertConformalConic(Ellipsoid<Meter, Degree> ellipsoid, double standardParallel1, double standardParallel2, double centralMeridian, double latitudeOfOrigin, double falseEasting = 0, double falseNorthing = 0, double scaleFactor = 1.0)
-        { 
+
+        public LambertConformalConic(Ellipsoid<Meter, Degree> ellipsoid,
+                                        double standardParallel1,
+                                        double standardParallel2,
+                                        double centralMeridian,
+                                        double latitudeOfOrigin,
+                                        double falseEasting = 0,
+                                        double falseNorthing = 0,
+                                        double scaleFactor = 1.0,
+                                        int srid = 0)
+        {
+            this._srid = srid;
+
             this._ellipsoid = ellipsoid;
 
             this._latitudeOfOrigin = latitudeOfOrigin;
@@ -42,7 +52,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
             this._falseNorthing = falseNorthing;
 
             this._scaleFactor = scaleFactor;
-            
+
             //this.scaleFactor = 1;
             double m1 = MapProjects.CalculateM(ellipsoid.FirstEccentricity, standardParallel1 * Math.PI / 180.0);
             double m2 = MapProjects.CalculateM(ellipsoid.FirstEccentricity, standardParallel2 * Math.PI / 180.0);
@@ -171,6 +181,12 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
             double y = rho0 - rho * Math.Cos(theta) + this._falseNorthing;
 
             return new Point(x, y);
-        } 
+        }
+
+
+        protected override int GetSrid()
+        {
+            return _srid;
+        }
     }
 }

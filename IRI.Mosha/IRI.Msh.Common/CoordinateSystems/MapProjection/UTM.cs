@@ -21,7 +21,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         {
         }
 
-        public UTM(Ellipsoid ellipsoid, double centralLongitude) : base(string.Empty, ellipsoid)
+        public UTM(Ellipsoid ellipsoid, double centralLongitude) : base(string.Empty, ellipsoid, 0)
         {
             this._centralMeridian = centralLongitude;
 
@@ -97,6 +97,18 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
                 return 32700 + zone;
                 //return int.Parse($"326{zone:00}");
             }
+        }
+
+        public int GetSrid(bool isNorthHemisphere)
+        {
+            var zone = MapProjects.FindZone(CentralMeridian);
+
+            return GetSrid(zone, isNorthHemisphere);
+        }
+
+        protected override int GetSrid()
+        {
+            return GetSrid(true);
         }
     }
 }

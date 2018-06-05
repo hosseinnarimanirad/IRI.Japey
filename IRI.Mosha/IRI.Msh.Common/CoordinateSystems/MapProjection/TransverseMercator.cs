@@ -28,7 +28,8 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         {
         }
 
-        public TransverseMercator(Ellipsoid ellipsoid, double centralMeridian, double latitudeOfOrigin, double falseEasting, double falseNorthing, double scaleFactor) : base(string.Empty, ellipsoid)
+        public TransverseMercator(Ellipsoid ellipsoid, double centralMeridian, double latitudeOfOrigin, double falseEasting, double falseNorthing, double scaleFactor, int srid = 0)
+            : base(string.Empty, ellipsoid, srid)
         {
             this._falseEasting = falseEasting;
 
@@ -68,6 +69,12 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
 
             return result;
 
+        }
+
+
+        protected override int GetSrid()
+        {
+            return _srid;
         }
     }
 }

@@ -18,8 +18,8 @@ using IRI.Ket.GsmGprsCommunication1;
 using IRI.Ket.Spatial.Primitives;
 using Sfc = IRI.Ket.Spatial;
 using System.Diagnostics;
-using IRI.Sta.Common.Mapping;
-using spatial = IRI.Sta.Common.Primitives;
+using IRI.Msh.Common.Mapping;
+using spatial = IRI.Msh.Common.Primitives;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using Microsoft.SqlServer.Types;
@@ -27,7 +27,7 @@ using System.Data;
 using Newtonsoft.Json;
 using IRI.Ket.Common.Extensions;
 using IRI.Ket.Common.Model;
-using IRI.Sta.Common.Model.GeoJson;
+using IRI.Msh.Common.Model.GeoJson;
 using IRI.Ket.SqlServerSpatialExtension.Extensions;
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -36,6 +36,10 @@ using System.IO;
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using System.IO.Compression;
+using IRI.Ket.SqlServerSpatialExtension;
+using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace MainProject
 {
@@ -43,11 +47,28 @@ namespace MainProject
     class Program
     {
 
+        public class NccPoint
+        {
+            [JsonProperty("Name")]
+            public string Name { get; set; }
+            [JsonIgnore()]
+            public string Type { get; set; }
+            [JsonProperty("X")]
+            public double XWebMercator { get; set; }
+            [JsonProperty("Y")]
+            public double YWebMercator { get; set; }
+        }
+
         [STAThread()]
         static void Main()
         {
+
+            ExportNiocIndex();
+
             //TestGeolocation();
-            GetTiles18();
+
+            //GetTiles18();
+
             ////////var jsonString = System.IO.File.ReadAllText(@"E:\Data\Iran\Railway\networkblock.json");
             ////////// var jsonStringOne = System.IO.File.ReadAllText(@"C:\Users\Hossein\Desktop\New Text Document.txt");
 
@@ -154,19 +175,185 @@ namespace MainProject
             Console.Read();
         }
 
+        static void ExportNiocIndex()
+        {
+            var iran = @"C:\Users\Hossein\Desktop\Export_Output.shp";
+
+            var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(10, 40) / 2;
+
+            var iranShape = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(iran).First().AsSqlGeometry(SridHelper.WebMercator).Simplify(threshold * threshold, IRI.Ket.SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea).MakeValid();
+
+            //var index250k = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get250kIndex(iranShape);
+
+            //IRI.Ket.ShapefileFormat.Shapefile.Save(@"C:\Users\Hossein\Desktop\nioc250k.shp", index250k, sqlGeo => sqlGeo.AsEsriShape(), true, true);
+
+
+            //var index100k = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get100kIndex(iranShape);
+
+            //IRI.Ket.ShapefileFormat.Shapefile.Save(@"C:\Users\Hossein\Desktop\nioc100k.shp", index100k, sqlGeo => sqlGeo.AsEsriShape(), true, true);
+
+
+            //var index50k = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get50kIndex(iranShape);
+
+            //IRI.Ket.ShapefileFormat.Shapefile.Save(@"C:\Users\Hossein\Desktop\nioc50k.shp", index50k, sqlGeo => sqlGeo.AsEsriShape(), true, true);
+
+            System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+
+            var index100Sheets = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get100kIndexSheets(iranShape);
+
+            IRI.Ket.ShapefileFormat.Shapefile.Save(
+                @"C:\Users\Hossein\Desktop\Index100k.shp",
+                index100Sheets,
+                i => i.Geometry.AsEsriShape(), new List<IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>>()
+                {
+                    new IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>(IRI.Ket.ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField("SheetName",4),sf=>sf.Attributes?.First().Value)
+                },
+                Encoding.UTF8,
+                new WebMercator(),
+                true);
+
+            watch.Stop();
+            var t100k = watch.ElapsedMilliseconds;
+            watch.Restart();
+
+            var index50Sheets = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get50kIndexSheets(iranShape);
+
+            IRI.Ket.ShapefileFormat.Shapefile.Save(
+                @"C:\Users\Hossein\Desktop\Index50k.shp",
+                index50Sheets,
+                i => i.Geometry.AsEsriShape(), new List<IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>>()
+                {
+                    new IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>(IRI.Ket.ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField("SheetName",20),sf=>sf.Attributes?.First().Value)
+                },
+                Encoding.UTF8,
+                new WebMercator(),
+                true);
+
+
+            watch.Stop();
+            var t50k = watch.ElapsedMilliseconds;
+            watch.Restart();
+
+
+            var index25Sheets = IRI.Ket.SqlServerSpatialExtension.Helpers.IndexHelper.Get25kIndexSheets(iranShape);
+
+            IRI.Ket.ShapefileFormat.Shapefile.Save(
+                @"C:\Users\Hossein\Desktop\Index25k.shp",
+                index25Sheets,
+                i => i.Geometry.AsEsriShape(), new List<IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>>()
+                {
+                    new IRI.Ket.ShapefileFormat.Model.ObjectToDbfTypeMap<SqlFeature>(IRI.Ket.ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField("SheetName",20),sf=>sf.Attributes?.First().Value)
+                },
+                Encoding.UTF8,
+                new WebMercator(),
+                true);
+
+
+            watch.Stop();
+            var t25k = watch.ElapsedMilliseconds;
+            //watch.Restart();
+
+        }
+
+        static void ExportNccData()
+        {
+            var shapefile = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(@"E:\Data\Iran\NCC\IranBM\IranBM.shp");
+            var dbf = IRI.Ket.ShapefileFormat.Dbf.DbfFile.Read(@"E:\Data\Iran\NCC\IranBM\IranBM.dbf", "table");
+
+            var points = IRI.Ket.ShapefileFormat.Shapefile.Read<NccPoint>(@"E:\Data\Iran\NCC\IranBM\IranBM.shp",
+                    (o) => new NccPoint() { Name = o["Name"]?.ToString(), Type = o["FolderPath"]?.ToString() },
+                    (s, srid, n) =>
+                    {
+                        var point = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator((IRI.Msh.Common.Primitives.IPoint)s);
+
+                        n.XWebMercator = point.X;
+
+                        n.YWebMercator = point.Y;
+                    },
+                    Encoding.UTF8,
+                    IRI.Ket.ShapefileFormat.Dbf.DbfFile.ArabicEncoding,
+                    true);
+
+            var types = points.Select(p => p.Type).Distinct().ToList();
+
+            var leveling3 = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ترازیابی/درجه سه ترازیابی").ToList();
+
+            //foreach (var item in leveling3)
+            //{
+            //    item.Type = "NccLeveling3";
+            //}
+
+            var leveling2 = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ترازیابی/درجه دو ترازیابی").ToList();
+
+            //foreach (var item in leveling2)
+            //{
+            //    item.Type = "NccLeveling2";
+            //}
+
+            var leveling1 = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ترازیابی/درجه یک ترازیابی").ToList();
+
+            //foreach (var item in leveling1)
+            //{
+            //    item.Type = "NccLeveling1";
+            //}
+
+            var geodesy2 = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ژئودزی/ژئودزی درجه دو").ToList();
+
+            //foreach (var item in geodesy2)
+            //{
+            //    item.Type = "NccGeodesy2";
+            //}
+
+            var geodesy1 = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ژئودزی/ژئودزی درجه یک").ToList();
+
+            //foreach (var item in geodesy1)
+            //{
+            //    item.Type = "NccGeodesy1";
+            //}
+
+            var gravity = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/چند منظوره ثقل سنجی").ToList();
+
+            //foreach (var item in gravity)
+            //{
+            //    item.Type = "NccGravity";
+            //}
+
+            var geodynamic = points.Where(p => p.Type == "Iran-BM/سازمان نقشه برداری کشور NCC/ژئودینامیک DGPS/RTK").ToList();
+
+            //foreach (var item in geodynamic)
+            //{
+            //    item.Type = "NccGeodynamic";
+            //}
+
+            var directory = @"E:\Data\Iran\NCC\IranBM\Json\";
+
+            System.IO.File.WriteAllText(directory + nameof(leveling3), JsonConvert.SerializeObject(leveling3));
+            System.IO.File.WriteAllText(directory + nameof(leveling2), JsonConvert.SerializeObject(leveling2));
+            System.IO.File.WriteAllText(directory + nameof(leveling1), JsonConvert.SerializeObject(leveling1));
+
+            System.IO.File.WriteAllText(directory + nameof(geodesy2), JsonConvert.SerializeObject(geodesy2));
+            System.IO.File.WriteAllText(directory + nameof(geodesy1), JsonConvert.SerializeObject(geodesy1));
+
+            System.IO.File.WriteAllText(directory + nameof(gravity), JsonConvert.SerializeObject(gravity));
+            System.IO.File.WriteAllText(directory + nameof(geodynamic), JsonConvert.SerializeObject(geodynamic));
+
+            ZipFile.CreateFromDirectory(directory, @"E:\Data\Iran\NCC\IranBM\store2");
+
+            var length = points.Count;
+        }
 
         static void GetTiles18()
         {
 
             //var wm = IRI.Jab.Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(null).First(i => i.Label == "اصفهان").GetBoundingBox(3857);
 
-            //IRI.Sta.Common.Mapping.WebMercatorUtility.WriteWebMercatorBoundingBoxToGoogleTileRegions(@"C:\Users\Hossein\Desktop\New Text Document.txt", wm, 18);
+            //IRI.Msh.Common.Mapping.WebMercatorUtility.WriteWebMercatorBoundingBoxToGoogleTileRegions(@"C:\Users\Hossein\Desktop\New Text Document.txt", wm, 18);
 
 
             WebMercatorHelper.WriteWebMercatorBoundingBoxToGoogleTileRegionsAsShapefile(
                 @"C:\Users\Hossein\Desktop\Iran13v3.shp",
-                IRI.Sta.Common.Primitives.BoundingBoxes.IranWebMercatorBoundingBox, 13);
-             
+                IRI.Msh.Common.Primitives.BoundingBoxes.IranWebMercatorBoundingBox, 13);
+
         }
 
         class MetroStation
@@ -251,9 +438,9 @@ namespace MainProject
                         YWebMercator = webMercator.Y;
 
                         resultArray.Add(new MetroStation() { Latitude = Latitude, Longitude = Longitude, Title = field3 });
-                        //newRow["LocationWgs84Wkb"] = SqlGeography.Point(wgs84.Y, wgs84.X, IRI.Sta.Common.CoordinateSystems.MapProjection.SridHelper.GeodeticWGS84).STAsBinary().Value;
+                        //newRow["LocationWgs84Wkb"] = SqlGeography.Point(wgs84.Y, wgs84.X, IRI.Sta.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84).STAsBinary().Value;
 
-                        //newRow["LocationWmWkb"] = SqlGeometry.Point(webMercator.X, webMercator.Y, IRI.Sta.Common.CoordinateSystems.MapProjection.SridHelper.WebMercator).STAsBinary().Value;
+                        //newRow["LocationWmWkb"] = SqlGeometry.Point(webMercator.X, webMercator.Y, IRI.Sta.CoordinateSystem.MapProjection.SridHelper.WebMercator).STAsBinary().Value;
                     }
                     else
                     {

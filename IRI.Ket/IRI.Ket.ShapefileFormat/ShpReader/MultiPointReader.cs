@@ -11,8 +11,8 @@ namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class MultiPointReader : PointsReader<EsriMultiPoint>
     {
-        public MultiPointReader(string fileName)
-            : base(fileName, EsriShapeType.EsriMultiPoint)
+        public MultiPointReader(string fileName, int srid)
+            : base(fileName, EsriShapeType.EsriMultiPoint, srid)
         {
 
         }
@@ -32,10 +32,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             EsriPoint[] points = this.ReadPoints(numPoints);
 
-            return new EsriMultiPoint(boundingBox, points);
+            return new EsriMultiPoint(boundingBox, points, this._srid);
         }
 
-        public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -48,7 +48,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var points = ShpBinaryReader.ReadPoints(reader, numPoints);
 
-            return new EsriMultiPoint(boundingBox, points);
+            return new EsriMultiPoint(boundingBox, points, srid);
         }
 
         

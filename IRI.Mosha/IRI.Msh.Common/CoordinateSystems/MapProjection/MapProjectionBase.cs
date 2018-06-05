@@ -12,6 +12,8 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
 
         protected double _scaleFactor = 1.0;
 
+        protected int _srid = 0;
+
         public MapProjectionBase()
         {
 
@@ -21,8 +23,9 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         //{
         //}
 
-        public MapProjectionBase(string title, Ellipsoid ellipsoid) : base(title, ellipsoid)
+        public MapProjectionBase(string title, Ellipsoid ellipsoid, int srid) : base(title, ellipsoid)
         {
+            _srid = srid;
         }
 
         public double FalseEasting

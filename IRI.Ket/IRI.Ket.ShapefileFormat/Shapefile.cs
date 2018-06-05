@@ -20,6 +20,8 @@ namespace IRI.Ket.ShapefileFormat
     {
         //private static System.ComponentModel.License license = null;
 
+        #region Read Shapefile
+
         public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName)
         {
             return Task.Run(() => { return ReadShapes(fileName); });
@@ -44,57 +46,59 @@ namespace IRI.Ket.ShapefileFormat
                 }
             }
 
+            int srid = TryGetSrid(shpFileName);
+
             switch (MainHeader.ShapeType)
             {
                 case EsriShapeType.NullShape:
                     throw new NotImplementedException();
 
                 case EsriShapeType.EsriPoint:
-                    Reader.PointReader reader01 = new Reader.PointReader(shpFileName);
+                    Reader.PointReader reader01 = new Reader.PointReader(shpFileName, srid);
                     return reader01.elements;
 
                 case EsriShapeType.EsriPolyLine:
-                    Reader.PolyLineReader reader02 = new Reader.PolyLineReader(shpFileName);
+                    Reader.PolyLineReader reader02 = new Reader.PolyLineReader(shpFileName, srid);
                     return reader02.elements;
 
                 case EsriShapeType.EsriPolygon:
-                    Reader.PolygonReader reader03 = new Reader.PolygonReader(shpFileName);
+                    Reader.PolygonReader reader03 = new Reader.PolygonReader(shpFileName, srid);
                     return reader03.elements;
 
                 case EsriShapeType.EsriMultiPoint:
-                    Reader.MultiPointReader reader04 = new Reader.MultiPointReader(shpFileName);
+                    Reader.MultiPointReader reader04 = new Reader.MultiPointReader(shpFileName, srid);
                     return reader04.elements;
 
                 case EsriShapeType.EsriPointZ:
-                    Reader.PointZReader reader05 = new Reader.PointZReader(shpFileName);
+                    Reader.PointZReader reader05 = new Reader.PointZReader(shpFileName, srid);
                     return reader05.elements;
 
                 case EsriShapeType.EsriPolyLineZ:
-                    Reader.PolyLineZReader reader06 = new Reader.PolyLineZReader(shpFileName);
+                    Reader.PolyLineZReader reader06 = new Reader.PolyLineZReader(shpFileName, srid);
                     return reader06.elements;
 
                 case EsriShapeType.EsriPolygonZ:
-                    Reader.PolygonZReader reader07 = new Reader.PolygonZReader(shpFileName);
+                    Reader.PolygonZReader reader07 = new Reader.PolygonZReader(shpFileName, srid);
                     return reader07.elements;
 
                 case EsriShapeType.EsriMultiPointZ:
-                    Reader.MultiPointZReader reader08 = new Reader.MultiPointZReader(shpFileName);
+                    Reader.MultiPointZReader reader08 = new Reader.MultiPointZReader(shpFileName, srid);
                     return reader08.elements;
 
                 case EsriShapeType.EsriPointM:
-                    Reader.PointMReader reader09 = new Reader.PointMReader(shpFileName);
+                    Reader.PointMReader reader09 = new Reader.PointMReader(shpFileName, srid);
                     return reader09.elements;
 
                 case EsriShapeType.EsriPolyLineM:
-                    Reader.PolyLineMReader reader10 = new Reader.PolyLineMReader(shpFileName);
+                    Reader.PolyLineMReader reader10 = new Reader.PolyLineMReader(shpFileName, srid);
                     return reader10.elements;
 
                 case EsriShapeType.EsriPolygonM:
-                    Reader.PolygonMReader reader11 = new Reader.PolygonMReader(shpFileName);
+                    Reader.PolygonMReader reader11 = new Reader.PolygonMReader(shpFileName, srid);
                     return reader11.elements;
 
                 case EsriShapeType.EsriMultiPointM:
-                    Reader.MultiPointMReader reader12 = new Reader.MultiPointMReader(shpFileName);
+                    Reader.MultiPointMReader reader12 = new Reader.MultiPointMReader(shpFileName, srid);
                     return reader12.elements;
 
                 case EsriShapeType.EsriMultiPatch:
@@ -106,21 +110,46 @@ namespace IRI.Ket.ShapefileFormat
         }
 
 
-        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
         {
             var shapes = ReadShapes(shpFileName);
 
-            var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+            var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            var srid = TryGetSrid(shpFileName);
 
             List<T> result = new List<T>(shapes.Count);
 
-            for (int i = 0; i < attributes.Count; i++)
+            for (int i = 0; i < attributeArray.Count; i++)
             {
-                var feature = mapPropertiesFunc(attributes[i]);
+                var feature = mapPropertiesFunc(attributeArray[i]);
 
-                updateGeometryAction(shapes[i], feature);
+                updateGeometryAction(shapes[i], srid, feature);
 
                 result.Add(feature);
+            }
+
+            return result;
+        }
+
+        internal static int TryGetSrid(string shpFileName)
+        {
+            int result = 0;
+
+            var prjFile = GetPrjFileName(shpFileName);
+
+            if (System.IO.File.Exists(prjFile))
+            {
+                try
+                {
+                    var esriPrjFile = Prj.EsriPrjFile.Parse(System.IO.File.ReadAllText(prjFile));
+
+                    result = esriPrjFile.Srid;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Exception at reading prj file");
+                }
             }
 
             return result;
@@ -128,26 +157,48 @@ namespace IRI.Ket.ShapefileFormat
 
         public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
         {
-            var shapes = ReadShapes(shpFileName);
 
-            var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
 
-            List<Feature> result = new List<Feature>(shapes.Count);
+            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.Geometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
+            //var shapes = ReadShapes(shpFileName);
 
-            for (int i = 0; i < attributes.Count; i++)
+            //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            //List<Feature> result = new List<Feature>(shapes.Count);
+
+            //for (int i = 0; i < attributes.Count; i++)
+            //{
+            //    var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
+
+            //    result.Add(feature);
+            //}
+
+            //return result;
+        }
+
+        public static MainFileHeader GetFileHeader(string fileName)
+        {
+            MainFileHeader MainHeader;
+
+            using (System.IO.FileStream shpStream = new System.IO.FileStream(fileName, System.IO.FileMode.Open))
             {
-                var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
-                 
-                result.Add(feature);
+                using (System.IO.BinaryReader shpReader = new System.IO.BinaryReader(shpStream))
+                {
+                    MainHeader = new MainFileHeader(shpReader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
+
+                    shpReader.Close();
+
+                    shpStream.Close();
+                }
             }
 
-            return result;
+            return MainHeader;
         }
 
-        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CoordinateReferenceSystemBase targetCrs)
-        {
-            return Task.Run(() => Project(shpFileName, targetCrs));
-        }
+        #endregion
+
+
+        #region Write (Save) Shapefile 
 
         public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false)
         {
@@ -244,24 +295,141 @@ namespace IRI.Ket.ShapefileFormat
             DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings.Select(m => m.MapFunction).ToList(), attributeMappings.Select(m => m.FieldType).ToList(), encoding, overwrite);
         }
 
-        public static MainFileHeader GetFileHeader(string fileName)
+
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
         {
-            MainFileHeader MainHeader;
+            Save(shpFileName, data, createEmptyDbf, overwrite);
 
-            using (System.IO.FileStream shpStream = new System.IO.FileStream(fileName, System.IO.FileMode.Open))
+            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
+        }
+
+        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
+        {
+            Save(shpFileName, data, map, createEmptyDbf, overwrite);
+
+            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
+        }
+
+        public static void SaveAsPrj(string prjFileName, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite)
+        {
+            if (overwrite && System.IO.File.Exists(prjFileName))
             {
-                using (System.IO.BinaryReader shpReader = new System.IO.BinaryReader(shpStream))
+                System.IO.File.Delete(prjFileName);
+            }
+
+            coordinateReferenceSystem.AsEsriPrj().Save(prjFileName);
+        }
+
+        #endregion
+
+
+        #region Project
+
+        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CoordinateReferenceSystemBase targetCrs)
+        {
+            return Task.Run(() => Project(shpFileName, targetCrs));
+        }
+
+
+        public static List<IEsriShape> Project(string shpFileName, CoordinateReferenceSystemBase targetCrs)
+        {
+            var sourcePrj = GetPrjFileName(shpFileName);
+
+            if (!System.IO.File.Exists(sourcePrj))
+            {
+                throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
+            }
+
+            var sourceCrs = new Prj.EsriPrjFile(sourcePrj).AsMapProjection();
+
+            var data = ReadShapes(shpFileName).ToList();
+
+            return Project(data, sourceCrs, targetCrs);
+
+            ////Old Method
+            //var sourcePrj = GetPrjFileName(shpFileName);
+            //if (!System.IO.File.Exists(sourcePrj))
+            //{
+            //    throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
+            //}
+            //var sourceCrs = new Prj.PrjFile(sourcePrj).AsMapProjection();
+            //var data = Read(shpFileName).ToList();
+            //List<IShape> result = new List<IShape>(data.Count);
+            //if (sourceCrs.Ellipsoid.AreTheSame(targetCrs.Ellipsoid))
+            //{
+            //    for (int i = 0; i < data.Count; i++)
+            //    {
+            //        var c1 = data[i].Transform(p => sourceCrs.ToGeodetic(p));
+            //        result.Add(c1.Transform(p => targetCrs.FromGeodetic(p)));
+            //    }
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < data.Count; i++)
+            //    {
+            //        var c1 = data[i].Transform(p => sourceCrs.ToGeodetic(p));
+            //        result.Add(c1.Transform(p => targetCrs.FromGeodetic(p, sourceCrs.Ellipsoid)));
+            //    }
+            //}
+            //return result;
+        }
+
+        public static List<IEsriShape> Project(List<IEsriShape> values, string sourceEsriWktPrj, string targetEsriWktPrj)
+        {
+            var sourceSrs = Prj.EsriPrjFile.Parse(sourceEsriWktPrj).AsMapProjection();
+
+            var targetSrs = Prj.EsriPrjFile.Parse(targetEsriWktPrj).AsMapProjection();
+
+            return Project(values, sourceSrs, targetSrs);
+        }
+
+        public static List<IEsriShape> Project(List<IEsriShape> values, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        {
+            List<IEsriShape> result = new List<IEsriShape>(values.Count);
+
+            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
+            {
+                for (int i = 0; i < values.Count; i++)
                 {
-                    MainHeader = new MainFileHeader(shpReader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), targetSrs.Srid);
 
-                    shpReader.Close();
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p), targetSrs.Srid));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < values.Count; i++)
+                {
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), targetSrs.Srid);
 
-                    shpStream.Close();
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid));
                 }
             }
 
-            return MainHeader;
+            return result;
         }
+
+        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, CoordinateReferenceSystemBase targetCrs, bool overwrite = false)
+        {
+            if (!CheckAllNeededFilesExists(sourceShapefileName, true))
+            {
+                throw new NotImplementedException();
+            }
+
+            var result = Project(sourceShapefileName, targetCrs);
+            //result.ToList().Select(i=>i.MinimumBoundingBox).ToList()
+            SaveAsShapefile(targetShapefileName, result, false, targetCrs, overwrite);
+
+            var destinationDbfFileName = GetDbfFileName(targetShapefileName);
+
+            System.IO.File.Copy(GetDbfFileName(sourceShapefileName), destinationDbfFileName, overwrite);
+        }
+
+
+        #endregion
+
+
+        #region Helper Functions
 
         public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
         {
@@ -399,123 +567,8 @@ namespace IRI.Ket.ShapefileFormat
 
         }
 
-        public static List<IEsriShape> Project(string shpFileName, CoordinateReferenceSystemBase targetCrs)
-        {
-            var sourcePrj = GetPrjFileName(shpFileName);
+        #endregion
 
-            if (!System.IO.File.Exists(sourcePrj))
-            {
-                throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
-            }
-
-            var sourceCrs = new Prj.PrjFile(sourcePrj).AsMapProjection();
-
-            var data = ReadShapes(shpFileName).ToList();
-
-            return Project(data, sourceCrs, targetCrs);
-
-            ////Old Method
-            //var sourcePrj = GetPrjFileName(shpFileName);
-            //if (!System.IO.File.Exists(sourcePrj))
-            //{
-            //    throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
-            //}
-            //var sourceCrs = new Prj.PrjFile(sourcePrj).AsMapProjection();
-            //var data = Read(shpFileName).ToList();
-            //List<IShape> result = new List<IShape>(data.Count);
-            //if (sourceCrs.Ellipsoid.AreTheSame(targetCrs.Ellipsoid))
-            //{
-            //    for (int i = 0; i < data.Count; i++)
-            //    {
-            //        var c1 = data[i].Transform(p => sourceCrs.ToGeodetic(p));
-            //        result.Add(c1.Transform(p => targetCrs.FromGeodetic(p)));
-            //    }
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < data.Count; i++)
-            //    {
-            //        var c1 = data[i].Transform(p => sourceCrs.ToGeodetic(p));
-            //        result.Add(c1.Transform(p => targetCrs.FromGeodetic(p, sourceCrs.Ellipsoid)));
-            //    }
-            //}
-            //return result;
-        }
-
-        public static List<IEsriShape> Project(List<IEsriShape> values, string sourceEsriWktPrj, string targetEsriWktPrj)
-        {
-            var sourceSrs = Prj.PrjFile.Parse(sourceEsriWktPrj).AsMapProjection();
-
-            var targetSrs = Prj.PrjFile.Parse(targetEsriWktPrj).AsMapProjection();
-
-            return Project(values, sourceSrs, targetSrs);
-        }
-
-        public static List<IEsriShape> Project(List<IEsriShape> values, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
-        {
-            List<IEsriShape> result = new List<IEsriShape>(values.Count);
-
-            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
-            {
-                for (int i = 0; i < values.Count; i++)
-                {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p));
-
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p)));
-                }
-            }
-            else
-            {
-                for (int i = 0; i < values.Count; i++)
-                {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p));
-
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid)));
-                }
-            }
-
-            return result;
-        }
-
-        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, CoordinateReferenceSystemBase targetCrs, bool overwrite = false)
-        {
-            if (!CheckAllNeededFilesExists(sourceShapefileName, true))
-            {
-                throw new NotImplementedException();
-            }
-
-            var result = Project(sourceShapefileName, targetCrs);
-            //result.ToList().Select(i=>i.MinimumBoundingBox).ToList()
-            SaveAsShapefile(targetShapefileName, result, false, targetCrs, overwrite);
-
-            var destinationDbfFileName = GetDbfFileName(targetShapefileName);
-
-            System.IO.File.Copy(GetDbfFileName(sourceShapefileName), destinationDbfFileName, overwrite);
-        }
-
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
-        {
-            Save(shpFileName, data, createEmptyDbf, overwrite);
-
-            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
-        }
-
-        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
-        {
-            Save(shpFileName, data, map, createEmptyDbf, overwrite);
-
-            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
-        }
-
-        public static void SaveAsPrj(string prjFileName, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite)
-        {
-            if (overwrite && System.IO.File.Exists(prjFileName))
-            {
-                System.IO.File.Delete(prjFileName);
-            }
-
-            coordinateReferenceSystem.AsEsriPrj().Save(prjFileName);
-        }
 
         #region Indexing
         //Indexing

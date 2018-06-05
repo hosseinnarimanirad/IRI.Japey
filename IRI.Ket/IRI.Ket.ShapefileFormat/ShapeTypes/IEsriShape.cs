@@ -14,6 +14,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
     {
         IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox { get; }
 
+        int Srid { get; }
+
         byte[] WriteContentsToByte();
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null);
 
-        IEsriShape Transform(Func<IPoint, IPoint> transform);
+        IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid);
 
         Geometry AsGeometry();
     }

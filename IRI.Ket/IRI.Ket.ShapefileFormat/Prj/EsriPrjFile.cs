@@ -11,9 +11,9 @@ using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Met
 
 namespace IRI.Ket.ShapefileFormat.Prj
 {
-    public class PrjFile
+    public class EsriPrjFile
     {
-        private PrjTree _root;
+        private EsriPrjTreeNode _root;
 
         #region Constants
 
@@ -32,6 +32,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
         public const string _unit = "UNIT";
         public const string _parameter = "PARAMETER";
         public const string _primem = "PRIMEM";
+        public const string _authority = "AUTHORITY";
 
         public const string _falseEasting = "False_Easting";
         public const string _falseNorthing = "False_Northing";
@@ -44,22 +45,35 @@ namespace IRI.Ket.ShapefileFormat.Prj
         public const string _greenwich = "Greenwich";
         public const string _degree = "Degree";
         public const string _degreeValue = "0.0174532925199433";
+        public const string _epsg = "EPSG";
 
         #endregion
 
-        public PrjFile(PrjTree root)
+        public EsriPrjFile(EsriPrjTreeNode root)
         {
             this._root = root;
+
+            //sample: AUTHORITY["EPSG", "4326"]
+            var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
+
+            int srid;
+
+            if (authorityInfo != null && authorityInfo.Count == 2 && authorityInfo?[0] == _epsg)
+            {
+                int.TryParse(authorityInfo[1], out srid);
+            }
+
+            this._srid = srid;
         }
 
-        public PrjFile(string prjFileName)
+        public EsriPrjFile(string prjFileName)
         {
-            this._root = PrjTree.Parse(System.IO.File.ReadAllText(prjFileName));
+            this._root = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
         }
 
-        public static PrjFile Parse(string esriWktPrj)
+        public static EsriPrjFile Parse(string esriWktPrj)
         {
-            return new PrjFile(PrjTree.Parse(esriWktPrj));
+            return new EsriPrjFile(EsriPrjTreeNode.Parse(esriWktPrj));
         }
 
         //Prj file type: GEOGCS, PROJCS
@@ -132,7 +146,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             get { return _root?.Values?.First(); }
         }
 
-        private PrjTree Geogcs
+        private EsriPrjTreeNode Geogcs
         {
             get
             {
@@ -150,7 +164,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
-        private PrjTree Datum
+        private EsriPrjTreeNode Datum
         {
             get
             {
@@ -158,6 +172,11 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
+        private int _srid;
+        public int Srid
+        {
+            get { return _srid; }
+        }
 
         //Ellipsoid
         public string EllipsoidName
@@ -168,7 +187,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             }
         }
 
-        //EPSG not available
+        //TODO: TEST EPSG
         public Ellipsoid Ellipsoid
         {
             get
@@ -177,7 +196,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
 
                 return new Ellipsoid(values.First(),
                                         new Sta.MeasurementUnit.Meter(double.Parse(values.Skip(1).First(), CultureInfo.InvariantCulture)),
-                                        double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture), int.MaxValue)
+                                        double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture), 0)
                 {
                     EsriName = values.First()
                 };
@@ -301,7 +320,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
                     throw new NotImplementedException();
 
                 case MapProjectionType.CylindricalEqualArea:
-                    return new CylindricalEqualArea(this.Title, this.Ellipsoid) { DatumName = this.Geogcs.Values?.First() };
+                    return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.Geogcs.Values?.First() };
 
                 case MapProjectionType.LambertConformalConic:
                     return new LambertConformalConic(
@@ -312,14 +331,15 @@ namespace IRI.Ket.ShapefileFormat.Prj
                         GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
                         GetParameter(EsriPrjParameterType.FalseEasting, 0),
                         GetParameter(EsriPrjParameterType.FalseNorthing, 0),
-                        GetParameter(EsriPrjParameterType.ScaleFactor, 1))
+                        GetParameter(EsriPrjParameterType.ScaleFactor, 1),
+                        Srid)
                     {
                         Title = this.Title,
                         DatumName = this.Geogcs.Values?.First()
                     };
 
                 case MapProjectionType.Mercator:
-                    return new Mercator(this.Ellipsoid)
+                    return new Mercator(this.Ellipsoid, Srid)
                     {
                         Title = this.Title,
                         DatumName = this.Geogcs.Values?.First()
@@ -333,7 +353,8 @@ namespace IRI.Ket.ShapefileFormat.Prj
                         GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
                         GetParameter(EsriPrjParameterType.FalseEasting, 0),
                         GetParameter(EsriPrjParameterType.FalseNorthing, 0),
-                        GetParameter(EsriPrjParameterType.ScaleFactor, 1))
+                        GetParameter(EsriPrjParameterType.ScaleFactor, 1), 
+                        Srid)
                     {
                         Title = this.Title,
                         DatumName = this.Geogcs.Values?.First()
