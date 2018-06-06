@@ -3,10 +3,10 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Sta.MeasurementUnit;
-using IRI.Sta.Algebra;
+using IRI.Msh.MeasurementUnit;
+using IRI.Msh.Algebra;
 
-namespace IRI.Sta.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem
 {
     public struct EllipsoidalPoint<TLinear, TAngular> : IEllipsoidalPoint
         where TLinear : LinearUnit, new()

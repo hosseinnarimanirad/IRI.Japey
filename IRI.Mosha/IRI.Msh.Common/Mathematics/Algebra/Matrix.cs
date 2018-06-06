@@ -6,7 +6,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.Serialization;
 
-namespace IRI.Sta.Algebra
+namespace IRI.Msh.Algebra
 {
     [DataContract]
     public class Matrix

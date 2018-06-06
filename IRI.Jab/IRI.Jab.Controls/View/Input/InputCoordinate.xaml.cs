@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 //using Microsoft.SqlServer.Types;
 
 namespace IRI.Jab.Controls.View.Input

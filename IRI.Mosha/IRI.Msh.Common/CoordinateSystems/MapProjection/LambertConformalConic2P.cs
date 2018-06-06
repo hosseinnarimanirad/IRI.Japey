@@ -1,5 +1,5 @@
-﻿using IRI.Sta.CoordinateSystem;
-using IRI.Sta.MeasurementUnit;
+﻿using IRI.Msh.CoordinateSystem;
+using IRI.Msh.MeasurementUnit;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -8,14 +8,14 @@ using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Sta.CoordinateSystem.MapProjection
+namespace IRI.Msh.CoordinateSystem.MapProjection
 {
-    public class LambertConformalConic : MapProjectionBase
+    public class LambertConformalConic2P : MapProjectionBase
     {
         //readonly double _latitude0, _latitude1, _latitude2, _longitude0, _falseEasting, _falseNorthing;
 
         //readonly IEllipsoid _ellipsoid;
-        readonly double n, F, rho0;
+        private readonly double n, F, rho0;
 
         public override MapProjectionType Type
         {
@@ -25,7 +25,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
             }
         }
 
-        public LambertConformalConic(Ellipsoid<Meter, Degree> ellipsoid,
+        public LambertConformalConic2P(Ellipsoid<Meter, Degree> ellipsoid,
                                         double standardParallel1,
                                         double standardParallel2,
                                         double centralMeridian,
@@ -74,7 +74,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         /// <param name="latitude">Must be in Degree</param>
         /// <param name="firstEccentricity"></param>
         /// <returns></returns>
-        internal double GeodeticLatitudeToT(double latitude, double firstEccentricity)
+        protected double GeodeticLatitudeToT(double latitude, double firstEccentricity)
         {
             //Limit the latitude value
             if (Math.Abs(latitude) > MapProjects._MaxConvertableToIsometricLatitude)

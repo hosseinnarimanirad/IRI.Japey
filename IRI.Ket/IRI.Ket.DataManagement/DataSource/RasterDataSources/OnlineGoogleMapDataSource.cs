@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 
 using System.Diagnostics;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.Common.Model;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 

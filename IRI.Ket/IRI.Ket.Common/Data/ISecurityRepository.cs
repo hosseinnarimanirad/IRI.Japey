@@ -15,6 +15,6 @@ namespace IRI.Ket.Common.Data
         GenericPrincipal GetPrincipal(string userName, string passwordHash);
         void Grant(string userName, string role);
         void UpdateUser(string oldUserName, string oldPasswordHash, string newUserName, string newPasswordHash);
-        bool UserExists(string userName);
+        bool UserExists(string userName);        
     }
 }

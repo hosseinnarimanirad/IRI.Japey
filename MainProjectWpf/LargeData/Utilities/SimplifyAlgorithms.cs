@@ -1,6 +1,6 @@
 ﻿using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.MainProjectWPF.LargeData.Model;
-using IRI.Sta.Common.Mapping;
+using IRI.Msh.Common.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -185,7 +185,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
 
         static void SuperSlim(string file)
         {
-            var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(file);
+            var shapes = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(file);
 
             EsriShapeCollection<EsriPolygon> polygons = new EsriShapeCollection<EsriPolygon>();
 
@@ -295,7 +295,7 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
             }
             else if (shapes.First().Type == EsriShapeType.EsriPolyLine || shapes.First().Type == EsriShapeType.EsriPolyLineZ || shapes.First().Type == EsriShapeType.EsriPolyLineM)
             {
-                var result = new List<EsriPolyLine>();
+                var result = new List<EsriPolyline>();
 
                 foreach (IEsriSimplePoints feature in shapes)
                 {
@@ -304,10 +304,10 @@ namespace IRI.MainProjectWPF.LargeData.Utilities
                     if (temp == null || temp.Length == 0 || temp.Sum(i => i.Length) == 0)
                         continue;
 
-                    result.Add(new EsriPolyLine(temp));
+                    result.Add(new EsriPolyline(temp));
                 }
 
-                return new EsriShapeCollection<EsriPolyLine>(result);
+                return new EsriShapeCollection<EsriPolyline>(result);
             }
             else
             {

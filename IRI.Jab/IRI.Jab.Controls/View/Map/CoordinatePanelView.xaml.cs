@@ -144,9 +144,9 @@ namespace IRI.Jab.Controls.View.Map
 
             //if (geodeticDms.IsChecked == true)
             //{
-            //    IRI.Sta.MeasurementUnit.Degree longitude = new IRI.Sta.MeasurementUnit.Degree(geodeticPoint.X);
+            //    IRI.Msh.MeasurementUnit.Degree longitude = new IRI.Msh.MeasurementUnit.Degree(geodeticPoint.X);
 
-            //    IRI.Sta.MeasurementUnit.Degree latitude = new IRI.Sta.MeasurementUnit.Degree(geodeticPoint.Y);
+            //    IRI.Msh.MeasurementUnit.Degree latitude = new IRI.Msh.MeasurementUnit.Degree(geodeticPoint.Y);
 
             //    this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
 
@@ -174,7 +174,7 @@ namespace IRI.Jab.Controls.View.Map
 
             //    this.region.Visibility = System.Windows.Visibility.Visible;
 
-            //    this.zone.Content = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
+            //    this.zone.Content = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
             //}
             //else if (mercator.IsChecked == true)
             //{
@@ -208,9 +208,9 @@ namespace IRI.Jab.Controls.View.Map
         //    try
         //    {
         //        IRI.Msh.Common.Primitives.Point result =
-        //            IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
+        //            IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
         //                    new IRI.Msh.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
-        //                    IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
+        //                    IRI.Msh.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result.X, result.Y);
         //    }
@@ -224,10 +224,10 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        double[][] result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //        double[][] result = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
         //                                                                new double[] { point.X },
         //                                                                new double[] { point.Y },
-        //                                                                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result[0][0], result[1][0]);
         //    }
@@ -241,10 +241,10 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        double[][] result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
+        //        double[][] result = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToTransverseMercator(
         //                                                                new double[] { point.X },
         //                                                                new double[] { point.Y },
-        //                                                                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result[0][0], result[1][0]);
         //    }
@@ -259,9 +259,9 @@ namespace IRI.Jab.Controls.View.Map
         //    try
         //    {
         //        double[][] result =
-        //            IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
+        //            IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
         //                new double[] { point.X },
-        //                new double[] { point.Y }, IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
+        //                new double[] { point.Y }, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84,
         //                0, 0);
 
         //        return new Point(result[0][0], result[1][0]);

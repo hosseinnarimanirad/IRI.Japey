@@ -2,11 +2,11 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Sta.MeasurementUnit;
+using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
-namespace IRI.Sta.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem
 {
     public static class Ellipsoids
     {

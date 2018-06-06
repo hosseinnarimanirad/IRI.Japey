@@ -1,4 +1,4 @@
-﻿using IRI.Sta.CoordinateSystem.MapProjection;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Prj;
 using System;
@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
-using IRI.Sta.MeasurementUnit;
+using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
+using IRI.Msh.MeasurementUnit;
 
 namespace IRI.Ket.ShapefileFormat.Prj
 {
@@ -203,7 +203,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
                 if (toWgs84Values == null)
                 {
                     return new Ellipsoid(spheroidValues.First(),
-                                        new Sta.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        new Msh.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
                                         double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture), srid)
                     {
                         EsriName = spheroidValues.First(),
@@ -220,10 +220,10 @@ namespace IRI.Ket.ShapefileFormat.Prj
                     var drz = double.Parse(toWgs84Values[5], CultureInfo.InvariantCulture);
 
                     return new Ellipsoid(spheroidValues.First(),
-                                        new Sta.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        new Msh.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
                                         double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
-                                        new IRI.Sta.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
-                                        new Sta.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
+                                        new IRI.Msh.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
+                                        new Msh.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
                                         srid)
                     {
                         EsriName = spheroidValues.First(),
@@ -379,7 +379,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
                     return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.Geogcs.Values?.First() };
 
                 case MapProjectionType.LambertConformalConic:
-                    return new LambertConformalConic(
+                    return new LambertConformalConic2P(
                         this.Ellipsoid,
                         GetParameter(EsriPrjParameterType.StandardParallel_1, double.NaN),
                         GetParameter(EsriPrjParameterType.StandardParallel_2, double.NaN),

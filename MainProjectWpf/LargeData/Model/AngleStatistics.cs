@@ -81,7 +81,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
         public double StandardDeviation
         {
-            get { return IRI.Sta.Statistics.Statistics.CalculateStandardDeviation(this.Angles); }
+            get { return IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(this.Angles); }
         }
 
 

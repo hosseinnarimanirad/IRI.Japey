@@ -17,7 +17,7 @@ namespace IRI.Test.CoordinateSystem
             //WGS84(51.190512, 35.817032)
             Point wgs84Point = new Point(51.190512, 35.817032);
 
-            var mercator = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(wgs84Point);
+            var mercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(wgs84Point);
 
             Assert.AreEqual(5698501.75902, mercator.X, .1);
             Assert.AreEqual(4250468.61959, mercator.Y, .1);
@@ -29,23 +29,23 @@ namespace IRI.Test.CoordinateSystem
             //WGS84(51.190512, 35.817032)
             Point wgs84Point = new Point(51.190512, 35.817032);
 
-            //var a = Sta.CoordinateSystem.Ellipsoids.WGS84.SemiMajorAxis.Value;
+            //var a = Msh.CoordinateSystem.Ellipsoids.WGS84.SemiMajorAxis.Value;
 
             //Web Mercator has Sphere-based calculation but the resuling phi,lambda is assumend to be based on WGS84
 
-            var webMercator = Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84Point);
+            var webMercator = Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84Point);
 
             Assert.AreEqual(5698501.75902, webMercator.X, .1);
             Assert.AreEqual(4275474.36482, webMercator.Y, .1);
 
-            var mercator = Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(wgs84Point);
+            var mercator = Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(wgs84Point);
 
-            var calculatedMercator = Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToMercatorWgs84(webMercator);
+            var calculatedMercator = Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToMercatorWgs84(webMercator);
 
             Assert.AreEqual(mercator.X, calculatedMercator.X, .1);
             Assert.AreEqual(mercator.Y, calculatedMercator.Y, .1);
 
-            var calculatedWgs84Point = Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercator);
+            var calculatedWgs84Point = Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercator);
 
             Assert.AreEqual(wgs84Point.X, calculatedWgs84Point.X, .000001);
             Assert.AreEqual(wgs84Point.Y, calculatedWgs84Point.Y, .000001);

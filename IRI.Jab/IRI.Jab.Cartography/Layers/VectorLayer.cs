@@ -115,17 +115,17 @@ namespace IRI.Jab.Cartography
         //    }
         //}
 
-        private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
+        //private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
 
-        public SimplePointSymbol PointSymbol
-        {
-            get { return _pointSymbol; }
-            set
-            {
-                _pointSymbol = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public SimplePointSymbol PointSymbol
+        //{
+        //    get { return _pointSymbol; }
+        //    set
+        //    {
+        //        _pointSymbol = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
         private sb.BoundingBox _extent;
@@ -204,10 +204,8 @@ namespace IRI.Jab.Cartography
 
             this.VisualParameters = parameters;
 
-            this.PointSymbol = pointSymbol ?? new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
-
-            //this.PositionFunc = positionFunc;
-
+            //this.PointSymbol = pointSymbol ?? new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
+             
             this.Labels = labeling;
 
             //Check for missing visibleRange
@@ -237,7 +235,7 @@ namespace IRI.Jab.Cartography
 
             if (this.Type.HasFlag(LayerType.Point))
             {
-                geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, mapToScreen, this.PointSymbol.GeometryPointSymbol);
+                geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, mapToScreen, this.VisualParameters.PointSymbol.GeometryPointSymbol);
 
                 geo.FillRule = FillRule.Nonzero;
 
@@ -281,7 +279,7 @@ namespace IRI.Jab.Cartography
 
             Brush brush = this.VisualParameters.Fill;
 
-            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSize, this.PointSymbol);
+            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
 
@@ -323,8 +321,7 @@ namespace IRI.Jab.Cartography
                 mapToScreen,
                 pen,
                 this.VisualParameters.Fill.AsGdiBrush(),
-                this.VisualParameters.PointSize,
-                this.PointSymbol);
+                this.VisualParameters.PointSymbol);
 
             if (image == null)
                 return null;
@@ -464,7 +461,7 @@ namespace IRI.Jab.Cartography
 
             var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.VisualParameters.PointSize, this.PointSymbol);
+            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.VisualParameters.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)tileWidth, (int)tileHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -522,8 +519,7 @@ namespace IRI.Jab.Cartography
                             p => transform(new Point(p.X - shiftX, p.Y - shiftY)),
                             pen,
                             this.VisualParameters.Fill.AsGdiBrush(),
-                            this.VisualParameters.PointSize,
-                            this.PointSymbol);
+                            this.VisualParameters.PointSymbol);
 
             if (image == null)
                 return null;
@@ -758,8 +754,7 @@ namespace IRI.Jab.Cartography
                                     mapToScreen,
                                     pen,
                                     this.VisualParameters.Fill.AsGdiBrush(),
-                                    this.VisualParameters.PointSize,
-                                    this.PointSymbol);
+                                    this.VisualParameters.PointSymbol);
 
                     image.Save($"{directory}\\{tile.ZoomLevel}, {tile.RowNumber}, {tile.ColumnNumber}.jpg");
                 }

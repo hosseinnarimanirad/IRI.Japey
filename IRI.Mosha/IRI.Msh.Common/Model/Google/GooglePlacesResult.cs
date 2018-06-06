@@ -128,7 +128,7 @@ namespace IRI.Msh.Common.Model.Google
 
         public Point AsWebMercatorPoint()
         {
-            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
+            return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
         }
 
         public BoundingBox AsGeodeticBoundingBox()
@@ -146,7 +146,7 @@ namespace IRI.Msh.Common.Model.Google
 
         public BoundingBox AsWebMercatorBoundingBox()
         {
-            return (AsGeodeticBoundingBox().Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
+            return (AsGeodeticBoundingBox().Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
         }
     }
 

@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Msh.Common.Primitives;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.SqlServerSpatialExtension
 {

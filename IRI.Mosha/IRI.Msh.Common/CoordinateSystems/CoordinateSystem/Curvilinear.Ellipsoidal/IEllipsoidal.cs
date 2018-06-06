@@ -2,11 +2,11 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Sta.MeasurementUnit;
+using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Sta.Algebra;
+using IRI.Msh.Algebra;
 
-namespace IRI.Sta.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem
 {
     public interface IEllipsoidal : IEnumerable<IEllipsoidalPoint>
     {
@@ -20,9 +20,9 @@ namespace IRI.Sta.CoordinateSystem
         IAngularCollection HorizontalAngle { get; }
         IAngularCollection VerticalAngle { get; }
 
-        IEllipsoidal RotateAboutX(IRI.Sta.MeasurementUnit.AngularUnit value, RotateDirection direction);
-        IEllipsoidal RotateAboutY(IRI.Sta.MeasurementUnit.AngularUnit value, RotateDirection direction);
-        IEllipsoidal RotateAboutZ(IRI.Sta.MeasurementUnit.AngularUnit value, RotateDirection direction);
+        IEllipsoidal RotateAboutX(IRI.Msh.MeasurementUnit.AngularUnit value, RotateDirection direction);
+        IEllipsoidal RotateAboutY(IRI.Msh.MeasurementUnit.AngularUnit value, RotateDirection direction);
+        IEllipsoidal RotateAboutZ(IRI.Msh.MeasurementUnit.AngularUnit value, RotateDirection direction);
         IEllipsoidal Shift(ISphericalPoint newBase);
         IEllipsoidalPoint this[int index] { get; set; }
         Cartesian3D<T> ToCartesian<T>() where T : LinearUnit, new();

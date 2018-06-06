@@ -14,7 +14,7 @@ using System.Data;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource

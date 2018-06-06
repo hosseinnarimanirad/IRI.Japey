@@ -135,7 +135,7 @@ namespace IRI.Ket.Common.Helpers
         //{
         //    var wgs84 = GetWgs84Location(bitmap);
 
-        //    var mercator = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Msh.Common.Primitives.Point)wgs84);
+        //    var mercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Msh.Common.Primitives.Point)wgs84);
 
         //    return new IRI.Msh.Common.Point3D(mercator.X, mercator.Y, wgs84.Z);
         //}
@@ -235,7 +235,7 @@ namespace IRI.Ket.Common.Helpers
 
         private static byte[] DoubleToExifGpsByte(double value)
         {
-            Sta.MeasurementUnit.Degree degreeValue = new Sta.MeasurementUnit.Degree(value);
+            Msh.MeasurementUnit.Degree degreeValue = new Msh.MeasurementUnit.Degree(value);
 
             //var longitudeNumerator = new int[3] { degreeValue.DegreePart, degreeValue.MinutePart, degreeValue.SecondPart };
 

@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using IRI.Sta.Algebra;
+using IRI.Msh.Algebra;
 
 
 namespace MainProject

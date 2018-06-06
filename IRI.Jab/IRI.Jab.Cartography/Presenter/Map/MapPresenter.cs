@@ -868,7 +868,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public void PanToGeographicPoint(IRI.Msh.Common.Primitives.IPoint point, Action callback = null)
         {
-            var webMercatorPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
+            var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 
             this.PanTo(webMercatorPoint, callback);
         }
@@ -1190,7 +1190,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             {
                 var dataSource = await Task.Run<IFeatureDataSource>(async () =>
                 {
-                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Sta.CoordinateSystem.MapProjection.WebMercator()))
+                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
                                     .Select(i => i.AsSqlGeometry(3857))
                                     .Where(i => !i.IsNotValidOrEmpty())
                                     .ToList();

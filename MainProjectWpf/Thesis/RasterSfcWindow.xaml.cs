@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using sfc = IRI.Ket.Spatial.Primitives;
-using spatial = IRI.Sta.Common.Primitives;
+using spatial = IRI.Msh.Common.Primitives;
 
 namespace IRI.MainProjectWPF
 {

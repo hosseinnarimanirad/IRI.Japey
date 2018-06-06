@@ -56,7 +56,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
             if (this.NumberOfPoints == 0)
                 return 0;
   
-            return IRI.Sta.Statistics.Statistics.CalculateStandardDeviation(Areas);
+            return IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(Areas);
         }
 
         public override string ToString()

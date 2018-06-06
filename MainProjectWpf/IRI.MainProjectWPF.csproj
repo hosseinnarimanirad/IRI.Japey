@@ -359,10 +359,6 @@
       <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
       <Name>IRI.Ket.SqlServerSpatialExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
-      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
-      <Name>IRI.Sta.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

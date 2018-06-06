@@ -35,7 +35,7 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.MapViewer
 {
@@ -545,7 +545,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestAddPointToNewDrawing = p =>
             {
-                //AddPointToNewDrawing(Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+                //AddPointToNewDrawing(Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
                 AddPointToNewDrawing((sb.Point)p);
             };
 
@@ -713,7 +713,7 @@ namespace IRI.Jab.MapViewer
 
         public Point GeodeticToMap(Point point)
         {
-            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
+            return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
         }
 
         public Point ScreenToGeodetic(Point point)
@@ -750,7 +750,7 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
+                return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
             }
             catch (Exception)
             {
@@ -1615,7 +1615,7 @@ namespace IRI.Jab.MapViewer
                     return;
                 }
 
-                var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+                var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
 
                 Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
 
@@ -4161,7 +4161,7 @@ namespace IRI.Jab.MapViewer
 
         //    var layer = new EditableFeatureLayer(
         //                    "edit",
-        //                    wgs84Points.Select(i => Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
+        //                    wgs84Points.Select(i => Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
         //                    this.viewTransform,
         //                    ScreenToMap,
         //                    sb.GeometryType.Polygon);

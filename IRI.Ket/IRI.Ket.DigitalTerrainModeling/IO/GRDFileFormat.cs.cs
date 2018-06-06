@@ -20,7 +20,7 @@ namespace IRI.Ket.DigitalTerrainModeling
 
         public string Path;
 
-        public IRI.Sta.Algebra.Matrix Values;
+        public IRI.Msh.Algebra.Matrix Values;
 
         public GRDFileFormat(string path)
         {
@@ -62,7 +62,7 @@ namespace IRI.Ket.DigitalTerrainModeling
 
             System.IO.StreamReader reader = new System.IO.StreamReader(this.Path);
 
-            Values = new IRI.Sta.Algebra.Matrix(this.NumberOfRows, this.NumberOfColumns);
+            Values = new IRI.Msh.Algebra.Matrix(this.NumberOfRows, this.NumberOfColumns);
 
             for (int i = 0; i < 6; i++)
                 reader.ReadLine();
@@ -126,7 +126,7 @@ namespace IRI.Ket.DigitalTerrainModeling
             return result;
         }
 
-        public IRI.Sta.Algebra.Matrix ReadQuarter(QuarterPart part)
+        public IRI.Msh.Algebra.Matrix ReadQuarter(QuarterPart part)
         {
             int midRow = this.NumberOfRows % 2 == 0 ? this.NumberOfRows / 2 - 1 : this.NumberOfRows / 2;
 
@@ -151,7 +151,7 @@ namespace IRI.Ket.DigitalTerrainModeling
             }
         }
 
-        public IRI.Sta.Algebra.Matrix ReadRegion(int startRow, int startColumn, int endRow, int endColumn)
+        public IRI.Msh.Algebra.Matrix ReadRegion(int startRow, int startColumn, int endRow, int endColumn)
         {
             return this.Values.SubMatrix(startRow, startColumn, endRow, endColumn);
         }
@@ -162,7 +162,7 @@ namespace IRI.Ket.DigitalTerrainModeling
 
             int midColumn = this.NumberOfColumns % 2 == 0 ? this.NumberOfColumns / 2 - 1 : this.NumberOfColumns / 2;
 
-            IRI.Sta.Algebra.Matrix values;
+            IRI.Msh.Algebra.Matrix values;
 
             switch (part)
             {
@@ -256,7 +256,7 @@ namespace IRI.Ket.DigitalTerrainModeling
             writer.Close();
         }
 
-        public void SaveAsGRD(string path, IRI.Sta.Algebra.Matrix values, double lowerLeftX, double lowerLeftY, double cellSize, double noDataValue)
+        public void SaveAsGRD(string path, IRI.Msh.Algebra.Matrix values, double lowerLeftX, double lowerLeftY, double cellSize, double noDataValue)
         {
             System.IO.StreamWriter writer = new System.IO.StreamWriter(path);
 

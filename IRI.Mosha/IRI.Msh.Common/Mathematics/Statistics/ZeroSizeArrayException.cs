@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace IRI.Sta.Statistics
+namespace IRI.Msh.Statistics
 {
     [DataContract]
     public class ZeroSizeArrayException : Exception

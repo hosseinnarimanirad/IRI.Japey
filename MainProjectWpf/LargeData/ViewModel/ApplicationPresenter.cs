@@ -1,6 +1,6 @@
 ﻿using IRI.Jab.Common;
 using IRI.MainProjectWPF.LargeData.Model;
-using IRI.Sta.Common.Mapping;
+using IRI.Msh.Common.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

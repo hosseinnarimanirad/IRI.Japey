@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Sta.Algebra;
+using IRI.Msh.Algebra;
 
-namespace IRI.Sta.MeasurementUnit
+namespace IRI.Msh.MeasurementUnit
 {
     public interface IAngularCollection : IEnumerable<AngularUnit>
     {

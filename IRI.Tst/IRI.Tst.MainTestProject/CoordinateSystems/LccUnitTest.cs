@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using IRI.Sta.MeasurementUnit;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.MeasurementUnit;
+using IRI.Msh.CoordinateSystem;
 using IRI.Msh.Common.Primitives;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Test.CoordinateSystem
 {
@@ -14,13 +14,13 @@ namespace IRI.Test.CoordinateSystem
         public void TestGeographicToLcc()
         {
 
-            var result = new LambertConformalConic(Ellipsoids.Clarke1866, 33.0, 45.0, -96.0, 23.0).FromGeodetic(new Point(-75.0, 35.0));
+            var result = new LambertConformalConic2P(Ellipsoids.Clarke1866, 33.0, 45.0, -96.0, 23.0).FromGeodetic(new Point(-75.0, 35.0));
 
             Assert.AreEqual(result.X, 1894410.9, .1);
             Assert.AreEqual(result.Y, 1564649.5, .1);
 
 
-            var ellipse = IRI.Sta.CoordinateSystem.Ellipsoids.GRS80;
+            var ellipse = IRI.Msh.CoordinateSystem.Ellipsoids.GRS80;
 
             double phi0 = 52;
             double phi1 = 35;
@@ -28,7 +28,7 @@ namespace IRI.Test.CoordinateSystem
 
             double lambda0 = 10;
 
-            var projection = new LambertConformalConic(ellipse, phi1, phi2, lambda0, phi0);
+            var projection = new LambertConformalConic2P(ellipse, phi1, phi2, lambda0, phi0);
 
 
             //Iran
@@ -77,8 +77,8 @@ namespace IRI.Test.CoordinateSystem
             double expectedPhi = 35.0;
             double expectedLambda = -75.0;
 
-            var result = new LambertConformalConic(
-                            IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1866,
+            var result = new LambertConformalConic2P(
+                            IRI.Msh.CoordinateSystem.Ellipsoids.Clarke1866,
                             33.0,
                             45.0,
                             -96.0,
@@ -87,7 +87,7 @@ namespace IRI.Test.CoordinateSystem
             Assert.AreEqual(result.X, expectedLambda, .00001);
             Assert.AreEqual(result.Y, expectedPhi, .00001);
 
-            var ellipse = IRI.Sta.CoordinateSystem.Ellipsoids.GRS80;
+            var ellipse = IRI.Msh.CoordinateSystem.Ellipsoids.GRS80;
 
             double phi0 = 52;
             double phi1 = 35;
@@ -95,7 +95,7 @@ namespace IRI.Test.CoordinateSystem
 
             double lambda0 = 10;
 
-            var projection = new LambertConformalConic(ellipse, phi1, phi2, lambda0, phi0);
+            var projection = new LambertConformalConic2P(ellipse, phi1, phi2, lambda0, phi0);
 
 
             //China
@@ -151,8 +151,8 @@ namespace IRI.Test.CoordinateSystem
             double expectedPhi = 35.0;
             double expectedLambda = -75.0;
 
-            var projection = new LambertConformalConic(
-                IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1866,
+            var projection = new LambertConformalConic2P(
+                IRI.Msh.CoordinateSystem.Ellipsoids.Clarke1866,
                 phi1,
                 phi2,
                 lambda0,
@@ -226,5 +226,14 @@ namespace IRI.Test.CoordinateSystem
 
         }
 
+        [TestMethod]
+        public void TestFd58Lcc()
+        {
+            var fd58 = IRI.Msh.CoordinateSystem.MapProjection.DefaultMapProjections.LccFd58.FromWgs84Geodetic(new Point(51, 35));
+
+            //REF: EPSG.IO
+            Assert.AreEqual(2047242.77, fd58.X, .01);
+            Assert.AreEqual(1458475.69, fd58.Y, .1);
+        }
     }
 }

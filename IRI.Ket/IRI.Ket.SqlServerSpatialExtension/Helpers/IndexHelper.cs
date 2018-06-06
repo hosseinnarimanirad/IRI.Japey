@@ -51,19 +51,19 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
         public static List<SqlGeometry> GetIndexes(SqlGeometry webMercatorRegion, Func<BoundingBox, List<BoundingBox>> indexFunc)
         {
-            var geographicGeometry = webMercatorRegion.Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+            var geographicGeometry = webMercatorRegion.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
 
             var geographicBoundingBox = geographicGeometry.GetBoundingBox();
 
             return indexFunc(geographicBoundingBox)
                         .Where(b => b.Intersects(geographicGeometry))
-                        .Select(b => b.Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
+                        .Select(b => b.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
                         .ToList();
         }
 
         public static List<SqlFeature> GetIndexeSheets(SqlGeometry webMercatorRegion, Func<BoundingBox, List<IndexSheet>> indexFunc)
         {
-            var geographicGeometry = webMercatorRegion.Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+            var geographicGeometry = webMercatorRegion.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
 
             var geographicBoundingBox = geographicGeometry.GetBoundingBox();
 
@@ -71,7 +71,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
                         .Where(b => b.Extent.Intersects(geographicGeometry))
                         .Select(b => new SqlFeature()
                         {
-                            Geometry = b.Extent.Transform(IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry(),
+                            Geometry = b.Extent.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry(),
                             Attributes = new Dictionary<string, object>() { { nameof(b.SheetName), b.SheetName } }
                         })
                         .ToList();

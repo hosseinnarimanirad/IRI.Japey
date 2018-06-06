@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Primitives; 
 
-namespace IRI.Sta.CoordinateSystem.MapProjection
+namespace IRI.Msh.CoordinateSystem.MapProjection
 {
     public class WebMercator : MapProjectionBase
     {

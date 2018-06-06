@@ -5,7 +5,7 @@ using IRI.Jab.Common;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using IRI.Jab.Common.Extensions;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 using IRI.Msh.Common.Primitives;
 using System.Windows;
 using System.Windows.Input;
@@ -17,13 +17,13 @@ using Point = IRI.Msh.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
 using System.Collections.ObjectModel;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.MapMarkers;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Cartography
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 
 namespace IRI.Jab.Common.Presenters
 {
@@ -134,13 +134,13 @@ namespace IRI.Jab.Common.Presenters
             {
                 if (this.SpatialReference == SpatialReferenceType.UTM)
                 {
-                    var geodetic = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
+                    var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
 
-                    return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+                    return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
                 }
                 else if (this.SpatialReference == SpatialReferenceType.Geodetic)
                 {
-                    return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+                    return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
                 }
                 else
                 {
@@ -157,13 +157,13 @@ namespace IRI.Jab.Common.Presenters
 
         private Point FromWebMercator(Point webMercatorPoint)
         {
-            var geodetic = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
+            var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
 
             if (this.SpatialReference == SpatialReferenceType.UTM)
             {
-                this.CurrentEditingZone = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
+                this.CurrentEditingZone = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
 
-                return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
+                return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
             }
             else if (this.SpatialReference == SpatialReferenceType.Geodetic)
             {

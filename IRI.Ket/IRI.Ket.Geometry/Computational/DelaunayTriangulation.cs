@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-//using IRI.Sta.Statistics;
+//using IRI.Msh.Statistics;
 
 
 namespace IRI.Ket.Geometry
@@ -490,8 +490,8 @@ namespace IRI.Ket.Geometry
                 double[] secondSetAngle = new double[] { triangle3.FirstAngle, triangle3.SecondAngle, triangle3.ThirdAngle,
                                                             triangle4.FirstAngle, triangle4.SecondAngle, triangle4.ThirdAngle};
 
-                if (IRI.Sta.Statistics.Statistics.GetMax(firstSetAngle) > IRI.Sta.Statistics.Statistics.GetMax(secondSetAngle) &&
-                    IRI.Sta.Statistics.Statistics.GetMin(firstSetAngle) < IRI.Sta.Statistics.Statistics.GetMin(secondSetAngle))
+                if (IRI.Msh.Statistics.Statistics.GetMax(firstSetAngle) > IRI.Msh.Statistics.Statistics.GetMax(secondSetAngle) &&
+                    IRI.Msh.Statistics.Statistics.GetMin(firstSetAngle) < IRI.Msh.Statistics.Statistics.GetMin(secondSetAngle))
                 {
 
                     bool condition1 = ComputationalGeometry.GetPointCircleRelation(secondPoint, thirdPoint, firstPoint, neighbourFarPoint) == PointCircleRelation.In;

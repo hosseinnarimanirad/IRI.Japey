@@ -8,7 +8,7 @@ using WpfPoint = System.Windows.Point;
 using GdiPoint = System.Drawing.Point;
 
 using System.Windows.Media;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 using IRI.Jab.Common.View.MapMarkers;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
@@ -16,7 +16,7 @@ using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
 //using System.Windows;
 using System.Windows.Input; 
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Jab.Common.Extensions;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Jab.Common.Helpers;

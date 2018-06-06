@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.MeasurementUnit
+namespace IRI.Msh.MeasurementUnit
 {
 
     public static class UnitConversion

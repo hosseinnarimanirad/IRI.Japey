@@ -6,7 +6,7 @@ using IRI.Ket.ShapefileFormat.EsriType;
 using System.Data.SqlTypes;
 using System.Threading.Tasks;
 using IRI.Ket.ShapefileFormat.Reader;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Extensions;
 using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;

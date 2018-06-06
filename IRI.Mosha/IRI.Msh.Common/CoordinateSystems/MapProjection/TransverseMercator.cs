@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Primitives;
-using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
+using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 
-namespace IRI.Sta.CoordinateSystem.MapProjection
+namespace IRI.Msh.CoordinateSystem.MapProjection
 {
     public class TransverseMercator : MapProjectionBase
     {

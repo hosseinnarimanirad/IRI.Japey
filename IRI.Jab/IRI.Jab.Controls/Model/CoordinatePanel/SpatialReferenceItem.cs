@@ -1,4 +1,4 @@
-﻿using IRI.Sta.CoordinateSystem;
+﻿using IRI.Msh.CoordinateSystem;
 using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
@@ -74,7 +74,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
 
             this.YValue = _toString(point.Y);
 
-            this.ZoneNumber = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
+            this.ZoneNumber = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
 
             if (UILanguage == LanguageMode.Persian)
             {

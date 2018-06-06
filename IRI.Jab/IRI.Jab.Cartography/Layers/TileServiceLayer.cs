@@ -8,13 +8,13 @@ using IRI.Jab.Cartography.Model;
 using IRI.Jab.Common;
 
 using System.Net;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Data;
 using IRI.Ket.Common.Model;
 using IRI.Jab.Common.Model;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Model;
 
 namespace IRI.Jab.Cartography

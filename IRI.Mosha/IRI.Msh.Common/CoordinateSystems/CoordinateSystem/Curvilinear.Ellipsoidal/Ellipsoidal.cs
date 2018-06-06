@@ -2,11 +2,11 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Sta.MeasurementUnit;
+using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
-using IRI.Sta.Algebra;
+using IRI.Msh.Algebra;
 
-namespace IRI.Sta.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem
 {
     public class Ellipsoidal<TLinear, TAngular> : IEllipsoidal
         where TLinear : LinearUnit, new()

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text;
-using IRI.Sta.Algebra;
+using IRI.Msh.Algebra;
 using IRI.Ket.Geometry;
-using IRI.Sta.Statistics;
+using IRI.Msh.Statistics;
 using IRI.Ket.DigitalTerrainModeling;
 using IRI.Ket.Graph.GraphRepresentation;
 using IRI.Ket.Graph;
@@ -38,7 +38,7 @@ using IRI.Jab.Common.Model.Spatialable;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using System.IO.Compression;
 using IRI.Ket.SqlServerSpatialExtension;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace MainProject
@@ -102,45 +102,45 @@ namespace MainProject
             ////////var utmWgs84Point = new spatial.Point(535975, 3234346);
 
 
-            ////////var result000 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result0000 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
+            ////////var result000 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result0000 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNiocWithClarcke1880Rgs.FromLocalGeodetic(nahrawanGeodeticPoint);
 
-            ////////var result00 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
-            ////////var result01 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result001 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-
-
-            ////////var result3 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result003 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            ////////var result4 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
-            ////////var result004 = IRI.Sta.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
-
-            ////////var temp = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
+            ////////var result00 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromWgs84Geodetic(wgsGeodeticPoint);
+            ////////var result01 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result001 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNahrawan.FromLocalGeodetic(nahrawanGeodeticPoint);
 
 
-            ////////var result30 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
+
+            ////////var result3 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result003 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccNahrawanIraq.FromLocalGeodetic(nahrawanGeodeticPoint);
+
+            ////////var result4 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromGeodetic(nahrawanGeodeticPoint);
+            ////////var result004 = IRI.Msh.CoordinateSystem.MapProjection.MapProjections.LccFd58.FromLocalGeodetic(nahrawanGeodeticPoint);
+
+            ////////var temp = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmWgs84Point, 39);
+
+
+            ////////var result30 = IRI.Msh.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.Clarke1880Rgs);
 
             ////////var nahrawanCalculatedClarke = $"{DegreeHelper.ToDms(result30.X)} - {DegreeHelper.ToDms(result30.Y)}";
 
-            ////////var result20 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.Nahrawan);
+            ////////var result20 = IRI.Msh.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.Nahrawan);
 
             ////////var nahrawanCalculatedNahrawan = $"{DegreeHelper.ToDms(result20.X)} - {DegreeHelper.ToDms(result20.Y)}";
 
-            ////////var result40 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.NahrawanIraq);
+            ////////var result40 = IRI.Msh.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.NahrawanIraq);
 
             ////////var nahrawanCalculatedNahrawanIraq = $"{DegreeHelper.ToDms(result40.X)} - {DegreeHelper.ToDms(result40.Y)}";
 
-            ////////var result50 = IRI.Sta.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.WGS84,
-            ////////                IRI.Sta.CoordinateSystem.Ellipsoids.FD58);
+            ////////var result50 = IRI.Msh.CoordinateSystem.Transformation.ChangeDatum(wgsGeodeticPoint,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.WGS84,
+            ////////                IRI.Msh.CoordinateSystem.Ellipsoids.FD58);
 
             ////////var nahrawanCalculatedFD58 = $"{DegreeHelper.ToDms(result50.X)} - {DegreeHelper.ToDms(result50.Y)}";
 
@@ -157,8 +157,8 @@ namespace MainProject
             //}
             //System.IO.File.WriteAllLines(@"C:\Users\Hossein\Desktop\93.PolygonGeo\markup.txt", result);
 
-            ////////var utmPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
-            ////////var geodeticPoint0 = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
+            ////////var utmPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new spatial.Point(52.34, 35.0));
+            ////////var geodeticPoint0 = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmPoint, 39);
 
             //ReadAdmin();
             //IRI.Ket.Data.Feeds.AdminFeeder.GetProvinces();
@@ -264,7 +264,7 @@ namespace MainProject
                     (o) => new NccPoint() { Name = o["Name"]?.ToString(), Type = o["FolderPath"]?.ToString() },
                     (s, srid, n) =>
                     {
-                        var point = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator((IRI.Msh.Common.Primitives.IPoint)s);
+                        var point = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator((IRI.Msh.Common.Primitives.IPoint)s);
 
                         n.XWebMercator = point.X;
 
@@ -366,7 +366,7 @@ namespace MainProject
 
             public IEsriShape Point
             {
-                get { return new IRI.Ket.ShapefileFormat.EsriType.EsriPoint(Longitude, Latitude); }
+                get { return new IRI.Ket.ShapefileFormat.EsriType.EsriPoint(Longitude, Latitude, 0); }
             }
         }
 
@@ -438,9 +438,9 @@ namespace MainProject
                         YWebMercator = webMercator.Y;
 
                         resultArray.Add(new MetroStation() { Latitude = Latitude, Longitude = Longitude, Title = field3 });
-                        //newRow["LocationWgs84Wkb"] = SqlGeography.Point(wgs84.Y, wgs84.X, IRI.Sta.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84).STAsBinary().Value;
+                        //newRow["LocationWgs84Wkb"] = SqlGeography.Point(wgs84.Y, wgs84.X, IRI.Msh.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84).STAsBinary().Value;
 
-                        //newRow["LocationWmWkb"] = SqlGeometry.Point(webMercator.X, webMercator.Y, IRI.Sta.CoordinateSystem.MapProjection.SridHelper.WebMercator).STAsBinary().Value;
+                        //newRow["LocationWmWkb"] = SqlGeometry.Point(webMercator.X, webMercator.Y, IRI.Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator).STAsBinary().Value;
                     }
                     else
                     {
@@ -611,9 +611,9 @@ namespace MainProject
 
         static spatial.Point GetP(spatial.Point point, int zone)
         {
-            var geo = IRI.Sta.CoordinateSystem.MapProjection.DefaultMapProjections.LccNiocWithClarcke1880Rgs.ToWgs84Geodetic(point);
+            var geo = IRI.Msh.CoordinateSystem.MapProjection.DefaultMapProjections.LccNiocWithClarcke1880Rgs.ToWgs84Geodetic(point);
 
-            return IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geo, IRI.Sta.CoordinateSystem.Ellipsoids.WGS84, zone, true);
+            return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geo, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84, zone, true);
         }
 
 
@@ -955,9 +955,9 @@ namespace MainProject
 
             IRI.Ket.Graph.ShortestPaths.AllPairs.FloydWarshallProblem fwp = new IRI.Ket.Graph.ShortestPaths.AllPairs.FloydWarshallProblem(matrix);
 
-            double shortest = IRI.Sta.Statistics.Statistics.GetMin(new Matrix(fwp.shortestPaths));
-            double biggest = IRI.Sta.Statistics.Statistics.GetMax(new Matrix(fwp.shortestPaths));
-            double mean = IRI.Sta.Statistics.Statistics.CalculateMean(new Matrix(fwp.shortestPaths));
+            double shortest = IRI.Msh.Statistics.Statistics.GetMin(new Matrix(fwp.shortestPaths));
+            double biggest = IRI.Msh.Statistics.Statistics.GetMax(new Matrix(fwp.shortestPaths));
+            double mean = IRI.Msh.Statistics.Statistics.CalculateMean(new Matrix(fwp.shortestPaths));
         }
 
         private static void FloydWarshall()
@@ -2963,7 +2963,7 @@ namespace MainProject
 
         private static void Tests001()
         {
-            IRI.Sta.Algebra.Matrix m = new IRI.Sta.Algebra.Matrix(4, 4);
+            IRI.Msh.Algebra.Matrix m = new IRI.Msh.Algebra.Matrix(4, 4);
             m[2, 2] = 4;
             m[1, 0] = 2;
             m[2, 0] = 5;

@@ -59,7 +59,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             this.Values = values.ToList();
         }
 
-        public EsriPrjTreeNode(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title, int srid)
+        public EsriPrjTreeNode(IRI.Msh.CoordinateSystem.IEllipsoid ellipsoid, string title, int srid)
         {
             this.Name = EsriPrjFile._geogcs;
 

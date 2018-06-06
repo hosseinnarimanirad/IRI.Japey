@@ -67,10 +67,10 @@ namespace IRI.Jab.Controls.View
 
         //public System.Windows.Point GeodeticToMap(System.Windows.Point point)
         //{
-        //    double[][] result = Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
+        //    double[][] result = Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(
         //                                                            new double[] { point.X },
         //                                                            new double[] { point.Y },
-        //                                                             Sta.CoordinateSystem.Ellipsoids.WGS84);
+        //                                                             Msh.CoordinateSystem.Ellipsoids.WGS84);
 
         //    return new System.Windows.Point(result[0][0], result[1][0]);
         //}
@@ -87,7 +87,7 @@ namespace IRI.Jab.Controls.View
         {
             try
             {
-                var result = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint());
+                var result = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint());
 
                 return new System.Windows.Point(result.X, result.Y);
             }
@@ -103,7 +103,7 @@ namespace IRI.Jab.Controls.View
             try
             {
                 var result =
-                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Msh.Common.Primitives.Point(point.X, point.Y), Sta.CoordinateSystem.Ellipsoids.WGS84);
+                    Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(new IRI.Msh.Common.Primitives.Point(point.X, point.Y), Msh.CoordinateSystem.Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result.X, result.Y);
             }
@@ -119,9 +119,9 @@ namespace IRI.Jab.Controls.View
             try
             {
                 double[][] result =
-                    Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
+                    Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(
                         new double[] { point.X },
-                        new double[] { point.Y }, Sta.CoordinateSystem.Ellipsoids.WGS84,
+                        new double[] { point.Y }, Msh.CoordinateSystem.Ellipsoids.WGS84,
                         0, 0);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
@@ -137,10 +137,10 @@ namespace IRI.Jab.Controls.View
         {
             try
             {
-                double[][] result = Sta.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(
+                double[][] result = Msh.CoordinateSystem.MapProjection.MapProjects.MercatorToGeodetic(
                                                                     new double[] { point.X },
                                                                     new double[] { point.Y },
-                                                                    Sta.CoordinateSystem.Ellipsoids.WGS84);
+                                                                    Msh.CoordinateSystem.Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
             }

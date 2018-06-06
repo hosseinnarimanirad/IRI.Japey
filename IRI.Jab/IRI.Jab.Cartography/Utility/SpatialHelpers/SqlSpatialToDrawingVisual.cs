@@ -25,8 +25,8 @@ namespace IRI.Jab.Cartography.Convertor
 
         double pointSymbolMinX, pointSymbolMinY;
 
-        //public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, Pen pen, Brush brush, double pointSize, ImageSource pointSymbol = null, Geometry symbol = null)
-        public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, Pen pen, Brush brush, double pointSize, SimplePointSymbol pointSymbol = null)
+        //public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, Pen pen, Brush brush,  ImageSource pointSymbol = null, Geometry symbol = null)
+        public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, Pen pen, Brush brush, SimplePointSymbol pointSymbol)
         {
 
             if (pen != null)
@@ -62,7 +62,7 @@ namespace IRI.Jab.Cartography.Convertor
                 {
                     foreach (SqlGeometry item in geometries)
                     {
-                        p += AddGeometry(context, item, transform, brush, pen, pointSize, pointSymbol);
+                        p += AddGeometry(context, item, transform, brush, pen, pointSymbol);
                     }
                 }
             }
@@ -70,8 +70,8 @@ namespace IRI.Jab.Cartography.Convertor
             return result;
         }
 
-        //private int AddGeometry(DrawingContext context, SqlGeometry geometry, Func<Point, Point> transform, Brush brush, Pen pen, double pointSize, ImageSource pointSymbol, Geometry symbol)
-        private int AddGeometry(DrawingContext context, SqlGeometry geometry, Func<Point, Point> transform, Brush brush, Pen pen, double pointSize, SimplePointSymbol pointSymbol)
+        //private int AddGeometry(DrawingContext context, SqlGeometry geometry, Func<Point, Point> transform, Brush brush, Pen pen,  ImageSource pointSymbol, Geometry symbol)
+        private int AddGeometry(DrawingContext context, SqlGeometry geometry, Func<Point, Point> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
         {
             if (geometry.IsNotValidOrEmpty())
             {
@@ -83,7 +83,7 @@ namespace IRI.Jab.Cartography.Convertor
             switch (type)
             {
                 case OpenGisGeometryType.Point:
-                    AddPoint(context, geometry, transform, brush, pen, pointSize, pointSymbol);
+                    AddPoint(context, geometry, transform, brush, pen, pointSymbol);
                     break;
 
                 case OpenGisGeometryType.LineString:
@@ -95,7 +95,7 @@ namespace IRI.Jab.Cartography.Convertor
                     break;
 
                 case OpenGisGeometryType.MultiPoint:
-                    AddMultiPoint(context, geometry, transform, brush, pen, pointSize, pointSymbol);
+                    AddMultiPoint(context, geometry, transform, brush, pen, pointSymbol);
                     break;
 
                 case OpenGisGeometryType.MultiLineString:
@@ -161,7 +161,7 @@ namespace IRI.Jab.Cartography.Convertor
             context.DrawGeometry(brush, pen, geometry);
         }
 
-        private void AddPoint(DrawingContext context, SqlGeometry point, Func<Point, Point> transform, Brush brush, Pen pen, double pointSize, SimplePointSymbol pointSymbol)
+        private void AddPoint(DrawingContext context, SqlGeometry point, Func<Point, Point> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
         {
             if (pointSymbol?.GeometryPointSymbol != null)
             {
@@ -181,11 +181,11 @@ namespace IRI.Jab.Cartography.Convertor
             }
             else
             {
-                context.DrawEllipse(brush, pen, transform(point.AsWpfPoint()), pointSize, pointSize);
+                context.DrawEllipse(brush, pen, transform(point.AsWpfPoint()), pointSymbol.SymbolWidth, pointSymbol.SymbolHeight);
             }
         }
 
-        private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<Point, Point> transform, Brush brush, Pen pen, double pointSize, SimplePointSymbol pointSymbol)
+        private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<Point, Point> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
         {
             int numberOfPoints = multiPoint.STNumGeometries().Value;
 
@@ -193,7 +193,7 @@ namespace IRI.Jab.Cartography.Convertor
             {
                 SqlGeometry point = multiPoint.STGeometryN(i);
 
-                AddPoint(context, point, transform, brush, pen, pointSize, pointSymbol);
+                AddPoint(context, point, transform, brush, pen, pointSymbol);
             }
         }
 

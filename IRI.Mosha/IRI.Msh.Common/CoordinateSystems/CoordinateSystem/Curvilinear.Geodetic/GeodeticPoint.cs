@@ -2,10 +2,10 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Sta.MeasurementUnit;
+using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 
-namespace IRI.Sta.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem
 {
     public struct GeodeticPoint<TLinear, TAngular> : IGeodeticPoint
         where TLinear : LinearUnit, new()

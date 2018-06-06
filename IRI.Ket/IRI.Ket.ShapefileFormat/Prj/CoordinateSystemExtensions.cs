@@ -1,4 +1,4 @@
-﻿using IRI.Sta.CoordinateSystem.MapProjection;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace IRI.Ket.ShapefileFormat
                     return AsEsriPrjFile((CylindricalEqualArea)mapProjection);
 
                 case MapProjectionType.LambertConformalConic:
-                    return AsEsriPrjFile((LambertConformalConic)mapProjection);
+                    return AsEsriPrjFile((LambertConformalConic2P)mapProjection);
 
                 case MapProjectionType.Mercator:
                     return AsEsriPrjFile((Mercator)mapProjection);
@@ -44,7 +44,7 @@ namespace IRI.Ket.ShapefileFormat
             }
         }
 
-        private static EsriPrjFile AsEsriPrjFile(LambertConformalConic lcc)
+        private static EsriPrjFile AsEsriPrjFile(LambertConformalConic2P lcc)
         {
             EsriPrjTreeNode root = new EsriPrjTreeNode();
 
@@ -85,7 +85,7 @@ namespace IRI.Ket.ShapefileFormat
 
             string ns = utm.FalseNorthing == 0 ? "N" : "S";
 
-            var zone = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.FindZone(utm.CentralMeridian);
+            var zone = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(utm.CentralMeridian);
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(utm.Title) ? $"WGS_1984_UTM_Zone_{zone}{ns}" : utm.Title };
 

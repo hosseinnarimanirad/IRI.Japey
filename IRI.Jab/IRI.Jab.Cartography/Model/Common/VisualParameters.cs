@@ -9,6 +9,7 @@ using IRI.Jab.Common;
 using IRI.Jab.Common.Extensions;
 using System.Runtime.CompilerServices;
 using IRI.Jab.Common.Helpers;
+using IRI.Jab.Cartography.Model.Symbology;
 
 namespace IRI.Jab.Cartography
 {
@@ -117,14 +118,15 @@ namespace IRI.Jab.Cartography
         public static readonly DependencyProperty DashStyleProperty =
             DependencyProperty.Register("DashStyle", typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
-        private double _pointSize = 4;
 
-        public double PointSize
+        private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
+
+        public SimplePointSymbol PointSymbol
         {
-            get { return _pointSize; }
+            get { return _pointSymbol; }
             set
             {
-                _pointSize = value;
+                _pointSymbol = value;
                 RaisePropertyChanged();
             }
         }

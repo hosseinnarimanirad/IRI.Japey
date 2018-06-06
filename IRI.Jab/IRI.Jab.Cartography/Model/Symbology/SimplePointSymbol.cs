@@ -74,6 +74,16 @@ namespace IRI.Jab.Cartography.Model.Symbology
             }
         }
 
+        public SimplePointSymbol()
+        {
 
+        }
+
+        public SimplePointSymbol(double pointSize)
+        {
+            this.SymbolHeight = pointSize;
+
+            this.SymbolWidth = pointSize;
+        }
     }
 }

@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Sta.Algebra;
-using IRI.Sta.Statistics;
+using IRI.Msh.Algebra;
+using IRI.Msh.Statistics;
 using IRI.Ket.DataStructure;
 
 namespace IRI.Ket.Graph.ShortestPaths

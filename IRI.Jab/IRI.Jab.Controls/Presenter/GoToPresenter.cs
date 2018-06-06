@@ -1,4 +1,4 @@
-﻿using IRI.Sta.CoordinateSystem.MapProjection;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives; 
 using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
@@ -13,7 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.CoordinateSystem;
+using IRI.Msh.CoordinateSystem;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -138,7 +138,7 @@ namespace IRI.Jab.Controls.Presenter
             switch (this.SelectedItem?.MenuType)
             {
                 case SpatialReferenceType.Geodetic:
-                    return point;//.Project( ,new IRI.Sta.CoordinateSystem.MapProjection.NoProjection());
+                    return point;//.Project( ,new IRI.Msh.CoordinateSystem.MapProjection.NoProjection());
 
                 case SpatialReferenceType.UTM:
                     return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
@@ -301,7 +301,7 @@ namespace IRI.Jab.Controls.Presenter
                },
                p =>
                {
-                   var webMercatorPoint = IRI.Sta.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
+                   var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
 
                    mapPresenter.ZoomToLevelAndCenter(13, webMercatorPoint, () =>
                    {

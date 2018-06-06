@@ -1,6 +1,6 @@
-﻿using IRI.Sta.CoordinateSystem.MapProjection;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
-using IRI.Sta.CoordinateSystem.MapProjection;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;

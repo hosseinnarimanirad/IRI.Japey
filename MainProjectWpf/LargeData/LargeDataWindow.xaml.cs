@@ -2,7 +2,7 @@
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.MainProjectWPF.LargeData.Model;
 using IRI.MainProjectWPF.LargeData.Utilities;
-using IRI.Sta.Common.Mapping;
+using IRI.Msh.Common.Mapping;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace IRI.MainProjectWPF.LargeData
             //string file = @"E:\Data\0. Test\Large Data\94.04.18\TehranBlocksAddiArea13AfterAddiAngle.shp";
             var file = @"E:\Research\Large Data\ErrorPolygonRemoval.shp";
 
-            var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(file);
+            var shapes = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(file);
 
             this.map.EnableZoomingOnMouseWheel();
 
@@ -326,7 +326,7 @@ namespace IRI.MainProjectWPF.LargeData
 
         private IEsriShapeCollection GetShapes(string fileName)
         {
-            var shapes = IRI.Ket.ShapefileFormat.Shapefile.Read(fileName);
+            var shapes = IRI.Ket.ShapefileFormat.Shapefile.ReadShapes(fileName);
 
             var width = Math.Max(shapes.MainHeader.MinimumBoundingBox.Width, shapes.MainHeader.MinimumBoundingBox.Height);
 
