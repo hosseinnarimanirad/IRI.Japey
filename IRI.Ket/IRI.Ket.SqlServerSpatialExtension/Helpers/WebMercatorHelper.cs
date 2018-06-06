@@ -22,7 +22,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             IRI.Ket.ShapefileFormat.Shapefile.Save<TileInfo>(
                 fileName,
                 tiles,
-                t => t.GeocentricExtent.AsEsriShape(),
+                t => t.GeocentricExtent.AsEsriShape(SridHelper.GeodeticWGS84),
                 new List<ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>>()
                     {
                         new ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Google Zoom"), t => t.ZoomLevel),

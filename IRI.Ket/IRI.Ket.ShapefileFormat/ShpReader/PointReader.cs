@@ -29,11 +29,11 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             double y = shpReader.ReadDouble();
 
-            return new EsriPoint(x, y);
+            return new EsriPoint(x, y, this._srid);
         }
 
 
-        public static EsriPoint Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -44,7 +44,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             double y = reader.ReadDouble();
 
-            return new EsriPoint(x, y);
+            return new EsriPoint(x, y, srid);
         }
     }
 }

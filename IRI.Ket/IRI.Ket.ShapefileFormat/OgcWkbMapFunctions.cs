@@ -89,7 +89,7 @@ namespace IRI.Ket.ShapefileFormat
 
             for (int i = 0; i < points.Length; i++)
             {
-                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointM(points[i].X, points[i].Y, measures[i])));
+                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointM(points[i].X, points[i].Y, measures[i], points[i].Srid)));
             }
 
             return result.ToArray();
@@ -107,7 +107,7 @@ namespace IRI.Ket.ShapefileFormat
 
             for (int i = 0; i < points.Length; i++)
             {
-                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointZ(points[i].X, points[i].Y, zValues[i], measures[i])));
+                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointZ(points[i].X, points[i].Y, zValues[i], measures[i], points[i].Srid)));
             }
 
             return result.ToArray();

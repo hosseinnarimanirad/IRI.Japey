@@ -37,7 +37,7 @@ namespace IRI.Ket.ShapefileFormat.ShpReader
             return new BoundingBox(xMin, yMin, xMax, yMax);
         }
 
-        internal static EsriPoint[] ReadPoints(BinaryReader reader, int numberOfPoints)
+        internal static EsriPoint[] ReadPoints(BinaryReader reader, int numberOfPoints, int srid)
         {
             EsriPoint[] result = new EsriPoint[numberOfPoints];
 
@@ -47,13 +47,13 @@ namespace IRI.Ket.ShapefileFormat.ShpReader
 
                 double tempY = reader.ReadDouble();
 
-                result[i] = new EsriPoint(tempX, tempY);
+                result[i] = new EsriPoint(tempX, tempY, srid);
             }
 
             return result;
         }
 
-        internal static EsriPoint[] ReadPoints(byte[] byteArray, int offset, int numberOfPoints)
+        internal static EsriPoint[] ReadPoints(byte[] byteArray, int offset, int numberOfPoints, int srid)
         {
             EsriPoint[] result = new EsriPoint[numberOfPoints];
 
@@ -63,7 +63,7 @@ namespace IRI.Ket.ShapefileFormat.ShpReader
 
                 double tempY = BitConverter.ToDouble(byteArray, (2 * i + 1) * ShapeConstants.DoubleSize + offset);
 
-                result[i] = new EsriPoint(tempX, tempY);
+                result[i] = new EsriPoint(tempX, tempY, srid);
             }
 
             return result;
@@ -82,7 +82,7 @@ namespace IRI.Ket.ShapefileFormat.ShpReader
                 values[i] = reader.ReadDouble();
             }
         }
-         
+
         internal static void ReadValues(byte[] byteArray, int offset, int numberOfPoints, out double min, out double max, out double[] values)
         {
             min = BitConverter.ToDouble(byteArray, 0 * ShapeConstants.DoubleSize + offset);
@@ -96,6 +96,6 @@ namespace IRI.Ket.ShapefileFormat.ShpReader
                 values[i] = BitConverter.ToDouble(byteArray, (i + 2) * ShapeConstants.DoubleSize + offset);
             }
         }
-        
+
     }
 }

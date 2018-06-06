@@ -72,16 +72,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public EsriPolygonM(EsriPoint[] points, int[] parts, double[] measures, int srid)
+        public EsriPolygonM(EsriPoint[] points, int[] parts, double[] measures)
         {
-            if (points.Length != measures.Length)
+            if (points == null || points.Length < 1 || points.Length != measures.Length)
             {
                 throw new NotImplementedException();
             }
-
+             
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
@@ -104,11 +104,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         }
 
-        internal EsriPolygonM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures, int srid)
+        internal EsriPolygonM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
+            if (points == null || points.Length < 1 || points.Length != measures.Length)
+            {
+                throw new NotImplementedException();
+            }
+
             this.boundingBox = boundingBox;
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
@@ -227,7 +232,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriPolygonM(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures, newSrid);
+            return new EsriPolygonM(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.Measures);
         }
 
         //always returns polygon not multi polygon

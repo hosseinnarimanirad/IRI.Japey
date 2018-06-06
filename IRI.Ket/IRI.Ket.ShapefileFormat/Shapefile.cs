@@ -132,6 +132,46 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
+        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        {
+
+
+            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.Geometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
+            //var shapes = ReadShapes(shpFileName);
+
+            //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            //List<Feature> result = new List<Feature>(shapes.Count);
+
+            //for (int i = 0; i < attributes.Count; i++)
+            //{
+            //    var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
+
+            //    result.Add(feature);
+            //}
+
+            //return result;
+        }
+
+        public static MainFileHeader GetFileHeader(string shpFileName)
+        {
+            MainFileHeader MainHeader;
+
+            using (System.IO.FileStream shpStream = new System.IO.FileStream(shpFileName, System.IO.FileMode.Open))
+            {
+                using (System.IO.BinaryReader shpReader = new System.IO.BinaryReader(shpStream))
+                {
+                    MainHeader = new MainFileHeader(shpReader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
+
+                    shpReader.Close();
+
+                    shpStream.Close();
+                }
+            }
+
+            return MainHeader;
+        }
+
         internal static int TryGetSrid(string shpFileName)
         {
             int result = 0;
@@ -155,76 +195,12 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
-        {
-
-
-            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.Geometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
-            //var shapes = ReadShapes(shpFileName);
-
-            //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
-
-            //List<Feature> result = new List<Feature>(shapes.Count);
-
-            //for (int i = 0; i < attributes.Count; i++)
-            //{
-            //    var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
-
-            //    result.Add(feature);
-            //}
-
-            //return result;
-        }
-
-        public static MainFileHeader GetFileHeader(string fileName)
-        {
-            MainFileHeader MainHeader;
-
-            using (System.IO.FileStream shpStream = new System.IO.FileStream(fileName, System.IO.FileMode.Open))
-            {
-                using (System.IO.BinaryReader shpReader = new System.IO.BinaryReader(shpStream))
-                {
-                    MainHeader = new MainFileHeader(shpReader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
-
-                    shpReader.Close();
-
-                    shpStream.Close();
-                }
-            }
-
-            return MainHeader;
-        }
-
         #endregion
 
 
         #region Write (Save) Shapefile 
 
-        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false)
-        {
-            if (shapes.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            IEsriShapeCollection collection = new EsriShapeCollection<IEsriShape>(shapes);
-
-            Save(shpFileName, collection, createDbf, overwrite);
-        }
-
-        public static void Save<T>(string shpFileName, IEnumerable<T> objects, Func<T, IEsriShape> map, bool createDbf = false, bool overwrite = false)
-        {
-            if (objects.IsNullOrEmpty())
-            {
-                return;
-            }
-
-            IEsriShapeCollection collection = new EsriShapeCollection<IEsriShape>(objects.Select(o => map(o)));
-
-            Save(shpFileName, collection, createDbf, overwrite);
-        }
-
-        public static void Save(string shpFileName, IEsriShapeCollection shapes, bool createDbf = false, bool overwrite = false)
+        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false, CrsBase crs = null)
         {
             if (shapes.IsNullOrEmpty())
             {
@@ -237,6 +213,8 @@ namespace IRI.Ket.ShapefileFormat
             {
                 System.IO.Directory.CreateDirectory(directory);
             }
+
+            IEsriShapeCollection collection = new EsriShapeCollection<IEsriShape>(shapes);
 
             EsriShapeType shapeType = shapes.First().Type;
 
@@ -255,7 +233,7 @@ namespace IRI.Ket.ShapefileFormat
                 {
                     int fileLength = (int)featureWriter.Length / 2 + 50;
 
-                    shpWriter.Write(ShpWriter.WriteMainHeader(shapes, fileLength, shapeType), 0, 100);
+                    shpWriter.Write(ShpWriter.WriteMainHeader(collection, fileLength, shapeType), 0, 100);
 
                     shpWriter.Write(featureWriter.ToArray(), 0, (int)featureWriter.Length);
 
@@ -274,50 +252,87 @@ namespace IRI.Ket.ShapefileFormat
                 }
             }
 
-            ShxWriter.Write(Shapefile.GetShxFileName(shpFileName), shapes, shapeType, overwrite);
+            ShxWriter.Write(Shapefile.GetShxFileName(shpFileName), collection, shapeType, overwrite);
 
             if (createDbf)
             {
-                Dbf.DbfFile.Write(Shapefile.GetDbfFileName(shpFileName), shapes.Count, overwrite);
+                Dbf.DbfFile.Write(Shapefile.GetDbfFileName(shpFileName), collection.Count, overwrite);
+            }
+
+            if (crs == null)
+            {
+                var srid = shapes.First().Srid;
+
+
+            }
+            else
+            {
+                SaveAsPrj(shpFileName, crs, overwrite);
             }
         }
+
+        //public static void Save<T>(string shpFileName, IEnumerable<T> objects, Func<T, IEsriShape> map, bool createDbf = false, bool overwrite = false)
+        //{
+        //    if (objects.IsNullOrEmpty())
+        //    {
+        //        return;
+        //    }
+
+        //    IEsriShapeCollection collection = new EsriShapeCollection<IEsriShape>(objects.Select(o => map(o)));
+
+        //    Save(shpFileName, collection, createDbf, overwrite);
+        //}
+
+        //public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false)
+        //{
+        //    if (shapes.IsNullOrEmpty())
+        //    {
+        //        return;
+        //    }
+
+        //    IEsriShapeCollection collection = new EsriShapeCollection<IEsriShape>(shapes);
+
+        //    Save(shpFileName, collection, createDbf, overwrite);
+        //}
 
         public static void Save<T>(string shpFileName,
                                       IEnumerable<T> values,
                                       Func<T, IEsriShape> geometryMap,
                                       List<ObjectToDbfTypeMap<T>> attributeMappings,
                                       Encoding encoding,
-                                      CoordinateReferenceSystemBase coordinateReferenceSystem,
+                                      CrsBase crs,
                                       bool overwrite = false)
         {
-            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, coordinateReferenceSystem, overwrite);
+            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, crs, overwrite);
 
             DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings.Select(m => m.MapFunction).ToList(), attributeMappings.Select(m => m.FieldType).ToList(), encoding, overwrite);
         }
 
 
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
         {
             Save(shpFileName, data, createEmptyDbf, overwrite);
 
-            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
+            //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite = false)
+        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
         {
-            Save(shpFileName, data, map, createEmptyDbf, overwrite);
+            Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite);
 
-            SaveAsPrj(GetPrjFileName(shpFileName), coordinateReferenceSystem, overwrite);
+            //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsPrj(string prjFileName, CoordinateReferenceSystemBase coordinateReferenceSystem, bool overwrite)
+        public static void SaveAsPrj(string shpFileName, CrsBase crs, bool overwrite)
         {
+            var prjFileName = GetPrjFileName(shpFileName);
+
             if (overwrite && System.IO.File.Exists(prjFileName))
             {
                 System.IO.File.Delete(prjFileName);
             }
 
-            coordinateReferenceSystem.AsEsriPrj().Save(prjFileName);
+            crs.AsEsriPrj().Save(prjFileName);
         }
 
         #endregion
@@ -325,13 +340,13 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Project
 
-        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CoordinateReferenceSystemBase targetCrs)
+        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CrsBase targetCrs)
         {
             return Task.Run(() => Project(shpFileName, targetCrs));
         }
 
 
-        public static List<IEsriShape> Project(string shpFileName, CoordinateReferenceSystemBase targetCrs)
+        public static List<IEsriShape> Project(string shpFileName, CrsBase targetCrs)
         {
             var sourcePrj = GetPrjFileName(shpFileName);
 
@@ -383,7 +398,7 @@ namespace IRI.Ket.ShapefileFormat
             return Project(values, sourceSrs, targetSrs);
         }
 
-        public static List<IEsriShape> Project(List<IEsriShape> values, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        public static List<IEsriShape> Project(List<IEsriShape> values, CrsBase sourceSrs, CrsBase targetSrs)
         {
             List<IEsriShape> result = new List<IEsriShape>(values.Count);
 
@@ -409,7 +424,7 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, CoordinateReferenceSystemBase targetCrs, bool overwrite = false)
+        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, CrsBase targetCrs, bool overwrite = false)
         {
             if (!CheckAllNeededFilesExists(sourceShapefileName, true))
             {
@@ -617,6 +632,8 @@ namespace IRI.Ket.ShapefileFormat
 
             var shxFile = new ShxReader(GetShxFileName(shpFileName));
 
+            int srid = TryGetSrid(shpFileName);
+
             using (System.IO.FileStream shpStream = new System.IO.FileStream(shpFileName, System.IO.FileMode.Open))
             {
                 using (var shpReader = new System.IO.BinaryReader(shpStream))
@@ -626,22 +643,22 @@ namespace IRI.Ket.ShapefileFormat
                         case EsriShapeType.EsriPoint:
                         case EsriShapeType.EsriPointZ:
                         case EsriShapeType.EsriPointM:
-                            return ExtractPoints(shpReader, shxFile, filtered);
+                            return ExtractPoints(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriMultiPoint:
                         case EsriShapeType.EsriMultiPointZ:
                         case EsriShapeType.EsriMultiPointM:
-                            return ExtractMultiPoints(shpReader, shxFile, filtered);
+                            return ExtractMultiPoints(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriPolyLine:
                         case EsriShapeType.EsriPolyLineZ:
                         case EsriShapeType.EsriPolyLineM:
-                            return ExtractPolyLines(shpReader, shxFile, filtered);
+                            return ExtractPolyLines(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriPolygon:
                         case EsriShapeType.EsriPolygonZ:
                         case EsriShapeType.EsriPolygonM:
-                            return ExtractPolygons(shpReader, shxFile, filtered);
+                            return ExtractPolygons(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.NullShape:
                         case EsriShapeType.EsriMultiPatch:
@@ -652,7 +669,7 @@ namespace IRI.Ket.ShapefileFormat
             }
         }
 
-        private static IEsriShapeCollection ExtractPoints(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)
+        private static IEsriShapeCollection ExtractPoints(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes, int srid)
         {
             List<EsriPoint> geometries = new List<EsriPoint>(indexes.Count);
 
@@ -662,13 +679,13 @@ namespace IRI.Ket.ShapefileFormat
 
                 shxReader.GetRecord(indexes[i].RecordNumber, out offset, out contentLength);
 
-                geometries[i] = PointReader.Read(shpReader, offset, contentLength);
+                geometries[i] = PointReader.Read(shpReader, offset, contentLength, srid);
             }
 
             return new EsriShapeCollection<EsriPoint>(geometries);
         }
 
-        private static IEsriShapeCollection ExtractMultiPoints(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)
+        private static IEsriShapeCollection ExtractMultiPoints(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes, int srid)
         {
             List<EsriMultiPoint> geometries = new List<EsriMultiPoint>(indexes.Count);
 
@@ -678,13 +695,13 @@ namespace IRI.Ket.ShapefileFormat
 
                 shxReader.GetRecord(indexes[i].RecordNumber, out offset, out contentLength);
 
-                geometries[i] = MultiPointReader.Read(shpReader, offset, contentLength);
+                geometries[i] = MultiPointReader.Read(shpReader, offset, contentLength, srid);
             }
 
             return new EsriShapeCollection<EsriMultiPoint>(geometries);
         }
 
-        private static IEsriShapeCollection ExtractPolyLines(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)
+        private static IEsriShapeCollection ExtractPolyLines(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes, int srid)
         {
             List<EsriPolyline> geometries = new List<EsriPolyline>(indexes.Count);
 
@@ -694,13 +711,13 @@ namespace IRI.Ket.ShapefileFormat
 
                 shxReader.GetRecord(indexes[i].RecordNumber, out offset, out contentLength);
 
-                geometries[i] = PolyLineReader.Read(shpReader, offset, contentLength);
+                geometries[i] = PolyLineReader.Read(shpReader, offset, contentLength, srid);
             }
 
             return new EsriShapeCollection<EsriPolyline>(geometries);
         }
 
-        private static IEsriShapeCollection ExtractPolygons(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes)
+        private static IEsriShapeCollection ExtractPolygons(System.IO.BinaryReader shpReader, ShxReader shxReader, List<Indexing.ShpIndex> indexes, int srid)
         {
             List<EsriPolygon> geometries = new List<EsriPolygon>(indexes.Count);
 
@@ -710,7 +727,7 @@ namespace IRI.Ket.ShapefileFormat
 
                 shxReader.GetRecord(indexes[i].RecordNumber, out offset, out contentLength);
 
-                geometries[i] = PolygonReader.Read(shpReader, offset, contentLength);
+                geometries[i] = PolygonReader.Read(shpReader, offset, contentLength, srid);
             }
 
             return new EsriShapeCollection<EsriPolygon>(geometries);

@@ -94,25 +94,25 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.zValues; }
         }
 
-        public EsriPolygonZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures, int srid)
+        public EsriPolygonZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
         {
-            if (points.Length != zValues.Length || points.Length != measures.Length)
+            if (points == null || points.Length < 1 || points.Length != zValues?.Length || points.Length != measures?.Length)
             {
                 throw new NotImplementedException();
             }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
             this.points = points;
 
             this.measures = measures;
-             
+
             this.zValues = zValues;
-             
+
             if (measures?.Count() > 0)
             {
                 this.minMeasure = measures.Min();
@@ -148,12 +148,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                             double[] zValues,
                             double minMeasure,
                             double maxMeasure,
-                            double[] measures, 
-                            int srid)
+                            double[] measures)
         {
+            if (points == null || points.Length < 1 || points.Length != zValues?.Length || points.Length != measures?.Length)
+            {
+                throw new NotImplementedException();
+            }
+
             this.boundingBox = boundingBox;
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
@@ -282,7 +286,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriPolygonZ(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures, newSrid);
+            return new EsriPolygonZ(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, this.ZValues, this.Measures);
         }
 
         //always returns polygon not multi polygon

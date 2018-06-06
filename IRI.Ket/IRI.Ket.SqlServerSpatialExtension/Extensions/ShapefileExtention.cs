@@ -10,7 +10,7 @@ using System.Text;
 namespace IRI.Ket.SpatialExtensions
 {
     public static class ShapefileExtention
-    { 
+    {
         private static bool AreConsistent(EsriShapeType esriType, OpenGisGeometryType ogcType)
         {
             switch (ogcType)
@@ -99,7 +99,7 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        public static List<SqlGeometry > AsSqlGeometry(this IEsriShapeCollection shapes, int srid)
+        public static List<SqlGeometry> AsSqlGeometry(this IEsriShapeCollection shapes, int srid)
         {
             var count = shapes.Count();
 
@@ -125,9 +125,9 @@ namespace IRI.Ket.SpatialExtensions
             //}
 
             SqlGeometryBuilder builder = new SqlGeometryBuilder();
-            
+
             builder.SetSrid(srid);
-            
+
             try
             {
                 switch (shape.Type)
@@ -295,11 +295,11 @@ namespace IRI.Ket.SpatialExtensions
         {
             if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
             {
-                return new EsriPoint(double.NaN, double.NaN);
+                return new EsriPoint(double.NaN, double.NaN, 0);
             }
             else
             {
-                return new EsriPoint(point.STX.Value, point.STY.Value);
+                return new EsriPoint(point.STX.Value, point.STY.Value, point.STSrid.Value);
             }
         }
 
@@ -489,7 +489,7 @@ namespace IRI.Ket.SpatialExtensions
 
             return points;
         }
-      
+
         #endregion
     }
 }

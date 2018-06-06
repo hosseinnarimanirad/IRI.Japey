@@ -8,7 +8,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Reader
 {
-    public class PointZReader : ShpReader<EsriPointZ> 
+    public class PointZReader : ShpReader<EsriPointZ>
     {
         public PointZReader(string fileName, int srid)
             : base(fileName, EsriShapeType.EsriPointZ, srid)
@@ -33,10 +33,10 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             double m = shpReader.ReadDouble();
 
-            return new EsriPointZ(x, y, z, m);
+            return new EsriPointZ(x, y, z, m, this._srid);
         }
 
-        public static EsriPointZ Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPointZ Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -51,7 +51,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             double m = reader.ReadDouble();
 
-            return new EsriPointZ(x, y, z, m);
+            return new EsriPointZ(x, y, z, m, srid);
         }
     }
 }

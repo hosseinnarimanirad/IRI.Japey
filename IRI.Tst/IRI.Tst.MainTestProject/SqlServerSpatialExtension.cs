@@ -84,15 +84,15 @@ namespace IRI.Test.MainTestProject.SqlServerSpatialExtension
         {
             var prjString = ReadFile("Clarke 1880 (RGS).prj");
 
+            //var prjString = ReadFile("lccnioc.prj");
+
             EsriPrjFile prjFile = EsriPrjFile.Parse(prjString);
 
             var prjFile2 = prjFile.AsMapProjection().AsEsriPrj();
-
-            var temp = prjFile.AsEsriCrsWkt() == prjFile2.AsEsriCrsWkt();
-
-            Assert.Fail();
+             
+            Assert.AreEqual(prjFile.AsEsriCrsWkt(), prjFile2.AsEsriCrsWkt());
         }
-
+         
         private string ReadFile(string fileName)
         {
             var assembly = Assembly.GetExecutingAssembly();

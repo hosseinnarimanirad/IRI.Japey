@@ -10,12 +10,12 @@ namespace IRI.Ket.ShapefileFormat
 {
     public static class CoordinateSystemExtensions
     {
-        public static EsriPrjFile AsEsriPrj(this CoordinateReferenceSystemBase mapProjection)
+        public static EsriPrjFile AsEsriPrj(this CrsBase mapProjection)
         {
             switch (mapProjection.Type)
             {
                 case MapProjectionType.None:
-                    return new EsriPrjFile(new EsriPrjTreeNode(mapProjection.Ellipsoid, mapProjection.Title));
+                    return new EsriPrjFile(new EsriPrjTreeNode(mapProjection.Ellipsoid, mapProjection.Title, mapProjection.Srid));
 
                 case MapProjectionType.AlbersEqualAreaConic:
                 case MapProjectionType.AzimuthalEquidistant:
@@ -52,7 +52,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(lcc.Title) ? "LAMBERT CONFORMAL CONIC" : lcc.Title };
 
-            var geogcs = new EsriPrjTreeNode(lcc.Ellipsoid, lcc.DatumName);
+            var geogcs = new EsriPrjTreeNode(lcc.Ellipsoid, lcc.DatumName, lcc.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriLambertConformalConic);
 
@@ -89,7 +89,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(utm.Title) ? $"WGS_1984_UTM_Zone_{zone}{ns}" : utm.Title };
 
-            var geogcs = new EsriPrjTreeNode(utm.Ellipsoid, utm.DatumName);
+            var geogcs = new EsriPrjTreeNode(utm.Ellipsoid, utm.DatumName, utm.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriTransverseMercator);
 
@@ -118,7 +118,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(webMercator.Title) ? $"{webMercator.Ellipsoid.EsriName}_Web_Mercator_Auxiliary_Sphere" : webMercator.Title };
 
-            var geogcs = new EsriPrjTreeNode(webMercator.Ellipsoid, webMercator.DatumName);
+            var geogcs = new EsriPrjTreeNode(webMercator.Ellipsoid, webMercator.DatumName, webMercator.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriWebMercator);
 
@@ -147,7 +147,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(mercator.Title) ? "WGS_1984_World_Mercator" : mercator.Title };
 
-            var geogcs = new EsriPrjTreeNode(mercator.Ellipsoid, mercator.DatumName);
+            var geogcs = new EsriPrjTreeNode(mercator.Ellipsoid, mercator.DatumName, mercator.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriMercator);
 
@@ -174,7 +174,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(cylindricalEqualArea.Title) ? "World_Cylindrical_Equal_Area" : cylindricalEqualArea.Title };
 
-            var geogcs = new EsriPrjTreeNode(cylindricalEqualArea.Ellipsoid, cylindricalEqualArea.DatumName);
+            var geogcs = new EsriPrjTreeNode(cylindricalEqualArea.Ellipsoid, cylindricalEqualArea.DatumName, cylindricalEqualArea.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriCylindricalEqualArea);
 
@@ -201,7 +201,7 @@ namespace IRI.Ket.ShapefileFormat
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(transverseMercator.Title) ? "Transverse Mercator" : transverseMercator.Title };
 
-            var geogcs = new EsriPrjTreeNode(transverseMercator.Ellipsoid, transverseMercator.DatumName);
+            var geogcs = new EsriPrjTreeNode(transverseMercator.Ellipsoid, transverseMercator.DatumName, transverseMercator.Ellipsoid.Srid);
 
             var projection = new EsriPrjTreeNode(EsriPrjFile._projection, EsriPrjFile._esriTransverseMercator);
 

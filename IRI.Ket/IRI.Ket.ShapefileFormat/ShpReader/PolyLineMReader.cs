@@ -11,7 +11,7 @@ using System.Text;
 namespace IRI.Ket.ShapefileFormat.Reader
 {
     public class PolyLineMReader : MeasuresReader<EsriPolylineM>
-    { 
+    {
         public PolyLineMReader(string fileName, int srid)
             : base(fileName, EsriShapeType.EsriPolyLineM, srid)
         {
@@ -39,7 +39,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 parts[i] = shpReader.ReadInt32();
             }
 
-            EsriPoint[] points = this.ReadPoints(numPoints);
+            EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
 
             double minMeasure, maxMeasure;
 
@@ -50,7 +50,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
             return new EsriPolylineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }
 
-        public static EsriPolylineM Read(System.IO.BinaryReader reader, int offset, int contentLength)
+        public static EsriPolylineM Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
             if (contentLength == 38)
             {
@@ -75,7 +75,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 parts[i] = reader.ReadInt32();
             }
 
-            var points = ShpBinaryReader.ReadPoints(reader, numPoints);
+            var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
 
             double minMeasure, maxMeasure;
 

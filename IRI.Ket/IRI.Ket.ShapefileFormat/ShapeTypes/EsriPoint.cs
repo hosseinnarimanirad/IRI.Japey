@@ -83,10 +83,10 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return EsriShapeType.EsriPoint; }
         }
 
-        public static explicit operator EsriPoint(Point value)
-        {
-            return new EsriPoint(value.X, value.Y);
-        }
+        //public static explicit operator EsriPoint(Point value)
+        //{
+        //    return new EsriPoint(value.X, value.Y);
+        //}
 
         public string AsExactString()
         {

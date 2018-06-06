@@ -30,7 +30,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             int numPoints = shpReader.ReadInt32();
 
-            EsriPoint[] points = this.ReadPoints(numPoints);
+            EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
 
             double minZ, maxZ;
 
@@ -47,7 +47,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
             }
 
-            return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures, this._srid);
+            return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
         }
 
         public static EsriMultiPointZ Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
@@ -61,7 +61,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var numPoints = reader.ReadInt32();
 
-            var points = ShpBinaryReader.ReadPoints(reader, numPoints);
+            var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
 
             double minZ, maxZ;
 
@@ -78,7 +78,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
                 ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
             }
 
-            return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures, srid);
+            return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
         }
 
     }

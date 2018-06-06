@@ -56,44 +56,54 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.parts.Length; }
         }
 
-        internal EsriPolygon(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points, int srid)
+        internal EsriPolygon(BoundingBox boundingBox, int[] parts, EsriPoint[] points)
         {
-            this.boundingBox = boundingBox;
+            if (points == null || points.Length < 1)
+            {
+                throw new NotImplementedException();
+            }
 
-            this.Srid = srid;
+            this.boundingBox = boundingBox;
+             
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
             this.points = points;
         }
 
-        public EsriPolygon(EsriPoint[] points, int srid)
-            : this(points, new int[] { 0 }, srid)
+        public EsriPolygon(EsriPoint[] points)
+            : this(points, new int[] { 0 })
         {
 
         }
 
-        public EsriPolygon(EsriPoint[] points, int[] parts, int srid)
+        public EsriPolygon(EsriPoint[] points, int[] parts)
         {
-            //this.boundingBox = new IRI.Msh.Common.Primitives.BoundingBox(
-            //                                    xMin: points.Min(i => i.X),
-            //                                    yMin: points.Min(i => i.Y),
-            //                                    xMax: points.Max(i => i.X),
-            //                                    yMax: points.Max(i => i.Y));
+            if (points == null || points.Length < 1)
+            {
+                throw new NotImplementedException();
+            } 
+
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
 
             this.parts = parts;
 
             this.points = points;
         }
 
-        public EsriPolygon(EsriPoint[][] points, int srid)
+        public EsriPolygon(EsriPoint[][] points)
         {
+            if (points == null || points.Length < 1)
+            {
+                throw new NotImplementedException();
+            }
+
             this.points = points.Where(i => i.Length > 3).SelectMany(i => i).ToArray();
 
-            this.Srid = srid;
+            this.Srid = this.points.First().Srid;
 
             this.parts = new int[points.Length];
 
@@ -102,9 +112,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 parts[i] = points.Where((array, index) => index < i).Sum(array => array.Length);
             }
 
-            var boundingBoxes = points.Select(i => IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(i.Cast<IRI.Msh.Common.Primitives.IPoint>()));
+            var boundingBoxes = points.Select(i => BoundingBox.CalculateBoundingBox(i.Cast<IRI.Msh.Common.Primitives.IPoint>()));
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.GetMergedBoundingBox(boundingBoxes);
+            this.boundingBox = BoundingBox.GetMergedBoundingBox(boundingBoxes);
 
             //this.boundingBox = IRI.Msh.Common.Infrastructure.CalculateBoundingBox(this.points.Cast<IRI.Msh.Common.Primitives.IPoint>());
         }
@@ -208,7 +218,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriPolygon(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts, newSrid);
+            return new EsriPolygon(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.Parts);
         }
 
 

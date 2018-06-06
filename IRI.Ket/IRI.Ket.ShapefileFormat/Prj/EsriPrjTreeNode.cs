@@ -59,7 +59,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             this.Values = values.ToList();
         }
 
-        public EsriPrjTreeNode(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title = null)
+        public EsriPrjTreeNode(IRI.Sta.CoordinateSystem.IEllipsoid ellipsoid, string title, int srid)
         {
             this.Name = EsriPrjFile._geogcs;
 
@@ -78,8 +78,16 @@ namespace IRI.Ket.ShapefileFormat.Prj
             var primem = new EsriPrjTreeNode(EsriPrjFile._primem, EsriPrjFile._greenwich, "0.0");
 
             var unit = new EsriPrjTreeNode(EsriPrjFile._unit, EsriPrjFile._degree, EsriPrjFile._degreeValue);
-
+             
             this.Children = new List<EsriPrjTreeNode>() { datum, primem, unit };
+
+            if (srid != 0)
+            {
+                var authority = new EsriPrjTreeNode(EsriPrjFile._authority, EsriPrjFile._epsg, srid.ToString());
+
+                this.Children.Add(authority);
+            }
+             
         }
 
         private EsriPrjTreeNode(string name, string content)

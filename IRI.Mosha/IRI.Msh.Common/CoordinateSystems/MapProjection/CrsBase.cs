@@ -1,5 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Met
 
 namespace IRI.Sta.CoordinateSystem.MapProjection
 {
-    public abstract class CoordinateReferenceSystemBase
+    public abstract class CrsBase
     {
         private string _title;
 
@@ -36,7 +35,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
 
         public abstract MapProjectionType Type { get; }
 
-        public CoordinateReferenceSystemBase()
+        public CrsBase()
         {
 
         }
@@ -50,7 +49,7 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
 
         //}
 
-        public CoordinateReferenceSystemBase(string title, Ellipsoid ellipsoid)
+        public CrsBase(string title, Ellipsoid ellipsoid)
         {
             this.Title = title;
 

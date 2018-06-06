@@ -45,22 +45,32 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return new int[] { 0 }; }
         }
 
-        public EsriMultiPoint(EsriPoint[] points, int srid)
+        public EsriMultiPoint(EsriPoint[] points)
         {
+            if (points == null || points.Length < 1)
+            {
+                throw new NotImplementedException();
+            }
+
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
             this.points = points;
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
         }
 
-        internal EsriMultiPoint(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points, int srid)
+        internal EsriMultiPoint(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points)
         {
+            if (points == null || points.Length < 1)
+            {
+                throw new NotImplementedException();
+            }
+
             this.boundingBox = boundingBox;
 
             this.points = points;
 
-            this.Srid = srid;
+            this.Srid = points.First().Srid;
         }
 
         public byte[] WriteContentsToByte()
@@ -149,7 +159,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
         {
-            return new EsriMultiPoint(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), newSrid);
+            return new EsriMultiPoint(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray());
         }
 
         public Geometry AsGeometry()

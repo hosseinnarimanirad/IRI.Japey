@@ -46,11 +46,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Projected\IProjected.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Projected\Projected.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\RotateDirection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\CoordinateReferenceSystemBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\CrsBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\CylindricalEqualArea.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\LambertConformalConic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\DefaultMapProjections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\Mercator.cs" />

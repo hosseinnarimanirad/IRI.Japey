@@ -31,7 +31,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
             return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
-        protected EsriPoint[] ReadPoints(int numberOfPoints)
+        protected EsriPoint[] ReadPoints(int numberOfPoints, int srid)
         {
             EsriPoint[] result = new EsriPoint[numberOfPoints];
 
@@ -41,12 +41,12 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
                 double tempY = shpReader.ReadDouble();
 
-                result[i] = new EsriPoint(tempX, tempY);
+                result[i] = new EsriPoint(tempX, tempY, srid);
             }
 
             return result;
         }
-    
+
         //protected EsriPoint[] ReadPoints(int numberOfPoints)
         //{
         //    EsriPoint[] result = new EsriPoint[numberOfPoints];

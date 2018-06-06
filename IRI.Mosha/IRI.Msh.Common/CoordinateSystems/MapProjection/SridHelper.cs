@@ -18,6 +18,22 @@ namespace IRI.Sta.CoordinateSystem.MapProjection
         public const int UtmNorthZone40 = 32640;
 
         public const int UtmNorthZone41 = 32641;
-         
+
+
+        //public static CrsBase GetCrs(int srid)
+        //{
+        //    switch (srid)
+        //    {
+        //        case GeodeticWGS84:
+        //            return DefaultMapProjections.
+        //            break;
+
+        //        case WebMercator:
+        //            return new WebMercator();
+
+        //        default:
+        //            break;
+        //    }
+        //}
     }
 }

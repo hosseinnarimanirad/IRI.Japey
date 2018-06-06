@@ -85,11 +85,13 @@ namespace IRI.Sta.CoordinateSystem
             {
                 return new Ellipsoid<Meter, Degree>("Nahrwan 67 ", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-245.0), new Meter(-153.9), new Meter(382.8)),
-                    new OrientationParameter(new Degree(), new Degree(), new Degree()), int.MinValue)
+                    new OrientationParameter(new Degree(), new Degree(), new Degree()), 
+                    int.MinValue)
                 { EsriName = "Nahrwan 1967 (deg)" };
             }
         }
 
+        //https://epsg.io/4270
         public static Ellipsoid<Meter, Degree> NahrawanIraq
         {
             get
@@ -102,6 +104,7 @@ namespace IRI.Sta.CoordinateSystem
             }
         }
 
+        //https://epsg.io/4132
         public static Ellipsoid<Meter, Degree> FD58
         {
             get

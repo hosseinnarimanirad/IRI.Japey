@@ -478,7 +478,7 @@ namespace IRI.Ket.SpatialExtensions
         #region Projection
 
 
-        public static IPoint Project(this IPoint point, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        public static IPoint Project(this IPoint point, CrsBase sourceSrs, CrsBase targetSrs)
         {
             if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
             {
@@ -495,7 +495,7 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        public static List<Geometry> Project(this List<Geometry> values, CoordinateReferenceSystemBase sourceSrs, CoordinateReferenceSystemBase targetSrs)
+        public static List<Geometry> Project(this List<Geometry> values, CrsBase sourceSrs, CrsBase targetSrs)
         {
             List<Geometry> result = new List<Geometry>(values.Count);
 

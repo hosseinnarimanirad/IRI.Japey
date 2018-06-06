@@ -30,9 +30,9 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             int numPoints = shpReader.ReadInt32();
 
-            EsriPoint[] points = this.ReadPoints(numPoints);
+            EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
 
-            return new EsriMultiPoint(boundingBox, points, this._srid);
+            return new EsriMultiPoint(boundingBox, points);
         }
 
         public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
@@ -46,9 +46,9 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             var numPoints = reader.ReadInt32();
 
-            var points = ShpBinaryReader.ReadPoints(reader, numPoints);
+            var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
 
-            return new EsriMultiPoint(boundingBox, points, srid);
+            return new EsriMultiPoint(boundingBox, points);
         }
 
         

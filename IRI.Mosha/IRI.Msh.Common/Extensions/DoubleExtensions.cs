@@ -25,7 +25,11 @@ namespace System
 
         public static string AsExactString(this double value)
         {
-            return value.ToString("G17", System.Globalization.CultureInfo.InvariantCulture);
+            //decimal.Parse("6378249.145").ToString("G17")---------"6378249.145"
+
+            //double.Parse("6378249.145").ToString("G17")---------"6378249.1449999996"
+
+            return ((decimal)value).ToString("G17", CultureInfo.InvariantCulture);
         }
     }
 }

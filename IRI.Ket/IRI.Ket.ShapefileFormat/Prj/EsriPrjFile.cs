@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ellipsoid = IRI.Sta.CoordinateSystem.Ellipsoid<IRI.Sta.MeasurementUnit.Meter, IRI.Sta.MeasurementUnit.Degree>;
+using IRI.Sta.MeasurementUnit;
 
 namespace IRI.Ket.ShapefileFormat.Prj
 {
@@ -33,6 +34,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
         public const string _parameter = "PARAMETER";
         public const string _primem = "PRIMEM";
         public const string _authority = "AUTHORITY";
+        public const string _toWgs84 = "TOWGS84";
 
         public const string _falseEasting = "False_Easting";
         public const string _falseNorthing = "False_Northing";
@@ -54,16 +56,16 @@ namespace IRI.Ket.ShapefileFormat.Prj
             this._root = root;
 
             //sample: AUTHORITY["EPSG", "4326"]
-            var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
+            //var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
 
-            int srid;
+            //int srid = 0;
 
-            if (authorityInfo != null && authorityInfo.Count == 2 && authorityInfo?[0] == _epsg)
-            {
-                int.TryParse(authorityInfo[1], out srid);
-            }
+            //if (authorityInfo != null && authorityInfo.Count == 2 && authorityInfo?[0] == _epsg)
+            //{
+            //    int.TryParse(authorityInfo[1], out srid);
+            //}
 
-            this._srid = srid;
+            this._srid = GetCrsSrid();
         }
 
         public EsriPrjFile(string prjFileName)
@@ -192,17 +194,71 @@ namespace IRI.Ket.ShapefileFormat.Prj
         {
             get
             {
-                var values = Datum.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
+                var spheroidValues = Datum.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
 
-                return new Ellipsoid(values.First(),
-                                        new Sta.MeasurementUnit.Meter(double.Parse(values.Skip(1).First(), CultureInfo.InvariantCulture)),
-                                        double.Parse(values.Skip(2).First(), CultureInfo.InvariantCulture), 0)
+                var toWgs84Values = Datum.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_toWgs84))?.Values;
+
+                var srid = GetEllipsoidSrid();
+
+                if (toWgs84Values == null)
                 {
-                    EsriName = values.First()
-                };
+                    return new Ellipsoid(spheroidValues.First(),
+                                        new Sta.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture), srid)
+                    {
+                        EsriName = spheroidValues.First(),
+                    };
+                }
+                else
+                {
+                    var dx = double.Parse(toWgs84Values[0], CultureInfo.InvariantCulture);
+                    var dy = double.Parse(toWgs84Values[1], CultureInfo.InvariantCulture);
+                    var dz = double.Parse(toWgs84Values[2], CultureInfo.InvariantCulture);
+
+                    var drx = double.Parse(toWgs84Values[3], CultureInfo.InvariantCulture);
+                    var dry = double.Parse(toWgs84Values[4], CultureInfo.InvariantCulture);
+                    var drz = double.Parse(toWgs84Values[5], CultureInfo.InvariantCulture);
+
+                    return new Ellipsoid(spheroidValues.First(),
+                                        new Sta.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
+                                        new IRI.Sta.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
+                                        new Sta.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
+                                        srid)
+                    {
+                        EsriName = spheroidValues.First(),
+                    };
+                }
+
+
             }
         }
 
+        private int GetCrsSrid()
+        {
+            var crsAuthorityNode = _root.Children.SingleOrDefault(i => i.Name == _authority);
+
+            return GetSridFromAuthorityNode(crsAuthorityNode);
+        }
+
+        private int GetEllipsoidSrid()
+        {
+            var ellipsoidAuthorityNode = Geogcs.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_authority));
+
+            return GetSridFromAuthorityNode(ellipsoidAuthorityNode);
+        }
+
+        private int GetSridFromAuthorityNode(EsriPrjTreeNode authorityNode)
+        {
+            int srid = 0;
+
+            if (authorityNode?.Values?.Count == 2 && authorityNode?.Values?[0] == _epsg)
+            {
+                int.TryParse(authorityNode.Values[1], out srid);
+            }
+
+            return srid;
+        }
 
         public bool IsSISystem()
         {
@@ -308,7 +364,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             return double.Parse(parameters.Single(i => i.Values.First().EqualsIgnoreCase(parameterName)).Values.Skip(1).First());
         }
 
-        public CoordinateReferenceSystemBase AsMapProjection()
+        public CrsBase AsMapProjection()
         {
             switch (ProjectionType)
             {
@@ -353,7 +409,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
                         GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
                         GetParameter(EsriPrjParameterType.FalseEasting, 0),
                         GetParameter(EsriPrjParameterType.FalseNorthing, 0),
-                        GetParameter(EsriPrjParameterType.ScaleFactor, 1), 
+                        GetParameter(EsriPrjParameterType.ScaleFactor, 1),
                         Srid)
                     {
                         Title = this.Title,
