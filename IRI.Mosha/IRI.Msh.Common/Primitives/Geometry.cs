@@ -340,7 +340,7 @@ namespace IRI.Msh.Common.Primitives
             {
                 return Points.Last();
             }
-            else if (Geometries != null)
+            else if (Geometries?.Length > 0)
             {
                 return Geometries.Last().GetLastPoint();
             }

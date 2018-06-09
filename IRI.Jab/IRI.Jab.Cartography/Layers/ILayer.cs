@@ -34,6 +34,8 @@ namespace IRI.Jab.Cartography
 
         void Invalidate();
 
+        bool IsSelectedInToc { get; set; }
+
         event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged; 
         //event EventHandler<CustomEventArgs<bool>> OnVisibilityChanged;
     }

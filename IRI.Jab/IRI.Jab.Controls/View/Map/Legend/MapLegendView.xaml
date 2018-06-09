@@ -17,33 +17,56 @@
             <!--<Label Content="لیست  لایه ها" FontWeight="Bold" DockPanel.Dock="Top"/>-->
             <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">-->
             <!--<ItemsControl Name="tableList" Margin="4" ItemsSource="{Binding }">-->
-            <ItemsControl Name="tableList" Margin="4" ItemsSource="{Binding Source={StaticResource collectionViewSource}}">
-                <ItemsControl.ItemTemplate>
+            <ListBox Name="tableList" Margin="4" ItemsSource="{Binding Source={StaticResource collectionViewSource}}" IsSynchronizedWithCurrentItem="True">
+                <ListBox.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightColorKey}"  Color="Gray"/>
+                </ListBox.Resources>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="IsSelected" Value="{Binding IsSelectedInToc, Mode=TwoWay}"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="1" Padding="1">
-                            <DockPanel HorizontalAlignment="Stretch" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="1">
-                                <!--<Border DockPanel.Dock="Left"   BorderBrush="Black" BorderThickness="1">-->
-                                <!--<telerik:RadColorPicker SelectedColor="{Binding VisualParameters.Stroke, Converter={StaticResource solidColorBrushToColorConverter}, Mode=TwoWay}"   IsRecentColorsActive="True" NoColorVisibility="Collapsed"/>-->
-                                <!--</Border>-->
-                                <Border DockPanel.Dock="Left"  Width="15" Height="15" BorderBrush="Black" BorderThickness="1">
-                                    <Path Margin="1" Data="{Binding Type, Converter={StaticResource iLayerToLegendConverter}}"
+                            <ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <StackPanel>
+                                <DockPanel HorizontalAlignment="Stretch" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="1">
+                                    <!--<Border DockPanel.Dock="Left"   BorderBrush="Black" BorderThickness="1">-->
+                                    <!--<telerik:RadColorPicker SelectedColor="{Binding VisualParameters.Stroke, Converter={StaticResource solidColorBrushToColorConverter}, Mode=TwoWay}"   IsRecentColorsActive="True" NoColorVisibility="Collapsed"/>-->
+                                    <!--</Border>-->
+                                    <Border DockPanel.Dock="Left"  Width="15" Height="15" BorderBrush="Black" BorderThickness="1">
+                                        <Path Margin="1" Data="{Binding Type, Converter={StaticResource iLayerToLegendConverter}}"
                                           Fill="{Binding VisualParameters.Fill}" Stroke="{Binding VisualParameters.Stroke}"
                                           StrokeThickness="{Binding VisualParameters.StrokeThickness}"
                                           HorizontalAlignment="Center" VerticalAlignment="Center"
                                           Opacity="{Binding VisualParameters.Opacity}"/>
-                                </Border>
-                                <Viewbox Height="20" DockPanel.Dock="Left" Margin="2">
-                                    <Slider Width="75" Maximum="1" Value="{Binding VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2" />
-                                </Viewbox>
-                                <CheckBox VerticalAlignment="Center" Name="visibility" Margin="2"
-                                          IsChecked="{Binding VisualParameters.Visibility, Converter={StaticResource visibilityToBoolConverter}}" 
-                                          FontWeight="Bold" FontSize="13" Content="{Binding LayerName}" Grid.ColumnSpan="2"/>
-                            </DockPanel>
-
+                                    </Border>
+                                    <Viewbox Height="20" DockPanel.Dock="Left" Margin="2">
+                                        <Slider Width="75" Maximum="1" Value="{Binding VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2" />
+                                    </Viewbox>
+<CheckBox VerticalAlignment="Center" Name="visibility" Margin="2"
+        IsHitTestVisible="{Binding Path=IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"
+        IsChecked="{Binding VisualParameters.Visibility, Converter={StaticResource visibilityToBoolConverter}}" 
+        FontWeight="Bold" FontSize="13" Content="{Binding LayerName}" Grid.ColumnSpan="2"/>
+                                </DockPanel>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding IsSelectedInToc, Converter={StaticResource boolToVisibilityConverter}}">
+                                    <Button Cursor="Hand" Margin="2" ToolTip="انتخاب عارضه" VerticalAlignment="Center">
+                                        <Path Data="{StaticResource appbarVectorPenConvert}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                    </Button>
+                                    <Button Cursor="Hand" Margin="2">
+                                        <Path Data="{StaticResource appbarPageText}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                    </Button>
+                                    <Button Cursor="Hand" Margin="2">
+                                        <Path Data="{StaticResource appbarDelete}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                            </ScrollViewer>
                         </Border>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <!--</ScrollViewer>-->
             <!--<ListBox Margin="4"></ListBox>-->
         </DockPanel>

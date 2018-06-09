@@ -1222,6 +1222,45 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         }
 
+        public async virtual void AddWorldfile()
+        {
+            this.IsBusy = true;
+
+            var fileName = this.RequestOpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
+
+            if (!File.Exists(fileName))
+            {
+                this.IsBusy = false;
+
+                return;
+            }
+
+            try
+            {
+                var dataSource = GeoRasterFileDataSource.Create(fileName);
+
+                if (dataSource == null)
+                {
+                    return;
+                }
+
+                var rasterLayer = new RasterLayer(dataSource, System.IO.Path.GetFileNameWithoutExtension(fileName), ScaleInterval.All, false, false, Visibility.Visible, .9);
+
+                this.SetLayer(rasterLayer);
+                 
+                this.Refresh();
+
+            }
+            catch (Exception ex)
+            {
+                ShowMessage(ex.Message);
+            }
+            finally
+            {
+                this.IsBusy = false;
+            }
+
+        }
 
         #endregion
 
@@ -1351,6 +1390,20 @@ namespace IRI.Jab.Cartography.Presenter.Map
                     _addShapefileCommand = new RelayCommand(param => { AddShapefile(); });
                 }
                 return _addShapefileCommand;
+            }
+        }
+
+        private RelayCommand _addWorldfileCommand;
+
+        public RelayCommand AddWorldfileCommand
+        {
+            get
+            {
+                if (_addWorldfileCommand == null)
+                {
+                    _addWorldfileCommand = new RelayCommand(param => { AddWorldfile(); });
+                }
+                return _addWorldfileCommand;
             }
         }
 

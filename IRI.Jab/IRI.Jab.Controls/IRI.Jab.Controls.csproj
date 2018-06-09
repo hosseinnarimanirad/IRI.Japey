@@ -103,6 +103,7 @@
     <Compile Include="Presenter\CoordinatePanelPresenter.cs" />
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
+    <Compile Include="Presenter\MapApplicationPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\CoordinateEditor\LineStringEditorView.xaml.cs">
       <DependentUpon>LineStringEditorView.xaml</DependentUpon>

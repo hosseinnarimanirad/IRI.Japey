@@ -151,6 +151,9 @@ namespace IRI.Ket.WorldfileFormat
 
                     if (!System.IO.File.Exists(worldFileName))
                         worldFileName = System.IO.Path.ChangeExtension(imageFileName, "jpegw");
+
+                    if (!System.IO.File.Exists(worldFileName))
+                        worldFileName = System.IO.Path.ChangeExtension(imageFileName, "jgw");
                     break;
 
                 case ".tif":

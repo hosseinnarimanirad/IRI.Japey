@@ -43,6 +43,18 @@ namespace IRI.Jab.Cartography
 
         public int ZIndex { get; set; }
 
+        private bool _isSelectedInToc;
+
+        public bool IsSelectedInToc
+        {
+            get { return _isSelectedInToc; }
+            set
+            {
+                _isSelectedInToc = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private ScaleInterval _visibleRange;
 

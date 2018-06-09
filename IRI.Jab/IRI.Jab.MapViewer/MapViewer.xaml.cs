@@ -784,6 +784,10 @@ namespace IRI.Jab.MapViewer
 
         public void SetRasterLayer(ScaleInterval scaleInterval, IDataSource dataSource, string layerName, double opacity, bool isBaseMap = false, bool isPyramid = false, RenderingApproach rendering = RenderingApproach.Default)
         {
+            if (dataSource == null)
+            {
+                return;
+            }
             this._layerManager.Add(new RasterLayer(dataSource, layerName, scaleInterval, isBaseMap, isPyramid, Visibility.Visible, opacity, rendering));
         }
 

@@ -18,22 +18,22 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public BoundingBox Extent { get; private set; }
 
-        public GeoRasterFileDataSource(string imageFileName)
+        private GeoRasterFileDataSource(string imageFileName)
         {
-            if (!System.IO.File.Exists(imageFileName))
-            {
-                throw new NotImplementedException();
-            }
-            
+            this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName);
+
+            this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+        }
+
+        public static GeoRasterFileDataSource Create(string imageFileName)
+        {
             try
             {
-                this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName);
-
-                this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+                return new GeoRasterFileDataSource(imageFileName);
             }
             catch (Exception ex)
             {
-                throw new NotImplementedException();
+                return null;
             }
         }
 
