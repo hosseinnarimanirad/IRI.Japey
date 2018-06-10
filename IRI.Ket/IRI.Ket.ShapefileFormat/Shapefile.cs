@@ -311,14 +311,14 @@ namespace IRI.Ket.ShapefileFormat
 
         public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
         {
-            Save(shpFileName, data, createEmptyDbf, overwrite);
+            Save(shpFileName, data, createEmptyDbf, overwrite, crs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
         public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
         {
-            Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite);
+            Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite, crs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }

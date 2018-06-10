@@ -187,7 +187,7 @@ namespace IRI.Msh.Common.Primitives
                 xMax: boundingBoxes.Max(i => i.XMax),
                 yMax: boundingBoxes.Max(i => i.YMax));
             }
-            
+
         }
 
         public static BoundingBox CalculateBoundingBox(IEnumerable<IPoint> points)
@@ -271,6 +271,24 @@ namespace IRI.Msh.Common.Primitives
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
+        }
+
+
+        public List<Point> GetClockWiseOrderOfEsriPoints()
+        {
+            return new List<Point>
+            {
+                new Point(this.XMin, this.YMin),
+                new Point(this.XMin, this.YMax),
+                new Point(this.XMax, this.YMax),
+                new Point(this.XMax, this.YMin)
+            };
+        }
+
+
+        public Geometry AsGeometry(int srid)
+        {
+            return Geometry.Create(GetClockWiseOrderOfEsriPoints().ToArray(), GeometryType.Polygon, srid);
         }
     }
 }

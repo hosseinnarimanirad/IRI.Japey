@@ -9,26 +9,26 @@ namespace IRI.Msh.Common.Mapping
 {
     public static class MapIndexes
     {
-        const double _250kWidth = 1.5;
+        internal const double _250kWidth = 1.5;
 
-        const double _250kHeight = 1.0;
-
-        //size: width and height (degree)
-        const double _100kSize = 0.5;
+        internal const double _250kHeight = 1.0;
 
         //size: width and height (degree)
-        const double _50kSize = 0.25;
+        internal const double _100kSize = 0.5;
 
         //size: width and height (degree)
-        const double _25kSize = 0.125;
+        internal const double _50kSize = 0.25;
 
-        const double _10kWidth = 5.0 / 60.0;
+        //size: width and height (degree)
+        internal const double _25kSize = 0.125;
 
-        const double _10kHeight = 3.0 / 60.0;
+        internal const double _10kWidth = 5.0 / 60.0;
 
-        const double _5kWidth = 2.5 / 60.0;
+        internal const double _10kHeight = 3.0 / 60.0;
 
-        const double _5kHeight = 1.5 / 60.0;
+        internal const double _5kWidth = 2.5 / 60.0;
+
+        internal const double _5kHeight = 1.5 / 60.0;
 
         public static List<BoundingBox> Find250kIndexes(BoundingBox geographicIntersectRegion)
         {

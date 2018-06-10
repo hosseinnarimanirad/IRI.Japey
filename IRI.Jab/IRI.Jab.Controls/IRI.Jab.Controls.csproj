@@ -100,6 +100,8 @@
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Model\DegreeMinuteSecondModel.cs" />
     <Compile Include="Model\GoTo\HamburgerGoToMenuItem.cs" />
+    <Compile Include="Model\Legend\LegendCommand.cs" />
+    <Compile Include="Model\Legend\MapLegendItemWithOptionsModel.cs" />
     <Compile Include="Presenter\CoordinatePanelPresenter.cs" />
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
@@ -146,6 +148,9 @@
     </Compile>
     <Compile Include="View\Map\FullNavigationView.xaml.cs">
       <DependentUpon>FullNavigationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Map\Legend\MapLegendItemWithOptions.xaml.cs">
+      <DependentUpon>MapLegendItemWithOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Map\Legend\MapLegendView.xaml.cs">
       <DependentUpon>MapLegendView.xaml</DependentUpon>
@@ -244,6 +249,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Map\FullNavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Map\Legend\MapLegendItemWithOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

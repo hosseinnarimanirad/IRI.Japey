@@ -81,6 +81,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\RandomHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StreamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ZipArchiveHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Index100k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Index250k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\IndexBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapIndexes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\WebMercatorUtility.cs" />

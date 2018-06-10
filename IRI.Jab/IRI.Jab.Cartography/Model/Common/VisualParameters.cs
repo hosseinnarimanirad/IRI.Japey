@@ -119,6 +119,20 @@ namespace IRI.Jab.Cartography
             DependencyProperty.Register("DashStyle", typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
 
+
+
+        public bool IsInScaleRange
+        {
+            get { return (bool)GetValue(IsInScaleRangeProperty); }
+            set { SetValue(IsInScaleRangeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsInScaleRange.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsInScaleRangeProperty =
+            DependencyProperty.Register("IsInScaleRange", typeof(bool), typeof(VisualParameters), new PropertyMetadata(true));
+
+
+
         private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
 
         public SimplePointSymbol PointSymbol
@@ -130,6 +144,7 @@ namespace IRI.Jab.Cartography
                 RaisePropertyChanged();
             }
         }
+
 
 
         public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)

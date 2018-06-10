@@ -55,6 +55,18 @@ namespace IRI.Jab.Cartography
             }
         }
 
+        private bool _showInToc;
+
+        public bool ShowInToc
+        {
+            get { return _showInToc; }
+            set
+            {
+                _showInToc = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private ScaleInterval _visibleRange;
 

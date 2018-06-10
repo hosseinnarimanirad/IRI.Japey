@@ -21,7 +21,7 @@ namespace IRI.Jab.Controls.View.Map
     /// Interaction logic for UserControl1.xaml
     /// </summary>
     public partial class MapLegendView : UserControl
-    { 
+    {
         public MapLegendView()
         {
             InitializeComponent();
@@ -32,9 +32,10 @@ namespace IRI.Jab.Controls.View.Map
             var item = e.Item as ILayer;
 
             e.Accepted =
+                item.ShowInToc && (
                 item.Type.HasFlag(LayerType.VectorLayer) ||
                 item.Type.HasFlag(LayerType.Raster) ||
-                item.Type.HasFlag(LayerType.ImagePyramid);
+                item.Type.HasFlag(LayerType.ImagePyramid));
         }
 
     }
