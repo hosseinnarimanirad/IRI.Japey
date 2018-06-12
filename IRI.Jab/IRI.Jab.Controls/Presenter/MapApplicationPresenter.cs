@@ -14,7 +14,7 @@ namespace IRI.Jab.Controls.Presenter
 
         }
 
-        public void Initialize(System.Windows.Window ownerWindow)
+        public  void Initialize(System.Windows.Window ownerWindow)
         {
 
             this.RequestOpenFile = (filter) =>
@@ -35,6 +35,8 @@ namespace IRI.Jab.Controls.Presenter
             this.BaseMapType = IRI.Jab.Cartography.TileServices.TileType.Hybrid;
 
             this.RequestGoTo = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
+
+            this.RegisterMapOptions();
              
         }
     }

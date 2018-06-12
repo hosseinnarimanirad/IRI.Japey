@@ -81,9 +81,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\RandomHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StreamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ZipArchiveHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Index100k.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Index250k.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\IndexBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index100k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index250k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index25k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index50k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapIndexes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\WebMercatorUtility.cs" />
@@ -120,7 +122,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GooglePlacesResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Here\HereIsolineResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ImageSource.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Mapping\IndexSheet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexSheet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenIsochroneResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenRouteCostingModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Field.cs" />
@@ -169,5 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Mapping\Model\" />
   </ItemGroup>
 </Project>

@@ -30,9 +30,9 @@ namespace IRI.Jab.Controls.Model.Legend
             get { return _layer.VisualParameters; }
         }
 
-        private IEnumerable<LegendCommand> _commands;
+        private IEnumerable<ILegendCommand> _commands;
 
-        public IEnumerable<LegendCommand> Commands
+        public IEnumerable<ILegendCommand> Commands
         {
             get { return _commands; }
             set

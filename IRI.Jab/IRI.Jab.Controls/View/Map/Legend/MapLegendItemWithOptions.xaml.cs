@@ -65,15 +65,15 @@ namespace IRI.Jab.Controls.View.Map
 
 
 
-        public IEnumerable<LegendCommand> Commands
+        public IEnumerable<ILegendCommand> Commands
         {
-            get { return (IEnumerable<LegendCommand>)GetValue(CommandsProperty); }
+            get { return (IEnumerable<ILegendCommand>)GetValue(CommandsProperty); }
             set { SetValue(CommandsProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Commands.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommandsProperty =
-            DependencyProperty.Register("Commands", typeof(IEnumerable<LegendCommand>), typeof(MapLegendItemWithOptions), new PropertyMetadata(null));
+            DependencyProperty.Register("Commands", typeof(IEnumerable<ILegendCommand>), typeof(MapLegendItemWithOptions), new PropertyMetadata(null));
 
 
 

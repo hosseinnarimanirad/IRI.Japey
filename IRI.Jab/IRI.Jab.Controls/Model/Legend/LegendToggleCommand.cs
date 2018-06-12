@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Controls.Model.Legend
 {
-    public class LegendCommand : Notifier, ILegendCommand
+    public class LegendToggleCommand : Notifier, ILegendCommand
     {
         private RelayCommand _command;
 
@@ -33,5 +33,18 @@ namespace IRI.Jab.Controls.Model.Legend
                 RaisePropertyChanged();
             }
         }
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
     }
 }
