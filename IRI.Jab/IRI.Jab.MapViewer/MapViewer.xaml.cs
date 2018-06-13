@@ -36,6 +36,7 @@ using IRI.Ket.Common.Helpers;
 using IRI.Jab.Cartography.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Jab.MapViewer
 {
@@ -352,6 +353,8 @@ namespace IRI.Jab.MapViewer
                 { MapAction.None, Cursors.AppStarting },
             };
 
+            this.RegisterRightClickOptions();
+
             _layerManager.OnRequestRefresh += (sender, e) =>
             {
                 RefreshTilesButNotBaseMaps();
@@ -624,9 +627,9 @@ namespace IRI.Jab.MapViewer
             };
 
             presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
-          {
-              return DrawGeometryLablePairs(gl, n, p, lp);
-          };
+            {
+                return DrawGeometryLablePairs(gl, n, p, lp);
+            };
 
             presenter.RequestSelectGeometries = (g, v, s) =>
             {
@@ -2327,6 +2330,12 @@ namespace IRI.Jab.MapViewer
             ClearLayer(LayerType.RightClickOption, true);
         }
 
+        public void RegisterRightClickOptions()
+        {
+            this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
+            this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
+        }
+
         public void RegisterRightClickContextOptions<T>(sb.ILocateable context) where T : FrameworkElement, new()
         {
             this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
@@ -2376,7 +2385,7 @@ namespace IRI.Jab.MapViewer
 
             var screenLocation = e.GetPosition(this.mapView);
 
-            FrameworkElement view;
+            FrameworkElement view = null;
 
             if (this.Status == MapStatus.Drawing)
             {
@@ -2390,7 +2399,7 @@ namespace IRI.Jab.MapViewer
 
                 view.DataContext = context;
             }
-            else
+            else if (rightClickOptions != null)
             {
                 view = (FrameworkElement)Activator.CreateInstance(rightClickOptions.GetType());
 
@@ -2399,6 +2408,9 @@ namespace IRI.Jab.MapViewer
                 view.DataContext = this.rightClickDataContext;
 
             }
+
+            if (view == null)
+                return;
 
             view.RenderTransformOrigin = new Point(view.Width / 2, -view.Height);
 
@@ -2566,9 +2578,12 @@ namespace IRI.Jab.MapViewer
                 parameters = new LabelParameters(null, fontSize, labelBackground, new FontFamily("tahoma"), positionFunc);
             }
 
+            var source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+
             var layer = new VectorLayer(
                 layerName,
-                new MemoryDataSource<object>(geometries, labels, i => i.ToString()),
+                //new MemoryDataSource(geometries, labels, i => i.ToString()),
+                source,
                 visualElements,
                 LayerType.Drawing,
                 RenderingApproach.Default,
@@ -2588,9 +2603,12 @@ namespace IRI.Jab.MapViewer
             if (geometries == null)
                 return;
 
+            var source = new MemoryDataSource<SqlFeature>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+
             var layer = new VectorLayer(
                 layerName,
-                new MemoryDataSource<string>(geometries.Geometries, geometries.Labels, i => i?.ToString()),
+                //new MemoryDataSource<string>(geometries.Geometries, geometries.Labels, i => i?.ToString()),
+                source,
                 parameters,
                 LayerType.Drawing,
                 RenderingApproach.Default,
@@ -2613,7 +2631,7 @@ namespace IRI.Jab.MapViewer
 
             var layer = new VectorLayer(
                 layerName,
-                new MemoryDataSource<object>(geometries),
+                new MemoryDataSource(geometries),
                 visualParameters,
                 LayerType.Drawing,
                 RenderingApproach.Default,
@@ -2635,7 +2653,7 @@ namespace IRI.Jab.MapViewer
 
             var layer = new VectorLayer(
                 Guid.NewGuid().ToString(),
-                new MemoryDataSource<object>(geometries),
+                new MemoryDataSource(geometries),
                 visualParameters,
                 LayerType.Selection,
                 RenderingApproach.Default,

@@ -166,7 +166,7 @@ namespace IRI.Jab.Cartography
             if (features == null || features.Count == 0)
                 throw new NotImplementedException();
 
-            Initialize(layerName, new MemoryDataSource<object>(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
+            Initialize(layerName, new MemoryDataSource(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
         }
 
         public VectorLayer(string layerName, IFeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
@@ -205,7 +205,7 @@ namespace IRI.Jab.Cartography
             this.VisualParameters = parameters;
 
             //this.PointSymbol = pointSymbol ?? new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
-             
+
             this.Labels = labeling;
 
             //Check for missing visibleRange
@@ -868,9 +868,9 @@ namespace IRI.Jab.Cartography
         {
             List<SqlGeometry> geometries = new List<SqlGeometry>();
 
-            if (this.DataSource is MemoryScaleDependentDataSource<object>)
+            if (this.DataSource is MemoryScaleDependentDataSource)
             {
-                geometries = await ((MemoryScaleDependentDataSource<object>)this.DataSource).GetGeometriesAsync(mapScale, boundingBox);
+                geometries = await ((MemoryScaleDependentDataSource)this.DataSource).GetGeometriesAsync(mapScale, boundingBox);
             }
             else
             {
@@ -904,7 +904,7 @@ namespace IRI.Jab.Cartography
 
         public bool IsLabeled(double mapScale)
         {
-            return this.Labels != null && this.Labels.IsLabeled(1.0 / mapScale);
+            return this.Labels?.IsLabeled(1.0 / mapScale) == true;
         }
 
         private Image DrawLabels(List<string> labels, List<SqlGeometry> geometries, double width, double height, Func<Point, Point> mapToScreen)

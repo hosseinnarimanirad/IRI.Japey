@@ -10,34 +10,26 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class GeoJsonSource<T> : MemoryDataSource<T> where T : IGeometryAware
+    public class GeoJsonSource<T> : MemoryDataSource<T> where T : ISqlGeometryAware
     {
 
-        private GeoJsonSource(IEnumerable<T> features)
+        private GeoJsonSource(List<T> features) : this(features, null)
         {
-            //if (attributes == null || labelFunc == null)
-            //{
-            //    this._geometries = geometries;
-            //}
-            //else
-            //{
-            //    this.geometryAttributePairs = geometries.Zip(attributes, (a, b) => new NamedSqlGeometry(a, labelFunc(b))).ToList();
-            //}
 
-            //this._attributes = attributes;
+        }
 
-            //this._labelFunc = labelFunc;
+        private GeoJsonSource(List<T> features, Func<T, string> labelFunc)
+        {
+            this._labelFunc = labelFunc;
 
-            var sqlGeometries = features.Select(g => g.Geometry.AsSqlGeometry()).ToList();
+            this._features = features;
 
-            this._geometries = sqlGeometries;
-
-            this.Extent = sqlGeometries.GetBoundingBox();
+            this.Extent = GetGeometries().GetBoundingBox();
         }
 
         public static GeoJsonSource<T> CreateFromJsonString(string jsonString)
         {
-            var values = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<T>>(jsonString);
+            var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<T>>(jsonString);
 
             return new GeoJsonSource<T>(values);
         }
@@ -49,6 +41,19 @@ namespace IRI.Ket.DataManagement.DataSource
             return CreateFromJsonString(jsonString);
         }
 
+        public static GeoJsonSource<T> CreateFromJsonString(string jsonString, Func<T, string> labelFunc)
+        {
+            var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<T>>(jsonString);
+
+            return new GeoJsonSource<T>(values, labelFunc);
+        }
+
+        public static GeoJsonSource<T> CreateFromFile(string fileName, Func<T, string> labelFunc)
+        {
+            var jsonString = System.IO.File.ReadAllText(fileName);
+
+            return CreateFromJsonString(jsonString, labelFunc);
+        }
 
     }
 }

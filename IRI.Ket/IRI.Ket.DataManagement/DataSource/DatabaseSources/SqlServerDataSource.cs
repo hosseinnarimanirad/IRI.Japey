@@ -227,16 +227,16 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public FeatureSet QueryFeaturesWhereIntersects(string wktGeometryFilter)
+        public SqlFeatureSet QueryFeaturesWhereIntersects(string wktGeometryFilter)
         {
             return QueryFeatures(GetCommandString(wktGeometryFilter, false));
         }
 
-        public FeatureSet QueryFeatures(string selectQuery)
+        public SqlFeatureSet QueryFeatures(string selectQuery)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
-            FeatureSet result = new FeatureSet() { Fields = new List<Field>(), Features = new List<SqlFeature>() };
+            SqlFeatureSet result = new SqlFeatureSet() { Fields = new List<Field>(), Features = new List<SqlFeature>() };
 
             try
             {
@@ -504,7 +504,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     //geometries.Add(SqlGeometry.Deserialize(reader.GetSqlBytes(0))); //3220 ms
 
                     //approach 3 
-                     
+
                     geometries.Add(reader[0] as SqlGeometry);//2565 ms
 
                 }
@@ -701,7 +701,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             throw new NotImplementedException();
         }
-         
+
 
         #endregion
     }

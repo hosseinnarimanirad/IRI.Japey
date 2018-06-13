@@ -443,7 +443,7 @@ namespace IRI.Ket.SpatialExtensions
 
             var end = toGeodeticWgs84Func(line.End);
 
-            var geodeticLine = SqlServerSpatialExtension.Utility.MakeGeography(new System.Collections.Generic.List<Point>() { (Point)start, (Point)end }, false);
+            var geodeticLine = SqlServerSpatialExtension.SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<Point>() { (Point)start, (Point)end }, false);
 
             return geodeticLine.STLength().Value;
         }

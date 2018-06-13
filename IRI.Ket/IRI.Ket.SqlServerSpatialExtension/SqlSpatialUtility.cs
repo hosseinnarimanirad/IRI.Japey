@@ -9,7 +9,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.SqlServerSpatialExtension
 {
-    public static class Utility
+    public static class SqlSpatialUtility
     {
         public static SqlGeometry MakeGeometry(List<Point> points, bool isClosed, int srid = 32639)
         {
@@ -85,7 +85,7 @@ namespace IRI.Ket.SqlServerSpatialExtension
             return resultGeography.EnvelopeAngle().Value == 180 ? resultGeography.ReorientObject() : resultGeography;
         }
 
-        public static SqlGeometry Union(List<SqlGeometry> geometries)
+        public static SqlGeometry UnionAll(List<SqlGeometry> geometries)
         {
             return Aggregate(geometries, (g1, g2) => g1.STUnion(g2));
         }

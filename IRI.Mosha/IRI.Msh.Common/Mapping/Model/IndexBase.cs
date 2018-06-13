@@ -10,19 +10,19 @@ namespace IRI.Msh.Common.Mapping
     public abstract class IndexBase : IGeometryAware
     {
         [JsonProperty("shne")]
-        public string SheetNameEn { get; set; }
+        public virtual string SheetNameEn { get; set; }
 
         [JsonProperty("shnf")]
-        public string SheetNameFa { get; set; }
+        public virtual string SheetNameFa { get; set; }
 
         [JsonProperty("shno")]
-        public string SheetNumber { get; set; }
+        public virtual string SheetNumber { get; set; }
 
         [JsonProperty("minlat")]
-        public double MinLatitude { get; set; }
+        public virtual double MinLatitude { get; set; }
 
         [JsonProperty("minlng")]
-        public double MinLongitude { get; set; }
+        public virtual double MinLongitude { get; set; }
 
         [JsonIgnore]
         public abstract double Width { get; }

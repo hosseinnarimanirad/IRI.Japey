@@ -84,16 +84,20 @@
     <Compile Include="GeoStatistics\PointClusters.cs" />
     <Compile Include="Helpers\IndexHelper.cs" />
     <Compile Include="Helpers\WebMercatorHelper.cs" />
+    <Compile Include="Mapping\SqlIndex100k.cs" />
+    <Compile Include="Mapping\SqlIndex250k.cs" />
+    <Compile Include="Mapping\SqlIndex25k.cs" />
+    <Compile Include="Mapping\SqlIndex50k.cs" />
     <Compile Include="Model\EsriFeatureSet.cs" />
-    <Compile Include="Model\Feature.cs" />
-    <Compile Include="Model\FeatureSet.cs" />
+    <Compile Include="Model\SqlFeature.cs" />
+    <Compile Include="Model\SqlFeatureSet.cs" />
     <Compile Include="Model\NamedSqlGeometry.cs" />
     <Compile Include="Model\ISqlGeometryAware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\ShapefileExtention.cs" />
     <Compile Include="Extensions\SpatialBaseExtensions.cs" />
     <Compile Include="Extensions\SqlSpatialExtensions.cs" />
-    <Compile Include="Utility.cs" />
+    <Compile Include="SqlSpatialUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">

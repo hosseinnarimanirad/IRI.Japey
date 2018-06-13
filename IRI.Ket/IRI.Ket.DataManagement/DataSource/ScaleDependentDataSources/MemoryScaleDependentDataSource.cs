@@ -14,7 +14,7 @@ using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class MemoryScaleDependentDataSource<T> : MemoryDataSource<T>, IScaleDependentDataSource
+    public class MemoryScaleDependentDataSource<T> : MemoryDataSource<T>, IScaleDependentDataSource where T : ISqlGeometryAware
     {
         Dictionary<double, List<SqlGeometry>> source;
 
@@ -65,7 +65,72 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries(scale).AsParallel().Where(i => i.STIntersects(geometry).IsTrue).ToList();
         }
 
-         
+
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(double scale)
+        {
+            return Task.Run(() => { return GetGeometries(scale); });
+        }
+
+        public Task<List<SqlGeometry>> GetGeometriesAsync(double scale, BoundingBox boundingBox)
+        {
+            return Task.Run(() => { return GetGeometries(scale, boundingBox); });
+        }
+
+    }
+
+    public class MemoryScaleDependentDataSource : MemoryDataSource, IScaleDependentDataSource  
+    {
+        Dictionary<double, List<SqlGeometry>> source;
+
+        double averageLatitude = 30;
+
+        //average latitude is assumed to be 30
+        public MemoryScaleDependentDataSource(List<SqlGeometry> geometries)
+        {
+            source = new Dictionary<double, List<SqlGeometry>>();
+
+            var boundingBox = geometries.GetBoundingBox();
+
+            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
+
+            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
+
+            for (int i = fitLevel; i < 18; i += 4)
+            {
+                var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+
+                Debug.Print($"threshold: {threshold}, level:{i}");
+
+                var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+
+                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
+            }
+        }
+
+        public List<SqlGeometry> GetGeometries(double scale)
+        {
+            var availableScales = source.Select(k => k.Key).ToList();
+
+            var selectedScale = IRI.Msh.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
+
+            return source[selectedScale];
+        }
+
+        public List<SqlGeometry> GetGeometries(double scale, BoundingBox boundingBox)
+        {
+            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+
+            return GetGeometries(scale, boundary);
+
+        }
+
+        public List<SqlGeometry> GetGeometries(double scale, SqlGeometry geometry)
+        {
+            return GetGeometries(scale).AsParallel().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+        }
+
+
 
         public Task<List<SqlGeometry>> GetGeometriesAsync(double scale)
         {

@@ -19,7 +19,7 @@
                 </Button>
             </DataTemplate>-->
             <DataTemplate DataType="{x:Type model:LegendToggleCommand}">
-                <ToggleButton VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" BorderThickness="0" Focusable="False" 
+                <ToggleButton VerticalAlignment="Center" Margin="1" Cursor="Hand" BorderThickness="0" Focusable="False" 
                                   Background="Transparent" IsChecked="{Binding IsSelected, Mode=TwoWay}">
                     <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}" Width="16" Height="16"/>
                 </ToggleButton>

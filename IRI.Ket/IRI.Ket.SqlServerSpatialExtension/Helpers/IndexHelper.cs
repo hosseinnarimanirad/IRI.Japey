@@ -69,12 +69,14 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
             return indexFunc(geographicBoundingBox)
                         .Where(b => b.Extent.Intersects(geographicGeometry))
-                        .Select(b => new SqlFeature()
+                        .Select(b => new SqlFeature(b.Extent.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
                         {
-                            Geometry = b.Extent.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry(),
                             Attributes = new Dictionary<string, object>() { { nameof(b.SheetName), b.SheetName } }
                         })
                         .ToList();
         }
+
+
+         
     }
 }

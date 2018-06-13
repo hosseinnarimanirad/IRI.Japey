@@ -43,6 +43,8 @@ namespace IRI.Jab.Controls.Model.Legend
             {
                 _isSelected = value;
                 RaisePropertyChanged();
+
+                Command.Execute(value);
             }
         }
 

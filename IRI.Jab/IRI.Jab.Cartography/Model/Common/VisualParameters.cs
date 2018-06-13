@@ -146,6 +146,18 @@ namespace IRI.Jab.Cartography
         }
 
 
+        //private bool _isLabeled;
+
+        //public bool IsLabeled
+        //{
+        //    get { return _isLabeled; }
+        //    set
+        //    {
+        //        _isLabeled = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
 
         public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
         {

@@ -1195,7 +1195,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                                     .Where(i => !i.IsNotValidOrEmpty())
                                     .ToList();
 
-                    MemoryDataSource<object> source = new MemoryDataSource<object>(shp);
+                    MemoryDataSource  source = new MemoryDataSource (shp);
 
                     return source;
                 });
