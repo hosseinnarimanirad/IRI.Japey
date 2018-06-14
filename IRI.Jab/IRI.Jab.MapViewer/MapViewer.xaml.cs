@@ -390,11 +390,16 @@ namespace IRI.Jab.MapViewer
             {
                 this._mapScale = this.ToMapScale(this.ScreenScale);
 
+                Debug.WriteLine($"OnZoomChanged {1.0 / _mapScale}");
+
                 RaisePropertyChanged(nameof(MapScale));
 
                 RaisePropertyChanged(nameof(CurrentZoomLevel));
 
                 UpdateTileInfos();
+
+                this._layerManager.UpdateIsInRange(1.0 / _mapScale);
+
             };
         }
 
@@ -586,7 +591,9 @@ namespace IRI.Jab.MapViewer
             presenter.RequestAddLayer = (l) =>
             {
                 this.SetLayer(l);
-                return this.AddNonTiledLayer(l);
+
+                //return this.AddNonTiledLayer(l);
+                this.AddLayer(l);
             };
 
             presenter.RequestRemoveLayer = (i) =>
@@ -926,6 +933,100 @@ namespace IRI.Jab.MapViewer
 
         }
 
+        public void AddLayer(ILayer layer)
+        {
+            if (layer.VisualParameters.Visibility != Visibility.Visible)
+                return;
+
+            var mapScale = this.MapScale;
+
+            if (layer.Rendering == RenderingApproach.Tiled)
+                return;
+
+            if (layer is ClusteredPointLayer)
+            {
+                Action action = () =>
+                {
+                    AddComplexLayer((layer as ClusteredPointLayer).GetLayer(mapScale));
+                };
+
+                Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
+                    Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
+            }
+            else if (layer is DrawingLayer)
+            {
+                AddEditableFeatureLayer((layer as DrawingLayer).GetLayer());
+            }
+            else if (layer is EditableFeatureLayer)
+            {
+                AddEditableFeatureLayer(layer as EditableFeatureLayer);
+            }
+            else if (layer is PolyBezierLayer)
+            {
+                AddPolyBezierLayer(layer as PolyBezierLayer);
+            }
+            else if (layer is SpecialLineLayer)
+            {
+                AddSpecialLineLayer(layer as SpecialLineLayer, null);
+            }
+            else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
+            {
+                Action action = () =>
+                {
+                    AddComplexLayer((SpecialPointLayer)layer);
+                };
+
+                Task.Run(() =>
+                  this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
+                      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                  );
+
+                //this.tasks.Add(task);
+            }
+            else if (layer is TileServiceLayer)
+            {
+                //their Rendering property must be Tiled and catched by the first `if`
+                throw new NotImplementedException();
+
+                //They are handled when UpdateTileInfos is fired
+                //continue;
+            }
+            else if (!layer.Type.HasFlag(LayerType.Raster) && !layer.Type.HasFlag(LayerType.BaseMap) && !layer.Type.HasFlag(LayerType.ImagePyramid))
+            {
+                VectorLayer vectorLayer = (VectorLayer)layer;
+
+                Action action = async () =>
+                {
+                    //AddTiledLayer(vectorLayer);
+                    await AddNonTiledLayer(vectorLayer);
+                    //ClearBasemap();
+                };
+
+                var extent = this.CurrentExtent;
+
+                Task.Run(() =>
+                   this.jobs.Add(new Job(
+                      new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
+                      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                  );
+
+            }
+            else if (!layer.Type.HasFlag(LayerType.Label))
+            {
+                if (layer.Rendering == RenderingApproach.Default)
+                {
+                    AddLayer((RasterLayer)layer, this.CurrentExtent);
+
+                    //Remove Old base maps
+                    ClearOutOfExtent(false);
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
 
@@ -1036,13 +1137,13 @@ namespace IRI.Jab.MapViewer
 
             if (layerTile == null || layerTile.IsProcessing)
             {
-                Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
+                //Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
                 return;
             }
 
             if (tile.ZoomLevel != this.CurrentZoomLevel)
             {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+                //Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 layerTile.IsProcessing = false;
                 return;
             }
@@ -1053,7 +1154,7 @@ namespace IRI.Jab.MapViewer
 
             if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
             {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+                //Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 layerTile.IsProcessing = false;
                 return;
             }
@@ -1610,7 +1711,7 @@ namespace IRI.Jab.MapViewer
 
                 if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
-                    Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+                    //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
                 }
 
@@ -1618,7 +1719,7 @@ namespace IRI.Jab.MapViewer
 
                 if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
-                    Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+                    //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
                 }
 
@@ -1728,7 +1829,7 @@ namespace IRI.Jab.MapViewer
 
         public void RefreshTiles(TileInfo tile, Func<ILayer, bool> criteria)
         {
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale).ToList();
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
 
             Action action = async () =>
             {
@@ -1739,7 +1840,7 @@ namespace IRI.Jab.MapViewer
 
                     if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
                     {
-                        Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
+                        //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
                         return;
                     }
 
@@ -1795,7 +1896,7 @@ namespace IRI.Jab.MapViewer
 
         public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
         {
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale).ToList();
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
 
             Action action = async () =>
            {
@@ -1806,7 +1907,7 @@ namespace IRI.Jab.MapViewer
 
                    if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
                    {
-                       Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
+                       //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
                        return;
                    }
 
@@ -1877,7 +1978,7 @@ namespace IRI.Jab.MapViewer
 
             var mapScale = this.MapScale;
 
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale);
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Default);
 
             if (infos == null) return;
 
@@ -1888,7 +1989,7 @@ namespace IRI.Jab.MapViewer
 
                 if (MapScale != mapScale)
                 {
-                    Debug.Print("Zoom Level Conflict! [@Refresh foreach loop]");
+                    //Debug.Print("Zoom Level Conflict! [@Refresh foreach loop]");
 
                     return;
                 }
@@ -1896,112 +1997,113 @@ namespace IRI.Jab.MapViewer
                 if (item.Rendering == RenderingApproach.Tiled)
                     continue;
 
+                AddLayer(item);
 
-                if (item is ClusteredPointLayer)
-                {
-                    Action action = () =>
-                    {
-                        AddComplexLayer((item as ClusteredPointLayer).GetLayer(mapScale));
-                    };
+                //if (item is ClusteredPointLayer)
+                //{
+                //    Action action = () =>
+                //    {
+                //        AddComplexLayer((item as ClusteredPointLayer).GetLayer(mapScale));
+                //    };
 
-                    Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
-                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
-                }
-                else if (item is DrawingLayer)
-                {
-                    var layer = (item as DrawingLayer).GetLayer();
+                //    Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
+                //        Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
+                //}
+                //else if (item is DrawingLayer)
+                //{
+                //    var layer = (item as DrawingLayer).GetLayer();
 
-                    AddEditableFeatureLayer(layer);
-                }
-                else if (item is EditableFeatureLayer)
-                {
-                    var layer = item as EditableFeatureLayer;
+                //    AddEditableFeatureLayer(layer);
+                //}
+                //else if (item is EditableFeatureLayer)
+                //{
+                //    var layer = item as EditableFeatureLayer;
 
-                    AddEditableFeatureLayer(layer);
-                }
-                else if (item is PolyBezierLayer)
-                {
-                    var layer = item as PolyBezierLayer;
+                //    AddEditableFeatureLayer(layer);
+                //}
+                //else if (item is PolyBezierLayer)
+                //{
+                //    var layer = item as PolyBezierLayer;
 
-                    AddPolyBezierLayer(layer);
-                }
-                else if (item is SpecialLineLayer)
-                {
-                    var layer = item as SpecialLineLayer;
+                //    AddPolyBezierLayer(layer);
+                //}
+                //else if (item is SpecialLineLayer)
+                //{
+                //    var layer = item as SpecialLineLayer;
 
-                    AddSpecialLineLayer(layer, null);
-                }
-                else if (item.Type.HasFlag(LayerType.Complex) || item.Type.HasFlag(LayerType.MoveableItem))
-                {
-                    Action action = () =>
-                    {
-                        AddComplexLayer((SpecialPointLayer)item);
-                    };
+                //    AddSpecialLineLayer(layer, null);
+                //}
+                //else if (item.Type.HasFlag(LayerType.Complex) || item.Type.HasFlag(LayerType.MoveableItem))
+                //{
+                //    Action action = () =>
+                //    {
+                //        AddComplexLayer((SpecialPointLayer)item);
+                //    };
 
-                    Task.Run(() =>
-                      this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
-                          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                      );
+                //    Task.Run(() =>
+                //      this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
+                //          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                //      );
 
-                    //this.tasks.Add(task);
-                }
-                else if (item is TileServiceLayer)
-                {
-                    //their Rendering property must be Tiled and catched by the first `if`
-                    throw new NotImplementedException();
+                //    //this.tasks.Add(task);
+                //}
+                //else if (item is TileServiceLayer)
+                //{
+                //    //their Rendering property must be Tiled and catched by the first `if`
+                //    throw new NotImplementedException();
 
-                    //They are handled when UpdateTileInfos is fired
-                    //continue;
-                }
-                else if (!item.Type.HasFlag(LayerType.Raster) && !item.Type.HasFlag(LayerType.BaseMap) && !item.Type.HasFlag(LayerType.ImagePyramid))
-                {
-                    VectorLayer vectorLayer = (VectorLayer)item;
+                //    //They are handled when UpdateTileInfos is fired
+                //    //continue;
+                //}
+                //else if (!item.Type.HasFlag(LayerType.Raster) && !item.Type.HasFlag(LayerType.BaseMap) && !item.Type.HasFlag(LayerType.ImagePyramid))
+                //{
+                //    VectorLayer vectorLayer = (VectorLayer)item;
 
-                    Action action = async () =>
-                     {
-                         //AddTiledLayer(vectorLayer);
-                         await AddNonTiledLayer(vectorLayer);
-                         //ClearBasemap();
-                     };
+                //    Action action = async () =>
+                //     {
+                //         //AddTiledLayer(vectorLayer);
+                //         await AddNonTiledLayer(vectorLayer);
+                //         //ClearBasemap();
+                //     };
 
-                    var extent = this.CurrentExtent;
+                //    var extent = this.CurrentExtent;
 
-                    Task.Run(() =>
-                       this.jobs.Add(new Job(
-                          new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
-                          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                      );
+                //    Task.Run(() =>
+                //       this.jobs.Add(new Job(
+                //          new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
+                //          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                //      );
 
-                    //this.tasks.Add(task);
-                }
-                else if (!item.Type.HasFlag(LayerType.Label))
-                {
-                    ////this.jobs.Add(
-                    ////Dispatcher.BeginInvoke(new Action(() =>
-                    ////{
-                    ////AddLayer((RasterLayer)item, item.Type == LayerType.Tile ? this.CurrentExtent : this.GetExactCurrentExtent());
-                    //AddLayer((RasterLayer)item, this.CurrentExtent);
-                    ////})));
+                //    //this.tasks.Add(task);
+                //}
+                //else if (!item.Type.HasFlag(LayerType.Label))
+                //{
+                //    ////this.jobs.Add(
+                //    ////Dispatcher.BeginInvoke(new Action(() =>
+                //    ////{
+                //    ////AddLayer((RasterLayer)item, item.Type == LayerType.Tile ? this.CurrentExtent : this.GetExactCurrentExtent());
+                //    //AddLayer((RasterLayer)item, this.CurrentExtent);
+                //    ////})));
 
-                    if (item.Rendering == RenderingApproach.Default)
-                    {
-                        AddLayer((RasterLayer)item, this.CurrentExtent);
+                //    if (item.Rendering == RenderingApproach.Default)
+                //    {
+                //        AddLayer((RasterLayer)item, this.CurrentExtent);
 
-                        //Remove Old base maps
-                        ClearOutOfExtent(false);
+                //        //Remove Old base maps
+                //        ClearOutOfExtent(false);
 
-                        //Task.Run(() =>
-                        //{
-                        //    this.jobs.Add(new Job(
-                        //       new LayerTag() { LayerType = item.Type, Extent = null },
-                        //       Dispatcher.BeginInvoke(new Action(async () => { await AddLayer((RasterLayer)item, this.CurrentExtent); ClearBasemap(); }), DispatcherPriority.Background, null)));
-                        //});
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                //        //Task.Run(() =>
+                //        //{
+                //        //    this.jobs.Add(new Job(
+                //        //       new LayerTag() { LayerType = item.Type, Extent = null },
+                //        //       Dispatcher.BeginInvoke(new Action(async () => { await AddLayer((RasterLayer)item, this.CurrentExtent); ClearBasemap(); }), DispatcherPriority.Background, null)));
+                //        //});
+                //    }
+                //}
+                //else
+                //{
+                //    throw new NotImplementedException();
+                //}
 
             }
             //****************************
@@ -2100,7 +2202,7 @@ namespace IRI.Jab.MapViewer
                     if (this.CurrentTileInfos.Contains(currentJob.Tag.Tile) && currentJob.Tag.Scale == this.MapScale)
                         continue;
 
-                    Debug.WriteLine($"Job Stopped [@StopUnnecessaryJobs]; tile: {currentJob.Tag.Tile?.ToShortString()} jobScale:{currentJob.Tag.Scale} expectedScale:{MapScale}");
+                    //Debug.WriteLine($"Job Stopped [@StopUnnecessaryJobs]; tile: {currentJob.Tag.Tile?.ToShortString()} jobScale:{currentJob.Tag.Scale} expectedScale:{MapScale}");
 
                     currentJob.Operation.Abort();
 
@@ -2212,7 +2314,7 @@ namespace IRI.Jab.MapViewer
                 }
             }
 
-            Debug.WriteLine($"ClearLayer: {count} {type.ToString()} removed");
+            //Debug.WriteLine($"ClearLayer: {count} {type.ToString()} removed");
         }
 
         public void ClearLayer(ILayer layer)
@@ -2824,11 +2926,11 @@ namespace IRI.Jab.MapViewer
 
         private void mapView_MouseDownForPan(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
             if (this.viewTransform == null || itemIsMoving)
             {
-                Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEscaped);
+                //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEscaped);
 
                 return;
             }
@@ -2876,13 +2978,13 @@ namespace IRI.Jab.MapViewer
 
             if (Math.Abs(xOffset) > 2 || Math.Abs(yOffset) > 2)
             {
-                Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
+                //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
 
                 Refresh();
             }
             else
             {
-                Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _methodEscaped);
+                //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _methodEscaped);
             }
         }
 
@@ -2913,7 +3015,7 @@ namespace IRI.Jab.MapViewer
 
         private void ExtentManager_OnTilesRemoved(object sender, CustomEventArgs<List<TileInfo>> e)
         {
-            Debug.Print($"ExtentManager_OnTilesRemoved: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
+            //Debug.Print($"ExtentManager_OnTilesRemoved: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
 
             lock (locker)
             {
@@ -2932,7 +3034,7 @@ namespace IRI.Jab.MapViewer
                     //{
                     if (e.Arg.Contains(currentJob.Tag.Tile) && !this.CurrentTileInfos.Contains(currentJob.Tag.Tile))
                     {
-                        Debug.Print($"Job Stopped [@TileRemoved] {currentJob.Tag.Tile?.ToShortString()}");
+                        //Debug.Print($"Job Stopped [@TileRemoved] {currentJob.Tag.Tile?.ToShortString()}");
 
                         currentJob.Operation.Abort();
 
@@ -2947,20 +3049,20 @@ namespace IRI.Jab.MapViewer
 
         private void ExtentManager_OnTilesAdded(object sender, CustomEventArgs<List<TileInfo>> e)
         {
-            Debug.Print($"ExtentManager_OnTilesAdded: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
+            //Debug.Print($"ExtentManager_OnTilesAdded: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
 
             foreach (var item in e.Arg)
             {
                 if (item.ZoomLevel != this.CurrentZoomLevel)
                 {
-                    Debug.Print($"Zoom Level Conflict [@ExtentManager_OnTilesAdded] {item.ToShortString()} ; expected zoom level: {this.CurrentZoomLevel}");
+                    //Debug.Print($"Zoom Level Conflict [@ExtentManager_OnTilesAdded] {item.ToShortString()} ; expected zoom level: {this.CurrentZoomLevel}");
                     return;
                 }
 
 
                 if (!CurrentTileInfos.Contains(item))
                 {
-                    Debug.Print($"Not in `CurrentTileInfos` [@ExtentManager_OnTilesAdded] {item.ToShortString()} ; expected zoom level: {this.CurrentZoomLevel}");
+                    //Debug.Print($"Not in `CurrentTileInfos` [@ExtentManager_OnTilesAdded] {item.ToShortString()} ; expected zoom level: {this.CurrentZoomLevel}");
                     continue;
                 }
 
@@ -3125,7 +3227,7 @@ namespace IRI.Jab.MapViewer
                     Dispatcher.BeginInvoke(callback, System.Windows.Threading.DispatcherPriority.Background, null);
                 }
 
-                Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _methodEscaped);
+                //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _methodEscaped);
             }
         }
 
@@ -3215,7 +3317,7 @@ namespace IRI.Jab.MapViewer
 
         private void mapView_MouseDownForZoom(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
             if (this.viewTransform == null)
             //if (this.mapTransform == null)
@@ -3263,7 +3365,7 @@ namespace IRI.Jab.MapViewer
 
         private void mapView_MouseUpForZoom(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
             this.mapView.MouseUp -= mapView_MouseUpForZoom;
             this.mapView.MouseMove -= mapView_MouseMoveForZoom;
@@ -3459,8 +3561,8 @@ namespace IRI.Jab.MapViewer
 
         private void ZoomToPoint(Point windowPoint, double deltaZoom)
         {
-            Debug.Print("ZoomToPoint(Point windowPoint, double deltaZoom)");
-            //StopUnnecessaryJobs();
+            //Debug.Print("ZoomToPoint(Point windowPoint, double deltaZoom)");
+
 
             Point layerPoint = this.viewTransform.Inverse.Transform(windowPoint);
 
@@ -3482,7 +3584,7 @@ namespace IRI.Jab.MapViewer
 
             this._theScreenScale = scale * baseScaleX;
 
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
 
             //if (this.OnZoomChanged != null)
             //{
@@ -3497,7 +3599,7 @@ namespace IRI.Jab.MapViewer
 
         public void Zoom(double mapScale)
         {
-            Debug.Print("Zoom(double mapScale) is called");
+            //Debug.Print("Zoom(double mapScale) is called");
 
             this.Zoom(mapScale, new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0));
         }
@@ -3602,15 +3704,17 @@ namespace IRI.Jab.MapViewer
 
         private void Zoom(bool zoomIn, Point windowCenter)
         {
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
-            Debug.Print($"e.Delta: {zoomIn}");
+            //Debug.Print($"e.Delta: {zoomIn}");
 
             if (IsGoogleZoomLevelsEnabled)
             {
                 int newZoomLevel = zoomIn ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
 
                 newZoomLevel = CheckGoogleZoomLevel(newZoomLevel);
+
+                Debug.Print($"newZoomLevel: {newZoomLevel}");
 
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), windowCenter);
             }
@@ -3623,7 +3727,7 @@ namespace IRI.Jab.MapViewer
                 this.Zoom(newMapScale, windowCenter);
             }
 
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
 
         }
 
@@ -3691,7 +3795,7 @@ namespace IRI.Jab.MapViewer
 
         private void MapView_MouseDownForStartDrawing(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("START");
+            //Debug.WriteLine("START");
 
             if (e.ChangedButton != MouseButton.Left)
                 return;
@@ -3743,7 +3847,7 @@ namespace IRI.Jab.MapViewer
 
         private void MapView_MouseDownForStartNewPart(object sender, MouseButtonEventArgs e)
         {
-            Debug.WriteLine("MapView_MouseDownForStartNewPart");
+            //Debug.WriteLine("MapView_MouseDownForStartNewPart");
 
             if (e.ChangedButton != MouseButton.Left)
                 return;

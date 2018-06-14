@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Cartography;
+using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using System;
@@ -18,8 +19,10 @@ namespace IRI.Jab.Controls.Model.Legend
             this._layer = layer;
             RaisePropertyChanged(nameof(LayerName));
             RaisePropertyChanged(nameof(Symbology));
-        }
+             
 
+        }
+         
         public string LayerName
         {
             get { return _layer.LayerName; }
@@ -30,9 +33,14 @@ namespace IRI.Jab.Controls.Model.Legend
             get { return _layer.VisualParameters; }
         }
 
-        private IEnumerable<ILegendCommand> _commands;
+        public LabelParameters Label
+        {
+            get { return _layer.Labels; }
+        }
 
-        public IEnumerable<ILegendCommand> Commands
+        private List<ILegendCommand> _commands;
+
+        public List<ILegendCommand> Commands
         {
             get { return _commands; }
             set
@@ -41,5 +49,11 @@ namespace IRI.Jab.Controls.Model.Legend
                 RaisePropertyChanged();
             }
         }
+
+        public ILayer GetLayer()
+        {
+            return _layer;
+        }
+
     }
 }

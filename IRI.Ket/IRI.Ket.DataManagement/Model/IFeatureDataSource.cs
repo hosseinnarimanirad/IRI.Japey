@@ -69,6 +69,8 @@ namespace IRI.Ket.DataManagement.Model
 
         #region GetEntireFeature
 
+        public abstract DataTable GetEntireFeatures();
+
         public abstract DataTable GetEntireFeatures(string whereClause);
 
         public abstract DataTable GetEntireFeatures(BoundingBox geometry);

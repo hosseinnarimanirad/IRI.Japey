@@ -123,6 +123,18 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private ObservableCollection<SelectedLayer> _selectedLayers = new ObservableCollection<SelectedLayer>();
+
+        public ObservableCollection<SelectedLayer> SelectedLayers
+        {
+            get { return _selectedLayers; }
+            set
+            {
+                _selectedLayers = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         //private NotifiablePoint _currentMapInfoPoint;
 
@@ -610,7 +622,8 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<ILayer> RequestSetLayer;
 
-        public Func<VectorLayer, Task> RequestAddLayer;
+        //public Func<ILayer, Task> RequestAddLayer;
+        public Action<ILayer> RequestAddLayer;
 
         public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
         {
@@ -811,7 +824,12 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestSetLayer?.Invoke(layer);
         }
 
-        public void AddLayer(VectorLayer layer)
+        //public void AddLayer(VectorLayer layer)
+        //{
+        //    this.RequestAddLayer?.Invoke(layer);
+        //}
+
+        public void AddLayer(ILayer layer)
         {
             this.RequestAddLayer?.Invoke(layer);
         }
@@ -1195,7 +1213,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                                     .Where(i => !i.IsNotValidOrEmpty())
                                     .ToList();
 
-                    MemoryDataSource  source = new MemoryDataSource (shp);
+                    MemoryDataSource source = new MemoryDataSource(shp);
 
                     return source;
                 });
@@ -1247,7 +1265,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 var rasterLayer = new RasterLayer(dataSource, System.IO.Path.GetFileNameWithoutExtension(fileName), ScaleInterval.All, false, false, Visibility.Visible, .9);
 
                 this.SetLayer(rasterLayer);
-                 
+
                 this.Refresh();
 
             }

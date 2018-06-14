@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Common.Assets.Commands;
+﻿using IRI.Jab.Cartography;
+using IRI.Jab.Common.Assets.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,9 @@ namespace IRI.Jab.Controls.Model.Legend
         RelayCommand Command { get; set; }
 
         string PathMarkup { get; set; }
+
+        bool IsEnabled { get; set; }
+
+        ILayer Layer { get; set; }
     }
 }

@@ -63,18 +63,6 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        private LabelParameters _labels;
-
-        public LabelParameters Labels
-        {
-            get { return _labels; }
-            set
-            {
-                _labels = value;
-                RaisePropertyChanged();
-            }
-        }
-
         private LayerType _type;
 
         public override LayerType Type
@@ -367,10 +355,10 @@ namespace IRI.Jab.Cartography
             if (image == null)
                 return null;
 
-            //if (labels != null)
-            //{
-            //    this.DrawLabel(labels, geometries, image, transform);
-            //}
+            if (labels != null)
+            {
+                //this.DrawLabel(labels, geometries, image, transform);
+            }
 
             //BitmapImage bitmapImage = IRI.Jab.Common.Imaging.ImageUtility.AsBitmapImage(image);
 
@@ -900,6 +888,11 @@ namespace IRI.Jab.Cartography
                 return null;
 
             return geometries;
+        }
+        
+        public System.Data.DataTable GetEntireFeature()
+        {
+            return DataSource?.GetEntireFeatures();
         }
 
         public bool IsLabeled(double mapScale)

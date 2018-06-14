@@ -205,11 +205,6 @@ namespace IRI.Ket.DataManagement.DataSource
                                .Select(i => i[attributeColumn]).OfType<object>().ToList();
         }
 
-        public override DataTable GetEntireFeatures(string filterExpression)
-        {
-            return this._table.Select(filterExpression).CopyToDataTable();
-        }
-
         public List<string> GetLabels()
         {
             return this._table.Select()
@@ -242,20 +237,6 @@ namespace IRI.Ket.DataManagement.DataSource
                                       .Select(i => new NamedSqlGeometry((SqlGeometry)i[_spatialColumnName], i[_labelColumnName]?.ToString()))
                                       .Where(i => !i.Geometry.IsNull && geometry.STIntersects(i.Geometry.MakeValid()).IsTrue)
                                       .ToList();
-            }
-        }
-
-        public override DataTable GetEntireFeatures(SqlGeometry geometry)
-        {
-            var result = _table.Select().Where(i => (i[_spatialColumnName] as SqlGeometry).STIntersects(geometry).IsTrue);
-
-            if (result == null || result.Count() == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return result.CopyToDataTable();
             }
         }
 
@@ -308,6 +289,32 @@ namespace IRI.Ket.DataManagement.DataSource
 
         }
 
+        #region GetEntireFeatures
+
+        public override DataTable GetEntireFeatures()
+        {
+            return this._table;
+        }
+
+        public override DataTable GetEntireFeatures(string filterExpression)
+        {
+            return this._table.Select(filterExpression).CopyToDataTable();
+        }
+
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
+        {
+            var result = _table.Select().Where(i => (i[_spatialColumnName] as SqlGeometry).STIntersects(geometry).IsTrue);
+
+            if (result == null || result.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return result.CopyToDataTable();
+            }
+        }
+
         public override DataTable GetEntireFeatures(BoundingBox boundingBox)
         {
             var bound = boundingBox.AsSqlGeometry(_srid).MakeValid();
@@ -323,5 +330,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 return result.CopyToDataTable();
             }
         }
+
+        #endregion
     }
 }

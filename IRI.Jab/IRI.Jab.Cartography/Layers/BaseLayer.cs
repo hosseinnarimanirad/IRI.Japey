@@ -55,7 +55,7 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        private bool _showInToc;
+        private bool _showInToc = true;
 
         public bool ShowInToc
         {
@@ -66,8 +66,7 @@ namespace IRI.Jab.Cartography
                 RaisePropertyChanged();
             }
         }
-
-
+          
         private ScaleInterval _visibleRange;
 
         public ScaleInterval VisibleRange
@@ -77,6 +76,20 @@ namespace IRI.Jab.Cartography
             {
                 _visibleRange = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        private LabelParameters _labels;
+
+        public LabelParameters Labels
+        {
+            get { return _labels; }
+            set
+            {
+                _labels = value;
+                RaisePropertyChanged();
+
+                this.OnLabelChanged?.Invoke(this, new CustomEventArgs<LabelParameters>(value));
             }
         }
 
@@ -132,5 +145,7 @@ namespace IRI.Jab.Cartography
         {
             this._onVisibilityChanged.SafeInvoke(sender, e);
         }
+
+        public event EventHandler<CustomEventArgs<LabelParameters>> OnLabelChanged;
     }
 }

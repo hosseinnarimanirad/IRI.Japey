@@ -21,6 +21,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<T, string> _labelFunc;
 
+        public Func<List<T>, DataTable> MappingFunc;
         //protected List<NamedSqlGeometry> geometryAttributePairs;
          
         public override int GetSrid()
@@ -166,6 +167,11 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
+        public override DataTable GetEntireFeatures()
+        {
+            return MappingFunc(_features);
+        }
+
         //GetGeometryLabelPairs
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
@@ -306,6 +312,22 @@ namespace IRI.Ket.DataManagement.DataSource
             }
 
 
+            return result;
+        }
+
+        public override DataTable GetEntireFeatures( )
+        { 
+            DataTable result = new DataTable();
+
+            result.Columns.Add(new DataColumn("Geo"));
+             
+            var geometries = GetGeometries();
+
+            foreach (var item in geometries)
+            {
+                result.Rows.Add(item);
+            }
+             
             return result;
         }
 

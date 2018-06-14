@@ -193,6 +193,25 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0}", this._tableName));
         }
 
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
+
+            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).ToList();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        {
+            List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
+
+            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).Where(i => i.Geometry.STIntersects(geometry).Value).ToList();
+        }
+
         public override System.Data.DataTable GetEntireFeatures(string whereClause)
         {
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, MakeWhereClause(whereClause)));
@@ -210,30 +229,19 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
-        {
-            List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
-             
-            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).ToList();
-        }
-
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
-        {
-            List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
-             
-            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).Where(i => i.Geometry.STIntersects(geometry).Value).ToList();
-        }
-
         public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
             throw new NotImplementedException();
         }
-         
+
+        public override DataTable GetEntireFeatures()
+        {
+            string where = string.Empty;
+
+            return GetEntireFeatures(where);
+        }
+
+
         ~SqlServerCeDataSource()
         {
             if (this._connection != null)

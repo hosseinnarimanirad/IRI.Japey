@@ -130,9 +130,22 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale)
+        public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale, RenderingApproach rendering)
         {
-            var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
+            //var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
+            if (rendering == RenderingApproach.Default)
+            {
+                System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers:{  inverseMapScale}");
+                System.Diagnostics.Debug.WriteLine($"map count:{map.Count}");
+            }
+
+
+            var newLayers = map.Where(l => l.VisibleRange.IsInRange(inverseMapScale) && l.Rendering == rendering).OrderBy(i => i.Type != LayerType.BaseMap).ThenBy(i => i.ZIndex);
+
+            if (rendering == RenderingApproach.Default)
+            {
+                System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers layercounts:{  newLayers.Count()}");
+            }
 
             var toBeRemovedLayers = this.CurrentLayers.Where(i => newLayers.All(l => l.Id != i.Id)).ToList();
 
@@ -149,6 +162,25 @@ namespace IRI.Jab.MapViewer
             }
 
             return newLayers;
+        }
+
+        internal void UpdateIsInRange(double inverseMapScale)
+        {
+            System.Diagnostics.Debug.WriteLine($"UpdateIsInRange:{  inverseMapScale}");
+
+            foreach (var layer in map)
+            {
+                layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
+
+                if (layer.Labels != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"scale:{  inverseMapScale}");
+
+                    layer.Labels.IsInScaleRange = layer.Labels.VisibleRange.IsInRange(inverseMapScale);
+                }
+
+            }
+
         }
 
         public BoundingBox CalculateCurrentMapExtent()

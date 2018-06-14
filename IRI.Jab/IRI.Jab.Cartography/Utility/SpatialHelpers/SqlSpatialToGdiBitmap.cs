@@ -132,7 +132,7 @@ namespace IRI.Jab.Cartography.Convertor
                 if (brush != null)
                 {
                     graphics.FillEllipse(brush, (float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight / 2.0), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight);
-                }                
+                }
             }
         }
 
@@ -252,7 +252,7 @@ namespace IRI.Jab.Cartography.Convertor
                           return labelParameters.PositionFunc(g).AsWpfPoint();
                       }).ToList();
 
-            var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
+            var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, drawing.FontStyle.Bold);
 
             var graphic = drawing.Graphics.FromImage(image);
 
@@ -268,7 +268,7 @@ namespace IRI.Jab.Cartography.Convertor
             {
                 var location = mapToScreen(mapCoordinates[i]);
 
-                graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+                graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y, drawing.StringFormat.GenericDefault);
             }
 
             graphic.Flush();

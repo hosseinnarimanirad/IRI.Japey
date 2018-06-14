@@ -23,7 +23,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for Fill.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register("Fill", typeof(Brush), typeof(VisualParameters), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Fill), typeof(Brush), typeof(VisualParameters), new PropertyMetadata());
 
         public Brush Stroke
         {
@@ -33,7 +33,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for Stroke.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StrokeProperty =
-            DependencyProperty.Register("Stroke", typeof(Brush), typeof(VisualParameters), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Stroke), typeof(Brush), typeof(VisualParameters), new PropertyMetadata(null));
 
         public double Opacity
         {
@@ -43,7 +43,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for Opacity.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OpacityProperty =
-            DependencyProperty.Register("Opacity", typeof(double), typeof(VisualParameters));
+            DependencyProperty.Register(nameof(Opacity), typeof(double), typeof(VisualParameters));
 
         public double StrokeThickness
         {
@@ -53,7 +53,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for StrokeThickness.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty StrokeThicknessProperty =
-            DependencyProperty.Register("StrokeThickness", typeof(double), typeof(VisualParameters));
+            DependencyProperty.Register(nameof(StrokeThickness), typeof(double), typeof(VisualParameters));
 
         public Visibility Visibility
         {
@@ -63,7 +63,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for Visibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty VisibilityProperty =
-            DependencyProperty.Register("Visibility",
+            DependencyProperty.Register(nameof(Visibility),
                                         typeof(Visibility),
                                         typeof(VisualParameters),
                                         new PropertyMetadata(Visibility.Visible, new PropertyChangedCallback((dp, dpE) =>
@@ -82,8 +82,6 @@ namespace IRI.Jab.Cartography
                                             {
                                                 obj._onVisibilityChanged.SafeInvoke(obj, new CustomEventArgs<Visibility>(newVisibility));
                                             }
-                                            //this._onVisibilityChanged.SafeInvoke(this, new CustomEventArgs<Visibility>(value));
-
                                         })));
 
         public int Order
@@ -94,7 +92,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for Order.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OrderProperty =
-            DependencyProperty.Register("Order", typeof(int), typeof(VisualParameters));
+            DependencyProperty.Register(nameof(Order), typeof(int), typeof(VisualParameters));
 
         public DoubleCollection DashType
         {
@@ -104,7 +102,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for DashType.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DashTypeProperty =
-            DependencyProperty.Register("DashType", typeof(DoubleCollection), typeof(VisualParameters));
+            DependencyProperty.Register(nameof(DashType), typeof(DoubleCollection), typeof(VisualParameters));
 
 
 
@@ -116,8 +114,7 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for DashStyle.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DashStyleProperty =
-            DependencyProperty.Register("DashStyle", typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
-
+            DependencyProperty.Register(nameof(DashStyle), typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
 
 
@@ -129,7 +126,19 @@ namespace IRI.Jab.Cartography
 
         // Using a DependencyProperty as the backing store for IsInScaleRange.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsInScaleRangeProperty =
-            DependencyProperty.Register("IsInScaleRange", typeof(bool), typeof(VisualParameters), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsInScaleRange), typeof(bool), typeof(VisualParameters), new PropertyMetadata(true, new PropertyChangedCallback((dp, dpE) =>
+            {
+                var obj = dp as VisualParameters;
+
+                var newIsInScaleRange = ((bool)dpE.NewValue);
+
+                var oldIsInScaleRange = ((bool)dpE.OldValue);
+
+                if (newIsInScaleRange != oldIsInScaleRange)
+                { 
+                    obj.OnChanged?.Invoke(obj, new CustomEventArgs<VisualParameters>(obj));
+                }
+            })));
 
 
 
@@ -233,6 +242,8 @@ namespace IRI.Jab.Cartography
                 }
             }
         }
+
+        public event EventHandler<CustomEventArgs<VisualParameters>> OnChanged;
 
         public Pen GetWpfPen()
         {

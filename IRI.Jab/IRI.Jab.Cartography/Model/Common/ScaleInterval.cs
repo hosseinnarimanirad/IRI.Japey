@@ -22,7 +22,7 @@ namespace IRI.Jab.Cartography
             get { return _upper; }
             set { _upper = value; }
         }
-         
+
 
         public ScaleInterval(double lower, double upper)
         {
@@ -68,15 +68,21 @@ namespace IRI.Jab.Cartography
                 throw new NotImplementedException();
             }
 
-            var minInverse = 1.0 / IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel);
+            var minInverse = (1.0 / IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel) + .5);
 
-            var maxInverse = 1.0 / IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel);
+            var maxInverse = (1.0 / IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel) - .5);
 
             return new ScaleInterval(maxInverse, minInverse);
         }
 
         public bool IsInRange(double inverseMapScale)
         {
+            ////9244649.2265625; Lower: 1128.49722003937
+            //if (Upper < 9300000)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"Upper: {Upper}; Lower: {Lower}; InverseMapscale: {inverseMapScale}");
+            //}
+
             return (this.Upper >= inverseMapScale && this.Lower < inverseMapScale);
         }
     }

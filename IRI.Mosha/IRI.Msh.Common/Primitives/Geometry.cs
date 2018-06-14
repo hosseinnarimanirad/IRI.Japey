@@ -104,7 +104,7 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public int NumberOfPoints { get { return Points.Length; } }
+        public int NumberOfPoints { get { return Points?.Length ?? 0; } }
 
         public int Srid { get; set; }
 

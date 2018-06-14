@@ -100,7 +100,7 @@
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Model\DegreeMinuteSecondModel.cs" />
     <Compile Include="Model\GoTo\HamburgerGoToMenuItem.cs" />
-    <Compile Include="Model\Legend\CommandDataTemplateSelector.cs" />
+    <Compile Include="Assets\DataTemplateSelectors\CommandDataTemplateSelector.cs" />
     <Compile Include="Model\Legend\ILegendCommand.cs" />
     <Compile Include="Model\Legend\LegendCommand.cs" />
     <Compile Include="Model\Legend\LegendToggleCommand.cs" />
@@ -152,14 +152,17 @@
     <Compile Include="View\Map\FullNavigationView.xaml.cs">
       <DependentUpon>FullNavigationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Map\Legend\MapLegendItemWithOptions.xaml.cs">
-      <DependentUpon>MapLegendItemWithOptions.xaml</DependentUpon>
+    <Compile Include="View\Map\Legend\MapLegendItemWithOptionsView.xaml.cs">
+      <DependentUpon>MapLegendItemWithOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Map\Legend\MapLegendView.xaml.cs">
       <DependentUpon>MapLegendView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Map\Legend\MapLegendItem.xaml.cs">
       <DependentUpon>MapLegendItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Map\Legend\MapLegendWithOptionsView.xaml.cs">
+      <DependentUpon>MapLegendWithOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Scalebar.xaml.cs">
       <DependentUpon>Scalebar.xaml</DependentUpon>
@@ -255,7 +258,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Map\Legend\MapLegendItemWithOptions.xaml">
+    <Page Include="View\Map\Legend\MapLegendItemWithOptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,6 +269,10 @@
     <Page Include="View\Map\Legend\MapLegendItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Map\Legend\MapLegendWithOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Scalebar.xaml">
       <Generator>MSBuild:Compile</Generator>

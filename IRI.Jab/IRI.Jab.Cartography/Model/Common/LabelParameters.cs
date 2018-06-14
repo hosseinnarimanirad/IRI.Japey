@@ -58,9 +58,44 @@ namespace IRI.Jab.Cartography
             }
         }
 
-        public bool IsLabeled(double scale)
+        private bool _isInScaleRange = true;
+
+        public bool IsInScaleRange
         {
-            return scale < this.VisibleRange.Upper && scale > this.VisibleRange.Lower;
+            get
+            {
+                return _isInScaleRange;
+            }
+            set
+            {
+                if (_isInScaleRange == value)
+                {
+                    return;
+                }
+
+                _isInScaleRange = value;
+                RaisePropertyChanged();
+                this.OnIsInScaleRangeChanged?.Invoke(this, new CustomEventArgs<LabelParameters>(this));
+            }
+        }
+
+        private bool _isOn;
+
+        public bool IsOn
+        {
+            get { return _isOn; }
+            set
+            {
+                _isOn = value;
+                RaisePropertyChanged();
+                this.OnIsOnChanged?.Invoke(this, new CustomEventArgs<LabelParameters>(this));
+            }
+        }
+
+
+        public bool IsLabeled(double inverseMapScale)
+        {
+            return VisibleRange.IsInRange(inverseMapScale) && this.IsOn;
         }
 
         public Func<SqlGeometry, SqlGeometry> PositionFunc { get; set; }
@@ -83,5 +118,9 @@ namespace IRI.Jab.Cartography
         {
 
         }
+
+        public event EventHandler<CustomEventArgs<LabelParameters>> OnIsInScaleRangeChanged;
+
+        public event EventHandler<CustomEventArgs<LabelParameters>> OnIsOnChanged;
     }
 }

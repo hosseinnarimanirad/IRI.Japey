@@ -669,8 +669,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return result;
         }
-
-        public DataTable GetEntireFeature()
+         
+        public override DataTable GetEntireFeatures()
         {
             //string query = string.Empty;
 

@@ -44,7 +44,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             this.Extent = GetGeometries().GetBoundingBox();
         }
-         
+
         private string GetProperSelectForSpatialColumn(string columnName)
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "encode(ST_AsBinary({0}),'hex')", _spatialColumnName);
@@ -234,6 +234,13 @@ namespace IRI.Ket.DataManagement.DataSource
             var boundary = geometry.AsSqlGeometry(GetSrid());
 
             return GetEntireFeatures(boundary);
+        }
+
+        public override DataTable GetEntireFeatures()
+        {
+            string where = string.Empty;
+
+            return GetEntireFeatures(where);
         }
 
         #endregion
