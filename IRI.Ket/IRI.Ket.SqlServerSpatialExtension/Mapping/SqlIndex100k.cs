@@ -14,7 +14,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Mapping
     public class SqlIndex100k : Index100k, ISqlGeometryAware
     {
         [JsonIgnore]
-        SqlGeometry ISqlGeometryAware.Geometry { get => Geometry.AsSqlGeometry(); set => throw new NotImplementedException(); }
+        SqlGeometry ISqlGeometryAware.TheSqlGeometry { get => TheGeometry.AsSqlGeometry(); set => throw new NotImplementedException(); }
 
         public SqlIndex100k()
         {

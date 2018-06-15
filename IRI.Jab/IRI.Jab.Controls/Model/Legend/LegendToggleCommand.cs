@@ -36,6 +36,19 @@ namespace IRI.Jab.Controls.Model.Legend
             }
         }
 
+        private string _notCheckedPathMarkup;
+
+        public string NotCheckedPathMarkup
+        {
+            get { return _notCheckedPathMarkup; }
+            set
+            {
+                _notCheckedPathMarkup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private bool _isSelected;
 
         public bool IsSelected
@@ -71,6 +84,7 @@ namespace IRI.Jab.Controls.Model.Legend
             LegendToggleCommand result = new LegendToggleCommand();
 
             result.PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
+            result.NotCheckedPathMarkup = IRI.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone;
 
             result.Layer = layer;
 

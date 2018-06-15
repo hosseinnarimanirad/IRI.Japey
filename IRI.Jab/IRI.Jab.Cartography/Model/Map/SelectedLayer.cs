@@ -14,22 +14,9 @@ namespace IRI.Jab.Cartography.Model.Map
     {
         public string LayerName { get; set; }
 
-        //private ObservableCollection<IGeometryAware> _features;
+        private ObservableCollection<IGeometryAware> _features;
 
-        //public ObservableCollection<IGeometryAware> Features
-        //{
-        //    get { return _features; }
-        //    set
-        //    {
-        //        _features = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
-        private IEnumerable<object> _features;
-
-        public IEnumerable<object> Features
+        public ObservableCollection<IGeometryAware> Features
         {
             get { return _features; }
             set
@@ -38,6 +25,19 @@ namespace IRI.Jab.Cartography.Model.Map
                 RaisePropertyChanged();
             }
         }
+
+
+        //private DataTable _features;
+
+        //public DataTable Features
+        //{
+        //    get { return _features; }
+        //    set
+        //    {
+        //        _features = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
 

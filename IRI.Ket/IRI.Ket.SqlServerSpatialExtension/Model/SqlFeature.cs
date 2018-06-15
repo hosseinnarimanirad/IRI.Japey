@@ -13,7 +13,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
         private SqlGeometry _geometry;
 
-        public SqlGeometry Geometry
+        public SqlGeometry TheSqlGeometry
         {
             get
             {
@@ -36,19 +36,19 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
         public override string ToString()
         {
-            return $"Geometry: {Geometry?.STGeometryType()}, Attributes: {Attributes?.Count}";
+            return $"Geometry: {TheSqlGeometry?.STGeometryType()}, Attributes: {Attributes?.Count}";
         }
 
         public SqlFeature(SqlGeometry geometry)
         {
-            this.Geometry = geometry;
+            this.TheSqlGeometry = geometry;
 
             this.Attributes = new Dictionary<string, object>();
         }
 
         public SqlFeature(SqlGeometry geometry, string label)
         {
-            this.Geometry = geometry;
+            this.TheSqlGeometry = geometry;
 
             this.Attributes = new Dictionary<string, object>() { { _defaultLabelAttributeName, label } };
         }

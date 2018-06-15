@@ -6,6 +6,6 @@ namespace IRI.Msh.Common.Primitives
 {
     public interface IGeometryAware
     {
-        Geometry Geometry { get; set; }
+        Geometry TheGeometry { get; set; }
     }
 }

@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="IRI.Jab.Controls.View.RadFeatureTable"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <telerik:RadGridView ItemsSource="{Binding Features}" AutoGenerateColumns="True" AutoGeneratingColumn="RadGridView_AutoGeneratingColumn"
+                            ShowGroupPanel="False" IsReadOnly="True" x:Name="grid"/>
+        <telerik:RadDataPager Grid.Row="1" DisplayMode="FirstLastPreviousNextNumeric, Text" IsTotalItemCountFixed="True"
+                               Source="{Binding Features}" PageSize="50" PageIndex="0" />
+    </Grid>
+</UserControl>

@@ -92,8 +92,8 @@ namespace IRI.Jab.Controls.Model.Legend
                     new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
                     new SqlIndex250k(new Msh.Common.Mapping.Index250k())};
 
+                map.SelectedLayers.Add(new Cartography.Model.Map.SelectedLayer() { LayerName = layer.LayerName, Features = new System.Collections.ObjectModel.ObservableCollection<Msh.Common.Primitives.IGeometryAware>(list) });
                 //map.SelectedLayers.Add(new Cartography.Model.Map.SelectedLayer() { LayerName = layer.LayerName, Features = dataTable });
-                map.SelectedLayers.Add(new Cartography.Model.Map.SelectedLayer() { LayerName = layer.LayerName, Features = list });
             });
 
             return result;

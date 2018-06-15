@@ -284,7 +284,7 @@ namespace IRI.Ket.DataManagement.DataSource
                         {
                             if (reader[i] is SqlGeometry)
                             {
-                                feature.Geometry = (SqlGeometry)reader[i];
+                                feature.TheSqlGeometry = (SqlGeometry)reader[i];
                             }
                             else
                             {

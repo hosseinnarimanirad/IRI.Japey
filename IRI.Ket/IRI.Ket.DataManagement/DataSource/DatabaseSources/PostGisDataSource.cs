@@ -69,13 +69,6 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
-        {
-            string whereClause = string.Format(System.Globalization.CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
-
-            return GetEntireFeatures(whereClause);
-        }
-
         public DataTable GetEntireFeaturesWhereIntersects(List<Point> region)
         {
             string wktRegion = string.Format(System.Globalization.CultureInfo.InvariantCulture, " POLYGON(({0})) ",
@@ -138,23 +131,6 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        //WHERE ST_INTERSECTS(A,B)
-        public override DataTable GetEntireFeatures(string whereClause)
-        {
-            List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema, _tableName);
-
-            if (!columns.Contains(_spatialColumnName))
-                throw new NotImplementedException();
-
-            string command =
-                string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}",
-                    string.Join(",", columns.Select(i => i == _spatialColumnName ? GetProperSelectForSpatialColumn(i) : i)),
-                    _tableName,
-                    string.IsNullOrEmpty(whereClause) ? string.Empty : whereClause);
-
-            return ExecuteSql(command);
-        }
-
         public override List<SqlGeometry> GetGeometries(string whereClause)
         {
             NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
@@ -207,13 +183,6 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override DataTable GetEntireFeatures(SqlGeometry geometry)
-        {
-            string wkt = new string(geometry.STAsText().Value);
-
-            return GetEntireFeaturesWhereIntersects(wkt);
-        }
-
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
             throw new NotImplementedException();
@@ -229,6 +198,13 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
+        {
+            string whereClause = string.Format(System.Globalization.CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
+
+            return GetEntireFeatures(whereClause);
+        }
+
         public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
             var boundary = geometry.AsSqlGeometry(GetSrid());
@@ -241,6 +217,30 @@ namespace IRI.Ket.DataManagement.DataSource
             string where = string.Empty;
 
             return GetEntireFeatures(where);
+        }
+
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
+        {
+            string wkt = new string(geometry.STAsText().Value);
+
+            return GetEntireFeaturesWhereIntersects(wkt);
+        }
+
+        //WHERE ST_INTERSECTS(A,B)
+        public override DataTable GetEntireFeatures(string whereClause)
+        {
+            List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema, _tableName);
+
+            if (!columns.Contains(_spatialColumnName))
+                throw new NotImplementedException();
+
+            string command =
+                string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}",
+                    string.Join(",", columns.Select(i => i == _spatialColumnName ? GetProperSelectForSpatialColumn(i) : i)),
+                    _tableName,
+                    string.IsNullOrEmpty(whereClause) ? string.Empty : whereClause);
+
+            return ExecuteSql(command);
         }
 
         #endregion

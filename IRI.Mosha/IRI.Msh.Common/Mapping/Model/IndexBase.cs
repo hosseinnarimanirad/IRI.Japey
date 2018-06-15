@@ -36,7 +36,7 @@ namespace IRI.Msh.Common.Mapping
         }
 
         [JsonIgnore]
-        public Geometry Geometry
+        public Geometry TheGeometry
         {
             //1397.03.21
             get => GetBoundingBox().Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.GeodeticWGS84);

@@ -1,6 +1,7 @@
 ﻿using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Mapping;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using Newtonsoft.Json;
 using System;
@@ -12,10 +13,10 @@ using System.Threading.Tasks;
 namespace IRI.Ket.SqlServerSpatialExtension.Mapping
 {
   
-    public class SqlIndex250k : Index250k, ISqlGeometryAware
+    public class SqlIndex250k : Index250k, ISqlGeometryAware, IGeometryAware
     {
         [JsonIgnore]
-        SqlGeometry ISqlGeometryAware.Geometry { get => Geometry.AsSqlGeometry(); set => throw new NotImplementedException(); }
+        SqlGeometry ISqlGeometryAware.TheSqlGeometry { get => TheGeometry.AsSqlGeometry(); set => throw new NotImplementedException(); }
 
         public SqlIndex250k()
         {

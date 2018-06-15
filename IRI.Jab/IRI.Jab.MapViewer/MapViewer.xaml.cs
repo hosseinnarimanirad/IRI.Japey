@@ -1042,7 +1042,7 @@ namespace IRI.Jab.MapViewer
 
             foreach (var region in CurrentTileInfos)
             {
-                await AddTiledLayer(layer, region);
+                await AddTiledLayerAsync(layer, region);
             }
         }
 
@@ -1125,7 +1125,7 @@ namespace IRI.Jab.MapViewer
 
 
         //This method should be improved. it is not working well
-        private async Task AddTiledLayer(VectorLayer layer, TileInfo tile)
+        private async Task AddTiledLayerAsync(VectorLayer layer, TileInfo tile)
         {
             var mapScale = MapScale;
 
@@ -1704,7 +1704,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private async Task AddLayerAsync(TileServiceLayer layer, TileInfo tile)
+        private async Task AddTileServiceLayerAsync(TileServiceLayer layer, TileInfo tile)
         {
             try
             {
@@ -1859,11 +1859,11 @@ namespace IRI.Jab.MapViewer
 
                         vectorLayer.TileManager.TryAdd(tile);
 
-                        await AddTiledLayer(vectorLayer, tile);
+                        await AddTiledLayerAsync(vectorLayer, tile);
                     }
                     else if (item is TileServiceLayer)
                     {
-                        await AddLayerAsync(item as TileServiceLayer, tile);
+                        await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
                     }
                     else
                     {
@@ -1926,11 +1926,11 @@ namespace IRI.Jab.MapViewer
 
                        vectorLayer.TileManager.TryAdd(tile);
 
-                       await AddTiledLayer(vectorLayer, tile);
+                       await AddTiledLayerAsync(vectorLayer, tile);
                    }
                    else if (item is TileServiceLayer)
                    {
-                       await AddLayerAsync(item as TileServiceLayer, tile);
+                       await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
                    }
                    else
                    {

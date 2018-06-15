@@ -20,7 +20,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
             result.Features = featureSet.Features.Select(f => new EsriFeature()
             {
                 Attributes = f.Attributes.ToDictionary(i => i.Key, i => i.Value == null ? string.Empty : i.Value.ToString()),
-                Geometry = f.Geometry.ParseToEsriJsonGeometry()
+                Geometry = f.TheSqlGeometry.ParseToEsriJsonGeometry()
             }).ToArray();
 
             return result;

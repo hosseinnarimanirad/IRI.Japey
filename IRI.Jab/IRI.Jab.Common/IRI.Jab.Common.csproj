@@ -116,6 +116,7 @@
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
     <Compile Include="Assets\Fonts\Fonts.cs" />
     <Compile Include="Assets\ShapeStrings\Appbar.cs" />
+    <Compile Include="Assets\ShapeStrings\AppbarExtension.cs" />
     <Compile Include="Assets\ShapeStrings\CustomShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
@@ -244,6 +245,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\IRI.Fonts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Assets\Shapes\AppbarExtension.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

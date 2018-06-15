@@ -197,7 +197,7 @@ namespace IRI.Jab.Cartography
                     return new GeoReferencedImage(Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound), tile.GeodeticExtent, false);
                 }
 
-                WiseWebClient client = new WiseWebClient(40);
+                WiseWebClient client = new WiseWebClient(30);
 
                 if (proxy != null)
                 {

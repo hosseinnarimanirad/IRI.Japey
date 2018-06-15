@@ -26,7 +26,7 @@ namespace IRI.Ket.DataManagement.DataSource
          
         public override int GetSrid()
         {
-            return this._features?.SkipWhile(g => g == null || g.Geometry == null || g.Geometry.IsNotValidOrEmpty())?.FirstOrDefault()?.Geometry.GetSrid() ?? 0;
+            return this._features?.SkipWhile(g => g == null || g.TheSqlGeometry == null || g.TheSqlGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheSqlGeometry.GetSrid() ?? 0;
         }
 
         //private bool HasAttribute
@@ -88,7 +88,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //GetGeometries
         public override List<SqlGeometry> GetGeometries()
         {
-            return this._features?.Select(f => f.Geometry)?.ToList();
+            return this._features?.Select(f => f.TheSqlGeometry)?.ToList();
         }
 
         public override List<SqlGeometry> GetGeometries(string whereClause)
@@ -111,7 +111,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //GetAttributes
         public List<T> GetFeatures(SqlGeometry geometry)
         {
-            return this._features.Where(i => i.Geometry.STIntersects(geometry).IsTrue).ToList();
+            return this._features.Where(i => i.TheSqlGeometry.STIntersects(geometry).IsTrue).ToList();
         }
 
         public override List<object> GetAttributes(string attributeColumn, string whereClause)
@@ -175,7 +175,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //GetGeometryLabelPairs
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
-            return this._features.Select(f => new NamedSqlGeometry(f.Geometry, _labelFunc(f))).ToList();
+            return this._features.Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
@@ -196,7 +196,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
         {
-            return this._features.Where(i => i.Geometry.STIntersects(geometry).IsTrue).Select(f => new NamedSqlGeometry(f.Geometry, _labelFunc(f))).ToList();
+            return this._features.Where(i => i.TheSqlGeometry.STIntersects(geometry).IsTrue).Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)

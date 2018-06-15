@@ -9,11 +9,11 @@
     <Grid IsEnabled="{Binding ElementName=root, Path=Symbology.IsInScaleRange}">
         <Grid.Resources>
             <DataTemplate DataType="{x:Type model:LegendToggleCommand}">
-                <ToggleButton VerticalAlignment="Center" Margin="1" Cursor="Hand" BorderThickness="0" Focusable="False" 
-                                  Background="Transparent" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
+                <ToggleButton VerticalAlignment="Center" Margin="2" Cursor="Hand" BorderThickness="0" Focusable="False"
+                              Background="Transparent" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                            <Setter Property="Foreground" Value="LightGray"/>
+                            <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
@@ -21,11 +21,25 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                                 </Trigger>
+                                
                             </Style.Triggers>
                         </Style>
                     </ToggleButton.Style>
-                   
-                    <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16"/>
+
+                    <Path Stretch="Uniform" Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16">
+                        <Path.Style>
+                            <Style TargetType="{x:Type Path}" >
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Value="True">
+                                        <Setter Property="Data" Value="{Binding PathMarkup}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Value="False">
+                                        <Setter Property="Data" Value="{Binding NotCheckedPathMarkup}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
                 </ToggleButton>
             </DataTemplate>
             <DataTemplate DataType="{x:Type model:LegendCommand}">

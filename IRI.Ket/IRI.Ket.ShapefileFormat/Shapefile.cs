@@ -136,7 +136,7 @@ namespace IRI.Ket.ShapefileFormat
         {
 
 
-            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.Geometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
+            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
             //var shapes = ReadShapes(shpFileName);
 
             //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
