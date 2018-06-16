@@ -18,7 +18,7 @@ using IRI.Msh.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlServerDataSource : IFeatureDataSource
+    public class SqlServerDataSource : FeatureDataSource
     {
         const string _outputSpatialAttribute = "_shape";
 

@@ -3,6 +3,7 @@ using IRI.Jab.Cartography.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Ket.SqlServerSpatialExtension.Mapping;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +71,7 @@ namespace IRI.Jab.Controls.Model.Legend
             return result;
         }
 
-        public static LegendCommand CreateShowAttributeTable(MapPresenter map, ILayer layer)
+        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, ILayer layer) where T : ISqlGeometryAware
         {
             var result = new LegendCommand()
             {
@@ -83,16 +84,21 @@ namespace IRI.Jab.Controls.Model.Legend
                 if (layer == null || map == null)
                     return;
 
-                var dataTable = (layer as VectorLayer).GetEntireFeature();
+                var features = (layer as VectorLayer).GetFeatures<T>();
 
-                var list = new List<SqlIndex250k>() {
-                    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                    new SqlIndex250k(new Msh.Common.Mapping.Index250k())};
+                //var list = new List<SqlIndex250k>() {
+                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
+                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
+                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
+                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
+                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k())};
 
-                map.SelectedLayers.Add(new Cartography.Model.Map.SelectedLayer() { LayerName = layer.LayerName, Features = new System.Collections.ObjectModel.ObservableCollection<Msh.Common.Primitives.IGeometryAware>(list) });
+                map.SelectedLayers.Add(
+                    new Cartography.Model.Map.SelectedLayer<T>()
+                    {
+                        LayerName = layer.LayerName,
+                        Features = new System.Collections.ObjectModel.ObservableCollection<T>(features)
+                    });
                 //map.SelectedLayers.Add(new Cartography.Model.Map.SelectedLayer() { LayerName = layer.LayerName, Features = dataTable });
             });
 

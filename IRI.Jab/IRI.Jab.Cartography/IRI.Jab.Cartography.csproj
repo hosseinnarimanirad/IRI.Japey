@@ -102,6 +102,7 @@
     <Compile Include="Model\BezierItem.cs" />
     <Compile Include="Model\EditableFeatureLayerOptions.cs" />
     <Compile Include="Model\Map\DrawingItem.cs" />
+    <Compile Include="Model\Map\ISelectedLayer.cs" />
     <Compile Include="Model\Map\MapSettings.cs" />
     <Compile Include="Model\Map\SelectedLayer.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />

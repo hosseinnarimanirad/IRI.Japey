@@ -111,7 +111,7 @@
     <Compile Include="DataSource\RasterDataSources\ImagePyramidDataSource.cs" />
     <Compile Include="Infrastructure\ZippedJsonArchiveInfrastructure.cs" />
     <Compile Include="Model\IDataSource.cs" />
-    <Compile Include="Model\IFeatureDataSource.cs" />
+    <Compile Include="Model\FeatureDataSource.cs" />
     <Compile Include="Model\IScaleDependentDataSource.cs" />
     <Compile Include="Model\SchemaDefinition.cs" />
     <Compile Include="Infrastructure\DataSourceInfrastructure.cs" />

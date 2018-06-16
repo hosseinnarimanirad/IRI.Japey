@@ -251,7 +251,7 @@ namespace IRI.Jab.Cartography
                       region.YMin);
 
                 //??
-                var table = await ((IRI.Ket.DataManagement.Model.IFeatureDataSource)this.DataSource).GetEntireFeatureAsync(whereClouse);
+                var table = await ((IRI.Ket.DataManagement.Model.FeatureDataSource)this.DataSource).GetEntireFeatureAsync(whereClouse);
 
                 foreach (System.Data.DataRow item in table.Rows)
                 {

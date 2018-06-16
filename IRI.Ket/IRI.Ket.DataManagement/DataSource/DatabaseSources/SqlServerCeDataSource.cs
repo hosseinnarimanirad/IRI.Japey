@@ -15,7 +15,7 @@ using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlServerCeDataSource : IFeatureDataSource
+    public class SqlServerCeDataSource : FeatureDataSource
     {
         public override BoundingBox Extent { get; protected set; }
 

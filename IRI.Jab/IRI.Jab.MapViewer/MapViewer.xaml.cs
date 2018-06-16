@@ -831,7 +831,7 @@ namespace IRI.Jab.MapViewer
         }
 
         public void SetVectorLayer(
-            ScaleInterval scaleInterval, IFeatureDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
+            ScaleInterval scaleInterval, FeatureDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
             bool isLabeled = false, Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
         {
             LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
@@ -842,7 +842,7 @@ namespace IRI.Jab.MapViewer
         }
 
         public void SetVectorLayer(
-                ScaleInterval scaleInterval, IFeatureDataSource dataSource, string layerName, VisualParameters visualElements,
+                ScaleInterval scaleInterval, FeatureDataSource dataSource, string layerName, VisualParameters visualElements,
                 LabelParameters parameters, RenderingApproach rendering = RenderingApproach.Default, Geometry pointSymbol = null, RasterizationApproach toRasterApproach = RasterizationApproach.GdiPlus)
         {
             if (toRasterApproach == RasterizationApproach.StreamGeometry && rendering == RenderingApproach.Tiled)

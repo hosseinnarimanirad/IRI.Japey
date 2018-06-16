@@ -14,7 +14,7 @@ using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class PostGisDataSource : IFeatureDataSource
+    public class PostGisDataSource : FeatureDataSource
     {
         public override BoundingBox Extent { get; protected set; }
 

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.Model
 {
-    public abstract class IFeatureDataSource : IDataSource
+    public abstract class FeatureDataSource : IDataSource
     {
         public abstract BoundingBox Extent { get; protected set; }
 
@@ -30,30 +30,55 @@ namespace IRI.Ket.DataManagement.Model
 
         public virtual List<SqlGeometry> GetGeometries()
         {
-            return GetGeometries(string.Empty);
+            SqlGeometry geometry = null;
+
+            return GetGeometries(geometry);
         }
 
-        public abstract List<SqlGeometry> GetGeometries(string whereClause);
+        public virtual List<SqlGeometry> GetGeometries(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
 
-        public abstract List<SqlGeometry> GetGeometries(BoundingBox boundingBox);
+        public virtual List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
+        {
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(this.GetSrid()).MakeValid();
 
-        public abstract List<SqlGeometry> GetGeometries(SqlGeometry geometry);
+            return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
+        }
+
+        public virtual List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        {
+            return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+        }
+
 
         #endregion
 
-
         #region Get Geometry Label Pairs
 
-        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs();
+        public virtual List<NamedSqlGeometry> GetGeometryLabelPairs()
+        {
+            SqlGeometry geometry = null;
 
-        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause);
+            return GetGeometryLabelPairs(geometry);
+        }
 
-        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox);
+        public virtual List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundary)
+        {
+            SqlGeometry geometry = boundary.AsSqlGeometry(GetSrid());
+
+            return GetGeometryLabelPairs(geometry);
+        }
 
         public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry);
 
         #endregion
-
 
         #region Get Attribute Methods
 
@@ -66,19 +91,30 @@ namespace IRI.Ket.DataManagement.Model
 
         #endregion
 
-
         #region GetEntireFeature
 
-        public abstract DataTable GetEntireFeatures();
+        public virtual DataTable GetEntireFeatures()
+        {
+            SqlGeometry geometry = null;
 
-        public abstract DataTable GetEntireFeatures(string whereClause);
+            return GetEntireFeatures(geometry);
+        }
 
-        public abstract DataTable GetEntireFeatures(BoundingBox geometry);
+        public virtual DataTable GetEntireFeatures(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual DataTable GetEntireFeatures(BoundingBox boundary)
+        {
+            SqlGeometry geometry = boundary.AsSqlGeometry(GetSrid());
+
+            return GetEntireFeatures(geometry);
+        }
 
         public abstract DataTable GetEntireFeatures(SqlGeometry geometry);
 
         #endregion
-
 
         #region Async Methods
 
@@ -140,5 +176,17 @@ namespace IRI.Ket.DataManagement.Model
         }
 
         #endregion
+    }
+
+    public abstract class FeatureDataSource<T> : FeatureDataSource where T : ISqlGeometryAware
+    { 
+        public List<T> GetFeatures()
+        {
+            SqlGeometry geometry = null;
+
+            return GetFeatures(geometry);
+        }
+
+        public abstract List<T> GetFeatures(SqlGeometry geometry);
     }
 }

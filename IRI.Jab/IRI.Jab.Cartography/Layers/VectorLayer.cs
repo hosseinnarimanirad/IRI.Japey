@@ -26,6 +26,7 @@ using IRI.Msh.Common.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Cartography.Model.Symbology;
 using IRI.Jab.Common.Helpers;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Jab.Cartography
 {
@@ -45,7 +46,7 @@ namespace IRI.Jab.Cartography
         //    }
         //}
 
-        public IFeatureDataSource DataSource { get; private set; }
+        public FeatureDataSource DataSource { get; private set; }
 
         private FrameworkElement _element;
 
@@ -157,13 +158,13 @@ namespace IRI.Jab.Cartography
             Initialize(layerName, new MemoryDataSource(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
         }
 
-        public VectorLayer(string layerName, IFeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
+        public VectorLayer(string layerName, FeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
             RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbol pointSymbol = null, LabelParameters labeling = null)
         {
             Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
         }
 
-        private void Initialize(string layerName, IFeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
+        private void Initialize(string layerName, FeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
                                     RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
                                     SimplePointSymbol pointSymbol, LabelParameters labeling)
         {
@@ -889,10 +890,20 @@ namespace IRI.Jab.Cartography
 
             return geometries;
         }
-        
+
         public System.Data.DataTable GetEntireFeature()
         {
             return DataSource?.GetEntireFeatures();
+        }
+
+        public List<T> GetFeatures<T>() where T : ISqlGeometryAware
+        {
+            if (DataSource is FeatureDataSource<T>)
+            {
+                return (DataSource as FeatureDataSource<T>).GetFeatures();
+            }
+
+            return null;
         }
 
         public bool IsLabeled(double mapScale)

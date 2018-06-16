@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Common;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Cartography.Model.Map
 {
-    public class SelectedLayer : Notifier
+    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : ISqlGeometryAware
     {
         public string LayerName { get; set; }
 
-        private ObservableCollection<IGeometryAware> _features;
+        private ObservableCollection<T> _features;
 
-        public ObservableCollection<IGeometryAware> Features
+        public ObservableCollection<T> Features
         {
             get { return _features; }
             set
@@ -41,9 +42,9 @@ namespace IRI.Jab.Cartography.Model.Map
 
 
 
-        private IEnumerable<IGeometryAware> _highlightedFeatures;
+        private IEnumerable<T> _highlightedFeatures;
 
-        public IEnumerable<IGeometryAware> HighlightedFeatures
+        public IEnumerable<T> HighlightedFeatures
         {
             get { return _highlightedFeatures; }
             set

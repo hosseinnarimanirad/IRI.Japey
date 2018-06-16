@@ -29,16 +29,12 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static GeoJsonSource<T> CreateFromJsonString(string jsonString)
         {
-            var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<T>>(jsonString);
-
-            return new GeoJsonSource<T>(values);
+            return CreateFromJsonString(jsonString, null);
         }
 
         public static GeoJsonSource<T> CreateFromFile(string fileName)
         {
-            var jsonString = System.IO.File.ReadAllText(fileName);
-
-            return CreateFromJsonString(jsonString);
+            return CreateFromFile(fileName, null);
         }
 
         public static GeoJsonSource<T> CreateFromJsonString(string jsonString, Func<T, string> labelFunc)

@@ -25,6 +25,7 @@ using System.Windows;
 using System.Windows.Input;
 using static System.Windows.Media.Colors;
 using WpfPoint = System.Windows.Point;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Jab.Cartography.Presenter.Map
 {
@@ -123,9 +124,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        private ObservableCollection<SelectedLayer> _selectedLayers = new ObservableCollection<SelectedLayer>();
+        private ObservableCollection<ISelectedLayer> _selectedLayers = new ObservableCollection<ISelectedLayer>();
 
-        public ObservableCollection<SelectedLayer> SelectedLayers
+        public ObservableCollection<ISelectedLayer> SelectedLayers
         {
             get { return _selectedLayers; }
             set
@@ -1206,7 +1207,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
             try
             {
-                var dataSource = await Task.Run<IFeatureDataSource>(async () =>
+                var dataSource = await Task.Run<FeatureDataSource>(async () =>
                 {
                     var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
                                     .Select(i => i.AsSqlGeometry(3857))

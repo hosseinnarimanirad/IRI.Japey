@@ -12,6 +12,6 @@
         <telerik:RadGridView ItemsSource="{Binding Features}" AutoGenerateColumns="True" AutoGeneratingColumn="RadGridView_AutoGeneratingColumn"
                             ShowGroupPanel="False" IsReadOnly="True" x:Name="grid"/>
         <telerik:RadDataPager Grid.Row="1" DisplayMode="FirstLastPreviousNextNumeric, Text" IsTotalItemCountFixed="True"
-                               Source="{Binding Features}" PageSize="50" PageIndex="0" />
+                               Source="{Binding ElementName=grid, Path=Items}" PageSize="50" PageIndex="0" />
     </Grid>
 </UserControl>
