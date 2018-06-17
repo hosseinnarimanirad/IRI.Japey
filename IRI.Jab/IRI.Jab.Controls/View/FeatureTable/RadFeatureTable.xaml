@@ -3,15 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" >
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:localTelerik="clr-namespace:IRI.Jab.Controls.Assets.Telerik">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <telerik:RadGridView ItemsSource="{Binding Features}" AutoGenerateColumns="True" AutoGeneratingColumn="RadGridView_AutoGeneratingColumn"
-                            ShowGroupPanel="False" IsReadOnly="True" x:Name="grid"/>
-        <telerik:RadDataPager Grid.Row="1" DisplayMode="FirstLastPreviousNextNumeric, Text" IsTotalItemCountFixed="True"
-                               Source="{Binding ElementName=grid, Path=Items}" PageSize="50" PageIndex="0" />
+                                ShowGroupPanel="False" IsReadOnly="True" x:Name="grid" telerik:StyleManager.Theme="Office2016"
+                                SelectionMode="Extended" SelectionChanged="grid_SelectionChanged">
+            <!--<i:Interaction.Behaviors>
+                <localTelerik:RadMultiSelectBehavior SelectedItems="{Binding HighlightedFeatures}"/>
+            </i:Interaction.Behaviors>-->
+        </telerik:RadGridView>
+        <DockPanel Grid.Row="1" HorizontalAlignment="Stretch" LastChildFill="False">
+            <telerik:RadDataPager DisplayMode="FirstLastPreviousNextNumeric,Text" IsTotalItemCountFixed="True"
+                              Source="{Binding ElementName=grid, Path=Items}" PageSize="50" PageIndex="0" 
+                              telerik:StyleManager.Theme="Office2016" BorderThickness="0" DockPanel.Dock="Right">
+            </telerik:RadDataPager>
+            <TextBlock MinWidth="50"
+                       VerticalAlignment="Center" FontFamily="{StaticResource iranSans}"
+                       DockPanel.Dock="Left" Margin="4">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{1} از {0} عارضه">
+                        <Binding ElementName="grid" Path="ItemsSource.Count" Converter="{StaticResource latinDigitsToFarsiDigitsConverter}"/>
+                        <Binding ElementName="grid" Path="SelectedItems.Count" Converter="{StaticResource latinDigitsToFarsiDigitsConverter}"/>
+                        <!--Text="{Binding ElementName=grid, Path=ItemsSource.Count, Converter={StaticResource latinDigitsToFarsiDigitsConverter}, StringFormat={}{0} عارضه}"-->
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
+                <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+            </Button>
+            
+        </DockPanel>
     </Grid>
 </UserControl>

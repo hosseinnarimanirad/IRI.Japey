@@ -34,6 +34,27 @@ namespace IRI.Jab.Cartography
             return result;
         }
 
+        public static VisualParameters GetDefaultForSelection()
+        {
+            return new VisualParameters(DefaultSelectionFill, DefaultSelectionStroke, 2, .8);
+        }
+
+        public static VisualParameters GetDefaultForHighlight()
+        {
+            return new VisualParameters(DefaultHighlightFill, DefaultHighlightStroke, 2, .8);
+        }
+
+
+
+        public static SolidColorBrush DefaultHighlightStroke = new SolidColorBrush(Colors.Yellow);
+
+        public static SolidColorBrush DefaultHighlightFill = new SolidColorBrush(new Color() { B = 0, G = 255, R = 255, A = 50 });
+
+        public static SolidColorBrush DefaultSelectionStroke = new SolidColorBrush(Colors.Cyan);
+
+        public static SolidColorBrush DefaultSelectionFill = new SolidColorBrush(new Color() { B = 255, G = 255, R = 0, A = 50 });
+
+
         public static SolidColorBrush DefaultDrawingStroke = new SolidColorBrush(new Color() { R = 255, G = 200, B = 0, A = 250 });
 
         public static SolidColorBrush DefaultDrawingFill = new SolidColorBrush(new Color() { R = 255, G = 200, B = 0, A = 160 });

@@ -136,6 +136,106 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
+        private ISelectedLayer _currentLayer;
+
+        public ISelectedLayer CurrentLayer
+        {
+            get { return _currentLayer; }
+            set
+            {
+                _currentLayer = value;
+                RaisePropertyChanged();
+
+                ShowSelectedFeatures(value?.GetSelectedFeatures());
+            }
+        }
+
+        public void AddSelectedLayer(ISelectedLayer selectedLayer)
+        {
+            if (selectedLayer == null)
+            {
+                return;
+            }
+
+            var existingLayer = SelectedLayers?.SingleOrDefault(l => l.Id == selectedLayer?.Id);
+
+            if (existingLayer == null)
+            {
+                selectedLayer.FeaturesChangedAction = ShowSelectedFeatures;
+
+                selectedLayer.HighlightFeaturesChangedAction = ShowHighlightedFeatures;
+
+                selectedLayer.ZoomTo = (features) =>
+                {
+                    var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
+
+                    this.ZoomToExtent(extent, false);
+                };
+
+                selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
+
+                this.SelectedLayers.Add(selectedLayer);
+
+                CurrentLayer = selectedLayer;
+
+                if (selectedLayer.ShowSelectedOnMap)
+                {
+                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
+                }
+            }
+            else
+            {
+                existingLayer.UpdateSelectedFeatures(selectedLayer.GetSelectedFeatures());
+
+                CurrentLayer = existingLayer;
+
+                if (selectedLayer.ShowSelectedOnMap)
+                {
+                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
+                }
+            }
+        }
+
+        public void RemoveSelectedLayer(ILayer layer)
+        {
+            var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.Id);
+
+            if (selectedLayer != null)
+            {
+                this.SelectedLayers.Remove(selectedLayer);
+
+                ClearLayer("__$selection", true);
+                ClearLayer("__$highlight", true);
+            }
+        }
+
+        private void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+            ClearLayer("__$selection", true);
+            ClearLayer("__$highlight", true);
+
+            if (enumerable == null)
+            {
+                return;
+            }
+
+            DrawGeometries(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
+
+        }
+
+        private void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+
+            ClearLayer("__$highlight", true);
+
+            if (enumerable == null)
+            {
+                return;
+            }
+
+            DrawGeometries(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight());
+
+        }
 
         //private NotifiablePoint _currentMapInfoPoint;
 
@@ -497,7 +597,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
                     _currentEditingLayer.RequestZoomToGeometry = g =>
                     {
-                        this.ZoomToExtent(g.GetBoundingBox());
+                        this.ZoomToExtent(g.GetBoundingBox(), false);
                     };
                 }
 
@@ -572,7 +672,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
 
         public Action<IRI.Msh.Common.Primitives.Point, int, Action> RequestZoomToGoogleScale;
 
-        public Action<IRI.Msh.Common.Primitives.BoundingBox, Action> RequestZoomToExtent;
+        public Action<IRI.Msh.Common.Primitives.BoundingBox, bool, Action> RequestZoomToExtent;
 
         public Action<SqlGeometry> RequestZoomToFeature;
 
@@ -729,7 +829,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 }
             };
 
-            shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox()); };
+            shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
             shapeItem.RequestDownload = (s) =>
             {
@@ -942,9 +1042,9 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestZoomToGoogleScale?.Invoke(center, googleScale, callback);
         }
 
-        public void ZoomToExtent(IRI.Msh.Common.Primitives.BoundingBox boundingBox, Action callback = null)
+        public void ZoomToExtent(IRI.Msh.Common.Primitives.BoundingBox boundingBox, bool isExactExtent, Action callback = null)
         {
-            this.RequestZoomToExtent?.Invoke(boundingBox, callback);
+            this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, callback);
         }
 
         public void Zoom(SqlGeometry geometry)

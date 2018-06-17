@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
+    <Compile Include="Assets\Telerik\RadMultiSelectBehavior.cs" />
     <Compile Include="Common\Defaults\DefaultActions.cs" />
     <Compile Include="Extensions\GeometryExtensions.cs" />
     <Compile Include="Model\CoordinateEditor\CoordinateEditor.cs" />
@@ -310,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\Images\" />
+    <Folder Include="Model\Telerik\" />
     <Folder Include="View\Map\Auxilary\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

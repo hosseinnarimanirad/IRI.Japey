@@ -75,6 +75,18 @@ namespace IRI.Jab.Controls.Model.Legend
             }
         }
 
+        private string _toolTip;
+
+        public string ToolTip
+        {
+            get { return _toolTip; }
+            set
+            {
+                _toolTip = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ILayer Layer { get; set; }
 
 
@@ -85,7 +97,7 @@ namespace IRI.Jab.Controls.Model.Legend
 
             result.PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
             result.NotCheckedPathMarkup = IRI.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone;
-
+            result.ToolTip = "نمایش برچسب عوارض";
             result.Layer = layer;
 
             EventHandler<CustomEventArgs<LabelParameters>> labels_IsInScaleRangeChanged = (sender, e) =>

@@ -9,7 +9,7 @@
     <Grid IsEnabled="{Binding ElementName=root, Path=Symbology.IsInScaleRange}">
         <Grid.Resources>
             <DataTemplate DataType="{x:Type model:LegendToggleCommand}">
-                <ToggleButton VerticalAlignment="Center" Margin="2" Cursor="Hand" BorderThickness="0" Focusable="False"
+                <ToggleButton VerticalAlignment="Center" Margin="2" Cursor="Hand" BorderThickness="0" Focusable="False" ToolTip="{Binding ToolTip}"
                               Background="Transparent" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -43,7 +43,8 @@
                 </ToggleButton>
             </DataTemplate>
             <DataTemplate DataType="{x:Type model:LegendCommand}">
-                <Button VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" BorderThickness="0" Focusable="False" Background="Transparent">
+                <Button VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
+                        BorderThickness="0" Focusable="False" Background="Transparent" ToolTip="{Binding ToolTip}">
                     <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}" Width="16" Height="16"/>
                 </Button>
             </DataTemplate>

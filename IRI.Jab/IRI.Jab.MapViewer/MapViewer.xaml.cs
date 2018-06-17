@@ -549,7 +549,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestFlashPoint = (i) => { this.Flash(i); };
 
-            presenter.RequestZoomToExtent = (boundingBox, callback) => { this.ZoomToExtent(boundingBox, false, true, callback); };
+            presenter.RequestZoomToExtent = (boundingBox, isExactExtent, callback) => { this.ZoomToExtent(boundingBox, false, isExactExtent, callback); };
 
             presenter.RequestAddPointToNewDrawing = p =>
             {
@@ -662,7 +662,7 @@ namespace IRI.Jab.MapViewer
                 this.ZoomToExtent(a.GetBoundingBox(SridHelper.WebMercator));
             });
 
-            presenter.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox);
+            presenter.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox, true);
 
             presenter.Pan();
 
@@ -2306,14 +2306,13 @@ namespace IRI.Jab.MapViewer
                     this.mapView.Children.RemoveAt(i);
 
                     count++;
-
-                    if (remove)
-                    {
-                        this._layerManager.Remove(type);
-                    }
                 }
             }
 
+            if (remove)
+            {
+                this._layerManager.Remove(type);
+            }
             //Debug.WriteLine($"ClearLayer: {count} {type.ToString()} removed");
         }
 
@@ -2388,12 +2387,12 @@ namespace IRI.Jab.MapViewer
                 if (tag.Layer?.LayerName == layerName)
                 {
                     this.mapView.Children.RemoveAt(i);
-
-                    if (remove)
-                    {
-                        this._layerManager.Remove(layerName);
-                    }
                 }
+            }
+
+            if (remove)
+            {
+                this._layerManager.Remove(layerName);
             }
         }
 
@@ -2680,7 +2679,17 @@ namespace IRI.Jab.MapViewer
                 parameters = new LabelParameters(null, fontSize, labelBackground, new FontFamily("tahoma"), positionFunc);
             }
 
-            var source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+            FeatureDataSource source;
+
+            if (labels == null)
+            {
+                source = new MemoryDataSource(geometries);
+            }
+            else
+            {
+                source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+            }
+
 
             var layer = new VectorLayer(
                 layerName,

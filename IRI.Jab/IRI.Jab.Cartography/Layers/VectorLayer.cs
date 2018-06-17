@@ -898,13 +898,20 @@ namespace IRI.Jab.Cartography
 
         public List<T> GetFeatures<T>() where T : ISqlGeometryAware
         {
+            return GetFeatures<T>(null);
+        }
+
+        public List<T> GetFeatures<T>(SqlGeometry geometry) where T : ISqlGeometryAware
+        {
             if (DataSource is FeatureDataSource<T>)
             {
-                return (DataSource as FeatureDataSource<T>).GetFeatures();
+                return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
             }
 
             return null;
         }
+
+
 
         public bool IsLabeled(double mapScale)
         {

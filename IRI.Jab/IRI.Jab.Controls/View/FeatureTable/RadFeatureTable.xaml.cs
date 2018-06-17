@@ -1,4 +1,5 @@
-﻿using IRI.Ket.SqlServerSpatialExtension.Model;
+﻿using IRI.Jab.Cartography.Model.Map;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace IRI.Jab.Controls.View
     /// </summary>
     public partial class RadFeatureTable : UserControl
     {
+        public ISelectedLayer Presenter { get { return this.DataContext as ISelectedLayer; } }
+
         public RadFeatureTable()
         {
             InitializeComponent();
@@ -32,6 +35,11 @@ namespace IRI.Jab.Controls.View
             {
                 e.Cancel = true;
             }
+        }
+
+        private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+        {
+            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<ISqlGeometryAware>());
         }
     }
 }

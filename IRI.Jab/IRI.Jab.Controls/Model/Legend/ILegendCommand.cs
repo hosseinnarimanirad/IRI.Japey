@@ -16,6 +16,8 @@ namespace IRI.Jab.Controls.Model.Legend
 
         bool IsEnabled { get; set; }
 
+        string ToolTip { get; set; }
+
         ILayer Layer { get; set; }
     }
 }
