@@ -630,17 +630,17 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestAddGeometries = (g, n, p) =>
             {
-                return this.DrawGeometries(g, n, p);
+                return this.DrawGeometriesAsync(g, n, p);
             };
 
             presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
             {
-                return DrawGeometryLablePairs(gl, n, p, lp);
+                return DrawGeometryLablePairsAsync(gl, n, p, lp);
             };
 
             presenter.RequestSelectGeometries = (g, v, s) =>
             {
-                return SelectGeometries(g, v, s);
+                return SelectGeometriesAsync(g, v, s);
             };
 
             presenter.RequestClearLayer = (t, r) => { this.ClearLayer(t, r); };
@@ -2664,7 +2664,7 @@ namespace IRI.Jab.MapViewer
         }
 
         //Get the FontFamily in method parameters
-        public async Task DrawGeometries(List<SqlGeometry> geometries, string layerName,
+        public async Task DrawGeometriesAsync(List<SqlGeometry> geometries, string layerName,
                                         VisualParameters visualElements, List<object> labels = null,
                                         Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0,
                                         Brush labelBackground = null, FontFamily font = null, RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
@@ -2709,7 +2709,7 @@ namespace IRI.Jab.MapViewer
             await AddNonTiledLayer(layer);
         }
 
-        public async Task DrawGeometryLablePairs(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
+        public async Task DrawGeometryLablePairsAsync(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
         {
             if (geometries == null)
                 return;
@@ -2755,7 +2755,7 @@ namespace IRI.Jab.MapViewer
             await AddNonTiledLayer(layer);
         }
 
-        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
         {
             ClearLayer(LayerType.Selection, true);
 

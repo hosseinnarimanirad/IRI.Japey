@@ -66,9 +66,9 @@ namespace IRI.Ket.DataManagement.DataSource
 
                     //var zipArchive = new System.IO.Compression.ZipArchive(archive.Open());
 
-                    if (_archive.Entries.Any(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i), StringComparison.OrdinalIgnoreCase)))
+                    if (_archive.Entries.Any(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i).Replace("\\", "/"), StringComparison.OrdinalIgnoreCase)))
                     {
-                        var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i), StringComparison.OrdinalIgnoreCase)).Open();
+                        var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i).Replace("\\", "/"), StringComparison.OrdinalIgnoreCase)).Open();
 
                         byte[] bytes = IRI.Msh.Common.Helpers.StreamHelper.ToByteArray(stream);
 

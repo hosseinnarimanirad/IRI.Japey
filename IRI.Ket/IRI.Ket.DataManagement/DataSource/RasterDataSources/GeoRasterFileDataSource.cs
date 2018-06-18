@@ -18,18 +18,18 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public BoundingBox Extent { get; private set; }
 
-        private GeoRasterFileDataSource(string imageFileName)
+        private GeoRasterFileDataSource(string imageFileName, int srid)
         {
-            this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName);
+            this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName, srid);
 
             this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
-        public static GeoRasterFileDataSource Create(string imageFileName)
+        public static GeoRasterFileDataSource Create(string imageFileName, int srid)
         {
             try
             {
-                return new GeoRasterFileDataSource(imageFileName);
+                return new GeoRasterFileDataSource(imageFileName, srid);
             }
             catch (Exception ex)
             {

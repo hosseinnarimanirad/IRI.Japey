@@ -61,7 +61,7 @@ namespace IRI.Ket.WorldfileFormat
             System.IO.File.WriteAllText(fileName, lines.ToString());
         }
 
-        public static GeoReferencedImage ReadWorldfile(string imageFileName)
+        public static GeoReferencedImage ReadWorldfile(string imageFileName, int srid)
         {
             if (!System.IO.File.Exists(imageFileName))
                 return null;
@@ -107,7 +107,21 @@ namespace IRI.Ket.WorldfileFormat
 
             try
             {
-                var boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height);
+
+                BoundingBox boundingBox;
+
+                if (srid == Msh.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84)
+                {
+                    boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height);
+                }
+                else if (srid == Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator)
+                {
+                    boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height).Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84);
+                }
+                else
+                {
+                    throw new NotImplementedException("not supported srid for worldfile");
+                }
 
                 return new GeoReferencedImage(System.IO.File.ReadAllBytes(imageFileName), boundingBox);
             }

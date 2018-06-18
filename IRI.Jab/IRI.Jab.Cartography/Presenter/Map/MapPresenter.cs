@@ -209,7 +209,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
             }
         }
 
-        private void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        private async void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
         {
             ClearLayer("__$selection", true);
             ClearLayer("__$highlight", true);
@@ -219,11 +219,11 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 return;
             }
 
-            DrawGeometries(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
+            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
 
         }
 
-        private void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        private async void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
         {
 
             ClearLayer("__$highlight", true);
@@ -233,7 +233,7 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 return;
             }
 
-            DrawGeometries(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight());
+            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight());
 
         }
 
@@ -905,14 +905,14 @@ namespace IRI.Jab.Cartography.Presenter.Map
             this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
         }
 
-        public void DrawGeometries(List<SqlGeometry> geometry, string name, VisualParameters parameters)
+        public async Task DrawGeometriesAsync(List<SqlGeometry> geometry, string name, VisualParameters parameters)
         {
-            this.RequestAddGeometries?.Invoke(geometry, name, parameters);
+            await this.RequestAddGeometries?.Invoke(geometry, name, parameters);
         }
 
-        public void DrawGeometry(SqlGeometry geometry, string name, VisualParameters parameters)
+        public async Task DrawGeometryAsync(SqlGeometry geometry, string name, VisualParameters parameters)
         {
-            DrawGeometries(new List<SqlGeometry> { geometry }, name, parameters);
+            await DrawGeometriesAsync(new List<SqlGeometry> { geometry }, name, parameters);
         }
 
         public void AddLayer(SpecialPointLayer layer)
@@ -1354,9 +1354,14 @@ namespace IRI.Jab.Cartography.Presenter.Map
                 return;
             }
 
+            AddWorldfile(fileName, Msh.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84);
+        }
+
+        public virtual void AddWorldfile(string fileName, int srid)
+        {
             try
             {
-                var dataSource = GeoRasterFileDataSource.Create(fileName);
+                var dataSource = GeoRasterFileDataSource.Create(fileName, srid);
 
                 if (dataSource == null)
                 {
