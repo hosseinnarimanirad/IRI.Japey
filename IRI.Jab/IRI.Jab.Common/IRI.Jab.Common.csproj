@@ -54,8 +54,18 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>..\..\IRI.Deploy\OpenTK\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>..\..\IRI.Deploy\OpenTK\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -80,7 +90,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WriteableBitmapEx.Wpf">
-      <HintPath>Deploy\WriteableBitmapEx.Wpf.dll</HintPath>
+      <HintPath>..\..\IRI.Deploy\WriteableBitmap\WriteableBitmapEx.Wpf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +122,7 @@
     <Compile Include="Assets\Converters\StringToRtlFlowDirection.cs" />
     <Compile Include="Assets\Converters\StringToShapeConverter.cs" />
     <Compile Include="Assets\Converters\SubtractConstantConverter.cs" />
+    <Compile Include="Assets\Converters\TileTypeToBoolConverter.cs" />
     <Compile Include="Assets\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Assets\Data\IriProvinces93WmEnvelope.cs" />
     <Compile Include="Assets\Fonts\Fonts.cs" />
@@ -123,57 +134,127 @@
     <Compile Include="Assets\ShapeStrings\MaterialDesign.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
     <Compile Include="Common\Defaults\DefaultRighClickOptions.cs" />
-    <Compile Include="Event\CallbackEventArgs.cs" />
-    <Compile Include="Event\ChangeEventArgs.cs" />
-    <Compile Include="Event\CustomEventArgs.cs" />
-    <Compile Include="Event\GeometryEventArgs.cs" />
-    <Compile Include="Event\MapActionEventArgs.cs" />
-    <Compile Include="Event\MapStatusEventArgs.cs" />
-    <Compile Include="Event\PointArrayEventArgs.cs" />
-    <Compile Include="Event\MapOptionsEventArgs.cs" />
-    <Compile Include="Event\TcsEventArgs.cs" />
-    <Compile Include="Event\ZoomToPointEventArgs.cs" />
-    <Compile Include="Extensions\AnimationHelper.cs" />
-    <Compile Include="Extensions\BoundingBoxExtensions.cs" />
-    <Compile Include="Extensions\BrushExtensions.cs" />
-    <Compile Include="Extensions\ColorExtensions.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\EventHandlerExtensions.cs" />
-    <Compile Include="Extensions\PenExtensions.cs" />
-    <Compile Include="Extensions\PointExtensions.cs" />
-    <Compile Include="Extensions\SpatialBaseExtensions.cs" />
-    <Compile Include="Helpers\BrushHelper.cs" />
-    <Compile Include="Helpers\ColorHelper.cs" />
-    <Compile Include="Helpers\ImageUtility.cs" />
-    <Compile Include="Helpers\PrintHelper.cs" />
-    <Compile Include="Helpers\RichTextBoxHelper.cs" />
-    <Compile Include="Helpers\WorldfilePyramid.cs" />
+    <Compile Include="Common\Event\CallbackEventArgs.cs" />
+    <Compile Include="Common\Event\ChangeEventArgs.cs" />
+    <Compile Include="Common\Event\CustomEventArgs.cs" />
+    <Compile Include="Common\Event\GeometryEventArgs.cs" />
+    <Compile Include="Common\Event\MapActionEventArgs.cs" />
+    <Compile Include="Common\Event\MapStatusEventArgs.cs" />
+    <Compile Include="Common\Event\PointArrayEventArgs.cs" />
+    <Compile Include="Common\Event\MapOptionsEventArgs.cs" />
+    <Compile Include="Common\Event\TcsEventArgs.cs" />
+    <Compile Include="Common\Event\ZoomToPointEventArgs.cs" />
+    <Compile Include="Common\Extensions\AnimationHelper.cs" />
+    <Compile Include="Common\Extensions\BoundingBoxExtensions.cs" />
+    <Compile Include="Common\Extensions\BrushExtensions.cs" />
+    <Compile Include="Common\Extensions\ColorExtensions.cs" />
+    <Compile Include="Common\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Common\Extensions\EnvelopeMarkupLabelTripleExtension.cs" />
+    <Compile Include="Common\Extensions\EventHandlerExtensions.cs" />
+    <Compile Include="Common\Extensions\GeometryExtensions.cs" />
+    <Compile Include="Common\Extensions\PenExtensions.cs" />
+    <Compile Include="Common\Extensions\PointExtensions.cs" />
+    <Compile Include="Common\Extensions\SpatialBaseExtensions.cs" />
+    <Compile Include="Common\Extensions\SqlGeometryExtensions.cs" />
+    <Compile Include="Common\Extensions\TileInfoExtensions.cs" />
+    <Compile Include="Common\Helpers\BrushHelper.cs" />
+    <Compile Include="Common\Helpers\ColorHelper.cs" />
+    <Compile Include="Common\Helpers\ImageUtility.cs" />
+    <Compile Include="Common\Helpers\PrintHelper.cs" />
+    <Compile Include="Common\Helpers\RichTextBoxHelper.cs" />
+    <Compile Include="Common\Helpers\WorldfilePyramid.cs" />
+    <Compile Include="Layers\BaseLayer.cs" />
+    <Compile Include="Layers\ClusteredPointLayer.cs" />
+    <Compile Include="Layers\DrawingLayer.cs" />
+    <Compile Include="Layers\EditableFeatureLayer.cs" />
+    <Compile Include="Layers\ILayer.cs" />
+    <Compile Include="Layers\MeasurableLayer.cs" />
+    <Compile Include="Layers\PolyBezierLayer.cs" />
+    <Compile Include="Layers\RasterLayer.cs" />
+    <Compile Include="Layers\SpecialLineLayer.cs" />
+    <Compile Include="Layers\SpecialPointLayer.cs" />
+    <Compile Include="Layers\TileServiceLayer.cs" />
+    <Compile Include="Layers\VectorLayer.cs" />
+    <Compile Include="Model\Common\DrawMode.cs" />
     <Compile Include="Model\Common\IProxySettings.cs" />
+    <Compile Include="Model\Common\LabelParameters.cs" />
+    <Compile Include="Model\Common\LayerTag.cs" />
     <Compile Include="Model\Common\ProxySettingsModel.cs" />
+    <Compile Include="Model\Common\RasterizationApproach.cs" />
+    <Compile Include="Model\Common\RenderingApproach.cs" />
+    <Compile Include="Model\Common\ScaleInterval.cs" />
     <Compile Include="Model\Common\SpecialDateTime.cs" />
+    <Compile Include="Model\Common\VisualParameters.cs" />
+    <Compile Include="Model\Common\VisualParametersStaticValues.cs" />
+    <Compile Include="Model\DataStructure\RecursiveCollection.cs" />
     <Compile Include="Model\EditableItem.cs" />
     <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
     <Compile Include="Model\Globalization\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
+    <Compile Include="Model\Legend\ILegendCommand.cs" />
+    <Compile Include="Model\Legend\LegendCommand.cs" />
+    <Compile Include="Model\Legend\LegendItem.cs" />
+    <Compile Include="Model\Legend\LegendItemEventArgs.cs" />
+    <Compile Include="Model\Legend\LegendToggleCommand.cs" />
+    <Compile Include="Model\Legend\MapLegendItemWithOptionsModel.cs" />
     <Compile Include="Model\MapAction.cs" />
     <Compile Include="Model\MapMarkers\IMapMarker.cs" />
     <Compile Include="Model\MapStatus.cs" />
+    <Compile Include="Model\Map\AncherFunctionHandler.cs" />
+    <Compile Include="Model\Map\AncherFunctionHandlers.cs" />
+    <Compile Include="Model\Map\BezierItem.cs" />
+    <Compile Include="Model\Map\DrawingItem.cs" />
+    <Compile Include="Model\Map\EditableFeatureLayerOptions.cs" />
+    <Compile Include="Model\Map\ISelectedLayer.cs" />
+    <Compile Include="Model\Map\Locateable.cs" />
+    <Compile Include="Model\Map\MapSettings.cs" />
+    <Compile Include="Model\Map\MoveableItem.cs" />
+    <Compile Include="Model\Map\PathMarkupLabelPair.cs" />
+    <Compile Include="Model\Map\SelectedLayer.cs" />
+    <Compile Include="Model\Map\Tile.cs" />
+    <Compile Include="Model\Map\TileManager.cs" />
     <Compile Include="Model\NotifiablePoint.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
+    <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
+    <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
+    <Compile Include="Model\Symbology\ISymbol.cs" />
+    <Compile Include="Model\Symbology\SimpleLineSymbol.cs" />
+    <Compile Include="Model\Symbology\SimpleMarkerSymbol.cs" />
+    <Compile Include="Model\Symbology\SimplePointSymbol.cs" />
+    <Compile Include="Model\Symbology\SimplePolygonSymbol.cs" />
     <Compile Include="Notifier.cs" />
-    <Compile Include="Event\PanEventArgs.cs" />
-    <Compile Include="Event\PointEventArgs.cs" />
+    <Compile Include="Common\Event\PanEventArgs.cs" />
+    <Compile Include="Common\Event\PointEventArgs.cs" />
+    <Compile Include="Presenters\BasePresenter.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
+    <Compile Include="Presenters\LegendPresenter.cs" />
     <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
     <Compile Include="Presenters\MapPanelPresenter.cs" />
+    <Compile Include="Presenters\Map\MapPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
     <Compile Include="Presenters\Security\IHavePassword.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Event\ZoomEventArgs.cs" />
-    <Compile Include="StateMachine\StateMachineExtensions.cs" />
+    <Compile Include="Common\Event\ZoomEventArgs.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Common\StateMachine\StateMachineExtensions.cs" />
+    <Compile Include="TileServices\CacheSource.cs" />
+    <Compile Include="TileServices\MapProviderType.cs" />
+    <Compile Include="TileServices\TileCacheAddress.cs" />
+    <Compile Include="TileServices\TileType.cs" />
+    <Compile Include="Utility\Legend\TocManager.cs" />
+    <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToDrawingVisual.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToGdiBitmap.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToOpenTKBitmap.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToStreamGeometry.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlSpatialToWriteableBitmap.cs" />
     <Compile Include="View\MapMarkers\Circle.xaml.cs">
       <DependentUpon>Circle.xaml</DependentUpon>
     </Compile>
@@ -361,6 +442,7 @@
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
+    <Resource Include="Assets\Images\imageNotFound.jpg" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -368,8 +450,25 @@
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
+      <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
+      <Name>IRI.Ket.DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
+      <Name>IRI.Ket.ShapefileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
+      <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
+      <Name>IRI.Ket.SqlServerSpatialExtension</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

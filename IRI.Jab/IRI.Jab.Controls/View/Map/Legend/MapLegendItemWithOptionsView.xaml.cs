@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Cartography;
+﻿using IRI.Jab.Common;
+using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Controls.Model.Legend;
 using System;
 using System.Collections.Generic;

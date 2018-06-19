@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,37 @@ namespace IRI.MainProjectWPF.Thesis
         public MainThesisWindow()
         {
             InitializeComponent();
+
+
+
+            var folder = @"E:\Data\Iran\GSI Categorized\250kJPEGWm";
+
+            System.IO.DirectoryInfo info = new DirectoryInfo(folder);
+
+            foreach (var file in info.EnumerateFiles("*.jpg"))
+            {
+                IRI.Ket.WorldfileFormat.WorldfilePyramid.Create(file.FullName, 0.00026458386250105835);
+            }
+
+        }
+        private double GetUnitDistance()
+        {
+            double? _unitDistance = null;
+
+            if (_unitDistance == null || double.IsNaN(_unitDistance.Value))
+            {
+                PresentationSource source = PresentationSource.FromVisual(this);
+
+                if (source == null)
+                    return 1;
+
+                double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
+
+                //size of each pixel (in meter)
+                _unitDistance = IRI.Msh.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
+            }
+
+            return _unitDistance.Value;
         }
 
         private void openKdTree(object sender, RoutedEventArgs e)

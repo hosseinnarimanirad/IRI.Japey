@@ -20,9 +20,9 @@ using System.Threading;
 using Microsoft.SqlServer.Types;
 
 using IRI.Jab.Common;
-using IRI.Jab.Cartography;
-using IRI.Jab.Cartography.Extensions;
-using IRI.Jab.Cartography.Model;
+using IRI.Jab.Common;
+using IRI.Jab.Common.Extensions;
+using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.MapViewer.Model;
 using IRI.Jab.Common.Model;
@@ -33,7 +33,7 @@ using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.Common.Helpers;
-using IRI.Jab.Cartography.TileServices;
+using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SqlServerSpatialExtension.Model;
@@ -404,12 +404,12 @@ namespace IRI.Jab.MapViewer
         }
 
 
-        Cartography.Presenter.Map.MapPresenter _presenter;
+        Common.Presenter.Map.MapPresenter _presenter;
 
         #endregion
 
 
-        public void Register(Cartography.Presenter.Map.MapPresenter presenter)
+        public void Register(Common.Presenter.Map.MapPresenter presenter)
         {
 
             _presenter = presenter;
@@ -836,7 +836,7 @@ namespace IRI.Jab.MapViewer
         {
             LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
-            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
+            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
 
             this._layerManager.Add(layer);
         }
@@ -850,7 +850,7 @@ namespace IRI.Jab.MapViewer
                 throw new NotImplementedException();
             }
 
-            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
+            var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
 
             this._layerManager.Add(layer);
         }
@@ -2250,7 +2250,24 @@ namespace IRI.Jab.MapViewer
                 {
                     this.mapView.Children.RemoveAt(i);
                 }
+            }
+        }
 
+        public void Clear(Predicate<ILayer> criteria, bool remove)
+        {
+            for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
+            {
+                var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
+
+                if (criteria(tag.Layer))
+                {
+                    this.mapView.Children.RemoveAt(i);
+                }
+            }
+
+            if (remove)
+            {
+                _layerManager.Remove(criteria);
             }
         }
 
@@ -2748,7 +2765,7 @@ namespace IRI.Jab.MapViewer
                 RenderingApproach.Default,
                 RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
-                new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
+                new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
             this._layerManager.Add(layer);
 
@@ -2770,7 +2787,7 @@ namespace IRI.Jab.MapViewer
                 RenderingApproach.Default,
                 RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
-                new IRI.Jab.Cartography.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
+                new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
             this._layerManager.Add(layer);
 

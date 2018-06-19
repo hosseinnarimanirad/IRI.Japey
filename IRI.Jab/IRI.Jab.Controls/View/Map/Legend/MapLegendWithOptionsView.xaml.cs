@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IRI.Jab.Common;
+using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Model.Legend;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +26,73 @@ namespace IRI.Jab.Controls.View.Map
         public MapLegendWithOptionsView()
         {
             InitializeComponent();
+        }
+
+
+
+        public string GroupName
+        {
+            get { return (string)GetValue(GroupNameProperty); }
+            set { SetValue(GroupNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for GroupName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GroupNameProperty =
+            DependencyProperty.Register(nameof(GroupName), typeof(string), typeof(MapLegendWithOptionsView), new PropertyMetadata("A"));
+
+
+        public bool EnableFilterMode
+        {
+            get { return (bool)GetValue(EnableFilterModeProperty); }
+            set { SetValue(EnableFilterModeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EnableFilterMode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EnableFilterModeProperty =
+            DependencyProperty.Register("EnableFilterMode", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(true));
+
+
+        public bool ShowVectorLayers
+        {
+            get { return (bool)GetValue(ShowVectorLayersProperty); }
+            set { SetValue(ShowVectorLayersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowVectorLayers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowVectorLayersProperty =
+            DependencyProperty.Register("ShowVectorLayers", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(true));
+
+
+
+        public bool ShowRasterLayers
+        {
+            get { return (bool)GetValue(ShowRasterLayersProperty); }
+            set { SetValue(ShowRasterLayersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowRasterLayers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowRasterLayersProperty =
+            DependencyProperty.Register("ShowRasterLayers", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(true));
+
+
+
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            var item = e.Item as MapLegendItemWithOptionsModel;
+
+            if (!EnableFilterMode)
+            {
+                e.Accepted = true;
+            }
+            else
+            {
+                e.Accepted =
+                    item.Layer.ShowInToc && (
+                    (ShowVectorLayers && item.Layer.Type.HasFlag(LayerType.VectorLayer)) ||
+                    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.Raster)) ||
+                    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.ImagePyramid)));
+            }
+
         }
     }
 }

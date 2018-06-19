@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
-             xmlns:model="clr-namespace:IRI.Jab.Controls.Model.Legend" >
+             xmlns:model="clr-namespace:IRI.Jab.Common.Model.Legend;assembly=IRI.Jab.Common" >
      
     <Grid IsEnabled="{Binding ElementName=root, Path=Symbology.IsInScaleRange}">
         <Grid.Resources>
@@ -26,7 +26,7 @@
                         </Style>
                     </ToggleButton.Style>
 
-                    <Path Stretch="Uniform" Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16">
+                    <Path Stretch="Uniform" Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16" FlowDirection="LeftToRight">
                         <Path.Style>
                             <Style TargetType="{x:Type Path}" >
                                 <Style.Triggers>
@@ -45,7 +45,7 @@
             <DataTemplate DataType="{x:Type model:LegendCommand}">
                 <Button VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
                         BorderThickness="0" Focusable="False" Background="Transparent" ToolTip="{Binding ToolTip}">
-                    <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}" Width="16" Height="16"/>
+                    <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}" Width="16" Height="16" FlowDirection="LeftToRight"/>
                 </Button>
             </DataTemplate>
             

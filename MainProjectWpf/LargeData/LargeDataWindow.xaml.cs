@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Cartography;
+﻿using IRI.Jab.Common;
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.MainProjectWPF.LargeData.Model;
 using IRI.MainProjectWPF.LargeData.Utilities;
@@ -73,17 +73,17 @@ namespace IRI.MainProjectWPF.LargeData
 
         }
 
-        private void AddShapefile(IEsriShapeCollection shapes, string title)
+        private async void AddShapefile(IEsriShapeCollection shapes, string title)
         {
             this.Presenter.ShapeCollections.Add(new ShapeCollection(shapes, title));
 
             var geometries = shapes.Select(i => i.AsSqlGeometry(0)).ToList();
 
-            var vertexes = shapes.ExtractPoints().Select(i => (((Sta.Common.Primitives.IPoint)i).AsSqlGeometry(0))).ToList();
+            var vertexes = shapes.ExtractPoints().Select(i => (((Msh.Common.Primitives.IPoint)i).AsSqlGeometry(0))).ToList();
 
-            this.map.DrawGeometries(geometries, Guid.NewGuid().ToString(), VisualParameters.CreateNew(.7));
+            await this.map.DrawGeometriesAsync(geometries, Guid.NewGuid().ToString(), VisualParameters.CreateNew(.7), null);
 
-            this.map.DrawGeometries(vertexes, Guid.NewGuid().ToString(), VisualParameters.CreateNew(.9));
+            await this.map.DrawGeometries(vertexes, Guid.NewGuid().ToString(), VisualParameters.CreateNew(.9), null);
         }
 
         private void FullExtent_Click(object sender, RoutedEventArgs e)

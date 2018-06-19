@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map"
+             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
              xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View.Map" >
     <Grid>
-        <ListBox ItemsSource="{Binding}">
+        <Grid.Resources>
+            <CollectionViewSource x:Key="collectionViewSource" Source="{Binding}" Filter="CollectionViewSource_Filter"/>
+        </Grid.Resources>
+        <ListBox ItemsSource="{Binding Source={StaticResource collectionViewSource}}">
             <ListBox.Resources>
                 <Style TargetType="ToggleButton">
                     <Setter Property="BorderThickness" Value="4,0,0,0"/>
@@ -56,7 +59,7 @@
             </ListBox.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="A"
+                    <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}"
                                  DataContext="{Binding }" IsEnabled="{Binding Symbology.IsInScaleRange}">
                         <iriJabControls:MapLegendItemWithOptionsView LayerName="{Binding LayerName}" Symbology="{Binding Symbology}"  
                                                                         Commands="{Binding Commands}" IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>

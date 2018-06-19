@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using IRI.Jab.Cartography;
+using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
 
@@ -51,7 +51,7 @@ namespace IRI.Jab.Controls.View.Map
 
         //private FeatureType featureType;
 
-        public MapLegendItem(string layerName, IRI.Jab.Cartography.VisualParameters parameters, LayerType type)
+        public MapLegendItem(string layerName, IRI.Jab.Common.VisualParameters parameters, LayerType type)
         {
             InitializeComponent();
 
@@ -76,7 +76,7 @@ namespace IRI.Jab.Controls.View.Map
         //    Initialize(layerName, parameters);
         //}
 
-        private void Initialize(string layerName, IRI.Jab.Cartography.VisualParameters parameters)
+        private void Initialize(string layerName, IRI.Jab.Common.VisualParameters parameters)
         {
             this.layerName.Text = layerName;
 

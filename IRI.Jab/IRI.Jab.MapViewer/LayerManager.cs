@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Jab.Cartography;
-using Microsoft.SqlServer.Types;
 using IRI.Jab.Common;
+using Microsoft.SqlServer.Types;
 using System.Windows;
 using IRI.Msh.Common.Primitives;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Model;
+using IRI.Jab.Common.TileServices;
 
 namespace IRI.Jab.MapViewer
 {
@@ -101,8 +101,8 @@ namespace IRI.Jab.MapViewer
                 }
             }
         }
-
-        public void Remove(Cartography.TileServices.MapProviderType provider, Cartography.TileServices.TileType type)
+         
+        public void Remove(MapProviderType provider, TileType type)
         {
             for (int i = CurrentLayers.Count - 1; i >= 0; i--)
             {
@@ -147,14 +147,14 @@ namespace IRI.Jab.MapViewer
                 System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers layercounts:{  newLayers.Count()}");
             }
 
-            var toBeRemovedLayers = this.CurrentLayers.Where(i => newLayers.All(l => l.Id != i.Id)).ToList();
+            var toBeRemovedLayers = this.CurrentLayers.Where(i => i.Rendering == rendering && newLayers.All(l => l.Id != i.Id)).ToList();
 
             for (int i = 0; i < toBeRemovedLayers.Count; i++)
             {
                 this.CurrentLayers.Remove(toBeRemovedLayers[i]);
             }
 
-            var toBeAdded = newLayers.Where(i => this.CurrentLayers.All(l => l.Id != i.Id)).ToList();
+            var toBeAdded = newLayers.Where(i => i.Rendering == rendering && this.CurrentLayers.All(l => l.Id != i.Id)).ToList();
 
             for (int i = 0; i < toBeAdded.Count; i++)
             {
@@ -213,6 +213,7 @@ namespace IRI.Jab.MapViewer
         }
 
         public event EventHandler OnRequestRefresh;
+
     }
 
 

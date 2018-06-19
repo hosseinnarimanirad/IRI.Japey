@@ -137,10 +137,6 @@
       <Project>{BDA8CB8C-3871-4565-A766-8C3F641074EB}</Project>
       <Name>IRI.Ket.ShapefileFormat</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
-      <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
-      <Name>IRI.Jab.Cartography</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{EDB6898C-02C2-4335-B3C0-308D619FAB4E}</Project>
       <Name>IRI.Jab.Common</Name>

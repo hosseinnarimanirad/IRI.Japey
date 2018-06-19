@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Cartography.Presenter.Map;
+﻿using IRI.Jab.Common.Presenter.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace IRI.Jab.Controls.Presenter
             this.MapSettings.MaxGoogleZoomLevel = 18;
             this.MapSettings.MinGoogleZoomLevel = 4;
 
-            this.BaseMapType = IRI.Jab.Cartography.TileServices.TileType.Hybrid;
+            this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;
 
             this.RequestGoTo = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 

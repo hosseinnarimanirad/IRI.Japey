@@ -1,6 +1,6 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives; 
-using IRI.Jab.Cartography.Presenter.Map;
+using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Extensions;

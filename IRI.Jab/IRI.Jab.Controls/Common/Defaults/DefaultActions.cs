@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Cartography.Presenter.Map;
+﻿using IRI.Jab.Common.Presenter.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -29,4 +29,7 @@
     <converters:SubtractConstantConverter x:Key="subtractConstantConverter"/>
 
     <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>
+
+
+    <converters:TileTypeToBoolConverter x:Key="tileTypeToBoolConverter"/>
 </ResourceDictionary>

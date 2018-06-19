@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
-    [DataContract]
+    
     public struct BoundingBox
     {
         private double xMin, yMin, xMax, yMax;
@@ -42,19 +43,23 @@ namespace IRI.Msh.Common.Primitives
             this.yMax = yMax;
         }
 
+        [JsonIgnore]
         public double Width
         {
             get { return this.XMax - this.XMin; }
         }
 
+        [JsonIgnore]
         public double Height
         {
             get { return this.YMax - this.YMin; }
         }
 
+        [JsonIgnore]
         //The system is asumed to be right handed
         public Point TopLeft { get { return new Point(XMin, YMax); } }
 
+        [JsonIgnore]
         //The system is asumed to be right handed
         public Point BottomRight { get { return new Point(XMax, YMin); } }
 
@@ -241,6 +246,7 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        [JsonIgnore]
         public Point Center { get { return new Point((XMax + XMin) / 2.0, (YMax + YMin) / 2.0); } }
 
         public static BoundingBox NaN { get { return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN); } }

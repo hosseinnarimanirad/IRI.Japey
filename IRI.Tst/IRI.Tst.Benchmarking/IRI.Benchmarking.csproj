@@ -124,9 +124,9 @@
     <Folder Include="Stuff\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Cartography\IRI.Jab.Cartography.csproj">
-      <Project>{31fe8012-fcc2-4b3d-8b8b-a9191b8d8505}</Project>
-      <Name>IRI.Jab.Cartography</Name>
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
+      <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
+      <Name>IRI.Jab.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
       <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>

@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Cartography.Model;
+﻿using IRI.Jab.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
