@@ -151,7 +151,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 }
             }
 
-            System.Diagnostics.Trace.WriteLine(string.Format("{0} Images founded; zoom level = {1}", result.Count, zoomLevel));
+            //System.Diagnostics.Trace.WriteLine(string.Format("{0} Images founded; zoom level = {1}", result.Count, zoomLevel));
 
             return result;
         }

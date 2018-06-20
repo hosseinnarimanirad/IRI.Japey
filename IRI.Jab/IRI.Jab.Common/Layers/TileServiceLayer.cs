@@ -176,7 +176,7 @@ namespace IRI.Jab.Common
 
         private bool _isCacheEnabled;
 
-        private bool IsCacheEnabled
+        public bool IsCacheEnabled
         {
             get { return _isCacheEnabled; }
             set
@@ -193,7 +193,7 @@ namespace IRI.Jab.Common
             try
             {
                 if (IsOffline)
-                { 
+                {
                     return new GeoReferencedImage(Helpers.ImageUtility.AsByteArray(IRI.Jab.Common.Properties.Resources.imageNotFound), tile.GeodeticExtent, false);
                 }
 

@@ -318,6 +318,9 @@ namespace IRI.Jab.Common
                 this._extent = dataSource.Extent;
             }
 
+            //AddTiled method is not supported for raster layers and image pyramid
+            //this.Rendering = rendering;
+
             this.LayerName = layerName;
 
             this.VisibleRange = visibleRange;

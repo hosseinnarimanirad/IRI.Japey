@@ -20,12 +20,9 @@ using System.Threading;
 using Microsoft.SqlServer.Types;
 
 using IRI.Jab.Common;
-using IRI.Jab.Common;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Extensions;
 using IRI.Jab.MapViewer.Model;
-using IRI.Jab.Common.Model;
 using sb = IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
@@ -1015,10 +1012,28 @@ namespace IRI.Jab.MapViewer
             {
                 if (layer.Rendering == RenderingApproach.Default)
                 {
-                    AddLayer((RasterLayer)layer, this.CurrentExtent);
+                    var extent = this.CurrentExtent;
 
-                    //Remove Old base maps
-                    ClearOutOfExtent(false);
+                    Action action = () =>
+                    {
+                        if (!layer.Extent.Intersects(this.CurrentExtent))
+                        {
+                            System.Diagnostics.Debug.WriteLine($"raster layer escaped!");
+                            return;
+                        }
+
+                        AddLayer((RasterLayer)layer, extent);
+
+                        //Remove Old base maps
+                        ClearOutOfExtent(false);
+                    };
+
+                    Task.Run(() =>
+                          this.jobs.Add(new Job(
+                             new LayerTag(mapScale) { LayerType = layer.Type, BoundingBox = extent },
+                             Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                            );
+
                 }
             }
             else
@@ -1032,18 +1047,45 @@ namespace IRI.Jab.MapViewer
 
         #region Private Layer Management
 
-        private async void AddTiledLayer(VectorLayer layer)
+        private void AddTiledLayer(VectorLayer layer)
         {
-            if (this.CurrentTileInfos == null)
-                return;
-
-            //Try #3
-            layer.TileManager.Update(CurrentTileInfos.Select(i => i.Parse()).ToList());
-
-            foreach (var region in CurrentTileInfos)
+            Action action = async () =>
             {
-                await AddTiledLayerAsync(layer, region);
-            }
+                if (this.CurrentTileInfos == null)
+                    return;
+
+                //Try #3
+                layer.TileManager.Update(CurrentTileInfos.Select(i => i.Parse()).ToList());
+
+                foreach (var region in CurrentTileInfos)
+                {
+                    await AddTiledLayerAsync(layer, region);
+                }
+            };
+
+            var extent = this.CurrentExtent;
+
+            var mapScale = MapScale;
+
+            Task.Run(() =>
+            {
+                this.jobs.Add(new Job(
+                    new LayerTag(mapScale) { LayerType = layer.Type, BoundingBox = extent },
+                    Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)));
+            });
+
+            //Action action = async () =>
+            //{
+            //    await AddNonTiledLayer(vectorLayer);
+            //};
+
+            //var extent = this.CurrentExtent;
+
+            //Task.Run(() =>
+            //   this.jobs.Add(new Job(
+            //      new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
+            //      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+            //  );
         }
 
         //private async void OldAddTiledLayer(VectorLayer layer, TileInfo tile)
@@ -1682,7 +1724,7 @@ namespace IRI.Jab.MapViewer
             var paths = await layer.ParseToPath(boundingBox, this.viewTransform, this.MapScale, GetUnitDistance());
             //var paths = await layer.ParseToPath(boundingBox, this.mapTransform, this.viewTransform, this.MapScale, GetUnitDistance());
 
-            Debug.WriteLine(string.Format("Number of Images for layer: {0} was {1}", layer.LayerName, paths.Count));
+            //Debug.WriteLine(string.Format("Number of Images for layer: {0} was {1}", layer.LayerName, paths.Count));
 
             foreach (var item in paths)
             {
@@ -1715,7 +1757,11 @@ namespace IRI.Jab.MapViewer
                     return;
                 }
 
+                System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+
                 var geoImage = await layer.GetTileAsync(tile, this.Proxy);
+
+                System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
                 if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
@@ -1759,6 +1805,8 @@ namespace IRI.Jab.MapViewer
                     //Tag = new LayerTag(GoogleMapsUtility.GetGoogleMapScale(tile.ZoomLevel)) { Layer = layer, LayerType = layer.Type, Tile = tile }
                 };
 
+                System.Diagnostics.Debug.WriteLine($"path after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+
                 layer.Element = path;
 
                 //94.09.04
@@ -1791,10 +1839,14 @@ namespace IRI.Jab.MapViewer
             if (tiles == null)
                 return;
 
+            System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
+
             foreach (var tile in tiles)
             {
                 RefreshTiles(tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
             }
+
+            System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
         }
 
         public void RefreshTilesButNotBaseMaps()
@@ -1808,7 +1860,8 @@ namespace IRI.Jab.MapViewer
 
             foreach (var tile in tiles)
             {
-                RefreshTiles(tile, false);
+                //RefreshTiles(tile, false);
+                RefreshTiles(tile, l => l.Type != LayerType.BaseMap);
             }
         }
 
@@ -1823,7 +1876,7 @@ namespace IRI.Jab.MapViewer
 
             foreach (var tile in tiles)
             {
-                RefreshTiles(tile);
+                RefreshTiles(tile, l => true);
             }
         }
 
@@ -1833,6 +1886,8 @@ namespace IRI.Jab.MapViewer
 
             Action action = async () =>
             {
+                System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
+
                 foreach (ILayer item in infos)
                 {
                     if (item.VisualParameters.Visibility != Visibility.Visible)
@@ -1847,42 +1902,39 @@ namespace IRI.Jab.MapViewer
                     if (item.Rendering != RenderingApproach.Tiled)
                         continue;
 
-                    //Do not draw base map in the case of change visibility for layers
-                    if (!criteria(item))
-                        continue;
-
-                    //Debug.Print($"{item.LayerName} - {tile.ToShortString()}");
-
-                    if (item is VectorLayer)
+                    //Do not draw if criteria not satisfied
+                    if (criteria(item))
                     {
-                        VectorLayer vectorLayer = (VectorLayer)item;
+                        if (item is VectorLayer)
+                        {
+                            VectorLayer vectorLayer = (VectorLayer)item;
 
-                        vectorLayer.TileManager.TryAdd(tile);
+                            vectorLayer.TileManager.TryAdd(tile);
 
-                        await AddTiledLayerAsync(vectorLayer, tile);
+                            await AddTiledLayerAsync(vectorLayer, tile);
+                        }
+                        else if (item is TileServiceLayer)
+                        {
+                            await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
+                        }
+                        else
+                        {
+                            //return;
+                            throw new NotImplementedException();
+                        }
                     }
-                    else if (item is TileServiceLayer)
-                    {
-                        await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
-                    }
-                    else
-                    {
-                        //return;
-                        throw new NotImplementedException();
-                    }
-
                 }
             };
 
             Task.Run(() =>
             {
-                lock (locker)
-                {
+                //lock (locker)
+                //{
                     this.jobs.Add(
                             new Job(
                                 new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
                                 Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
-                }
+                //}
             });
 
             ////94.09.17
@@ -3092,7 +3144,7 @@ namespace IRI.Jab.MapViewer
                     continue;
                 }
 
-                RefreshTiles(item);
+                RefreshTiles(item, l => true);
 
             }
 

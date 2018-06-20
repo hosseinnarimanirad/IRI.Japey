@@ -147,7 +147,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 _currentLayer = value;
                 RaisePropertyChanged();
 
-                ShowSelectedFeatures(value?.GetSelectedFeatures());
+                if (value?.ShowSelectedOnMap == true)
+                {
+                    ShowSelectedFeatures(value?.GetSelectedFeatures());
+                }
             }
         }
 
@@ -301,12 +304,21 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private async void SetTileService(MapProviderType provider, TileType tileType)
         {
+            System.Diagnostics.Debug.WriteLine($"SetTileService begin; {DateTime.Now.ToLongTimeString()}");            
+
             if (!IsConnected)
             {
+                System.Diagnostics.Debug.WriteLine($"CheckInternetAccess before; {DateTime.Now.ToLongTimeString()}");
+
                 await CheckInternetAccess();
+
+                System.Diagnostics.Debug.WriteLine($"CheckInternetAccess after; {DateTime.Now.ToLongTimeString()}");
             }
 
             this.RequestSetTileService?.Invoke(provider, tileType, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected);
+
+            System.Diagnostics.Debug.WriteLine($"SetTileService end {DateTime.Now.ToLongTimeString()}");
+
         }
 
         //private string _baseMapCacheDirectory = null;
