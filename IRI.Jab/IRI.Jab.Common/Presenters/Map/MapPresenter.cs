@@ -27,19 +27,12 @@ using static System.Windows.Media.Colors;
 using WpfPoint = System.Windows.Point;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
     public class MapPresenter : BasePresenter
     {
-
-
-        //public void Initialize()
-        //{
-
-
-        //}
-
         #region Properties
 
         private ProxySettingsModel _proxy;
@@ -55,8 +48,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-
-
         private MapSettingsModel _mapSettings = new MapSettingsModel();
 
         public MapSettingsModel MapSettings
@@ -69,50 +60,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-
-        //private bool _isZoomOnMouseWheelEnabled;
-
-        //public bool IsZoomOnMouseWheelEnabled
-        //{
-        //    get { return _isZoomOnMouseWheelEnabled; }
-        //    set
-        //    {
-        //        _isZoomOnMouseWheelEnabled = value;
-        //        RaisePropertyChanged();
-
-        //        this.FireIsMouseWheelZoomEnabledChanged?.Invoke(value);
-        //    }
-        //}
-
-        //private bool _isGoogleZoomLevelsEnabled;
-
-        //public bool IsGoogleZoomLevelsEnabled
-        //{
-        //    get { return _isGoogleZoomLevelsEnabled; }
-        //    set
-        //    {
-        //        _isGoogleZoomLevelsEnabled = value;
-        //        RaisePropertyChanged();
-
-        //        this.FireIsGoogleZoomLevelsEnabledChanged?.Invoke(value);
-        //    }
-        //}
-
-        //private bool _isZoomInOnDoubleClickEnabled;
-
-        //public bool IsZoomInOnDoubleClickEnabled
-        //{
-        //    get { return _isZoomInOnDoubleClickEnabled; }
-        //    set
-        //    {
-        //        _isZoomInOnDoubleClickEnabled = value;
-        //        RaisePropertyChanged();
-
-        //        this.FireIsZoomInOnDoubleClickEnabledChanged?.Invoke(value);
-        //    }
-
-        //}
-
         private MapPanelPresenter _mapPanel;
 
         public MapPanelPresenter MapPanel
@@ -124,6 +71,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 RaisePropertyChanged();
             }
         }
+
 
         private ObservableCollection<ISelectedLayer> _selectedLayers = new ObservableCollection<ISelectedLayer>();
 
@@ -151,6 +99,94 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     ShowSelectedFeatures(value?.GetSelectedFeatures());
                 }
+            }
+        }
+
+
+        private ObservableCollection<ILayer> _layers;
+
+        public ObservableCollection<ILayer> Layers
+        {
+            get { return _layers; }
+            set
+            {
+                _layers = value;
+                RaisePropertyChanged();
+
+                //if (_layers == null)
+                //    return;
+
+                //_layers.CollectionChanged += (sender, e) =>
+                //{
+                //    switch (e.Action)
+                //    {
+                //        case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                //            foreach (var item in e.NewItems.Cast<ILayer>())
+                //            {
+                //                if (item.Type == LayerType.BaseMap)
+                //                {
+                //                    return;
+                //                }
+
+                //                var layer = item;
+
+                //                var model = new Model.Legend.MapLegendItemWithOptionsModel(layer);
+                //                model.Commands = new List<Model.Legend.ILegendCommand>()
+                //                {
+                //                    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                //                };
+
+                //                LegendLayers.Add(model);
+                //            }
+                //            break;
+                //        case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                //            foreach (var item in e.OldItems.Cast<ILayer>())
+                //            {
+                //                if (item.Type == LayerType.BaseMap)
+                //                {
+                //                    return;
+                //                }
+
+                //                LegendLayers.Remove(LegendLayers.First(ll => ll.Id == item.Id));
+                //            }
+                //            break;
+                //        case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                //            break;
+                //        case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                //            break;
+                //        case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                //            this.LegendLayers.Clear();
+                //            break;
+                //        default:
+                //            break;
+                //    }
+                //};
+            }
+        }
+
+
+        //private ObservableCollection<MapLegendItemWithOptionsModel> _legendLayers = new ObservableCollection<MapLegendItemWithOptionsModel>();
+
+        //public ObservableCollection<MapLegendItemWithOptionsModel> LegendLayers
+        //{
+        //    get { return _legendLayers; }
+        //    set
+        //    {
+        //        _legendLayers = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+
+        private ObservableCollection<DrawingItem> _drawingItems = new ObservableCollection<DrawingItem>();
+
+        public ObservableCollection<DrawingItem> DrawingItems
+        {
+            get { return _drawingItems; }
+            set
+            {
+                _drawingItems = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -241,18 +277,6 @@ namespace IRI.Jab.Common.Presenter.Map
 
         }
 
-        //private NotifiablePoint _currentMapInfoPoint;
-
-        //public NotifiablePoint CurrentEditingPoint
-        //{
-        //    get { return _currentMapInfoPoint; }
-        //    set
-        //    {
-        //        _currentMapInfoPoint = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
 
         private IRI.Msh.Common.Primitives.Point _currentPoint;
 
@@ -304,7 +328,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private async void SetTileService(MapProviderType provider, TileType tileType)
         {
-            System.Diagnostics.Debug.WriteLine($"SetTileService begin; {DateTime.Now.ToLongTimeString()}");            
+            System.Diagnostics.Debug.WriteLine($"SetTileService begin; {DateTime.Now.ToLongTimeString()}");
 
             if (!IsConnected)
             {
@@ -320,34 +344,6 @@ namespace IRI.Jab.Common.Presenter.Map
             System.Diagnostics.Debug.WriteLine($"SetTileService end {DateTime.Now.ToLongTimeString()}");
 
         }
-
-        //private string _baseMapCacheDirectory = null;
-
-        //public string BaseMapCacheDirectory
-        //{
-        //    get { return _baseMapCacheDirectory; }
-        //    set
-        //    {
-        //        _baseMapCacheDirectory = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
-        //private bool _isBaseMapCacheEnabled;
-
-        //public bool IsBaseMapCacheEnabled
-        //{
-        //    get { return _isBaseMapCacheEnabled; }
-        //    set
-        //    {
-        //        _isBaseMapCacheEnabled = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
-        //public string GooglePath { get; set; }
 
         private bool? _isConnected = null;
 
@@ -418,94 +414,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private ObservableCollection<ILayer> _layers;
-
-        public ObservableCollection<ILayer> Layers
-        {
-            get { return _layers; }
-            set
-            {
-                _layers = value;
-                RaisePropertyChanged();
-
-                if (_layers == null)
-                    return;
-
-                _layers.CollectionChanged += (sender, e) =>
-                {
-                    switch (e.Action)
-                    {
-                        case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                            foreach (var item in e.NewItems.Cast<ILayer>())
-                            {
-                                if (item.Type == LayerType.BaseMap)
-                                {
-                                    return;
-                                }
-
-                                var layer = item;
-
-                                var model = new Model.Legend.MapLegendItemWithOptionsModel(layer);
-                                model.Commands = new List<Model.Legend.ILegendCommand>()
-                                {
-                                    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                                };
-
-                                LegendLayers.Add(model);
-                            }
-                            break;
-                        case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                            foreach (var item in e.OldItems.Cast<ILayer>())
-                            {
-                                if (item.Type == LayerType.BaseMap)
-                                {
-                                    return;
-                                }
-
-                                LegendLayers.Remove(LegendLayers.First(ll => ll.Id == item.Id));
-                            }
-                            break;
-                        case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                            break;
-                        case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
-                            break;
-                        case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                            this.LegendLayers.Clear();
-                            break;
-                        default:
-                            break;
-                    }
-                };
-            }
-        }
-
-
-        private ObservableCollection<IRI.Jab.Common.Model.Legend.MapLegendItemWithOptionsModel> _legendLayers = new ObservableCollection<Model.Legend.MapLegendItemWithOptionsModel>();
-
-        public ObservableCollection<IRI.Jab.Common.Model.Legend.MapLegendItemWithOptionsModel> LegendLayers
-        {
-            get { return _legendLayers; }
-            set
-            {
-                _legendLayers = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-
-        private ObservableCollection<DrawingItem> _drawingItems = new ObservableCollection<DrawingItem>();
-
-        public ObservableCollection<DrawingItem> DrawingItems
-        {
-            get { return _drawingItems; }
-            set
-            {
-                _drawingItems = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         private bool _isBusy;
 
@@ -572,19 +480,6 @@ namespace IRI.Jab.Common.Presenter.Map
                 RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
             }
         }
-
-        //private bool _isMeasureMode;
-
-        //public bool IsMeasureMode
-        //{
-        //    get { return _isMeasureMode; }
-        //    set
-        //    {
-        //        _isMeasureMode = value;
-        //        RaisePropertyChanged();
-        //        RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
-        //    }
-        //}
 
 
         public bool IsDrawEditMeasureMode
@@ -776,9 +671,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<string> RequestRemoveLayerByName;
 
-        public Action<LayerType, bool> RequestClearLayer;
+        public Action<LayerType, bool> RequestClearLayerByType;
 
         public Action<string, bool> RequestClearLayerByName;
+
+        public Action<Predicate<ILayer>, bool> RequestClearLayer;
 
         public Action RequestRemovePolyBezierLayers;
 
@@ -812,7 +709,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawingAsync;
 
-        public Action RequestClearMap;
+        public Action RequestClearAll;
 
         public Action RequestCancelNewDrawing;
 
@@ -858,11 +755,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
             if (shapeItem != null)
             {
-                this.SetLayer(shapeItem.AssociatedLayer);
+                //this.SetLayer(shapeItem.AssociatedLayer);
 
                 this.DrawingItems.Add(shapeItem);
 
-                this.Refresh();
+                this.AddLayer(shapeItem.AssociatedLayer);
+
+                //this.Refresh();
             }
         }
 
@@ -878,18 +777,20 @@ namespace IRI.Jab.Common.Presenter.Map
                 return null;
             }
 
-            var shapeItem = new DrawingItem() { Geometry = drawing };
+            var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+            var shapeItem = new DrawingItem(name, drawing) { AssociatedLayer = layer };
 
             shapeItem.Title = name;
 
-            shapeItem.RemoveAction = () =>
+            shapeItem.RequestRemoveAction = () =>
             {
                 this.DrawingItems.Remove(shapeItem);
                 this.RemoveLayer(shapeItem.AssociatedLayer);
                 this.Refresh();
             };
 
-            shapeItem.EditAction = async () =>
+            shapeItem.RequestEditAction = async () =>
             {
                 this.RemoveLayer(shapeItem.AssociatedLayer);
 
@@ -898,7 +799,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 if (edittedShape != null)
                 {
                     shapeItem.Geometry = edittedShape;
-                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { edittedShape.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { edittedShape.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
                     this.SetLayer(shapeItem.AssociatedLayer);
                     Refresh();
@@ -907,12 +808,49 @@ namespace IRI.Jab.Common.Presenter.Map
 
             shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
-            shapeItem.RequestDownload = (s) =>
+            var defaultFill = layer.VisualParameters.Fill.AsSolidColor();
+            var defaultStroke = layer.VisualParameters.Stroke.AsSolidColor();
+
+            shapeItem.RequestHighlightGeometry = di =>
             {
-                //this.OnRequestShowDownloadDialog?.Invoke(s);
+                if (di.IsSelected)
+                {
+                    if (defaultFill != null)
+                    {
+                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+                    }
+
+                    if (defaultStroke != null)
+                    {
+                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+                    }
+
+                    this.RemoveLayer(layer);
+
+                    this.AddLayer(layer);
+                }
+                else
+                {
+                    if (defaultFill != null)
+                    {
+                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+                    }
+
+                    if (defaultStroke != null)
+                    {
+                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+                    }
+
+                    this.RemoveLayer(layer);
+
+                    this.AddLayer(layer);
+                }
             };
 
-            shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+            //shapeItem.RequestDownload = (s) =>
+            //{
+            //this.OnRequestShowDownloadDialog?.Invoke(s);
+            //};
 
             return shapeItem;
         }
@@ -1023,12 +961,34 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void ClearLayer(LayerType type, bool remove)
         {
-            RequestClearLayer?.Invoke(type, remove);
+            this.RequestClearLayerByType?.Invoke(type, remove);
         }
 
         public void ClearLayer(string layerName, bool remove)
         {
             this.RequestClearLayerByName?.Invoke(layerName, remove);
+        }
+
+        public void ClearAll()
+        {
+            //for (int i = Layers.Count - 1; i >= 0; i--)
+            //{
+            //    RemoveLayer(Layers[i]);
+            //}
+            //ClearLayer(LayerType.VectorLayer, true);
+            //ClearLayer(LayerType.Complex, true);
+            //ClearLayer(LayerType.Drawing, true);
+            //ClearLayer(LayerType.Feature, true);
+            //ClearLayer(LayerType.Selection, true);
+
+            this.Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
+
+            this.DrawingItems.Clear();
+        }
+
+        private void Clear(Predicate<ILayer> layersToBeRemoved, bool remove)
+        {
+            this.RequestClearLayer?.Invoke(layersToBeRemoved, remove);
         }
 
         public void RemoveLayer(string layerName)
@@ -1087,21 +1047,6 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             this.RequestFullExtent?.Invoke();
         }
-
-        public void ClearMap()
-        {
-            //for (int i = Layers.Count - 1; i >= 0; i--)
-            //{
-            //    RemoveLayer(Layers[i]);
-            //}
-            ClearLayer(LayerType.VectorLayer, true);
-            ClearLayer(LayerType.Complex, true);
-            ClearLayer(LayerType.Drawing, true);
-            ClearLayer(LayerType.Feature, true);
-            ClearLayer(LayerType.Selection, true);
-
-        }
-
 
         public void Zoom(double mapScale)
         {
@@ -1383,14 +1328,27 @@ namespace IRI.Jab.Common.Presenter.Map
 
             try
             {
-                var dataSource = await Task.Run<FeatureDataSource>(async () =>
+                var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
                 {
-                    var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
-                                    .Select(i => i.AsSqlGeometry(3857))
-                                    .Where(i => !i.IsNotValidOrEmpty())
-                                    .ToList();
+                    var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
 
-                    MemoryDataSource source = new MemoryDataSource(shp);
+                    //var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
+                    //                .Select(i => i.AsSqlGeometry(SridHelper.WebMercator))
+                    //                .Where(i => !i.IsNotValidOrEmpty())
+                    //                .ToList();
+
+                    Func<IPoint, IPoint> map = p => p.Project(sourceSrs, new WebMercator());
+
+
+                    var shp = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                            fileName,
+                            d => new SqlFeature() { Attributes = d },
+                            (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, SridHelper.WebMercator).AsSqlGeometry(SridHelper.WebMercator),
+                            System.Text.Encoding.UTF8,
+                            System.Text.Encoding.UTF8,
+                            true);
+
+                    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(shp, s => s.Label);
 
                     return source;
                 });
@@ -1400,6 +1358,14 @@ namespace IRI.Jab.Common.Presenter.Map
                     LayerType.VectorLayer,
                     RenderingApproach.Default,
                     IRI.Jab.Common.Model.RasterizationApproach.GdiPlus, ScaleInterval.All);
+
+                vectorLayer.Commands = new List<ILegendCommand>()
+                {
+                    LegendCommand.CreateZoomToExtentCommand(this, vectorLayer),
+                    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, vectorLayer),
+                    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, vectorLayer),
+                    LegendCommand.CreateClearSelected(this, vectorLayer),
+                };
 
                 this.SetLayer(vectorLayer);
 
@@ -1498,22 +1464,22 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private RelayCommand _clearMapCommand;
+        private RelayCommand _clearAllCommand;
 
-        public RelayCommand ClearMapCommand
+        public RelayCommand ClearAllCommand
 
         {
             get
             {
-                if (_clearMapCommand == null)
+                if (_clearAllCommand == null)
                 {
-                    _clearMapCommand = new RelayCommand(param =>
+                    _clearAllCommand = new RelayCommand(param =>
                     {
-                        this.RequestClearMap?.Invoke();
+                        this.RequestClearAll?.Invoke();
                     });
                 }
 
-                return _clearMapCommand;
+                return _clearAllCommand;
             }
         }
 

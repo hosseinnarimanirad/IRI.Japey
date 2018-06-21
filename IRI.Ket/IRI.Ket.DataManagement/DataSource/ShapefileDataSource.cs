@@ -125,7 +125,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
         }
 
-        public static Task<ShapefileDataSource<SqlFeature>> Create(string shapeFileName, string spatialColumnName, int srid, Encoding encoding, CrsBase targetCrs, string labelColumnName = null)
+        public static Task<ShapefileDataSource<SqlFeature>> Create(string shapeFileName, string spatialColumnName, int srid, Encoding encoding, SrsBase targetCrs, string labelColumnName = null)
         {
             return Task.Run<ShapefileDataSource<SqlFeature>>(() =>
             {

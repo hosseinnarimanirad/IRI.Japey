@@ -14,8 +14,33 @@ namespace IRI.Jab.Common.Model
 {
     public class EditableFeatureLayerOptions : Notifier
     {
-        static readonly Brush _stroke = BrushHelper.CreateBrush("#FF1CA1E2");
-        static readonly Brush _fill = BrushHelper.CreateBrush("#661CA1E2");
+        static readonly Brush _defaultStroke = BrushHelper.CreateBrush("#FF1CA1E2");
+        static readonly Brush _defaultFill = BrushHelper.CreateBrush("#661CA1E2");
+
+        static readonly Brush _stroke;
+        static readonly Brush _fill;
+
+        static EditableFeatureLayerOptions()
+        {
+            try
+            {
+                var brush = (SolidColorBrush)Application.Current.Resources["AccentColorBrush"];
+
+                _fill = new SolidColorBrush(new Color() { A = 100, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+
+                _stroke = new SolidColorBrush(new Color() { A = 204, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+            }
+            catch (Exception ex)
+            {
+                _fill = _defaultFill;
+
+                _stroke = _defaultStroke;
+            }        
+            finally
+            {
+                
+            }
+        }
 
         public bool IsNewDrawing { get; set; } = false;
 
@@ -167,7 +192,7 @@ namespace IRI.Jab.Common.Model
 
         public ScaleInterval VisibleRange { get; set; } = ScaleInterval.All;
 
-        public VisualParameters Visual { get; set; } = new VisualParameters(_fill, _stroke, 4, .9, Visibility.Visible);
+        public VisualParameters Visual { get; set; }= new VisualParameters(_fill, _stroke, 4, .9, Visibility.Visible);
 
         public Func<FrameworkElement> MakePrimaryVertex { get; set; } = () => new View.MapMarkers.Circle(1);
 
@@ -182,11 +207,11 @@ namespace IRI.Jab.Common.Model
 
         public Action RequestHandleIsEdgeLabelVisibleChanged;
 
-       
 
 
 
-       
+
+
 
     }
 }

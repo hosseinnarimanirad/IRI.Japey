@@ -7,7 +7,7 @@ using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Met
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
 {
-    public abstract class CrsBase
+    public abstract class SrsBase
     {
         private string _title;
 
@@ -35,7 +35,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         public abstract MapProjectionType Type { get; }
 
-        public CrsBase()
+        public SrsBase()
         {
 
         }
@@ -49,7 +49,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         //}
 
-        public CrsBase(string title, Ellipsoid ellipsoid)
+        public SrsBase(string title, Ellipsoid ellipsoid)
         {
             this.Title = title;
 

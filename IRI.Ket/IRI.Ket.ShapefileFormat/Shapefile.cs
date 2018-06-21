@@ -12,6 +12,7 @@ using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
 using IRI.Msh.Common.Primitives;
+using IRI.Ket.ShapefileFormat.Prj;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -109,6 +110,10 @@ namespace IRI.Ket.ShapefileFormat
             }
         }
 
+        public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        {
+            return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters); });
+        }
 
         public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
         {
@@ -172,27 +177,57 @@ namespace IRI.Ket.ShapefileFormat
             return MainHeader;
         }
 
-        internal static int TryGetSrid(string shpFileName)
+        public static EsriPrjFile TryReadPrjFile(string shpFileName)
         {
-            int result = 0;
-
             var prjFile = GetPrjFileName(shpFileName);
 
-            if (System.IO.File.Exists(prjFile))
+            try
             {
-                try
+                if (System.IO.File.Exists(prjFile))
                 {
-                    var esriPrjFile = Prj.EsriPrjFile.Parse(System.IO.File.ReadAllText(prjFile));
-
-                    result = esriPrjFile.Srid;
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Exception at reading prj file");
+                    return new Prj.EsriPrjFile(prjFile);
                 }
             }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-            return result;
+            return null;
+        }
+
+        public static SrsBase TryGetSrs(string shpFileName)
+        {
+            var esriPrjFile = TryReadPrjFile(shpFileName);
+
+            return esriPrjFile?.AsMapProjection() ?? null;
+        }
+
+        internal static int TryGetSrid(string shpFileName)
+        {
+            var esriPrjFile = TryReadPrjFile(shpFileName);
+
+            return esriPrjFile?.Srid ?? 0;
+
+            //int result = 0;
+
+            //var prjFile = GetPrjFileName(shpFileName);
+
+            //if (System.IO.File.Exists(prjFile))
+            //{
+            //    try
+            //    {
+            //        var esriPrjFile = Prj.EsriPrjFile.Parse(System.IO.File.ReadAllText(prjFile));
+
+            //        result = esriPrjFile.Srid;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        System.Diagnostics.Debug.WriteLine("Exception at reading prj file");
+            //    }
+            //}
+
+            //return result;
         }
 
         #endregion
@@ -200,7 +235,7 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Write (Save) Shapefile 
 
-        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false, CrsBase crs = null)
+        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false, SrsBase crs = null)
         {
             if (shapes.IsNullOrEmpty())
             {
@@ -300,7 +335,7 @@ namespace IRI.Ket.ShapefileFormat
                                       Func<T, IEsriShape> geometryMap,
                                       List<ObjectToDbfTypeMap<T>> attributeMappings,
                                       Encoding encoding,
-                                      CrsBase crs,
+                                      SrsBase crs,
                                       bool overwrite = false)
         {
             SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, crs, overwrite);
@@ -309,21 +344,21 @@ namespace IRI.Ket.ShapefileFormat
         }
 
 
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, SrsBase crs, bool overwrite = false)
         {
             Save(shpFileName, data, createEmptyDbf, overwrite, crs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, CrsBase crs, bool overwrite = false)
+        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, SrsBase crs, bool overwrite = false)
         {
             Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite, crs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsPrj(string shpFileName, CrsBase crs, bool overwrite)
+        public static void SaveAsPrj(string shpFileName, SrsBase crs, bool overwrite)
         {
             var prjFileName = GetPrjFileName(shpFileName);
 
@@ -340,13 +375,13 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Project
 
-        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, CrsBase targetCrs)
+        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, SrsBase targetCrs)
         {
             return Task.Run(() => Project(shpFileName, targetCrs));
         }
 
 
-        public static List<IEsriShape> Project(string shpFileName, CrsBase targetCrs)
+        public static List<IEsriShape> Project(string shpFileName, SrsBase targetCrs)
         {
             var sourcePrj = GetPrjFileName(shpFileName);
 
@@ -398,7 +433,7 @@ namespace IRI.Ket.ShapefileFormat
             return Project(values, sourceSrs, targetSrs);
         }
 
-        public static List<IEsriShape> Project(List<IEsriShape> values, CrsBase sourceSrs, CrsBase targetSrs)
+        public static List<IEsriShape> Project(List<IEsriShape> values, SrsBase sourceSrs, SrsBase targetSrs)
         {
             List<IEsriShape> result = new List<IEsriShape>(values.Count);
 
@@ -424,7 +459,7 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, CrsBase targetCrs, bool overwrite = false)
+        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, SrsBase targetCrs, bool overwrite = false)
         {
             if (!CheckAllNeededFilesExists(sourceShapefileName, true))
             {

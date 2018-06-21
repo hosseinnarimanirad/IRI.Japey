@@ -4,22 +4,60 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
-             xmlns:model="clr-namespace:IRI.Jab.Common.Model.Legend;assembly=IRI.Jab.Common" >
+             xmlns:model="clr-namespace:IRI.Jab.Common.Model.Legend;assembly=IRI.Jab.Common"
+             xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+             FontFamily="{StaticResource iranSans}">
      
     <Grid IsEnabled="{Binding ElementName=root, Path=Symbology.IsInScaleRange}">
         <Grid.Resources>
+            <Style  TargetType="{x:Type Button}" x:Key="circleButton">
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Margin="1" Fill="{TemplateBinding Property=Background}"/>
+                                <ContentPresenter/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <DataTemplate DataType="{x:Type model:LegendToggleCommand}">
                 <ToggleButton VerticalAlignment="Center" Margin="2" Cursor="Hand" BorderThickness="0" Focusable="False" ToolTip="{Binding ToolTip}"
-                              Background="Transparent" IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
+                              IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                            <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+                            <Setter Property="Width" Value="30"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid>
+                                            <Ellipse Margin="1" Fill="{TemplateBinding Property=Background}"/>
+                                            <ContentPresenter/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
                                 </Trigger>
                                 
                             </Style.Triggers>
@@ -43,9 +81,9 @@
                 </ToggleButton>
             </DataTemplate>
             <DataTemplate DataType="{x:Type model:LegendCommand}">
-                <Button VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
-                        BorderThickness="0" Focusable="False" Background="Transparent" ToolTip="{Binding ToolTip}">
-                    <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}" Width="16" Height="16" FlowDirection="LeftToRight"/>
+                <Button Style="{StaticResource circleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
+                        BorderThickness="0" Focusable="False"  ToolTip="{Binding ToolTip}">
+                    <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
                 </Button>
             </DataTemplate>
             
@@ -90,7 +128,18 @@
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
                 <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2" TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
-                <TextBlock Text="{Binding ElementName=root, Path=LayerName}" MinWidth="70" VerticalAlignment="Center" Margin="4"/>
+                <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="70" VerticalAlignment="Center" Margin="4"
+                           Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}"/>
+                <TextBox Text="{Binding ElementName=root, Path=Title}" Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}}"
+                         mahApp:TextBoxHelper.Watermark="عنوان" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"
+                         MinWidth="70">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
             </StackPanel>
             <ItemsControl Visibility="{Binding IsChecked, ElementName=root, Converter={StaticResource boolToVisibilityConverter}}" BorderBrush="Black" BorderThickness="0,0,0,0"
                             Margin="6,0,0,6" ItemsSource="{Binding ElementName=root, Path=Commands}" >

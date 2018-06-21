@@ -30,7 +30,7 @@ namespace IRI.Jab.Controls.View.Map
 
 
 
-        public string LayerName
+        public string Title
         {
             get { return (string)GetValue(LayerNameProperty); }
             set { SetValue(LayerNameProperty, value); }
@@ -38,7 +38,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for LayerName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LayerNameProperty =
-            DependencyProperty.Register(nameof(LayerName), typeof(string), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(Title), typeof(string), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(string.Empty));
 
 
         public VisualParameters Symbology
@@ -49,7 +49,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for Symbology.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SymbologyProperty =
-            DependencyProperty.Register("Symbology", typeof(VisualParameters), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Symbology), typeof(VisualParameters), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
 
 
 
@@ -62,7 +62,7 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for IsChecked.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsCheckedProperty =
-            DependencyProperty.Register("IsChecked", typeof(bool), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsChecked), typeof(bool), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(false));
 
 
 
@@ -74,7 +74,20 @@ namespace IRI.Jab.Controls.View.Map
 
         // Using a DependencyProperty as the backing store for Commands.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CommandsProperty =
-            DependencyProperty.Register("Commands", typeof(IEnumerable<ILegendCommand>), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Commands), typeof(IEnumerable<ILegendCommand>), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
+
+
+
+
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsEditable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsEditableProperty =
+            DependencyProperty.Register(nameof(IsEditable), typeof(bool), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(false));
 
 
 

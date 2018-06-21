@@ -71,7 +71,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public void UpdateSelectedFeatures(IEnumerable<ISqlGeometryAware> items)
         {
-            Features = new ObservableCollection<T>(items.Cast<T>());
+            Features = new ObservableCollection<T>(items?.Cast<T>());
         }
 
         public void UpdateHighlightedFeatures(IEnumerable<ISqlGeometryAware> items)

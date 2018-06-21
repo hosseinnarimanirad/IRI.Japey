@@ -20,20 +20,48 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         public const int UtmNorthZone41 = 32641;
 
 
-        //public static CrsBase GetCrs(int srid)
-        //{
-        //    switch (srid)
-        //    {
-        //        case GeodeticWGS84:
-        //            return DefaultMapProjections.
-        //            break;
+        public static SrsBase AsSrsBase(int srid)
+        {
+            switch (srid)
+            {
+                case SridHelper.GeodeticWGS84:
+                    return new NoProjection("Wgs84", Ellipsoids.WGS84);// { DatumName = this.Geogcs.Values?.First() };
 
-        //        case WebMercator:
-        //            return new WebMercator();
+                case SridHelper.WebMercator:
+                    return new WebMercator();
 
-        //        default:
-        //            break;
-        //    }
-        //}
+                case SridHelper.UtmNorthZone38:
+                    return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(38));
+
+                case SridHelper.UtmNorthZone39:
+                    return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(39));
+
+                case SridHelper.UtmNorthZone40:
+                    return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(40));
+
+                case SridHelper.UtmNorthZone41:
+                    return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(41));
+
+                default:
+
+                    throw new NotImplementedException();
+            }
+
+            //public static CrsBase GetCrs(int srid)
+            //{
+            //    switch (srid)
+            //    {
+            //        case GeodeticWGS84:
+            //            return DefaultMapProjections.
+            //            break;
+
+            //        case WebMercator:
+            //            return new WebMercator();
+
+            //        default:
+            //            break;
+            //    }
+            //}
+        }
     }
 }

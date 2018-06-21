@@ -809,7 +809,33 @@ namespace IRI.Msh.Common.Primitives
             return false;
         }
 
+        public SrsBase GetSrs()
+        {
+            return SridHelper.AsSrsBase(Srid);
+        }
 
+        public Geometry Project(SrsBase targetSrs)
+        {
+            var sourceSrs = GetSrs();
+
+            return Project(sourceSrs, targetSrs);
+        }
+
+        public Geometry Project(SrsBase sourceSrs, SrsBase targetSrs)
+        {
+            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
+            {
+                var c1 = this.Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
+
+                return c1.Transform(p => targetSrs.FromGeodetic(p), targetSrs.Srid);
+            }
+            else
+            {
+                var c1 = this.Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
+
+                return c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid);
+            }
+        }
 
 
         #region Static Methods

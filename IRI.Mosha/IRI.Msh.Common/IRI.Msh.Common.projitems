@@ -69,6 +69,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DoubleExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\GeometryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NullableBoolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PathHelper.cs" />

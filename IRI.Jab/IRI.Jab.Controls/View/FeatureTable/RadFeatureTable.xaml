@@ -14,6 +14,7 @@
         <telerik:RadGridView ItemsSource="{Binding Features}" AutoGenerateColumns="True" AutoGeneratingColumn="RadGridView_AutoGeneratingColumn"
                                 ShowGroupPanel="False" IsReadOnly="True" x:Name="grid" telerik:StyleManager.Theme="Office2016"
                                 SelectionMode="Extended" SelectionChanged="grid_SelectionChanged">
+             
             <!--<i:Interaction.Behaviors>
                 <localTelerik:RadMultiSelectBehavior SelectedItems="{Binding HighlightedFeatures}"/>
             </i:Interaction.Behaviors>-->

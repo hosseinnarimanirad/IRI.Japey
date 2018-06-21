@@ -93,7 +93,7 @@ namespace IRI.Jab.Common
 
             //var options = new EditableFeatureLayerOptions() { IsVerticesLabelVisible = isEdgeLengthVisible };
 
-            this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<sb.Point>() { startMercatorPoint }, toScreen, screenToMap, type, options);
+            this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<sb.Point>() { startMercatorPoint }, toScreen, screenToMap, type, options) { ZIndex = int.MaxValue };
 
             this._editableFeatureLayer.OnRequestFinishDrawing += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
 

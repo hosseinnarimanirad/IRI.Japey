@@ -76,9 +76,39 @@ namespace IRI.Jab.Controls.View.Map
 
 
 
+
+        //public bool ShowDrawingLayers
+        //{
+        //    get { return (bool)GetValue(ShowDrawingLayersProperty); }
+        //    set { SetValue(ShowDrawingLayersProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for ShowDrawingLayers.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty ShowDrawingLayersProperty =
+        //    DependencyProperty.Register("ShowDrawingLayers", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(false));
+
+
+
+
+        //public bool IsDrawingToc
+        //{
+        //    get { return (bool)GetValue(IsDrawingTocProperty); }
+        //    set { SetValue(IsDrawingTocProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for IsDrawingToc.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty IsDrawingTocProperty =
+        //    DependencyProperty.Register("IsDrawingToc", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(false, (dpO, dp) =>
+        //    {
+                
+        //    }));
+
+
+
         private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
         {
-            var item = e.Item as MapLegendItemWithOptionsModel;
+            //var item = e.Item as MapLegendItemWithOptionsModel;
+            var item = e.Item as ILayer;
 
             if (!EnableFilterMode)
             {
@@ -87,10 +117,16 @@ namespace IRI.Jab.Controls.View.Map
             else
             {
                 e.Accepted =
-                    item.Layer.ShowInToc && (
-                    (ShowVectorLayers && item.Layer.Type.HasFlag(LayerType.VectorLayer)) ||
-                    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.Raster)) ||
-                    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.ImagePyramid)));
+                   item.ShowInToc && (
+                   (ShowVectorLayers && item.Type.HasFlag(LayerType.VectorLayer)) ||
+                   (ShowRasterLayers && item.Type.HasFlag(LayerType.Raster)) ||
+                   (ShowRasterLayers && item.Type.HasFlag(LayerType.ImagePyramid)));
+
+                //e.Accepted =
+                //    item.Layer.ShowInToc && (
+                //    (ShowVectorLayers && item.Layer.Type.HasFlag(LayerType.VectorLayer)) ||
+                //    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.Raster)) ||
+                //    (ShowRasterLayers && item.Layer.Type.HasFlag(LayerType.ImagePyramid)));
             }
 
         }

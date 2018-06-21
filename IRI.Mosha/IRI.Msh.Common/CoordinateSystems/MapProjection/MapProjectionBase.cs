@@ -6,7 +6,7 @@ using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Met
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
 {
-    public abstract class MapProjectionBase : CrsBase
+    public abstract class MapProjectionBase : SrsBase
     {
         protected double _latitudeOfOrigin, _standardParallel1, _standardParallel2, _centralMeridian, _falseEasting, _falseNorthing;
 

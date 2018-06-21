@@ -635,20 +635,22 @@ namespace IRI.Jab.MapViewer
                 return DrawGeometryLablePairsAsync(gl, n, p, lp);
             };
 
-            presenter.RequestSelectGeometries = (g, v, s) =>
+            presenter.RequestSelectGeometries = (geometries, visualParameters, symbol) =>
             {
-                return SelectGeometriesAsync(g, v, s);
+                return SelectGeometriesAsync(geometries, visualParameters, symbol);
             };
 
-            presenter.RequestClearLayer = (t, r) => { this.ClearLayer(t, r); };
+            presenter.RequestClearLayerByType = (type, remove) => { this.ClearLayer(type, remove); };
 
-            presenter.RequestClearLayerByName = (l, r) => { this.ClearLayer(l, r); };
+            presenter.RequestClearLayerByName = (layer, remove) => { this.ClearLayer(layer, remove); };
+
+            presenter.RequestClearLayer = (predicate, remove) => { this.Clear(predicate, remove); };
 
             presenter.RequestPan = () => { this.Pan(); };
 
-            presenter.RequestZoomToFeature = f => { this.ZoomToFeature(f); };
+            presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
 
-            presenter.RequestIdentify = p => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(p));
+            presenter.RequestIdentify = point => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(point));
 
             presenter.RequestGetPoint = () => SelectPointAsync();
 

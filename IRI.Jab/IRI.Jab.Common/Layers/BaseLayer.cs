@@ -8,6 +8,7 @@ using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using System.Windows;
 using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Model.Legend;
 
 namespace IRI.Jab.Common
 {
@@ -92,6 +93,18 @@ namespace IRI.Jab.Common
             }
         }
 
+        private List<ILegendCommand> _commands;
+
+        public List<ILegendCommand> Commands
+        {
+            get { return _commands; }
+            set
+            {
+                _commands = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private LabelParameters _labels;
 
         public LabelParameters Labels
@@ -139,7 +152,6 @@ namespace IRI.Jab.Common
             }
         }
 
-        //public event EventHandler<CustomEventArgs<bool>> OnVisibilityChanged;
         private event EventHandler<CustomEventArgs<Visibility>> _onVisibilityChanged;
 
         public event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged

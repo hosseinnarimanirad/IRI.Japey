@@ -10,7 +10,7 @@ namespace IRI.Ket.ShapefileFormat
 {
     public static class CoordinateSystemExtensions
     {
-        public static EsriPrjFile AsEsriPrj(this CrsBase mapProjection)
+        public static EsriPrjFile AsEsriPrj(this SrsBase mapProjection)
         {
             switch (mapProjection.Type)
             {

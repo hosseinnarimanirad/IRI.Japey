@@ -478,7 +478,7 @@ namespace IRI.Ket.SpatialExtensions
         #region Projection
 
 
-        public static IPoint Project(this IPoint point, CrsBase sourceSrs, CrsBase targetSrs)
+        public static IPoint Project(this IPoint point, SrsBase sourceSrs, SrsBase targetSrs)
         {
             if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
             {
@@ -493,32 +493,6 @@ namespace IRI.Ket.SpatialExtensions
                 return targetSrs.FromGeodetic(c1, sourceSrs.Ellipsoid);
 
             }
-        }
-
-        public static List<Geometry> Project(this List<Geometry> values, CrsBase sourceSrs, CrsBase targetSrs)
-        {
-            List<Geometry> result = new List<Geometry>(values.Count);
-
-            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
-            {
-                for (int i = 0; i < values.Count; i++)
-                {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
-
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p), targetSrs.Srid));
-                }
-            }
-            else
-            {
-                for (int i = 0; i < values.Count; i++)
-                {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
-
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid));
-                }
-            }
-
-            return result;
         }
 
         #endregion

@@ -16,6 +16,11 @@ namespace IRI.Jab.Controls.Presenter
 
         public  void Initialize(System.Windows.Window ownerWindow)
         {
+            this.RequestClearAll = () =>
+            {
+                this.ClearAll();// (new Predicate<ILayer>(l => l.CanUserDelete == true), true);
+            };
+
 
             this.RequestOpenFile = (filter) =>
             {

@@ -167,6 +167,9 @@
     <Compile Include="View\Map\FullNavigationView.xaml.cs">
       <DependentUpon>FullNavigationView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Map\Legend\MapDrawingLegendView.xaml.cs">
+      <DependentUpon>MapDrawingLegendView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Map\Legend\MapLegendItemWithOptionsView.xaml.cs">
       <DependentUpon>MapLegendItemWithOptionsView.xaml</DependentUpon>
     </Compile>
@@ -270,6 +273,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Map\FullNavigationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Map\Legend\MapDrawingLegendView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

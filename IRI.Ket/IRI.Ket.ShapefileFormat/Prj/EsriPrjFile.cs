@@ -364,7 +364,7 @@ namespace IRI.Ket.ShapefileFormat.Prj
             return double.Parse(parameters.Single(i => i.Values.First().EqualsIgnoreCase(parameterName)).Values.Skip(1).First());
         }
 
-        public CrsBase AsMapProjection()
+        public SrsBase AsMapProjection()
         {
             switch (ProjectionType)
             {
