@@ -2,16 +2,13 @@
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.TileServices;
-using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.Common.Helpers;
-using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Common;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Jab.Common.Presenters;
 using IRI.Ket.DataManagement.DataSource;
-using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using Microsoft.SqlServer.Types;
 using System;
@@ -808,8 +805,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
             shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
-            var defaultFill = layer.VisualParameters.Fill.AsSolidColor();
-            var defaultStroke = layer.VisualParameters.Stroke.AsSolidColor();
+            var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
+            var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
 
             shapeItem.RequestHighlightGeometry = di =>
             {
@@ -817,33 +814,33 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     if (defaultFill != null)
                     {
-                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+                        shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
                     }
 
                     if (defaultStroke != null)
                     {
-                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+                        shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
                     }
 
-                    this.RemoveLayer(layer);
+                    this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                    this.AddLayer(layer);
+                    this.AddLayer(shapeItem.AssociatedLayer);
                 }
                 else
                 {
                     if (defaultFill != null)
                     {
-                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+                        shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
                     }
 
                     if (defaultStroke != null)
                     {
-                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+                        shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
                     }
 
-                    this.RemoveLayer(layer);
+                    this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                    this.AddLayer(layer);
+                    this.AddLayer(shapeItem.AssociatedLayer);
                 }
             };
 
@@ -1330,6 +1327,9 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
                 {
+
+                    System.Diagnostics.Debug.WriteLine($"before TryGetSrs: {DateTime.Now.ToLongTimeString()}");
+
                     var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
 
                     //var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
@@ -1337,21 +1337,31 @@ namespace IRI.Jab.Common.Presenter.Map
                     //                .Where(i => !i.IsNotValidOrEmpty())
                     //                .ToList();
 
-                    Func<IPoint, IPoint> map = p => p.Project(sourceSrs, new WebMercator());
+                    System.Diagnostics.Debug.WriteLine($"after TryGetSrs: {DateTime.Now.ToLongTimeString()}");
+
+                    var webmercator = new WebMercator();
+
+                    Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
+
+                    System.Diagnostics.Debug.WriteLine($"before Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
 
 
                     var shp = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                             fileName,
                             d => new SqlFeature() { Attributes = d },
-                            (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, SridHelper.WebMercator).AsSqlGeometry(SridHelper.WebMercator),
+                            (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
                             System.Text.Encoding.UTF8,
                             System.Text.Encoding.UTF8,
                             true);
+                    
+                    System.Diagnostics.Debug.WriteLine($"after Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
 
                     MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(shp, s => s.Label);
 
                     return source;
                 });
+
+                System.Diagnostics.Debug.WriteLine($"before vectorLayer: {DateTime.Now.ToLongTimeString()}");
 
                 var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(fileName), dataSource,
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
@@ -1367,9 +1377,15 @@ namespace IRI.Jab.Common.Presenter.Map
                     LegendCommand.CreateClearSelected(this, vectorLayer),
                 };
 
+                System.Diagnostics.Debug.WriteLine($"before SetLayer: {DateTime.Now.ToLongTimeString()}");
+
                 this.SetLayer(vectorLayer);
 
+                System.Diagnostics.Debug.WriteLine($"before Refresh: {DateTime.Now.ToLongTimeString()}");
+
                 this.Refresh();
+
+                System.Diagnostics.Debug.WriteLine($"after Refresh: {DateTime.Now.ToLongTimeString()}");
 
             }
             catch (Exception ex)

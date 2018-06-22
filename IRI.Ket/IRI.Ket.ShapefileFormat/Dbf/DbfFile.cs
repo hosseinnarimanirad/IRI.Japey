@@ -10,8 +10,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 {
     public static class DbfFile
     {
-
-
+         
         private static Func<string, string> defaultCorrection = (i) => { return i.ArabicToFarsi(); };
 
         //private static Func<string, string> defaultCorrection = (i) => { return i.Replace('ي', 'ی').Replace('ك', 'ک'); };
@@ -372,10 +371,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             return result;
         }
 
-
-
-
-
+         
         public static List<DbfFieldDescriptor> GetDbfSchema(string dbfFileName)
         {
             System.IO.Stream stream = new System.IO.FileStream(dbfFileName, System.IO.FileMode.Open);

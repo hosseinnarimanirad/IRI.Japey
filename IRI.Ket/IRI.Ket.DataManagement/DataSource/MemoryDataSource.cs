@@ -8,6 +8,8 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.SpatialExtensions;
 using System.Threading.Tasks;
+using IRI.Msh.CoordinateSystem.MapProjection;
+using System.Text;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -61,7 +63,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     throw new NotImplementedException();
                 }
 
-                geometries = GetGeometries().Where(i => i.STIntersects(geometry).IsTrue);
+                geometries = GetGeometries()?.Where(i => i.STIntersects(geometry).IsTrue);
             }
 
             foreach (var item in geometries)
@@ -77,6 +79,61 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries().Select(g => new NamedSqlGeometry(g, string.Empty)).ToList();
         }
 
+
+        private static Func<List<SqlFeature>, DataTable> sqlFeatureToDataTableMapping = (list) =>
+         {
+             if (!(list?.Count > 1))
+             {
+                 return null;
+             }
+
+             DataTable table = new DataTable();
+
+             foreach (var col in list?.First().Attributes)
+             {
+                 table.Columns.Add(col.Key);
+             }
+
+             table.Columns.Add(new DataColumn("Geo"));
+
+             foreach (var item in list)
+             {
+                 var newRow = table.NewRow();
+
+                 foreach (var col in list.First().Attributes)
+                 {
+                     newRow[col.Key] = col.Value;
+                 }
+
+                 newRow["Geo"] = item.TheSqlGeometry;
+
+                 table.Rows.Add(newRow);
+             }
+
+             return table;
+         };
+
+        public static MemoryDataSource<SqlFeature> Create(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        {
+            var features = ShapefileExtention.ReadShapefile(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
+
+            var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
+
+            result.MappingFunc = sqlFeatureToDataTableMapping;
+
+            return result;
+        }
+
+        public static async Task<MemoryDataSource<SqlFeature>> CreateAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        {
+            var features = await ShapefileExtention.ReadShapefileAsync(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
+
+            var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
+
+            result.MappingFunc = sqlFeatureToDataTableMapping;
+
+            return result;
+        }
     }
 
     public class MemoryDataSource<T> : FeatureDataSource<T> where T : ISqlGeometryAware
@@ -158,7 +215,7 @@ namespace IRI.Ket.DataManagement.DataSource
             }
             else
             {
-                return this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList();
+                return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList();
             }
         }
 

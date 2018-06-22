@@ -40,7 +40,17 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        public ILayer AssociatedLayer { get; set; }
+        private ILayer _associatedLayer;
+
+        public ILayer AssociatedLayer
+        {
+            get { return _associatedLayer; }
+            set
+            {
+                _associatedLayer = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private string _title;
 

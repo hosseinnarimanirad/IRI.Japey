@@ -4,7 +4,7 @@ using System.Text;
 using IRI.Msh.MeasurementUnit;
 using IRI.Msh.Common.Primitives;
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
-using System.Linq; 
+using System.Linq;
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
 {
@@ -381,10 +381,23 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             return new Point(x, y);
         }
 
-        public static Point WebMercatorToGeodeticWgs84(IPoint webMercator)
+        public static Point WebMercatorToGeodeticWgs84Slow(IPoint webMercator)
         {
             return MercatorToGeodetic(WebMercatorToMercatorWgs84(webMercator));
         }
+
+        public static Point WebMercatorToGeodeticWgs84(IPoint webMercator)
+        {
+            var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
+             
+            double longitude = (webMercator.X / a) * 180 / Math.PI;
+
+            double latitude = 2.0 * (Math.Atan(Math.Exp(webMercator.Y / a)) - Math.PI / 4.0) * 180 / Math.PI;
+
+            return new Point(longitude, latitude);
+
+        }
+
 
         #endregion
 

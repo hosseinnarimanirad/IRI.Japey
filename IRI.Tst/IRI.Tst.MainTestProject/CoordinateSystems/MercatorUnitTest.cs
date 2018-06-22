@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -52,5 +53,36 @@ namespace IRI.Test.CoordinateSystem
 
         }
 
+
+        [TestMethod]
+        public void TestWebMercatorForBothMethods()
+        {
+            TestForPoint(new Point(51.1, 35.58));
+
+            TestForPoint(new Point(51.17, -35.52));
+
+            TestForPoint(new Point(-51.1, 35.53));
+
+            TestForPoint(new Point(-51.15, -35.5));
+        }
+
+        private void TestForPoint(Point geodeticPoint)
+        {
+
+            var webMercator = MapProjects.GeodeticWgs84ToWebMercator(geodeticPoint);
+
+            var geodetic1 = MapProjects.WebMercatorToGeodeticWgs84(webMercator);
+
+            var geodetic2 = MapProjects.WebMercatorToGeodeticWgs84Slow(webMercator);
+
+            Assert.AreEqual(geodetic1.X, geodetic2.X);
+
+            Assert.AreEqual(geodetic1.Y, geodetic2.Y, 1E-10);
+
+
+            Assert.AreEqual(geodeticPoint.X, geodetic2.X, 1E-12);
+
+            Assert.AreEqual(geodeticPoint.Y, geodetic2.Y, 1E-10);
+        }
     }
 }

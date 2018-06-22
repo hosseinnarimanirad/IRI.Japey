@@ -26,7 +26,7 @@ namespace IRI.Test.MainTestProject.SpatialConversions
                 Assert.Fail();
             }
 
-            var checkIShapeConversions = networkblocks.Select(f => f.geometry.AsToShapefileShape().AsSqlGeometry(0).AsWkt() == f.geometry.AsSqlGeometry().AsWkt());
+            var checkIShapeConversions = networkblocks.Select(f => f.geometry.AsToShapefileShape().AsSqlGeometry().AsWkt() == f.geometry.AsSqlGeometry().AsWkt());
  
             if (checkIShapeConversions.Any(r => r == false))
             {
@@ -44,7 +44,7 @@ namespace IRI.Test.MainTestProject.SpatialConversions
                 Assert.Fail();
             }
 
-            var checkIShapeConversions2 = stations.Select(f => f.geometry.AsToShapefileShape().AsSqlGeometry(0).AsWkt() == f.geometry.AsSqlGeometry().AsWkt());
+            var checkIShapeConversions2 = stations.Select(f => f.geometry.AsToShapefileShape().AsSqlGeometry().AsWkt() == f.geometry.AsSqlGeometry().AsWkt());
 
             if (checkIShapeConversions2.Any(r => r == false))
             {

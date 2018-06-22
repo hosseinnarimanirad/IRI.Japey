@@ -117,9 +117,15 @@ namespace IRI.Ket.ShapefileFormat
 
         public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
         {
+            System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
+
             var shapes = ReadShapes(shpFileName);
 
+            System.Diagnostics.Debug.WriteLine($"after ReadShapes & before DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
+
             var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+            System.Diagnostics.Debug.WriteLine($"after DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
 
             var srid = TryGetSrid(shpFileName);
 
@@ -133,6 +139,8 @@ namespace IRI.Ket.ShapefileFormat
 
                 result.Add(feature);
             }
+
+            System.Diagnostics.Debug.WriteLine($"after parse to T: {DateTime.Now.ToLongTimeString()}");
 
             return result;
         }
@@ -176,6 +184,10 @@ namespace IRI.Ket.ShapefileFormat
 
             return MainHeader;
         }
+
+        #endregion
+
+        #region Prj & Srid
 
         public static EsriPrjFile TryReadPrjFile(string shpFileName)
         {
@@ -231,7 +243,6 @@ namespace IRI.Ket.ShapefileFormat
         }
 
         #endregion
-
 
         #region Write (Save) Shapefile 
 
