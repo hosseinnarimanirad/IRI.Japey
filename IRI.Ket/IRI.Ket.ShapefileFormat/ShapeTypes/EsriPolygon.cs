@@ -58,15 +58,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         internal EsriPolygon(BoundingBox boundingBox, int[] parts, EsriPoint[] points)
         {
-            if (points == null || points.Length < 1)
+            if (points == null)
             {
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = boundingBox;
-             
-            this.Srid = points.First().Srid;
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
 
+            this.boundingBox = boundingBox;
+              
             this.parts = parts;
 
             this.points = points;
@@ -80,15 +87,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPolygon(EsriPoint[] points, int[] parts)
         {
-            if (points == null || points.Length < 1)
+            if (points == null)
             {
                 throw new NotImplementedException();
-            } 
+            }
+
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-
-            this.Srid = points.First().Srid;
-
+             
             this.parts = parts;
 
             this.points = points;
@@ -96,15 +110,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPolygon(EsriPoint[][] points)
         {
-            if (points == null || points.Length < 1)
+            if (points == null)
             {
                 throw new NotImplementedException();
             }
 
             this.points = points.Where(i => i.Length > 3).SelectMany(i => i).ToArray();
 
-            this.Srid = this.points.First().Srid;
-
+            if (this.points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = this.points.First().Srid;
+            }
+             
             this.parts = new int[points.Length];
 
             for (int i = 1; i < points.Length; i++)
@@ -242,6 +263,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
         }
 
+
+        public bool IsNullOrEmpty()
+        {
+            return Points == null || Points.Length < 1;
+        }
 
     }
 

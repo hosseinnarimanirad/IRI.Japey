@@ -34,6 +34,7 @@ using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Jab.Common.Model.Legend;
 
 namespace IRI.Jab.MapViewer
 {
@@ -67,8 +68,7 @@ namespace IRI.Jab.MapViewer
         const string _info = "(MapViewer) - info";
 
         #endregion
-
-
+         
 
         #region events
 
@@ -89,7 +89,6 @@ namespace IRI.Jab.MapViewer
         public event EventHandler<EditableFeatureLayer> OnEditableFeatureLayerChanged;
 
         #endregion
-
 
 
         #region Fields, Properties
@@ -352,11 +351,9 @@ namespace IRI.Jab.MapViewer
 
             this.RegisterRightClickOptions();
 
-            _layerManager.OnRequestRefresh += (sender, e) =>
+            _layerManager.RequestRefreshVisibility = (layer) =>
             {
-                RefreshTilesButNotBaseMaps();
-
-                Refresh();
+                RefreshLayerVisibility(layer);
             };
 
             this.extentManager.OnTilesAdded -= ExtentManager_OnTilesAdded;
@@ -401,6 +398,7 @@ namespace IRI.Jab.MapViewer
         }
 
 
+
         Common.Presenter.Map.MapPresenter _presenter;
 
         #endregion
@@ -428,6 +426,8 @@ namespace IRI.Jab.MapViewer
             presenter.RequestSetCursor = (c) => { this.SetCursor(c); };
 
             presenter.RequestRefresh = () => { this.Refresh(); };
+
+            presenter.RequestRefreshLayerVisibility = (layer) => { this.RefreshLayerVisibility(layer); };
 
             presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox); };
 
@@ -858,6 +858,8 @@ namespace IRI.Jab.MapViewer
         {
             this._layerManager.Add(layer);
         }
+
+
 
         public void UnSetLayer(string layerName)
         {
@@ -1832,6 +1834,9 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+
+        #region Refresh
+
         public void RefreshBaseMaps()
         {
             this.Clear(tag => (tag.IsTiled || tag.LayerType == LayerType.BaseMap));
@@ -1850,6 +1855,8 @@ namespace IRI.Jab.MapViewer
 
             System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
         }
+
+
 
         public void RefreshTilesButNotBaseMaps()
         {
@@ -1881,6 +1888,73 @@ namespace IRI.Jab.MapViewer
                 RefreshTiles(tile, l => true);
             }
         }
+
+        //public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
+        //{
+        //    IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+
+        //    Action action = async () =>
+        //    {
+        //        foreach (ILayer item in infos)
+        //        {
+        //            if (item.VisualParameters.Visibility != Visibility.Visible)
+        //                continue;
+
+        //            if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
+        //            {
+        //                //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
+        //                return;
+        //            }
+
+        //            if (item.Rendering != RenderingApproach.Tiled)
+        //                continue;
+
+        //            //Do not draw base map in the case of change visibility for layers
+        //            if (item.Type == LayerType.BaseMap && !processBaseMaps)
+        //                continue;
+
+        //            //Debug.Print($"{item.LayerName} - {tile.ToShortString()}");
+
+        //            if (item is VectorLayer)
+        //            {
+        //                VectorLayer vectorLayer = (VectorLayer)item;
+
+        //                vectorLayer.TileManager.TryAdd(tile);
+
+        //                await AddTiledLayerAsync(vectorLayer, tile);
+        //            }
+        //            else if (item is TileServiceLayer)
+        //            {
+        //                await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
+        //            }
+        //            else
+        //            {
+        //                //return;
+        //                throw new NotImplementedException();
+        //            }
+
+        //        }
+        //    };
+
+        //    Task.Run(() =>
+        //    {
+        //        lock (locker)
+        //        {
+        //            this.jobs.Add(
+        //                    new Job(
+        //                        new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
+        //                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
+        //        }
+        //    });
+
+        //    ////94.09.17
+        //    //Task.Run(() =>
+        //    // this.jobs.Add(
+        //    //     new Job(
+        //    //         new LayerTag(WebMercatorUtility.GetGoogleMapScale(tile.ZoomLevel)) { LayerType = LayerType.None, Tile = tile },
+        //    //         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)))
+        //    //                        );
+        //}
 
         public void RefreshTiles(TileInfo tile, Func<ILayer, bool> criteria)
         {
@@ -1932,10 +2006,10 @@ namespace IRI.Jab.MapViewer
             {
                 //lock (locker)
                 //{
-                    this.jobs.Add(
-                            new Job(
-                                new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
-                                Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
+                this.jobs.Add(
+                        new Job(
+                            new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
+                            Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
                 //}
             });
 
@@ -1948,73 +2022,28 @@ namespace IRI.Jab.MapViewer
             //                        );
         }
 
-        public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
-        {
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+        private void RefreshLayerVisibility(ILayer layer)
+        {   //clear current layer
+            this.ClearLayer(layer);
 
-            Action action = async () =>
-           {
-               foreach (ILayer item in infos)
-               {
-                   if (item.VisualParameters.Visibility != Visibility.Visible)
-                       continue;
-
-                   if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
-                   {
-                       //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
-                       return;
-                   }
-
-                   if (item.Rendering != RenderingApproach.Tiled)
-                       continue;
-
-                   //Do not draw base map in the case of change visibility for layers
-                   if (item.Type == LayerType.BaseMap && !processBaseMaps)
-                       continue;
-
-                   //Debug.Print($"{item.LayerName} - {tile.ToShortString()}");
-
-                   if (item is VectorLayer)
-                   {
-                       VectorLayer vectorLayer = (VectorLayer)item;
-
-                       vectorLayer.TileManager.TryAdd(tile);
-
-                       await AddTiledLayerAsync(vectorLayer, tile);
-                   }
-                   else if (item is TileServiceLayer)
-                   {
-                       await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
-                   }
-                   else
-                   {
-                       //return;
-                       throw new NotImplementedException();
-                   }
-
-               }
-           };
-
-            Task.Run(() =>
+            if (layer.VisualParameters.Visibility == Visibility.Visible)
+            {
+                if (layer.Rendering == RenderingApproach.Tiled)
+                {
+                    if ((layer is VectorLayer))
                     {
-                        lock (locker)
-                        {
-                            this.jobs.Add(
-                                    new Job(
-                                        new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
-                                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
-                        }
-                    });
+                        throw new NotImplementedException();
+                    }
 
-            ////94.09.17
-            //Task.Run(() =>
-            // this.jobs.Add(
-            //     new Job(
-            //         new LayerTag(WebMercatorUtility.GetGoogleMapScale(tile.ZoomLevel)) { LayerType = LayerType.None, Tile = tile },
-            //         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)))
-            //                        );
+                    AddTiledLayer(layer as VectorLayer);
+                }
+                else
+                {
+                    AddLayer(layer);
+
+                }
+            }
         }
-
 
         //POTENTIALLY ERROR PROUNE; Check if exceptions are catched correctly; 
         //POTENTIALLY ERROR PROUNE; Captured Variables
@@ -2174,6 +2203,8 @@ namespace IRI.Jab.MapViewer
             this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
         }
 
+        #endregion
+
 
         #region Others
         //POTENTIALLY ERROR PROUNE; not sure everything is considered or not
@@ -2235,6 +2266,17 @@ namespace IRI.Jab.MapViewer
 
 
         #region Clearing-Removing layers, Job Management
+
+        private void CancelAsyncMapInteractions()
+        {
+            CancelDrawing();
+
+            CancelEditGeometry();
+
+            CancelGetBezier();
+
+            //CancelMeasure();
+        }
 
         private void StopUnnecessaryJobs()
         {
@@ -2649,8 +2691,7 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
-
-
+         
         #region Drawing & Anot
 
         public void Flash(List<IRI.Msh.Common.Primitives.Point> points)
@@ -2958,6 +2999,7 @@ namespace IRI.Jab.MapViewer
         CancellationTokenSource selectPointCancelationToken;
 
         #endregion
+
 
         #region Print
 
@@ -3842,16 +3884,6 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
-        private void CancelAsyncMapInteractions()
-        {
-            CancelDrawing();
-
-            CancelEditGeometry();
-
-            CancelGetBezier();
-
-            //CancelMeasure();
-        }
 
         #region Draw Shapes
 

@@ -1,15 +1,8 @@
-﻿using IRI.Jab.Common;
-using IRI.Jab.Common.Presenter.Map;
-using IRI.Jab.Common;
+﻿using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Ket.SpatialExtensions;
-using IRI.Ket.SqlServerSpatialExtension.Mapping;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -59,6 +52,18 @@ namespace IRI.Jab.Common.Model.Legend
             set
             {
                 _toolTip = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isCommandVisible = true;
+
+        public bool IsCommandVisible
+        {
+            get { return _isCommandVisible; }
+            set
+            {
+                _isCommandVisible = value;
                 RaisePropertyChanged();
             }
         }
@@ -197,6 +202,23 @@ namespace IRI.Jab.Common.Model.Legend
             result.Command = new RelayCommand(param =>
             {
                 map.RemoveSelectedLayer(layer);
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateRemoveLayer(MapPresenter map, ILayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+                Layer = layer,
+                ToolTip = "حذف لایه",
+            };
+
+            result.Command = new RelayCommand(param =>
+            {
+                map.ClearLayer(layer, true);
             });
 
             return result;

@@ -19,5 +19,7 @@ namespace IRI.Jab.Common.Model.Legend
         string ToolTip { get; set; }
 
         ILayer Layer { get; set; }
+
+        bool IsCommandVisible { get; set; }
     }
 }

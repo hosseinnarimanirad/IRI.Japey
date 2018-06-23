@@ -55,14 +55,21 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         internal EsriPolyline(IRI.Msh.Common.Primitives.BoundingBox boundingBox, int[] parts, EsriPoint[] points)
         {
-            if (points == null || points.Length < 1)
+            if (points == null)
             {
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = boundingBox;
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
 
-            this.Srid = points.First().Srid;
+            this.boundingBox = boundingBox;
 
             this.parts = parts;
 
@@ -310,6 +317,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 return new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid);
             }
+        }
+
+        public bool IsNullOrEmpty()
+        {
+            return Points == null || Points.Length < 1;
         }
 
     }

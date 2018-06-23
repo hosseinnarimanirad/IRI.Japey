@@ -87,6 +87,18 @@ namespace IRI.Jab.Common.Model.Legend
             }
         }
 
+        private bool _isCommandVisible = true;
+
+        public bool IsCommandVisible
+        {
+            get { return _isCommandVisible; }
+            set
+            {
+                _isCommandVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ILayer Layer { get; set; }
 
 
@@ -130,15 +142,17 @@ namespace IRI.Jab.Common.Model.Legend
                 if (result.IsSelected)
                 {
                     result.Layer.Labels.IsOn = true;
-
-                    map.Refresh();
+                     
+                    //map.Refresh();
                 }
                 else
                 {
                     result.Layer.Labels.IsOn = false;
 
-                    map.Refresh();
+                    //map.Refresh();
                 }
+
+                map.RefreshLayerVisibility(result.Layer);
             });
 
             return result;

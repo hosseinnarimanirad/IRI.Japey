@@ -1,13 +1,8 @@
-﻿using IRI.Jab.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using System.Windows;
-using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
 
 namespace IRI.Jab.Common
@@ -168,7 +163,7 @@ namespace IRI.Jab.Common
 
         private void RaiseVisibilityChanged(object sender, CustomEventArgs<Visibility> e)
         {
-            this._onVisibilityChanged.SafeInvoke(sender, e);
+            this._onVisibilityChanged.SafeInvoke(this, e);
         }
 
         public event EventHandler<CustomEventArgs<LabelParameters>> OnLabelChanged;

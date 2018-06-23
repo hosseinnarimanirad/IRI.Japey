@@ -96,15 +96,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPolygonZ(EsriPoint[] points, int[] parts, double[] zValues, double[] measures)
         {
-            if (points == null || points.Length < 1 || points.Length != zValues?.Length || points.Length != measures?.Length)
+            if (points == null || points.Length != zValues?.Length || points.Length != measures?.Length)
             {
                 throw new NotImplementedException();
             }
 
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
+
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-
-            this.Srid = points.First().Srid;
-
+             
             this.parts = parts;
 
             this.points = points;
@@ -150,15 +157,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                             double maxMeasure,
                             double[] measures)
         {
-            if (points == null || points.Length < 1 || points.Length != zValues?.Length || points.Length != measures?.Length)
+            if (points == null || points.Length != zValues?.Length || points.Length != measures?.Length)
             {
                 throw new NotImplementedException();
             }
 
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
+
             this.boundingBox = boundingBox;
-
-            this.Srid = points.First().Srid;
-
+             
             this.parts = parts;
 
             this.points = points;
@@ -307,6 +321,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             {
                 return new Geometry(new Geometry[] { new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid) }, GeometryType.Polygon, Srid);
             }
+        }
+
+        public bool IsNullOrEmpty()
+        {
+            return Points == null || Points.Length < 1;
         }
 
     }

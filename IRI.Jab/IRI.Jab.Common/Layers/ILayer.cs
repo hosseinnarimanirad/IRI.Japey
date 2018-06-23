@@ -40,7 +40,7 @@ namespace IRI.Jab.Common
          
         bool CanUserDelete { get; }
 
-        List<ILegendCommand> Commands { get; }
+        List<ILegendCommand> Commands { get; set; }
 
         event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged;
 

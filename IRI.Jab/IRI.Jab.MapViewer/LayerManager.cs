@@ -37,9 +37,9 @@ namespace IRI.Jab.MapViewer
 
         public void Add(ILayer layer)
         {
-            layer.OnVisibilityChanged -= Refresh;
+            layer.OnVisibilityChanged -= RefreshLayerVisibility;
 
-            layer.OnVisibilityChanged += Refresh;
+            layer.OnVisibilityChanged += RefreshLayerVisibility;
 
             this.CurrentLayers.Add(layer);
 
@@ -101,7 +101,7 @@ namespace IRI.Jab.MapViewer
                 }
             }
         }
-         
+
         public void Remove(MapProviderType provider, TileType type)
         {
             for (int i = CurrentLayers.Count - 1; i >= 0; i--)
@@ -207,12 +207,12 @@ namespace IRI.Jab.MapViewer
             return BoundingBox.GetMergedBoundingBox(extents);
         }
 
-        private void Refresh(object sender, EventArgs e)
+        private void RefreshLayerVisibility(object sender, EventArgs e)
         {
-            this.OnRequestRefresh.SafeInvoke(null);
+            this.RequestRefreshVisibility?.Invoke(sender as BaseLayer);
         }
 
-        public event EventHandler OnRequestRefresh;
+        public Action<BaseLayer> RequestRefreshVisibility;
 
     }
 

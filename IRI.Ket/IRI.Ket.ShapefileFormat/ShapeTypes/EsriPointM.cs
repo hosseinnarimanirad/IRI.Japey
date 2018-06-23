@@ -148,6 +148,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
+        public bool IsNullOrEmpty()
+        {
+            return false;
+        }
+
     }
 
 }

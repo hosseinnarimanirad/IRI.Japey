@@ -34,7 +34,8 @@
             </Style>
             <DataTemplate DataType="{x:Type model:LegendToggleCommand}">
                 <ToggleButton VerticalAlignment="Center" Margin="2" Cursor="Hand" BorderThickness="0" Focusable="False" ToolTip="{Binding ToolTip}"
-                              IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}">
+                              IsChecked="{Binding IsSelected, Mode=TwoWay}" IsEnabled="{Binding IsEnabled}"
+                              Visibility="{Binding IsCommandVisible, Converter={StaticResource boolToVisibilityConverter}}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                             <Setter Property="Foreground" Value="White"/>
@@ -59,7 +60,10 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
                                 </Trigger>
-                                
+
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </ToggleButton.Style>
@@ -82,7 +86,8 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type model:LegendCommand}">
                 <Button Style="{StaticResource circleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
-                        BorderThickness="0" Focusable="False"  ToolTip="{Binding ToolTip}">
+                        BorderThickness="0" Focusable="False"  ToolTip="{Binding ToolTip}"
+                        Visibility="{Binding IsCommandVisible, Converter={StaticResource boolToVisibilityConverter}}">
                     <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
                 </Button>
             </DataTemplate>

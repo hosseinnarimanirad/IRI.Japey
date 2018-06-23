@@ -65,15 +65,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriMultiPointM(EsriPoint[] points, double[] measures)
         {
-            if (points == null || points.Length < 1 || points.Length != measures.Length)
+            if (points == null || points.Length != measures.Length)
             {
                 throw new NotImplementedException();
             }
 
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
+
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-
-            this.Srid = points.First().Srid;
-
+             
             this.points = points;
 
             this.measures = measures;
@@ -96,15 +103,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         internal EsriMultiPointM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
-            if (points == null || points.Length < 1 || points.Length != measures.Length)
+            if (points == null || points.Length != measures.Length)
             {
                 throw new NotImplementedException();
             }
 
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
+
             this.boundingBox = boundingBox;
-
-            this.Srid = points.First().Srid;
-
+             
             this.points = points;
 
             this.minMeasure = minMeasure;
@@ -262,6 +276,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         public Geometry AsGeometry()
         {
             return new Geometry(points.Select(p => new Point(p.X, p.Y)).ToArray(), GeometryType.MultiPoint, Srid);
+        }
+
+        public bool IsNullOrEmpty()
+        {
+            return Points == null || Points.Length < 1;
         }
 
         #endregion

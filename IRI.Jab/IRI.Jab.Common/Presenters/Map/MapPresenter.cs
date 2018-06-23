@@ -624,6 +624,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestRefresh;
 
+        public Action<ILayer> RequestRefreshLayerVisibility;
+
         public Action RequestIranExtent;
 
         public Action RequestFullExtent;
@@ -890,6 +892,11 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestRefresh?.Invoke();
         }
 
+        public void RefreshLayerVisibility(ILayer layer)
+        {
+            this.RequestRefreshLayerVisibility?.Invoke(layer);
+        }
+
         public async Task CheckInternetAccess()
         {
             var proxy = this.RequestGetProxy?.Invoke();
@@ -933,7 +940,37 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void SetLayer(ILayer layer)
         {
+            TrySetCommands(layer);
+
             this.RequestSetLayer?.Invoke(layer);
+        }
+
+        private void TrySetCommands(ILayer layer)
+        {
+            if ((layer?.Commands?.Count > 0))
+            {
+                return;
+            }
+
+            if (layer is VectorLayer)
+            {
+                layer.Commands = new List<ILegendCommand>()
+                {
+                    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, (VectorLayer)layer),
+                    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, (VectorLayer)layer),
+                    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                    LegendCommand.CreateRemoveLayer(this, layer),
+                };
+            }
+            else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
+            {
+                layer.Commands = new List<ILegendCommand>()
+                {
+                    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    LegendCommand.CreateRemoveLayer(this, layer),
+                };
+            }
         }
 
         //public void AddLayer(VectorLayer layer)
@@ -943,6 +980,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddLayer(ILayer layer)
         {
+            TrySetCommands(layer);
+
             this.RequestAddLayer?.Invoke(layer);
         }
 
@@ -954,6 +993,11 @@ namespace IRI.Jab.Common.Presenter.Map
         public void RemovePolyBezierLayers()
         {
             this.RequestRemovePolyBezierLayers?.Invoke();
+        }
+
+        public void ClearLayer(ILayer layer, bool remove)
+        {
+            this.RequestClearLayer?.Invoke(l => l == layer, remove);
         }
 
         public void ClearLayer(LayerType type, bool remove)
@@ -1353,7 +1397,7 @@ namespace IRI.Jab.Common.Presenter.Map
                             System.Text.Encoding.UTF8,
                             System.Text.Encoding.UTF8,
                             true);
-                    
+
                     System.Diagnostics.Debug.WriteLine($"after Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
 
                     MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(shp, s => s.Label);
@@ -1375,6 +1419,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     LegendCommand.CreateSelectByDrawing<SqlFeature>(this, vectorLayer),
                     LegendCommand.CreateShowAttributeTable<SqlFeature>(this, vectorLayer),
                     LegendCommand.CreateClearSelected(this, vectorLayer),
+                    LegendCommand.CreateRemoveLayer(this, vectorLayer),
                 };
 
                 System.Diagnostics.Debug.WriteLine($"before SetLayer: {DateTime.Now.ToLongTimeString()}");

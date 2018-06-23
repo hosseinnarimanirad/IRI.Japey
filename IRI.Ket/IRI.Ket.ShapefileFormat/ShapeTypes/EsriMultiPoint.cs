@@ -11,11 +11,8 @@ using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-
-
     public struct EsriMultiPoint : IRI.Ket.ShapefileFormat.EsriType.IEsriSimplePoints
     {
-
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
@@ -47,16 +44,24 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriMultiPoint(EsriPoint[] points)
         {
-            if (points == null || points.Length < 1)
+            if (points == null)
             {
                 throw new NotImplementedException();
+            }
+
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
             }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
 
             this.points = points;
 
-            this.Srid = points.First().Srid;
         }
 
         internal EsriMultiPoint(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points)
@@ -144,7 +149,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
         /// <summary>
-        /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
+        /// Returns Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
         public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
@@ -165,6 +170,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         public Geometry AsGeometry()
         {
             return new Geometry(points.Select(p => p.AsGeometry()).ToArray(), GeometryType.MultiPoint, Srid);
+        }
+
+        public bool IsNullOrEmpty()
+        {
+            return Points == null || Points.Length < 1;
         }
     }
 }

@@ -36,5 +36,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid);
 
         Geometry AsGeometry();
+
+        bool IsNullOrEmpty();
     }
 }
