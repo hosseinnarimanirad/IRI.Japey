@@ -81,5 +81,7 @@ namespace IRI.Jab.Common.Model
         {
             return this.BoundingBox.Intersects(extent);
         }
+
+        public Guid AncestorLayerId { get; set; }
     }
 }

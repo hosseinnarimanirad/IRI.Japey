@@ -14,7 +14,7 @@ namespace IRI.Jab.MapViewer
 {
     public class LayerManager : Notifier
     {
-        List<ILayer> map;
+        List<ILayer> allLayers;
 
         private ObservableCollection<ILayer> _currentLayers;
 
@@ -30,7 +30,7 @@ namespace IRI.Jab.MapViewer
 
         public LayerManager()
         {
-            this.map = new List<ILayer>();
+            this.allLayers = new List<ILayer>();
 
             this.CurrentLayers = new ObservableCollection<ILayer>();
         }
@@ -43,86 +43,114 @@ namespace IRI.Jab.MapViewer
 
             this.CurrentLayers.Add(layer);
 
-            layer.ZIndex = this.map.Count(i => !i.Type.HasFlag(LayerType.Complex) && !i.Type.HasFlag(LayerType.Drawing));
+            layer.ZIndex = this.allLayers.Count(i => !i.Type.HasFlag(LayerType.Complex) && !i.Type.HasFlag(LayerType.Drawing));
 
-            this.map.Add(layer);
+            this.allLayers.Add(layer);
 
-            this.map = this.map.OrderBy(i => i.Type == LayerType.Complex).ToList();
+            this.allLayers = this.allLayers.OrderBy(i => i.Type == LayerType.Complex).ToList();
         }
 
-        public void Remove(ILayer layer)
+        public void Remove(ILayer layer, bool forceRemove)
         {
-            this.map.Remove(layer);
+            Clear(lyr => lyr == layer, forceRemove);
+            //if (forceRemove || layer.CanUserDelete)
+            //{
+            //    this.allLayers.Remove(layer);
 
-            this.CurrentLayers.Remove(layer);
+            //    this.CurrentLayers.Remove(layer);
+            //}
         }
 
-        public void Remove(string layerName)
+        public void Remove(string layerName, bool forceRemove)
         {
-            this.map.RemoveAll(i => i.LayerName == layerName);
+            Clear(layer => layer?.LayerName == layerName, forceRemove);
 
+            //this.allLayers.RemoveAll(i => (forceRemove || i.CanUserDelete) && i.LayerName == layerName);
+
+            //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            //{
+            //    if ( CurrentLayers[i].LayerName == layerName)
+            //    {
+            //        this.CurrentLayers.Remove(CurrentLayers[i]);
+            //    }
+            //}
+        }
+
+        internal void Remove(LayerType type, bool forceRemove)
+        {
+            Clear(layer => layer.Type.HasFlag(type), forceRemove);
+
+            //lock (allLayers)
+            //{
+            //    lock (CurrentLayers)
+            //    {
+            //        this.allLayers.RemoveAll(i => (forceRemove || i.CanUserDelete) && i.Type.HasFlag(type));
+
+            //        for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            //        {
+            //            if (CurrentLayers[i].Type.HasFlag(type))
+            //            {
+            //                this.CurrentLayers.Remove(CurrentLayers[i]);
+            //            }
+            //        }
+            //    }
+            //}
+        }
+
+        public void Remove(Predicate<ILayer> rule, bool forceRemove)
+        {
+            Clear(rule, forceRemove);
+
+            //this.allLayers.RemoveAll(rule);
+
+
+            //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            //{
+            //    if (rule(CurrentLayers[i]))
+            //    {
+            //        this.CurrentLayers.Remove(CurrentLayers[i]);
+            //    }
+            //}
+        }
+
+        public void Remove(MapProviderType provider, TileType type, bool forceRemove)
+        {
+            //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
+            //{
+            //    if (CurrentLayers[i] is TileServiceLayer)
+            //    {
+            //        var layer = CurrentLayers[i] as TileServiceLayer;
+
+            //        if (layer.Provider == provider && layer.TileType == type)
+            //        {
+            //            this.CurrentLayers.Remove(layer);
+
+            //            //map.Remove(layer);
+            //        }
+            //    }
+            //}
+
+            Clear(layer => (layer as TileServiceLayer)?.Provider == provider && (layer as TileServiceLayer)?.TileType == type, forceRemove);
+        }
+
+
+        private void Clear(Predicate<ILayer> rule, bool forceRemove)
+        {
             for (int i = CurrentLayers.Count - 1; i >= 0; i--)
             {
-                if (CurrentLayers[i].LayerName == layerName)
+                if ((forceRemove || CurrentLayers[i]?.CanUserDelete == true) && rule(CurrentLayers[i]))
                 {
                     this.CurrentLayers.Remove(CurrentLayers[i]);
                 }
             }
+
+            this.allLayers.RemoveAll(layer => (forceRemove || layer?.CanUserDelete == true) && rule(layer));
         }
-
-        internal void Remove(LayerType type)
-        {
-            lock (map)
-            {
-                lock (CurrentLayers)
-                {
-                    this.map.RemoveAll(i => i.Type.HasFlag(type));
-
-                    for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-                    {
-                        if (CurrentLayers[i].Type.HasFlag(type))
-                        {
-                            this.CurrentLayers.Remove(CurrentLayers[i]);
-                        }
-                    }
-                }
-            }
-        }
-
-        internal void Remove(Predicate<ILayer> rule)
-        {
-            this.map.RemoveAll(rule);
-
-            for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-            {
-                if (rule(CurrentLayers[i]))
-                {
-                    this.CurrentLayers.Remove(CurrentLayers[i]);
-                }
-            }
-        }
-
-        public void Remove(MapProviderType provider, TileType type)
-        {
-            for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-            {
-                if (CurrentLayers[i] is TileServiceLayer)
-                {
-                    var layer = CurrentLayers[i] as TileServiceLayer;
-
-                    if (layer.Provider == provider && layer.TileType == type)
-                    {
-                        this.CurrentLayers.Remove(layer);
-
-                        map.Remove(layer);
-                    }
-                }
-            }
-        }
+         
 
         public void Clear()
         {
-            this.map.Clear();
+            this.allLayers.Clear();
 
             for (int i = CurrentLayers.Count - 1; i >= 0; i--)
             {
@@ -136,11 +164,11 @@ namespace IRI.Jab.MapViewer
             if (rendering == RenderingApproach.Default)
             {
                 System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers:{  inverseMapScale}");
-                System.Diagnostics.Debug.WriteLine($"map count:{map.Count}");
+                System.Diagnostics.Debug.WriteLine($"map count:{allLayers.Count}");
             }
 
 
-            var newLayers = map.Where(l => l.VisibleRange.IsInRange(inverseMapScale) && l.Rendering == rendering).OrderBy(i => i.Type != LayerType.BaseMap).ThenBy(i => i.ZIndex);
+            var newLayers = allLayers.Where(l => l.VisibleRange.IsInRange(inverseMapScale) && l.Rendering == rendering).OrderBy(i => i.Type != LayerType.BaseMap).ThenBy(i => i.ZIndex);
 
             if (rendering == RenderingApproach.Default)
             {
@@ -168,7 +196,7 @@ namespace IRI.Jab.MapViewer
         {
             System.Diagnostics.Debug.WriteLine($"UpdateIsInRange:{  inverseMapScale}");
 
-            foreach (var layer in map)
+            foreach (var layer in allLayers)
             {
                 layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
 
@@ -190,7 +218,7 @@ namespace IRI.Jab.MapViewer
 
         public BoundingBox CalculateMapExtent()
         {
-            return CalculateExtent(this.map);
+            return CalculateExtent(this.allLayers);
         }
 
         private BoundingBox CalculateExtent(IList<ILayer> layers)

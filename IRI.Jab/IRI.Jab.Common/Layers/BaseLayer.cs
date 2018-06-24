@@ -75,6 +75,26 @@ namespace IRI.Jab.Common
             }
         }
 
+        private int _numberOfSelectedFeatures;
+
+        public bool HasSelectedFeatures
+        {
+            get { return NumberOfSelectedFeatures > 0; }
+        }
+
+        public int NumberOfSelectedFeatures
+        {
+            get { return _numberOfSelectedFeatures; }
+            set
+            {
+                _numberOfSelectedFeatures = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(HasSelectedFeatures));
+
+                this.OnSelectedFeaturesChanged?.Invoke(this, new CustomEventArgs<BaseLayer>(this));
+            }
+        }
+
 
         private ScaleInterval _visibleRange;
 
@@ -160,6 +180,8 @@ namespace IRI.Jab.Common
                 }
             }
         }
+
+        public event EventHandler<CustomEventArgs<BaseLayer>> OnSelectedFeaturesChanged;
 
         private void RaiseVisibilityChanged(object sender, CustomEventArgs<Visibility> e)
         {

@@ -133,15 +133,19 @@
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
                 <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2" TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
-                <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="70" VerticalAlignment="Center" Margin="4"
+                <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
                            Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}"/>
+                <TextBlock Text="{Binding NumberOfSelectedFeatures, Converter={StaticResource latinDigitsToFarsiDigitsConverter}, StringFormat={}({0})}" VerticalAlignment="Center"
+                           Visibility="{Binding NumberOfSelectedFeatures, Converter={StaticResource intGreaterThanIntParameterToVisibilityConverter}, ConverterParameter=0}"/>
                 <TextBox Text="{Binding ElementName=root, Path=Title}" Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}}"
-                         mahApp:TextBoxHelper.Watermark="عنوان" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"
+                         mahApp:TextBoxHelper.Watermark="عنوان" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True" BorderThickness="1" Padding="0" VerticalAlignment="Center"
                          MinWidth="70">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="5"/>
+                            <Setter Property="CornerRadius" Value="4"/>
                             <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Margin" Value="1"/>
+                            <Setter Property="Padding" Value="0"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>

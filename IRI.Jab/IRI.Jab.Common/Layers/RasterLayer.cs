@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using IRI.Msh.Common.Primitives;
-using Microsoft.SqlServer.Types;
 using System.Windows.Media.Imaging;
-using IRI.Jab.Common;
 using System.Windows.Data;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
@@ -15,7 +11,6 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Extensions;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
-using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Common
 {
@@ -350,7 +345,7 @@ namespace IRI.Jab.Common
                 {
                     Fill = new ImageBrush(item.Image),
                     Data = geometry,
-                    Tag = new LayerTag(mapScale) { Layer = item, IsDrawn = true, BoundingBox = item.Extent }
+                    Tag = new LayerTag(mapScale) { Layer = item, IsDrawn = true, BoundingBox = item.Extent, AncestorLayerId = this.Id }
                 };
 
                 item.Element = path;

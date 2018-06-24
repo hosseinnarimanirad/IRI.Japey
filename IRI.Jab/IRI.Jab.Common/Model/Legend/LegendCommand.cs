@@ -124,9 +124,8 @@ namespace IRI.Jab.Common.Model.Legend
                 //System.Diagnostics.Debug.WriteLine($"Get Features finished {watch.ElapsedMilliseconds}");
                 //watch.Restart();
 
-                var newLayer = new Model.Map.SelectedLayer<T>(layer.Id)
+                var newLayer = new Model.Map.SelectedLayer<T>(layer)
                 {
-                    LayerName = layer.LayerName,
                     Features = new System.Collections.ObjectModel.ObservableCollection<T>(features)
                 };
 
@@ -160,9 +159,8 @@ namespace IRI.Jab.Common.Model.Legend
 
                 var features = layer.GetFeatures<T>(drawing.AsSqlGeometry());
 
-                var newLayer = new Model.Map.SelectedLayer<T>(layer.Id)
+                var newLayer = new Model.Map.SelectedLayer<T>(layer)
                 {
-                    LayerName = layer.LayerName,
                     ShowSelectedOnMap = true
                 };
 
@@ -194,15 +192,18 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
                 Layer = layer,
                 ToolTip = "پاک کردن عوارض انتخابی",
+                IsCommandVisible = false,
             };
 
             result.Command = new RelayCommand(param =>
             {
                 map.RemoveSelectedLayer(layer);
             });
+
+            layer.OnSelectedFeaturesChanged += (sender, e) => { result.IsCommandVisible = e.Arg.HasSelectedFeatures; };
 
             return result;
         }
@@ -211,7 +212,7 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete,
                 Layer = layer,
                 ToolTip = "حذف لایه",
             };

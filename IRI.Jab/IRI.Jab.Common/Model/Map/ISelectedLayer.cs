@@ -11,7 +11,9 @@ namespace IRI.Jab.Common.Model.Map
     {
         Guid Id { get; }
 
-        string LayerName { get; set; }
+        ILayer AssociatedLayer { get; set; }
+
+        string LayerName { get;  }
 
         void UpdateSelectedFeatures(IEnumerable<ISqlGeometryAware> items);
 
@@ -20,6 +22,8 @@ namespace IRI.Jab.Common.Model.Map
         bool ShowSelectedOnMap { get; set; }  
 
         IEnumerable<ISqlGeometryAware> GetSelectedFeatures();
+
+        int CountOfSelectedFeatures();
 
         IEnumerable<ISqlGeometryAware> GetHighlightedFeatures();
 

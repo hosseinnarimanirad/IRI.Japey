@@ -194,6 +194,8 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
+            selectedLayer.AssociatedLayer.NumberOfSelectedFeatures = selectedLayer.CountOfSelectedFeatures();
+
             var existingLayer = SelectedLayers?.SingleOrDefault(l => l.Id == selectedLayer?.Id);
 
             if (existingLayer == null)
@@ -236,6 +238,8 @@ namespace IRI.Jab.Common.Presenter.Map
         public void RemoveSelectedLayer(ILayer layer)
         {
             var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.Id);
+
+            layer.NumberOfSelectedFeatures = 0;
 
             if (selectedLayer != null)
             {
@@ -666,7 +670,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action RequestCopyCurrentLocationToClipboard;
 
 
-        public Action<ILayer> RequestRemoveLayer;
+        public Action<ILayer, bool> RequestRemoveLayer;
 
         public Action<string> RequestRemoveLayerByName;
 
@@ -674,7 +678,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<string, bool> RequestClearLayerByName;
 
-        public Action<Predicate<ILayer>, bool> RequestClearLayer;
+        public Action<ILayer, bool> RequestClearLayer;
+
+        public Action<Predicate<ILayer>, bool> RequestClearLayerByCriteria;
 
         public Action RequestRemovePolyBezierLayers;
 
@@ -997,7 +1003,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void ClearLayer(ILayer layer, bool remove)
         {
-            this.RequestClearLayer?.Invoke(l => l == layer, remove);
+            this.RequestClearLayer?.Invoke(layer, remove);
         }
 
         public void ClearLayer(LayerType type, bool remove)
@@ -1029,7 +1035,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private void Clear(Predicate<ILayer> layersToBeRemoved, bool remove)
         {
-            this.RequestClearLayer?.Invoke(layersToBeRemoved, remove);
+            this.RequestClearLayerByCriteria?.Invoke(layersToBeRemoved, remove);
         }
 
         public void RemoveLayer(string layerName)
@@ -1037,9 +1043,9 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestRemoveLayerByName?.Invoke(layerName);
         }
 
-        public void RemoveLayer(ILayer layer)
+        public void RemoveLayer(ILayer layer, bool forceRemove = false)
         {
-            this.RequestRemoveLayer?.Invoke(layer);
+            this.RequestRemoveLayer?.Invoke(layer, forceRemove);
         }
 
         public void FlashPoints(List<IRI.Msh.Common.Primitives.Point> points)
@@ -1367,6 +1373,12 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
+            await AddShapefile(fileName, IRI.Ket.ShapefileFormat.Dbf.DbfFile.ArabicEncoding, IRI.Ket.ShapefileFormat.Dbf.DbfFile.ArabicEncoding);
+        }
+
+        public async Task AddShapefile(string fileName, System.Text.Encoding dataEncoding, System.Text.Encoding headerEncoding)
+        {
+
             try
             {
                 var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
@@ -1394,8 +1406,8 @@ namespace IRI.Jab.Common.Presenter.Map
                             fileName,
                             d => new SqlFeature() { Attributes = d },
                             (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
-                            System.Text.Encoding.UTF8,
-                            System.Text.Encoding.UTF8,
+                            dataEncoding,
+                            headerEncoding,
                             true);
 
                     System.Diagnostics.Debug.WriteLine($"after Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
@@ -1424,11 +1436,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 System.Diagnostics.Debug.WriteLine($"before SetLayer: {DateTime.Now.ToLongTimeString()}");
 
-                this.SetLayer(vectorLayer);
+                //this.SetLayer(vectorLayer);
 
-                System.Diagnostics.Debug.WriteLine($"before Refresh: {DateTime.Now.ToLongTimeString()}");
+                this.AddLayer(vectorLayer);
 
-                this.Refresh();
+                //this.Refresh();
 
                 System.Diagnostics.Debug.WriteLine($"after Refresh: {DateTime.Now.ToLongTimeString()}");
 
@@ -1441,7 +1453,6 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 this.IsBusy = false;
             }
-
         }
 
         public async virtual void AddWorldfile()
@@ -1473,9 +1484,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 var rasterLayer = new RasterLayer(dataSource, System.IO.Path.GetFileNameWithoutExtension(fileName), ScaleInterval.All, false, false, Visibility.Visible, .9);
 
-                this.SetLayer(rasterLayer);
+                //this.SetLayer(rasterLayer);
 
-                this.Refresh();
+                this.AddLayer(rasterLayer);
+
+                //this.Refresh();
 
             }
             catch (Exception ex)

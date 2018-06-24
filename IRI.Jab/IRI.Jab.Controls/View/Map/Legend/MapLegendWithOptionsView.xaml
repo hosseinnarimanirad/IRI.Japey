@@ -9,6 +9,7 @@
         <Grid.Resources>
             <CollectionViewSource x:Key="collectionViewSource" Source="{Binding}" Filter="CollectionViewSource_Filter"/>
         </Grid.Resources>
+        
         <ListBox ItemsSource="{Binding Source={StaticResource collectionViewSource}}">
             <ListBox.Resources>
                 <Style TargetType="ToggleButton">
@@ -52,11 +53,11 @@
                     </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
+            <!--<ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel/>
+                    <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                 </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
+            </ListBox.ItemsPanel>-->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}"
@@ -67,5 +68,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListBox>
+      
     </Grid>
 </UserControl>

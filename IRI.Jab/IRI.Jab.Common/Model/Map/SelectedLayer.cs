@@ -14,9 +14,11 @@ namespace IRI.Jab.Common.Model.Map
 {
     public class SelectedLayer<T> : Notifier, ISelectedLayer where T : ISqlGeometryAware
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get { return AssociatedLayer?.Id ?? Guid.Empty; } }
 
-        public string LayerName { get; set; }
+        public ILayer AssociatedLayer { get; set; }
+
+        public string LayerName { get { return AssociatedLayer?.LayerName; } }
 
         public bool ShowSelectedOnMap { get; set; } = false;
 
@@ -32,11 +34,6 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        public SelectedLayer(Guid id)
-        {
-            this.Id = id;
-        }
-
         //private DataTable _features;
 
         //public DataTable Features
@@ -48,8 +45,7 @@ namespace IRI.Jab.Common.Model.Map
         //        RaisePropertyChanged();
         //    }
         //}
-
-
+         
         private ObservableCollection<T> _highlightedFeatures = new ObservableCollection<T>();
 
         public ObservableCollection<T> HighlightedFeatures
@@ -69,6 +65,13 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
+        public SelectedLayer(ILayer layer)
+        {
+            //this.Id = id;
+
+            this.AssociatedLayer = layer;
+        }
+
         public void UpdateSelectedFeatures(IEnumerable<ISqlGeometryAware> items)
         {
             Features = new ObservableCollection<T>(items?.Cast<T>());
@@ -82,6 +85,11 @@ namespace IRI.Jab.Common.Model.Map
         public IEnumerable<ISqlGeometryAware> GetSelectedFeatures()
         {
             return Features?.Cast<ISqlGeometryAware>().ToList();
+        }
+
+        public int CountOfSelectedFeatures()
+        {
+            return Features.Count();
         }
 
         public IEnumerable<ISqlGeometryAware> GetHighlightedFeatures()
