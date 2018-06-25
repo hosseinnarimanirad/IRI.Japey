@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Jab.Common
 {
@@ -44,6 +46,23 @@ namespace IRI.Jab.Common
             return new VisualParameters(DefaultHighlightFill, DefaultHighlightStroke, 2, .8);
         }
 
+
+        internal static VisualParameters GetDefaultForHighlight(ISqlGeometryAware sqlGeometryAware)
+        {
+            VisualParameters result;
+
+            if (sqlGeometryAware?.TheSqlGeometry?.IsPointOrMultiPoint() == true)
+            {
+                result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 2, .8) { PointSymbol = new Model.Symbology.SimplePointSymbol(10) };
+            }
+            else
+            {
+                result = GetDefaultForHighlight();
+            }
+
+            return result;
+
+        }
 
 
         public static SolidColorBrush DefaultHighlightStroke = new SolidColorBrush(Colors.Yellow);

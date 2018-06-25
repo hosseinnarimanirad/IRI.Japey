@@ -25,6 +25,7 @@ using WpfPoint = System.Windows.Point;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Ket.DataManagement.Model;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -204,11 +205,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 selectedLayer.HighlightFeaturesChangedAction = ShowHighlightedFeatures;
 
-                selectedLayer.ZoomTo = (features) =>
+                selectedLayer.FlashSinglePoint = FlashHighlightedFeatures;
+
+                selectedLayer.ZoomTo = (features, callback) =>
                 {
                     var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
 
-                    this.ZoomToExtent(extent, false);
+                    this.ZoomToExtent(extent, false, callback);
                 };
 
                 selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
@@ -269,12 +272,23 @@ namespace IRI.Jab.Common.Presenter.Map
 
             ClearLayer("__$highlight", true);
 
-            if (enumerable == null)
+            if (enumerable == null || enumerable.Count() == 0)
             {
                 return;
             }
 
-            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight());
+            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
+
+        }
+
+        private void FlashHighlightedFeatures(ISqlGeometryAware geometry)
+        {
+            var point = geometry?.TheSqlGeometry?.AsPoint();
+
+            if (point != null)
+            {
+                FlashPoint(new Msh.Common.Primitives.Point(point.X, point.Y));
+            }
 
         }
 
@@ -979,6 +993,36 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        private void TrySetCommands<T>(ILayer layer) where T : ISqlGeometryAware
+        {
+            if ((layer?.Commands?.Count > 0))
+            {
+                return;
+            }
+
+            if (layer is VectorLayer)
+            {
+                layer.Commands = new List<ILegendCommand>()
+                {
+                    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
+                    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
+                    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                    LegendCommand.CreateRemoveLayer(this, layer),
+                };
+            }
+            //this should not happed be cause source must be FeatureDataSource<T>
+            else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
+            {
+                layer.Commands = new List<ILegendCommand>()
+                {
+                    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    LegendCommand.CreateRemoveLayer(this, layer),
+                };
+            }
+        }
+
+
         //public void AddLayer(VectorLayer layer)
         //{
         //    this.RequestAddLayer?.Invoke(layer);
@@ -987,6 +1031,13 @@ namespace IRI.Jab.Common.Presenter.Map
         public void AddLayer(ILayer layer)
         {
             TrySetCommands(layer);
+
+            this.RequestAddLayer?.Invoke(layer);
+        }
+
+        public void AddLayer<T>(ILayer layer) where T : ISqlGeometryAware
+        {
+            TrySetCommands<T>(layer);
 
             this.RequestAddLayer?.Invoke(layer);
         }

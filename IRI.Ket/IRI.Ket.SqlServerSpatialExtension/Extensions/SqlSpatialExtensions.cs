@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
-using IRI.Msh.Common.Helpers; 
+using IRI.Msh.Common.Helpers;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Model.Esri;
 
@@ -327,6 +327,42 @@ namespace IRI.Ket.SpatialExtensions
             //{
             //    return (OpenGisGeometryType)Enum.Parse(typeof(OpenGisGeometryType), geometry.STGeometryType().Value, true);
             //}
+        }
+
+        public static bool IsPointOrMultiPoint(this SqlGeometry geometry)
+        {
+            if (geometry != null)
+            {
+                var type = geometry.GetOpenGisType();
+
+                return type == OpenGisGeometryType.Point || type == OpenGisGeometryType.MultiPoint;
+            }
+
+            return false;
+        }
+
+        public static bool IsLineStringOrMultiLineString(this SqlGeometry geometry)
+        {
+            if (geometry != null)
+            {
+                var type = geometry.GetOpenGisType();
+
+                return type == OpenGisGeometryType.LineString || type == OpenGisGeometryType.MultiLineString;
+            }
+
+            return false;
+        }
+
+        public static bool IsPolygonOrMultiPolygon(this SqlGeometry geometry)
+        {
+            if (geometry != null)
+            {
+                var type = geometry.GetOpenGisType();
+
+                return type == OpenGisGeometryType.Polygon || type == OpenGisGeometryType.MultiPolygon;
+            }
+
+            return false;
         }
 
         public static Point AsPoint(this SqlGeography point)

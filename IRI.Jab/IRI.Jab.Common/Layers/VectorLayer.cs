@@ -903,7 +903,7 @@ namespace IRI.Jab.Common
 
         public List<T> GetFeatures<T>(SqlGeometry geometry) where T : ISqlGeometryAware
         {
-            if (DataSource is FeatureDataSource<T>)
+            if (DataSource as FeatureDataSource<T> != null)
             {
                 return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
             }

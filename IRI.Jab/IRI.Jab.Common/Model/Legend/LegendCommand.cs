@@ -124,10 +124,17 @@ namespace IRI.Jab.Common.Model.Legend
                 //System.Diagnostics.Debug.WriteLine($"Get Features finished {watch.ElapsedMilliseconds}");
                 //watch.Restart();
 
-                var newLayer = new Model.Map.SelectedLayer<T>(layer)
+                var newLayer = new Model.Map.SelectedLayer<T>(layer);
+
+                if (features == null)
                 {
-                    Features = new System.Collections.ObjectModel.ObservableCollection<T>(features)
-                };
+                    newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>();
+                }
+                else
+                {
+                    newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>(features);
+                }
+
 
                 map.AddSelectedLayer(newLayer);
 

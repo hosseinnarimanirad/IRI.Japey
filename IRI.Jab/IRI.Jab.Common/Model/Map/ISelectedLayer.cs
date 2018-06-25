@@ -35,7 +35,9 @@ namespace IRI.Jab.Common.Model.Map
 
         Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
 
-        Action<IEnumerable<ISqlGeometryAware>> ZoomTo { get; set; }
+        Action<ISqlGeometryAware> FlashSinglePoint { get; set; }
+
+        Action<IEnumerable<ISqlGeometryAware>, Action> ZoomTo { get; set; }
          
         Action RequestRemove { get; set; }
     }

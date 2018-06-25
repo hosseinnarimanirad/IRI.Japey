@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;
@@ -45,7 +46,7 @@ namespace IRI.Jab.Common.Model.Map
         //        RaisePropertyChanged();
         //    }
         //}
-         
+
         private ObservableCollection<T> _highlightedFeatures = new ObservableCollection<T>();
 
         public ObservableCollection<T> HighlightedFeatures
@@ -104,15 +105,31 @@ namespace IRI.Jab.Common.Model.Map
 
         public void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
         {
-            HighlightFeaturesChangedAction?.Invoke(enumerable);
+            if (enumerable?.Count() == 1 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            {
+                FlashSinglePoint?.Invoke(enumerable.First());
+            }
+            else
+            {
+                HighlightFeaturesChangedAction?.Invoke(enumerable);
+            }
         }
 
+        private void TryFlashPoint(IEnumerable<ISqlGeometryAware> point)
+        {
+            if (point?.Count() == 1 && point.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            {
+                FlashSinglePoint?.Invoke(point.First());
+            }
+        }
 
         public Action<IEnumerable<ISqlGeometryAware>> FeaturesChangedAction { get; set; }
 
         public Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
 
-        public Action<IEnumerable<ISqlGeometryAware>> ZoomTo { get; set; }
+        public Action<ISqlGeometryAware> FlashSinglePoint { get; set; }
+
+        public Action<IEnumerable<ISqlGeometryAware>, Action> ZoomTo { get; set; }
 
         public Action RequestRemove { get; set; }
 
@@ -126,7 +143,8 @@ namespace IRI.Jab.Common.Model.Map
                 {
                     _zoomToCommand = new RelayCommand(param =>
                     {
-                        this.ZoomTo?.Invoke(HighlightedFeatures.Cast<ISqlGeometryAware>());
+                        var features = HighlightedFeatures.Cast<ISqlGeometryAware>();
+                        this.ZoomTo?.Invoke(features, () => { TryFlashPoint(features); });
                     });
                 }
 

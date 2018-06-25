@@ -132,6 +132,8 @@ namespace IRI.Msh.Common.Primitives
                 this.Points = points;
 
                 this.Type = type;
+
+                this.Srid = srid;
             }
             else
             {
@@ -163,7 +165,7 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public Geometry(Geometry geometry, GeometryType type) : this(new Geometry[] { geometry }, type)
+        public Geometry(Geometry geometry, GeometryType type, int srid) : this(new Geometry[] { geometry }, type, srid)
         {
 
         }
@@ -199,7 +201,7 @@ namespace IRI.Msh.Common.Primitives
                 //return CreatePointOrLineString(points, srid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon) { Srid = srid };
+                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon, srid);
 
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:

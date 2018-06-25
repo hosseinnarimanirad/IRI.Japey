@@ -93,6 +93,8 @@ namespace IRI.Jab.MapViewer
 
         #region Fields, Properties
 
+        int minBoundingBoxSize = 10;
+
         private readonly object locker = new object();
 
         ExtentManager extentManager = new ExtentManager();
@@ -2795,7 +2797,7 @@ namespace IRI.Jab.MapViewer
 
             this.mapView.Children.Add(path);
 
-            Canvas.SetZIndex(path, this.mapView.Children.Count);
+            Canvas.SetZIndex(path, int.MaxValue);
 
             DoubleAnimation animation = new DoubleAnimation()
             {
@@ -3585,7 +3587,7 @@ namespace IRI.Jab.MapViewer
 
             ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
         }
-
+  
         //It has animation
         private async void ZoomToExtent(Rect mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
         {
@@ -3593,7 +3595,7 @@ namespace IRI.Jab.MapViewer
             {
                 return;
             }
-            else if (mapBoundingBox.Width + mapBoundingBox.Height == 0)
+            else if (mapBoundingBox.Width + mapBoundingBox.Height < minBoundingBoxSize)
             {
                 //PanTo(mapBoundingBox.X, mapBoundingBox.Y, callback);
 
