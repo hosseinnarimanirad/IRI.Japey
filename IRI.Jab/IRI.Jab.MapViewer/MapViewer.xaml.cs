@@ -4392,7 +4392,7 @@ namespace IRI.Jab.MapViewer
 
             if (geometry.GetOpenGisType() == OpenGisGeometryType.Point || geometry.GetOpenGisType() == OpenGisGeometryType.MultiPoint)
             {
-                var mapDistance = ScreenToMap(5);
+                var mapDistance = ScreenToMap(7);
 
                 geometry = geometry.STBuffer(mapDistance);
             }

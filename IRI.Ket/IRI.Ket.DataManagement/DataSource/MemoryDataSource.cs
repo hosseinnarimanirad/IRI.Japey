@@ -82,7 +82,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         private static Func<List<SqlFeature>, DataTable> sqlFeatureToDataTableMapping = (list) =>
          {
-             if (!(list?.Count > 1))
+             if (!(list?.Count > 0))
              {
                  return null;
              }
