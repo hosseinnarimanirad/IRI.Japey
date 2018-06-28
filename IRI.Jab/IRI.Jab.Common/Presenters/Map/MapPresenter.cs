@@ -269,16 +269,24 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private async void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
         {
-
             ClearLayer("__$highlight", true);
+
+            ClearLayer(LayerType.AnimatingItem, true);
 
             if (enumerable == null || enumerable.Count() == 0)
             {
                 return;
             }
 
-            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
-
+            if (enumerable?.Count() < 10 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            {
+                FlashPoints(enumerable.Select(e => (IRI.Msh.Common.Primitives.Point)e.TheSqlGeometry.AsPoint()).ToList());
+                //FlashSinglePoint?.Invoke(enumerable.First());
+            }
+            else
+            {
+                await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
+            }
         }
 
         private void FlashHighlightedFeatures(ISqlGeometryAware geometry)

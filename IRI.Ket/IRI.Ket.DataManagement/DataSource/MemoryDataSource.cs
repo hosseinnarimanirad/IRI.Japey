@@ -60,7 +60,7 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 if (geometry?.STSrid.Value != this.GetSrid())
                 {
-                    throw new NotImplementedException();
+                    throw new ArgumentException("srid mismatch");
                 }
 
                 geometries = GetGeometries()?.Where(i => i.STIntersects(geometry).IsTrue);
@@ -241,7 +241,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             if (geometry?.STSrid.Value != this.GetSrid())
             {
-                throw new NotImplementedException();
+                throw new ArgumentException("srid mismatch");
             }
 
             return MappingFunc(this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList());

@@ -84,15 +84,22 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriPolyline(EsriPoint[] points, int[] parts)
         {
-            if (points == null || points.Length < 1)
+            if (points == null )
             {
                 throw new NotImplementedException();
             }
 
+            if (points.Length == 0)
+            {
+                this.Srid = 0;
+            }
+            else
+            {
+                this.Srid = points.First().Srid;
+            }
+
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-
-            this.Srid = points.First().Srid;
-
+             
             this.points = points;
 
             this.parts = parts;

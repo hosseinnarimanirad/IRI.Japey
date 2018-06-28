@@ -28,7 +28,7 @@ namespace IRI.Ket.ShapefileFormat
             return Task.Run(() => { return ReadShapes(fileName); });
         }
 
-        public static IEsriShapeCollection ReadShapes(string shpFileName)
+        public static IEsriShapeCollection ReadShapes(string shpFileName, int defaultSrid = 0)
         {
             //System.ComponentModel.LicenseManager.Validate(typeof(Shapefile));
 
@@ -47,7 +47,16 @@ namespace IRI.Ket.ShapefileFormat
                 }
             }
 
-            int srid = TryGetSrid(shpFileName);
+            int srid;
+
+            if (defaultSrid == 0)
+            {
+                srid = TryGetSrid(shpFileName);
+            }
+            else
+            {
+                srid = defaultSrid;
+            }
 
             switch (MainHeader.ShapeType)
             {
@@ -110,12 +119,12 @@ namespace IRI.Ket.ShapefileFormat
             }
         }
 
-        public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
         {
-            return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters); });
+            return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid); });
         }
 
-        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
         {
             System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
 
@@ -127,7 +136,16 @@ namespace IRI.Ket.ShapefileFormat
 
             System.Diagnostics.Debug.WriteLine($"after DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
 
-            var srid = TryGetSrid(shpFileName);
+            int srid;
+
+            if (defaultSrid != 0)
+            {
+                srid = defaultSrid;
+            }
+            else
+            {
+                srid = TryGetSrid(shpFileName);
+            }
 
             List<T> result = new List<T>(shapes.Count);
 
@@ -145,11 +163,12 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true)
+        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
         {
 
 
-            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters);
+            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
+
             //var shapes = ReadShapes(shpFileName);
 
             //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);

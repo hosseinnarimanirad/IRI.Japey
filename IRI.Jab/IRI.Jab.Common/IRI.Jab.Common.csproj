@@ -156,6 +156,7 @@
     <Compile Include="Common\Extensions\GeometryExtensions.cs" />
     <Compile Include="Common\Extensions\PenExtensions.cs" />
     <Compile Include="Common\Extensions\PointExtensions.cs" />
+    <Compile Include="Common\Extensions\RectExtensions.cs" />
     <Compile Include="Common\Extensions\SpatialBaseExtensions.cs" />
     <Compile Include="Common\Extensions\SqlGeometryExtensions.cs" />
     <Compile Include="Common\Extensions\TileInfoExtensions.cs" />

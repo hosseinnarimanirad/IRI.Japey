@@ -2032,7 +2032,7 @@ namespace IRI.Jab.MapViewer
             {
                 if (layer.Rendering == RenderingApproach.Tiled)
                 {
-                    if ((layer is VectorLayer))
+                    if (!(layer is VectorLayer))
                     {
                         throw new NotImplementedException();
                     }
@@ -2319,6 +2319,13 @@ namespace IRI.Jab.MapViewer
                 if (justTiled && !tag.IsTiled)
                     continue;
 
+                if (tag.Tile != null && (tag.Tile.ZoomLevel != this.CurrentZoomLevel || !this.CurrentTileInfos.Contains(tag.Tile)))
+                {
+                    this.mapView.Children.RemoveAt(i);
+
+                    continue;
+                }
+
                 if (this.CurrentTileInfos.Contains(tag.Tile) && tag.Tile.ZoomLevel == this.CurrentZoomLevel)// && tag.Scale == this.MapScale)
                     continue;
 
@@ -2409,9 +2416,12 @@ namespace IRI.Jab.MapViewer
                 //Complex layer items may not be Path, so use FrameworkElement
                 var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
 
-                if (criteria(tag.Layer))
+                if (tag?.Layer != null)
                 {
-                    this.mapView.Children.RemoveAt(i);
+                    if (criteria(tag.Layer))
+                    {
+                        this.mapView.Children.RemoveAt(i);
+                    }
                 }
             }
 
@@ -3587,7 +3597,7 @@ namespace IRI.Jab.MapViewer
 
             ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
         }
-  
+
         //It has animation
         private async void ZoomToExtent(Rect mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
         {
@@ -3600,8 +3610,8 @@ namespace IRI.Jab.MapViewer
                 //PanTo(mapBoundingBox.X, mapBoundingBox.Y, callback);
 
                 int newZoomLevel = WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel);
-
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), MapToScreen(mapBoundingBox.Location), callback);
+                 
+                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), mapBoundingBox.GetCenter().AsPoint(), callback);
 
                 return;
             }

@@ -105,14 +105,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
         {
-            if (enumerable?.Count() == 1 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
-            {
-                FlashSinglePoint?.Invoke(enumerable.First());
-            }
-            else
-            {
-                HighlightFeaturesChangedAction?.Invoke(enumerable);
-            }
+            HighlightFeaturesChangedAction?.Invoke(enumerable);
         }
 
         private void TryFlashPoint(IEnumerable<ISqlGeometryAware> point)
