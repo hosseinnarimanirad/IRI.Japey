@@ -80,5 +80,28 @@ namespace IRI.Ket.SpatialExtensions
 
             return new EsriPolygon(polygon.ToArray());
         }
+
+        public static List<SqlGeometry> Tessellate(this BoundingBox boundingBox, int numberOfColumns, int srid)
+        {
+            var size = boundingBox.Width / numberOfColumns;
+
+            var numberOfRows = Math.Ceiling(boundingBox.Height / size);
+
+            List<SqlGeometry> result = new List<SqlGeometry>();
+
+            var minX = boundingBox.XMin;
+
+            var minY = boundingBox.YMin;
+
+            for (int i = 0; i < numberOfColumns; i++)
+            {
+                for (int j = 0; j < numberOfRows; j++)
+                {
+                    result.Add(new BoundingBox(minX + i * size, minY + j * size, minX + (i + 1) * size, minY + (j + 1) * size).AsSqlGeometry(srid));
+                }
+            }
+
+            return result;
+        }
     }
 }

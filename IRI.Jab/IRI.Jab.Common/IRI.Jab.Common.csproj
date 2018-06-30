@@ -247,6 +247,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Common\StateMachine\StateMachineExtensions.cs" />
+    <Compile Include="Raster\RasterCalculus.cs" />
     <Compile Include="TileServices\CacheSource.cs" />
     <Compile Include="TileServices\MapProviderType.cs" />
     <Compile Include="TileServices\TileCacheAddress.cs" />
@@ -456,6 +457,10 @@
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DigitalImageProcessing\IRI.Ket.DigitalImageProcessing.csproj">
+      <Project>{0662A1B4-12DE-4E31-8BD3-DB61BAAF7D8D}</Project>
+      <Name>IRI.Ket.DigitalImageProcessing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
       <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>

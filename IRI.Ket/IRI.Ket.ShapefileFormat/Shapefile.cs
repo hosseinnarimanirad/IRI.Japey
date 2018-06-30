@@ -23,9 +23,9 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Read Shapefile
 
-        public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName)
+        public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName, int defaultSrid = 0)
         {
-            return Task.Run(() => { return ReadShapes(fileName); });
+            return Task.Run(() => { return ReadShapes(fileName, defaultSrid); });
         }
 
         public static IEsriShapeCollection ReadShapes(string shpFileName, int defaultSrid = 0)
@@ -128,7 +128,7 @@ namespace IRI.Ket.ShapefileFormat
         {
             System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
 
-            var shapes = ReadShapes(shpFileName);
+            var shapes = ReadShapes(shpFileName, defaultSrid);
 
             System.Diagnostics.Debug.WriteLine($"after ReadShapes & before DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
 
