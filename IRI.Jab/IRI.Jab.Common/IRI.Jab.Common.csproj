@@ -105,6 +105,7 @@
     <Compile Include="Assets\Converters\BoolToGridLengthConverter.cs" />
     <Compile Include="Assets\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\DoubleInverseConverter.cs" />
+    <Compile Include="Assets\Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Assets\Converters\FlowDocumentXmlToStringConverter.cs" />
     <Compile Include="Assets\Converters\IntGreaterThanIntParameterToIsEnabledConverter.cs" />
     <Compile Include="Assets\Converters\IntGreaterThanIntParameterToVisibilityConverter.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
     <Compile Include="Assets\ShapeStrings\MaterialDesign.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
+    <Compile Include="Assets\ShapeStrings\TheNounProject.cs" />
     <Compile Include="Common\Defaults\DefaultRighClickOptions.cs" />
     <Compile Include="Common\Event\CallbackEventArgs.cs" />
     <Compile Include="Common\Event\ChangeEventArgs.cs" />

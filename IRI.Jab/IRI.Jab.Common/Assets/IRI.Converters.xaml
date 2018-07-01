@@ -25,7 +25,7 @@
     <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
     <converters:StringToShapeConverter x:Key="stringToShapeConverter"/>
     <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>
-    
+    <converters:EnumToDescriptionConverter x:Key="enumToDescriptionConverter"/>
     <converters:SubtractConstantConverter x:Key="subtractConstantConverter"/>
 
     <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>

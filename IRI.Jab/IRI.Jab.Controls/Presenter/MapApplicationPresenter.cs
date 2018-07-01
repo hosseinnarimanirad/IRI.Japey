@@ -32,6 +32,8 @@ namespace IRI.Jab.Controls.Presenter
                     return string.Empty;
             };
 
+            this.RequestShowMessage = msg => System.Windows.MessageBox.Show(msg);
+
             this.MapSettings.BaseMapCacheDirectory = Environment.CurrentDirectory + "\\Data";
 
             this.MapSettings.MaxGoogleZoomLevel = 18;

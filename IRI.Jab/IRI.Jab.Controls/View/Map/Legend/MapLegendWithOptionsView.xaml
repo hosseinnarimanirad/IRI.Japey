@@ -27,7 +27,6 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-
                             <Setter Property="BorderBrush" Value="{DynamicResource HighlightBrush}"/>
                             <Setter Property="Cursor" Value="Arrow"/>
                         </Trigger>
