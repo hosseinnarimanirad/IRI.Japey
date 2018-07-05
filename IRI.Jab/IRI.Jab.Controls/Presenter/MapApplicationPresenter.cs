@@ -14,7 +14,7 @@ namespace IRI.Jab.Controls.Presenter
 
         }
 
-        public  void Initialize(System.Windows.Window ownerWindow)
+        public void Initialize(System.Windows.Window ownerWindow)
         {
             this.RequestClearAll = () =>
             {
@@ -25,6 +25,16 @@ namespace IRI.Jab.Controls.Presenter
             this.RequestOpenFile = (filter) =>
             {
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog() { Filter = filter };
+
+                if (dialog.ShowDialog() == true)
+                    return dialog.FileName;
+                else
+                    return string.Empty;
+            };
+
+            this.RequestSaveFile = (filter) =>
+            {
+                Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog() { Filter = filter };
 
                 if (dialog.ShowDialog() == true)
                     return dialog.FileName;
@@ -44,7 +54,7 @@ namespace IRI.Jab.Controls.Presenter
             this.RequestGoTo = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
             this.RegisterMapOptions();
-             
+
         }
     }
 }

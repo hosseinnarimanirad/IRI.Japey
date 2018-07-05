@@ -25,6 +25,13 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
+        public GeoRasterFileDataSource(GeoReferencedImage image)
+        {
+            this.geoRaster = image;
+            
+            this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+        }
+
         public static GeoRasterFileDataSource Create(string imageFileName, int srid)
         {
             try

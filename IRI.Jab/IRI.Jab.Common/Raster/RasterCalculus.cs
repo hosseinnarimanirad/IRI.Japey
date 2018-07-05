@@ -1,7 +1,11 @@
-﻿using IRI.Ket.DigitalImageProcessing;
+﻿using IRI.Jab.Common.Helpers;
+using IRI.Jab.Common.Model.Symbology;
+using IRI.Jab.Common.Raster.Model;
+using IRI.Ket.DigitalImageProcessing;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Algebra;
+using IRI.Msh.Common.Model;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -103,7 +107,7 @@ namespace IRI.Jab.Common.Raster
             //return result;
         }
 
-        public static void Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors)
+        public static GeoReferencedImage Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges)
         {
             var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
@@ -128,7 +132,7 @@ namespace IRI.Jab.Common.Raster
             var midValue = rangeValue / 2.0 + minValue;
 
             //ContinousRangeColor ranges = new ContinousRangeColor(values, colors);
-            DiscreteRangeColor ranges = new DiscreteRangeColor(values, colors);
+            //DiscreteRangeColor ranges = new DiscreteRangeColor(values, colors);
 
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -148,8 +152,7 @@ namespace IRI.Jab.Common.Raster
             var ellapsedtime = stopwatch.ElapsedMilliseconds;
             stopwatch.Restart();
 
-            result.Save("result.bmp");
-
+            return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
         }
 
         public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors)
@@ -268,106 +271,5 @@ namespace IRI.Jab.Common.Raster
 
     }
 
-    public class DiscreteRangeColor
-    {
-        public double MinValue { get; }
 
-        public double MaxValue { get; }
-
-        public List<double> MidValues { get; }
-
-        public List<Color> Colors { get; }
-
-        public DiscreteRangeColor(List<double> values, List<Color> colors)
-        {
-            if (values.Count - 1 != colors.Count)
-            {
-                throw new NotImplementedException();
-            }
-
-            MidValues = values;
-
-            this.Colors = colors;
-        }
-
-        public Color Interpolate(double value)
-        {
-            var index = MidValues.IndexOf(MidValues.First(v => v >= value));
-
-            return Colors[index == 0 ? 0 : index - 1];
-        }
-    }
-
-    public class ContinousRangeColor
-    {
-        public double MinValue { get; }
-
-        public double MaxValue { get; }
-
-        public List<double> MidValues { get; }
-
-        public List<Color> Colors { get; }
-
-        public List<ColorInterpolation> Interpolations { get; private set; }
-
-        public ContinousRangeColor(List<double> values, List<Color> colors)
-        {
-            if (values.Count - 1 != colors.Count)
-            {
-                throw new NotImplementedException();
-            }
-
-            MinValue = values.First();
-
-            MaxValue = values.Last();
-
-            MidValues = values;
-
-            Interpolations = new List<ColorInterpolation>();
-
-            for (int i = 0; i < colors.Count - 1; i++)
-            {
-                Interpolations.Add(new ColorInterpolation(colors[i], colors[i + 1]));
-            }
-        }
-
-        public Color Interpolate(double value)
-        {
-            var index = MidValues.IndexOf(MidValues.First(v => v >= value));
-
-            index = index == Interpolations.Count ? Interpolations.Count - 1 : index;
-
-            return Interpolations[index].Interpolate(value, MidValues[index - 1], MidValues[index]);
-        }
-    }
-
-    public class ColorInterpolation
-    {
-        Color _minColor, _maxColor;
-
-        int rangeR, rangeB, rangeG;
-
-        public ColorInterpolation(Color minColor, Color maxColor)
-        {
-            _minColor = minColor;
-
-            _maxColor = maxColor;
-
-            rangeR = maxColor.R - minColor.R;
-            rangeG = maxColor.G - minColor.G;
-            rangeB = maxColor.B - minColor.B;
-
-        }
-
-        public Color Interpolate(double value, double minValue, double maxValue)
-        {
-            var r = (int)(_minColor.R + rangeR / (maxValue - minValue) * (value - minValue));
-            var g = (int)(_minColor.G + rangeG / (maxValue - minValue) * (value - minValue));
-            var b = (int)(_minColor.B + rangeB / (maxValue - minValue) * (value - minValue));
-
-            return Color.FromArgb(r, g, b);
-
-        }
-
-    }
 }

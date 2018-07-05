@@ -223,6 +223,7 @@
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
+    <Compile Include="Model\Symbology\ColorInterpolation.cs" />
     <Compile Include="Model\Symbology\ISymbol.cs" />
     <Compile Include="Model\Symbology\SimpleLineSymbol.cs" />
     <Compile Include="Model\Symbology\SimpleMarkerSymbol.cs" />
@@ -249,6 +250,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Common\StateMachine\StateMachineExtensions.cs" />
+    <Compile Include="Raster\Model\ContinousRangeColor.cs" />
+    <Compile Include="Raster\Model\DiscreteRangeColor.cs" />
     <Compile Include="Raster\RasterCalculus.cs" />
     <Compile Include="TileServices\CacheSource.cs" />
     <Compile Include="TileServices\MapProviderType.cs" />
