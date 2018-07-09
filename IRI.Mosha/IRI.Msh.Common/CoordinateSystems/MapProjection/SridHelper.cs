@@ -43,8 +43,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
                     return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(41));
 
                 default:
-
-                    throw new NotImplementedException();
+                    return null;
             }
 
             //public static CrsBase GetCrs(int srid)

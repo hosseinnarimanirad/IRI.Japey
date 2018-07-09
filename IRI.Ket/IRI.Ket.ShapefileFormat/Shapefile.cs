@@ -265,7 +265,7 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Write (Save) Shapefile 
 
-        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false, SrsBase crs = null)
+        public static void Save(string shpFileName, IEnumerable<IEsriShape> shapes, bool createDbf = false, bool overwrite = false, SrsBase srs = null)
         {
             if (shapes.IsNullOrEmpty())
             {
@@ -324,16 +324,19 @@ namespace IRI.Ket.ShapefileFormat
                 Dbf.DbfFile.Write(Shapefile.GetDbfFileName(shpFileName), collection.Count, overwrite);
             }
 
-            if (crs == null)
+            //try to automatically find srs
+            if (srs == null)
             {
-                var srid = shapes.First().Srid;
+                var srid = shapes.First()?.Srid ?? 0;
 
-
+                srs = SridHelper.AsSrsBase(srid);
             }
-            else
+             
+            if (srs != null)
             {
-                SaveAsPrj(shpFileName, crs, overwrite);
+                SaveAsPrj(shpFileName, srs, overwrite);
             }
+
         }
 
         //public static void Save<T>(string shpFileName, IEnumerable<T> objects, Func<T, IEsriShape> map, bool createDbf = false, bool overwrite = false)
@@ -365,30 +368,30 @@ namespace IRI.Ket.ShapefileFormat
                                       Func<T, IEsriShape> geometryMap,
                                       List<ObjectToDbfTypeMap<T>> attributeMappings,
                                       Encoding encoding,
-                                      SrsBase crs,
+                                      SrsBase srs,
                                       bool overwrite = false)
         {
-            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, crs, overwrite);
+            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
 
             DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings.Select(m => m.MapFunction).ToList(), attributeMappings.Select(m => m.FieldType).ToList(), encoding, overwrite);
         }
 
 
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, SrsBase crs, bool overwrite = false)
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, SrsBase srs, bool overwrite = false)
         {
-            Save(shpFileName, data, createEmptyDbf, overwrite, crs);
+            Save(shpFileName, data, createEmptyDbf, overwrite, srs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, SrsBase crs, bool overwrite = false)
+        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<T> data, Func<T, IEsriShape> map, bool createEmptyDbf, SrsBase srs, bool overwrite = false)
         {
-            Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite, crs);
+            Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite, srs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsPrj(string shpFileName, SrsBase crs, bool overwrite)
+        public static void SaveAsPrj(string shpFileName, SrsBase srs, bool overwrite)
         {
             var prjFileName = GetPrjFileName(shpFileName);
 
@@ -397,7 +400,7 @@ namespace IRI.Ket.ShapefileFormat
                 System.IO.File.Delete(prjFileName);
             }
 
-            crs.AsEsriPrj().Save(prjFileName);
+            srs.AsEsriPrj().Save(prjFileName);
         }
 
         #endregion
@@ -405,13 +408,13 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Project
 
-        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, SrsBase targetCrs)
+        public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, SrsBase targetSrs)
         {
-            return Task.Run(() => Project(shpFileName, targetCrs));
+            return Task.Run(() => Project(shpFileName, targetSrs));
         }
 
 
-        public static List<IEsriShape> Project(string shpFileName, SrsBase targetCrs)
+        public static List<IEsriShape> Project(string shpFileName, SrsBase targetSrs)
         {
             var sourcePrj = GetPrjFileName(shpFileName);
 
@@ -420,11 +423,11 @@ namespace IRI.Ket.ShapefileFormat
                 throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
             }
 
-            var sourceCrs = new Prj.EsriPrjFile(sourcePrj).AsMapProjection();
+            var sourceSrs = new Prj.EsriPrjFile(sourcePrj).AsMapProjection();
 
             var data = ReadShapes(shpFileName).ToList();
 
-            return Project(data, sourceCrs, targetCrs);
+            return Project(data, sourceSrs, targetSrs);
 
             ////Old Method
             //var sourcePrj = GetPrjFileName(shpFileName);
@@ -489,16 +492,16 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, SrsBase targetCrs, bool overwrite = false)
+        public static void ProjectAndSaveAsShapefile(string sourceShapefileName, string targetShapefileName, SrsBase targetSrs, bool overwrite = false)
         {
             if (!CheckAllNeededFilesExists(sourceShapefileName, true))
             {
                 throw new NotImplementedException();
             }
 
-            var result = Project(sourceShapefileName, targetCrs);
+            var result = Project(sourceShapefileName, targetSrs);
             //result.ToList().Select(i=>i.MinimumBoundingBox).ToList()
-            SaveAsShapefile(targetShapefileName, result, false, targetCrs, overwrite);
+            SaveAsShapefile(targetShapefileName, result, false, targetSrs, overwrite);
 
             var destinationDbfFileName = GetDbfFileName(targetShapefileName);
 

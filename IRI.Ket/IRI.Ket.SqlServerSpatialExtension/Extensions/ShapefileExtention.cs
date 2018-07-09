@@ -71,6 +71,10 @@ namespace IRI.Ket.SpatialExtensions
             return result;
         }
 
+
+        #region EsriShape to SqlGeometry
+
+        
         private static SqlGeometry CreateDefault(EsriShapeType esriType, int srid)
         {
             switch (esriType)
@@ -280,6 +284,8 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndFigure();
         }
 
+        #endregion
+
         public static List<EsriPoint> ExtractPoints(this IEsriShapeCollection shapes)
         {
             List<EsriPoint> result = new List<EsriPoint>();
@@ -307,7 +313,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-        #region Convert To ESRI Shape
+        #region SqlGeometry To ESRI Shape
 
 
 

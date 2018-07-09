@@ -835,6 +835,25 @@ namespace IRI.Jab.Common.Presenter.Map
 
             shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
+            shapeItem.RequestSaveAsShapefile = g =>
+            {
+                try
+                {
+                    var file = SaveFile("*.shp|*.shp");
+
+                    if (string.IsNullOrWhiteSpace(file))
+                        return;
+
+                    var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
+
+                    IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+                }
+                catch (Exception ex)
+                {
+                    ShowMessage(ex.Message);
+                }
+            };
+
             var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
             var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
 

@@ -20,6 +20,8 @@ namespace IRI.Jab.Common.Model.Map
 
         private const string _zoomToolTip = "بزرگ‌نمایی";
 
+        private const string _saveToolTip = "ذخیره‌سازی";
+
         private string _id;
 
         public string Id
@@ -87,6 +89,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public Action<DrawingItem> RequestHighlightGeometry;
 
+        public Action<DrawingItem> RequestSaveAsShapefile;
 
         //public Action<DrawingItem> RequestDownload;
 
@@ -121,6 +124,8 @@ namespace IRI.Jab.Common.Model.Map
             Commands.Add(new LegendCommand() { Command = RemoveCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarDelete, ToolTip = _removeToolTip });
 
             Commands.Add(new LegendCommand() { Command = EditCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarEdit, ToolTip = _editToolTip });
+
+            Commands.Add(new LegendCommand() { Command = SaveAsShapefile, Layer = AssociatedLayer, PathMarkup = Appbar.appbarSave, ToolTip = _saveToolTip });
 
             Commands.Add(new LegendCommand() { Command = ZoomCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarMagnify, ToolTip = _zoomToolTip });
 
@@ -169,6 +174,24 @@ namespace IRI.Jab.Common.Model.Map
                 }
 
                 return _highlightCommand;
+            }
+        }
+
+        private RelayCommand _saveAsShapefile;
+
+        public RelayCommand SaveAsShapefile
+        {
+            get
+            {
+                if (_saveAsShapefile == null)
+                {
+                    _saveAsShapefile = new RelayCommand(param =>
+                    {
+                        this.RequestSaveAsShapefile?.Invoke(this);
+                    });
+                }
+
+                return _saveAsShapefile;
             }
         }
 

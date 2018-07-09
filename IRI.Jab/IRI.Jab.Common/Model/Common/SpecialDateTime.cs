@@ -1,4 +1,5 @@
 ﻿using IRI.Ket.Common.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,8 +133,9 @@ namespace IRI.Jab.Common.Model.Common
             return LongPersianDateTime;
         }
 
+        [JsonIgnore]
         public Action<SpecialDateTime> ChangeAction;
-
+         
         public event EventHandler<CustomEventArgs<SpecialDateTime>> OnChanged;
     }
 }
