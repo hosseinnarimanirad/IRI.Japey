@@ -16,6 +16,9 @@
     <converters:NotNullToBoolConverter x:Key="notNullToBoolConverter"/>
     <converters:ScaleToGoogleScaleConverter x:Key="scaleToGoogleScaleConverter"/>
     <converters:BoolToBoldFontConverter x:Key="boolToBoldFontConverter"/>
+
+    <converters:MultiBooleanToVisibilityConverter x:Key="multiBooleanToVisibilityConverter"/>
+
     <converters:NotConverter x:Key="notConverter"/>
     <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
     <converters:LatinDigitsToFarsiDigitsConverter x:Key="latinDigitsToFarsiDigitsConverter"/>

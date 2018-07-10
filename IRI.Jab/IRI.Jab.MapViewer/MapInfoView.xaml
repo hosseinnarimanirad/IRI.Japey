@@ -100,10 +100,12 @@
                     Margin="4" Visibility="{Binding IsDrawEditMeasureMode, Converter={StaticResource boolToVisibilityConverter}}">
         <StackPanel >
             <DockPanel Margin="0" >
-                <TextBlock DockPanel.Dock="Left" Text="X" Margin="4"/>
+                <TextBlock DockPanel.Dock="Left" Text="X" Margin="4"
+                           Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}}"/>
                 <!--<TextBox DockPanel.Dock="Left" Text="{Binding MapPanel.CurrentEditingPoint.X, Mode=TwoWay}" MaxWidth="90"
                          FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">-->
-                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center"
+                         Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
@@ -118,13 +120,15 @@
                     </TextBox.Style>
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="3"/>
+                            <Setter Property="CornerRadius" Value="4"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
 
-                <TextBlock DockPanel.Dock="Left" Text="Y" Margin="4"/>
-                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">
+                <TextBlock DockPanel.Dock="Left" Text="Y" Margin="4"
+                           Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center"
+                         Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
@@ -139,7 +143,7 @@
                     </TextBox.Style>
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="3"/>
+                            <Setter Property="CornerRadius" Value="4"/>
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
@@ -149,15 +153,15 @@
                 <DockPanel DockPanel.Dock="Right" LastChildFill="False"
                             Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}">
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" Margin="2" 
-                        ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
-                        Command="{Binding AddPointToNewDrawingCommand}"  
-                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}">
+                            ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
+                            Command="{Binding AddPointToNewDrawingCommand}"
+                            Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarAdd}" FlowDirection="LeftToRight"/>
                     </Button>
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" Margin="2,0,10,0" 
                         ToolTip="{Binding ElementName=root, Path=FinishDrawingPartText.Title}"
-                        Command="{Binding FinishDrawingPartCommand}"  
-                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}">
+                        Command="{Binding FinishDrawingPartCommand}"
+                            Visibility="{Binding MapPanel.IsMultiPartSupportAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarCheckmark}" FlowDirection="LeftToRight"/>
                     </Button>
 
@@ -205,7 +209,7 @@
             <!--<TextBlock Text="{Binding ElementName=root, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"
                                Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}"/>-->
             <StackPanel Visibility="{Binding MapPanel.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <TabControl>
+                <TabControl SelectedIndex="2">
                     <TabControl.Items>
                         <TabItem Header="نقطه جاری" Cursor="Hand" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
@@ -241,7 +245,13 @@
                             </StackPanel>
                         </TabItem>
 
-                        <TabItem Header="عوارض چند تکه‌ای" Cursor="Hand" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
+                        <TabItem Header="عوارض چند تکه‌ای" Cursor="Hand"><!--Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">-->
+                            <TabItem.Visibility>
+                                <MultiBinding Converter="{StaticResource multiBooleanToVisibilityConverter}">
+                                    <Binding Path="IsEditMode"/>
+                                    <Binding Path="MapPanel.IsMultiPartSupportAvailable"/>
+                                </MultiBinding> 
+                            </TabItem.Visibility>
                             <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
                                 <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
@@ -311,13 +321,10 @@
                     </TabControl.Items>
                 </TabControl>
 
-                <Expander Header="نقطه جاری"  Visibility="Collapsed">
-                    <!--Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">-->
+                <!--<Expander Header="نقطه جاری"  Visibility="Collapsed"> 
 
                     <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
-                        <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
-                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
-                                  x:Name="showMultiPartTools" IsChecked="True"/>-->
+                    
 
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
                                 ToolTip="نقطه قبلی"
@@ -347,18 +354,9 @@
                     </StackPanel>
                 </Expander>
                 <Expander Header="عوارض چند تکه‌ای"   Visibility="Collapsed">
-                    <!--Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">-->
 
                     <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
-                        <!--<CheckBox Content="نمایش ابزارهای عوارض چند تکه‌ای" 
-                                  HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Visibility="Collapsed"
-                                  x:Name="showMultiPartTools" IsChecked="True"/>-->
-                      
-                        <!--<Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
-                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
-                                Command="{Binding CancelNewDrawingCommand}" >
-                            <Path Data="{StaticResource appbarChevronLeft}" FlowDirection="LeftToRight"/>
-                        </Button>-->
+
                         <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
                                 ToolTip="حذف تکهٔ جاری"
                                 Command="{Binding DeleteCurrentPartCommand}" >
@@ -375,14 +373,9 @@
                                 Command="{Binding ZoomToCurrentPartCommand}" >
                             <Path Data="{StaticResource appbarMagnifyAdd}" FlowDirection="LeftToRight"/>
                         </Button>
-                        <!--<Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
-                                ToolTip="{Binding ElementName=root, Path=CancelDrawingText.Title}"
-                                Command="{Binding CancelNewDrawingCommand}" >
-                            <Path Data="{StaticResource appbarChevronRight}" FlowDirection="LeftToRight"/>
-                        </Button>-->
+
                     </StackPanel>
                 </Expander>
-                
                 <Expander Header="سیستم مرجع مکانی" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" >
                         <RadioButton GroupName="A" ToolTip="{Binding ElementName=root, Path=GeodeticWgs84Text.Title}" Foreground="White" Margin="4,2" 
@@ -414,7 +407,8 @@
                             </TextBox.Resources>
                         </TextBox>
                     </StackPanel>
-                </Expander>
+                </Expander>-->
+                
             </StackPanel>
 
             <Border Height="Auto" Margin="0 5 0 0" CornerRadius="0 0 15 15" 

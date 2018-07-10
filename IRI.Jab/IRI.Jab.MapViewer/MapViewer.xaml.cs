@@ -556,9 +556,9 @@ namespace IRI.Jab.MapViewer
                 AddPointToNewDrawing((sb.Point)p);
             };
 
-            presenter.RequestGetDrawingAsync = (mode, display) =>
+            presenter.RequestGetDrawingAsync = (mode, options, display) =>
             {
-                return this.GetDrawingAsync(mode, null, display);
+                return this.GetDrawingAsync(mode, options, display);
             };
 
             presenter.RequestCancelNewDrawing = () => this.CancelDrawing();
@@ -571,7 +571,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestFinishEdit = () => this.FinishEditing();
 
-            presenter.RequestMeasure = async (mode, isEdgeLabelVisible) => await this.MeasureAsync(mode, isEdgeLabelVisible, null);
+            //presenter.RequestMeasure = async (mode, isEdgeLabelVisible) => await this.MeasureAsync(mode, isEdgeLabelVisible, null);
+            presenter.RequestMeasure = async (mode, drawingOptions, editingOptions, action) => await this.MeasureAsync(mode, drawingOptions, editingOptions, action);
 
 
             presenter.RequestCancelMeasure = this.CancelMeasure;
@@ -3610,7 +3611,7 @@ namespace IRI.Jab.MapViewer
                 //PanTo(mapBoundingBox.X, mapBoundingBox.Y, callback);
 
                 int newZoomLevel = WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel);
-                 
+
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), mapBoundingBox.GetCenter().AsPoint(), callback);
 
                 return;
@@ -4080,7 +4081,7 @@ namespace IRI.Jab.MapViewer
 
         private void FinishDrawingPart()
         {
-            if (drawingLayer != null)
+            if (drawingLayer != null && drawingLayer.TryFinishDrawingPart())
             {
                 this.mapView.MouseUp -= MapView_MouseUpForDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
@@ -4090,30 +4091,34 @@ namespace IRI.Jab.MapViewer
                 this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
                 this.mapView.MouseDown += MapView_MouseDownForStartNewPart;
 
-                drawingLayer.FinishDrawingPart();
+                //drawingLayer.TryFinishDrawingPart();
             }
         }
 
         private void FinishDrawing()
         {
-            this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-            this.mapView.MouseMove -= MapView_MouseMoveDrawing;
-            this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+            if (drawingLayer?.GetFinalGeometry()?.IsValid() == true)
+            {
 
-            this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
 
-            ResetMapViewEvents();
+                this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
 
-            this.ClearLayer(drawingLayer, remove: true, forceRemove: true);
+                ResetMapViewEvents();
 
-            this.RemoveEditableFeatureLayer(drawingLayer.GetLayer());
+                this.ClearLayer(drawingLayer, remove: true, forceRemove: true);
 
-            drawingCancellationToken = null;
+                this.RemoveEditableFeatureLayer(drawingLayer.GetLayer());
 
-            drawingTcs.SetResult(drawingLayer.GetFinalGeometry());
+                drawingCancellationToken = null;
 
-            this.Pan();
+                drawingTcs.SetResult(drawingLayer.GetFinalGeometry());
+
+                this.Pan();
+            }
         }
 
         private void MapView_MouseMoveDrawing(object sender, MouseEventArgs e)
@@ -4274,6 +4279,8 @@ namespace IRI.Jab.MapViewer
 
             this.displayDrawingPath = display;
 
+            options.IsNewDrawing = true;
+
             this.drawingOptions = options;
 
             this.drawMode = mode;
@@ -4331,7 +4338,7 @@ namespace IRI.Jab.MapViewer
 
                 options = options ?? EditableFeatureLayerOptions.CreateDefault();
 
-                options.IsNewDrawing = true;
+                //options.IsNewDrawing = true;
 
                 var result = await GetDrawing(mode, options, display);
 
@@ -4823,7 +4830,8 @@ namespace IRI.Jab.MapViewer
 
         Guid _measureId;
 
-        private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
+        //private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
+        private async Task<sb.Geometry> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
         {
             this._measureCancellationToken = new CancellationTokenSource();
 
@@ -4876,25 +4884,29 @@ namespace IRI.Jab.MapViewer
                 }
             };
 
-            var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
-            {
-                Visual = VisualParameters.GetDefaultForMeasurements(),
-                IsEdgeLabelVisible = isEdgeLabelVisible,
-            }, true);
+            //1397.04.18
+            //var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
+            //{
+            //    Visual = VisualParameters.GetDefaultForMeasurements(),
+            //    IsEdgeLabelVisible = isEdgeLabelVisible,
+            //}, true);
+            var result = await GetDrawingAsync(mode, drawingOptions, true);
 
             this.ClearLayer(measureLayer, remove: true, forceRemove: true);
 
             if (result != null)
             {
-                result = await EditGeometryAsync(result, new EditableFeatureLayerOptions()
-                {
-                    IsEdgeLabelVisible = true,
-                    IsMeasureVisible = true,
-                    IsFinishButtonVisible = false,
-                    IsCancelButtonVisible = false,
-                    IsDeleteButtonVisible = true,
-                    IsMeasureButtonVisible = true
-                });
+                //1397.04.18
+                //result = await EditGeometryAsync(result, new EditableFeatureLayerOptions()
+                //{
+                //    IsEdgeLabelVisible = true,
+                //    IsMeasureVisible = true,
+                //    IsFinishButtonVisible = false,
+                //    IsCancelButtonVisible = false,
+                //    IsDeleteButtonVisible = true,
+                //    IsMeasureButtonVisible = true
+                //});
+                result = await EditGeometryAsync(result, editingOptions);
             }
 
             if (_measureId == guid)
@@ -4912,7 +4924,8 @@ namespace IRI.Jab.MapViewer
             return result;
         }
 
-        public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
+        //public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
+        public async Task<sb.Geometry> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
         {
             _measureId = Guid.NewGuid();
 
@@ -4922,7 +4935,8 @@ namespace IRI.Jab.MapViewer
 
                 CancelMeasure();
 
-                return await Measure(mode, isEdgeLabelVisible, action, _measureId);
+                //return await Measure(mode, isEdgeLabelVisible, action, _measureId);
+                return await Measure(mode, drawingOptions, editingOptions, action, _measureId);
             }
             catch (TaskCanceledException)
             {

@@ -115,6 +115,7 @@
     <Compile Include="Assets\Converters\IsAuthorizedToVisibility.cs" />
     <Compile Include="Assets\Converters\LatinDigitsToFarsiDigitsConverter.cs" />
     <Compile Include="Assets\Converters\MapStatusToVisibilityConverter.cs" />
+    <Compile Include="Assets\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\NotConverter.cs" />
     <Compile Include="Assets\Converters\NotNullToBoolConverter.cs" />
     <Compile Include="Assets\Converters\StreamGeometryToImageConverter.cs" />

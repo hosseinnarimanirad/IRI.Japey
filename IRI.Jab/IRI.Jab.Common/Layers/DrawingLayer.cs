@@ -146,9 +146,9 @@ namespace IRI.Jab.Common
             return this._editableFeatureLayer == null ? false : this._editableFeatureLayer.HasAnyPoint();
         }
 
-        public void FinishDrawingPart()
+        public bool TryFinishDrawingPart()
         {
-            this._editableFeatureLayer.FinishDrawingPart();
+            return this._editableFeatureLayer.TryFinishDrawingPart();
         }
 
         public void StartNewPart(sb.Point webMercatorPoint)

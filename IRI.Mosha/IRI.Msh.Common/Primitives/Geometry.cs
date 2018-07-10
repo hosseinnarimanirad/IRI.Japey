@@ -534,6 +534,7 @@ namespace IRI.Msh.Common.Primitives
             this.Geometries = geometries.ToArray();
         }
 
+
         public Geometry Clone()
         {
             if (this.Points != null)
@@ -546,6 +547,33 @@ namespace IRI.Msh.Common.Primitives
             }
 
             return new Geometry(null, this.Type, false, this.Srid);
+        }
+
+        public bool IsValid()
+        {
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                    return this.Points?.Length == 1;
+
+                case GeometryType.LineString:
+                    return this.Points.Length > 1;
+
+                case GeometryType.Polygon:
+                    return this.Geometries.Length > 0 && this.Geometries.All(g => g.Points?.Length > 3);
+
+                case GeometryType.MultiPoint:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                case GeometryType.GeometryCollection:
+                    return this.Geometries?.All(g => g.IsValid()) == true;
+
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public List<LineSegment> GetLineSegments()
@@ -626,9 +654,15 @@ namespace IRI.Msh.Common.Primitives
             return null;
         }
 
-        public void AddNewPart()
+        public bool TryAddNewPart()
         {
             var currentGeometry = this.Clone();
+
+            //e.g. having a LineString with just one point we cannot convert to MultilineString
+            if (!currentGeometry.IsValid())
+            {
+                return false;
+            }
 
             switch (this.Type)
             {
@@ -683,6 +717,8 @@ namespace IRI.Msh.Common.Primitives
                 default:
                     throw new NotImplementedException();
             }
+
+            return true;
         }
 
         public void ClearEmptyGeometries()

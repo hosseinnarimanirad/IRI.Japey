@@ -13,7 +13,7 @@ namespace IRI.Jab.Common.Model.Map
         public MapSettingsModel()
         {
         }
- 
+
 
 
         private string _baseMapCacheDirectory = null;
@@ -144,6 +144,55 @@ namespace IRI.Jab.Common.Model.Map
         }
 
         public Action<int> FireMaxGoogleZoomLevelChanged;
+
+
+        private EditableFeatureLayerOptions _drawingOptions = EditableFeatureLayerOptions.CreateDefault();
+
+        public EditableFeatureLayerOptions DrawingOptions
+        {
+            get { return _drawingOptions; }
+            set
+            {
+                _drawingOptions = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private EditableFeatureLayerOptions _editingOptions = EditableFeatureLayerOptions.CreateDefaultForEditing(true, true);
+
+        public EditableFeatureLayerOptions EditingOptions
+        {
+            get { return _editingOptions; }
+            set
+            {
+                _editingOptions = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private EditableFeatureLayerOptions _drawingMeasureOptions = EditableFeatureLayerOptions.CreateDefaultForDrawingMeasure(true, true, true);
+
+        public EditableFeatureLayerOptions DrawingMeasureOptions
+        {
+            get { return _drawingMeasureOptions; }
+            set
+            {
+                _drawingMeasureOptions = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private EditableFeatureLayerOptions _editingMeasureOptions = EditableFeatureLayerOptions.CreateDefaultForEditingMeasure(true, true);
+
+        public EditableFeatureLayerOptions EditingMeasureOptions
+        {
+            get { return _editingMeasureOptions; }
+            set
+            {
+                _editingMeasureOptions = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         public void Initialize()

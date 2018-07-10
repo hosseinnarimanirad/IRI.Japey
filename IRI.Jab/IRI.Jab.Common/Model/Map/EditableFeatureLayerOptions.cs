@@ -35,10 +35,10 @@ namespace IRI.Jab.Common.Model
                 _fill = _defaultFill;
 
                 _stroke = _defaultStroke;
-            }        
+            }
             finally
             {
-                
+
             }
         }
 
@@ -171,6 +171,31 @@ namespace IRI.Jab.Common.Model
             }
         }
 
+        private bool _isManualInputAvailable = true;
+
+        public bool IsManualInputAvailable
+        {
+            get { return _isManualInputAvailable; }
+            set
+            {
+                _isManualInputAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isMultiPartSupportAvailable = true;
+
+        public bool IsMultiPartSupportAvailable
+        {
+            get { return _isMultiPartSupportAvailable; }
+            set
+            {
+                _isMultiPartSupportAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private string _editText;
 
         public string EditText
@@ -192,7 +217,7 @@ namespace IRI.Jab.Common.Model
 
         public ScaleInterval VisibleRange { get; set; } = ScaleInterval.All;
 
-        public VisualParameters Visual { get; set; }= new VisualParameters(_fill, _stroke, 4, .9, Visibility.Visible);
+        public VisualParameters Visual { get; set; } = new VisualParameters(_fill, _stroke, 4, .9, Visibility.Visible);
 
         public Func<FrameworkElement> MakePrimaryVertex { get; set; } = () => new View.MapMarkers.Circle(1);
 
@@ -208,8 +233,57 @@ namespace IRI.Jab.Common.Model
         public Action RequestHandleIsEdgeLabelVisibleChanged;
 
 
+        public static EditableFeatureLayerOptions CreateDefaultForDrawing(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        {
+            return new EditableFeatureLayerOptions()
+            {
+                IsEdgeLabelVisible = false,
+                IsMeasureButtonVisible = false,
+                IsVerticesVisible = false,
+                IsNewDrawing = true,
+                IsManualInputAvailable = isManualInputAvailable,
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+            };
+        }
 
+        public static EditableFeatureLayerOptions CreateDefaultForEditing(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        {
+            return new EditableFeatureLayerOptions()
+            {
+                IsDeleteButtonVisible = true,
+                IsCancelButtonVisible = true,
+                IsFinishButtonVisible = true,
+                IsMeasureVisible = false,
+                IsManualInputAvailable = isManualInputAvailable,
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+            };
+        }
 
+        public static EditableFeatureLayerOptions CreateDefaultForDrawingMeasure(bool isEdgeLabelVisible, bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        {
+            return new EditableFeatureLayerOptions()
+            {
+                Visual = VisualParameters.GetDefaultForMeasurements(),
+                IsEdgeLabelVisible = isEdgeLabelVisible,
+                IsManualInputAvailable = isManualInputAvailable,
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+            };
+        }
+
+        public static EditableFeatureLayerOptions CreateDefaultForEditingMeasure(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        {
+            return new EditableFeatureLayerOptions()
+            {
+                IsEdgeLabelVisible = true,
+                IsMeasureVisible = true,
+                IsFinishButtonVisible = false,
+                IsCancelButtonVisible = false,
+                IsDeleteButtonVisible = true,
+                IsMeasureButtonVisible = true,
+                IsManualInputAvailable = isManualInputAvailable,
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+            };
+        }
 
 
 

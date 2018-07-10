@@ -229,14 +229,16 @@ namespace IRI.Jab.Common
             this.RequestCancelDrawing?.Invoke();
         }
 
-        internal void FinishDrawingPart()
+        internal bool TryFinishDrawingPart()
         {
-            this._webMercatorGeometry.AddNewPart();
+            var result = this._webMercatorGeometry.TryAddNewPart();
 
             MakePathGeometry();
 
             ReconstructLocateables();
 
+
+            return result;
             //this._pathGeometry.Figures.Last().Segments.RemoveAt(this._pathGeometry.Figures.Last().Segments.Count - 1);
 
             //this._pathGeometry.Figures.Add(new PathFigure());

@@ -567,6 +567,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
         private EditableFeatureLayer _currentEditingLayer;
 
         public EditableFeatureLayer CurrentEditingLayer
@@ -734,7 +735,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
 
-        public Func<DrawMode, bool, Task<Geometry>> RequestGetDrawingAsync;
+        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Geometry>> RequestGetDrawingAsync;
 
         public Action RequestClearAll;
 
@@ -748,7 +749,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestFinishEdit;
 
-        public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
+        //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
+        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Geometry>> RequestMeasure;
 
         //public Action RequestMeasureLength;
 
@@ -778,7 +780,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private async void DrawAsync(DrawMode mode)
         {
-            var shapeItem = await MakeShapeItemAsync(mode, $"DRAWING {DrawingItems?.Count}");
+            var shapeItem = await MakeShapeItemAsync(mode, MapSettings.DrawingOptions, $"DRAWING {DrawingItems?.Count}");
 
             if (shapeItem != null)
             {
@@ -792,12 +794,12 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private async Task<DrawingItem> MakeShapeItemAsync(DrawMode mode, string name)
+        private async Task<DrawingItem> MakeShapeItemAsync(DrawMode mode, EditableFeatureLayerOptions options, string name)
         {
             this.IsPanMode = true;
             //ResetMode(mode);
 
-            var drawing = await this.GetDrawingAsync(mode, true);
+            var drawing = await this.GetDrawingAsync(mode, options, true);
 
             if (drawing == null)
             {
@@ -1208,11 +1210,13 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestUnregisterMapOptions?.Invoke();
         }
 
-        public async Task<Geometry> GetDrawingAsync(DrawMode mode, bool display = true)
+        public async Task<Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
         {
             this.IsDrawMode = true;
 
-            var result = await this.RequestGetDrawingAsync?.Invoke(mode, display);
+            options = options ?? this.MapSettings.DrawingOptions;
+
+            var result = await this.RequestGetDrawingAsync?.Invoke(mode, options, display);
 
             this.IsDrawMode = false;
 
@@ -1270,11 +1274,12 @@ namespace IRI.Jab.Common.Presenter.Map
             this.OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected async Task<Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible)
+        //protected async Task<Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action = null)
+        protected async Task<Geometry> Measure(DrawMode mode, Action action = null)
         {
             //this.IsMeasureMode = true;
 
-            var result = await this.RequestMeasure?.Invoke(mode, isEdgeLabelVisible);
+            var result = await this.RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
 
             //this.IsMeasureMode = false;
 
@@ -1859,7 +1864,12 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_measureLengthCommand == null)
                 {
-                    _measureLengthCommand = new RelayCommand(async param => await this.Measure(DrawMode.Polyline, param == null ? true : (bool)param));
+                    _measureLengthCommand = new RelayCommand(async param =>
+                    {
+                        this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
+
+                        await this.Measure(DrawMode.Polyline);
+                    });
                 }
 
                 return _measureLengthCommand;
@@ -1874,7 +1884,12 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_measureAreaCommand == null)
                 {
-                    _measureAreaCommand = new RelayCommand(async param => await this.Measure(DrawMode.Polygon, param == null ? true : (bool)param));
+                    _measureAreaCommand = new RelayCommand(async param =>
+                    {
+                        this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
+
+                        await this.Measure(DrawMode.Polygon);
+                    });
                 }
 
                 return _measureAreaCommand;

@@ -170,6 +170,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         //*******************************Others
         public static byte FindZone(double lambda)
         {
+            while (lambda < 0)
+            {
+                lambda += 360;
+            }
+
             if (lambda >= 0 && lambda <= 180)
             {
                 return (byte)(30 + Math.Ceiling(lambda / 6));
@@ -187,11 +192,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         public static int CalculateCentralMeridian(int zone)
         {
-            if (zone >= 0 && zone <= 30)
+            if (zone >= 0 && zone < 30)
             {
                 return 180 + zone * 6 - 3;
             }
-            else if (zone > 30 && zone <= 60)
+            else if (zone >= 30 && zone <= 60)
             {
                 return (zone - 30) * 6 - 3;
             }
@@ -359,7 +364,16 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             var x = a * geodetic.X * Math.PI / 180.0;
 
-            var y = a * Math.Log(Math.Tan(Math.PI / 4.0 + geodetic.Y / 2.0 * Math.PI / 180.0));
+            double y;
+
+            if (geodetic.Y == 0)
+            {
+                y = 0;
+            }
+            else
+            {
+                y = a * Math.Log(Math.Tan(Math.PI / 4.0 + geodetic.Y / 2.0 * Math.PI / 180.0));
+            }
 
             return new Point(x, y);
         }
@@ -389,7 +403,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         public static Point WebMercatorToGeodeticWgs84(IPoint webMercator)
         {
             var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
-             
+
             double longitude = (webMercator.X / a) * 180 / Math.PI;
 
             double latitude = 2.0 * (Math.Atan(Math.Exp(webMercator.Y / a)) - Math.PI / 4.0) * 180 / Math.PI;

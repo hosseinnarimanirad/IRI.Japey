@@ -36,6 +36,30 @@ namespace IRI.Jab.Common.Presenters
             }
         }
 
+        private bool _isManualInputAvailable = true;
+
+        public bool IsManualInputAvailable
+        {
+            get { return _isManualInputAvailable; }
+            set
+            {
+                _isManualInputAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isMultiPartSupportAvailable = true;
+
+        public bool IsMultiPartSupportAvailable
+        {
+            get { return _isMultiPartSupportAvailable; }
+            set
+            {
+                _isMultiPartSupportAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private SpatialReferenceType _spatialReference = SpatialReferenceType.Geodetic;
 
         public SpatialReferenceType SpatialReference
