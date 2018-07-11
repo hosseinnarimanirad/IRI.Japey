@@ -799,6 +799,8 @@ namespace IRI.Jab.Common.Presenter.Map
             this.IsPanMode = true;
             //ResetMode(mode);
 
+            this.MapPanel.Options = options;
+
             var drawing = await this.GetDrawingAsync(mode, options, true);
 
             if (drawing == null)
@@ -823,7 +825,17 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions() { IsDeleteButtonVisible = true, IsCancelButtonVisible = true, IsFinishButtonVisible = true, IsMeasureVisible = false });
+                //var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions()
+                //{
+                //    IsDeleteButtonVisible = true,
+                //    IsCancelButtonVisible = true,
+                //    IsFinishButtonVisible = true,
+                //    IsMeasureVisible = false                
+                //});
+
+                //options = options ?? MapSettings.EditingOptions;
+
+                var edittedShape = await this.Edit(shapeItem.Geometry, MapSettings.EditingOptions);                 
 
                 if (edittedShape != null)
                 {
@@ -1216,6 +1228,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
             options = options ?? this.MapSettings.DrawingOptions;
 
+            this.MapPanel.Options = options;
+
             var result = await this.RequestGetDrawingAsync?.Invoke(mode, options, display);
 
             this.IsDrawMode = false;
@@ -1279,6 +1293,8 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             //this.IsMeasureMode = true;
 
+            this.MapPanel.Options = MapSettings.DrawingMeasureOptions;
+
             var result = await this.RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
 
             //this.IsMeasureMode = false;
@@ -1339,10 +1355,9 @@ namespace IRI.Jab.Common.Presenter.Map
                 return new Task<Geometry>(null);
             }
 
-            if (options == null)
-            {
-                options = new EditableFeatureLayerOptions();
-            }
+            options = options ?? this.MapSettings.EditingOptions;
+
+            this.MapPanel.Options = options;
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
 

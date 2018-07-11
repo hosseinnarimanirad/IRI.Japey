@@ -101,11 +101,11 @@
         <StackPanel >
             <DockPanel Margin="0" >
                 <TextBlock DockPanel.Dock="Left" Text="X" Margin="4"
-                           Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}}"/>
+                           Visibility="{Binding MapPanel.Options.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}"/>
                 <!--<TextBox DockPanel.Dock="Left" Text="{Binding MapPanel.CurrentEditingPoint.X, Mode=TwoWay}" MaxWidth="90"
                          FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center">-->
                 <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center"
-                         Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
+                         Visibility="{Binding MapPanel.Options.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
@@ -126,9 +126,9 @@
                 </TextBox>
 
                 <TextBlock DockPanel.Dock="Left" Text="Y" Margin="4"
-                           Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                           Visibility="{Binding MapPanel.Options.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}"/>
                 <TextBox DockPanel.Dock="Left" MaxWidth="90" FlowDirection="LeftToRight" MinWidth="80" Margin="2" VerticalAlignment="Center"
-                         Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
+                         Visibility="{Binding MapPanel.Options.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                     <TextBox.Style>
                         <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                             <Style.Triggers>
@@ -155,13 +155,13 @@
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" Margin="2" 
                             ToolTip="{Binding ElementName=root, Path=AddPointText.Title}"
                             Command="{Binding AddPointToNewDrawingCommand}"
-                            Visibility="{Binding MapPanel.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
+                            Visibility="{Binding MapPanel.Options.IsManualInputAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarAdd}" FlowDirection="LeftToRight"/>
                     </Button>
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Left" Margin="2,0,10,0" 
                         ToolTip="{Binding ElementName=root, Path=FinishDrawingPartText.Title}"
                         Command="{Binding FinishDrawingPartCommand}"
-                            Visibility="{Binding MapPanel.IsMultiPartSupportAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
+                            Visibility="{Binding MapPanel.Options.IsMultiPartSupportAvailable, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarCheckmark}" FlowDirection="LeftToRight"/>
                     </Button>
 
@@ -208,8 +208,15 @@
 
             <!--<TextBlock Text="{Binding ElementName=root, Path=NewDrawingText.Title}" VerticalAlignment="Center" Margin="8,0" Foreground="White"
                                Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}"/>-->
-            <StackPanel Visibility="{Binding MapPanel.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <TabControl SelectedIndex="2">
+            <StackPanel >
+                <StackPanel.Visibility>
+                    <MultiBinding Converter="{StaticResource multiBooleanToVisibilityConverter}">
+                        <Binding Path="MapPanel.Options.IsOptionsAvailable"/>
+                        <Binding Path="MapPanel.IsDetailsVisible"/>
+                    </MultiBinding>
+                    <!--Visibility="{Binding MapPanel.IsDetailsVisible, Converter={StaticResource boolToVisibilityConverter}}"-->
+                </StackPanel.Visibility>
+                <TabControl SelectedIndex="2" Background="Transparent">
                     <TabControl.Items>
                         <TabItem Header="نقطه جاری" Cursor="Hand" Visibility="{Binding IsEditMode, Converter={StaticResource boolToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal" DataContext="{Binding CurrentEditingLayer}">
@@ -249,7 +256,7 @@
                             <TabItem.Visibility>
                                 <MultiBinding Converter="{StaticResource multiBooleanToVisibilityConverter}">
                                     <Binding Path="IsEditMode"/>
-                                    <Binding Path="MapPanel.IsMultiPartSupportAvailable"/>
+                                    <Binding Path="MapPanel.Options.IsMultiPartSupportAvailable"/>
                                 </MultiBinding> 
                             </TabItem.Visibility>
                             <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left" DataContext="{Binding CurrentEditingLayer}" >
@@ -412,7 +419,7 @@
             </StackPanel>
 
             <Border Height="Auto" Margin="0 5 0 0" CornerRadius="0 0 15 15" 
-                    Cursor="Hand">
+                    Cursor="Hand" Visibility="{Binding MapPanel.Options.IsOptionsAvailable, Converter={StaticResource boolToVisibilityConverter}}">
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding MapPanel.ToggleDetailsVisibilityCommand}"/>
                 </Border.InputBindings>

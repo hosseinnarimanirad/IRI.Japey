@@ -36,29 +36,42 @@ namespace IRI.Jab.Common.Presenters
             }
         }
 
-        private bool _isManualInputAvailable = true;
+        //private bool _isManualInputAvailable = true;
 
-        public bool IsManualInputAvailable
+        //public bool IsManualInputAvailable
+        //{
+        //    get { return _isManualInputAvailable; }
+        //    set
+        //    {
+        //        _isManualInputAvailable = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+        //private bool _isMultiPartSupportAvailable = true;
+
+        //public bool IsMultiPartSupportAvailable
+        //{
+        //    get { return _isMultiPartSupportAvailable; }
+        //    set
+        //    {
+        //        _isMultiPartSupportAvailable = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+        private EditableFeatureLayerOptions _options;
+
+        public EditableFeatureLayerOptions Options
         {
-            get { return _isManualInputAvailable; }
+            get { return _options; }
             set
             {
-                _isManualInputAvailable = value;
+                _options = value;
                 RaisePropertyChanged();
             }
         }
 
-        private bool _isMultiPartSupportAvailable = true;
-
-        public bool IsMultiPartSupportAvailable
-        {
-            get { return _isMultiPartSupportAvailable; }
-            set
-            {
-                _isMultiPartSupportAvailable = value;
-                RaisePropertyChanged();
-            }
-        }
 
         private SpatialReferenceType _spatialReference = SpatialReferenceType.Geodetic;
 

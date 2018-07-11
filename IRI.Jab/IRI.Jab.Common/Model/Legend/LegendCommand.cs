@@ -162,7 +162,14 @@ namespace IRI.Jab.Common.Model.Legend
 
             result.Command = new RelayCommand(async param =>
             {
-                var drawing = await map.GetDrawingAsync(Model.DrawMode.Polygon);
+                var options = EditableFeatureLayerOptions.CreateDefaultForDrawing(false, false);
+
+                options.IsOptionsAvailable = false;
+
+                var drawing = await map.GetDrawingAsync(Model.DrawMode.Polygon, options);
+
+                if (drawing == null)
+                    return;
 
                 var features = layer.GetFeatures<T>(drawing.AsSqlGeometry());
 

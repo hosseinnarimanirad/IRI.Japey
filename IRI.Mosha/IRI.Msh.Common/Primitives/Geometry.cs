@@ -560,7 +560,7 @@ namespace IRI.Msh.Common.Primitives
                     return this.Points.Length > 1;
 
                 case GeometryType.Polygon:
-                    return this.Geometries.Length > 0 && this.Geometries.All(g => g.Points?.Length > 3);
+                    return this.Geometries.Length > 0 && this.Geometries.All(g => g.Points?.Length >= 3);
 
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:

@@ -195,6 +195,18 @@ namespace IRI.Jab.Common.Model
             }
         }
 
+        private bool _isOptionsAvailable = true;
+
+        public bool IsOptionsAvailable
+        {
+            get { return _isOptionsAvailable; }
+            set
+            {
+                _isOptionsAvailable = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private string _editText;
 
@@ -233,7 +245,7 @@ namespace IRI.Jab.Common.Model
         public Action RequestHandleIsEdgeLabelVisibleChanged;
 
 
-        public static EditableFeatureLayerOptions CreateDefaultForDrawing(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        public static EditableFeatureLayerOptions CreateDefaultForDrawing(bool isMultipartSupportAvailable, bool isManualInputAvailable, bool isOptionsAvailable = true)
         {
             return new EditableFeatureLayerOptions()
             {
@@ -241,12 +253,13 @@ namespace IRI.Jab.Common.Model
                 IsMeasureButtonVisible = false,
                 IsVerticesVisible = false,
                 IsNewDrawing = true,
+                IsOptionsAvailable = isOptionsAvailable,
                 IsManualInputAvailable = isManualInputAvailable,
                 IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
         }
 
-        public static EditableFeatureLayerOptions CreateDefaultForEditing(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        public static EditableFeatureLayerOptions CreateDefaultForEditing(bool isMultipartSupportAvailable, bool isManualInputAvailable, bool isOptionsAvailable = true)
         {
             return new EditableFeatureLayerOptions()
             {
@@ -254,23 +267,25 @@ namespace IRI.Jab.Common.Model
                 IsCancelButtonVisible = true,
                 IsFinishButtonVisible = true,
                 IsMeasureVisible = false,
+                IsOptionsAvailable = isOptionsAvailable,
                 IsManualInputAvailable = isManualInputAvailable,
                 IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
         }
 
-        public static EditableFeatureLayerOptions CreateDefaultForDrawingMeasure(bool isEdgeLabelVisible, bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        public static EditableFeatureLayerOptions CreateDefaultForDrawingMeasure(bool isEdgeLabelVisible, bool isMultipartSupportAvailable, bool isManualInputAvailable, bool isOptionsAvailable = true)
         {
             return new EditableFeatureLayerOptions()
             {
                 Visual = VisualParameters.GetDefaultForMeasurements(),
                 IsEdgeLabelVisible = isEdgeLabelVisible,
+                IsOptionsAvailable = isOptionsAvailable,
                 IsManualInputAvailable = isManualInputAvailable,
                 IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
         }
 
-        public static EditableFeatureLayerOptions CreateDefaultForEditingMeasure(bool isMultipartSupportAvailable, bool isManualInputAvailable)
+        public static EditableFeatureLayerOptions CreateDefaultForEditingMeasure(bool isMultipartSupportAvailable, bool isManualInputAvailable, bool isOptionsAvailable = true)
         {
             return new EditableFeatureLayerOptions()
             {
@@ -280,6 +295,7 @@ namespace IRI.Jab.Common.Model
                 IsCancelButtonVisible = false,
                 IsDeleteButtonVisible = true,
                 IsMeasureButtonVisible = true,
+                IsOptionsAvailable = isOptionsAvailable,
                 IsManualInputAvailable = isManualInputAvailable,
                 IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
