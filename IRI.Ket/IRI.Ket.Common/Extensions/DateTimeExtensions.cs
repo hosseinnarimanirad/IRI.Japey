@@ -82,6 +82,16 @@ namespace IRI.Ket.Common.Extensions
             return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
         }
 
+        public static int GetPersianDayOfMonth(this DateTime dateTime)
+        {
+            return _calendar.GetDayOfMonth(dateTime);
+        }
+
+        public static int GetPersianMonth(this DateTime dateTime)
+        {
+            return _calendar.GetMonth(dateTime);
+        }
+
         public static string ToPersianYearMonth(this DateTime dateTime, bool useFarsiNumbers = true)
         {
             //to avoid ArgumentOutOfRangeException
@@ -183,5 +193,32 @@ namespace IRI.Ket.Common.Extensions
         };
 
         public static readonly DateTime JulianDate = new DateTime(1970, 1, 1, 0, 0, 0);
+
+        public static string GetPersianEllapsedValue(this DateTime dateTime)
+        {
+            var interval = (DateTime.Now - dateTime);
+
+            var result = string.Empty;
+
+            if (interval.Days < 7)
+            {
+                result = $"{interval.Days} روز پیش";
+            }
+            else if (interval.Days < 30)
+            {
+                result = $"{interval.Days / 7} هفته پیش";
+            }
+            else if (interval.Days < 366)
+            {
+                result = $"{interval.Days / 30} ماه پیش";
+            }
+            else
+            {
+                result = $"{interval.Days / 360} سال پیش";
+            }
+
+            return result.LatinNumbersToFarsiNumbers();
+        }
     }
+
 }

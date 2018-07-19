@@ -44,6 +44,10 @@ namespace IRI.Jab.Common.Model.Common
 
                 LongPersianDateTime = value?.ToLongPersianDateTime() ?? string.Empty;
 
+                PersianDay = value?.GetPersianDayOfMonth() ?? 0;
+
+                PersianMonth = value?.GetPersianMonth() ?? 0;
+
                 RaisePropertyChanged(nameof(Ticks));
 
                 this.ChangeAction?.Invoke(this);
@@ -80,6 +84,31 @@ namespace IRI.Jab.Common.Model.Common
                 RaisePropertyChanged();
             }
         }
+
+        private int _persianDay;
+
+        public int PersianDay
+        {
+            get { return _persianDay; }
+            set
+            {
+                _persianDay = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _persianMonth;
+
+        public int PersianMonth
+        {
+            get { return _persianMonth; }
+            set
+            {
+                _persianMonth = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
 
         private string _longPersianDateTime;
@@ -135,7 +164,7 @@ namespace IRI.Jab.Common.Model.Common
 
         [JsonIgnore]
         public Action<SpecialDateTime> ChangeAction;
-         
+
         public event EventHandler<CustomEventArgs<SpecialDateTime>> OnChanged;
     }
 }

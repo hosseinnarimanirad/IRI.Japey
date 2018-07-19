@@ -539,7 +539,14 @@ namespace IRI.Msh.Common.Primitives
         {
             if (this.Points != null)
             {
-                return Geometry.Create((IPoint[])this.Points.Clone(), this.Type, this.Srid);
+                IPoint[] points = new IPoint[this.Points.Length];
+
+                for (int i = 0; i < this.Points.Length; i++)
+                {
+                    points[i] = new Point(this.Points[i].X, this.Points[i].Y);
+                }
+
+                return Geometry.Create(points, this.Type, this.Srid);
             }
             if (this.Geometries != null)
             {

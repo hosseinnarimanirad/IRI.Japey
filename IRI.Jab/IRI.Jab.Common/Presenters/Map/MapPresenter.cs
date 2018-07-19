@@ -445,10 +445,35 @@ namespace IRI.Jab.Common.Presenter.Map
             get { return _isBusy; }
             set
             {
-                _isBusy = value;
+                //SetIsBusy(value);
+                this._isBusy = value;
                 RaisePropertyChanged();
             }
         }
+
+        public async Task SetIsBusy(bool isBusy)
+        {
+            _isBusy = isBusy;
+            RaisePropertyChanged(nameof(IsBusy));
+
+            await Wait();
+        }
+
+
+        private async Task Wait()
+        {
+            //System.Diagnostics.Debug.WriteLine("Wait start");
+
+            await Task.Run(async () =>
+            {
+                //System.Diagnostics.Debug.WriteLine("Befor Task.Delay");
+                await Task.Delay(1000);
+                //System.Diagnostics.Debug.WriteLine("After Task.Delay");
+            });
+
+            //System.Diagnostics.Debug.WriteLine("Wait end");
+        }
+
 
         public double MapScale
         {
@@ -835,7 +860,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 //options = options ?? MapSettings.EditingOptions;
 
-                var edittedShape = await this.Edit(shapeItem.Geometry, MapSettings.EditingOptions);                 
+                var edittedShape = await this.Edit(shapeItem.Geometry, MapSettings.EditingOptions);
 
                 if (edittedShape != null)
                 {

@@ -4598,8 +4598,10 @@ namespace IRI.Jab.MapViewer
 
         public async Task<sb.Geometry> EditGeometryAsync(sb.Geometry originalGeometry, EditableFeatureLayerOptions options)
         {
+            sb.Geometry originalClone = null;
             try
             {
+                originalClone = originalGeometry.Clone();
 
                 //if (editingCancellationToken != null)
                 //{
@@ -4622,7 +4624,9 @@ namespace IRI.Jab.MapViewer
                     this.Status = MapStatus.Idle;
                 }
 
-                return originalGeometry;
+                //97 04 27
+                //return originalGeometry;
+                return originalClone;
             }
             catch (Exception ex)
             {

@@ -73,7 +73,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
                 return string.Empty;
             }
         }
- 
+
 
         public string GetComponentName()
         {
@@ -148,7 +148,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
     }
 
 
-    
+
 
     public class DictionaryPropertyDescriptor : PropertyDescriptor
     {
@@ -164,7 +164,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
         public override Type PropertyType
         {
-            get { return _dictionary[_key].GetType(); }
+            get { return _dictionary[_key]?.GetType() ?? typeof(string); }
         }
 
         public override void SetValue(object component, object value)
