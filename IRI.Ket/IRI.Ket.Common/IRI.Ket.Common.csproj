@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Data\ISecurityRepository.cs" />
     <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Extensions\NullableIntExtensions.cs" />
     <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ZipFileHelper.cs" />

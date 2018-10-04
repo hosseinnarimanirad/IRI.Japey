@@ -1023,7 +1023,7 @@ namespace IRI.Jab.MapViewer
 
                     Action action = () =>
                     {
-                        if (!layer.Extent.Intersects(this.CurrentExtent))
+                        if (!layer.Extent.Intersects(this.CurrentExtent) && !layer.Type.HasFlag(LayerType.BaseMap))
                         {
                             System.Diagnostics.Debug.WriteLine($"raster layer escaped!");
                             return;

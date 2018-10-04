@@ -8,7 +8,7 @@ namespace IRI.Msh.Common.Analysis.Interpolation
 {
     public static class Idw
     {
-        public static double Calculate(IEnumerable<Point3D> points, IPoint measurePoint)
+        public static double Calculate(IEnumerable<Point3D> points, IPoint measurePoint, double? maxDistance)
         {
             //var weights = new List<double>();
 
@@ -16,20 +16,28 @@ namespace IRI.Msh.Common.Analysis.Interpolation
 
             double sum = 0;
 
+            int count = 0;
+
             foreach (var item in points)
             {
                 double distance = measurePoint.DistanceTo(item);
 
-                double weight = 1.0 / (distance * distance);
+                if (distance < maxDistance)
+                {
+                    double weight = 1.0 / (distance * distance);
 
-                //weights.Add(weight);
+                    //weights.Add(weight);
 
-                weightedSum += weight * item.Z;
+                    weightedSum += weight * item.Z;
 
-                sum += weight;
+                    sum += weight;
+
+                    count++;
+                }
+
             }
 
-            return (weightedSum / sum);
+            return count > 0 ? (weightedSum / count) : 0;
         }
     }
 }

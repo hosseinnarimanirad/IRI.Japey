@@ -927,7 +927,8 @@ namespace IRI.Jab.Common
 
                 var locateable = ToPrimaryLocateable(webMercatorPoint);
 
-                if (geometry.Points.Last().AreExactlyTheSame(webMercatorPoint))
+                //geometry.Points.Length > 0, is to see if it is not going to add first point of a new part
+                if (geometry.Points.Length > 0 && geometry.Points.Last().AreExactlyTheSame(webMercatorPoint) == true)
                     return;
 
                 geometry.AddLastPoint(webMercatorPoint);

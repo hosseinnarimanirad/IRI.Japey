@@ -18,7 +18,7 @@ namespace IRI.Jab.Common.Raster
 {
     public static class RasterCalculus
     {
-        public static void Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor)
+        public static void Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor, double? maxDistance)
         {
             var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
@@ -60,7 +60,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y));
+                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
                     //map value to color
                     //var r = (int)(minR + rangeR / rangeValue * (value - minValue));
@@ -107,7 +107,7 @@ namespace IRI.Jab.Common.Raster
             //return result;
         }
 
-        public static GeoReferencedImage Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges)
+        public static GeoReferencedImage Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges, double? maxDistance)
         {
             var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
@@ -142,7 +142,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y));
+                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
                     result.SetPixel(j, i + 0, ranges.Interpolate(value));
                 }
@@ -155,7 +155,7 @@ namespace IRI.Jab.Common.Raster
             return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
         }
 
-        public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors)
+        public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
             var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
@@ -194,7 +194,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y));
+                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
                     var color = ranges.Interpolate(value);
 
@@ -217,7 +217,7 @@ namespace IRI.Jab.Common.Raster
 
         }
 
-        public static void CreateForPolygon(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors)
+        public static void CreateForPolygon(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
             var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 

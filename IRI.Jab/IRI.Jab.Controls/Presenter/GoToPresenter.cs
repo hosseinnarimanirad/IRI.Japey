@@ -268,8 +268,8 @@ namespace IRI.Jab.Controls.Presenter
                 }
 
                 _selectedItem = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged("SelectedItem.Content");
+                RaisePropertyChanged();                 
+                //RaisePropertyChanged("SelectedItem.Content");
 
                 this.LongitudeDms.SetValue(0);
                 this.LatitudeDms.SetValue(0);

@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IRI.Ket.Common.Extensions
+{
+    public static class NullableIntExtensions
+    {
+        public static int GetValue(this int? value)
+        {
+            return value == null ? 0 : (value.HasValue ? value.Value : 0);
+        }
+    }
+}
