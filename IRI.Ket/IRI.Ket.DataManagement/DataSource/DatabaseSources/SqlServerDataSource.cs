@@ -402,11 +402,16 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected string GetCommandString(string wktGeometryFilter, bool returnOnlyGeometry = true)
         {
-            var srid = GetSrid();
-
             var wkbArray = SqlSpatialExtensions.Parse(wktGeometryFilter).STAsBinary().Value;
 
-            var wkbString = Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbArray, true);
+            return GetCommandString(wkbArray, returnOnlyGeometry);
+        }
+
+        protected string GetCommandString(byte[] wkbGeometryFilter, bool returnOnlyGeometry = true)
+        {
+            var srid = GetSrid();
+
+            var wkbString = Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbGeometryFilter, true);
 
             if (returnOnlyGeometry)
             {
@@ -422,10 +427,14 @@ namespace IRI.Ket.DataManagement.DataSource
                 SET @filter = GEOMETRY::STGeomFromWKB({wkbString},{srid});
                 SELECT * FROM {GetTable()} WHERE {_spatialColumnName}.STIntersects(@filter)=1");
             }
-
         }
 
         #region Get Geometries
+
+        public override List<SqlGeometry> GetGeometries()
+        {
+            return GetGeometries(string.Empty);
+        }
 
         //3857: web mercator; 102100: web mercator
         public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
@@ -518,9 +527,24 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<SqlGeometry> GetGeometriesWhereIntersects(string wktGeometryFilter)
         {
+            if (wktGeometryFilter == null)
+            {
+                return GetGeometries();
+            }
+
             return SelectGeometries(GetCommandString(wktGeometryFilter));
 
             //return SelectGeometries(FormattableString.Invariant($"SELECT {_spatialColumnName} FROM {GetTable()} WHERE {_spatialColumnName}.STIntersects(GEOMETRY::STGeomFromWKB({wkbString},{srid}))=1"));
+        }
+
+        public List<SqlGeometry> GetGeometriesWhereIntersects(byte[] wkbGeometryFilter)
+        {
+            if (wkbGeometryFilter == null)
+            {
+                return GetGeometries();
+            }
+
+            return SelectGeometries(GetCommandString(wkbGeometryFilter));
         }
 
         #endregion
@@ -633,7 +657,12 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
         {
-            throw new NotImplementedException();
+            if (geometry == null)
+            {
+                return GetGeometries();
+            }
+
+            return GetGeometriesWhereIntersects(geometry.AsWkt());
         }
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
@@ -669,7 +698,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return result;
         }
-         
+
         public override DataTable GetEntireFeatures()
         {
             //string query = string.Empty;

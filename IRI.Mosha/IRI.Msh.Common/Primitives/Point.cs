@@ -1,6 +1,7 @@
 ﻿using IRI.Msh.Common.Ogc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -90,7 +91,7 @@ namespace IRI.Msh.Common.Primitives
         public static Point PositiveInfinity { get; } = new Point(double.PositiveInfinity, double.PositiveInfinity);
 
         public override bool Equals(object obj)
-        { 
+        {
             if (obj?.GetType() == typeof(Point))
             {
                 Point temp = (Point)obj;
@@ -121,6 +122,10 @@ namespace IRI.Msh.Common.Primitives
             return result;
         }
 
+        public virtual string AsWkt()
+        {
+            return FormattableString.Invariant($"POINT({X.ToInvariantString()} {Y.ToInvariantString()}");
+        }
 
         public static Point Parse(double[] values, bool isLongitudeFirst)
         {

@@ -28,13 +28,8 @@ namespace IRI.Ket.DataManagement.Model
 
         #region Get Geometries
 
-        public virtual List<SqlGeometry> GetGeometries()
-        {
-            SqlGeometry geometry = null;
-
-            return GetGeometries(geometry);
-        }
-
+        public abstract List<SqlGeometry> GetGeometries();
+         
         public virtual List<SqlGeometry> GetGeometries(string whereClause)
         {
             throw new NotImplementedException();

@@ -60,7 +60,12 @@ namespace IRI.Ket.DataManagement.DataSource
             }
 
         }
-         
+
+        public override List<SqlGeometry> GetGeometries()
+        {
+            return GetGeometries(string.Empty);
+        }
+
         /// <summary>
         /// s
         /// </summary>

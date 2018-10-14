@@ -164,6 +164,11 @@ namespace IRI.Ket.DataManagement.DataSource
         //                         .ToList();
         //}
 
+        public override List<SqlGeometry> GetGeometries()
+        {
+            return this._table.Select().Select(g => g[_spatialColumnName]).Cast<SqlGeometry>().ToList();
+        }
+
         public override List<SqlGeometry> GetGeometries(string filterExpression)
         {
             return this._table.Select(filterExpression)

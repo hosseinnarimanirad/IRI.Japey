@@ -65,10 +65,10 @@ namespace IRI.Ket.Common.Helpers
             {
                 var isConnected = await PingHostAsync(address ?? _defaulHost);
 
-                if (!isConnected)
-                {
-                    return await OpenRead(proxy, address ?? _defaultUri);
-                }
+                //if (!isConnected)
+                //{
+                //    return await OpenRead(proxy, address ?? _defaultUri);
+                //}
 
                 return isConnected;
                 //return await OpenRead(proxy, address ?? _defaultUri);

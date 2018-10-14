@@ -193,6 +193,13 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
         //}
 
+        public override List<SqlGeometry> GetGeometries()
+        {
+            SqlGeometry geometry = null;
+
+            return GetGeometries(geometry);
+        }
+
         public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
         {
             if (geometry == null)

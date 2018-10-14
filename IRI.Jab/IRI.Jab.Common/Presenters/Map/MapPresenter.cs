@@ -368,6 +368,19 @@ namespace IRI.Jab.Common.Presenter.Map
 
         }
 
+        private bool _doNotCheckInternet = false;
+
+        public bool DoNotCheckInternet
+        {
+            get { return _doNotCheckInternet; }
+            set
+            {
+                _doNotCheckInternet = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private bool? _isConnected = null;
 
         public bool IsConnected
@@ -985,6 +998,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async Task CheckInternetAccess()
         {
+            if (DoNotCheckInternet)
+            {
+                return;
+            }
+
             var proxy = this.RequestGetProxy?.Invoke();
 
             this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);

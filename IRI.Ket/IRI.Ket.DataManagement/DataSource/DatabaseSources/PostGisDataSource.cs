@@ -126,6 +126,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Override Methods
 
+        public override List<SqlGeometry> GetGeometries()
+        {
+            return GetGeometries(string.Empty);
+        }
+
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
         {
             throw new NotImplementedException();
