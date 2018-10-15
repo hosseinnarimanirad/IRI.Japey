@@ -26,6 +26,7 @@ using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.DataManagement.Model;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -313,6 +314,16 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
+        private Dictionary<string, Func<TileType, IMapProvider>> _mapProviders;
+
+        public Dictionary<string, Func<TileType, IMapProvider>> MapProviders
+        {
+            get { return _mapProviders; }
+            set { _mapProviders = value; }
+        }
+
+
         private TileType _baseMapType = TileType.None;
 
         public TileType BaseMapType
@@ -326,13 +337,14 @@ namespace IRI.Jab.Common.Presenter.Map
                 _baseMapType = value;
                 RaisePropertyChanged();
 
-                SetTileService(ProviderType, value);
+                //SetTileService(ProviderType, value, MapSettings.GetFileName);
+                UpdateBaseMap();
             }
         }
 
-        private MapProviderType _providerType = MapProviderType.Google;
+        private string _providerType = "GOOGLE";
 
-        public MapProviderType ProviderType
+        public string ProviderType
         {
             get { return _providerType; }
             set
@@ -342,15 +354,70 @@ namespace IRI.Jab.Common.Presenter.Map
                     return;
                 }
 
-                _providerType = value;
+                var providerType = value.ToUpper();
+
+                _providerType = providerType;
                 RaisePropertyChanged();
 
-                SetTileService(value, BaseMapType);
+                UpdateBaseMap();
             }
         }
 
-        private async void SetTileService(MapProviderType provider, TileType tileType)
+        public async void UpdateBaseMap()
         {
+            await SetTileService(ProviderType, BaseMapType, MapSettings.GetFileName);
+        }
+
+        public void RemoveAllTileServices()
+        {
+            this.Clear(l => l.Type == LayerType.BaseMap, true);
+        }
+
+        public void AddProvider(IMapProvider mapProvider)
+        {
+            var nameInUpper = mapProvider?.ProviderName?.ToUpper();
+
+            if (!MapProviders.ContainsKey(nameInUpper))
+            {
+                this.MapProviders.Add(nameInUpper, t =>
+                {
+                    this._baseMapType = mapProvider.TileType;
+
+                    return mapProvider;
+                });
+            }
+        }
+
+        public void RemoveProvider(string name)
+        {
+            var nameInUpper = name?.ToUpper();
+
+            if (MapProviders.ContainsKey(nameInUpper))
+            {
+                this.MapProviders.Remove(nameInUpper);
+            }
+        }
+
+        public async Task SetTileService(IMapProvider baseMap, Func<TileInfo, string> getFileName = null)
+        {
+            if (MapProviders.ContainsKey(baseMap.ProviderName))
+            {
+                this.MapProviders.Add(baseMap.ProviderName, t => { baseMap.TileType = t; return baseMap; });
+            }
+
+            if (!IsConnected)
+            {
+                await CheckInternetAccess();
+            }
+
+            this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getFileName);
+
+        }
+
+        public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)
+        {
+            provider = provider.ToUpper();
+
             System.Diagnostics.Debug.WriteLine($"SetTileService begin; {DateTime.Now.ToLongTimeString()}");
 
             if (!IsConnected)
@@ -362,10 +429,16 @@ namespace IRI.Jab.Common.Presenter.Map
                 System.Diagnostics.Debug.WriteLine($"CheckInternetAccess after; {DateTime.Now.ToLongTimeString()}");
             }
 
-            this.RequestSetTileService?.Invoke(provider, tileType, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected);
+            if (!MapProviders.ContainsKey(provider))
+            {
+                return;
+            }
+
+            var mapProvider = MapProviders[provider](tileType);
+
+            this.RequestSetTileService?.Invoke(mapProvider, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getFileName);
 
             System.Diagnostics.Debug.WriteLine($"SetTileService end {DateTime.Now.ToLongTimeString()}");
-
         }
 
         private bool _doNotCheckInternet = false;
@@ -641,6 +714,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public MapPresenter()
         {
+            this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
+            {
+                {"GOOGLE", tileType => new GoogleMapProvider(tileType) },
+                {"BING", tileType => new BingMapProvider(tileType) },
+                {"NOKIA", tileType => new NokiaMapProvider(tileType) },
+            };
+
             this.MapPanel = new MapPanelPresenter();
             this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
               {
@@ -679,7 +759,16 @@ namespace IRI.Jab.Common.Presenter.Map
 
         //public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
 
-        public Action<MapProviderType, TileType, bool, string, bool> RequestSetTileService;
+
+
+        //public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetCustomTileService;
+
+        //public Action<MapProviderType, TileType, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
+
+        //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName
+        public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
+
+        public Action RequestRemoveAllTileServices;
 
         public Func<double> RequestMapScale;
 
@@ -1890,7 +1979,8 @@ namespace IRI.Jab.Common.Presenter.Map
                         {
                             var args = param.ToString().Split(',');
 
-                            MapProviderType provider = (MapProviderType)Enum.Parse(typeof(MapProviderType), args[0]);
+                            //MapProviderType provider = (MapProviderType)Enum.Parse(typeof(MapProviderType), args[0]);
+                            var provider = args[0];
 
                             TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 

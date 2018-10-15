@@ -11,9 +11,9 @@ namespace IRI.Jab.Common.TileServices
 {
     public class TileCacheAddress
     {
-        private MapProviderType provider;
+        private string provider;
 
-        public MapProviderType Provider
+        public string Provider
         {
             get { return provider; }
             set
@@ -57,17 +57,17 @@ namespace IRI.Jab.Common.TileServices
 
         public string Url { get { return url; } }
 
-        private Func<TileInfo, string> _getFilePath;
+        private Func<TileInfo, string> _getFileName;
 
-        public TileCacheAddress(MapProviderType provider, TileType type, Func<TileInfo, string> getFilePath = null)
+        public TileCacheAddress(string provider, TileType type, Func<TileInfo, string> getFileName = null)
         {
-            if (getFilePath == null)
+            if (getFileName == null)
             {
-                _getFilePath = t => $"{t.ZoomLevel}\\{t.RowNumber}_{t.ColumnNumber}.png";
+                _getFileName = t => $"{t.ZoomLevel}\\{t.RowNumber}_{t.ColumnNumber}.png";
             }
             else
             {
-                _getFilePath = getFilePath;
+                _getFileName = getFileName;
             }
 
             Provider = provider;
@@ -77,13 +77,14 @@ namespace IRI.Jab.Common.TileServices
 
         private string MakeUrl()
         {
-            return $"{BaseDirectory}\\{Enum.GetName(typeof(MapProviderType), Provider)}\\{Enum.GetName(typeof(TileType), Type)}";
+            //return $"{BaseDirectory}\\{Enum.GetName(typeof(MapProviderType), Provider)}\\{Enum.GetName(typeof(TileType), Type)}";
+            return $"{BaseDirectory}\\{Provider}\\{Enum.GetName(typeof(TileType), Type)}";
         }
 
         private string GetFilePath(TileInfo tile)
         {
             //return $"{Url}\\{tile.ZoomLevel}\\{tile.RowNumber}_{tile.ColumnNumber}.png";
-            return $"{Url}\\{_getFilePath(tile)}";
+            return $"{Url}\\{_getFileName(tile)}";
         }
 
         public Task<GeoReferencedImage> GetTileAsync(TileInfo tile)

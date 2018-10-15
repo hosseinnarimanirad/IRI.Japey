@@ -491,11 +491,22 @@ namespace IRI.Jab.MapViewer
             };
             //bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false
 
-            presenter.RequestSetTileService = (provider, baseMapType, isCachEnabled, cacheDirectory, isOffline) =>
+            //presenter.RequestSetCustomTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName) =>
+            //{
+            //    this.UnSetTileServices();
+
+            //    this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName);
+
+            //    this.RefreshBaseMaps();
+            //};
+
+
+            //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func< TileInfo, string> getFileName = null
+            presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName) =>
             {
                 this.UnSetTileServices();
 
-                this.SetTileService(provider, baseMapType, isCachEnabled, cacheDirectory, isOffline);
+                this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName);
 
                 //this.RefreshTiles();
                 this.RefreshBaseMaps();
@@ -805,9 +816,32 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(new RasterLayer(dataSource, layerName, scaleInterval, isBaseMap, isPyramid, Visibility.Visible, opacity, rendering));
         }
 
-        public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
+        //public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
+        //{
+        //    IMapProvider mapProvider;
+
+        //    if (provider == MapProviderType.Custom)
+        //    {
+        //        mapProvider = MapProviderFactory.CreateKnownProvider(provider, type);
+        //    }
+        //    else
+        //    {
+        //        mapProvider = null;
+        //    }
+
+        //    var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = scaleInterval };
+
+        //    SetTileService(layer, isCachEnabled, cacheDirectory, isOffline, getFileName);
+        //}
+
+        //public void SetTileService(MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
+        //{
+        //    SetTileService(ScaleInterval.All, provider, type, isCachEnabled, cacheDirectory, isOffline, getFileName);
+        //}
+
+        public void SetTileService(IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
         {
-            var layer = new TileServiceLayer(provider, type) { VisibleRange = scaleInterval };
+            var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = ScaleInterval.All };
 
             if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
             {
@@ -816,15 +850,24 @@ namespace IRI.Jab.MapViewer
 
             layer.IsOffline = isOffline;
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer); 
+
+            //SetTileService(layer, isCachEnabled, cacheDirectory, isOffline, getFileName);
         }
 
-        public void SetTileService(MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false)
-        {
-            SetTileService(ScaleInterval.All, provider, type, isCachEnabled, cacheDirectory, isOffline);
-        }
+        //private void SetTileService(TileServiceLayer layer, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
+        //{
+        //    if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
+        //    {
+        //        layer.EnableCaching(cacheDirectory);
+        //    }
 
-        public void UnSetTileService(MapProviderType provider, TileType type)
+        //    layer.IsOffline = isOffline;
+
+        //    this._layerManager.Add(layer);
+        //}
+
+        public void UnSetTileService(string provider, TileType type)
         {
             this._layerManager.Remove(provider, type, forceRemove: true);
         }
@@ -1757,7 +1800,6 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-
                 if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
                     //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");

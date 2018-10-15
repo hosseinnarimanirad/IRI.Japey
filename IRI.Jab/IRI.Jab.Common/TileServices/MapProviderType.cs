@@ -12,6 +12,7 @@ namespace IRI.Jab.Common.TileServices
         Bing,
         Yahoo,
         Nokia,
-        OpenStreetMap
+        OpenStreetMap,
+        Custom
     }
 }

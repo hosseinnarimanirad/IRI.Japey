@@ -254,8 +254,13 @@
     <Compile Include="Raster\Model\ContinousRangeColor.cs" />
     <Compile Include="Raster\Model\DiscreteRangeColor.cs" />
     <Compile Include="Raster\RasterCalculus.cs" />
-    <Compile Include="TileServices\CacheSource.cs" />
+    <Compile Include="TileServices\BingMapProvider.cs" />
+    <Compile Include="TileServices\MapProviderFactory.cs" />
+    <Compile Include="TileServices\CustomMapProvider.cs" />
+    <Compile Include="TileServices\GoogleMapProvider.cs" />
+    <Compile Include="TileServices\IMapProvider.cs" />
     <Compile Include="TileServices\MapProviderType.cs" />
+    <Compile Include="TileServices\NokiaMapProvider.cs" />
     <Compile Include="TileServices\TileCacheAddress.cs" />
     <Compile Include="TileServices\TileType.cs" />
     <Compile Include="Utility\Legend\TocManager.cs" />

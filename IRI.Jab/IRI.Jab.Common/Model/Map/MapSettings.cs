@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Jab.Common.Model.Map
 {
@@ -50,6 +51,19 @@ namespace IRI.Jab.Common.Model.Map
         }
 
         public Action<bool> FireIsBaseMapCacheEnabledChanged;
+
+
+        private Func<TileInfo, string> _getFileName = null;
+
+        public Func<TileInfo, string> GetFileName
+        {
+            get { return _getFileName; }
+            set
+            {
+                _getFileName = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
 

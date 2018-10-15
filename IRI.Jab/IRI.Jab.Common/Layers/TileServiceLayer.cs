@@ -30,34 +30,91 @@ namespace IRI.Jab.Common
             notFoundImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(IRI.Jab.Common.Properties.Resources.imageNotFound);
         }
 
-        private TileServices.MapProviderType _provider;
+        private TileServices.TileCacheAddress _cache;
 
-        public TileServices.MapProviderType Provider
+        private TileServices.IMapProvider _mapProvider;
+
+
+        private bool _isCacheEnabled;
+
+        public bool IsCacheEnabled
         {
-            get { return _provider; }
-            set { _provider = value; }
+            get { return _isCacheEnabled; }
+            set
+            {
+                this._isCacheEnabled = value;
+                RaisePropertyChanged();
+            }
         }
 
-        private TileServices.TileType _tileType;
+        //private TileServices.MapProviderType _provider;
+
+        public string Provider
+        {
+            get { return _mapProvider.ProviderName; }
+            //set { _provider = value; }
+        }
+
+        //private TileServices.TileType _tileType;
 
         public TileServices.TileType TileType
         {
-            get { return _tileType; }
-            set { _tileType = value; }
+            get { return _mapProvider.TileType; }
+            //private set { _tileType = value; }
         }
 
         public bool IsOffline { get; set; }
 
-        public TileServiceLayer(TileServices.MapProviderType provider, TileServices.TileType type, Func<TileInfo, string> getFilePath = null)
+        //private TileServiceLayer()
+        //{
+
+        //}
+
+        //public TileServiceLayer(TileServices.MapProviderType provider, TileServices.TileType type, Func<TileInfo, string> getFileName = null)
+        //{
+        //    //this.Provider = provider;
+
+        //    //this.TileType = type;
+
+        //    this._cache = new TileServices.TileCacheAddress(provider, type, getFileName);
+
+        //    this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+
+        //    this._mapProvider = TileServices.MapProviderFactory.CreateKnownProvider(provider, type);
+        //}
+
+        public TileServiceLayer(TileServices.IMapProvider mapProvider, Func<TileInfo, string> getFileName = null)
         {
-            this.Provider = provider;
+            //this.Provider = TileServices.MapProviderType.Custom;
 
-            this.TileType = type;
-
-            this.Cache = new TileServices.TileCacheAddress(provider, type, getFilePath);
+            this._cache = new TileServices.TileCacheAddress(mapProvider.ProviderName, mapProvider.TileType, getFileName);
 
             this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+
+            this._mapProvider = mapProvider;
         }
+
+        //public static TileServiceLayer Create(TileServices.MapProviderType provider, TileServices.TileType type, Func<TileInfo, string> getFileName = null)
+        //{
+        //    var mapProvider = TileServices.MapProviderFactory.CreateKnownProvider(provider, type);
+
+        //    if (mapProvider == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    TileServiceLayer result = new TileServiceLayer();
+
+        //    //result.Provider = provider;
+
+        //    result._mapProvider = mapProvider;
+
+        //    result._cache = new TileServices.TileCacheAddress(provider, type, getFileName);
+
+        //    result.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+
+        //    return result;
+        //}
 
         public override BoundingBox Extent
         {
@@ -171,22 +228,8 @@ namespace IRI.Jab.Common
         {
             IsCacheEnabled = true;
 
-            this.Cache.BaseDirectory = baseDirectory;
+            this._cache.BaseDirectory = baseDirectory;
         }
-
-        private bool _isCacheEnabled;
-
-        public bool IsCacheEnabled
-        {
-            get { return _isCacheEnabled; }
-            set
-            {
-                this._isCacheEnabled = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private TileServices.TileCacheAddress Cache;
 
         public async Task<GeoReferencedImage> DownloadTileAsync(TileInfo tile, WebProxy proxy)
         {
@@ -214,7 +257,8 @@ namespace IRI.Jab.Common
                 ////google terrain
                 //var url = $@"http://mt1.google.com/vt/lyrs=t@131,r@176163100&hl=en&x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
 
-                var url = TileServices.CacheSourceFactory.GetUrl(Cache.Provider, Cache.Type, tile);
+                //var url = TileServices.MapProviderFactory.GetUrl(_cache.Provider, _cache.Type, tile);
+                var url = this._mapProvider.GetUrl(tile);
 
                 if (url == null)
                 {
@@ -269,7 +313,8 @@ namespace IRI.Jab.Common
                 ////google terrain
                 //var url = $@"http://mt1.google.com/vt/lyrs=t@131,r@176163100&hl=en&x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
 
-                var url = TileServices.CacheSourceFactory.GetUrl(Cache.Provider, Cache.Type, tile);
+                //var url = TileServices.MapProviderFactory.GetUrl(_cache.Provider, _cache.Type, tile);
+                var url = _mapProvider.GetUrl(tile);
 
                 if (url == null)
                 {
@@ -294,7 +339,7 @@ namespace IRI.Jab.Common
 
             if (IsCacheEnabled)
             {
-                result = await Cache.GetTileAsync(tile);
+                result = await _cache.GetTileAsync(tile);
 
                 if (!result.IsValid)
                 {
@@ -303,7 +348,7 @@ namespace IRI.Jab.Common
                     //Do not save imageNotFounds
                     if (result.IsValid)
                     {
-                        await Cache.SaveAsync(result, tile);
+                        await _cache.SaveAsync(result, tile);
                     }
                 }
             }
@@ -321,7 +366,7 @@ namespace IRI.Jab.Common
 
             if (IsCacheEnabled)
             {
-                result = Cache.GetTile(tile);
+                result = _cache.GetTile(tile);
 
                 if (!result.IsValid)
                 {
@@ -330,7 +375,7 @@ namespace IRI.Jab.Common
                     //Do not save imageNotFounds
                     if (result.IsValid)
                     {
-                        Cache.Save(result, tile);
+                        _cache.Save(result, tile);
                     }
                 }
             }

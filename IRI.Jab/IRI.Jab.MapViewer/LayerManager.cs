@@ -113,7 +113,7 @@ namespace IRI.Jab.MapViewer
             //}
         }
 
-        public void Remove(MapProviderType provider, TileType type, bool forceRemove)
+        public void Remove(string provider, TileType type, bool forceRemove)
         {
             //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
             //{
@@ -130,7 +130,7 @@ namespace IRI.Jab.MapViewer
             //    }
             //}
 
-            Clear(layer => (layer as TileServiceLayer)?.Provider == provider && (layer as TileServiceLayer)?.TileType == type, forceRemove);
+            Clear(layer => (layer as TileServiceLayer)?.Provider == provider?.ToUpper() && (layer as TileServiceLayer)?.TileType == type, forceRemove);
         }
 
 
