@@ -2,37 +2,50 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:IRI.Jab.Common.Assets.Converters">
     
-    <converters:CountLessThanOneToBoolConverter x:Key="countLessThanOneToBoolConverter"/>
     <converters:ArabicStringToFarsiStringConverter x:Key="arabicToFarsiConverter"/>
+
+    <converters:BoolToBoldFontConverter x:Key="boolToBoldFontConverter"/>
+    <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
+    <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>
     <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter"/>
+
+    <converters:CenterChildParentConverter x:Key="centerChildParentConverter"/>
+    <converters:CountLessThanOneToBoolConverter x:Key="countLessThanOneToBoolConverter"/>
+ 
+    <converters:DoubleToDoubleInverseConverter x:Key="doubleInverseConverter"/>
+    <converters:DoubleToMarginTopConverter x:Key="doubleToMarginTopConverter"/>
+    <converters:DoubleToReducedDoubleByPercentConverter x:Key="doubleToReducedDoubleByPercentConverter"/>
+
+    <converters:EnumToDescriptionConverter x:Key="enumToDescriptionConverter"/>
+
+    <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>
+    
     <converters:IntGreaterThanIntParameterToVisibilityConverter x:Key="intGreaterThanIntParameterToVisibilityConverter"/>
     <converters:IntGreaterThanIntParameterToIsEnabledConverter x:Key="intGreaterThanIntParameterToIsEnabledConverter"/>
     <converters:IntLessThanIntParameterToIsEnabledConverter x:Key="intLessThanIntParameterToIsEnabledConverter"/>
     <converters:IsAuthorizedToBool x:Key="isAuthorizedToBool"/>
     <converters:IsAuthorizedToVisibility x:Key="isAuthorizedToVisibility"/>
-    <converters:VisibilityToBoolConverter x:Key="visibilityToBoolConverter"/>
-    <converters:SolidColorBrushToColorConverter x:Key="solidColorBrushToColorConverter"/>
-    <converters:DoubleInverseConverter x:Key="doubleInverseConverter"/>
-    <converters:NotNullToBoolConverter x:Key="notNullToBoolConverter"/>
-    <converters:ScaleToGoogleScaleConverter x:Key="scaleToGoogleScaleConverter"/>
-    <converters:BoolToBoldFontConverter x:Key="boolToBoldFontConverter"/>
+    <converters:IsGreaterThanConverter x:Key="isGreaterThanConverter"/>
+    <converters:IsLessThanConverter x:Key="isLessThanConverter"/>
 
-    <converters:MultiBooleanToVisibilityConverter x:Key="multiBooleanToVisibilityConverter"/>
-
-    <converters:NotConverter x:Key="notConverter"/>
-    <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
     <converters:LatinDigitsToFarsiDigitsConverter x:Key="latinDigitsToFarsiDigitsConverter"/>
+    
+    <converters:MultiBooleanToVisibilityConverter x:Key="multiBooleanToVisibilityConverter"/>
+    
+    <converters:NotConverter x:Key="notConverter"/>
+    <converters:NotNullToBoolConverter x:Key="notNullToBoolConverter"/>
+     
+    <converters:ScaleToGoogleScaleConverter x:Key="scaleToGoogleScaleConverter"/>
+    <converters:SolidColorBrushToColorConverter x:Key="solidColorBrushToColorConverter"/>
     <converters:StreamGeometryToImageConverter x:Key="streamGeometryToImageConverter"/>
     <converters:StreamGeometryToPathConverter x:Key="streamGeometryToPathConverter"/>
     <converters:StringToFarsiStringConverter x:Key="stringToFarsiStringConverter"/>
     <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
     <converters:StringToShapeConverter x:Key="stringToShapeConverter"/>
-    <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>
-    <converters:EnumToDescriptionConverter x:Key="enumToDescriptionConverter"/>
     <converters:SubtractConstantConverter x:Key="subtractConstantConverter"/>
 
-    <converters:FlowDocumentXmlToStringConverter x:Key="flowDocumentXmlToStringConverter"/>
-
-
     <converters:TileTypeToBoolConverter x:Key="tileTypeToBoolConverter"/>
+    
+    <converters:VisibilityToBoolConverter x:Key="visibilityToBoolConverter"/>
+      
 </ResourceDictionary>

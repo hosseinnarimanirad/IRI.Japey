@@ -173,6 +173,11 @@ namespace IRI.Jab.Common.Model.Legend
 
                 var features = layer.GetFeatures<T>(drawing.AsSqlGeometry());
 
+                if (features == null)
+                {
+                    return;
+                }
+
                 var newLayer = new Model.Map.SelectedLayer<T>(layer)
                 {
                     ShowSelectedOnMap = true

@@ -23,7 +23,7 @@ namespace IRI.Jab.Common.View.MapMarkers
     /// </summary>
     public partial class LabelMarker : UserControl, IMapMarker
     {
-         
+
         public string LabelValue
         {
             get { return (string)GetValue(LabelValueProperty); }
@@ -33,6 +33,20 @@ namespace IRI.Jab.Common.View.MapMarkers
         // Using a DependencyProperty as the backing store for LabelValue.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelValueProperty =
             DependencyProperty.Register(nameof(LabelValue), typeof(string), typeof(LabelMarker), new PropertyMetadata(string.Empty));
+
+
+
+
+        public string TooltipValue
+        {
+            get { return (string)GetValue(TooltipValueProperty); }
+            set { SetValue(TooltipValueProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TooltipValue.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TooltipValueProperty =
+            DependencyProperty.Register("TooltipValue", typeof(string), typeof(LabelMarker), new PropertyMetadata(string.Empty));
+
 
 
 

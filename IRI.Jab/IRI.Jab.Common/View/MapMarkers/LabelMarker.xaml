@@ -63,7 +63,7 @@
 
         </EventTrigger>
     </UserControl.Triggers>
-    <Grid x:Name="Document">
+    <Grid x:Name="Document" Background="Transparent" ToolTip="{Binding ElementName=root, Path=ToolTipValue}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>

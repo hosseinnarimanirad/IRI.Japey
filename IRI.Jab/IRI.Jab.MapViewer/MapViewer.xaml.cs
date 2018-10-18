@@ -4922,7 +4922,11 @@ namespace IRI.Jab.MapViewer
 
                     var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
 
+                    marker.ToolTip = mode == DrawMode.Polygon ? geoAsGeodetic.STArea().Value : geoAsGeodetic.STLength().Value;
+
                     marker.LabelValue = measureValue;
+
+                    
                 }
                 catch (Exception ex)
                 {

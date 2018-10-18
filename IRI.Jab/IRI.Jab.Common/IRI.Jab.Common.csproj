@@ -104,7 +104,10 @@
     <Compile Include="Assets\Converters\BoolToGeometryConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGridLengthConverter.cs" />
     <Compile Include="Assets\Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Assets\Converters\DoubleInverseConverter.cs" />
+    <Compile Include="Assets\Converters\CenterChildParentConverter.cs" />
+    <Compile Include="Assets\Converters\DoubleToDoubleInverseConverter.cs" />
+    <Compile Include="Assets\Converters\DoubleToMarginTopConverter.cs" />
+    <Compile Include="Assets\Converters\DoubleToReducedDoubleByPercentConverter.cs" />
     <Compile Include="Assets\Converters\EnumToDescriptionConverter.cs" />
     <Compile Include="Assets\Converters\FlowDocumentXmlToStringConverter.cs" />
     <Compile Include="Assets\Converters\IntGreaterThanIntParameterToIsEnabledConverter.cs" />
@@ -113,6 +116,8 @@
     <Compile Include="Assets\Converters\IntLessThanIntParameterToIsEnabledConverter.cs" />
     <Compile Include="Assets\Converters\IsAuthorizedToBool.cs" />
     <Compile Include="Assets\Converters\IsAuthorizedToVisibility.cs" />
+    <Compile Include="Assets\Converters\IsGreaterThanConverter.cs" />
+    <Compile Include="Assets\Converters\IsLessThanConverter.cs" />
     <Compile Include="Assets\Converters\LatinDigitsToFarsiDigitsConverter.cs" />
     <Compile Include="Assets\Converters\MapStatusToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\MultiBooleanToVisibilityConverter.cs" />
@@ -270,6 +275,9 @@
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToOpenTKBitmap.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToStreamGeometry.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToWriteableBitmap.cs" />
+    <Compile Include="View\Controls\InlineInput.xaml.cs">
+      <DependentUpon>InlineInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MapMarkers\Circle.xaml.cs">
       <DependentUpon>Circle.xaml</DependentUpon>
     </Compile>
@@ -377,6 +385,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Assets\Styles\CircleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\InlineInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

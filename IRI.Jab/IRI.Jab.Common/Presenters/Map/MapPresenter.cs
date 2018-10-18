@@ -380,9 +380,7 @@ namespace IRI.Jab.Common.Presenter.Map
             if (!MapProviders.ContainsKey(nameInUpper))
             {
                 this.MapProviders.Add(nameInUpper, t =>
-                {
-                    this._baseMapType = mapProvider.TileType;
-
+                { 
                     return mapProvider;
                 });
             }
@@ -1150,8 +1148,8 @@ namespace IRI.Jab.Common.Presenter.Map
                 layer.Commands = new List<ILegendCommand>()
                 {
                     LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, (VectorLayer)layer),
-                    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, (VectorLayer)layer),
+                    LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
+                    LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
                     LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
                     LegendCommand.CreateRemoveLayer(this, layer),
                 };

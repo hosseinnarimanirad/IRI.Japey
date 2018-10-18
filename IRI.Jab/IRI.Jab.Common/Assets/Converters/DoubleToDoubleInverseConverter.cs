@@ -7,7 +7,7 @@ using System.Windows.Data;
 
 namespace IRI.Jab.Common.Assets.Converters
 {
-    public class DoubleInverseConverter : IValueConverter
+    public class DoubleToDoubleInverseConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

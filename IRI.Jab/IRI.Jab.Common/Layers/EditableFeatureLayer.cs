@@ -320,6 +320,8 @@ namespace IRI.Jab.Common
 
                 var element = new View.MapMarkers.RectangleLabelMarker(MeasureLabel);
 
+                element.TooltipValue = MeasureValue;
+
                 var offset = _screenToMap(20);
 
                 _edgeLabelLayer.Items.Add(new Locateable(Model.AncherFunctionHandlers.BottomCenter)
@@ -970,6 +972,11 @@ namespace IRI.Jab.Common
         public bool HasAnyPoint()
         {
             return this._webMercatorGeometry != null ? this._webMercatorGeometry.HasAnyPoint() : false;
+        }
+
+        public string MeasureValue
+        {
+            get { return _webMercatorGeometry.GetMeasure(MapProjects.WebMercatorToGeodeticWgs84).ToString(); }
         }
 
         public string MeasureLabel
