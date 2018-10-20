@@ -235,9 +235,9 @@ namespace IRI.Jab.Common
         {
             try
             {
-                if (IsOffline)
+                if (IsOffline && _mapProvider.RequireInternetConnection)
                 {
-                    return new GeoReferencedImage(Helpers.ImageUtility.AsByteArray(IRI.Jab.Common.Properties.Resources.imageNotFound), tile.GeodeticExtent, false);
+                    return GetNotFoundImage(tile);
                 }
 
                 WiseWebClient client = new WiseWebClient(30);
@@ -291,7 +291,7 @@ namespace IRI.Jab.Common
         {
             try
             {
-                if (IsOffline)
+                if (IsOffline && _mapProvider.RequireInternetConnection)
                 {
                     return GetNotFoundImage(tile);
                 }

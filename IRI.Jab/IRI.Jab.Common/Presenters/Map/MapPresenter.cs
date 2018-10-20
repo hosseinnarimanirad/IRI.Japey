@@ -349,12 +349,12 @@ namespace IRI.Jab.Common.Presenter.Map
             get { return _providerType; }
             set
             {
-                if (_providerType == value)
+                var providerType = value?.ToUpper();
+
+                if (_providerType == providerType)
                 {
                     return;
                 }
-
-                var providerType = value.ToUpper();
 
                 _providerType = providerType;
                 RaisePropertyChanged();
@@ -380,7 +380,9 @@ namespace IRI.Jab.Common.Presenter.Map
             if (!MapProviders.ContainsKey(nameInUpper))
             {
                 this.MapProviders.Add(nameInUpper, t =>
-                { 
+                {
+                    mapProvider.TileType = t;
+
                     return mapProvider;
                 });
             }
@@ -1036,6 +1038,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //{
             //this.OnRequestShowDownloadDialog?.Invoke(s);
             //};
+            this.IsPanMode = true;
 
             return shapeItem;
         }
@@ -1463,6 +1466,10 @@ namespace IRI.Jab.Common.Presenter.Map
             //this.IsEditMode = true;
 
             Geometry result = null;
+
+            options = options ?? this.MapSettings.EditingOptions;
+
+            this.MapPanel.Options = options;
 
             if (this.RequestEdit != null)
             {
@@ -2054,6 +2061,21 @@ namespace IRI.Jab.Common.Presenter.Map
                 }
 
                 return _cancelMeasureCommand;
+            }
+        }
+ 
+
+        private RelayCommand _drawPointCommand;
+
+        public RelayCommand DrawPointCommand
+        {
+            get
+            {
+                if (_drawPointCommand == null)
+                {
+                    _drawPointCommand = new RelayCommand(param => { DrawAsync(DrawMode.Point); });
+                }
+                return _drawPointCommand;
             }
         }
 

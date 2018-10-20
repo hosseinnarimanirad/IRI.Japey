@@ -40,6 +40,8 @@ namespace IRI.Jab.Common.TileServices
 
         public CustomMapProvider(string providerName, Func<TileInfo, string> roadMapFunc, Func<TileInfo, string> satelliteFunc, Func<TileInfo, string> terrainFunc, Func<TileInfo, string> hybridFunc)
         {
+            RequireInternetConnection = false;
+
             this.MakeRoadMapUrl = roadMapFunc;
             this.MakeTerrainUrl = terrainFunc;
             this.MakeSatelliteUrl = satelliteFunc;

@@ -12,6 +12,8 @@ namespace IRI.Jab.Common.TileServices
     {
         //public string Name { get; set; }
 
+        public bool RequireInternetConnection { get; set; } = true;
+
         public TileType TileType { get; set; }
 
         public string ProviderName { get; protected set; }
