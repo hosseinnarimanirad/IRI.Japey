@@ -12,28 +12,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
     {
         const string _defaultLabelAttributeName = "Label";
 
-        private SqlGeometry _geometry;
+        public int Id { get; set; }
 
-        public SqlGeometry TheSqlGeometry
-        {
-            get
-            {
-                return _geometry;
-            }
+        public SqlGeometry TheSqlGeometry { get; set; }
 
-            set
-            {
-                _geometry = value;
-            }
-        }
-
-        private Dictionary<string, object> _attributes;
-
-        public Dictionary<string, object> Attributes
-        {
-            get { return _attributes; }
-            set { _attributes = value; }
-        }
+        public Dictionary<string, object> Attributes { get; set; }
 
         public override string ToString()
         {
@@ -75,6 +58,10 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
         }
 
 
+
+        #region ICustomTypeDescriptor
+
+        
         public string GetComponentName()
         {
             return TypeDescriptor.GetComponentName(this, true);
@@ -145,10 +132,8 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
             return new PropertyDescriptorCollection(props);
         }
 
+        #endregion
     }
-
-
-
 
     public class DictionaryPropertyDescriptor : PropertyDescriptor
     {

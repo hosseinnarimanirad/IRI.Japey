@@ -86,6 +86,8 @@ namespace IRI.Jab.Common.Model.Map
         public IEnumerable<ISqlGeometryAware> GetSelectedFeatures()
         {
             return Features?.Cast<ISqlGeometryAware>().ToList();
+
+            AssociatedLayer.
         }
 
         public int CountOfSelectedFeatures()
@@ -163,6 +165,7 @@ namespace IRI.Jab.Common.Model.Map
                 return _removeCommand;
             }
         }
+
 
     }
 }

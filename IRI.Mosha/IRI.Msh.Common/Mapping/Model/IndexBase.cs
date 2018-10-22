@@ -9,6 +9,8 @@ namespace IRI.Msh.Common.Mapping
 {
     public abstract class IndexBase : IGeometryAware
     {
+        public int Id { get; set; }
+
         [JsonProperty("shne")]
         public virtual string SheetNameEn { get; set; }
 

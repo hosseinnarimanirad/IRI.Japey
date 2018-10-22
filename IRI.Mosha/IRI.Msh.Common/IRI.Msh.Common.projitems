@@ -105,10 +105,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriJsonGeometryType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriJsonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriJsonSpatialreference.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\SpatialReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriSpatialReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonFeature.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonFeatureCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonFeatureSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonGeometryConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonLineString.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoJson\GeoJsonMultiLineString.cs" />

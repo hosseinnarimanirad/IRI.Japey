@@ -7,7 +7,7 @@ namespace IRI.Msh.Common.Model.Esri
 {
     public class EsriFeatureSet
     {
-        public SpatialReference SpatialReference { get; set; }
+        public EsriSpatialReference SpatialReference { get; set; }
 
         public Field[] Fields { get; set; }
 

@@ -10,6 +10,7 @@ using IRI.Ket.SpatialExtensions;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Text;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -115,7 +116,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static MemoryDataSource<SqlFeature> Create(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
         {
-            var features = ShapefileExtention.ReadShapefile(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
+            var features = ShapefileHelper.ReadShapefile(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
 
             var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
 
@@ -126,7 +127,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static async Task<MemoryDataSource<SqlFeature>> CreateAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
         {
-            var features = await ShapefileExtention.ReadShapefileAsync(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
+            var features = await ShapefileHelper.ReadShapefileAsync(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
 
             var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
 
@@ -143,6 +144,8 @@ namespace IRI.Ket.DataManagement.DataSource
         protected List<T> _features;
 
         protected Func<T, string> _labelFunc;
+
+        protected Func<int, T> _idFunc;
 
         public Func<List<T>, DataTable> MappingFunc;
 
@@ -165,12 +168,13 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = GetGeometries().GetBoundingBox();
         }
 
-        public MemoryDataSource(List<T> features, Func<T, string> labelFunc)
+        public MemoryDataSource(List<T> features, Func<T, string> labelFunc, Func<int, T> idFunc = null)
         {
-
             this._features = features;
 
             this._labelFunc = labelFunc;
+
+            this._idFunc = idFunc;
 
             this.Extent = GetGeometries().GetBoundingBox();
         }
@@ -305,13 +309,45 @@ namespace IRI.Ket.DataManagement.DataSource
                                     .Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
         }
 
-        //public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public override void Add(T newGeometry)
+        {
+            this._features.Add(newGeometry);
+        }
 
+        public override void Remove(int geometryId)
+        {
+            if (_idFunc == null)
+            {
+                return;
+            }
+
+            var geometry = _idFunc(geometryId);
+
+            this.Remove(geometry);
+        }
+
+        public void Remove(T geometry)
+        {
+            this._features.Remove(geometry);
+        }
+
+        public override void Update(T newGeometry, int geometryId)
+        {
+            if (_idFunc == null)
+            {
+                return;
+            }
+
+            var geometry = _idFunc(geometryId);
+
+            var index = this._features.IndexOf(geometry);
+
+            if (index < 0)
+            {
+                return;
+            }
+
+            this._features[index] = newGeometry; ;
+        }
     }
-
-
-
 }

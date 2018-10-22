@@ -29,7 +29,7 @@ namespace IRI.Ket.DataManagement.Model
         #region Get Geometries
 
         public abstract List<SqlGeometry> GetGeometries();
-         
+
         public virtual List<SqlGeometry> GetGeometries(string whereClause)
         {
             throw new NotImplementedException();
@@ -170,11 +170,11 @@ namespace IRI.Ket.DataManagement.Model
             return Task.Run(() => { return GetEntireFeatures(geometry); });
         }
 
-        #endregion
+        #endregion        
     }
 
     public abstract class FeatureDataSource<T> : FeatureDataSource where T : ISqlGeometryAware
-    { 
+    {
         public List<T> GetFeatures()
         {
             SqlGeometry geometry = null;
@@ -183,5 +183,11 @@ namespace IRI.Ket.DataManagement.Model
         }
 
         public abstract List<T> GetFeatures(SqlGeometry geometry);
+
+        public abstract void Add(T newGeometry);
+
+        public abstract void Remove(int geometryId);
+
+        public abstract void Update(T newGeometry, int geometryId);
     }
 }

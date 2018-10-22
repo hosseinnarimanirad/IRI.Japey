@@ -141,7 +141,6 @@ namespace IRI.Jab.Common
 
         #endregion
 
-
         #region Constructors
 
         public VectorLayer(string name, List<SqlGeometry> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
@@ -211,10 +210,6 @@ namespace IRI.Jab.Common
         }
 
         #endregion
-
-
-
-
 
         //StreamGeometry Approach
         public Path AsShape(List<SqlGeometry> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
@@ -903,7 +898,11 @@ namespace IRI.Jab.Common
 
         public List<T> GetFeatures<T>(SqlGeometry geometry) where T : ISqlGeometryAware
         {
-            if (DataSource as FeatureDataSource<T> != null)
+            //if (DataSource as FeatureDataSource != null)
+            //{
+            //    return (DataSource as FeatureDataSource).GetGeometries(geometry).Cast<T>().ToList();
+            //}
+              if (DataSource as FeatureDataSource<T> != null)
             {
                 return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
             }

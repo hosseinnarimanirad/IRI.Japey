@@ -9,6 +9,8 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 {
     public class NamedSqlGeometry
     {
+        public int Id { get; set; }
+
         public SqlGeometry Geometry { get; set; }
 
         public string Label { get; set; }

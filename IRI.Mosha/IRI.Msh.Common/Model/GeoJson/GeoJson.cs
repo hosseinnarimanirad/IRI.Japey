@@ -17,9 +17,9 @@ namespace IRI.Msh.Common.Model.GeoJson
             return parsedObject["features"].Select(f => JsonConvert.DeserializeObject<GeoJsonFeature>(f.ToString()));
         }
 
-        public static GeoJsonFeatureCollection ParseToGeoJsonFeatureCollection(string geoJsonFeatures)
+        public static GeoJsonFeatureSet ParseToGeoJsonFeatureCollection(string geoJsonFeatures)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeatureCollection>(geoJsonFeatures);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeatureSet>(geoJsonFeatures);
         }
 
         public static IEnumerable<GeoJsonFeature> ParseToGeoJsonFeatures(string geoJsonFeature)

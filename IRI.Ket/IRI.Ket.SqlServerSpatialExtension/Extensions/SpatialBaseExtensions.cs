@@ -42,7 +42,7 @@ namespace IRI.Ket.SpatialExtensions
 
             if (geometry.IsNullOrEmpty())
             {
-                return SqlSpatialExtensions.CreateEmptySqlGeometry(type, geometry.Srid);
+                return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);
             }
 
             SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -378,7 +378,7 @@ namespace IRI.Ket.SpatialExtensions
             {
                 if (geometry.IsNullOrEmpty())
                 {
-                    SqlSpatialExtensions.AddEmptySqlGeometry(builder, item.Type);
+                    IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
                 }
 
                 switch (item.Type)

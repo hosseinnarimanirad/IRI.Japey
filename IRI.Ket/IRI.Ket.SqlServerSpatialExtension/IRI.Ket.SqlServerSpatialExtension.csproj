@@ -83,12 +83,13 @@
     <Compile Include="GeoStatistics\KdTreePointClusters.cs" />
     <Compile Include="GeoStatistics\PointClusters.cs" />
     <Compile Include="Helpers\IndexHelper.cs" />
+    <Compile Include="Helpers\ShapefileHelper.cs" />
+    <Compile Include="Helpers\SqlSpatialHelper.cs" />
     <Compile Include="Helpers\WebMercatorHelper.cs" />
     <Compile Include="Mapping\SqlIndex100k.cs" />
     <Compile Include="Mapping\SqlIndex250k.cs" />
     <Compile Include="Mapping\SqlIndex25k.cs" />
     <Compile Include="Mapping\SqlIndex50k.cs" />
-    <Compile Include="Model\EsriFeatureSet.cs" />
     <Compile Include="Model\SqlFeature.cs" />
     <Compile Include="Model\SqlFeatureSet.cs" />
     <Compile Include="Model\NamedSqlGeometry.cs" />

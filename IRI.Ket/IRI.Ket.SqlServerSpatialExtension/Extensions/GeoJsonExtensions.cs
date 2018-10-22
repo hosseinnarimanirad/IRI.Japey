@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 {
@@ -22,13 +23,14 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
         //}
 
         #region SqlGeometry
+
         public static SqlGeometry AsSqlGeometry(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
         {
             var type = geometry.GeometryType;
 
             if (geometry.IsNullOrEmpty())
             {
-                return SqlSpatialExtensions.CreateEmptySqlGeometry(type, srid);
+                return SqlSpatialHelper.CreateEmptySqlGeometry(type, srid);
             }
 
             SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -72,8 +74,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
             return builder.ConstructedGeometry.MakeValid();
         }
-
-
+         
         private static void AddPoint(SqlGeometryBuilder builder, GeoJsonPoint point, bool isLongitudeFirst)
         {
             builder.BeginGeometry(OpenGisGeometryType.Point);

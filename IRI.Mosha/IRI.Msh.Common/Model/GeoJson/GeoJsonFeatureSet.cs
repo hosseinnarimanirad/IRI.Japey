@@ -5,15 +5,15 @@ using System.Text;
 namespace IRI.Msh.Common.Model.GeoJson
 {
 
-    public class GeoJsonFeatureCollection
+    public class GeoJsonFeatureSet
     {
         public string type { get; set; }
         public int totalFeatures { get; set; }
         public GeoJsonFeature[] features { get; set; }
-        public Crs crs { get; set; }
+        public GeoJsonCrs crs { get; set; }
     }
 
-    public class Crs
+    public class GeoJsonCrs
     {
         public string type { get; set; }
         public Properties properties { get; set; }

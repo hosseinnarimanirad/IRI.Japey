@@ -9,6 +9,7 @@ using System.Text;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Threading.Tasks;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -72,39 +73,20 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-        #region EsriShape to SqlGeometry
-
-        
-        private static SqlGeometry CreateDefault(EsriShapeType esriType, int srid)
+        public static List<EsriPoint> ExtractPoints(this IEsriShapeCollection shapes)
         {
-            switch (esriType)
+            List<EsriPoint> result = new List<EsriPoint>();
+
+            foreach (IEsriSimplePoints shape in shapes)
             {
-                case EsriShapeType.EsriPoint:
-                case EsriShapeType.EsriPointM:
-                case EsriShapeType.EsriPointZ:
-                    return SqlSpatialExtensions.CreateEmptyPoint(srid);
-
-                case EsriShapeType.EsriMultiPoint:
-                case EsriShapeType.EsriMultiPointM:
-                case EsriShapeType.EsriMultiPointZ:
-                    return SqlSpatialExtensions.CreateEmptyMultipoint(srid);
-
-                case EsriShapeType.EsriPolyLine:
-                case EsriShapeType.EsriPolyLineM:
-                case EsriShapeType.EsriPolyLineZ:
-                    return SqlSpatialExtensions.CreateEmptyLineString(srid);
-
-                case EsriShapeType.EsriPolygon:
-                case EsriShapeType.EsriPolygonM:
-                case EsriShapeType.EsriPolygonZ:
-                    return SqlSpatialExtensions.CreateEmptyPolygon(srid);
-
-                case EsriShapeType.NullShape:
-                case EsriShapeType.EsriMultiPatch:
-                default:
-                    return SqlGeometry.Null;
+                result.AddRange(shape.Points);
             }
+
+            return result;
         }
+
+
+        #region Esri Shape > SqlGeometry
 
         public static List<SqlGeometry> AsSqlGeometry(this IEsriShapeCollection shapes)
         {
@@ -183,6 +165,37 @@ namespace IRI.Ket.SpatialExtensions
             catch (Exception ex)
             {
                 return CreateDefault(shape.Type, shape.Srid);
+            }
+        }
+
+        private static SqlGeometry CreateDefault(EsriShapeType esriType, int srid)
+        {
+            switch (esriType)
+            {
+                case EsriShapeType.EsriPoint:
+                case EsriShapeType.EsriPointM:
+                case EsriShapeType.EsriPointZ:
+                    return SqlSpatialHelper.CreateEmptyPoint(srid);
+
+                case EsriShapeType.EsriMultiPoint:
+                case EsriShapeType.EsriMultiPointM:
+                case EsriShapeType.EsriMultiPointZ:
+                    return SqlSpatialHelper.CreateEmptyMultipoint(srid);
+
+                case EsriShapeType.EsriPolyLine:
+                case EsriShapeType.EsriPolyLineM:
+                case EsriShapeType.EsriPolyLineZ:
+                    return SqlSpatialHelper.CreateEmptyLineString(srid);
+
+                case EsriShapeType.EsriPolygon:
+                case EsriShapeType.EsriPolygonM:
+                case EsriShapeType.EsriPolygonZ:
+                    return SqlSpatialHelper.CreateEmptyPolygon(srid);
+
+                case EsriShapeType.NullShape:
+                case EsriShapeType.EsriMultiPatch:
+                default:
+                    return SqlGeometry.Null;
             }
         }
 
@@ -286,19 +299,8 @@ namespace IRI.Ket.SpatialExtensions
 
         #endregion
 
-        public static List<EsriPoint> ExtractPoints(this IEsriShapeCollection shapes)
-        {
-            List<EsriPoint> result = new List<EsriPoint>();
 
-            foreach (IEsriSimplePoints shape in shapes)
-            {
-                result.AddRange(shape.Points);
-            }
-
-            return result;
-        }
-
-
+        #region SqlGeometry > Esri Shape
 
         public static EsriPoint AsEsriPoint(this SqlGeometry point)
         {
@@ -311,11 +313,6 @@ namespace IRI.Ket.SpatialExtensions
                 return new EsriPoint(point.STX.Value, point.STY.Value, point.STSrid.Value);
             }
         }
-
-
-        #region SqlGeometry To ESRI Shape
-
-
 
         public static IEsriShape AsEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
         {
@@ -336,28 +333,28 @@ namespace IRI.Ket.SpatialExtensions
                     throw new NotImplementedException();
 
                 case OpenGisGeometryType.LineString:
-                    return LineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+                    return SqlLineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
 
                 case OpenGisGeometryType.MultiLineString:
-                    return LineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+                    return SqlLineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
 
                 case OpenGisGeometryType.MultiPoint:
-                    return MultiPointToEsriMultiPoint(geometry, mapFunction);
+                    return SqlMultiPointToEsriMultiPoint(geometry, mapFunction);
 
                 case OpenGisGeometryType.MultiPolygon:
-                    return PolygonToEsriPolygon(geometry, mapFunction);
+                    return SqlPolygonToEsriPolygon(geometry, mapFunction);
 
 
                 case OpenGisGeometryType.Point:
-                    return PointToEsriPoint(geometry, mapFunction);
+                    return SqlPointToEsriPoint(geometry, mapFunction);
 
                 case OpenGisGeometryType.Polygon:
-                    return PolygonToEsriPolygon(geometry, mapFunction);
+                    return SqlPolygonToEsriPolygon(geometry, mapFunction);
             }
         }
 
         //Not supportig Z and M Values
-        private static EsriPoint PointToEsriPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPoint SqlPointToEsriPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             var point = geometry.AsEsriPoint();
 
@@ -365,7 +362,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supportig Z and M Values
-        private static EsriMultiPoint MultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriMultiPoint SqlMultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
             {
@@ -395,7 +392,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static EsriPolyline LineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPolyline SqlLineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty())
             {
@@ -423,7 +420,7 @@ namespace IRI.Ket.SpatialExtensions
 
         //Not supporting Z and M values
         //check for cw and cww criteria
-        private static EsriPolygon PolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        private static EsriPolygon SqlPolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
         {
             if (geometry.IsNullOrEmpty())
             {
@@ -501,63 +498,5 @@ namespace IRI.Ket.SpatialExtensions
 
         #endregion
 
-
-        public static List<SqlFeature> ReadShapefile(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
-        {
-            if (targetSrs != null)
-            {
-                var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
-
-                Func<IPoint, IPoint> map = p => p.Project(sourceSrs, targetSrs);
-
-                return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
-                        shpFileName,
-                        d => new SqlFeature() { Attributes = d },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
-            }
-            else
-            {
-
-                return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
-                        shpFileName,
-                        d => new SqlFeature() { Attributes = d },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
-            }
-        }
-
-        public static async Task<List<SqlFeature>> ReadShapefileAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
-        {
-            if (targetSrs != null)
-            {
-                var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
-
-                Func<IPoint, IPoint> map = p => p.Project(sourceSrs, targetSrs);
-
-                return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                        shpFileName,
-                        d => new SqlFeature() { Attributes = d },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
-            }
-            else
-            {
-
-                return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                        shpFileName,
-                        d => new SqlFeature() { Attributes = d },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
-            }
-        }
     }
 }

@@ -408,6 +408,10 @@ namespace IRI.Jab.MapViewer
 
         public void Register(Common.Presenter.Map.MapPresenter presenter)
         {
+            if (presenter == null)
+            {
+                return;
+            }
 
             _presenter = presenter;
 
@@ -416,6 +420,8 @@ namespace IRI.Jab.MapViewer
             presenter.RequestGetProxy = () => this.Proxy;
 
             presenter.RequestSetProxy = (p) => this.Proxy = p;
+
+            this.Proxy = presenter.Proxy?.GetProxy();
 
             presenter.RequestGetActualHeight = () => this.mapView.ActualHeight;
 
@@ -850,7 +856,7 @@ namespace IRI.Jab.MapViewer
 
             layer.IsOffline = isOffline;
 
-            this._layerManager.Add(layer); 
+            this._layerManager.Add(layer);
 
             //SetTileService(layer, isCachEnabled, cacheDirectory, isOffline, getFileName);
         }
@@ -4386,7 +4392,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                return result.AsSqlGeometry().MakeValid().ExtractPoints();
+                return result.AsSqlGeometry().MakeValid().AsGeometry();
             }
             catch (TaskCanceledException)
             {
@@ -4926,7 +4932,7 @@ namespace IRI.Jab.MapViewer
 
                     marker.LabelValue = measureValue;
 
-                    
+
                 }
                 catch (Exception ex)
                 {

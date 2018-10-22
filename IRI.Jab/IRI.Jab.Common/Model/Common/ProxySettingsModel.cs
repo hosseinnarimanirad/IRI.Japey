@@ -19,7 +19,7 @@ namespace IRI.Jab.Common.Model.Common
                 Update();
                 RaisePropertyChanged();
                 this.FireProxyChanged?.Invoke(this);
-                this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
+                //this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -32,7 +32,7 @@ namespace IRI.Jab.Common.Model.Common
                 Update();
                 RaisePropertyChanged();
                 this.FireProxyChanged?.Invoke(this);
-                this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
+                //this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -45,7 +45,7 @@ namespace IRI.Jab.Common.Model.Common
                 Update();
                 RaisePropertyChanged();
                 this.FireProxyChanged?.Invoke(this);
-                this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
+                //this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -58,7 +58,7 @@ namespace IRI.Jab.Common.Model.Common
                 Update();
                 RaisePropertyChanged();
                 this.FireProxyChanged?.Invoke(this);
-                this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
+                //this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -71,7 +71,7 @@ namespace IRI.Jab.Common.Model.Common
                 Update();
                 RaisePropertyChanged();
                 this.FireProxyChanged?.Invoke(this);
-                this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
+                //this.OnProxyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -104,7 +104,7 @@ namespace IRI.Jab.Common.Model.Common
 
         private System.Net.WebProxy _proxy;
 
-        public event EventHandler OnProxyChanged;
+        //public event EventHandler OnProxyChanged;
 
         public Action<ProxySettingsModel> FireProxyChanged;
     }

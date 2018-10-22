@@ -188,7 +188,7 @@ namespace Microsoft.SqlServer.Types
                 return geometry;
             }
 
-            var extractedGeometry = geometry.ExtractPoints();
+            var extractedGeometry = geometry.AsGeometry();
 
             var filteredGeometry = extractedGeometry.SelectPoints(filter);
 

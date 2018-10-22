@@ -92,7 +92,7 @@ namespace IRI.Ket.SpatialExtensions
             return builder.ConstructedGeography.STIsValid().Value ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
         }
 
-        public static void AddTrackSegment(SqlGeographyBuilder builder, GpxTrackSegment segment)
+        private static void AddTrackSegment(SqlGeographyBuilder builder, GpxTrackSegment segment)
         {
             builder.BeginGeography(OpenGisGeographyType.LineString);
 

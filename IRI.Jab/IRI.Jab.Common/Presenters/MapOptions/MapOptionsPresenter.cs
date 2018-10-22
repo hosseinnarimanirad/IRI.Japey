@@ -190,10 +190,7 @@ namespace IRI.Jab.Common.Presenters.MapOptions
                 {
                     _rightCommand = new RelayCommand(param =>
                     {
-                        if (this.RightCommandAction != null)
-                        {
-                            this.RightCommandAction(param);
-                        }
+                        this.RightCommandAction?.Invoke(param);
                     });
                 }
                 return _rightCommand;
@@ -212,10 +209,7 @@ namespace IRI.Jab.Common.Presenters.MapOptions
                 {
                     _leftCommand = new RelayCommand(param =>
                     {
-                        if (this.LeftCommandAction != null)
-                        {
-                            this.LeftCommandAction(param);
-                        }
+                        this.LeftCommandAction?.Invoke(param);
                     });
                 }
                 return _leftCommand;
@@ -234,10 +228,7 @@ namespace IRI.Jab.Common.Presenters.MapOptions
                 {
                     _middleCommand = new RelayCommand(param =>
                     {
-                        if (this.MiddleCommandAction != null)
-                        {
-                            this.MiddleCommandAction(param);
-                        }
+                        this.MiddleCommandAction?.Invoke(param);
                     });
                 }
                 return _middleCommand;
@@ -256,10 +247,7 @@ namespace IRI.Jab.Common.Presenters.MapOptions
                 {
                     _upperRightCommand = new RelayCommand(param =>
                     {
-                        if (this.UpperRightCommandAction != null)
-                        {
-                            this.UpperRightCommandAction(param);
-                        }
+                        this.UpperRightCommandAction?.Invoke(param);
                     });
                 }
                 return _upperRightCommand;

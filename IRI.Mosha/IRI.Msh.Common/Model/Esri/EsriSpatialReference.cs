@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Model.Esri
 {
-    public class SpatialReference
+    public class EsriSpatialReference
     {
         public int wkid { get; set; }
     }

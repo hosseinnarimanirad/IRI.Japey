@@ -358,5 +358,19 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public override void Add(T newGeometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(int geometryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(T newGeometry, int geometryId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
