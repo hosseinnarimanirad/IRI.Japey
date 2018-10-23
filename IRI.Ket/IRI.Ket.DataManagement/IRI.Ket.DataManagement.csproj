@@ -98,18 +98,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSource\GeoJsonSource.cs" />
+    <Compile Include="DataSource\MemorySources\GeoJsonSource.cs" />
     <Compile Include="DataSource\DatabaseSources\SqlServerScaleDependentDataSource.cs" />
+    <Compile Include="DataSource\MemorySources\SqlFeatureDataSource.cs" />
+    <Compile Include="DataSource\MemorySources\SqlGeometryDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\ClusteredGeoTaggedImageSource.cs" />
     <Compile Include="DataSource\RasterDataSources\GeoRasterFileDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\OnlineGoogleMapDataSource.cs" />
     <Compile Include="DataSource\ScaleDependentDataSources\MemoryScaleDependentDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\OfflineGoogleMapDataSource.cs" />
     <Compile Include="DataSource\ScaleDependentDataSources\SqlServerScaleDependentDataSource.cs" />
-    <Compile Include="DataSource\ShapefileDataStore.cs" />
+    <Compile Include="DataSource\MemorySources\ShapefileDataStore.cs" />
     <Compile Include="DataSource\RasterDataSources\ZippedImagePyramidDataSource.cs" />
     <Compile Include="DataSource\RasterDataSources\ImagePyramidDataSource.cs" />
     <Compile Include="Infrastructure\ZippedJsonArchiveInfrastructure.cs" />
+    <Compile Include="Model\ConnectedSqlFeatureSet.cs" />
     <Compile Include="Model\IDataSource.cs" />
     <Compile Include="Model\FeatureDataSource.cs" />
     <Compile Include="Model\IScaleDependentDataSource.cs" />
@@ -118,9 +121,9 @@
     <Compile Include="Infrastructure\PostGisInfrastructure.cs" />
     <Compile Include="Infrastructure\SqlServerCeInfrastructure.cs" />
     <Compile Include="Infrastructure\SqlServerInfrastructure.cs" />
-    <Compile Include="DataSource\MemoryDataSource.cs" />
+    <Compile Include="DataSource\MemorySources\MemoryDataSource.cs" />
     <Compile Include="DataSource\DatabaseSources\PostGisDataSource.cs" />
-    <Compile Include="DataSource\ShapefileDataSource.cs" />
+    <Compile Include="DataSource\MemorySources\ShapefileDataSource.cs" />
     <Compile Include="DataSource\DatabaseSources\SqlServerCeDataSource.cs" />
     <Compile Include="DataSourceType.cs" />
     <Compile Include="Model\SqlServerSourceParameter.cs" />

@@ -80,64 +80,24 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries().Select(g => new NamedSqlGeometry(g, string.Empty)).ToList();
         }
 
-
-        private static Func<List<SqlFeature>, DataTable> sqlFeatureToDataTableMapping = (list) =>
-         {
-             if (!(list?.Count > 0))
-             {
-                 return null;
-             }
-
-             DataTable table = new DataTable();
-
-             foreach (var col in list?.First().Attributes)
-             {
-                 table.Columns.Add(col.Key);
-             }
-
-             table.Columns.Add(new DataColumn("Geo"));
-
-             foreach (var item in list)
-             {
-                 var newRow = table.NewRow();
-
-                 foreach (var col in list.First().Attributes)
-                 {
-                     newRow[col.Key] = col.Value;
-                 }
-
-                 newRow["Geo"] = item.TheSqlGeometry;
-
-                 table.Rows.Add(newRow);
-             }
-
-             return table;
-         };
-
-        public static MemoryDataSource<SqlFeature> Create(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        public override void Add(ISqlGeometryAware newValue)
         {
-            var features = ShapefileHelper.ReadShapefile(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
-
-            var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
-
-            result.MappingFunc = sqlFeatureToDataTableMapping;
-
-            return result;
+            _geometries.Add(newValue.TheSqlGeometry);
         }
 
-        public static async Task<MemoryDataSource<SqlFeature>> CreateAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        public override void Remove(ISqlGeometryAware value)
         {
-            var features = await ShapefileHelper.ReadShapefileAsync(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, targetSrs);
+            _geometries.Remove(value.TheSqlGeometry);
+        }
 
-            var result = new MemoryDataSource<SqlFeature>(features, i => i.Label);
-
-            result.MappingFunc = sqlFeatureToDataTableMapping;
-
-            return result;
+        //ERROR PRONE: valueId is used as index
+        public override void Update(ISqlGeometryAware newValue, int valueId)
+        {
+            _geometries[valueId] = newValue.TheSqlGeometry;
         }
     }
 
-    public class MemoryDataSource<T> : FeatureDataSource<T> where T : ISqlGeometryAware
+    public class MemoryDataSource<T> : FeatureDataSource<T> where T : class, ISqlGeometryAware
     {
         public override BoundingBox Extent { get; protected set; }
 
@@ -147,7 +107,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<int, T> _idFunc;
 
-        public Func<List<T>, DataTable> MappingFunc;
+        public Func<List<T>, DataTable> ToDataTableMappingFunc;
 
         public override int GetSrid()
         {
@@ -161,7 +121,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public MemoryDataSource(List<SqlGeometry> geometries)
         {
-            this._features = geometries.Select(g => new SqlFeature(g)).Cast<T>().ToList<T>();
+            this._features = geometries.Select(g => new SqlFeature(g)).Cast<T>().ToList();
 
             this._labelFunc = null;
 
@@ -179,24 +139,6 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = GetGeometries().GetBoundingBox();
         }
 
-        //GetGeometries
-        //public override List<SqlGeometry> GetGeometries()
-        //{
-        //    return this._features?.Select(f => f.TheSqlGeometry)?.ToList();
-        //}
-
-        //public override List<SqlGeometry> GetGeometries(string whereClause)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
-        //{
-        //    SqlGeometry boundary = boundingBox.AsSqlGeometry(this.GetSrid()).MakeValid();
-
-        //    return GetGeometries().Where(i => i.STIntersects(boundary).IsTrue).ToList();
-        //}
-
         public override List<SqlGeometry> GetGeometries()
         {
             SqlGeometry geometry = null;
@@ -206,14 +148,15 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
         {
-            if (geometry == null)
-            {
-                return this._features.Select(f => f.TheSqlGeometry).ToList();
-            }
-            else
-            {
-                return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).Select(f => f.TheSqlGeometry).ToList();
-            }
+            //if (geometry == null)
+            //{
+            //    return this._features.Select(f => f.TheSqlGeometry).ToList();
+            //}
+            //else
+            //{
+            //    return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).Select(f => f.TheSqlGeometry).ToList();
+            //}
+            return GetFeatures(geometry)?.Select(f => f.TheSqlGeometry).ToList();
 
         }
 
@@ -226,6 +169,11 @@ namespace IRI.Ket.DataManagement.DataSource
             }
             else
             {
+                if (geometry?.STSrid.Value != this.GetSrid())
+                {
+                    throw new ArgumentException("srid mismatch");
+                }
+
                 return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList();
             }
         }
@@ -250,44 +198,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
-            if (geometry?.STSrid.Value != this.GetSrid())
-            {
-                throw new ArgumentException("srid mismatch");
-            }
 
-            return MappingFunc(this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList());
-
-            //DataTable result = new DataTable();
-
-            //result.Columns.Add(new DataColumn("Geo"));
-
-            //if (_labelFunc != null)
-            //{
-            //    var geometries = GetGeometryLabelPairs(geometry);
-
-            //    result.Columns.Add(new DataColumn("Attribute", typeof(string)));
-
-            //    foreach (var item in geometries)
-            //    {
-            //        result.Rows.Add(item.Geometry, item.Label);
-            //    }
-            //}
-            //else
-            //{
-            //    var geometries = GetGeometries().Where(i => i.STIntersects(geometry).IsTrue);
-
-            //    foreach (var item in geometries)
-            //    {
-            //        result.Rows.Add(item);
-            //    }
-            //}
-
-            //return result;
+            return ToDataTableMappingFunc(GetFeatures(geometry));
+            //return ToDataTableMappingFunc(this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList()); 
         }
 
         public override DataTable GetEntireFeatures()
         {
-            return MappingFunc(_features);
+            return ToDataTableMappingFunc(_features);
         }
 
         //GetGeometryLabelPairs
@@ -305,33 +223,23 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
         {
-            return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
-                                    .Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
+            //return this._features.Where(i => i?.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+            //                        .Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
+
+            return GetFeatures(geometry).Select(f => new NamedSqlGeometry(f.TheSqlGeometry, _labelFunc(f))).ToList();
         }
 
-        public override void Add(T newGeometry)
+        public override void Add(ISqlGeometryAware newGeometry)
         {
-            this._features.Add(newGeometry);
+            this._features.Add(newGeometry as T);
         }
 
-        public override void Remove(int geometryId)
+        public override void Remove(ISqlGeometryAware geometry)
         {
-            if (_idFunc == null)
-            {
-                return;
-            }
-
-            var geometry = _idFunc(geometryId);
-
-            this.Remove(geometry);
+            this._features.Remove(geometry as T);
         }
 
-        public void Remove(T geometry)
-        {
-            this._features.Remove(geometry);
-        }
-
-        public override void Update(T newGeometry, int geometryId)
+        public override void Update(ISqlGeometryAware newGeometry, int geometryId)
         {
             if (_idFunc == null)
             {
@@ -347,7 +255,16 @@ namespace IRI.Ket.DataManagement.DataSource
                 return;
             }
 
-            this._features[index] = newGeometry; ;
+            this._features[index] = newGeometry as T ;
+        }
+
+        public virtual void SaveChanges()
+        {
+
         }
     }
+
+
+
+
 }

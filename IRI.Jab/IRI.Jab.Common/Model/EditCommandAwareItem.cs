@@ -9,7 +9,12 @@ namespace IRI.Jab.Common.Model
 {
     public class EditCommandAwareItem : Notifier
     {
-        public Action RequestRemoveAction, AddAction, RequestEditAction;
+        public Action RequestRemoveAction { get; set; }
+
+        public Action RequestAddAction { get; set; }
+
+        public Action RequestEditAction { get; set; }
+
 
         public EditCommandAwareItem()
         {
@@ -20,7 +25,7 @@ namespace IRI.Jab.Common.Model
         {
             this.RequestRemoveAction = removeAction;
 
-            this.AddAction = addAction;
+            this.RequestAddAction = addAction;
 
             this.RequestEditAction = editAction;
         }
@@ -47,7 +52,7 @@ namespace IRI.Jab.Common.Model
             {
                 if (_addCommand == null)
                 {
-                    _addCommand = new RelayCommand(param => this.AddAction?.Invoke());
+                    _addCommand = new RelayCommand(param => this.RequestAddAction?.Invoke());
                 }
                 return _addCommand;
             }
@@ -66,5 +71,11 @@ namespace IRI.Jab.Common.Model
                 return _editCommand;
             }
         }
+
+        //public event EventHandler OnRemove;
+
+        //public event EventHandler OnAdd;
+
+        //public event EventHandler OnEdit;
     }
 }

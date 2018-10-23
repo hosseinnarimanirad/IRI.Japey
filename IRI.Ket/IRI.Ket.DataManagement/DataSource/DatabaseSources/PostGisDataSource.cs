@@ -248,6 +248,21 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(command);
         }
 
+        public override void Add(ISqlGeometryAware newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(ISqlGeometryAware value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(ISqlGeometryAware newValue, int valueId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 

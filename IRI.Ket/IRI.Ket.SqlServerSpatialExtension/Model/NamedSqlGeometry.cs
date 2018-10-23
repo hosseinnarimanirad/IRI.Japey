@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Model
 {
-    public class NamedSqlGeometry
+    public class NamedSqlGeometry : ISqlGeometryAware
     {
         public int Id { get; set; }
 
-        public SqlGeometry Geometry { get; set; }
+        public SqlGeometry TheSqlGeometry { get; set; }
 
         public string Label { get; set; }
-
+       
         public NamedSqlGeometry(SqlGeometry geometry, string label)
         {
-            this.Geometry = geometry;
+            this.TheSqlGeometry = geometry;
 
             this.Label = label;
         }

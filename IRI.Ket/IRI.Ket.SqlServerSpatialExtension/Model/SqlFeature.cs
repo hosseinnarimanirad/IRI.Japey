@@ -23,18 +23,21 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
             return $"Geometry: {TheSqlGeometry?.STGeometryType()}, Attributes: {Attributes?.Count}";
         }
 
-        public SqlFeature(SqlGeometry geometry)
+        public SqlFeature(SqlGeometry geometry) : this(geometry, new Dictionary<string, object>())
         {
-            this.TheSqlGeometry = geometry;
 
-            this.Attributes = new Dictionary<string, object>();
         }
 
-        public SqlFeature(SqlGeometry geometry, string label)
+        public SqlFeature(SqlGeometry geometry, string label) : this(geometry, new Dictionary<string, object>() { { _defaultLabelAttributeName, label } })
+        {
+
+        }
+
+        public SqlFeature(SqlGeometry geometry, Dictionary<string, object> attributes)
         {
             this.TheSqlGeometry = geometry;
 
-            this.Attributes = new Dictionary<string, object>() { { _defaultLabelAttributeName, label } };
+            this.Attributes = attributes;
         }
 
         public SqlFeature()
@@ -61,7 +64,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
         #region ICustomTypeDescriptor
 
-        
+
         public string GetComponentName()
         {
             return TypeDescriptor.GetComponentName(this, true);

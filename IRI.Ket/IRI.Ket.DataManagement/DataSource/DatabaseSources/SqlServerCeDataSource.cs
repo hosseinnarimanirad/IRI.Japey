@@ -214,7 +214,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             List<string> attributes = GetAttributes(this._labelColumnName).Select(i => i.ToString()).ToList();
 
-            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).Where(i => i.Geometry.STIntersects(geometry).Value).ToList();
+            return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).Where(i => i.TheSqlGeometry.STIntersects(geometry).Value).ToList();
         }
 
         public override System.Data.DataTable GetEntireFeatures(string whereClause)
@@ -246,6 +246,20 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetEntireFeatures(where);
         }
 
+        public override void Add(ISqlGeometryAware newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(ISqlGeometryAware value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(ISqlGeometryAware newValue, int valueId)
+        {
+            throw new NotImplementedException();
+        }
 
         ~SqlServerCeDataSource()
         {

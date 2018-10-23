@@ -1,4 +1,5 @@
-﻿using Microsoft.SqlServer.Types;
+﻿using IRI.Msh.Common.Primitives;
+using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Model
 {
-    public interface ISqlGeometryAware
+    public interface ISqlGeometryAware: IIdentifiable
     {
-        int Id { get; set; }
-
         SqlGeometry TheSqlGeometry { get; set; }
     }
 }

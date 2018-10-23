@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Model.Legend;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Assets.ShapeStrings;
+using IRI.Ket.DataManagement.Model;
 
 namespace IRI.Jab.Common.Model.Map
 {
-    public class DrawingItem : IRI.Jab.Common.Model.EditCommandAwareItem
+    public class DrawingItem : IRI.Jab.Common.Model.EditCommandAwareItem, IIdentifiable
     {
         private const string _removeToolTip = "حذف";
 
@@ -22,9 +23,11 @@ namespace IRI.Jab.Common.Model.Map
 
         private const string _saveToolTip = "ذخیره‌سازی";
 
-        private string _id;
+        public int Id { get; set; }
 
-        public string Id
+        public FeatureDataSource Source { get; set; }
+
+        public string LayerId
         {
             get { return AssociatedLayer?.Id.ToString() ?? Guid.NewGuid().ToString(); }
         }
@@ -89,7 +92,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public Action<DrawingItem> RequestHighlightGeometry;
 
-        public Action<DrawingItem> RequestSaveAsShapefile;
+        public Action<DrawingItem> RequestExportAsShapefile;
 
         //public Action<DrawingItem> RequestDownload;
 
@@ -105,9 +108,13 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        public DrawingItem(string title, Geometry geometry)
+        public DrawingItem(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
         {
             //this._id = Guid.NewGuid().ToString();
+
+            this.Id = id;
+
+            this.Source = source;
 
             this.Title = title;
 
@@ -125,7 +132,7 @@ namespace IRI.Jab.Common.Model.Map
 
             Commands.Add(new LegendCommand() { Command = EditCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarEdit, ToolTip = _editToolTip });
 
-            Commands.Add(new LegendCommand() { Command = SaveAsShapefile, Layer = AssociatedLayer, PathMarkup = Appbar.appbarSave, ToolTip = _saveToolTip });
+            Commands.Add(new LegendCommand() { Command = ExportAsShapefile, Layer = AssociatedLayer, PathMarkup = Appbar.appbarSave, ToolTip = _saveToolTip });
 
             Commands.Add(new LegendCommand() { Command = ZoomCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarMagnify, ToolTip = _zoomToolTip });
 
@@ -177,24 +184,23 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        private RelayCommand _saveAsShapefile;
+        private RelayCommand _exportAsShapefile;
 
-        public RelayCommand SaveAsShapefile
+        public RelayCommand ExportAsShapefile
         {
             get
             {
-                if (_saveAsShapefile == null)
+                if (_exportAsShapefile == null)
                 {
-                    _saveAsShapefile = new RelayCommand(param =>
+                    _exportAsShapefile = new RelayCommand(param =>
                     {
-                        this.RequestSaveAsShapefile?.Invoke(this);
+                        this.RequestExportAsShapefile?.Invoke(this);
                     });
                 }
 
-                return _saveAsShapefile;
+                return _exportAsShapefile;
             }
         }
-
 
         #endregion
     }

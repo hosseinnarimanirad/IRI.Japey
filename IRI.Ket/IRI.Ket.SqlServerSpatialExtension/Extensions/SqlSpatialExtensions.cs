@@ -89,6 +89,16 @@ namespace IRI.Ket.SpatialExtensions
             return geometry.AsBinaryZM().Value;
         }
 
+        public static string AsWkbBase64(this SqlGeometry geometry)
+        {
+            return Convert.ToBase64String(geometry.AsWkb());
+        }
+
+        public static string AsWkbString(this SqlGeometry geometry)
+        {
+            return IRI.Ket.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
+        }
+
         public static List<SqlGeometry> GetGeometries(this SqlGeometry geometry)
         {
             if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
@@ -141,7 +151,7 @@ namespace IRI.Ket.SpatialExtensions
             }
 
             var envelopes = spatialFeatures.Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
-             
+
             return SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
 
             //Method 0

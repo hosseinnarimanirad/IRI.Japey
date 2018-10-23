@@ -87,7 +87,7 @@ namespace IRI.Jab.Common.Model.Map
         {
             return Features?.Cast<ISqlGeometryAware>().ToList();
 
-            AssociatedLayer.
+            //AssociatedLayer.
         }
 
         public int CountOfSelectedFeatures()

@@ -854,13 +854,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //public Func<ILayer, Task> RequestAddLayer;
         public Action<ILayer> RequestAddLayer;
 
-        public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
-        {
-            MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
-        }
-
         public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
-
 
         public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Geometry>> RequestGetDrawingAsync;
 
@@ -900,44 +894,50 @@ namespace IRI.Jab.Common.Presenter.Map
 
         #region Methods
 
+        public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
+        {
+            MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
+        }
+
         public void Print()
         {
             this.RequestPrint?.Invoke();
         }
 
-        private async void DrawAsync(DrawMode mode)
-        {
-            var shapeItem = await MakeShapeItemAsync(mode, MapSettings.DrawingOptions, $"DRAWING {DrawingItems?.Count}");
-
-            if (shapeItem != null)
-            {
-                //this.SetLayer(shapeItem.AssociatedLayer);
-
-                this.DrawingItems.Add(shapeItem);
-
-                this.AddLayer(shapeItem.AssociatedLayer);
-
-                //this.Refresh();
-            }
-        }
-
-        private async Task<DrawingItem> MakeShapeItemAsync(DrawMode mode, EditableFeatureLayerOptions options, string name)
+        private async Task DrawAsync(DrawMode mode)
         {
             this.IsPanMode = true;
             //ResetMode(mode);
 
-            this.MapPanel.Options = options;
-
-            var drawing = await this.GetDrawingAsync(mode, options, true);
+            var drawing = await this.GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
 
             if (drawing == null)
             {
-                return null;
+                return;
             }
 
+            var shapeItem = MakeShapeItem(drawing, $"DRAWING {DrawingItems?.Count}");
+
+            if (shapeItem != null)
+            {
+                //this.SetLayer(shapeItem.AssociatedLayer);
+                AddDrawingItem(shapeItem);
+                //this.Refresh();
+            }
+        }
+
+        public void AddDrawingItem(DrawingItem item)
+        {
+            this.DrawingItems.Add(item);
+
+            this.AddLayer(item.AssociatedLayer);
+        }
+
+        protected DrawingItem MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
+        {
             var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
-            var shapeItem = new DrawingItem(name, drawing) { AssociatedLayer = layer };
+            var shapeItem = new DrawingItem(name, drawing, id, source) { AssociatedLayer = layer };
 
             shapeItem.Title = name;
 
@@ -967,16 +967,23 @@ namespace IRI.Jab.Common.Presenter.Map
                 if (edittedShape != null)
                 {
                     shapeItem.Geometry = edittedShape;
+
                     shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { edittedShape.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
                     this.SetLayer(shapeItem.AssociatedLayer);
+
                     Refresh();
+
+                    if (shapeItem.Source != null)
+                    {
+                        shapeItem.Source.Update(new SqlFeature(edittedShape.AsSqlGeometry()), id);
+                    }
                 }
             };
 
             shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
-            shapeItem.RequestSaveAsShapefile = g =>
+            shapeItem.RequestExportAsShapefile = g =>
             {
                 try
                 {
@@ -996,6 +1003,7 @@ namespace IRI.Jab.Common.Presenter.Map
             };
 
             var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
+
             var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
 
             shapeItem.RequestHighlightGeometry = di =>
@@ -1034,10 +1042,6 @@ namespace IRI.Jab.Common.Presenter.Map
                 }
             };
 
-            //shapeItem.RequestDownload = (s) =>
-            //{
-            //this.OnRequestShowDownloadDialog?.Invoke(s);
-            //};
             this.IsPanMode = true;
 
             return shapeItem;
@@ -1167,7 +1171,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private void TrySetCommands<T>(ILayer layer) where T : ISqlGeometryAware
+        private void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
         {
             if ((layer?.Commands?.Count > 0))
             {
@@ -1209,7 +1213,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestAddLayer?.Invoke(layer);
         }
 
-        public void AddLayer<T>(ILayer layer) where T : ISqlGeometryAware
+        public void AddLayer<T>(ILayer layer) where T : class, ISqlGeometryAware
         {
             TrySetCommands<T>(layer);
 
@@ -1608,7 +1612,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
-            await AddShapefile(fileName, IRI.Ket.ShapefileFormat.Dbf.DbfFile.ArabicEncoding, IRI.Ket.ShapefileFormat.Dbf.DbfFile.ArabicEncoding);
+            await AddShapefile(fileName, IRI.Ket.ShapefileFormat.Dbf.DbfFile._arabicEncoding, IRI.Ket.ShapefileFormat.Dbf.DbfFile._arabicEncoding);
         }
 
         public async Task AddShapefile(string fileName, System.Text.Encoding dataEncoding, System.Text.Encoding headerEncoding)
@@ -1669,16 +1673,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     LegendCommand.CreateRemoveLayer(this, vectorLayer),
                 };
 
-                System.Diagnostics.Debug.WriteLine($"before SetLayer: {DateTime.Now.ToLongTimeString()}");
-
-                //this.SetLayer(vectorLayer);
-
                 this.AddLayer(vectorLayer);
-
-                //this.Refresh();
-
-                System.Diagnostics.Debug.WriteLine($"after Refresh: {DateTime.Now.ToLongTimeString()}");
-
             }
             catch (Exception ex)
             {
@@ -1690,7 +1685,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public async virtual void AddWorldfile()
+        public virtual void AddWorldfile()
         {
             this.IsBusy = true;
 
@@ -2063,7 +2058,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _cancelMeasureCommand;
             }
         }
- 
+
 
         private RelayCommand _drawPointCommand;
 

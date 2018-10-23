@@ -198,7 +198,7 @@
     <Compile Include="Model\Common\VisualParameters.cs" />
     <Compile Include="Model\Common\VisualParametersStaticValues.cs" />
     <Compile Include="Model\DataStructure\RecursiveCollection.cs" />
-    <Compile Include="Model\EditableItem.cs" />
+    <Compile Include="Model\EditCommandAwareItem.cs" />
     <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
     <Compile Include="Model\Globalization\Language.cs" />
     <Compile Include="Model\LayerType.cs" />

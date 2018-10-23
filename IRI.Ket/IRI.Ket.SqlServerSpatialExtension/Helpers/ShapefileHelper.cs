@@ -13,7 +13,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
     public class ShapefileHelper
     {
 
-        public static List<SqlFeature> ReadShapefile(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        public static List<SqlFeature> ReadShapefile(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label = null, SrsBase targetSrs = null)
         {
             if (targetSrs != null)
             {
@@ -23,10 +23,10 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d },
+                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
                         (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
+                        dataEncoding,
+                        headerEncoding,
                         true);
             }
             else
@@ -34,15 +34,15 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d },
+                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
                         (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
+                        dataEncoding,
+                        headerEncoding,
                         true);
             }
         }
 
-        public static async Task<List<SqlFeature>> ReadShapefileAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, SrsBase targetSrs = null)
+        public static async Task<List<SqlFeature>> ReadShapefileAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label = null, SrsBase targetSrs = null)
         {
             if (targetSrs != null)
             {
@@ -52,7 +52,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d },
+                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
                         (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
                         System.Text.Encoding.UTF8,
                         System.Text.Encoding.UTF8,
@@ -63,7 +63,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d },
+                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
                         (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
                         System.Text.Encoding.UTF8,
                         System.Text.Encoding.UTF8,

@@ -753,7 +753,7 @@ namespace IRI.Jab.Common
             {
                 var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsAsync(mapExtent);
 
-                geometries = geoLabelPairs.Select(i => i.Geometry).ToList();
+                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
 
                 labels = geoLabelPairs.Select(i => i.Label).ToList();
             }
@@ -773,7 +773,7 @@ namespace IRI.Jab.Common
             {
                 var geoLabelPairs = this.DataSource.GetGeometryLabelPairs(mapExtent);
 
-                geometries = geoLabelPairs.Select(i => i.Geometry).ToList();
+                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
 
                 labels = geoLabelPairs.Select(i => i.Label).ToList();
             }
@@ -891,18 +891,18 @@ namespace IRI.Jab.Common
             return DataSource?.GetEntireFeatures();
         }
 
-        public List<T> GetFeatures<T>() where T : ISqlGeometryAware
+        public List<T> GetFeatures<T>() where T : class, ISqlGeometryAware
         {
             return GetFeatures<T>(null);
         }
 
-        public List<T> GetFeatures<T>(SqlGeometry geometry) where T : ISqlGeometryAware
+        public List<T> GetFeatures<T>(SqlGeometry geometry) where T : class, ISqlGeometryAware
         {
             //if (DataSource as FeatureDataSource != null)
             //{
             //    return (DataSource as FeatureDataSource).GetGeometries(geometry).Cast<T>().ToList();
             //}
-              if (DataSource as FeatureDataSource<T> != null)
+            if (DataSource as FeatureDataSource<T> != null)
             {
                 return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
             }

@@ -4,8 +4,8 @@ using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
-    public interface IGeometryAware : IIdentifiable
+    public interface IIdentifiable
     {
-        Geometry TheGeometry { get; set; }
+        int Id { get; set; }
     }
 }

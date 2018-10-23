@@ -299,7 +299,7 @@ namespace IRI.Jab.Common.Convertor
                 //var location = mapToScreen(mapCoordinates[i]);
                 //graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
 
-                var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].Geometry).AsWpfPoint());
+                var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry).AsWpfPoint());
 
                 graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
             }

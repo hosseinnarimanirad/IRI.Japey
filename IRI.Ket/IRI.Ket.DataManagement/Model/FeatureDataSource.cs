@@ -170,10 +170,18 @@ namespace IRI.Ket.DataManagement.Model
             return Task.Run(() => { return GetEntireFeatures(geometry); });
         }
 
-        #endregion        
+        #endregion
+
+
+        public abstract void Add(ISqlGeometryAware newValue);
+
+        public abstract void Remove(ISqlGeometryAware value);
+
+        public abstract void Update(ISqlGeometryAware newValue, int valueId);
+
     }
 
-    public abstract class FeatureDataSource<T> : FeatureDataSource where T : ISqlGeometryAware
+    public abstract class FeatureDataSource<T> : FeatureDataSource where T : class, ISqlGeometryAware
     {
         public List<T> GetFeatures()
         {
@@ -184,10 +192,30 @@ namespace IRI.Ket.DataManagement.Model
 
         public abstract List<T> GetFeatures(SqlGeometry geometry);
 
-        public abstract void Add(T newGeometry);
+        //public abstract void Add(ISqlGeometryAware newGeometry);
 
-        public abstract void Remove(int geometryId);
+        //public abstract void Remove(ISqlGeometryAware feature);
 
-        public abstract void Update(T newGeometry, int geometryId);
+        //public abstract void Update(ISqlGeometryAware newGeometry, int geometryId);
+
+
+        public override void Add(ISqlGeometryAware newValue)
+        {
+            //Add(newValue as T);
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(ISqlGeometryAware value)
+        {
+            //Remove(value as T);
+            throw new NotImplementedException();
+        }
+
+        public override void Update(ISqlGeometryAware newValue, int valueId)
+        {
+            //Update(newValue as T, valueId);
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -14,7 +14,7 @@ using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class MemoryScaleDependentDataSource<T> : MemoryDataSource<T>, IScaleDependentDataSource where T : ISqlGeometryAware
+    public class MemoryScaleDependentDataSource<T> : MemoryDataSource<T>, IScaleDependentDataSource where T : class, ISqlGeometryAware
     {
         Dictionary<double, List<SqlGeometry>> source;
 
@@ -79,7 +79,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
     }
 
-    public class MemoryScaleDependentDataSource : MemoryDataSource, IScaleDependentDataSource  
+    public class MemoryScaleDependentDataSource : MemoryDataSource, IScaleDependentDataSource
     {
         Dictionary<double, List<SqlGeometry>> source;
 

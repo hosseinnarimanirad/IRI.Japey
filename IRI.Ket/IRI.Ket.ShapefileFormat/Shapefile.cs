@@ -408,6 +408,32 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Project
 
+        //public static Func<Point, Point> GetProjectFunc(string shapefileName, SrsBase targetCrs)
+        //{
+        //    //var sourcePrj = IRI.Ket.ShapefileFormat.Shapefile.GetPrjFileName(shapefileName);
+
+        //    //if (!System.IO.File.Exists(sourcePrj))
+        //    //{
+        //    //    throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
+        //    //}
+
+        //    //var sourceCrs = new ShapefileFormat.Prj.EsriPrjFile(sourcePrj).AsMapProjection();
+        //    var sourceSrs = TryGetSrs(shapefileName);
+
+        //    Func<Point, Point> result = null;
+
+        //    if (sourceSrs.Ellipsoid.AreTheSame(targetCrs.Ellipsoid))
+        //    {
+        //        result = new Func<Point, Point>(p => (Point)targetCrs.FromGeodetic(sourceSrs.ToGeodetic(p)));
+        //    }
+        //    else
+        //    {
+        //        result = new Func<Point, Point>(p => (Point)targetCrs.FromGeodetic(sourceSrs.ToGeodetic(p), sourceSrs.Ellipsoid));
+        //    }
+
+        //    return result;
+        //}
+
         public static Task<List<IEsriShape>> ProjectAsync(string shpFileName, SrsBase targetSrs)
         {
             return Task.Run(() => Project(shpFileName, targetSrs));

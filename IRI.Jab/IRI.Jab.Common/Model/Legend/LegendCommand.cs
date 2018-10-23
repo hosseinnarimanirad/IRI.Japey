@@ -93,7 +93,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, ILayer layer) where T : ISqlGeometryAware
+        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, ILayer layer) where T : class, ISqlGeometryAware
         {
             var result = new LegendCommand()
             {
@@ -151,7 +151,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : ISqlGeometryAware
+        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, ISqlGeometryAware
         {
             var result = new LegendCommand()
             {
