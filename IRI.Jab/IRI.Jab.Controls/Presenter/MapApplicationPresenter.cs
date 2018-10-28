@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Common.Presenter.Map;
+﻿using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Presenter.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,10 +52,36 @@ namespace IRI.Jab.Controls.Presenter
 
             this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;
 
-            this.RequestGoTo = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
+            this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
+
+            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);
+
+            this.SetMapCursorSet1();
 
             this.RegisterMapOptions();
 
         }
+
+
+        private void ShowAboutMe()
+        {
+            this.OnRequestShowAboutMe?.Invoke();
+        }
+
+
+        private RelayCommand _showAboutMeCommand;
+
+        public RelayCommand ShowAboutMeCommand
+        {
+            get
+            {
+                if (_showAboutMeCommand == null)
+                {
+                    _showAboutMeCommand = new RelayCommand(param => this.ShowAboutMe());
+                }
+                return _showAboutMeCommand;
+            }
+        }
+
     }
 }

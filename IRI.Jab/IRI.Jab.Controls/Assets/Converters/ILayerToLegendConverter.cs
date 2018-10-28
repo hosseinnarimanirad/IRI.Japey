@@ -48,7 +48,7 @@ namespace IRI.Jab.Controls.Assets.Converters
             }
             else if (layerType.HasFlag(LayerType.Polyline))
             {
-                return new LineGeometry(new System.Windows.Point(0, 10), new System.Windows.Point(10, 10));
+                return new LineGeometry(new System.Windows.Point(0, 0), new System.Windows.Point(10, 10));
                 //return new Line()
                 //{
                 //    StrokeThickness = 3,

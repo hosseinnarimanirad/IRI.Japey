@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
              xmlns:model="clr-namespace:IRI.Jab.Common.Model.Legend;assembly=IRI.Jab.Common"
+             xmlns:my="clr-namespace:IRI.Jab.Controls.Assets.Converters"
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
              FontFamily="{StaticResource iranSans}">
      
@@ -91,7 +92,7 @@
                     <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
                 </Button>
             </DataTemplate>
-            
+            <my:ILayerToLegendConverter x:Key="iLayerToLegendConverter"/>
             <!--<model:CommandDataTemplateSelector x:Key="commandDataTemplateSelector"/>-->
         </Grid.Resources>
         <!--<Grid.Resources>
@@ -132,6 +133,26 @@
         <StackPanel HorizontalAlignment="Stretch" Margin="0">
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
+                <Border Margin="0,0,4,0" Width="17" Height="17" BorderThickness="1" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}"
+                        Background="Transparent" Cursor="Hand">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="BorderBrush" Value="LightGray"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="DarkGray"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding ChangeSymbologyCommand}" CommandParameter="{Binding}"/>
+                    </Border.InputBindings>
+                    <Path Margin="1" Data="{Binding Type, Converter={StaticResource iLayerToLegendConverter}}"
+                            Fill="{Binding VisualParameters.Fill}" Stroke="{Binding VisualParameters.Stroke}"
+                            StrokeThickness="{Binding VisualParameters.StrokeThickness}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="{Binding VisualParameters.Opacity}"/>
+                </Border>
                 <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2" TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
                 <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
                            Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}"/>

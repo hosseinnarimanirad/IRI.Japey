@@ -91,9 +91,9 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         //ERROR PRONE: valueId is used as index
-        public override void Update(ISqlGeometryAware newValue, int valueId)
+        public override void Update(ISqlGeometryAware newValue)
         {
-            _geometries[valueId] = newValue.TheSqlGeometry;
+            _geometries[newValue.Id] = newValue.TheSqlGeometry;
         }
     }
 
@@ -239,16 +239,18 @@ namespace IRI.Ket.DataManagement.DataSource
             this._features.Remove(geometry as T);
         }
 
-        public override void Update(ISqlGeometryAware newGeometry, int geometryId)
+        public override void Update(ISqlGeometryAware newGeometry)
         {
             if (_idFunc == null)
             {
                 return;
             }
 
-            var geometry = _idFunc(geometryId);
+            //var geometry = _idFunc(newGeometry.Id);
 
-            var index = this._features.IndexOf(geometry);
+            //var index = this._features.IndexOf(geometry.);
+
+            var index = newGeometry.Id;
 
             if (index < 0)
             {

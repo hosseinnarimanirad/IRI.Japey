@@ -127,6 +127,7 @@
     <Compile Include="Assets\Converters\ScaleToGoogleScaleConverter.cs" />
     <Compile Include="Assets\Converters\SolidColorBrushToColorConverter.cs" />
     <Compile Include="Assets\Converters\StreamGeometryToPathConverter.cs" />
+    <Compile Include="Assets\Converters\StringToColorConverter.cs" />
     <Compile Include="Assets\Converters\StringToFarsiStringConverter.cs" />
     <Compile Include="Assets\Converters\StringToRtlFlowDirection.cs" />
     <Compile Include="Assets\Converters\StringToShapeConverter.cs" />

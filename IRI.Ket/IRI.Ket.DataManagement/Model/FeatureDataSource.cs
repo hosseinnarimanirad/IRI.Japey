@@ -177,7 +177,7 @@ namespace IRI.Ket.DataManagement.Model
 
         public abstract void Remove(ISqlGeometryAware value);
 
-        public abstract void Update(ISqlGeometryAware newValue, int valueId);
+        public abstract void Update(ISqlGeometryAware newValue);
 
     }
 
@@ -211,7 +211,7 @@ namespace IRI.Ket.DataManagement.Model
             throw new NotImplementedException();
         }
 
-        public override void Update(ISqlGeometryAware newValue, int valueId)
+        public override void Update(ISqlGeometryAware newValue)
         {
             //Update(newValue as T, valueId);
             throw new NotImplementedException();

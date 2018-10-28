@@ -256,7 +256,7 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override void Update(ISqlGeometryAware newValue, int valueId)
+        public override void Update(ISqlGeometryAware newValue)
         {
             throw new NotImplementedException();
         }

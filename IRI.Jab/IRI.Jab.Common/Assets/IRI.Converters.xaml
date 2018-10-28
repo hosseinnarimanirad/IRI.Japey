@@ -39,6 +39,7 @@
     <converters:SolidColorBrushToColorConverter x:Key="solidColorBrushToColorConverter"/>
     <converters:StreamGeometryToImageConverter x:Key="streamGeometryToImageConverter"/>
     <converters:StreamGeometryToPathConverter x:Key="streamGeometryToPathConverter"/>
+    <converters:StringToColorConverter x:Key="stringToColorConverter"/>
     <converters:StringToFarsiStringConverter x:Key="stringToFarsiStringConverter"/>
     <converters:StringToRtlFlowDirection x:Key="stringToRtlFlowDirection"/>
     <converters:StringToShapeConverter x:Key="stringToShapeConverter"/>

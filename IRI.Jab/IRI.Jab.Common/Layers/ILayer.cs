@@ -5,6 +5,7 @@ using System;
 using System.Windows;
 using System.Collections.Generic;
 using IRI.Jab.Common.Model.Legend;
+using IRI.Jab.Common.Assets.Commands;
 
 namespace IRI.Jab.Common
 {
@@ -35,14 +36,16 @@ namespace IRI.Jab.Common
         void Invalidate();
 
         bool IsSelectedInToc { get; set; }
-         
+
         bool ShowInToc { get; set; }
-         
+
         bool CanUserDelete { get; }
 
         int NumberOfSelectedFeatures { get; set; }
 
         List<ILegendCommand> Commands { get; set; }
+
+        RelayCommand ChangeSymbologyCommand { get;   }
 
         event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged;
 

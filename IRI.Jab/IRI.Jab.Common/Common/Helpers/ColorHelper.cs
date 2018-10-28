@@ -47,6 +47,11 @@ namespace IRI.Jab.Common.Helpers
             return $"#{color.A.ToString("X2")}{color.R.ToString("X2") }{color.G.ToString("X2")}{color.B.ToString("X2")}";
         }
 
+        public static string ToHexString(Color color)
+        {
+            return color.ToString();
+        }
+
         public static Color GetRandomWpfColor()
         {
             int randomIndex = RandomHelper.Get(goodColors.Length);

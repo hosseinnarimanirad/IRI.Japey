@@ -3,6 +3,7 @@ using IRI.Jab.Common.Assets.Commands;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
+using System.Windows;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -194,12 +195,13 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        public static LegendCommand Create(ILayer layer, Action action, string markup)
+        public static LegendCommand Create(ILayer layer, Action action, string markup, string tooltip)
         {
             var result = new LegendCommand()
             {
                 PathMarkup = markup,
-                Command = new RelayCommand(param => action())
+                Command = new RelayCommand(param => action()),
+                ToolTip = tooltip
             };
 
             result.Command = new RelayCommand(param => action());
@@ -243,5 +245,32 @@ namespace IRI.Jab.Common.Model.Legend
 
             return result;
         }
+
+        public static ILegendCommand CreateShowSymbologyView(ILayer layer, Action showSymbologyViewAction)
+        {
+            return Create(layer, showSymbologyViewAction, Assets.ShapeStrings.Appbar.appbarCart, "سمبل‌گذاری");
+        }
+
+        //public static ILegendCommand CreateShowModal(MapPresenter map, ILayer layer, Window window)
+        //{
+        //    //var result = new LegendCommand()
+        //    //{
+        //    //    PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCart,
+        //    //    Layer = layer,
+        //    //    ToolTip = "سمبل‌گذاری",
+        //    //};
+
+        //    //result.Command = new RelayCommand(param =>
+        //    //{
+        //    //    window.DataContext = layer;
+
+        //    //    window.Show();
+        //    //});
+
+        //    //return result;
+
+
+        //}
+
     }
 }

@@ -38,7 +38,9 @@
             <Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
                 <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
-            
+            <Button Command="{Binding EditCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4" IsEnabled="{Binding IsSingleValueHighlighted}">
+                <Path Data="{StaticResource appbarEdit}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+            </Button>
         </DockPanel>
     </Grid>
 </UserControl>

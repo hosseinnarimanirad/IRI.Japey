@@ -4,6 +4,7 @@ using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using System.Windows;
 using IRI.Jab.Common.Model.Legend;
+using IRI.Jab.Common.Assets.Commands;
 
 namespace IRI.Jab.Common
 {
@@ -48,6 +49,8 @@ namespace IRI.Jab.Common
             {
                 _isSelectedInToc = value;
                 RaisePropertyChanged();
+
+                ChangeSymbologyCommand?.CanExecute(null);
             }
         }
 
@@ -120,6 +123,22 @@ namespace IRI.Jab.Common
             }
         }
 
+        private RelayCommand _changeSymbologyCommand;
+
+        public RelayCommand ChangeSymbologyCommand
+        {
+            get
+            {
+                if (_changeSymbologyCommand == null)
+                {
+                    _changeSymbologyCommand = new RelayCommand(param => { this.RequestChangeSymbology?.Invoke(this); }, param => IsSelectedInToc);
+                }
+
+                return _changeSymbologyCommand;
+            }
+        }
+
+
         private LabelParameters _labels;
 
         public LabelParameters Labels
@@ -147,6 +166,7 @@ namespace IRI.Jab.Common
         }
 
 
+
         private VisualParameters _visualParameters;
 
         public VisualParameters VisualParameters
@@ -166,6 +186,8 @@ namespace IRI.Jab.Common
 
             }
         }
+
+        public Action<ILayer> RequestChangeSymbology;
 
         private event EventHandler<CustomEventArgs<Visibility>> _onVisibilityChanged;
 

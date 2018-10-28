@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
              xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View.Map" >
     <Grid>
@@ -60,9 +61,10 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}"
-                                 DataContext="{Binding }" IsEnabled="{Binding VisualParameters.IsInScaleRange}">
+                                 DataContext="{Binding }" IsEnabled="{Binding VisualParameters.IsInScaleRange}" IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
                         <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName}" Symbology="{Binding VisualParameters}"  
-                                                                        Commands="{Binding Commands}" IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                                                     Commands="{Binding Commands}"
+                                                                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                     </RadioButton>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

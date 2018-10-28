@@ -56,7 +56,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public Action<int> RemoveAction;
 
-        public Action<int, ISqlGeometryAware> UpdateAction;
+        public Action<ISqlGeometryAware> UpdateAction;
 
         public string IdColumnName { get; set; }
 
@@ -778,9 +778,9 @@ namespace IRI.Ket.DataManagement.DataSource
             this.RemoveAction?.Invoke(featureId);
         }
 
-        public override void Update(ISqlGeometryAware newFeature, int featureId)
+        public override void Update(ISqlGeometryAware newFeature)
         {
-            this.UpdateAction?.Invoke(featureId, newFeature);
+            this.UpdateAction?.Invoke(newFeature);
         }
 
         public override void Remove(ISqlGeometryAware feature)

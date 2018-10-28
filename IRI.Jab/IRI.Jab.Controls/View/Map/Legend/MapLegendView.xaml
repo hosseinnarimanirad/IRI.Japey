@@ -37,10 +37,10 @@
                                         <!--</Border>-->
                                         <Border DockPanel.Dock="Left"  Width="15" Height="15" BorderBrush="Black" BorderThickness="1">
                                             <Path Margin="1" Data="{Binding Type, Converter={StaticResource iLayerToLegendConverter}}"
-                                          Fill="{Binding VisualParameters.Fill}" Stroke="{Binding VisualParameters.Stroke}"
-                                          StrokeThickness="{Binding VisualParameters.StrokeThickness}"
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"
-                                          Opacity="{Binding VisualParameters.Opacity}"/>
+                                                    Fill="{Binding VisualParameters.Fill}" Stroke="{Binding VisualParameters.Stroke}"
+                                                    StrokeThickness="{Binding VisualParameters.StrokeThickness}"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                    Opacity="{Binding VisualParameters.Opacity}"/>
                                         </Border>
                                         <Viewbox Height="20" DockPanel.Dock="Left" Margin="2">
                                             <Slider Width="75" Maximum="1" Value="{Binding VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2" />

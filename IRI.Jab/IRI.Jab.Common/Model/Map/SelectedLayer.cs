@@ -59,12 +59,31 @@ namespace IRI.Jab.Common.Model.Map
 
                 _highlightedFeatures.CollectionChanged += (sender, e) =>
                 {
-                    this.UpdateHighlightedFeaturesOnMap(e.NewItems.Cast<ISqlGeometryAware>());
+                    //this.UpdateHighlightedFeaturesOnMap(e.NewItems.Cast<ISqlGeometryAware>());
+
+                    //RaisePropertyChanged(nameof(IsSingleValueHighlighted));
+                    Update();
                 };
 
-                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+                Update();
             }
         }
+
+        private void Update()
+        {
+            this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+
+            RaisePropertyChanged(nameof(IsSingleValueHighlighted));
+        }
+
+        public bool IsSingleValueHighlighted
+        {
+            get
+            {
+                return HighlightedFeatures?.Count() == 1;
+            }
+        }
+
 
         public SelectedLayer(ILayer layer)
         {
@@ -114,17 +133,33 @@ namespace IRI.Jab.Common.Model.Map
         {
             if (point?.Count() == 1 && point.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
             {
-                FlashSinglePoint?.Invoke(point.First());
+                RequestFlashSinglePoint?.Invoke(point.First());
             }
+        }
+
+        public void Update(ISqlGeometryAware oldGeometry, ISqlGeometryAware newGeometry)
+        {
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
+
+            dataSource.Update(newGeometry);
+
+            var feature = this.Features.Single(f => f.Id == oldGeometry.Id);
+
+            feature.TheSqlGeometry = newGeometry.TheSqlGeometry;
+
+            //this.UpdateHighlightedFeatures(new List<ISqlGeometryAware>() { feature });
+            //var highlight = HighlightedFeatures.Single(h => h.Id == oldGeometry.Id)
         }
 
         public Action<IEnumerable<ISqlGeometryAware>> FeaturesChangedAction { get; set; }
 
         public Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
 
-        public Action<ISqlGeometryAware> FlashSinglePoint { get; set; }
+        public Action<ISqlGeometryAware> RequestFlashSinglePoint { get; set; }
 
-        public Action<IEnumerable<ISqlGeometryAware>, Action> ZoomTo { get; set; }
+        public Action<IEnumerable<ISqlGeometryAware>, Action> RequestZoomTo { get; set; }
+
+        public Action<ISqlGeometryAware> RequestEdit { get; set; }
 
         public Action RequestRemove { get; set; }
 
@@ -139,11 +174,34 @@ namespace IRI.Jab.Common.Model.Map
                     _zoomToCommand = new RelayCommand(param =>
                     {
                         var features = HighlightedFeatures.Cast<ISqlGeometryAware>();
-                        this.ZoomTo?.Invoke(features, () => { TryFlashPoint(features); });
+                        this.RequestZoomTo?.Invoke(features, () => { TryFlashPoint(features); });
                     });
                 }
 
                 return _zoomToCommand;
+            }
+        }
+
+        private RelayCommand _editCommand;
+
+        public RelayCommand EditCommand
+        {
+            get
+            {
+                if (_editCommand == null)
+                {
+                    _editCommand = new RelayCommand(param =>
+                    {
+                        var highlightedFeatures = GetHighlightedFeatures();
+
+                        if (highlightedFeatures?.Count() == 1)
+                        {
+                            this.RequestEdit(highlightedFeatures.First());
+                        }
+                    });
+                }
+
+                return _editCommand;
             }
         }
 

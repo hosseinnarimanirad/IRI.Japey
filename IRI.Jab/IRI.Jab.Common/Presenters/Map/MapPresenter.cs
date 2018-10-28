@@ -206,9 +206,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 selectedLayer.HighlightFeaturesChangedAction = ShowHighlightedFeatures;
 
-                selectedLayer.FlashSinglePoint = FlashHighlightedFeatures;
+                selectedLayer.RequestFlashSinglePoint = FlashHighlightedFeatures;
 
-                selectedLayer.ZoomTo = (features, callback) =>
+                selectedLayer.RequestZoomTo = (features, callback) =>
                 {
                     var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
 
@@ -216,6 +216,28 @@ namespace IRI.Jab.Common.Presenter.Map
                 };
 
                 selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
+
+                selectedLayer.RequestEdit = async g =>
+                 {
+                     var editedGeometry = await Edit(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
+
+                     if (editedGeometry != null)
+                     {
+
+                         SqlFeature f = new SqlFeature(editedGeometry.AsSqlGeometry()) { Id = g.Id };
+
+                         selectedLayer.Update(g, f);
+
+                     }
+
+                     //Referesh
+                     if (selectedLayer.ShowSelectedOnMap)
+                     {
+                         ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
+                     }
+
+                     Refresh();
+                 };
 
                 this.SelectedLayers.Add(selectedLayer);
 
@@ -870,6 +892,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestFinishEdit;
 
+        public Action OnRequestShowAboutMe;
+
         //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
         public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Geometry>> RequestMeasure;
 
@@ -877,7 +901,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestCancelMeasure;
 
-        public Action RequestGoTo;
+        public Action RequestShowGoToView;
+
+        public Action<ILayer> RequestShowSymbologyView;
 
         public Action<IPoint> RequestAddPointToNewDrawing;
 
@@ -976,7 +1002,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                     if (shapeItem.Source != null)
                     {
-                        shapeItem.Source.Update(new SqlFeature(edittedShape.AsSqlGeometry()), id);
+                        shapeItem.Source.Update(new SqlFeature(edittedShape.AsSqlGeometry()) { Id = id });
                     }
                 }
             };
@@ -1143,7 +1169,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestSetLayer?.Invoke(layer);
         }
 
-        private void TrySetCommands(ILayer layer)
+        protected void TrySetCommands(ILayer layer)
         {
             if ((layer?.Commands?.Count > 0))
             {
@@ -1159,7 +1185,10 @@ namespace IRI.Jab.Common.Presenter.Map
                     LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
                     LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
                     LegendCommand.CreateRemoveLayer(this, layer),
+                    //LegendCommand.CreateShowSymbologyView(layer,()=>this.RequestShowSymbologyView?.Invoke(layer))
                 };
+
+                (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
             }
             else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
             {
@@ -1171,7 +1200,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
+        protected void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
         {
             if ((layer?.Commands?.Count > 0))
             {
@@ -1187,7 +1216,10 @@ namespace IRI.Jab.Common.Presenter.Map
                     LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
                     LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
                     LegendCommand.CreateRemoveLayer(this, layer),
+                    //LegendCommand.CreateShowSymbologyView(layer,()=>this.RequestShowSymbologyView?.Invoke(layer))
                 };
+
+                (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
             }
             //this should not happed be cause source must be FeatureDataSource<T>
             else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
@@ -2110,7 +2142,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_goToCommand == null)
                 {
-                    _goToCommand = new RelayCommand(param => this.RequestGoTo?.Invoke());
+                    _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke());
                 }
 
                 return _goToCommand;
