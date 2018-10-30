@@ -688,6 +688,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
+
         private List<EnvelopeMarkupLabelTriple> _ostanha;
 
         public List<EnvelopeMarkupLabelTriple> Ostanha
@@ -1171,73 +1172,75 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void TrySetCommands(ILayer layer)
         {
-            if ((layer?.Commands?.Count > 0))
-            {
-                return;
-            }
 
             if (layer is VectorLayer)
             {
-                layer.Commands = new List<ILegendCommand>()
+                if (!(layer?.Commands?.Count > 0))
                 {
-                    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
-                    LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
-                    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                    LegendCommand.CreateRemoveLayer(this, layer),
-                    //LegendCommand.CreateShowSymbologyView(layer,()=>this.RequestShowSymbologyView?.Invoke(layer))
-                };
+                    layer.Commands = new List<ILegendCommand>()
+                    {
+                        LegendCommand.CreateZoomToExtentCommand(this, layer),
+                        LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
+                        LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
+                        LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                        LegendCommand.CreateRemoveLayer(this, layer),
+                    };
+                }
 
-                (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+                if ((layer as VectorLayer).RequestChangeSymbology == null)
+                {
+                    (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+                }
             }
             else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
             {
-                layer.Commands = new List<ILegendCommand>()
+                if (!(layer?.Commands?.Count > 0))
                 {
-                    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    LegendCommand.CreateRemoveLayer(this, layer),
-                };
+                    layer.Commands = new List<ILegendCommand>()
+                    {
+                        LegendCommand.CreateZoomToExtentCommand(this, layer),
+                        LegendCommand.CreateRemoveLayer(this, layer),
+                    };
+                }
             }
         }
 
         protected void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
         {
-            if ((layer?.Commands?.Count > 0))
-            {
-                return;
-            }
-
             if (layer is VectorLayer)
             {
-                layer.Commands = new List<ILegendCommand>()
+                if (!(layer?.Commands?.Count > 0))
                 {
-                    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
-                    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
-                    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                    LegendCommand.CreateRemoveLayer(this, layer),
-                    //LegendCommand.CreateShowSymbologyView(layer,()=>this.RequestShowSymbologyView?.Invoke(layer))
-                };
-
-                (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+                    layer.Commands = new List<ILegendCommand>()
+                    {
+                        LegendCommand.CreateZoomToExtentCommand(this, layer),
+                        LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
+                        LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
+                        LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                        LegendCommand.CreateRemoveLayer(this, layer),
+                    };
+                }
+                if ((layer as VectorLayer).RequestChangeSymbology == null)
+                {
+                    (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+                }
             }
-            //this should not happed be cause source must be FeatureDataSource<T>
+
+            //this should not happed because source must be FeatureDataSource<T>
             else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
             {
-                layer.Commands = new List<ILegendCommand>()
+                if (!(layer?.Commands?.Count > 0))
                 {
-                    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    LegendCommand.CreateRemoveLayer(this, layer),
-                };
+                    layer.Commands = new List<ILegendCommand>()
+                    {
+                        LegendCommand.CreateZoomToExtentCommand(this, layer),
+                        LegendCommand.CreateRemoveLayer(this, layer),
+                    };
+                }
             }
         }
 
-
-        //public void AddLayer(VectorLayer layer)
-        //{
-        //    this.RequestAddLayer?.Invoke(layer);
-        //}
-
+         
         public void AddLayer(ILayer layer)
         {
             TrySetCommands(layer);
@@ -1696,16 +1699,16 @@ namespace IRI.Jab.Common.Presenter.Map
                     RenderingApproach.Default,
                     IRI.Jab.Common.Model.RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-                vectorLayer.Commands = new List<ILegendCommand>()
-                {
-                    LegendCommand.CreateZoomToExtentCommand(this, vectorLayer),
-                    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, vectorLayer),
-                    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, vectorLayer),
-                    LegendCommand.CreateClearSelected(this, vectorLayer),
-                    LegendCommand.CreateRemoveLayer(this, vectorLayer),
-                };
+                //vectorLayer.Commands = new List<ILegendCommand>()
+                //{
+                //    LegendCommand.CreateZoomToExtentCommand(this, vectorLayer),
+                //    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, vectorLayer),
+                //    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, vectorLayer),
+                //    LegendCommand.CreateClearSelected(this, vectorLayer),
+                //    LegendCommand.CreateRemoveLayer(this, vectorLayer),
+                //};
 
-                this.AddLayer(vectorLayer);
+                this.AddLayer<SqlFeature>(vectorLayer);
             }
             catch (Exception ex)
             {

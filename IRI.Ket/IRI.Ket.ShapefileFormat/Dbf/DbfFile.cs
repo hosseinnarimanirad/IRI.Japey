@@ -58,7 +58,16 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 }
                 else
                 {
-                    return new DateTime(int.Parse(first), int.Parse(second), int.Parse(third));
+                    var year = int.Parse(first);
+                    var month = int.Parse(second);
+                    var day = int.Parse(third);
+
+                    if (year + month + day == 0) //in the case; first : 0000, second : 00, third : 00
+                    {
+                        return null;
+                    }
+
+                    return new DateTime(year, month, day);
                 }
             });
 
@@ -241,12 +250,21 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             return columns;
         }
-
-
-        public static List<Dictionary<string, object>> Read(string dbfFileName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters = true)
+         
+       
+        public static List<Dictionary<string, object>> Read(string dbfFileName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters = true, bool tryDetectEncoding = true)
         {
-            ChangeEncoding(dataEncoding);
+            if (tryDetectEncoding)
+            {
+                Encoding encoding = ShapefileFormat.Shapefile.TryDetectEncoding(dbfFileName) ?? dataEncoding;
 
+                ChangeEncoding(encoding);
+            }
+            else
+            {
+                ChangeEncoding(dataEncoding);
+            }
+             
             DbfFile._fieldsEncoding = fieldHeaderEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
@@ -272,6 +290,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
 
+             
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
 
             var result = new List<Dictionary<string, object>>(header.NumberOfRecords);
@@ -312,7 +331,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             return result;
         }
-         
+
         public static object[][] ReadToObject(string dbfFileName, string tableName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters)
         {
             ChangeEncoding(dataEncoding);
@@ -632,7 +651,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             return result;
         }
-         
+
         //Write
         public static void Write(string fileName, System.Data.DataTable table, Encoding encoding, bool overwrite = false)
         {
