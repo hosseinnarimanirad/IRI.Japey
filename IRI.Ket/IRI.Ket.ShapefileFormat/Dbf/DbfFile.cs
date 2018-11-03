@@ -250,13 +250,38 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             return columns;
         }
-         
-       
+
+
+        public static Encoding TryDetectEncoding(string dbfFileName)
+        {
+            var cpgFile = Shapefile.GetCpgFileName(dbfFileName);
+
+            if (!System.IO.File.Exists(cpgFile))
+            {
+                return null;
+            }
+
+            var encodingText = System.IO.File.ReadAllText(cpgFile);
+
+            if (encodingText?.ToUpper()?.Trim() == "UTF-8" || encodingText?.ToUpper()?.Trim() == "UTF8")
+            {
+                return Encoding.UTF8;
+            }
+            else if (encodingText?.Contains("1256") == true)
+            {
+                return Dbf.DbfFile._arabicEncoding;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static List<Dictionary<string, object>> Read(string dbfFileName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters = true, bool tryDetectEncoding = true)
         {
             if (tryDetectEncoding)
             {
-                Encoding encoding = ShapefileFormat.Shapefile.TryDetectEncoding(dbfFileName) ?? dataEncoding;
+                Encoding encoding = TryDetectEncoding(dbfFileName) ?? dataEncoding;
 
                 ChangeEncoding(encoding);
             }
@@ -264,7 +289,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             {
                 ChangeEncoding(dataEncoding);
             }
-             
+
             DbfFile._fieldsEncoding = fieldHeaderEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
@@ -290,7 +315,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
 
-             
+
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
 
             var result = new List<Dictionary<string, object>>(header.NumberOfRecords);

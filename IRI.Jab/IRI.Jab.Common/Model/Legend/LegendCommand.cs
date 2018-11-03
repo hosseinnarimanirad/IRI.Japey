@@ -167,12 +167,12 @@ namespace IRI.Jab.Common.Model.Legend
 
                 options.IsOptionsAvailable = false;
 
-                var drawing = await map.GetDrawingAsync(Model.DrawMode.Polygon, options);
+                var drawingResult = await map.GetDrawingAsync(Model.DrawMode.Polygon, options);
 
-                if (drawing == null)
+                if (!drawingResult.HasValidResult())
                     return;
 
-                var features = layer.GetFeatures<T>(drawing.AsSqlGeometry());
+                var features = layer.GetFeatures<T>(drawingResult.Result.AsSqlGeometry());
 
                 if (features == null)
                 {

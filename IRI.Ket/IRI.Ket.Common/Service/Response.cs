@@ -8,13 +8,20 @@ namespace IRI.Ket.Common.Service
 {
     public class Response<T>
     {
-        public bool IsFailed { get; set; }
+        public bool? IsCanceled { get; set; }
+
+        public bool? IsFailed { get; set; }
+
+        public bool HasValidResult()
+        {
+            return !(IsCanceled == true) &&
+                    !(IsFailed == true) &&
+                    Result != null;
+        }
 
         public string ErrorMessage { get; set; }
 
         public T Result { get; set; }
-
-
     }
 
     public static class ResponseFactory

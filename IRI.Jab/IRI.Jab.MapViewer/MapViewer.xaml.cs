@@ -35,6 +35,7 @@ using IRI.Jab.Common.Model.Spatialable;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
+using IRI.Ket.Common.Service;
 
 namespace IRI.Jab.MapViewer
 {
@@ -2277,8 +2278,8 @@ namespace IRI.Jab.MapViewer
             //this.mapView.MouseMove -= mapView_MouseMoveForDraw;
             //this.mapView.MouseUp -= mapView_MouseUpForDraw;
 
-            this.mapView.MouseDown -= mapView_MouseUpForSelectPoint;
-            this.mapView.MouseUp -= mapView_MouseUpForSelectPoint;
+            //this.mapView.MouseDown -= mapView_MouseUpForSelectPoint;
+            //this.mapView.MouseUp -= mapView_MouseUpForSelectPoint;
 
             this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
             this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
@@ -3009,37 +3010,37 @@ namespace IRI.Jab.MapViewer
 
         #region SelectPoint
 
-        public void SelectPoint()
-        {
-            ResetMapViewEvents();
+        //public void SelectPoint()
+        //{
+        //    ResetMapViewEvents();
 
-            this.SetCursor(Cursors.Cross);
+        //    this.SetCursor(Cursors.Cross);
 
-            this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
+        //    this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
 
-            this.mapView.MouseUp += new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
-        }
+        //    this.mapView.MouseUp += new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
+        //}
 
-        public void ReleaseSelectPoint()
-        {
-            //this.SetCursor(Cursors.Arrow);
-            this.SetCursor(CursorSettings[_currentMouseAction]);
+        //public void ReleaseSelectPoint()
+        //{
+        //    //this.SetCursor(Cursors.Arrow);
+        //    this.SetCursor(CursorSettings[_currentMouseAction]);
 
-            this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
-        }
+        //    this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
+        //}
 
-        private void mapView_MouseUpForSelectPoint(object sender, MouseButtonEventArgs e)
-        {
-            Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+        //private void mapView_MouseUpForSelectPoint(object sender, MouseButtonEventArgs e)
+        //{
+        //    Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
 
-            Point point = Mouse.GetPosition(this.mapView);
+        //    Point point = Mouse.GetPosition(this.mapView);
 
-            //if (this.OnPointSelected != null)
-            //{
-            //    this.OnPointSelected(null, new Common.PointEventArgs(ScreenToGeodetic(point)));
-            //}
-            this.OnPointSelected.SafeInvoke(null, new PointEventArgs(ScreenToGeodetic(point)));
-        }
+        //    //if (this.OnPointSelected != null)
+        //    //{
+        //    //    this.OnPointSelected(null, new Common.PointEventArgs(ScreenToGeodetic(point)));
+        //    //}
+        //    this.OnPointSelected.SafeInvoke(null, new PointEventArgs(ScreenToGeodetic(point)));
+        //}
 
         private Task<sb.Point> SelectThePoint()
         {
@@ -4012,7 +4013,7 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource drawingCancellationToken;
 
-        TaskCompletionSource<sb.Geometry> drawingTcs;
+        TaskCompletionSource<Response<sb.Geometry>> drawingTcs;
 
         private void MapView_MouseDownForStartDrawing(object sender, MouseButtonEventArgs e)
         {
@@ -4163,7 +4164,7 @@ namespace IRI.Jab.MapViewer
 
                 drawingCancellationToken = null;
 
-                drawingTcs.SetResult(drawingLayer.GetFinalGeometry());
+                drawingTcs.SetResult(ResponseFactory.Create(drawingLayer.GetFinalGeometry()));
 
                 this.Pan();
             }
@@ -4319,9 +4320,9 @@ namespace IRI.Jab.MapViewer
             return view;
         }
 
-        private Task<sb.Geometry> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
+        private Task<Response<sb.Geometry>> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
         {
-            drawingTcs = new TaskCompletionSource<sb.Geometry>();
+            drawingTcs = new TaskCompletionSource<Response<sb.Geometry>>();
 
             drawingCancellationToken = new CancellationTokenSource();
 
@@ -4372,7 +4373,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<sb.Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
+        public async Task<Response<sb.Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
         {
             try
             {
@@ -4392,7 +4393,16 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                return result.AsSqlGeometry().MakeValid().AsGeometry();
+                if (result.HasValidResult())
+                {
+                    return ResponseFactory.Create(result.Result.AsSqlGeometry().MakeValid().AsGeometry());
+                }
+                else
+                {
+                    return new Response<sb.Geometry>();
+                }
+
+
             }
             catch (TaskCanceledException)
             {
@@ -4480,8 +4490,6 @@ namespace IRI.Jab.MapViewer
             return result;
         }
 
-        //this.map.GetFeatures(arg.AsSqlGeometry()
-
         #endregion
 
 
@@ -4568,11 +4576,11 @@ namespace IRI.Jab.MapViewer
         //    this.SetLayer(layer);
         //}
 
-        private Task<sb.Geometry> EditGeometry(sb.Geometry geometry, EditableFeatureLayerOptions options)
+        private Task<Response<sb.Geometry>> EditGeometry(sb.Geometry geometry, EditableFeatureLayerOptions options)
         {
             editingCancellationToken = new CancellationTokenSource();
 
-            var tcs = new TaskCompletionSource<sb.Geometry>();
+            var tcs = new TaskCompletionSource<Response<sb.Geometry>>();
 
             if (CurrentEditingLayer != null)
             {
@@ -4604,7 +4612,7 @@ namespace IRI.Jab.MapViewer
 
             CurrentEditingLayer.RequestFinishEditing = (g) =>
             {
-                tcs.SetResult(g);
+                tcs.SetResult(ResponseFactory.Create(g));
 
                 this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 
@@ -4644,9 +4652,10 @@ namespace IRI.Jab.MapViewer
             return tcs.Task;
         }
 
-        public async Task<sb.Geometry> EditGeometryAsync(sb.Geometry originalGeometry, EditableFeatureLayerOptions options)
+        public async Task<Response<sb.Geometry>> EditGeometryAsync(sb.Geometry originalGeometry, EditableFeatureLayerOptions options)
         {
             sb.Geometry originalClone = null;
+
             try
             {
                 originalClone = originalGeometry.Clone();
@@ -4674,7 +4683,7 @@ namespace IRI.Jab.MapViewer
 
                 //97 04 27
                 //return originalGeometry;
-                return originalClone;
+                return new Response<sb.Geometry>() { Result = originalGeometry, IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4726,48 +4735,6 @@ namespace IRI.Jab.MapViewer
         #region Bezier
 
         CancellationTokenSource bezierCancellationToken;
-
-        private async Task<PolyBezierLayer> GetBezier(Geometry decoration, VisualParameters decorationVisual)
-        {
-            bezierCancellationToken = new CancellationTokenSource();
-
-            var tcs = new TaskCompletionSource<PolyBezierLayer>();
-
-            bezierCancellationToken.Token.Register(() =>
-            {
-                tcs.TrySetCanceled();
-
-                //this.SetCursor(Cursors.Arrow);
-                this.SetCursor(CursorSettings[_currentMouseAction]);
-
-            }, useSynchronizationContext: false);
-
-            var polylineGeometry = await GetDrawingAsync(DrawMode.Polyline);
-
-            if (polylineGeometry == null)
-            {
-                bezierCancellationToken.Cancel();
-            }
-            else
-            {
-                var polyline = polylineGeometry.Points.Cast<sb.Point>().ToList();
-
-                PolyBezierLayer layer = new PolyBezierLayer(polyline, this.viewTransform, decoration, decorationVisual);
-
-                RegisterPolyBezierLayer(layer);
-
-                layer.RequestFinishEditing = r =>
-                {
-                    tcs.SetResult(r);
-                };
-
-                this.SetLayer(layer);
-
-                this.AddPolyBezierLayer(layer);
-            }
-
-            return await tcs.Task;
-        }
 
         private void RegisterPolyBezierLayer(PolyBezierLayer layer)
         {
@@ -4827,7 +4794,49 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<PolyBezierLayer> GetBezierAsync(Geometry decoration = null, VisualParameters decorationVisual = null)
+        private async Task<Response<PolyBezierLayer>> GetBezier(Geometry decoration, VisualParameters decorationVisual)
+        {
+            bezierCancellationToken = new CancellationTokenSource();
+
+            var tcs = new TaskCompletionSource<Response<PolyBezierLayer>>();
+
+            bezierCancellationToken.Token.Register(() =>
+            {
+                tcs.TrySetCanceled();
+
+                //this.SetCursor(Cursors.Arrow);
+                this.SetCursor(CursorSettings[_currentMouseAction]);
+
+            }, useSynchronizationContext: false);
+
+            var drawingResult = await GetDrawingAsync(DrawMode.Polyline);
+
+            if (!drawingResult.HasValidResult())
+            {
+                bezierCancellationToken.Cancel();
+            }
+            else
+            {
+                var polyline = drawingResult.Result.Points.Cast<sb.Point>().ToList();
+
+                PolyBezierLayer layer = new PolyBezierLayer(polyline, this.viewTransform, decoration, decorationVisual);
+
+                RegisterPolyBezierLayer(layer);
+
+                layer.RequestFinishEditing = r =>
+                {
+                    tcs.SetResult(ResponseFactory.Create<PolyBezierLayer>(r));
+                };
+
+                this.SetLayer(layer);
+
+                this.AddPolyBezierLayer(layer);
+            }
+
+            return await tcs.Task;
+        }
+
+        public async Task<Response<PolyBezierLayer>> GetBezierAsync(Geometry decoration = null, VisualParameters decorationVisual = null)
         {
             try
             {
@@ -4842,9 +4851,9 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                if (result != null)
+                if (result.HasValidResult())
                 {
-                    RemovePolyBezierLayer(result);
+                    RemovePolyBezierLayer(result.Result);
                 }
 
                 return result;
@@ -4853,7 +4862,7 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
-                return null;
+                return new Response<PolyBezierLayer>() { Result = null, IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4883,7 +4892,7 @@ namespace IRI.Jab.MapViewer
         Guid _measureId;
 
         //private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
-        private async Task<sb.Geometry> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
+        private async Task<Response<sb.Geometry>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
         {
             this._measureCancellationToken = new CancellationTokenSource();
 
@@ -4940,29 +4949,13 @@ namespace IRI.Jab.MapViewer
                 }
             };
 
-            //1397.04.18
-            //var result = await GetDrawingAsync(mode, new EditableFeatureLayerOptions()
-            //{
-            //    Visual = VisualParameters.GetDefaultForMeasurements(),
-            //    IsEdgeLabelVisible = isEdgeLabelVisible,
-            //}, true);
             var result = await GetDrawingAsync(mode, drawingOptions, true);
 
             this.ClearLayer(measureLayer, remove: true, forceRemove: true);
 
-            if (result != null)
+            if (result.HasValidResult())
             {
-                //1397.04.18
-                //result = await EditGeometryAsync(result, new EditableFeatureLayerOptions()
-                //{
-                //    IsEdgeLabelVisible = true,
-                //    IsMeasureVisible = true,
-                //    IsFinishButtonVisible = false,
-                //    IsCancelButtonVisible = false,
-                //    IsDeleteButtonVisible = true,
-                //    IsMeasureButtonVisible = true
-                //});
-                result = await EditGeometryAsync(result, editingOptions);
+                result = await EditGeometryAsync(result.Result, editingOptions);
             }
 
             if (_measureId == guid)
@@ -4981,7 +4974,7 @@ namespace IRI.Jab.MapViewer
         }
 
         //public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
-        public async Task<sb.Geometry> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
+        public async Task<Response<sb.Geometry>> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
         {
             _measureId = Guid.NewGuid();
 
@@ -4991,14 +4984,13 @@ namespace IRI.Jab.MapViewer
 
                 CancelMeasure();
 
-                //return await Measure(mode, isEdgeLabelVisible, action, _measureId);
                 return await Measure(mode, drawingOptions, editingOptions, action, _measureId);
             }
             catch (TaskCanceledException)
             {
                 this.Status = MapStatus.Idle;
 
-                return null;
+                return new Response<sb.Geometry>() { Result = null, IsCanceled = true };
             }
             catch (Exception ex)
             {

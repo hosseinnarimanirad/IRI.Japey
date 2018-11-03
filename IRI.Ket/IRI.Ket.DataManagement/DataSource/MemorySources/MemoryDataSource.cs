@@ -105,6 +105,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<T, string> _labelFunc;
 
+        private int _uniqueId = 0;
+
         protected Func<int, T> _idFunc;
 
         public Func<List<T>, DataTable> ToDataTableMappingFunc;
@@ -121,9 +123,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public MemoryDataSource(List<SqlGeometry> geometries)
         {
-            this._features = geometries.Select(g => new SqlFeature(g)).Cast<T>().ToList();
+            this._features = geometries.Select(g => new SqlFeature(g) { Id = GetNewId() }).Cast<T>().ToList();
 
             this._labelFunc = null;
+
+            this._idFunc = id => this._features.Single(f => f.Id == id);
 
             this.Extent = GetGeometries().GetBoundingBox();
         }
@@ -132,11 +136,21 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             this._features = features;
 
+            foreach (var item in _features)
+            {
+                item.Id = GetNewId();
+            }
+
             this._labelFunc = labelFunc;
 
             this._idFunc = idFunc;
 
             this.Extent = GetGeometries().GetBoundingBox();
+        }
+
+        protected int GetNewId()
+        {
+            return _uniqueId++;
         }
 
         public override List<SqlGeometry> GetGeometries()
@@ -246,18 +260,18 @@ namespace IRI.Ket.DataManagement.DataSource
                 return;
             }
 
-            //var geometry = _idFunc(newGeometry.Id);
+            var geometry = _idFunc(newGeometry.Id);
 
-            //var index = this._features.IndexOf(geometry.);
+            var index = this._features.IndexOf(geometry);
 
-            var index = newGeometry.Id;
+            //var index = newGeometry.Id;
 
-            if (index < 0)
-            {
-                return;
-            }
+            //if (index < 0)
+            //{
+            //    return;
+            //}
 
-            this._features[index] = newGeometry as T ;
+            this._features[index] = newGeometry as T;
         }
 
         public virtual void SaveChanges()

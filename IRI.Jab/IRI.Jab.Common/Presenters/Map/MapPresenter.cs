@@ -27,6 +27,7 @@ using IRI.Jab.Common.Model.Legend;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Model;
+using IRI.Ket.Common.Service;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -219,15 +220,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 selectedLayer.RequestEdit = async g =>
                  {
-                     var editedGeometry = await Edit(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
+                     var editResult = await EditAsync(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
 
-                     if (editedGeometry != null)
+                     if (editResult.HasValidResult())
                      {
-
-                         SqlFeature f = new SqlFeature(editedGeometry.AsSqlGeometry()) { Id = g.Id };
+                         SqlFeature f = new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = g.Id };
 
                          selectedLayer.Update(g, f);
-
                      }
 
                      //Referesh
@@ -879,7 +878,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
-        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Geometry>> RequestGetDrawingAsync;
+        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry>>> RequestGetDrawingAsync;
 
         public Action RequestClearAll;
 
@@ -896,7 +895,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action OnRequestShowAboutMe;
 
         //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
-        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Geometry>> RequestMeasure;
+        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry>>> RequestMeasure;
 
         //public Action RequestMeasureLength;
 
@@ -908,9 +907,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<IPoint> RequestAddPointToNewDrawing;
 
-        public Func<Geometry, EditableFeatureLayerOptions, Task<Geometry>> RequestEdit;
+        public Func<Geometry, EditableFeatureLayerOptions, Task<Response<Geometry>>> RequestEdit;
 
-        public Func<System.Windows.Media.Geometry, VisualParameters, Task<PolyBezierLayer>> RequestGetBezier;
+        public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
         public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
@@ -936,14 +935,14 @@ namespace IRI.Jab.Common.Presenter.Map
             this.IsPanMode = true;
             //ResetMode(mode);
 
-            var drawing = await this.GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
+            var drawingResult = await this.GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
 
-            if (drawing == null)
+            if (!drawingResult.HasValidResult())
             {
                 return;
             }
 
-            var shapeItem = MakeShapeItem(drawing, $"DRAWING {DrawingItems?.Count}");
+            var shapeItem = MakeShapeItem(drawingResult.Result, $"DRAWING {DrawingItems?.Count}");
 
             if (shapeItem != null)
             {
@@ -989,13 +988,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 //options = options ?? MapSettings.EditingOptions;
 
-                var edittedShape = await this.Edit(shapeItem.Geometry, MapSettings.EditingOptions);
+                var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
 
-                if (edittedShape != null)
+                if (editResult.HasValidResult())
                 {
-                    shapeItem.Geometry = edittedShape;
+                    shapeItem.Geometry = editResult.Result;
 
-                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { edittedShape.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
                     this.SetLayer(shapeItem.AssociatedLayer);
 
@@ -1003,7 +1002,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                     if (shapeItem.Source != null)
                     {
-                        shapeItem.Source.Update(new SqlFeature(edittedShape.AsSqlGeometry()) { Id = id });
+                        shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
                     }
                 }
             };
@@ -1240,7 +1239,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-         
+
         public void AddLayer(ILayer layer)
         {
             TrySetCommands(layer);
@@ -1394,7 +1393,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestUnregisterMapOptions?.Invoke();
         }
 
-        public async Task<Geometry> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
+        public async Task<Response<Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
         {
             this.IsDrawMode = true;
 
@@ -1461,7 +1460,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         //protected async Task<Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action = null)
-        protected async Task<Geometry> Measure(DrawMode mode, Action action = null)
+        protected async Task<Response<Geometry>> Measure(DrawMode mode, Action action = null)
         {
             //this.IsMeasureMode = true;
 
@@ -1488,7 +1487,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestCancelMeasure?.Invoke();
         }
 
-        protected Task<PolyBezierLayer> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
+        protected Task<Response<PolyBezierLayer>> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
         {
             if (RequestGetBezier != null)
             {
@@ -1496,15 +1495,15 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             else
             {
-                return new Task<PolyBezierLayer>(null);
+                return new Task<Response<PolyBezierLayer>>(() => new Response<PolyBezierLayer>() { IsFailed = true });
             }
         }
 
-        public async Task<Geometry> Edit(Geometry geometry, EditableFeatureLayerOptions options)
+        public async Task<Response<Geometry>> EditAsync(Geometry geometry, EditableFeatureLayerOptions options)
         {
             //this.IsEditMode = true;
 
-            Geometry result = null;
+            Response<Geometry> result = null;
 
             options = options ?? this.MapSettings.EditingOptions;
 
@@ -1516,7 +1515,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             else
             {
-                result = await new Task<Geometry>(null);
+                result = await new Task<Response<Geometry>>(() => ResponseFactory.Create<Geometry>(null));
             }
 
             //this.IsEditMode = false;
@@ -1524,11 +1523,11 @@ namespace IRI.Jab.Common.Presenter.Map
             return result;
         }
 
-        public Task<Geometry> Edit(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
+        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
         {
             if (points == null || points.Count < 1)
             {
-                return new Task<Geometry>(null);
+                return new Task<Response<Geometry>>(null);
             }
 
             options = options ?? this.MapSettings.EditingOptions;
@@ -1539,7 +1538,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             Geometry geometry = new Geometry(points.ToArray(), type);
 
-            return Edit(geometry, options);
+            return EditAsync(geometry, options);
         }
 
         public void FireMapStatusChanged(MapStatus status)
@@ -1652,43 +1651,43 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async Task AddShapefile(string fileName, System.Text.Encoding dataEncoding, System.Text.Encoding headerEncoding)
         {
-
             try
             {
                 var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
                 {
-
-                    System.Diagnostics.Debug.WriteLine($"before TryGetSrs: {DateTime.Now.ToLongTimeString()}");
-
                     var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
 
-                    //var shp = (await IRI.Ket.ShapefileFormat.Shapefile.ProjectAsync(fileName, new IRI.Msh.CoordinateSystem.MapProjection.WebMercator()))
-                    //                .Select(i => i.AsSqlGeometry(SridHelper.WebMercator))
-                    //                .Where(i => !i.IsNotValidOrEmpty())
-                    //                .ToList();
+                    List<SqlFeature> features;
+                     
+                    if (sourceSrs == null)
+                    {
+                        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                                fileName,
+                                d => new SqlFeature() { Attributes = d },
+                                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.AsSqlGeometry(),
+                                dataEncoding,
+                                headerEncoding,
+                                true);
+                    }
+                    else
+                    {
+                        var webmercator = new WebMercator();
 
-                    System.Diagnostics.Debug.WriteLine($"after TryGetSrs: {DateTime.Now.ToLongTimeString()}");
+                        Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
 
-                    var webmercator = new WebMercator();
+                        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                                fileName,
+                                d => new SqlFeature() { Attributes = d },
+                                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
+                                dataEncoding,
+                                headerEncoding,
+                                true);
+                    }
 
-                    Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
-
-                    System.Diagnostics.Debug.WriteLine($"before Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
-
-
-                    var shp = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                            fileName,
-                            d => new SqlFeature() { Attributes = d },
-                            (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
-                            dataEncoding,
-                            headerEncoding,
-                            true);
-
-                    System.Diagnostics.Debug.WriteLine($"after Shapefile.ReadAsync: {DateTime.Now.ToLongTimeString()}");
-
-                    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(shp, s => s.Label);
+                    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(features, s => s.Label);
 
                     return source;
+
                 });
 
                 System.Diagnostics.Debug.WriteLine($"before vectorLayer: {DateTime.Now.ToLongTimeString()}");
@@ -1697,16 +1696,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
                     LayerType.VectorLayer,
                     RenderingApproach.Default,
-                    IRI.Jab.Common.Model.RasterizationApproach.GdiPlus, ScaleInterval.All);
-
-                //vectorLayer.Commands = new List<ILegendCommand>()
-                //{
-                //    LegendCommand.CreateZoomToExtentCommand(this, vectorLayer),
-                //    LegendCommand.CreateSelectByDrawing<SqlFeature>(this, vectorLayer),
-                //    LegendCommand.CreateShowAttributeTable<SqlFeature>(this, vectorLayer),
-                //    LegendCommand.CreateClearSelected(this, vectorLayer),
-                //    LegendCommand.CreateRemoveLayer(this, vectorLayer),
-                //};
+                    RasterizationApproach.GdiPlus, ScaleInterval.All);
 
                 this.AddLayer<SqlFeature>(vectorLayer);
             }
@@ -2103,7 +2093,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_drawPointCommand == null)
                 {
-                    _drawPointCommand = new RelayCommand(param => { DrawAsync(DrawMode.Point); });
+                    _drawPointCommand = new RelayCommand(async param => await DrawAsync(DrawMode.Point));
                 }
                 return _drawPointCommand;
             }
@@ -2117,7 +2107,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_drawPolygonCommand == null)
                 {
-                    _drawPolygonCommand = new RelayCommand(param => { DrawAsync(DrawMode.Polygon); });
+                    _drawPolygonCommand = new RelayCommand(async param => await DrawAsync(DrawMode.Polygon));
                 }
                 return _drawPolygonCommand;
             }
@@ -2131,7 +2121,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_drawPolylineCommand == null)
                 {
-                    _drawPolylineCommand = new RelayCommand(param => { DrawAsync(DrawMode.Polyline); });
+                    _drawPolylineCommand = new RelayCommand(async param => await DrawAsync(DrawMode.Polyline));
                 }
                 return _drawPolylineCommand;
             }

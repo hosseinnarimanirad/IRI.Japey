@@ -223,7 +223,5 @@ namespace IRI.Jab.Common.Model.Map
                 return _removeCommand;
             }
         }
-
-
     }
 }

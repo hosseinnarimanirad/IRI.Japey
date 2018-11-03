@@ -125,7 +125,11 @@ namespace IRI.Ket.DataManagement.DataSource
                     geometry = geometries[i].AsSqlGeometry().MakeValid().Transform(p => transformFunc(p), srid);
                 }
 
-                this._features.Add(map(geometry, attributes[i]));
+                var feature = map(geometry, attributes[i]);
+
+                feature.Id = GetNewId();
+
+                this._features.Add(feature);
             }
         }
     }

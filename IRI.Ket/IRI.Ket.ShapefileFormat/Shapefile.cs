@@ -124,31 +124,6 @@ namespace IRI.Ket.ShapefileFormat
             return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid); });
         }
 
-        public static Encoding TryDetectEncoding(string shpFileName)
-        {
-            var cpgFile = GetCpgFileName(shpFileName);
-
-            if (!System.IO.File.Exists(cpgFile))
-            {
-                return null;
-            }
-
-            var encodingText = System.IO.File.ReadAllText(cpgFile);
-
-            if (encodingText?.ToUpper()?.Trim() == "UTF-8" || encodingText?.ToUpper()?.Trim() == "UTF8")
-            {
-                return Encoding.UTF8;
-            }
-            else if (encodingText?.Contains("1256") == true)
-            {
-                return Dbf.DbfFile._arabicEncoding;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
         {
             System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
@@ -463,8 +438,7 @@ namespace IRI.Ket.ShapefileFormat
         {
             return Task.Run(() => Project(shpFileName, targetSrs));
         }
-
-
+         
         public static List<IEsriShape> Project(string shpFileName, SrsBase targetSrs)
         {
             var sourcePrj = GetPrjFileName(shpFileName);
