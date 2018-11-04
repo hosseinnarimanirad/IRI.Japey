@@ -35,7 +35,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measure; }
         }
 
-        public int Srid { get; private set; }
+        public int Srid { get; set; }
 
         public EsriPointZ(double x, double y, double z, int srid)
             : this(x, y, z, ShapeConstants.NoDataValue, srid)

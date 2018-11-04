@@ -18,6 +18,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using IRI.Msh.Common.Helpers;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -25,76 +26,50 @@ namespace IRI.Ket.DataManagement.DataSource
     {
         static Func<SqlGeometry, Dictionary<string, object>, SqlFeature> mapShapeToSqlFeature = (geometry, attributes) => new SqlFeature(geometry, attributes);
 
-        public static ShapefileDataSource<SqlFeature> Create(string shapefileName, int srid, Encoding encoding, SrsBase targetCrs)
+        public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
         {
-            //var sourcePrj = IRI.Ket.ShapefileFormat.Shapefile.GetPrjFileName(shapefileName);
+            //var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
 
-            //if (!System.IO.File.Exists(sourcePrj))
-            //{
-            //    throw new System.IO.FileNotFoundException($"prj file not found. {sourcePrj}");
-            //}
+            //Func<IPoint, IPoint> func = p => p.Project(sourceSrs, targetCrs);
 
-            //var sourceCrs = new ShapefileFormat.Prj.EsriPrjFile(sourcePrj).AsMapProjection();
-
-            //Func<Point, Point> func = null;
-
-            //if (sourceCrs.Ellipsoid.AreTheSame(targetCrs.Ellipsoid))
-            //{
-            //    func = new Func<Point, Point>(p => (Point)targetCrs.FromGeodetic(sourceCrs.ToGeodetic(p)));
-            //}
-            //else
-            //{
-            //    func = new Func<Point, Point>(p => (Point)targetCrs.FromGeodetic(sourceCrs.ToGeodetic(p), sourceCrs.Ellipsoid));
-            //}
-
-
-            var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
-
-            Func<IPoint, IPoint> func = p => p.Project(sourceSrs, targetCrs);
-
-            // IRI.Ket.ShapefileFormat.Shapefile.GetProjectFunc(shapefileName, targetCrs);
-
-            return new ShapefileDataSource<SqlFeature>(shapefileName, srid, encoding, mapShapeToSqlFeature, func);
+            return new ShapefileDataSource<SqlFeature>(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
         }
 
-        public static SqlFeatureDataSource Create(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label, SrsBase targetSrs = null)
-        {
-            var features = ShapefileHelper.ReadShapefile(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, label, targetSrs);
-
-            var result = new SqlFeatureDataSource(features, f => f.Label);
-
-            //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
-
-            return result;
-        }
-
-        public static async Task<SqlFeatureDataSource> CreateAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label, SrsBase targetSrs = null)
-        {
-            var features = await ShapefileHelper.ReadShapefileAsync(shpFileName, dataEncoding, headerEncoding, correctFarsiCharacters, label, targetSrs);
-
-            var result = new SqlFeatureDataSource(features, i => i.Label);
-
-            //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
-
-            return result;
-        }
+       
     }
 
     public class ShapefileDataSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
     {
         string _shapefileName;
 
+        SrsBase _targetSrs;
+
+        SrsBase _sourceSrs;
+
+        public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
+
         protected ShapefileDataSource()
         {
         }
 
-        public ShapefileDataSource(string shapefileName, int srid, Encoding encoding, Func<SqlGeometry, Dictionary<string, object>, T> map, Func<IPoint, IPoint> transformFunc = null)
+        public ShapefileDataSource(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
         {
             this._shapefileName = shapefileName;
 
+            _sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
+
+            _targetSrs = targetSrs;
+
+            Func<IPoint, IPoint> transformFunc = null;
+
+            if (targetSrs != null)
+            {
+                transformFunc = p => p.Project(_sourceSrs, targetSrs);
+            }
+
             string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
 
-            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), encoding, encoding, true);
+            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
             var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
 
@@ -122,15 +97,44 @@ namespace IRI.Ket.DataManagement.DataSource
                 }
                 else
                 {
-                    geometry = geometries[i].AsSqlGeometry().MakeValid().Transform(p => transformFunc(p), srid);
+                    geometry = geometries[i].AsSqlGeometry().MakeValid().Transform(p => transformFunc(p), targetSrs.Srid);//targetSrs should not be null in this case
                 }
 
                 var feature = map(geometry, attributes[i]);
 
                 feature.Id = GetNewId();
 
+                this._idFunc = id => this._features.Single(f => f.Id == id);
+
                 this._features.Add(feature);
             }
+        }
+
+        public override void SaveChanges()
+        {
+            //save to shapefile
+            Func<IPoint, IPoint> inverseTransformFunc = null;
+
+            if (_targetSrs != null)
+            {
+                inverseTransformFunc = p => p.Project(_targetSrs, _sourceSrs);
+            }
+
+            //save shp, shx, dbf, prj, cpg
+
+            Func<T, IEsriShape> geometryMap = null;
+
+            if (_targetSrs == null)
+            {
+                geometryMap = t => t.TheSqlGeometry.AsEsriShape(inverseTransformFunc);
+            }
+            else
+            {
+                geometryMap = t => t.TheSqlGeometry.AsEsriShape();
+            }
+
+            IRI.Ket.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, AttributeMap, EncodingHelper.ArabicEncoding, _sourceSrs, true);
+
         }
     }
 }

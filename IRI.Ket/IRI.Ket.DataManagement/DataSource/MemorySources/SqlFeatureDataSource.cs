@@ -1,4 +1,6 @@
-﻿using IRI.Ket.SqlServerSpatialExtension.Model;
+﻿using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -57,6 +59,28 @@ namespace IRI.Ket.DataManagement.DataSource
             this._features = features;
 
             this._labelFunc = labelFunc;
+        }
+
+        public static SqlFeatureDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
+        {
+            var features = ShapefileHelper.ReadAsSqlFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
+
+            var result = new SqlFeatureDataSource(features, f => f.Label);
+
+            //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
+
+            return result;
+        }
+
+        public static async Task<SqlFeatureDataSource> CreateFromShapefileAsync(string shpFileName, string label, Encoding dataEncoding = null, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true)
+        {
+            var features = await ShapefileHelper.ReadAsSqlFeatureAsync(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
+
+            var result = new SqlFeatureDataSource(features, i => i.Label);
+
+            //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
+
+            return result;
         }
 
     }

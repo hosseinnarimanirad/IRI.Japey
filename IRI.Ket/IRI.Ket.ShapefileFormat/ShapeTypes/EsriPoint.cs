@@ -28,7 +28,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             set { this.y = value; }
         }
 
-        public int Srid { get; private set; }
+        public int Srid { get; set; }
 
         public EsriPoint(double x, double y, int srid)
         {

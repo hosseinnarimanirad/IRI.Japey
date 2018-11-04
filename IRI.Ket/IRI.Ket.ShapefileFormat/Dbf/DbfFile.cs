@@ -277,20 +277,24 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
         }
 
-        public static List<Dictionary<string, object>> Read(string dbfFileName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters = true, bool tryDetectEncoding = true)
+        public static List<Dictionary<string, object>> Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
         {
-            if (tryDetectEncoding)
-            {
-                Encoding encoding = TryDetectEncoding(dbfFileName) ?? dataEncoding;
+            dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
-                ChangeEncoding(encoding);
-            }
-            else
-            {
-                ChangeEncoding(dataEncoding);
-            }
+            ChangeEncoding(dataEncoding);
 
-            DbfFile._fieldsEncoding = fieldHeaderEncoding;
+            //if (tryDetectEncoding)
+            //{
+            //    Encoding encoding = TryDetectEncoding(dbfFileName) ?? dataEncoding;
+
+            //    ChangeEncoding(encoding);
+            //}
+            //else
+            //{
+            //    ChangeEncoding(dataEncoding);
+            //}
+
+            DbfFile._fieldsEncoding = fieldHeaderEncoding ?? _arabicEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
 
@@ -357,19 +361,17 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             return result;
         }
 
-        public static object[][] ReadToObject(string dbfFileName, string tableName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters)
+        public static object[][] ReadToObject(string dbfFileName, string tableName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
         {
-            ChangeEncoding(dataEncoding);
+            dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
-            DbfFile._fieldsEncoding = fieldHeaderEncoding;
+            ChangeEncoding(dataEncoding);
+             
+            DbfFile._fieldsEncoding = fieldHeaderEncoding ?? _arabicEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
 
-            return ReadToObject(dbfFileName, tableName);
-        }
 
-        public static object[][] ReadToObject(string dbfFileName, string tableName)
-        {
             System.IO.Stream stream = new System.IO.FileStream(dbfFileName, System.IO.FileMode.Open);
 
             System.IO.BinaryReader reader = new System.IO.BinaryReader(stream);
@@ -428,8 +430,20 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             stream.Close();
 
             return result;
+
+            //ChangeEncoding(dataEncoding);
+
+            //DbfFile._fieldsEncoding = fieldHeaderEncoding;
+
+            //DbfFile._correctFarsiCharacters = correctFarsiCharacters;
+
+            //return ReadToObject(dbfFileName, tableName);
         }
 
+        //public static object[][] ReadToObject(string dbfFileName, string tableName)
+        //{
+           
+        //}
 
         public static void Write(string fileName, int numberOfRecords, bool overwrite = false)
         {

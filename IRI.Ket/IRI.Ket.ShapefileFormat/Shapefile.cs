@@ -23,12 +23,12 @@ namespace IRI.Ket.ShapefileFormat
 
         #region Read Shapefile
 
-        public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName, int defaultSrid = 0)
+        public static Task<IEsriShapeCollection> ReadShapesAsync(string fileName, int? defaultSrid = null)
         {
             return Task.Run(() => { return ReadShapes(fileName, defaultSrid); });
         }
 
-        public static IEsriShapeCollection ReadShapes(string shpFileName, int defaultSrid = 0)
+        public static IEsriShapeCollection ReadShapes(string shpFileName, int? defaultSrid = null)
         {
             //System.ComponentModel.LicenseManager.Validate(typeof(Shapefile));
 
@@ -49,13 +49,13 @@ namespace IRI.Ket.ShapefileFormat
 
             int srid;
 
-            if (defaultSrid == 0)
+            if (!defaultSrid.HasValue)
             {
                 srid = TryGetSrid(shpFileName);
             }
             else
             {
-                srid = defaultSrid;
+                srid = defaultSrid.Value;
             }
 
             switch (MainHeader.ShapeType)
@@ -119,55 +119,101 @@ namespace IRI.Ket.ShapefileFormat
             }
         }
 
-        public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
+
+        public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, IEsriShape, T> mapFunc, bool correctFarsiCharacters = true, Encoding dataEncoding = null, int? defaultSrid = null, Encoding headerEncoding = null)
         {
-            return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid); });
+            return Task.Run(() => { return Read(shpFileName, mapFunc, correctFarsiCharacters, dataEncoding, defaultSrid, headerEncoding); });
         }
 
-        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
+        public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, IEsriShape, T> mapFunc, bool correctFarsiCharacters = true, Encoding dataEncoding = null, int? defaultSrid = null, Encoding headerEncoding = null)
         {
-            System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
-
             var shapes = ReadShapes(shpFileName, defaultSrid);
 
-            System.Diagnostics.Debug.WriteLine($"after ReadShapes & before DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
+            var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), correctFarsiCharacters, dataEncoding, headerEncoding);
 
-            var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+            //int srid;
 
-            System.Diagnostics.Debug.WriteLine($"after DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
-
-            int srid;
-
-            if (defaultSrid != 0)
-            {
-                srid = defaultSrid;
-            }
-            else
-            {
-                srid = TryGetSrid(shpFileName);
-            }
+            //if (defaultSrid != 0)
+            //{
+            //    srid = defaultSrid;
+            //}
+            //else
+            //{
+            //    srid = TryGetSrid(shpFileName);
+            //}
 
             List<T> result = new List<T>(shapes.Count);
 
             for (int i = 0; i < attributeArray.Count; i++)
             {
-                var feature = mapPropertiesFunc(attributeArray[i]);
+                //shapes[i].Srid = srid;
 
-                updateGeometryAction(shapes[i], srid, feature);
+                var feature = mapFunc(attributeArray[i], shapes[i]);
 
                 result.Add(feature);
             }
 
-            System.Diagnostics.Debug.WriteLine($"after parse to T: {DateTime.Now.ToLongTimeString()}");
-
             return result;
         }
 
-        public static List<Feature> Read(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
+        //public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
+        //{
+        //    return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid); });
+        //}
+
+        //public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
+        //{
+        //    System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
+
+        //    var shapes = ReadShapes(shpFileName, defaultSrid);
+
+        //    System.Diagnostics.Debug.WriteLine($"after ReadShapes & before DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
+
+        //    var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
+
+        //    System.Diagnostics.Debug.WriteLine($"after DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
+
+        //    int srid;
+
+        //    if (defaultSrid != 0)
+        //    {
+        //        srid = defaultSrid;
+        //    }
+        //    else
+        //    {
+        //        srid = TryGetSrid(shpFileName);
+        //    }
+
+        //    List<T> result = new List<T>(shapes.Count);
+
+        //    for (int i = 0; i < attributeArray.Count; i++)
+        //    {
+        //        var feature = mapPropertiesFunc(attributeArray[i]);
+
+        //        updateGeometryAction(shapes[i], srid, feature);
+
+        //        result.Add(feature);
+        //    }
+
+        //    System.Diagnostics.Debug.WriteLine($"after parse to T: {DateTime.Now.ToLongTimeString()}");
+
+        //    return result;
+        //}
+
+        public static List<Feature> ReadAsFeature(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int? defaultSrid = null)
         {
+            //return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
 
-
-            return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
+            return Read<Feature>(shpFileName,
+                (d, ies) => new Feature()
+                {
+                    Attributes = d,
+                    TheGeometry = ies.AsGeometry()
+                }, 
+                correctFarsiCharacters, 
+                dataEncoding, 
+                defaultSrid, 
+                headerEncoding);
 
             //var shapes = ReadShapes(shpFileName);
 
@@ -239,29 +285,10 @@ namespace IRI.Ket.ShapefileFormat
             var esriPrjFile = TryReadPrjFile(shpFileName);
 
             return esriPrjFile?.Srid ?? 0;
-
-            //int result = 0;
-
-            //var prjFile = GetPrjFileName(shpFileName);
-
-            //if (System.IO.File.Exists(prjFile))
-            //{
-            //    try
-            //    {
-            //        var esriPrjFile = Prj.EsriPrjFile.Parse(System.IO.File.ReadAllText(prjFile));
-
-            //        result = esriPrjFile.Srid;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        System.Diagnostics.Debug.WriteLine("Exception at reading prj file");
-            //    }
-            //}
-
-            //return result;
         }
 
         #endregion
+
 
         #region Write (Save) Shapefile 
 
@@ -438,7 +465,7 @@ namespace IRI.Ket.ShapefileFormat
         {
             return Task.Run(() => Project(shpFileName, targetSrs));
         }
-         
+
         public static List<IEsriShape> Project(string shpFileName, SrsBase targetSrs)
         {
             var sourcePrj = GetPrjFileName(shpFileName);

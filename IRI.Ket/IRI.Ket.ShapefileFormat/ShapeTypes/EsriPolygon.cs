@@ -24,7 +24,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
 
-        public int Srid { get; private set; }
+        public int Srid { get; set; }
 
         private EsriPoint[] points;
 

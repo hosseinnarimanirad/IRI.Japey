@@ -79,6 +79,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\BaseConversionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConversionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\EncodingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnumHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\RandomHelper.cs" />

@@ -12,8 +12,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 {
     public class ShapefileHelper
     {
-
-        public static List<SqlFeature> ReadShapefile(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label = null, SrsBase targetSrs = null)
+        public static List<SqlFeature> ReadAsSqlFeature(string shpFileName, Encoding dataEncoding, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true, string label = null)
         {
             if (targetSrs != null)
             {
@@ -23,26 +22,30 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map, targetSrs.Srid).AsSqlGeometry() },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
+                        true,
                         dataEncoding,
-                        headerEncoding,
-                        true);
+                        null,
+                        headerEncoding
+                        );
             }
             else
             {
 
                 return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.AsSqlGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
+                        true,
                         dataEncoding,
-                        headerEncoding,
-                        true);
+                        null,
+                        headerEncoding);
             }
         }
 
-        public static async Task<List<SqlFeature>> ReadShapefileAsync(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters, string label = null, SrsBase targetSrs = null)
+        public static async Task<List<SqlFeature>> ReadAsSqlFeatureAsync(string shpFileName, Encoding dataEncoding, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true, string label = null)
         {
             if (targetSrs != null)
             {
@@ -52,22 +55,25 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
                 return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map, targetSrs.Srid).AsSqlGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding);
             }
             else
             {
-
                 return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
-                        d => new SqlFeature() { Attributes = d, LabelAttribute = label },
-                        (d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
-                        System.Text.Encoding.UTF8,
-                        System.Text.Encoding.UTF8,
-                        true);
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.AsSqlGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding);
             }
         }
 

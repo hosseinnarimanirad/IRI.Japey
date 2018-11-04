@@ -28,6 +28,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Service;
+using IRI.Msh.Common.Helpers;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -959,6 +960,21 @@ namespace IRI.Jab.Common.Presenter.Map
             this.AddLayer(item.AssociatedLayer);
         }
 
+        public void RemoveDrawingItem(DrawingItem item)
+        {
+            this.DrawingItems.Remove(item);
+
+            this.RemoveLayer(item.AssociatedLayer);
+        }
+
+        public void RemoveAllDrawingItems()
+        {
+            for (int i = DrawingItems.Count - 1; i >= 0; i--)
+            {
+                RemoveDrawingItem(DrawingItems[i]);
+            }
+        }
+
         protected DrawingItem MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
         {
             var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
@@ -969,8 +985,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
             shapeItem.RequestRemoveAction = () =>
             {
-                this.DrawingItems.Remove(shapeItem);
-                this.RemoveLayer(shapeItem.AssociatedLayer);
+                RemoveDrawingItem(shapeItem);
+                //this.DrawingItems.Remove(shapeItem);
+                //this.RemoveLayer(shapeItem.AssociatedLayer);
                 this.Refresh();
             };
 
@@ -1653,42 +1670,46 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             try
             {
-                var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
-                {
-                    var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
+                //var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
+                //{
+                //var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
 
-                    List<SqlFeature> features;
-                     
-                    if (sourceSrs == null)
-                    {
-                        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                                fileName,
-                                d => new SqlFeature() { Attributes = d },
-                                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.AsSqlGeometry(),
-                                dataEncoding,
-                                headerEncoding,
-                                true);
-                    }
-                    else
-                    {
-                        var webmercator = new WebMercator();
+                //    List<SqlFeature> features;
 
-                        Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
+                //    if (sourceSrs == null)
+                //    {
+                //        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                //                fileName,
+                //                d => new SqlFeature() { Attributes = d },
+                //                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.AsSqlGeometry(),
+                //                dataEncoding,
+                //                headerEncoding,
+                //                true);
+                //    }
+                //    else
+                //    {
+                //        var webmercator = new WebMercator();
 
-                        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                                fileName,
-                                d => new SqlFeature() { Attributes = d },
-                                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
-                                dataEncoding,
-                                headerEncoding,
-                                true);
-                    }
+                //        Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
 
-                    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(features, s => s.Label);
+                //        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                //                fileName,
+                //                d => new SqlFeature() { Attributes = d },
+                //                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
+                //                dataEncoding,
+                //                headerEncoding,
+                //                true);
+                //    }
 
-                    return source;
+                //    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(features, s => s.Label);
 
-                });
+                //    return source;
+
+                //    return ShapefileDataSource.Create(fileName, sourceSrs.Srid, EncodingHelper.ArabicEncoding, new WebMercator());
+
+                //});
+
+                var dataSource = ShapefileDataSource.Create(fileName, new WebMercator());
 
                 System.Diagnostics.Debug.WriteLine($"before vectorLayer: {DateTime.Now.ToLongTimeString()}");
 

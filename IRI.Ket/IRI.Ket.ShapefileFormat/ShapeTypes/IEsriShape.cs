@@ -14,7 +14,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
     {
         IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox { get; }
 
-        int Srid { get; }
+        int Srid { get; set; }
 
         byte[] WriteContentsToByte();
 

@@ -32,7 +32,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             get { return this.measure; }
         }
 
-        public int Srid { get; private set; }
+        public int Srid { get; set; }
 
         public EsriPointM(double x, double y, double measure, int srid)
         {

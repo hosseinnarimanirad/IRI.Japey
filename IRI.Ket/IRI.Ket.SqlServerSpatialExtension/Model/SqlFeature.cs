@@ -37,7 +37,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
         {
             this.TheSqlGeometry = geometry;
 
-            this.Attributes = attributes;
+            this.Attributes = attributes;            
         }
 
         public SqlFeature()

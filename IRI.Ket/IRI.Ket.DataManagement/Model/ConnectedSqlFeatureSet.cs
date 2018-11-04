@@ -13,9 +13,11 @@ namespace IRI.Ket.DataManagement.Model
     {
         public FeatureDataSource<T> DataSource { get; set; }
 
-        public ConnectedSqlFeatureSet(List<T> features, FeatureDataSource<T> dataSource) : base(features)
+        public ConnectedSqlFeatureSet(List<T> features, FeatureDataSource<T> dataSource, string title) : base(features)
         {
             this.DataSource = dataSource;
+
+            this.Title = title;
         }
     }
 }
