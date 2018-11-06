@@ -45,30 +45,30 @@ namespace IRI.Jab.Common.Model
         public bool IsNewDrawing { get; set; } = false;
 
 
-        private bool _isFeatureInfoVisible;
+        //private bool _isFeatureInfoVisible;
 
-        public bool IsFeatureInfoVisible
-        {
-            get { return _isFeatureInfoVisible; }
-            set
-            {
-                _isFeatureInfoVisible = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public bool IsFeatureInfoVisible
+        //{
+        //    get { return _isFeatureInfoVisible; }
+        //    set
+        //    {
+        //        _isFeatureInfoVisible = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
-        private bool _isVerticesLabelVisible = false;
+        //private bool _isVerticesLabelVisible = false;
 
-        public bool IsVerticesLabelVisible
-        {
-            get { return _isVerticesLabelVisible && IsVerticesVisible; }
-            set
-            {
-                _isVerticesLabelVisible = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public bool IsVerticesLabelVisible
+        //{
+        //    get { return _isVerticesLabelVisible && IsVerticesVisible; }
+        //    set
+        //    {
+        //        _isVerticesLabelVisible = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
         private bool _isEdgeLabelVisible = false;
@@ -98,30 +98,30 @@ namespace IRI.Jab.Common.Model
         }
 
 
-        private bool _isVerticesVisible;
+        //private bool _isVerticesVisible;
 
-        public bool IsVerticesVisible
-        {
-            get { return _isVerticesVisible; }
-            set
-            {
-                _isVerticesVisible = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsVerticesLabelVisible));
-            }
-        }
+        //public bool IsVerticesVisible
+        //{
+        //    get { return _isVerticesVisible; }
+        //    set
+        //    {
+        //        _isVerticesVisible = value;
+        //        RaisePropertyChanged();
+        //        RaisePropertyChanged(nameof(IsVerticesLabelVisible));
+        //    }
+        //}
 
-        private bool _isAutoMeasureEnabled = false;
+        //private bool _isAutoMeasureEnabled = false;
 
-        public bool IsAutoMeasureEnabled
-        {
-            get { return _isAutoMeasureEnabled; }
-            set
-            {
-                _isAutoMeasureEnabled = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public bool IsAutoMeasureEnabled
+        //{
+        //    get { return _isAutoMeasureEnabled; }
+        //    set
+        //    {
+        //        _isAutoMeasureEnabled = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         private bool _isFinishButtonVisible = true;
 
@@ -249,13 +249,22 @@ namespace IRI.Jab.Common.Model
         {
             return new EditableFeatureLayerOptions()
             {
+                IsCancelButtonVisible = true,
+                IsDeleteButtonVisible = false,
                 IsEdgeLabelVisible = false,
+                IsFinishButtonVisible = true,
+
+                IsManualInputAvailable = isManualInputAvailable,
+
+                IsMeasureVisible = false,
                 IsMeasureButtonVisible = false,
-                IsVerticesVisible = false,
+
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable,
                 IsNewDrawing = true,
                 IsOptionsAvailable = isOptionsAvailable,
-                IsManualInputAvailable = isManualInputAvailable,
-                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+
+                //IsVerticesVisible = false,
+                //IsVerticesLabelVisible = false,
             };
         }
 
@@ -263,13 +272,22 @@ namespace IRI.Jab.Common.Model
         {
             return new EditableFeatureLayerOptions()
             {
-                IsDeleteButtonVisible = true,
                 IsCancelButtonVisible = true,
+                IsDeleteButtonVisible = true,
+                IsEdgeLabelVisible = false,
                 IsFinishButtonVisible = true,
-                IsMeasureVisible = false,
-                IsOptionsAvailable = isOptionsAvailable,
+
                 IsManualInputAvailable = isManualInputAvailable,
-                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+
+                IsMeasureVisible = false,
+                IsMeasureButtonVisible = false,
+
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable,
+                IsNewDrawing = false,
+                IsOptionsAvailable = isOptionsAvailable,
+
+                //IsVerticesVisible = true,
+                //IsVerticesLabelVisible = true
             };
         }
 
@@ -278,10 +296,27 @@ namespace IRI.Jab.Common.Model
             return new EditableFeatureLayerOptions()
             {
                 Visual = VisualParameters.GetDefaultForMeasurements(),
+
+                IsCancelButtonVisible = true,
+                IsDeleteButtonVisible = false,
                 IsEdgeLabelVisible = isEdgeLabelVisible,
-                IsOptionsAvailable = isOptionsAvailable,
+                IsFinishButtonVisible = true,
+
                 IsManualInputAvailable = isManualInputAvailable,
-                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+
+                IsMeasureVisible = true,
+                IsMeasureButtonVisible = false,
+
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable,
+                IsNewDrawing = true,
+                IsOptionsAvailable = isOptionsAvailable,
+
+
+
+                //IsEdgeLabelVisible = isEdgeLabelVisible,
+                //IsOptionsAvailable = isOptionsAvailable,
+                //IsManualInputAvailable = isManualInputAvailable,
+                //IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
         }
 
@@ -289,15 +324,29 @@ namespace IRI.Jab.Common.Model
         {
             return new EditableFeatureLayerOptions()
             {
-                IsEdgeLabelVisible = true,
-                IsMeasureVisible = true,
-                IsFinishButtonVisible = false,
                 IsCancelButtonVisible = false,
                 IsDeleteButtonVisible = true,
-                IsMeasureButtonVisible = true,
-                IsOptionsAvailable = isOptionsAvailable,
+                IsEdgeLabelVisible = true,
+                IsFinishButtonVisible = false,
+
                 IsManualInputAvailable = isManualInputAvailable,
-                IsMultiPartSupportAvailable = isMultipartSupportAvailable
+
+                IsMeasureVisible = true,
+                IsMeasureButtonVisible = true,
+
+                IsMultiPartSupportAvailable = isMultipartSupportAvailable,
+                IsNewDrawing = false,
+                IsOptionsAvailable = isOptionsAvailable,
+
+                //IsEdgeLabelVisible = true,
+                //IsMeasureVisible = true,
+                //IsFinishButtonVisible = false,
+                //IsCancelButtonVisible = false,
+                //IsDeleteButtonVisible = true,
+                //IsMeasureButtonVisible = true,
+                //IsOptionsAvailable = isOptionsAvailable,
+                //IsManualInputAvailable = isManualInputAvailable,
+                //IsMultiPartSupportAvailable = isMultipartSupportAvailable
             };
         }
 

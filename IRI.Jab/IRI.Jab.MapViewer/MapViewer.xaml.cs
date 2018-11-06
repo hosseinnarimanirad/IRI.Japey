@@ -3083,7 +3083,7 @@ namespace IRI.Jab.MapViewer
             return tcs.Task;
         }
 
-        public async Task<sb.Point> SelectPointAsync()
+        public async Task<Response<sb.Point>> SelectPointAsync()
         {
             try
             {
@@ -3094,11 +3094,11 @@ namespace IRI.Jab.MapViewer
 
                 var result = await SelectThePoint();
 
-                return result;
+                return new Response<sb.Point>() { Result = result };
             }
             catch (TaskCanceledException)
             {
-                return null;
+                return new Response<sb.Point>() { IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4326,6 +4326,9 @@ namespace IRI.Jab.MapViewer
 
             drawingCancellationToken = new CancellationTokenSource();
 
+            //in order to not show delete button when drawing new measure
+            this.CurrentEditingLayer = null;
+
             this.displayDrawingPath = display;
 
             options.IsNewDrawing = true;
@@ -4413,7 +4416,7 @@ namespace IRI.Jab.MapViewer
                     this.Pan();
                 }
 
-                return null;
+                return new Response<sb.Geometry>() { IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4429,7 +4432,7 @@ namespace IRI.Jab.MapViewer
             }
             finally
             {
-                this.Status = MapStatus.Idle;
+                //this.Status = MapStatus.Idle;
 
                 drawingLayer = null;
                 //this.Pan();
@@ -4623,7 +4626,7 @@ namespace IRI.Jab.MapViewer
 
             CurrentEditingLayer.RequestCancelEditing = (g) =>
             {
-                tcs.SetCanceled();
+                tcs?.TrySetCanceled();
 
                 this.RemoveEditableFeatureLayer(CurrentEditingLayer);
 

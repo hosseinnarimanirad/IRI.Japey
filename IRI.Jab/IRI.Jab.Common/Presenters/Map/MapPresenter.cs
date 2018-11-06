@@ -640,7 +640,19 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public bool IsDrawEditMeasureMode
         {
-            get { return IsEditMode || IsDrawMode; }
+            get
+            {
+                var result = IsEditMode || IsDrawMode;
+
+                //if (result == false)
+                //{
+                //    //in order not to raise RequestHandleIsEdgeLabelVisibleChanged of EditableFeatureLayerOptions, 
+                //    //otherwise previous edge labels may show on map
+                //    this.MapPanel.Options = null;
+                //}
+
+                return IsEditMode || IsDrawMode;
+            }
         }
 
 
@@ -745,6 +757,7 @@ namespace IRI.Jab.Common.Presenter.Map
             };
 
             this.MapPanel = new MapPanelPresenter();
+
             this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
               {
                   if (this.CurrentEditingLayer == null)
@@ -915,7 +928,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
 
-        public Func<Task<IRI.Msh.Common.Primitives.Point>> RequestGetPoint;
+        public Func<Task<Response<IRI.Msh.Common.Primitives.Point>>> RequestGetPoint;
 
         #endregion
 
@@ -1412,7 +1425,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async Task<Response<Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
         {
-            this.IsDrawMode = true;
+            //this.IsDrawMode = true;
 
             options = options ?? this.MapSettings.DrawingOptions;
 
@@ -1420,7 +1433,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var result = await this.RequestGetDrawingAsync?.Invoke(mode, options, display);
 
-            this.IsDrawMode = false;
+            //this.IsDrawMode = false;
 
             return result;
             //return tcs.Task;
@@ -1428,7 +1441,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void CancelNewDrawing()
         {
-            this.IsDrawMode = false;
+            //this.IsDrawMode = false;
 
             this.RequestCancelNewDrawing?.Invoke(); //this is called in MapViewer
 
@@ -1437,7 +1450,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private void FinishNewDrawing()
         {
-            this.IsDrawMode = false;
+            //this.IsDrawMode = false;
 
             this.RequestFinishNewDrawing?.Invoke(); //this is called in MapViewer
 
@@ -1451,7 +1464,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void CancelEdit()
         {
-            this.IsEditMode = false;
+            //this.IsEditMode = false;
 
             this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
@@ -1460,7 +1473,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void DeleteDrawing()
         {
-            this.IsEditMode = false;
+            //this.IsEditMode = false;
 
             this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
@@ -1469,7 +1482,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void FinishEdit()
         {
-            this.IsEditMode = false;
+            //this.IsEditMode = false;
 
             this.RequestFinishEdit?.Invoke(); //this is called in MapViewer
 
@@ -1480,14 +1493,22 @@ namespace IRI.Jab.Common.Presenter.Map
         protected async Task<Response<Geometry>> Measure(DrawMode mode, Action action = null)
         {
             //this.IsMeasureMode = true;
+            try
+            {
+                this.MapPanel.Options = MapSettings.DrawingMeasureOptions;
 
-            this.MapPanel.Options = MapSettings.DrawingMeasureOptions;
+                var result = await this.RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
 
-            var result = await this.RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
+                //this.IsMeasureMode = false;
 
-            //this.IsMeasureMode = false;
+                return result;
 
-            return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         //protected void MeasureArea()
@@ -1547,9 +1568,9 @@ namespace IRI.Jab.Common.Presenter.Map
                 return new Task<Response<Geometry>>(null);
             }
 
-            options = options ?? this.MapSettings.EditingOptions;
-
-            this.MapPanel.Options = options;
+            //1397.08.15.this is already done in EditAsync(geometry,options)
+            //options = options ?? this.MapSettings.EditingOptions;
+            //this.MapPanel.Options = options;
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
 
@@ -1628,7 +1649,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public Task<IRI.Msh.Common.Primitives.Point> GetPoint()
+        public Task<Response<IRI.Msh.Common.Primitives.Point>> GetPoint()
         {
             if (RequestGetPoint != null)
             {
@@ -1636,7 +1657,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             else
             {
-                return new Task<IRI.Msh.Common.Primitives.Point>(() => IRI.Msh.Common.Primitives.Point.NaN);
+                return new Task<Response<IRI.Msh.Common.Primitives.Point>>(() => new Response<Msh.Common.Primitives.Point>() { Result = IRI.Msh.Common.Primitives.Point.NaN, IsFailed = true });
             }
         }
 
@@ -2060,7 +2081,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _measureLengthCommand = new RelayCommand(async param =>
                     {
-                        this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
+                        //this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
 
                         await this.Measure(DrawMode.Polyline);
                     });
@@ -2080,7 +2101,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _measureAreaCommand = new RelayCommand(async param =>
                     {
-                        this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
+                        //this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
 
                         await this.Measure(DrawMode.Polygon);
                     });

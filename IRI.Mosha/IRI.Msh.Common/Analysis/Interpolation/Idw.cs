@@ -22,8 +22,8 @@ namespace IRI.Msh.Common.Analysis.Interpolation
             {
                 double distance = measurePoint.DistanceTo(item);
 
-                if (distance < maxDistance)
-                {
+                //if (distance < maxDistance)
+                //{
                     double weight = 1.0 / (distance * distance);
 
                     //weights.Add(weight);
@@ -33,11 +33,11 @@ namespace IRI.Msh.Common.Analysis.Interpolation
                     sum += weight;
 
                     count++;
-                }
+                //}
 
             }
 
-            return count > 0 ? (weightedSum / count) : 0;
+            return count > 0 ? (weightedSum / sum) : 0;
         }
     }
 }

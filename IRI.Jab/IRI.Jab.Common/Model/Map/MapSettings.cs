@@ -160,7 +160,7 @@ namespace IRI.Jab.Common.Model.Map
         public Action<int> FireMaxGoogleZoomLevelChanged;
 
 
-        private EditableFeatureLayerOptions _drawingOptions = EditableFeatureLayerOptions.CreateDefault();
+        private EditableFeatureLayerOptions _drawingOptions = EditableFeatureLayerOptions.CreateDefaultForDrawing(true, true, true);
 
         public EditableFeatureLayerOptions DrawingOptions
         {

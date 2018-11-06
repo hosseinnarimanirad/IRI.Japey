@@ -160,7 +160,11 @@ namespace IRI.Jab.Common
             //this._isNewDrawingMode = isNewDrawing;
             this._options = options ?? Model.EditableFeatureLayerOptions.CreateDefault();
 
-            this._options.RequestHandleIsEdgeLabelVisibleChanged = () => { UpdateEdgeLables(); };
+            this._options.RequestHandleIsEdgeLabelVisibleChanged = () =>
+            {
+                //what if editable feature layer was already removed from map?
+                UpdateEdgeLables();
+            };
 
             this.LayerName = name;
 
@@ -211,6 +215,7 @@ namespace IRI.Jab.Common
 
             if (Options.IsNewDrawing)
             {
+                //add virtual vertex which show last point
                 this.AddSemiVertex((Point)(mercatorGeometry.Points == null ? mercatorGeometry.Geometries.Last().Points.Last() : mercatorGeometry.Points.Last()));
             }
         }
@@ -293,12 +298,20 @@ namespace IRI.Jab.Common
                 _primaryVerticesLayer.Items.Add(item);
             }
 
+
             UpdateEdgeLables();
+
+
         }
 
         private void UpdateEdgeLables()
         {
             this._edgeLabelLayer.Items.Clear();
+
+            if (this._webMercatorGeometry.NumberOfPoints <= 1)
+            {
+                return;
+            }
 
             if (Options.IsEdgeLabelVisible)
             {
@@ -308,7 +321,6 @@ namespace IRI.Jab.Common
                 {
                     _edgeLabelLayer.Items.Add(item);
                 }
-
             }
 
             if (Options.IsMeasureVisible)
@@ -331,11 +343,6 @@ namespace IRI.Jab.Common
                     Y = point.Y + offset
                 });
             }
-
-            //if (Options.IsAutoMeasureEnabled && _mercatorGeometry.IsRingBase())
-            //{
-            //    RaisePropertyChanged(nameof(AreaLabel));
-            //}
         }
 
         private void UpdateCoordinate(Locateable locatable)
