@@ -316,10 +316,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Images\" />
     <Folder Include="Model\Legend\" />
     <Folder Include="Model\Telerik\" />
     <Folder Include="View\Map\Auxilary\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\transparentBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

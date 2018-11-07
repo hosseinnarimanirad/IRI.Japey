@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IRI.Jab.Common;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using IRI.Jab.Common.Extensions;
-using IRI.Msh.CoordinateSystem;
 using IRI.Msh.Common.Primitives;
 using System.Windows;
 using System.Windows.Input;
 using IRI.Jab.Common.Model.DataStructure;
 using WpfPoint = System.Windows.Point;
-using WpfGeometry = System.Windows.Media.Geometry;
 using Geometry = IRI.Msh.Common.Primitives.Geometry;
 using Point = IRI.Msh.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
-using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.SpatialExtensions;
-using System.Collections.ObjectModel;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.MapMarkers;
-using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Common
 {
@@ -170,7 +164,7 @@ namespace IRI.Jab.Common
 
             this._webMercatorGeometry = mercatorGeometry;
 
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this._toScreen = toScreen;
 

@@ -16,11 +16,8 @@ using sb = IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Extensions;
 using IRI.Jab.Common.Convertor;
-using IRI.Jab.Common.Extensions;
-using media = System.Windows.Media;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
-using IRI.Jab.Common.Model;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Ket.SpatialExtensions;
@@ -46,7 +43,7 @@ namespace IRI.Jab.Common
         //    }
         //}
 
-        public FeatureDataSource DataSource { get; private set; }
+        public FeatureDataSource DataSource { get; protected set; }
 
         private FrameworkElement _element;
 
@@ -143,6 +140,11 @@ namespace IRI.Jab.Common
 
         #region Constructors
 
+        internal VectorLayer()
+        {
+
+        }
+
         public VectorLayer(string name, List<SqlGeometry> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
             : this(name, features, new VisualParameters(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, 1, Visibility.Visible), type, rendering, toRasterTechnique)
         {
@@ -167,7 +169,7 @@ namespace IRI.Jab.Common
                                     RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
                                     SimplePointSymbol pointSymbol, LabelParameters labeling)
         {
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this.DataSource = dataSource;
 

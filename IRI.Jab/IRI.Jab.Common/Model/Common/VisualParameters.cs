@@ -208,6 +208,12 @@ namespace IRI.Jab.Common
 
         }
 
+
+        public VisualParameters Clone()
+        {
+            return new VisualParameters(Fill, Stroke, StrokeThickness, Opacity, Visibility);
+        }
+
         /// <summary>
         /// Returns a random VisualParameters
         /// </summary>

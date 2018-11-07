@@ -12,7 +12,7 @@ namespace IRI.Jab.Common
     {
         public BaseLayer()
         {
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this.VisibleRange = ScaleInterval.All;
 
@@ -34,7 +34,7 @@ namespace IRI.Jab.Common
 
         public virtual void Invalidate() => IsValid = false;
 
-        public Guid Id { get; protected set; }
+        public Guid LayerId { get; protected set; }
 
         public bool IsValid { get; set; } = true;
 
@@ -47,10 +47,17 @@ namespace IRI.Jab.Common
             get { return _isSelectedInToc; }
             set
             {
+                if (_isSelectedInToc == value)
+                {
+                    return;
+                }
+
                 _isSelectedInToc = value;
                 RaisePropertyChanged();
 
                 ChangeSymbologyCommand?.CanExecute(null);
+
+                OnIsSelectedInTocChanged?.Invoke(this, new CustomEventArgs<BaseLayer>(this));
             }
         }
 
@@ -211,5 +218,7 @@ namespace IRI.Jab.Common
         }
 
         public event EventHandler<CustomEventArgs<LabelParameters>> OnLabelChanged;
+
+        public event EventHandler<CustomEventArgs<BaseLayer>> OnIsSelectedInTocChanged;
     }
 }

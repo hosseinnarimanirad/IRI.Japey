@@ -112,7 +112,7 @@ namespace IRI.Jab.Common
 
         private PolyBezierLayer(VisualParameters parameters)
         {
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this.VisibleRange = ScaleInterval.All;
 
@@ -475,9 +475,9 @@ namespace IRI.Jab.Common
 
             _controlPath.Tag = new LayerTag(0) { Layer = this, IsTiled = false, LayerType = LayerType.EditableItem };
 
-            this._mainLayer = new SpecialPointLayer($"POLYBEZIER MAIN {Id}", _mainLocateables, .9, ScaleInterval.All, LayerType.EditableItem | LayerType.MoveableItem) { AlwaysTop = true };
+            this._mainLayer = new SpecialPointLayer($"POLYBEZIER MAIN {LayerId}", _mainLocateables, .9, ScaleInterval.All, LayerType.EditableItem | LayerType.MoveableItem) { AlwaysTop = true };
 
-            this._controlLayer = new SpecialPointLayer($"POLYBEZIER CONTROL {Id}", _controlLocateables, .9, ScaleInterval.All, LayerType.EditableItem | LayerType.MoveableItem) { AlwaysTop = true };
+            this._controlLayer = new SpecialPointLayer($"POLYBEZIER CONTROL {LayerId}", _controlLocateables, .9, ScaleInterval.All, LayerType.EditableItem | LayerType.MoveableItem) { AlwaysTop = true };
 
 
             this._mainPath.MouseLeftButtonDown += (sender, e) =>

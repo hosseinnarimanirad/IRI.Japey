@@ -177,6 +177,7 @@
     <Compile Include="Common\Helpers\WorldfilePyramid.cs" />
     <Compile Include="Layers\BaseLayer.cs" />
     <Compile Include="Layers\ClusteredPointLayer.cs" />
+    <Compile Include="Layers\DrawingItemLayer.cs" />
     <Compile Include="Layers\DrawingLayer.cs" />
     <Compile Include="Layers\EditableFeatureLayer.cs" />
     <Compile Include="Layers\ILayer.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Presenters\PagedResultPresenter.cs" />
     <Compile Include="Presenters\Security\IHavePassword.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />
+    <Compile Include="Presenters\Symbology\SymbologyPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\Event\ZoomEventArgs.cs" />

@@ -283,7 +283,7 @@ namespace IRI.Jab.Common
         public RasterLayer(RasterLayer parent, string name, BitmapImage image, double opacity, BoundingBox boundingBox, bool isBaseMap, bool isPyramid = false, RenderingApproach rendering = RenderingApproach.Default)
         {
 
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this._parent = parent;
 
@@ -302,7 +302,7 @@ namespace IRI.Jab.Common
 
         public RasterLayer(IDataSource dataSource, string layerName, ScaleInterval visibleRange, bool isBaseMap, bool isPyramid, Visibility visibility, double opacity, RenderingApproach rendering = RenderingApproach.Default)
         {
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this._type = isBaseMap ? LayerType.BaseMap : (isPyramid ? LayerType.ImagePyramid : LayerType.Raster);
 
@@ -345,7 +345,7 @@ namespace IRI.Jab.Common
                 {
                     Fill = new ImageBrush(item.Image),
                     Data = geometry,
-                    Tag = new LayerTag(mapScale) { Layer = item, IsDrawn = true, BoundingBox = item.Extent, AncestorLayerId = this.Id }
+                    Tag = new LayerTag(mapScale) { Layer = item, IsDrawn = true, BoundingBox = item.Extent, AncestorLayerId = this.LayerId }
                 };
 
                 item.Element = path;

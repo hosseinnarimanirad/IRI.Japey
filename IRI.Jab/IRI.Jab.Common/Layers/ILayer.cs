@@ -11,7 +11,7 @@ namespace IRI.Jab.Common
 {
     public interface ILayer
     {
-        Guid Id { get; }
+        Guid LayerId { get; }
 
         string LayerName { get; set; }
 

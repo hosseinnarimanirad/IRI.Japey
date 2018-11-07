@@ -2549,7 +2549,7 @@ namespace IRI.Jab.MapViewer
 
         public void ClearLayerByAncestor(ILayer ancestorLayer)
         {
-            Clear(new Predicate<LayerTag>(tag => tag.AncestorLayerId == ancestorLayer?.Id), false, false);
+            Clear(new Predicate<LayerTag>(tag => tag.AncestorLayerId == ancestorLayer?.LayerId), false, false);
         }
 
         //1397.04.02

@@ -176,7 +176,7 @@ namespace IRI.Jab.Common
 
         public SpecialPointLayer(string name, IEnumerable<Locateable> items, double opacity = 1, ScaleInterval visibleRange = null, LayerType type = LayerType.Complex)
         {
-            this.Id = Guid.NewGuid();
+            this.LayerId = Guid.NewGuid();
 
             this.Type = type;
 

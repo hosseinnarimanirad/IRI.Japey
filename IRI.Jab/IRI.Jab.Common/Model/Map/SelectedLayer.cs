@@ -15,7 +15,7 @@ namespace IRI.Jab.Common.Model.Map
 {
     public class SelectedLayer<T> : Notifier, ISelectedLayer where T : ISqlGeometryAware
     {
-        public Guid Id { get { return AssociatedLayer?.Id ?? Guid.Empty; } }
+        public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
         public ILayer AssociatedLayer { get; set; }
 

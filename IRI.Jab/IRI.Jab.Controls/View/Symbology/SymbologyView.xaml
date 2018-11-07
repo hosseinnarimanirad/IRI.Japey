@@ -14,6 +14,8 @@
             WindowTransitionsEnabled="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.Resources>
+            <BitmapImage x:Key="transparentBackground" UriSource="/Assets/Images/transparentBackground.png" />
+
             <Style TargetType="ToggleButton" x:Key="colorToggle">
                 <Style.Setters>
                     <Setter Property="Cursor" Value="Hand"/>
@@ -22,7 +24,10 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ToggleButton">
-                                <Rectangle Fill="{TemplateBinding Background}" Height="Auto" Width="Auto" Margin="4" Stroke="Gray" StrokeThickness="1"/>
+                                <Grid>
+                                    <Image Width="auto" Height="auto" Source="/IRI.Jab.Controls;component/Assets/Images/transparentBackground.png" Margin="4" Stretch="UniformToFill"/>
+                                    <Rectangle Fill="{TemplateBinding Background}" Height="Auto" Width="Auto" Margin="4" Stroke="Gray" StrokeThickness="1"/>
+                                </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsKeyboardFocused" Value="true">
                                     </Trigger>
@@ -37,7 +42,7 @@
                     </Setter>
                 </Style.Setters>
             </Style>
-           
+
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -55,35 +60,42 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" Text="رنگ سطح" VerticalAlignment="Center" Margin="4"/>
-        <ToggleButton Grid.Column="1" Height="32" Grid.Row="0" x:Name="fillToggle" Style="{StaticResource colorToggle}" Background="{Binding VisualParameters.Fill, Mode=TwoWay}"/>
- 
+        <ToggleButton Grid.Column="1" Height="32" Grid.Row="0" x:Name="fillToggle" Style="{StaticResource colorToggle}" Background="{Binding Symbology.Fill, Mode=TwoWay}"/>
+
         <Popup IsOpen="{Binding ElementName=fillToggle, Path=IsChecked}" StaysOpen="False"
                    PlacementTarget="{Binding ElementName=fillToggle}" >
             <Border Background="White">
                 <telerik:RadColorEditor x:Name="fillColor" VerticalAlignment="Top" HorizontalAlignment="Left" Width="349" Background="White"
-                                        SelectedColor="{Binding VisualParameters.Fill, Mode=TwoWay, Converter={StaticResource stringToColorConverter}}"/>
+                                        SelectedColor="{Binding Symbology.Fill, Mode=TwoWay, Converter={StaticResource stringToColorConverter}}"/>
             </Border>
         </Popup>
 
         <TextBlock Grid.Column="2" Grid.Row="0" Text="رنگ مرز" VerticalAlignment="Center" Margin="4"/>
-        <ToggleButton Grid.Column="3" Height="32" Grid.Row="0" x:Name="strokeToggle" Style="{StaticResource colorToggle}" Background="{Binding VisualParameters.Stroke, Mode=TwoWay}"/>
+        <ToggleButton Grid.Column="3" Height="32" Grid.Row="0" x:Name="strokeToggle" Style="{StaticResource colorToggle}" Background="{Binding Symbology.Stroke, Mode=TwoWay}"/>
 
         <Popup IsOpen="{Binding ElementName=strokeToggle, Path=IsChecked}" StaysOpen="False"
                    PlacementTarget="{Binding ElementName=strokeToggle}" >
             <Border Background="White">
                 <telerik:RadColorEditor x:Name="strokeColor" VerticalAlignment="Top" HorizontalAlignment="Left" Width="349" Background="White"
-                                        SelectedColor="{Binding VisualParameters.Stroke, Mode=TwoWay, Converter={StaticResource stringToColorConverter}}"/>
+                                        SelectedColor="{Binding Symbology.Stroke, Mode=TwoWay, Converter={StaticResource stringToColorConverter}}"/>
             </Border>
         </Popup>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="ضخامت مرز" VerticalAlignment="Center" Margin="4"/>
         <mahApp:NumericUpDown Grid.Row="1" Grid.Column="1" HideUpDownButtons="True" Width="80" Margin="4" 
-                                  mahApp:TextBoxHelper.SelectAllOnFocus="True" Minimum="0" Value="{Binding VisualParameters.StrokeThickness, Mode=TwoWay}"/>
+                                  mahApp:TextBoxHelper.SelectAllOnFocus="True" Minimum="0" Value="{Binding Symbology.StrokeThickness, Mode=TwoWay}"/>
 
- 
-        <Button Grid.Row="2" Grid.Column="3" Height="32" Width="32" Margin="4" Cursor="Hand" HorizontalAlignment="Right">
-            <Path Data="{StaticResource appbarClose}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+
+        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Height="32" Width="32" Margin="4" Cursor="Hand" HorizontalAlignment="Right" Command="{Binding CloseCommand}">
+                <Path Data="{StaticResource appbarClose}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
                       Height="24" />
-        </Button>
+            </Button>
+            <Button Height="32" Width="32" Margin="4" Cursor="Hand" HorizontalAlignment="Right" Command="{Binding ApplyCommand}">
+                <Path Data="{StaticResource appbarCheck}" FlowDirection="LeftToRight" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+                      Height="24" />
+            </Button>
+        </StackPanel>
+
     </Grid>
 </mahApp:MetroWindow>

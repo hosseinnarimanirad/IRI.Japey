@@ -133,7 +133,7 @@
         <StackPanel HorizontalAlignment="Stretch" Margin="0">
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
-                <Border Margin="0,0,4,0" Width="17" Height="17" BorderThickness="1" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}"
+                <Border Margin="0,0,4,0" Width="17" Height="17" BorderThickness="1"
                         Background="Transparent" Cursor="Hand">
                     <Border.Style>
                         <Style TargetType="Border">

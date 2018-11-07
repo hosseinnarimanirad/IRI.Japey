@@ -179,9 +179,9 @@ namespace IRI.Jab.Common.Presenter.Map
         //}
 
 
-        private ObservableCollection<DrawingItem> _drawingItems = new ObservableCollection<DrawingItem>();
+        private ObservableCollection<DrawingItemLayer> _drawingItems = new ObservableCollection<DrawingItemLayer>();
 
-        public ObservableCollection<DrawingItem> DrawingItems
+        public ObservableCollection<DrawingItemLayer> DrawingItems
         {
             get { return _drawingItems; }
             set
@@ -263,7 +263,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void RemoveSelectedLayer(ILayer layer)
         {
-            var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.Id);
+            var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
 
             layer.NumberOfSelectedFeatures = 0;
 
@@ -966,18 +966,20 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public void AddDrawingItem(DrawingItem item)
+        public void AddDrawingItem(DrawingItemLayer item)
         {
             this.DrawingItems.Add(item);
 
-            this.AddLayer(item.AssociatedLayer);
+            //this.AddLayer(item.AssociatedLayer);
+            this.AddLayer(item);
         }
 
-        public void RemoveDrawingItem(DrawingItem item)
+        public void RemoveDrawingItem(DrawingItemLayer item)
         {
             this.DrawingItems.Remove(item);
 
-            this.RemoveLayer(item.AssociatedLayer);
+            //this.RemoveLayer(item.AssociatedLayer);
+            this.RemoveLayer(item);
         }
 
         public void RemoveAllDrawingItems()
@@ -988,120 +990,235 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        protected DrawingItem MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
-        {
-            var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
-            var shapeItem = new DrawingItem(name, drawing, id, source) { AssociatedLayer = layer };
+        protected DrawingItemLayer MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
+        {
+            var shapeItem = new DrawingItemLayer(name, drawing, id, source);
 
             shapeItem.Title = name;
 
-            shapeItem.RequestRemoveAction = () =>
-            {
-                RemoveDrawingItem(shapeItem);
-                //this.DrawingItems.Remove(shapeItem);
-                //this.RemoveLayer(shapeItem.AssociatedLayer);
-                this.Refresh();
-            };
+            TrySetCommandsForDrawingItemLayer(shapeItem);
 
-            shapeItem.RequestEditAction = async () =>
-            {
-                this.RemoveLayer(shapeItem.AssociatedLayer);
+            //shapeItem.RequestRemoveAction = () =>
+            //{
+            //    RemoveDrawingItem(shapeItem); 
+            //    this.Refresh();
+            //};
 
-                //var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions()
-                //{
-                //    IsDeleteButtonVisible = true,
-                //    IsCancelButtonVisible = true,
-                //    IsFinishButtonVisible = true,
-                //    IsMeasureVisible = false                
-                //});
+            //shapeItem.RequestEditAction = async () =>
+            //{
+            //    this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                //options = options ?? MapSettings.EditingOptions;
+            //    var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
 
-                var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
+            //    if (editResult.HasValidResult())
+            //    {
+            //        shapeItem.Geometry = editResult.Result;
 
-                if (editResult.HasValidResult())
-                {
-                    shapeItem.Geometry = editResult.Result;
+            //        shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
-                    shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+            //        this.SetLayer(shapeItem.AssociatedLayer);
 
-                    this.SetLayer(shapeItem.AssociatedLayer);
+            //        Refresh();
 
-                    Refresh();
+            //        if (shapeItem.Source != null)
+            //        {
+            //            shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
+            //        }
+            //    }
+            //};
 
-                    if (shapeItem.Source != null)
-                    {
-                        shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
-                    }
-                }
-            };
+            //shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
 
-            shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
+            //shapeItem.RequestExportAsShapefile = g =>
+            //{
+            //    try
+            //    {
+            //        var file = SaveFile("*.shp|*.shp");
 
-            shapeItem.RequestExportAsShapefile = g =>
-            {
-                try
-                {
-                    var file = SaveFile("*.shp|*.shp");
+            //        if (string.IsNullOrWhiteSpace(file))
+            //            return;
 
-                    if (string.IsNullOrWhiteSpace(file))
-                        return;
+            //        var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
 
-                    var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
+            //        IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        ShowMessage(ex.Message);
+            //    }
+            //};
 
-                    IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
-                }
-                catch (Exception ex)
-                {
-                    ShowMessage(ex.Message);
-                }
-            };
+            //shapeItem.RequestChangeSymbology = g =>
+            //{
+            //    this.RequestShowSymbologyView?.Invoke(g.AssociatedLayer);
+            //};
 
-            var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
+            //var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
 
-            var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
+            //var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
 
-            shapeItem.RequestHighlightGeometry = di =>
-            {
-                if (di.IsSelected)
-                {
-                    if (defaultFill != null)
-                    {
-                        shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
-                    }
+            //shapeItem.RequestHighlightGeometry = di =>
+            //{
+            //    if (di.IsSelected)
+            //    {
+            //        if (defaultFill != null)
+            //        {
+            //            shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+            //        }
 
-                    if (defaultStroke != null)
-                    {
-                        shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
-                    }
+            //        if (defaultStroke != null)
+            //        {
+            //            shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+            //        }
 
-                    this.RemoveLayer(shapeItem.AssociatedLayer);
+            //        this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                    this.AddLayer(shapeItem.AssociatedLayer);
-                }
-                else
-                {
-                    if (defaultFill != null)
-                    {
-                        shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
-                    }
+            //        this.AddLayer(shapeItem.AssociatedLayer);
+            //    }
+            //    else
+            //    {
+            //        if (defaultFill != null)
+            //        {
+            //            shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+            //        }
 
-                    if (defaultStroke != null)
-                    {
-                        shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
-                    }
+            //        if (defaultStroke != null)
+            //        {
+            //            shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+            //        }
 
-                    this.RemoveLayer(shapeItem.AssociatedLayer);
+            //        this.RemoveLayer(shapeItem.AssociatedLayer);
 
-                    this.AddLayer(shapeItem.AssociatedLayer);
-                }
-            };
+            //        this.AddLayer(shapeItem.AssociatedLayer);
+            //    }
+            //};
 
             this.IsPanMode = true;
 
             return shapeItem;
         }
+
+
+        //protected DrawingItem MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
+        //{
+        //    var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+        //    var shapeItem = new DrawingItem(name, drawing, id, source) { AssociatedLayer = layer };
+
+        //    shapeItem.Title = name;
+
+        //    shapeItem.RequestRemoveAction = () =>
+        //    {
+        //        RemoveDrawingItem(shapeItem);
+        //        //this.DrawingItems.Remove(shapeItem);
+        //        //this.RemoveLayer(shapeItem.AssociatedLayer);
+        //        this.Refresh();
+        //    };
+
+        //    shapeItem.RequestEditAction = async () =>
+        //    {
+        //        this.RemoveLayer(shapeItem.AssociatedLayer);
+
+        //        //var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions()
+        //        //{
+        //        //    IsDeleteButtonVisible = true,
+        //        //    IsCancelButtonVisible = true,
+        //        //    IsFinishButtonVisible = true,
+        //        //    IsMeasureVisible = false                
+        //        //});
+
+        //        //options = options ?? MapSettings.EditingOptions;
+
+        //        var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
+
+        //        if (editResult.HasValidResult())
+        //        {
+        //            shapeItem.Geometry = editResult.Result;
+
+        //            shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+        //            this.SetLayer(shapeItem.AssociatedLayer);
+
+        //            Refresh();
+
+        //            if (shapeItem.Source != null)
+        //            {
+        //                shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
+        //            }
+        //        }
+        //    };
+
+        //    shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
+
+        //    shapeItem.RequestExportAsShapefile = g =>
+        //    {
+        //        try
+        //        {
+        //            var file = SaveFile("*.shp|*.shp");
+
+        //            if (string.IsNullOrWhiteSpace(file))
+        //                return;
+
+        //            var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
+
+        //            IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ShowMessage(ex.Message);
+        //        }
+        //    };
+
+        //    shapeItem.RequestChangeSymbology = g =>
+        //    {
+        //        this.RequestShowSymbologyView?.Invoke(g.AssociatedLayer);
+        //    };
+
+        //    var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
+
+        //    var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
+
+        //    shapeItem.RequestHighlightGeometry = di =>
+        //    {
+        //        if (di.IsSelected)
+        //        {
+        //            if (defaultFill != null)
+        //            {
+        //                shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+        //            }
+
+        //            if (defaultStroke != null)
+        //            {
+        //                shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+        //            }
+
+        //            this.RemoveLayer(shapeItem.AssociatedLayer);
+
+        //            this.AddLayer(shapeItem.AssociatedLayer);
+        //        }
+        //        else
+        //        {
+        //            if (defaultFill != null)
+        //            {
+        //                shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+        //            }
+
+        //            if (defaultStroke != null)
+        //            {
+        //                shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+        //            }
+
+        //            this.RemoveLayer(shapeItem.AssociatedLayer);
+
+        //            this.AddLayer(shapeItem.AssociatedLayer);
+        //        }
+        //    };
+
+        //    this.IsPanMode = true;
+
+        //    return shapeItem;
+        //}
 
         public async void SetProxy(System.Net.WebProxy proxy)
         {
@@ -1231,6 +1348,64 @@ namespace IRI.Jab.Common.Presenter.Map
                         LegendCommand.CreateRemoveLayer(this, layer),
                     };
                 }
+            }
+        }
+
+        protected void TrySetCommandsForDrawingItemLayer(DrawingItemLayer layer)
+        {
+            layer.Commands = new List<ILegendCommand>()
+                    {
+                        LegendCommand.CreateZoomToExtentCommand(this, layer),
+                        LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
+                        LegendCommand.CreateEditDrawingItemLayer(this, layer),
+                        LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                    };
+
+            layer.RequestHighlightGeometry = di =>
+            {
+                var defaultFill = layer.OriginalSymbology.Fill.AsSolidColor();
+
+                var defaultStroke = layer.OriginalSymbology.Stroke.AsSolidColor();
+
+
+                if (di.IsSelectedInToc)
+                {
+                    if (defaultFill != null)
+                    {
+                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+                    }
+
+                    if (defaultStroke != null)
+                    {
+                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+                    }
+
+                    this.RemoveLayer(layer);
+
+                    this.AddLayer(layer);
+                }
+                else
+                {
+                    if (defaultFill != null)
+                    {
+                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+                    }
+
+                    if (defaultStroke != null)
+                    {
+                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+                    }
+
+                    this.RemoveLayer(layer);
+
+                    this.AddLayer(layer);
+                }
+
+            };
+
+            if (layer.RequestChangeSymbology == null)
+            {
+                layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
             }
         }
 

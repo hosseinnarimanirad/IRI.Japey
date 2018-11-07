@@ -4,11 +4,21 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace IRI.Jab.Common.Model.Legend
 {
     public class LegendCommand : Notifier, ILegendCommand
     {
+        private const string _removeToolTip = "حذف";
+
+        private const string _editToolTip = "ویرایش";
+
+        private const string _zoomToolTip = "بزرگ‌نمایی";
+
+        private const string _saveToolTip = "ذخیره‌سازی";
+
+
         private RelayCommand _command;
 
         public RelayCommand Command
@@ -272,5 +282,99 @@ namespace IRI.Jab.Common.Model.Legend
 
         //}
 
+
+        #region DrawingItemLayer Default Commands
+
+
+        public static ILegendCommand CreateRemoveDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete,
+                Layer = layer,
+                ToolTip = _removeToolTip,
+            };
+
+            result.Command = new RelayCommand(param =>
+            {
+                map.RemoveDrawingItem(layer);
+
+                map.Refresh();
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateEditDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarEdit,
+                Layer = layer,
+                ToolTip = _editToolTip,
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                map.RemoveLayer(layer);
+
+                var editResult = await map.EditAsync(layer.Geometry, map.MapSettings.EditingOptions);
+
+                if (editResult.HasValidResult())
+                {
+                    layer.Geometry = editResult.Result;
+
+                    //shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+                    map.RemoveLayer(layer);
+                    map.AddLayer(layer);
+                    //map.SetLayer(layer);
+
+                    //map.Refresh();
+
+                    if (layer.OriginalSource != null)
+                    {
+                        layer.OriginalSource.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = layer.Id });
+                    }
+                }
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateExportDrawingItemLayerAsShapefile(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarSave,
+                Layer = layer,
+                ToolTip = _saveToolTip,
+            };
+
+            result.Command = new RelayCommand(param =>
+            {
+                try
+                {
+                    var file = map.SaveFile("*.shp|*.shp");
+
+                    if (string.IsNullOrWhiteSpace(file))
+                        return;
+
+                    var esriShape = layer.Geometry.AsSqlGeometry().AsEsriShape();
+
+                    IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+                }
+                catch (Exception ex)
+                {
+                    map.ShowMessage(ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+
+
+        #endregion
     }
 }

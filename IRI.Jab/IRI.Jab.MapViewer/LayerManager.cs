@@ -175,14 +175,14 @@ namespace IRI.Jab.MapViewer
                 System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers layercounts:{  newLayers.Count()}");
             }
 
-            var toBeRemovedLayers = this.CurrentLayers.Where(i => i.Rendering == rendering && newLayers.All(l => l.Id != i.Id)).ToList();
+            var toBeRemovedLayers = this.CurrentLayers.Where(i => i.Rendering == rendering && newLayers.All(l => l.LayerId != i.LayerId)).ToList();
 
             for (int i = 0; i < toBeRemovedLayers.Count; i++)
             {
                 this.CurrentLayers.Remove(toBeRemovedLayers[i]);
             }
 
-            var toBeAdded = newLayers.Where(i => i.Rendering == rendering && this.CurrentLayers.All(l => l.Id != i.Id)).ToList();
+            var toBeAdded = newLayers.Where(i => i.Rendering == rendering && this.CurrentLayers.All(l => l.LayerId != i.LayerId)).ToList();
 
             for (int i = 0; i < toBeAdded.Count; i++)
             {

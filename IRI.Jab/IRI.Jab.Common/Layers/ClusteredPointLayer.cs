@@ -34,7 +34,7 @@ namespace IRI.Jab.Common
         {
             ClusteredPointLayer result = new ClusteredPointLayer();
 
-            result.Id = Guid.NewGuid();
+            result.LayerId = Guid.NewGuid();
 
             //result.imageSymbol = symbol;
             result._viewMaker = viewMaker;

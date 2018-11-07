@@ -58,7 +58,7 @@
                     <StackPanel ScrollViewer.VerticalScrollBarVisibility="Auto"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>-->
-            <ItemsControl.ItemTemplate>
+            <ListBox.ItemTemplate>
                 <DataTemplate>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}"
                                  DataContext="{Binding }" IsEnabled="{Binding VisualParameters.IsInScaleRange}" IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
@@ -67,7 +67,7 @@
                                                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                     </RadioButton>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
       
     </Grid>
