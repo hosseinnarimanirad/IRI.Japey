@@ -27,15 +27,16 @@ namespace IRI.Ket.DataManagement.DataSource
         static Func<SqlGeometry, Dictionary<string, object>, SqlFeature> mapShapeToSqlFeature = (geometry, attributes) => new SqlFeature(geometry, attributes);
 
         public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
-        {
-            //var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
-
-            //Func<IPoint, IPoint> func = p => p.Project(sourceSrs, targetCrs);
-
-            return new ShapefileDataSource<SqlFeature>(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
+        { 
+            return  ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
         }
 
-       
+
+        public static async Task<ShapefileDataSource<SqlFeature>> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
+        { 
+            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
+        }
+
     }
 
     public class ShapefileDataSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
@@ -52,7 +53,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
         }
 
-        public ShapefileDataSource(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        private ShapefileDataSource(string shapefileName, IEsriShapeCollection geometries, List<Dictionary<string, object>> attributes, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs)
         {
             this._shapefileName = shapefileName;
 
@@ -67,11 +68,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 transformFunc = p => p.Project(_sourceSrs, targetSrs);
             }
 
-            string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
-
-            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
-
-            var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
+            //string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
 
             this.Extent = geometries.MainHeader.MinimumBoundingBox;
 
@@ -108,6 +105,82 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 this._features.Add(feature);
             }
+        }
+
+        //public ShapefileDataSource(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        //{
+        //    this._shapefileName = shapefileName;
+
+        //    _sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
+
+        //    _targetSrs = targetSrs;
+
+        //    Func<IPoint, IPoint> transformFunc = null;
+
+        //    if (targetSrs != null)
+        //    {
+        //        transformFunc = p => p.Project(_sourceSrs, targetSrs);
+        //    }
+
+        //    //string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
+
+        //    var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+
+        //    var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
+
+        //    this.Extent = geometries.MainHeader.MinimumBoundingBox;
+
+        //    if (transformFunc != null)
+        //    {
+        //        this.Extent = this.Extent.Transform(p => (Point)transformFunc(p));
+        //    }
+
+        //    if (geometries?.Count != attributes?.Count)
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+
+        //    this._features = new List<T>();
+
+        //    for (int i = 0; i < geometries.Count; i++)
+        //    {
+        //        SqlGeometry geometry = null;
+
+        //        if (transformFunc == null)
+        //        {
+        //            geometry = geometries[i].AsSqlGeometry().MakeValid();
+        //        }
+        //        else
+        //        {
+        //            geometry = geometries[i].AsSqlGeometry().MakeValid().Transform(p => transformFunc(p), targetSrs.Srid);//targetSrs should not be null in this case
+        //        }
+
+        //        var feature = map(geometry, attributes[i]);
+
+        //        feature.Id = GetNewId();
+
+        //        this._idFunc = id => this._features.Single(f => f.Id == id);
+
+        //        this._features.Add(feature);
+        //    }
+        //}
+
+        public static ShapefileDataSource<T> Create(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        {
+            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+
+            var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
+
+            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, targetSrs);
+        }
+
+        public static async Task<ShapefileDataSource<T>> CreateAsync(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        {
+            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+
+            var geometries = await ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
+
+            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, targetSrs);
         }
 
         public override void SaveChanges()

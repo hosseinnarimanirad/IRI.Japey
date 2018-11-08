@@ -85,46 +85,9 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged();
             }
         }
-
-        //private bool _isSelected;
-
-        //public bool IsSelected
-        //{
-        //    get { return _isSelected; }
-        //    set
-        //    {
-        //        if (_isSelected == value)
-        //        {
-        //            return;
-        //        }
-
-        //        _isSelected = value;
-        //        RaisePropertyChanged();
-
-        //        this.RequestHighlightGeometry?.Invoke(this);
-        //    }
-        //}
-
-        //public Action<DrawingItemLayer> RequestZoomToGeometry;
-
+         
         public Action<DrawingItemLayer> RequestHighlightGeometry;
-
-        //public Action<DrawingItemLayer> RequestExportAsShapefile;
-
-        //public Action<DrawingItemLayer> RequestChangeSymbology;
-
-        //private ObservableCollection<ILegendCommand> _commands;
-
-        //public ObservableCollection<ILegendCommand> Commands
-        //{
-        //    get { return _commands; }
-        //    set
-        //    {
-        //        _commands = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
+         
         public DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
         {
             //this._id = Guid.NewGuid().ToString();
@@ -162,97 +125,6 @@ namespace IRI.Jab.Common
             {
                 this.RequestHighlightGeometry?.Invoke(this);
             };
-
-            //Commands.Add(new LegendCommand() { Command = RemoveCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarDelete, ToolTip = _removeToolTip });
-
-            //Commands.Add(new LegendCommand() { Command = EditCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarEdit, ToolTip = _editToolTip });
-
-            //Commands.Add(new LegendCommand() { Command = ExportAsShapefileCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarSave, ToolTip = _saveToolTip });
-
-            //Commands.Add(new LegendCommand() { Command = ZoomCommand, Layer = AssociatedLayer, PathMarkup = Appbar.appbarMagnify, ToolTip = _zoomToolTip });
-
         }
-
-
-
-        #region Commands
-
-        //private RelayCommand _zoomCommand;
-
-        //public RelayCommand ZoomCommand
-        //{
-        //    get
-        //    {
-        //        if (_zoomCommand == null)
-        //        {
-        //            _zoomCommand = new RelayCommand(param => this.RequestZoomToGeometry?.Invoke(this));
-        //        }
-
-        //        return _zoomCommand;
-        //    }
-        //}
-
-
-        //private RelayCommand _highlightCommand;
-
-        //public RelayCommand HighlightCommand
-        //{
-        //    get
-        //    {
-        //        if (_highlightCommand == null)
-        //        {
-        //            _highlightCommand = new RelayCommand(param =>
-        //            {
-        //                this.RequestHighlightGeometry?.Invoke(this);
-        //            });
-        //        }
-
-        //        return _highlightCommand;
-        //    }
-        //}
-
-
-        //private RelayCommand _exportAsShapefileCommand;
-
-        //public RelayCommand ExportAsShapefileCommand
-        //{
-        //    get
-        //    {
-        //        if (_exportAsShapefileCommand == null)
-        //        {
-        //            _exportAsShapefileCommand = new RelayCommand(param =>
-        //            {
-        //                this.RequestExportAsShapefile?.Invoke(this);
-        //            });
-        //        }
-
-        //        return _exportAsShapefileCommand;
-        //    }
-        //}
-
-
-        //private RelayCommand _changeSymbologyCommand;
-
-        //public RelayCommand ChangeSymbologyCommand
-        //{
-        //    get
-        //    {
-        //        if (_changeSymbologyCommand == null)
-        //        {
-        //            _changeSymbologyCommand = new RelayCommand(param =>
-        //            {
-        //                this.RequestChangeSymbology?.Invoke(this);
-        //            });
-        //        }
-
-        //        return _changeSymbologyCommand;
-        //    }
-        //}
-
-
-
-        #endregion
-
-
     }
 }

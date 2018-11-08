@@ -37,7 +37,6 @@ namespace IRI.Jab.Common.Presenter.Map
         #region Properties
 
         private ProxySettingsModel _proxy;
-
         public ProxySettingsModel Proxy
         {
             get { return _proxy; }
@@ -49,8 +48,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private MapSettingsModel _mapSettings = new MapSettingsModel();
 
+        private MapSettingsModel _mapSettings = new MapSettingsModel();
         public MapSettingsModel MapSettings
         {
             get { return _mapSettings; }
@@ -61,8 +60,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private MapPanelPresenter _mapPanel;
 
+        private MapPanelPresenter _mapPanel;
         public MapPanelPresenter MapPanel
         {
             get { return _mapPanel; }
@@ -74,8 +73,50 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private ObservableCollection<ISelectedLayer> _selectedLayers = new ObservableCollection<ISelectedLayer>();
+        private List<EnvelopeMarkupLabelTriple> _ostanha;
+        public List<EnvelopeMarkupLabelTriple> Ostanha
+        {
+            get { return _ostanha; }
+            set
+            {
+                _ostanha = value;
+                RaisePropertyChanged();
+            }
+        }
 
+
+        private EditableFeatureLayer _currentEditingLayer;
+        public EditableFeatureLayer CurrentEditingLayer
+        {
+            get { return _currentEditingLayer; }
+            set
+            {
+                _currentEditingLayer = value;
+                RaisePropertyChanged();
+
+                if (_currentEditingLayer != null)
+                {
+                    _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
+                    {
+                        this.UpdateCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(l.X, l.Y));
+                    };
+
+                    _currentEditingLayer.RequestZoomToPoint = (p) =>
+                    {
+                        this.Zoom(IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
+                    };
+
+                    _currentEditingLayer.RequestZoomToGeometry = g =>
+                    {
+                        this.ZoomToExtent(g.GetBoundingBox(), false);
+                    };
+                }
+
+            }
+        }
+
+
+        private ObservableCollection<ISelectedLayer> _selectedLayers = new ObservableCollection<ISelectedLayer>();
         public ObservableCollection<ISelectedLayer> SelectedLayers
         {
             get { return _selectedLayers; }
@@ -86,8 +127,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private ISelectedLayer _currentLayer;
 
+        private ISelectedLayer _currentLayer;
         public ISelectedLayer CurrentLayer
         {
             get { return _currentLayer; }
@@ -105,7 +146,6 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
         private ObservableCollection<ILayer> _layers;
-
         public ObservableCollection<ILayer> Layers
         {
             get { return _layers; }
@@ -166,21 +206,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        //private ObservableCollection<MapLegendItemWithOptionsModel> _legendLayers = new ObservableCollection<MapLegendItemWithOptionsModel>();
-
-        //public ObservableCollection<MapLegendItemWithOptionsModel> LegendLayers
-        //{
-        //    get { return _legendLayers; }
-        //    set
-        //    {
-        //        _legendLayers = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
         private ObservableCollection<DrawingItemLayer> _drawingItems = new ObservableCollection<DrawingItemLayer>();
-
         public ObservableCollection<DrawingItemLayer> DrawingItems
         {
             get { return _drawingItems; }
@@ -191,141 +217,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public void AddSelectedLayer(ISelectedLayer selectedLayer)
-        {
-            if (selectedLayer == null)
-            {
-                return;
-            }
-
-            selectedLayer.AssociatedLayer.NumberOfSelectedFeatures = selectedLayer.CountOfSelectedFeatures();
-
-            var existingLayer = SelectedLayers?.SingleOrDefault(l => l.Id == selectedLayer?.Id);
-
-            if (existingLayer == null)
-            {
-                selectedLayer.FeaturesChangedAction = ShowSelectedFeatures;
-
-                selectedLayer.HighlightFeaturesChangedAction = ShowHighlightedFeatures;
-
-                selectedLayer.RequestFlashSinglePoint = FlashHighlightedFeatures;
-
-                selectedLayer.RequestZoomTo = (features, callback) =>
-                {
-                    var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
-
-                    this.ZoomToExtent(extent, false, callback);
-                };
-
-                selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
-
-                selectedLayer.RequestEdit = async g =>
-                 {
-                     var editResult = await EditAsync(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
-
-                     if (editResult.HasValidResult())
-                     {
-                         SqlFeature f = new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = g.Id };
-
-                         selectedLayer.Update(g, f);
-                     }
-
-                     //Referesh
-                     if (selectedLayer.ShowSelectedOnMap)
-                     {
-                         ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
-                     }
-
-                     Refresh();
-                 };
-
-                this.SelectedLayers.Add(selectedLayer);
-
-                CurrentLayer = selectedLayer;
-
-                if (selectedLayer.ShowSelectedOnMap)
-                {
-                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
-                }
-            }
-            else
-            {
-                existingLayer.UpdateSelectedFeatures(selectedLayer.GetSelectedFeatures());
-
-                CurrentLayer = existingLayer;
-
-                if (selectedLayer.ShowSelectedOnMap)
-                {
-                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
-                }
-            }
-        }
-
-        public void RemoveSelectedLayer(ILayer layer)
-        {
-            var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
-
-            layer.NumberOfSelectedFeatures = 0;
-
-            if (selectedLayer != null)
-            {
-                this.SelectedLayers.Remove(selectedLayer);
-
-                ClearLayer("__$selection", true);
-                ClearLayer("__$highlight", true);
-            }
-        }
-
-        private async void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
-        {
-            ClearLayer("__$selection", true);
-            ClearLayer("__$highlight", true);
-
-            if (enumerable == null)
-            {
-                return;
-            }
-
-            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
-
-        }
-
-        private async void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
-        {
-            ClearLayer("__$highlight", true);
-
-            ClearLayer(LayerType.AnimatingItem, true);
-
-            if (enumerable == null || enumerable.Count() == 0)
-            {
-                return;
-            }
-
-            if (enumerable?.Count() < 10 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
-            {
-                FlashPoints(enumerable.Select(e => (IRI.Msh.Common.Primitives.Point)e.TheSqlGeometry.AsPoint()).ToList());
-                //FlashSinglePoint?.Invoke(enumerable.First());
-            }
-            else
-            {
-                await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
-            }
-        }
-
-        private void FlashHighlightedFeatures(ISqlGeometryAware geometry)
-        {
-            var point = geometry?.TheSqlGeometry?.AsPoint();
-
-            if (point != null)
-            {
-                FlashPoint(new Msh.Common.Primitives.Point(point.X, point.Y));
-            }
-
-        }
-
 
         private IRI.Msh.Common.Primitives.Point _currentPoint;
-
         public IRI.Msh.Common.Primitives.Point CurrentPoint
         {
             get { return _currentPoint; }
@@ -338,16 +231,18 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
         private Dictionary<string, Func<TileType, IMapProvider>> _mapProviders;
-
         public Dictionary<string, Func<TileType, IMapProvider>> MapProviders
         {
             get { return _mapProviders; }
-            set { _mapProviders = value; }
+            set
+            {
+                _mapProviders = value;
+                RaisePropertyChanged();
+            }
         }
 
 
         private TileType _baseMapType = TileType.None;
-
         public TileType BaseMapType
         {
             get { return _baseMapType; }
@@ -364,8 +259,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private string _providerType = "GOOGLE";
 
+        private string _providerType = "GOOGLE";
         public string ProviderType
         {
             get { return _providerType; }
@@ -384,6 +279,402 @@ namespace IRI.Jab.Common.Presenter.Map
                 UpdateBaseMap();
             }
         }
+
+
+        private bool _doNotCheckInternet = false;
+        public bool DoNotCheckInternet
+        {
+            get { return _doNotCheckInternet; }
+            set
+            {
+                _doNotCheckInternet = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private bool? _isConnected = null;
+        public bool IsConnected
+        {
+            get { return _isConnected.HasValue && _isConnected.Value; }
+            set
+            {
+                if (_isConnected == value)
+                    return;
+
+                _isConnected = value;
+                RaisePropertyChanged();
+
+                this.RequestSetConnectedState?.Invoke(value);
+            }
+        }
+
+
+        private MapStatus _mapStatus;
+        public MapStatus MapStatus
+        {
+            get { return _mapStatus; }
+            set
+            {
+                if (_mapStatus == value)
+                {
+                    return;
+                }
+
+                _mapStatus = value;
+                RaisePropertyChanged();
+
+                switch (_mapStatus)
+                {
+                    case MapStatus.Drawing:
+                        this.IsDrawMode = true;
+                        break;
+                    case MapStatus.Editing:
+                        this.IsEditMode = true;
+                        break;
+                    //case MapStatus.Measuring:
+                    //    this.IsMeasureMode = true;
+                    //    break;
+                    case MapStatus.Idle:
+                        this.IsDrawMode = false;
+                        this.IsEditMode = false;
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+
+
+        private MapAction _mapAction;
+        public MapAction MapAction
+        {
+            get { return _mapAction; }
+            set
+            {
+                _mapAction = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsPanMode));
+                RaisePropertyChanged(nameof(IsZoomInMode));
+                RaisePropertyChanged(nameof(IsZoomOutMode));
+            }
+        }
+
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                //SetIsBusy(value);
+                this._isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public double MapScale
+        {
+            get
+            {
+                return this.RequestMapScale?.Invoke() ?? 1;
+            }
+        }
+
+
+        public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
+
+
+        public IRI.Msh.Common.Primitives.BoundingBox CurrentExtent
+        {
+            get
+            {
+                return this.RequestCurrentExtent?.Invoke() ?? BoundingBoxes.IranMercatorBoundingBox;
+            }
+        }
+
+
+        public double ActualWidth
+        {
+            get { return RequestGetActualWidth?.Invoke() ?? 1; }
+        }
+
+
+        public double ActualHeight
+        {
+            get { return RequestGetActualHeight?.Invoke() ?? 1; ; }
+        }
+
+
+        private bool _isDrawMode;
+        public bool IsDrawMode
+        {
+            get { return _isDrawMode; }
+            set
+            {
+                _isDrawMode = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
+            }
+        }
+
+
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get { return _isEditMode; }
+            set
+            {
+                _isEditMode = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
+            }
+        }
+
+
+        public bool IsDrawEditMeasureMode
+        {
+            get
+            {
+                return IsEditMode || IsDrawMode;
+            }
+        }
+
+
+        public bool IsPanMode
+        {
+            get { return MapAction == MapAction.Pan; }
+            set
+            {
+                if (value)
+                {
+                    this.Pan();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public bool IsZoomInMode
+        {
+            get { return MapAction == MapAction.ZoomIn || MapAction == MapAction.ZoomInRectangle; }
+            set
+            {
+                if (value)
+                {
+                    this.EnableRectangleZoomIn();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public bool IsZoomOutMode
+        {
+            get { return MapAction == MapAction.ZoomOut || MapAction == MapAction.ZoomOutRectangle; }
+            set
+            {
+                if (value)
+                {
+                    this.EnableZoomOut();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+
+
+        #endregion
+
+
+        public MapPresenter()
+        {
+            this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
+            {
+                {"GOOGLE", tileType => new GoogleMapProvider(tileType) },
+                {"BING", tileType => new BingMapProvider(tileType) },
+                {"NOKIA", tileType => new NokiaMapProvider(tileType) },
+            };
+
+            this.MapPanel = new MapPanelPresenter();
+
+            this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
+              {
+                  if (this.CurrentEditingLayer == null)
+                  {
+                      Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
+                      return;
+                  }
+                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(param.X, param.Y));
+                  this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
+
+              });
+        }
+
+
+        #region Actions & Funcs
+
+        public Action RequestPrint;
+
+        public Action<System.Net.WebProxy> RequestSetProxy;
+
+        public Func<System.Net.WebProxy> RequestGetProxy;
+
+        public Action<MapAction, Cursor> RequestSetDefaultCursor;
+
+        public Action<Cursor> RequestSetCursor;
+
+        public Func<double> RequestGetActualWidth;
+
+        public Func<double> RequestGetActualHeight;
+
+        public Action<MapPresenter> RegisterAction;
+
+        public Action<bool> RequestSetConnectedState;
+
+        public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
+
+        public Action RequestRemoveAllTileServices;
+
+        public Func<double> RequestMapScale;
+
+        public Func<int> RequestCurrentZoomLevel;
+
+        public Func<IRI.Msh.Common.Primitives.BoundingBox> RequestCurrentExtent;
+
+        public Action RequestRefresh;
+
+        public Action<ILayer> RequestRefreshLayerVisibility;
+
+        public Action RequestIranExtent;
+
+        public Action RequestFullExtent;
+
+        public Action<double> RequestZoomToScale;
+
+        public Action<IRI.Msh.Common.Primitives.Point, double> RequestZoomToPoint;
+
+        public Action<IRI.Msh.Common.Primitives.Point, int, Action> RequestZoomToGoogleScale;
+
+        public Action<IRI.Msh.Common.Primitives.BoundingBox, bool, Action> RequestZoomToExtent;
+
+        public Action<SqlGeometry> RequestZoomToFeature;
+
+        public Action RequestEnableRectangleZoom;
+
+        public Action RequestEnableZoomOut;
+
+        public Action RequestPan;
+
+        public Action<IRI.Msh.Common.Primitives.Point, Action> RequestPanTo;
+
+        public Action<int, IRI.Msh.Common.Primitives.Point, Action, bool> RequestZoomToLevelAndCenter;
+
+        public Action<MapOptionsEventArgs<FrameworkElement>> RequestRegisterMapOptions;
+
+        public Action RequestUnregisterMapOptions;
+
+        public Action RequestRemoveMapOptions;
+
+
+        public Action RequestCopyCurrentLocationToClipboard;
+
+
+        //presenter.RequestRemoveLayer = (layer, forceRemove) =>
+        //{
+        //   this.ClearLayer(layer, true, forceRemove);
+        //};
+
+        //presenter.RequestRemoveLayerByName = (i) =>
+        //{
+        //   this.ClearLayer(i, true);
+        //};
+
+        //public Action<ILayer, bool> RequestRemoveLayer;
+
+        //public Action<string> RequestRemoveLayerByName;
+
+        //public Action<LayerType, bool> RequestClearLayerByType;
+
+        //public Action<string, bool> RequestClearLayerByName;
+
+        public Action<ILayer, bool> RequestClearLayer;
+
+        public Action<Predicate<ILayer>, bool, bool> RequestClearLayerByCriteria;
+
+        public Action<Predicate<LayerTag>, bool, bool> RequestClearLayerByTag;
+
+        public Action RequestRemovePolyBezierLayers;
+
+
+
+        public Action<List<IRI.Msh.Common.Primitives.Point>> RequestFlashPoints;
+
+        public Action<IRI.Msh.Common.Primitives.Point> RequestFlashPoint;
+
+
+        public Func<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
+
+        public Func<List<SqlGeometry>, string, VisualParameters, Task> RequestAddGeometries;
+
+        public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
+
+        public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
+
+        public Action<ILayer> RequestSetLayer;
+
+        //public Func<ILayer, Task> RequestAddLayer;
+        public Action<ILayer> RequestAddLayer;
+
+        public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
+
+        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry>>> RequestGetDrawingAsync;
+
+        public Action RequestClearAll;
+
+        public Action RequestCancelNewDrawing;
+
+        public Action RequestFinishDrawingPart;
+
+        public Action RequestFinishNewDrawing;
+
+        public Action RequestCancelEdit;
+
+        public Action RequestFinishEdit;
+
+        public Action OnRequestShowAboutMe;
+
+        //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
+        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry>>> RequestMeasure;
+
+        //public Action RequestMeasureLength;
+
+        public Action RequestCancelMeasure;
+
+        public Action RequestShowGoToView;
+
+        public Action<ILayer> RequestShowSymbologyView;
+
+        public Action<IPoint> RequestAddPointToNewDrawing;
+
+        public Func<Geometry, EditableFeatureLayerOptions, Task<Response<Geometry>>> RequestEdit;
+
+        public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
+
+
+        public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
+
+        public Func<Task<Response<IRI.Msh.Common.Primitives.Point>>> RequestGetPoint;
+
+        #endregion
+
+
+        //*****************************************Map Providers & TileServices***********************************************
+        #region Map Providers & TileServices            
 
         public async void UpdateBaseMap()
         {
@@ -463,486 +754,240 @@ namespace IRI.Jab.Common.Presenter.Map
             System.Diagnostics.Debug.WriteLine($"SetTileService end {DateTime.Now.ToLongTimeString()}");
         }
 
-        private bool _doNotCheckInternet = false;
+        #endregion
 
-        public bool DoNotCheckInternet
+
+        //*****************************************Selected Layers & Select Geometries & DrawGeometries & Identify & FlashPoints ******************
+        #region Selected Layers & Select/Draw Geometries & Identify & FlashPoints 
+
+        public void AddSelectedLayer(ISelectedLayer selectedLayer)
         {
-            get { return _doNotCheckInternet; }
-            set
+            if (selectedLayer == null)
             {
-                _doNotCheckInternet = value;
-                RaisePropertyChanged();
+                return;
             }
-        }
 
+            selectedLayer.AssociatedLayer.NumberOfSelectedFeatures = selectedLayer.CountOfSelectedFeatures();
 
-        private bool? _isConnected = null;
+            var existingLayer = SelectedLayers?.SingleOrDefault(l => l.Id == selectedLayer?.Id);
 
-        public bool IsConnected
-        {
-            get { return _isConnected.HasValue && _isConnected.Value; }
-            set
+            if (existingLayer == null)
             {
-                if (_isConnected == value)
-                    return;
+                selectedLayer.FeaturesChangedAction = ShowSelectedFeatures;
 
-                _isConnected = value;
-                RaisePropertyChanged();
+                selectedLayer.HighlightFeaturesChangedAction = ShowHighlightedFeatures;
 
-                this.RequestSetConnectedState?.Invoke(value);
-            }
-        }
+                selectedLayer.RequestFlashSinglePoint = FlashHighlightedFeatures;
 
-        private MapStatus _mapStatus;
-
-        public MapStatus MapStatus
-        {
-            get { return _mapStatus; }
-            set
-            {
-                if (_mapStatus == value)
+                selectedLayer.RequestZoomTo = (features, callback) =>
                 {
-                    return;
-                }
+                    var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
 
-                _mapStatus = value;
-                RaisePropertyChanged();
+                    this.ZoomToExtent(extent, false, callback);
+                };
 
-                switch (_mapStatus)
+                selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
+
+                selectedLayer.RequestEdit = async g =>
                 {
-                    case MapStatus.Drawing:
-                        this.IsDrawMode = true;
-                        break;
-                    case MapStatus.Editing:
-                        this.IsEditMode = true;
-                        break;
-                    //case MapStatus.Measuring:
-                    //    this.IsMeasureMode = true;
-                    //    break;
-                    case MapStatus.Idle:
-                        this.IsDrawMode = false;
-                        this.IsEditMode = false;
-                        break;
-                    default:
-                        break;
-                }
+                    var editResult = await EditAsync(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
 
-            }
-        }
-
-        private MapAction _mapAction;
-
-        public MapAction MapAction
-        {
-            get { return _mapAction; }
-            set
-            {
-                _mapAction = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsPanMode));
-                RaisePropertyChanged(nameof(IsZoomInMode));
-                RaisePropertyChanged(nameof(IsZoomOutMode));
-            }
-        }
-
-
-        private bool _isBusy;
-
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                //SetIsBusy(value);
-                this._isBusy = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public async Task SetIsBusy(bool isBusy)
-        {
-            _isBusy = isBusy;
-            RaisePropertyChanged(nameof(IsBusy));
-
-            await Wait();
-        }
-
-
-        private async Task Wait()
-        {
-            //System.Diagnostics.Debug.WriteLine("Wait start");
-
-            await Task.Run(async () =>
-            {
-                //System.Diagnostics.Debug.WriteLine("Befor Task.Delay");
-                await Task.Delay(1000);
-                //System.Diagnostics.Debug.WriteLine("After Task.Delay");
-            });
-
-            //System.Diagnostics.Debug.WriteLine("Wait end");
-        }
-
-
-        public double MapScale
-        {
-            get
-            {
-                return this.RequestMapScale?.Invoke() ?? 1;
-            }
-        }
-
-        public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
-
-        public IRI.Msh.Common.Primitives.BoundingBox CurrentExtent
-        {
-            get
-            {
-                return this.RequestCurrentExtent?.Invoke() ?? BoundingBoxes.IranMercatorBoundingBox;
-            }
-        }
-
-        public double ActualWidth
-        {
-            get { return RequestGetActualWidth?.Invoke() ?? 1; }
-        }
-
-        public double ActualHeight
-        {
-            get { return RequestGetActualHeight?.Invoke() ?? 1; ; }
-        }
-
-        private bool _isDrawMode;
-
-        public bool IsDrawMode
-        {
-            get { return _isDrawMode; }
-            set
-            {
-                _isDrawMode = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
-            }
-        }
-
-        private bool _isEditMode;
-
-        public bool IsEditMode
-        {
-            get { return _isEditMode; }
-            set
-            {
-                _isEditMode = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDrawEditMeasureMode));
-            }
-        }
-
-
-        public bool IsDrawEditMeasureMode
-        {
-            get
-            {
-                var result = IsEditMode || IsDrawMode;
-
-                //if (result == false)
-                //{
-                //    //in order not to raise RequestHandleIsEdgeLabelVisibleChanged of EditableFeatureLayerOptions, 
-                //    //otherwise previous edge labels may show on map
-                //    this.MapPanel.Options = null;
-                //}
-
-                return IsEditMode || IsDrawMode;
-            }
-        }
-
-
-        public bool IsPanMode
-        {
-            get { return MapAction == MapAction.Pan; }
-            set
-            {
-                if (value)
-                {
-                    this.Pan();
-                }
-
-                RaisePropertyChanged();
-            }
-        }
-
-
-        public bool IsZoomInMode
-        {
-            get { return MapAction == MapAction.ZoomIn || MapAction == MapAction.ZoomInRectangle; }
-            set
-            {
-                if (value)
-                {
-                    this.EnableRectangleZoomIn();
-                }
-
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsZoomOutMode
-        {
-            get { return MapAction == MapAction.ZoomOut || MapAction == MapAction.ZoomOutRectangle; }
-            set
-            {
-                if (value)
-                {
-                    this.EnableZoomOut();
-                }
-
-                RaisePropertyChanged();
-            }
-        }
-
-
-
-        private List<EnvelopeMarkupLabelTriple> _ostanha;
-
-        public List<EnvelopeMarkupLabelTriple> Ostanha
-        {
-            get { return _ostanha; }
-            set
-            {
-                _ostanha = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private EditableFeatureLayer _currentEditingLayer;
-
-        public EditableFeatureLayer CurrentEditingLayer
-        {
-            get { return _currentEditingLayer; }
-            set
-            {
-                _currentEditingLayer = value;
-                RaisePropertyChanged();
-
-                if (_currentEditingLayer != null)
-                {
-                    _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
+                    if (editResult.HasValidResult())
                     {
-                        this.UpdateCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(l.X, l.Y));
-                    };
+                        SqlFeature f = new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = g.Id };
 
-                    _currentEditingLayer.RequestZoomToPoint = (p) =>
-                    {
-                        this.Zoom(IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
-                    };
+                        selectedLayer.Update(g, f);
+                    }
 
-                    _currentEditingLayer.RequestZoomToGeometry = g =>
+                    //Referesh
+                    if (selectedLayer.ShowSelectedOnMap)
                     {
-                        this.ZoomToExtent(g.GetBoundingBox(), false);
-                    };
+                        ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
+                    }
+
+                    Refresh();
+                };
+
+                this.SelectedLayers.Add(selectedLayer);
+
+                CurrentLayer = selectedLayer;
+
+                if (selectedLayer.ShowSelectedOnMap)
+                {
+                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
                 }
+            }
+            else
+            {
+                existingLayer.UpdateSelectedFeatures(selectedLayer.GetSelectedFeatures());
 
+                CurrentLayer = existingLayer;
+
+                if (selectedLayer.ShowSelectedOnMap)
+                {
+                    ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
+                }
+            }
+        }
+
+        public void RemoveSelectedLayer(ILayer layer)
+        {
+            var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
+
+            layer.NumberOfSelectedFeatures = 0;
+
+            if (selectedLayer != null)
+            {
+                this.SelectedLayers.Remove(selectedLayer);
+
+                ClearLayer("__$selection", true);
+                ClearLayer("__$highlight", true);
+            }
+        }
+
+        public void RemoveSelectedLayers(Predicate<ILayer> layersToBeRemoved)
+        {
+            for (int i = this.SelectedLayers.Count - 1; i >= 0; i--)
+            {
+                if (layersToBeRemoved(this.SelectedLayers[i].AssociatedLayer))
+                {
+                    RemoveSelectedLayer(this.SelectedLayers[i].AssociatedLayer);
+                }
+            }
+        }
+
+        private async void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+            ClearLayer("__$selection", true);
+            ClearLayer("__$highlight", true);
+
+            if (enumerable == null)
+            {
+                return;
+            }
+
+            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
+
+        }
+
+        private async void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+            ClearLayer("__$highlight", true);
+
+            ClearLayer(LayerType.AnimatingItem, true);
+
+            if (enumerable == null || enumerable.Count() == 0)
+            {
+                return;
+            }
+
+            if (enumerable?.Count() < 10 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            {
+                FlashPoints(enumerable.Select(e => (IRI.Msh.Common.Primitives.Point)e.TheSqlGeometry.AsPoint()).ToList());
+                //FlashSinglePoint?.Invoke(enumerable.First());
+            }
+            else
+            {
+                await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
+            }
+        }
+
+        private void FlashHighlightedFeatures(ISqlGeometryAware geometry)
+        {
+            var point = geometry?.TheSqlGeometry?.AsPoint();
+
+            if (point != null)
+            {
+                FlashPoint(new Msh.Common.Primitives.Point(point.X, point.Y));
+            }
+
+        }
+
+
+        public async Task SelectGeometries(List<SqlGeometry> geometries)
+        {
+            Debug.WriteLine("SelectGeometries 343 start");
+            await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
+            Debug.WriteLine("SelectGeometries 343 end");
+        }
+
+        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        {
+            Debug.WriteLine("SelectGeometries 675 start [MapPresenter]");
+            await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
+            Debug.WriteLine("SelectGeometries 675 end [MapPresenter]");
+        }
+
+
+        public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
+        {
+            this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
+        }
+
+        public async Task DrawGeometriesAsync(List<SqlGeometry> geometry, string name, VisualParameters parameters)
+        {
+            await this.RequestAddGeometries?.Invoke(geometry, name, parameters);
+        }
+
+        public async Task DrawGeometryAsync(SqlGeometry geometry, string name, VisualParameters parameters)
+        {
+            await DrawGeometriesAsync(new List<SqlGeometry> { geometry }, name, parameters);
+        }
+
+
+        public void FlashPoints(List<IRI.Msh.Common.Primitives.Point> points)
+        {
+            this.RequestFlashPoints?.Invoke(points);
+        }
+
+        public void FlashPoint(IRI.Msh.Common.Primitives.Point point)
+        {
+            this.RequestFlashPoint?.Invoke(point);
+        }
+
+
+        public ObservableCollection<System.Data.DataTable> Identify(IRI.Msh.Common.Primitives.Point arg)
+        {
+            if (RequestIdentify != null)
+            {
+                return RequestIdentify(arg.AsSqlGeometry());
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ObservableCollection<System.Data.DataTable> Identify(SqlGeometry arg)
+        {
+            if (RequestIdentify != null)
+            {
+                return RequestIdentify(arg);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+        public Task<Response<IRI.Msh.Common.Primitives.Point>> GetPoint()
+        {
+            if (RequestGetPoint != null)
+            {
+                return RequestGetPoint();
+            }
+            else
+            {
+                return new Task<Response<IRI.Msh.Common.Primitives.Point>>(() => new Response<Msh.Common.Primitives.Point>() { Result = IRI.Msh.Common.Primitives.Point.NaN, IsFailed = true });
             }
         }
 
         #endregion
 
-        public MapPresenter()
-        {
-            this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
-            {
-                {"GOOGLE", tileType => new GoogleMapProvider(tileType) },
-                {"BING", tileType => new BingMapProvider(tileType) },
-                {"NOKIA", tileType => new NokiaMapProvider(tileType) },
-            };
 
-            this.MapPanel = new MapPanelPresenter();
-
-            this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
-              {
-                  if (this.CurrentEditingLayer == null)
-                  {
-                      Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
-                      return;
-                  }
-                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(param.X, param.Y));
-                  this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
-
-              });
-        }
-
-        #region Actions & Funcs
-
-        public Action RequestPrint;
-
-        public Action<System.Net.WebProxy> RequestSetProxy;
-
-        public Func<System.Net.WebProxy> RequestGetProxy;
-
-        public Action<MapAction, Cursor> RequestSetDefaultCursor;
-
-        public Action<Cursor> RequestSetCursor;
-
-        public Func<double> RequestGetActualWidth;
-
-        public Func<double> RequestGetActualHeight;
-
-        public Action<MapPresenter> RegisterAction;
-
-        public Action<bool> RequestSetConnectedState;
-
-        ////public Action<NotifiablePoint> CurrentMapInfoPointChanged;
-
-        //public Action<MapProviderType, TileType, bool, string, bool> RequestChangeBaseMap;
-
-
-
-        //public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetCustomTileService;
-
-        //public Action<MapProviderType, TileType, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
-
-        //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName
-        public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
-
-        public Action RequestRemoveAllTileServices;
-
-        public Func<double> RequestMapScale;
-
-        public Func<int> RequestCurrentZoomLevel;
-
-        public Func<IRI.Msh.Common.Primitives.BoundingBox> RequestCurrentExtent;
-
-        public Action RequestRefresh;
-
-        public Action<ILayer> RequestRefreshLayerVisibility;
-
-        public Action RequestIranExtent;
-
-        public Action RequestFullExtent;
-
-        //public Action<bool> FireIsZoomInOnDoubleClickEnabledChanged;
-
-        //public Action<bool> FireIsMouseWheelZoomEnabledChanged;
-
-        //public Action<bool> FireIsGoogleZoomLevelsEnabledChanged;
-
-        public Action<double> RequestZoomToScale;
-
-        public Action<IRI.Msh.Common.Primitives.Point, double> RequestZoomToPoint;
-
-        public Action<IRI.Msh.Common.Primitives.Point, int, Action> RequestZoomToGoogleScale;
-
-        public Action<IRI.Msh.Common.Primitives.BoundingBox, bool, Action> RequestZoomToExtent;
-
-        public Action<SqlGeometry> RequestZoomToFeature;
-
-        public Action RequestEnableRectangleZoom;
-
-        public Action RequestEnableZoomOut;
-
-        public Action RequestPan;
-
-        public Action<IRI.Msh.Common.Primitives.Point, Action> RequestPanTo;
-
-        public Action<int, IRI.Msh.Common.Primitives.Point, Action, bool> RequestZoomToLevelAndCenter;
-
-        public Action<MapOptionsEventArgs<FrameworkElement>> RequestRegisterMapOptions;
-
-        public Action RequestUnregisterMapOptions;
-
-        public Action RequestRemoveMapOptions;
-
-
-        public Action RequestCopyCurrentLocationToClipboard;
-
-
-        public Action<ILayer, bool> RequestRemoveLayer;
-
-        public Action<string> RequestRemoveLayerByName;
-
-        public Action<LayerType, bool> RequestClearLayerByType;
-
-        public Action<string, bool> RequestClearLayerByName;
-
-        public Action<ILayer, bool> RequestClearLayer;
-
-        public Action<Predicate<ILayer>, bool> RequestClearLayerByCriteria;
-
-        public Action RequestRemovePolyBezierLayers;
-
-
-
-        public Action<List<IRI.Msh.Common.Primitives.Point>> RequestFlashPoints;
-
-        public Action<IRI.Msh.Common.Primitives.Point> RequestFlashPoint;
-
-
-        public Func<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
-
-        public Func<List<SqlGeometry>, string, VisualParameters, Task> RequestAddGeometries;
-
-        public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
-
-        public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
-
-        public Action<ILayer> RequestSetLayer;
-
-        //public Func<ILayer, Task> RequestAddLayer;
-        public Action<ILayer> RequestAddLayer;
-
-        public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
-
-        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry>>> RequestGetDrawingAsync;
-
-        public Action RequestClearAll;
-
-        public Action RequestCancelNewDrawing;
-
-        public Action RequestFinishDrawingPart;
-
-        public Action RequestFinishNewDrawing;
-
-        public Action RequestCancelEdit;
-
-        public Action RequestFinishEdit;
-
-        public Action OnRequestShowAboutMe;
-
-        //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
-        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry>>> RequestMeasure;
-
-        //public Action RequestMeasureLength;
-
-        public Action RequestCancelMeasure;
-
-        public Action RequestShowGoToView;
-
-        public Action<ILayer> RequestShowSymbologyView;
-
-        public Action<IPoint> RequestAddPointToNewDrawing;
-
-        public Func<Geometry, EditableFeatureLayerOptions, Task<Response<Geometry>>> RequestEdit;
-
-        public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
-
-
-        public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
-
-        public Func<Task<Response<IRI.Msh.Common.Primitives.Point>>> RequestGetPoint;
-
-        #endregion
-
-        #region Methods
-
-        public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
-        {
-            MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
-        }
-
-        public void Print()
-        {
-            this.RequestPrint?.Invoke();
-        }
+        //*****************************************Drawing Items*********************************************************
+        #region Drawing Items
 
         private async Task DrawAsync(DrawMode mode)
         {
@@ -979,7 +1024,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.DrawingItems.Remove(item);
 
             //this.RemoveLayer(item.AssociatedLayer);
-            this.RemoveLayer(item);
+            this.ClearLayer(item, true);
         }
 
         public void RemoveAllDrawingItems()
@@ -990,7 +1035,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-
         protected DrawingItemLayer MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
         {
             var shapeItem = new DrawingItemLayer(name, drawing, id, source);
@@ -999,226 +1043,32 @@ namespace IRI.Jab.Common.Presenter.Map
 
             TrySetCommandsForDrawingItemLayer(shapeItem);
 
-            //shapeItem.RequestRemoveAction = () =>
-            //{
-            //    RemoveDrawingItem(shapeItem); 
-            //    this.Refresh();
-            //};
-
-            //shapeItem.RequestEditAction = async () =>
-            //{
-            //    this.RemoveLayer(shapeItem.AssociatedLayer);
-
-            //    var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
-
-            //    if (editResult.HasValidResult())
-            //    {
-            //        shapeItem.Geometry = editResult.Result;
-
-            //        shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
-
-            //        this.SetLayer(shapeItem.AssociatedLayer);
-
-            //        Refresh();
-
-            //        if (shapeItem.Source != null)
-            //        {
-            //            shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
-            //        }
-            //    }
-            //};
-
-            //shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
-
-            //shapeItem.RequestExportAsShapefile = g =>
-            //{
-            //    try
-            //    {
-            //        var file = SaveFile("*.shp|*.shp");
-
-            //        if (string.IsNullOrWhiteSpace(file))
-            //            return;
-
-            //        var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
-
-            //        IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        ShowMessage(ex.Message);
-            //    }
-            //};
-
-            //shapeItem.RequestChangeSymbology = g =>
-            //{
-            //    this.RequestShowSymbologyView?.Invoke(g.AssociatedLayer);
-            //};
-
-            //var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
-
-            //var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
-
-            //shapeItem.RequestHighlightGeometry = di =>
-            //{
-            //    if (di.IsSelected)
-            //    {
-            //        if (defaultFill != null)
-            //        {
-            //            shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
-            //        }
-
-            //        if (defaultStroke != null)
-            //        {
-            //            shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
-            //        }
-
-            //        this.RemoveLayer(shapeItem.AssociatedLayer);
-
-            //        this.AddLayer(shapeItem.AssociatedLayer);
-            //    }
-            //    else
-            //    {
-            //        if (defaultFill != null)
-            //        {
-            //            shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
-            //        }
-
-            //        if (defaultStroke != null)
-            //        {
-            //            shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
-            //        }
-
-            //        this.RemoveLayer(shapeItem.AssociatedLayer);
-
-            //        this.AddLayer(shapeItem.AssociatedLayer);
-            //    }
-            //};
-
             this.IsPanMode = true;
 
             return shapeItem;
         }
 
+        #endregion
 
-        //protected DrawingItem MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
-        //{
-        //    var layer = new VectorLayer(name, new List<SqlGeometry>() { drawing.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
-        //    var shapeItem = new DrawingItem(name, drawing, id, source) { AssociatedLayer = layer };
+        //*****************************************General***************************************************************
+        #region General
 
-        //    shapeItem.Title = name;
+        public async Task SetIsBusy(bool isBusy)
+        {
+            _isBusy = isBusy;
+            RaisePropertyChanged(nameof(IsBusy));
 
-        //    shapeItem.RequestRemoveAction = () =>
-        //    {
-        //        RemoveDrawingItem(shapeItem);
-        //        //this.DrawingItems.Remove(shapeItem);
-        //        //this.RemoveLayer(shapeItem.AssociatedLayer);
-        //        this.Refresh();
-        //    };
+            await Wait();
+        }
 
-        //    shapeItem.RequestEditAction = async () =>
-        //    {
-        //        this.RemoveLayer(shapeItem.AssociatedLayer);
-
-        //        //var edittedShape = await this.Edit(shapeItem.Geometry, new EditableFeatureLayerOptions()
-        //        //{
-        //        //    IsDeleteButtonVisible = true,
-        //        //    IsCancelButtonVisible = true,
-        //        //    IsFinishButtonVisible = true,
-        //        //    IsMeasureVisible = false                
-        //        //});
-
-        //        //options = options ?? MapSettings.EditingOptions;
-
-        //        var editResult = await this.EditAsync(shapeItem.Geometry, MapSettings.EditingOptions);
-
-        //        if (editResult.HasValidResult())
-        //        {
-        //            shapeItem.Geometry = editResult.Result;
-
-        //            shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
-
-        //            this.SetLayer(shapeItem.AssociatedLayer);
-
-        //            Refresh();
-
-        //            if (shapeItem.Source != null)
-        //            {
-        //                shapeItem.Source.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = id });
-        //            }
-        //        }
-        //    };
-
-        //    shapeItem.RequestZoomToGeometry = (g) => { this.ZoomToExtent(g.Geometry.GetBoundingBox(), false); };
-
-        //    shapeItem.RequestExportAsShapefile = g =>
-        //    {
-        //        try
-        //        {
-        //            var file = SaveFile("*.shp|*.shp");
-
-        //            if (string.IsNullOrWhiteSpace(file))
-        //                return;
-
-        //            var esriShape = g.Geometry.AsSqlGeometry().AsEsriShape();
-
-        //            IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ShowMessage(ex.Message);
-        //        }
-        //    };
-
-        //    shapeItem.RequestChangeSymbology = g =>
-        //    {
-        //        this.RequestShowSymbologyView?.Invoke(g.AssociatedLayer);
-        //    };
-
-        //    var defaultFill = shapeItem.AssociatedLayer.VisualParameters.Fill.AsSolidColor();
-
-        //    var defaultStroke = shapeItem.AssociatedLayer.VisualParameters.Stroke.AsSolidColor();
-
-        //    shapeItem.RequestHighlightGeometry = di =>
-        //    {
-        //        if (di.IsSelected)
-        //        {
-        //            if (defaultFill != null)
-        //            {
-        //                shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
-        //            }
-
-        //            if (defaultStroke != null)
-        //            {
-        //                shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
-        //            }
-
-        //            this.RemoveLayer(shapeItem.AssociatedLayer);
-
-        //            this.AddLayer(shapeItem.AssociatedLayer);
-        //        }
-        //        else
-        //        {
-        //            if (defaultFill != null)
-        //            {
-        //                shapeItem.AssociatedLayer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
-        //            }
-
-        //            if (defaultStroke != null)
-        //            {
-        //                shapeItem.AssociatedLayer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
-        //            }
-
-        //            this.RemoveLayer(shapeItem.AssociatedLayer);
-
-        //            this.AddLayer(shapeItem.AssociatedLayer);
-        //        }
-        //    };
-
-        //    this.IsPanMode = true;
-
-        //    return shapeItem;
-        //}
+        private async Task Wait()
+        {
+            await Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+            });
+        }
 
         public async void SetProxy(System.Net.WebProxy proxy)
         {
@@ -1248,21 +1098,6 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestSetCursor?.Invoke(cursor);
         }
 
-        public void Pan()
-        {
-            this.RequestPan?.Invoke();
-        }
-
-        public void Refresh()
-        {
-            this.RequestRefresh?.Invoke();
-        }
-
-        public void RefreshLayerVisibility(ILayer layer)
-        {
-            this.RequestRefreshLayerVisibility?.Invoke(layer);
-        }
-
         public async Task CheckInternetAccess()
         {
             if (DoNotCheckInternet)
@@ -1275,33 +1110,169 @@ namespace IRI.Jab.Common.Presenter.Map
             this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
 
-        public async Task SelectGeometries(List<SqlGeometry> geometries)
+
+        public void ClearLayer(ILayer layer, bool remove = true, bool forceRemove = false)
         {
-            Debug.WriteLine("SelectGeometries 343 start");
-            await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
-            Debug.WriteLine("SelectGeometries 343 end");
+            this.RequestClearLayer?.Invoke(layer, remove);
+
+            this.RemoveSelectedLayers(l => l.LayerId == layer.LayerId);
         }
 
-        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public void ClearLayer(LayerType type, bool remove, bool forceRemove = false)
         {
-            Debug.WriteLine("SelectGeometries 675 start [MapPresenter]");
-            await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
-            Debug.WriteLine("SelectGeometries 675 end [MapPresenter]");
+            Clear(tag => tag.LayerType.HasFlag(type), remove, forceRemove);
+            //this.RequestClearLayerByType?.Invoke(type, remove);
         }
 
-        public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
+        public void ClearLayer(string layerName, bool remove = true, bool forceRemove = false)
         {
-            this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
+            Clear(layer => layer.LayerName == layerName, remove, forceRemove);
+            //this.RequestClearLayerByName?.Invoke(layerName, remove);
         }
 
-        public async Task DrawGeometriesAsync(List<SqlGeometry> geometry, string name, VisualParameters parameters)
-        {
-            await this.RequestAddGeometries?.Invoke(geometry, name, parameters);
+        public void ClearAll()
+        { 
+            this.Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
+
+            this.DrawingItems.Clear();
         }
 
-        public async Task DrawGeometryAsync(SqlGeometry geometry, string name, VisualParameters parameters)
+
+        private void Clear(Predicate<ILayer> layersToBeRemoved, bool remove, bool forceRemove = false)
         {
-            await DrawGeometriesAsync(new List<SqlGeometry> { geometry }, name, parameters);
+            this.RequestClearLayerByCriteria?.Invoke(layersToBeRemoved, remove, forceRemove);
+
+            this.RemoveSelectedLayers(layersToBeRemoved);
+        }
+
+        //1397.08.17: potentionally error prone, do not consider removing SelectedLayers associated with the input criteria
+        public void Clear(Predicate<LayerTag> criteria, bool remove, bool forceRemove = false)
+        {
+            this.RequestClearLayerByTag?.Invoke(criteria, remove, forceRemove);
+        }
+
+        //public void RemoveLayer(string layerName)
+        //{
+        //    this.RequestRemoveLayerByName?.Invoke(layerName);
+        //}
+
+        //public void RemoveLayer(ILayer layer, bool forceRemove = false)
+        //{
+        //    this.RequestRemoveLayer?.Invoke(layer, forceRemove);
+        //}
+
+
+        public void FireMapStatusChanged(MapStatus status)
+        {
+            this.MapStatus = status;
+        }
+
+        public void FireMapActionChanged(MapAction action)
+        {
+            this.MapAction = action;
+        }
+
+        public void FireExtentChanged(IRI.Msh.Common.Primitives.BoundingBox currentExtent)
+        {
+            this.RaisePropertyChanged(nameof(CurrentExtent));
+
+            this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
+        }
+
+        public void FireMouseMove(WpfPoint currentPoint)
+        {
+            this.CurrentPoint = new IRI.Msh.Common.Primitives.Point(currentPoint.X, currentPoint.Y);
+
+            this.OnMouseMove?.Invoke(this, currentPoint);
+        }
+
+        public void FireMapMouseUp(WpfPoint currentPoint)
+        {
+            this.OnMapMouseUp?.Invoke(this, currentPoint);
+        }
+
+        public void FireZoomChanged(double mapScale)
+        {
+            this.RaisePropertyChanged(nameof(this.CurrentZoomLevel));
+
+            this.OnZoomChanged?.Invoke(this, mapScale);
+        }
+
+        #endregion
+
+
+        //*****************************************Editing***************************************************************
+        #region Editing
+
+        public async Task<Response<Geometry>> EditAsync(Geometry geometry, EditableFeatureLayerOptions options)
+        {
+            //this.IsEditMode = true;
+
+            Response<Geometry> result = null;
+
+            options = options ?? this.MapSettings.EditingOptions;
+
+            this.MapPanel.Options = options;
+
+            if (this.RequestEdit != null)
+            {
+                result = await RequestEdit(geometry, options);
+            }
+            else
+            {
+                result = await new Task<Response<Geometry>>(() => ResponseFactory.Create<Geometry>(null));
+            }
+
+            //this.IsEditMode = false;
+
+            return result;
+        }
+
+        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
+        {
+            if (points == null || points.Count < 1)
+            {
+                return new Task<Response<Geometry>>(null);
+            }
+
+            //1397.08.15.this is already done in EditAsync(geometry,options)
+            //options = options ?? this.MapSettings.EditingOptions;
+            //this.MapPanel.Options = options;
+
+            var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
+
+            Geometry geometry = new Geometry(points.ToArray(), type);
+
+            return EditAsync(geometry, options);
+        }
+
+        protected void CancelEdit()
+        {
+            //this.IsEditMode = false;
+
+            this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
+
+            this.OnCancelEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        }
+
+        protected void FinishEdit()
+        {
+            //this.IsEditMode = false;
+
+            this.RequestFinishEdit?.Invoke(); //this is called in MapViewer
+
+            this.OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        }
+
+        #endregion
+
+
+        //*****************************************Layer Management******************************************************
+        #region Layer Management
+
+        public void RefreshLayerVisibility(ILayer layer)
+        {
+            this.RequestRefreshLayerVisibility?.Invoke(layer);
         }
 
         public void AddLayer(SpecialPointLayer layer)
@@ -1380,7 +1351,7 @@ namespace IRI.Jab.Common.Presenter.Map
                         layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
                     }
 
-                    this.RemoveLayer(layer);
+                    this.ClearLayer(layer, true);
 
                     this.AddLayer(layer);
                 }
@@ -1396,7 +1367,7 @@ namespace IRI.Jab.Common.Presenter.Map
                         layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
                     }
 
-                    this.RemoveLayer(layer);
+                    this.ClearLayer(layer, true);
 
                     this.AddLayer(layer);
                 }
@@ -1459,6 +1430,13 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestAddLayer?.Invoke(layer);
         }
 
+
+        #endregion
+
+
+        //*****************************************PolyBezier************************************************************
+        #region PolyBezier
+
         public void AddPolyBezierLayer(string name, List<IRI.Msh.Common.Primitives.Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
         {
             this.RequestAddPolyBezier?.Invoke(name, bezierPoints, symbol, showSymbolOnly, decorationVisuals);
@@ -1469,78 +1447,27 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestRemovePolyBezierLayers?.Invoke();
         }
 
-        public void ClearLayer(ILayer layer, bool remove)
+        protected Task<Response<PolyBezierLayer>> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
         {
-            this.RequestClearLayer?.Invoke(layer, remove);
+            if (RequestGetBezier != null)
+            {
+                return RequestGetBezier(symbol, decorationVisual);
+            }
+            else
+            {
+                return new Task<Response<PolyBezierLayer>>(() => new Response<PolyBezierLayer>() { IsFailed = true });
+            }
         }
 
-        public void ClearLayer(LayerType type, bool remove)
-        {
-            this.RequestClearLayerByType?.Invoke(type, remove);
-        }
+        #endregion
 
-        public void ClearLayer(string layerName, bool remove)
-        {
-            this.RequestClearLayerByName?.Invoke(layerName, remove);
-        }
 
-        public void ClearAll()
-        {
-            //for (int i = Layers.Count - 1; i >= 0; i--)
-            //{
-            //    RemoveLayer(Layers[i]);
-            //}
-            //ClearLayer(LayerType.VectorLayer, true);
-            //ClearLayer(LayerType.Complex, true);
-            //ClearLayer(LayerType.Drawing, true);
-            //ClearLayer(LayerType.Feature, true);
-            //ClearLayer(LayerType.Selection, true);
-
-            this.Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
-
-            this.DrawingItems.Clear();
-        }
-
-        private void Clear(Predicate<ILayer> layersToBeRemoved, bool remove)
-        {
-            this.RequestClearLayerByCriteria?.Invoke(layersToBeRemoved, remove);
-        }
-
-        public void RemoveLayer(string layerName)
-        {
-            this.RequestRemoveLayerByName?.Invoke(layerName);
-        }
-
-        public void RemoveLayer(ILayer layer, bool forceRemove = false)
-        {
-            this.RequestRemoveLayer?.Invoke(layer, forceRemove);
-        }
-
-        public void FlashPoints(List<IRI.Msh.Common.Primitives.Point> points)
-        {
-            this.RequestFlashPoints?.Invoke(points);
-        }
-
-        public void FlashPoint(IRI.Msh.Common.Primitives.Point point)
-        {
-            this.RequestFlashPoint?.Invoke(point);
-        }
-
-        public void PanTo(IRI.Msh.Common.Primitives.Point point, Action callback)
-        {
-            this.RequestPanTo?.Invoke(point, callback);
-        }
+        //*****************************************Zoom******************************************************************
+        #region Zoom
 
         public void ZoomToLevelAndCenter(int zoomLevel, IRI.Msh.Common.Primitives.Point centerMapPoint, Action callback = null, bool withAnimation = true)
         {
             this.RequestZoomToLevelAndCenter?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
-        }
-
-        public void PanToGeographicPoint(IRI.Msh.Common.Primitives.IPoint point, Action callback = null)
-        {
-            var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
-
-            this.PanTo(webMercatorPoint, callback);
         }
 
         public void EnableRectangleZoomIn()
@@ -1588,15 +1515,34 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToFeature?.Invoke(geometry);
         }
 
-        protected void RegisterRightClickMapOptions(FrameworkElement view, ILocateable dataContext)
+        #endregion
+
+
+        //*****************************************Pan*******************************************************************
+        #region Pan
+
+        public void Pan()
         {
-            this.RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<FrameworkElement>(view, dataContext));
+            this.RequestPan?.Invoke();
         }
 
-        protected void UnregisterRightClickMapOptions()
+        public void PanTo(IRI.Msh.Common.Primitives.Point point, Action callback)
         {
-            this.RequestUnregisterMapOptions?.Invoke();
+            this.RequestPanTo?.Invoke(point, callback);
         }
+
+        public void PanToGeographicPoint(IRI.Msh.Common.Primitives.IPoint point, Action callback = null)
+        {
+            var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
+
+            this.PanTo(webMercatorPoint, callback);
+        }
+
+        #endregion
+
+
+        //*****************************************Drawing***************************************************************
+        #region Drawing
 
         public async Task<Response<Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
         {
@@ -1637,15 +1583,6 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestFinishDrawingPart?.Invoke();
         }
 
-        protected void CancelEdit()
-        {
-            //this.IsEditMode = false;
-
-            this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
-
-            this.OnCancelEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
-        }
-
         protected void DeleteDrawing()
         {
             //this.IsEditMode = false;
@@ -1655,16 +1592,40 @@ namespace IRI.Jab.Common.Presenter.Map
             this.OnDeleteDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
         }
 
-        protected void FinishEdit()
+        private void AddPointToNewDrawing()
         {
-            //this.IsEditMode = false;
-
-            this.RequestFinishEdit?.Invoke(); //this is called in MapViewer
-
-            this.OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
+            this.RequestAddPointToNewDrawing?.Invoke(this.MapPanel.CurrentWebMercatorEditingPoint);
         }
 
-        //protected async Task<Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action = null)
+        #endregion
+
+
+        //*****************************************RightClickOptions*****************************************************
+        #region RightClickOptions
+
+        protected void RegisterRightClickMapOptions(FrameworkElement view, ILocateable dataContext)
+        {
+            this.RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<FrameworkElement>(view, dataContext));
+        }
+
+        protected void UnregisterRightClickMapOptions()
+        {
+            this.RequestUnregisterMapOptions?.Invoke();
+        }
+
+        protected void RemoveMapOptions()
+        {
+            this.RequestRemoveMapOptions?.Invoke();
+        }
+
+
+
+        #endregion
+
+
+        //*****************************************Measure***************************************************************
+        #region Measure
+
         protected async Task<Response<Geometry>> Measure(DrawMode mode, Action action = null)
         {
             //this.IsMeasureMode = true;
@@ -1686,13 +1647,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        //protected void MeasureArea()
-        //{
-        //    this.IsMeasureMode = true;
-
-        //    this.RequestMeasureArea?.Invoke();
-        //}
-
         protected void CancelMeasure()
         {
             //this.IsMeasureMode = false;
@@ -1700,142 +1654,28 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestCancelMeasure?.Invoke();
         }
 
-        protected Task<Response<PolyBezierLayer>> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
+        #endregion
+
+
+        public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
         {
-            if (RequestGetBezier != null)
-            {
-                return RequestGetBezier(symbol, decorationVisual);
-            }
-            else
-            {
-                return new Task<Response<PolyBezierLayer>>(() => new Response<PolyBezierLayer>() { IsFailed = true });
-            }
+            MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
         }
 
-        public async Task<Response<Geometry>> EditAsync(Geometry geometry, EditableFeatureLayerOptions options)
+        public void Print()
         {
-            //this.IsEditMode = true;
-
-            Response<Geometry> result = null;
-
-            options = options ?? this.MapSettings.EditingOptions;
-
-            this.MapPanel.Options = options;
-
-            if (this.RequestEdit != null)
-            {
-                result = await RequestEdit(geometry, options);
-            }
-            else
-            {
-                result = await new Task<Response<Geometry>>(() => ResponseFactory.Create<Geometry>(null));
-            }
-
-            //this.IsEditMode = false;
-
-            return result;
+            this.RequestPrint?.Invoke();
         }
 
-        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
+        public void Refresh()
         {
-            if (points == null || points.Count < 1)
-            {
-                return new Task<Response<Geometry>>(null);
-            }
-
-            //1397.08.15.this is already done in EditAsync(geometry,options)
-            //options = options ?? this.MapSettings.EditingOptions;
-            //this.MapPanel.Options = options;
-
-            var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
-
-            Geometry geometry = new Geometry(points.ToArray(), type);
-
-            return EditAsync(geometry, options);
+            this.RequestRefresh?.Invoke();
         }
 
-        public void FireMapStatusChanged(MapStatus status)
-        {
-            this.MapStatus = status;
-        }
 
-        public void FireMapActionChanged(MapAction action)
-        {
-            this.MapAction = action;
-        }
 
-        public void FireExtentChanged(IRI.Msh.Common.Primitives.BoundingBox currentExtent)
-        {
-            this.RaisePropertyChanged(nameof(CurrentExtent));
-
-            this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
-        }
-
-        public void FireMouseMove(WpfPoint currentPoint)
-        {
-            this.CurrentPoint = new IRI.Msh.Common.Primitives.Point(currentPoint.X, currentPoint.Y);
-
-            this.OnMouseMove?.Invoke(this, currentPoint);
-        }
-
-        public void FireMapMouseUp(WpfPoint currentPoint)
-        {
-            this.OnMapMouseUp?.Invoke(this, currentPoint);
-        }
-
-        private void AddPointToNewDrawing()
-        {
-            this.RequestAddPointToNewDrawing?.Invoke(this.MapPanel.CurrentWebMercatorEditingPoint);
-        }
-
-        public void FireZoomChanged(double mapScale)
-        {
-            this.RaisePropertyChanged(nameof(this.CurrentZoomLevel));
-
-            this.OnZoomChanged?.Invoke(this, mapScale);
-        }
-
-        protected void RemoveMapOptions()
-        {
-            this.RequestRemoveMapOptions?.Invoke();
-        }
-
-        public ObservableCollection<System.Data.DataTable> Identify(IRI.Msh.Common.Primitives.Point arg)
-        {
-            if (RequestIdentify != null)
-            {
-                return RequestIdentify(arg.AsSqlGeometry());
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public ObservableCollection<System.Data.DataTable> Identify(SqlGeometry arg)
-        {
-            if (RequestIdentify != null)
-            {
-                return RequestIdentify(arg);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public Task<Response<IRI.Msh.Common.Primitives.Point>> GetPoint()
-        {
-            if (RequestGetPoint != null)
-            {
-                return RequestGetPoint();
-            }
-            else
-            {
-                return new Task<Response<IRI.Msh.Common.Primitives.Point>>(() => new Response<Msh.Common.Primitives.Point>() { Result = IRI.Msh.Common.Primitives.Point.NaN, IsFailed = true });
-            }
-        }
-
+        //*****************************************General**************************************************************
+        #region Shapefile/Worldfile
 
         public async virtual void AddShapefile()
         {
@@ -1859,55 +1699,14 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
-            await AddShapefile(fileName, IRI.Ket.ShapefileFormat.Dbf.DbfFile._arabicEncoding, IRI.Ket.ShapefileFormat.Dbf.DbfFile._arabicEncoding);
+            await AddShapefile(fileName);
         }
 
-        public async Task AddShapefile(string fileName, System.Text.Encoding dataEncoding, System.Text.Encoding headerEncoding)
+        public async Task AddShapefile(string fileName)
         {
             try
             {
-                //var dataSource = await Task.Run<MemoryDataSource<SqlFeature>>(async () =>
-                //{
-                //var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(fileName);
-
-                //    List<SqlFeature> features;
-
-                //    if (sourceSrs == null)
-                //    {
-                //        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                //                fileName,
-                //                d => new SqlFeature() { Attributes = d },
-                //                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.AsSqlGeometry(),
-                //                dataEncoding,
-                //                headerEncoding,
-                //                true);
-                //    }
-                //    else
-                //    {
-                //        var webmercator = new WebMercator();
-
-                //        Func<IPoint, IPoint> map = p => p.Project(sourceSrs, webmercator);
-
-                //        features = await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
-                //                fileName,
-                //                d => new SqlFeature() { Attributes = d },
-                //                (esriShape, srid, feature) => feature.TheSqlGeometry = esriShape.Transform(map, SridHelper.WebMercator).AsSqlGeometry(),
-                //                dataEncoding,
-                //                headerEncoding,
-                //                true);
-                //    }
-
-                //    MemoryDataSource<SqlFeature> source = new MemoryDataSource<SqlFeature>(features, s => s.Label);
-
-                //    return source;
-
-                //    return ShapefileDataSource.Create(fileName, sourceSrs.Srid, EncodingHelper.ArabicEncoding, new WebMercator());
-
-                //});
-
-                var dataSource = ShapefileDataSource.Create(fileName, new WebMercator());
-
-                System.Diagnostics.Debug.WriteLine($"before vectorLayer: {DateTime.Now.ToLongTimeString()}");
+                var dataSource = await ShapefileDataSource.CreateAsync(fileName, new WebMercator());
 
                 var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(fileName), dataSource,
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),

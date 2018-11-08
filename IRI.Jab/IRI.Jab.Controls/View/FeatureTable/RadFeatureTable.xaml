@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:localTelerik="clr-namespace:IRI.Jab.Controls.Assets.Telerik">
+             xmlns:localTelerik="clr-namespace:IRI.Jab.Controls.Assets.Telerik" x:Name="root">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -38,7 +38,8 @@
             <Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
                 <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
-            <Button Command="{Binding EditCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4" IsEnabled="{Binding IsSingleValueHighlighted}">
+            <Button Command="{Binding EditCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4" IsEnabled="{Binding IsSingleValueHighlighted}"
+                    Visibility="{Binding ElementName=root, Path=CanUserEditGeometry, Converter={StaticResource boolToVisibilityConverter}}">
                 <Path Data="{StaticResource appbarEdit}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
         </DockPanel>

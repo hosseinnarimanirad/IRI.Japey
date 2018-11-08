@@ -22,6 +22,20 @@ namespace IRI.Jab.Controls.View
     /// </summary>
     public partial class RadFeatureTable : UserControl
     {
+
+
+        public bool CanUserEditGeometry
+        {
+            get { return (bool)GetValue(CanUserEditGeometryProperty); }
+            set { SetValue(CanUserEditGeometryProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanUserEditGeometry.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanUserEditGeometryProperty =
+            DependencyProperty.Register(nameof(CanUserEditGeometry), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
+
+
         public ISelectedLayer Presenter { get { return this.DataContext as ISelectedLayer; } }
 
         public RadFeatureTable()

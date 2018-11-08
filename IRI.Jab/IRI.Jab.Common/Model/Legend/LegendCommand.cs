@@ -299,7 +299,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 map.RemoveDrawingItem(layer);
 
-                map.Refresh();
+                //map.Refresh();
             });
 
             return result;
@@ -316,9 +316,12 @@ namespace IRI.Jab.Common.Model.Legend
 
             result.Command = new RelayCommand(async param =>
             {
-                map.RemoveLayer(layer);
-
                 var editResult = await map.EditAsync(layer.Geometry, map.MapSettings.EditingOptions);
+
+                if (!(editResult.IsCanceled == true))
+                {
+                    map.ClearLayer(layer);
+                }
 
                 if (editResult.HasValidResult())
                 {
@@ -326,7 +329,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     //shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
-                    map.RemoveLayer(layer);
+                    map.ClearLayer(layer);
                     map.AddLayer(layer);
                     //map.SetLayer(layer);
 

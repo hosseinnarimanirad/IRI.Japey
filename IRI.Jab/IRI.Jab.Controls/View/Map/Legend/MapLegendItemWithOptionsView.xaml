@@ -149,9 +149,9 @@
                         <MouseBinding MouseAction="LeftClick" Command="{Binding ChangeSymbologyCommand}" CommandParameter="{Binding}"/>
                     </Border.InputBindings>
                     <Path Margin="1" Data="{Binding Type, Converter={StaticResource iLayerToLegendConverter}}"
-                            Fill="{Binding VisualParameters.Fill}" Stroke="{Binding VisualParameters.Stroke}"
-                            StrokeThickness="{Binding VisualParameters.StrokeThickness}"
-                            HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="{Binding VisualParameters.Opacity}"/>
+                            Fill="{Binding ElementName=root, Path=Symbology.Fill}" Stroke="{Binding ElementName=root, Path=Symbology.Stroke}"
+                            StrokeThickness="{Binding ElementName=root, Path=Symbology.StrokeThickness}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="{Binding ElementName=root, Path=Symbology.Opacity}"/>
                 </Border>
                 <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2" TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
                 <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"

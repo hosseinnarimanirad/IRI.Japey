@@ -60,6 +60,8 @@ namespace IRI.Jab.Controls.Presenter
 
             this.RegisterMapOptions();
 
+            this.IsPanMode = true;
+
         }
 
 

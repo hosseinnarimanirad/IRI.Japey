@@ -59,7 +59,7 @@
                 <DataTemplate>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}" DataContext="{Binding }"
                                  IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
-                        <iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding VisualParameters}"  
+                        <iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding OriginalSymbology}"  
                                                                      IsEditable="True" Commands="{Binding Commands}" IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
 
 

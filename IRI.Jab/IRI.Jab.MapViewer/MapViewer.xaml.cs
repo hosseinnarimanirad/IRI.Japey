@@ -614,15 +614,15 @@ namespace IRI.Jab.MapViewer
                 this.AddLayer(l);
             };
 
-            presenter.RequestRemoveLayer = (layer, forceRemove) =>
-            {
-                this.ClearLayer(layer, true, forceRemove);
-            };
+            //presenter.RequestRemoveLayer = (layer, forceRemove) =>
+            //{
+            //    this.ClearLayer(layer, true, forceRemove);
+            //};
 
-            presenter.RequestRemoveLayerByName = (i) =>
-              {
-                  this.ClearLayer(i, true);
-              };
+            //presenter.RequestRemoveLayerByName = (i) =>
+            //  {
+            //      this.ClearLayer(i, true);
+            //  };
 
             presenter.RequestRemovePolyBezierLayers = () =>
             {
@@ -661,13 +661,15 @@ namespace IRI.Jab.MapViewer
                 return SelectGeometriesAsync(geometries, visualParameters, symbol);
             };
 
-            presenter.RequestClearLayerByType = (type, remove) => { this.ClearLayer(type, remove); };
+            //presenter.RequestClearLayerByType = (type, remove) => { this.ClearLayer(type, remove); };
 
-            presenter.RequestClearLayerByName = (layer, remove) => { this.ClearLayer(layer, remove); };
+            //presenter.RequestClearLayerByName = (layer, remove) => { this.ClearLayer(layer, remove); };
 
             presenter.RequestClearLayer = (layer, remove) => { this.ClearLayer(layer, remove); };
 
-            presenter.RequestClearLayerByCriteria = (predicate, remove) => { this.Clear(predicate, remove); };
+            presenter.RequestClearLayerByCriteria = (predicate, remove, forceRemove) => { this.Clear(predicate, remove, forceRemove); };
+
+            presenter.RequestClearLayerByTag = (predicate, remove, forceRemove) => { this.Clear(predicate, remove, forceRemove); };
 
             presenter.RequestPan = () => { this.Pan(); };
 
@@ -2411,34 +2413,11 @@ namespace IRI.Jab.MapViewer
         public void ClearNonTiled()
         {
             Clear(tag => !tag.IsTiled && tag.LayerType != LayerType.BaseMap, remove: false, forceRemove: false);
-
-            //for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-            //{
-            //    var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-            //    if (tag.IsTiled)
-            //        continue;
-
-            //    if (tag.LayerType == LayerType.BaseMap)
-            //        continue;
-
-            //    this.mapView.Children.RemoveAt(i);
-            //}
         }
 
         public void ClearTiled()
         {
             Clear(tag => tag.IsTiled, remove: false, forceRemove: false);
-
-            //for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-            //{
-            //    var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-            //    if (!tag.IsTiled)
-            //        continue;
-
-            //    this.mapView.Children.RemoveAt(i);
-            //}
         }
 
         public void Clear(Predicate<LayerTag> criteria, bool remove, bool forceRemove = false)
@@ -2454,7 +2433,7 @@ namespace IRI.Jab.MapViewer
                     if (remove && tag.Layer != null)
                     {
                         _layerManager.Remove(tag.Layer, forceRemove);
-                    }
+                    } 
                 }
             }
         }
@@ -2470,7 +2449,7 @@ namespace IRI.Jab.MapViewer
                 {
                     if (criteria(tag.Layer))
                     {
-                        this.mapView.Children.RemoveAt(i);
+                        this.mapView.Children.RemoveAt(i); 
                     }
                 }
             }
@@ -2481,70 +2460,28 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        //1397.04.02 Manage Clear & Remove
-        //public void ClearTiledButNotBaseMaps()
-        //{
-        //    for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-        //    {
-        //        var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-        //        if (!tag.IsTiled || tag.LayerType == LayerType.BaseMap)
-        //            continue;
-
-        //        this.mapView.Children.RemoveAt(i);
-        //    }
-        //}
-
         public void ClearLayer(LayerType type, bool remove, bool forceRemove = false)
         {
             Clear(tag => tag.LayerType.HasFlag(type), remove, forceRemove);
-
-            //for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-            //{
-            //    var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-            //    if (tag.LayerType.HasFlag(type))
-            //    {
-            //        this.mapView.Children.RemoveAt(i); 
-            //    }
-            //}
-
-            //if (remove)
-            //{
-            //    this._layerManager.Remove(layer=> type);
-            //} 
         }
 
         public void ClearLayer(ILayer layer, bool remove, bool forceRemove = false)
         {
             Clear(new Predicate<LayerTag>(tag => tag.Layer == layer), remove, forceRemove);
 
-            ClearLayerByAncestor(layer);
-
             //in the case of image pyramids, the actual layer will not be remove
             //"tag.AncestorLayerId == layer?.Id" is not a layer in layerManagemnr
             //so _layerManager.Remove(layer, forceRemove) removes it from map layers and
             //ClearLayerByAncestor(layer) removes if from canvas
+            ClearLayerByAncestor(layer);
 
+            //97.08.17
+            //In the case of DrawingLayer, it is not directly added to children of MapViewr
+            //so in order to remove it, it should be done here
             if (remove)
             {
                 _layerManager.Remove(layer, forceRemove);
             }
-
-
-            //Clear(new Predicate<ILayer>(lyr => lyr == layer), remove, forceRemove);
-
-
-            //for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-            //{
-            //    //Complex layer items may not be Path, so use FrameworkElement
-            //    var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-            //    if (layer == tag.Layer)
-            //    {
-            //        this.mapView.Children.RemoveAt(i);
-            //    }
-            //}
         }
 
         public void ClearLayerByAncestor(ILayer ancestorLayer)
@@ -2552,41 +2489,9 @@ namespace IRI.Jab.MapViewer
             Clear(new Predicate<LayerTag>(tag => tag.AncestorLayerId == ancestorLayer?.LayerId), false, false);
         }
 
-        //1397.04.02
-        //public void RemoveLayer(ILayer layer)
-        //{
-        //    for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-        //    {
-        //        //Complex layer items may not be Path, so use FrameworkElement
-        //        var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-        //        if (layer == tag.Layer)
-        //        {
-        //            this.mapView.Children.RemoveAt(i);
-        //        }
-        //    }
-
-        //    this._layerManager.Remove(layer);
-        //}
-
         public void ClearLayer(string layerName, bool remove, bool forceRemove = false)
         {
             Clear(layer => layer.LayerName == layerName, remove, forceRemove);
-
-            //for (int i = this.mapView.Children.Count - 1; i >= 0; i--)
-            //{
-            //    var tag = ((LayerTag)((FrameworkElement)(this.mapView.Children[i])).Tag);
-
-            //    if (tag.Layer?.LayerName == layerName)
-            //    {
-            //        this.mapView.Children.RemoveAt(i);
-            //    }
-            //}
-
-            //if (remove)
-            //{
-            //    this._layerManager.Remove(layerName);
-            //}
         }
 
         public void RemovePolyBezierLayers()
@@ -4080,19 +3985,6 @@ namespace IRI.Jab.MapViewer
 
             this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
 
-            //this.RemoveLayer(drawingLayer);
-
-            //this.drawingLayer = new DrawingLayer(this.drawMode, this.viewTransform, ScreenToMap, webMercatorPoint, drawingOptions);
-
-            //this.drawingLayer.OnRequestFinishDrawing += (s, arg) =>
-            //{
-            //    FinishDrawing();
-            //};
-
-            //this.SetLayer(drawingLayer);
-
-            //this.AddEditableFeatureLayer(drawingLayer.GetLayer());
-
             if (this.drawMode == DrawMode.Point)
             {
                 FinishDrawing();
@@ -4512,72 +4404,6 @@ namespace IRI.Jab.MapViewer
                 this.OnEditableFeatureLayerChanged?.Invoke(null, value);
             }
         }
-
-
-        //EditableFeatureLayer editingLayer;
-
-        //public void EditPolygon(List<sb.Point> wgs84Points)
-        //{
-        //    if (wgs84Points == null || wgs84Points.Count < 1)
-        //    {
-        //        return;
-        //    }
-
-        //    var layer = new EditableFeatureLayer(
-        //                    "edit",
-        //                    wgs84Points.Select(i => Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i)).Take(wgs84Points.Count - 1).ToList(),
-        //                    this.viewTransform,
-        //                    ScreenToMap,
-        //                    sb.GeometryType.Polygon);
-
-        //    layer.RequestRightClickOptions = (i1, i2, i3) =>
-        //    {
-        //        this.AddRightClickOptions(i1, i2, i3);
-        //    };
-
-        //    layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
-
-        //    layer.RequestRefresh = l =>
-        //    {
-        //        //this.ClearLayer(LayerType.EditableItem, false);
-
-        //        this.RemoveLayer(l);
-
-        //        this.SetLayer(l);
-
-        //        AddEditableFeatureLayer(l);
-        //    };
-
-        //    this.SetLayer(layer);
-
-        //}
-
-        //public void Edit(sb.Geometry geometry)
-        //{
-        //    var layer = new EditableFeatureLayer(
-        //                    "edit", geometry,
-        //                    this.viewTransform, ScreenToMap);
-
-        //    layer.RequestRightClickOptions = (i1, i2, i3) =>
-        //    {
-        //        this.AddRightClickOptions(i1, i2, i3);
-        //    };
-
-        //    layer.RequestRemoveRightClickOptions = () => { this.RemoveRightClickOptions(); };
-
-        //    layer.RequestRefresh = l =>
-        //    {
-        //        //this.ClearLayer(LayerType.EditableItem, false);
-
-        //        this.RemoveLayer(l);
-
-        //        this.SetLayer(l);
-
-        //        AddEditableFeatureLayer(l);
-        //    };
-
-        //    this.SetLayer(layer);
-        //}
 
         private Task<Response<sb.Geometry>> EditGeometry(sb.Geometry geometry, EditableFeatureLayerOptions options)
         {
