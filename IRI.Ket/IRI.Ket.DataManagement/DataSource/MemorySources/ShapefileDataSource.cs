@@ -19,6 +19,7 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Msh.Common.Helpers;
+using IRI.Ket.ShapefileFormat.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -26,15 +27,32 @@ namespace IRI.Ket.DataManagement.DataSource
     {
         static Func<SqlGeometry, Dictionary<string, object>, SqlFeature> mapShapeToSqlFeature = (geometry, attributes) => new SqlFeature(geometry, attributes);
 
+        static List<Func<SqlFeature, object>> CreateInverseAttributeMap(SqlFeature feature)
+        {
+            List<Func<SqlFeature, object>> result = new List<Func<SqlFeature, object>>();
+
+            foreach (var item in feature.Attributes)
+            {
+                result.Add(d => d.Attributes[item.Key]);
+            }
+
+            return result;
+        }
+
+
         public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
-        { 
-            return  ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
+        {
+            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
+
+            return ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
         }
 
 
         public static async Task<ShapefileDataSource<SqlFeature>> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
-        { 
-            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, targetCrs, encoding);
+        {
+            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
+
+            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
         }
 
     }
@@ -47,14 +65,26 @@ namespace IRI.Ket.DataManagement.DataSource
 
         SrsBase _sourceSrs;
 
-        public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
+        //public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
+
+        ObjectToDfbFields<T> _fields;
 
         protected ShapefileDataSource()
         {
         }
 
-        private ShapefileDataSource(string shapefileName, IEsriShapeCollection geometries, List<Dictionary<string, object>> attributes, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs)
+        private ShapefileDataSource(string shapefileName,
+                                    IEsriShapeCollection geometries,
+                                    EsriAttributeDictionary attributes,
+                                    Func<SqlGeometry, Dictionary<string, object>, T> map,
+                                    Func<T, List<Object>> inverseAttributeMap,
+                                    SrsBase targetSrs)
         {
+            if (attributes == null)
+            {
+                throw new NotImplementedException();
+            }
+
             this._shapefileName = shapefileName;
 
             _sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
@@ -77,7 +107,10 @@ namespace IRI.Ket.DataManagement.DataSource
                 this.Extent = this.Extent.Transform(p => (Point)transformFunc(p));
             }
 
-            if (geometries?.Count != attributes?.Count)
+            this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
+
+
+            if (geometries?.Count != attributes.Attributes?.Count)
             {
                 throw new NotImplementedException();
             }
@@ -97,7 +130,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     geometry = geometries[i].AsSqlGeometry().MakeValid().Transform(p => transformFunc(p), targetSrs.Srid);//targetSrs should not be null in this case
                 }
 
-                var feature = map(geometry, attributes[i]);
+                var feature = map(geometry, attributes.Attributes[i]);
 
                 feature.Id = GetNewId();
 
@@ -165,22 +198,22 @@ namespace IRI.Ket.DataManagement.DataSource
         //    }
         //}
 
-        public static ShapefileDataSource<T> Create(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        public static ShapefileDataSource<T> Create(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, Func<T, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
             var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
             var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
 
-            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, targetSrs);
+            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
 
-        public static async Task<ShapefileDataSource<T>> CreateAsync(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, SrsBase targetSrs = null, Encoding encoding = null)
+        public static async Task<ShapefileDataSource<T>> CreateAsync(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, Func<T, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
             var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
             var geometries = await ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
 
-            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, targetSrs);
+            return new ShapefileDataSource<T>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
 
         public override void SaveChanges()
@@ -206,8 +239,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 geometryMap = t => t.TheSqlGeometry.AsEsriShape();
             }
 
-            IRI.Ket.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, AttributeMap, EncodingHelper.ArabicEncoding, _sourceSrs, true);
-
+            IRI.Ket.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
         }
     }
 }

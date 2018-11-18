@@ -44,5 +44,7 @@ namespace IRI.Jab.Common.Model.Map
         Action RequestRemove { get; set; }
 
         void Update(ISqlGeometryAware oldGeometry, ISqlGeometryAware newGeometry);
+
+        void UpdateFeature(object item);
     }
 }

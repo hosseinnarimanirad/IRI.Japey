@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace IRI.Ket.Common.Service.Google
 {
@@ -25,6 +26,13 @@ namespace IRI.Ket.Common.Service.Google
                         signalStrength = i.SignalStrength,
 
                     }).ToArray();
+
+                //
+                //System.IO.File.WriteAllText("vezarat.txt", Newtonsoft.Json.JsonConvert.SerializeObject(wifiAccessPoints));
+                foreach (var item in wifiAccessPoints)
+                {
+                    Debug.WriteLine($"mac: {item.macAddress}, signal:{item.signalStrength}, channel: {item.channel}");
+                }
 
                 return await GetLocationAsync(key, wifiAccessPoints);
 

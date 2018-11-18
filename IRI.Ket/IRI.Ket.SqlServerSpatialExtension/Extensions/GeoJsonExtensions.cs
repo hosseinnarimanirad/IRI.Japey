@@ -74,7 +74,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
             return builder.ConstructedGeometry.MakeValid();
         }
-         
+
         private static void AddPoint(SqlGeometryBuilder builder, GeoJsonPoint point, bool isLongitudeFirst)
         {
             builder.BeginGeometry(OpenGisGeometryType.Point);
@@ -256,22 +256,21 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
             IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true);
 
-            List<Func<GeoJsonFeature, object>> maps = new List<Func<GeoJsonFeature, object>>();
-
-            List<ShapefileFormat.Dbf.DbfFieldDescriptor> fields = new List<ShapefileFormat.Dbf.DbfFieldDescriptor>();
+            var fields = new List<ShapefileFormat.Model.ObjectToDbfTypeMap<GeoJsonFeature>>();
 
             foreach (var item in features.First().properties)
             {
                 var propertyName = item.Key;
 
-                maps.Add(new Func<GeoJsonFeature, string>(g => g.properties[propertyName]));
-
-                fields.Add(ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField(propertyName, 255));
+                fields.Add(
+                    new ShapefileFormat.Model.ObjectToDbfTypeMap<GeoJsonFeature>(
+                            ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField(propertyName, 255), 
+                            new Func<GeoJsonFeature, string>(g => g.properties[propertyName])));
             }
 
             var dbfFile = IRI.Ket.ShapefileFormat.Shapefile.GetDbfFileName(shpFileName);
 
-            IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<GeoJsonFeature>(dbfFile, features, maps, fields, Encoding.GetEncoding(1256), true);
+            IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<GeoJsonFeature>(dbfFile, features, fields, Encoding.GetEncoding(1256), true);
         }
 
         #endregion

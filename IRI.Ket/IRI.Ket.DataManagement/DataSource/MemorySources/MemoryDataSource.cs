@@ -95,6 +95,16 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             _geometries[newValue.Id] = newValue.TheSqlGeometry;
         }
+
+        public override void UpdateFeature(ISqlGeometryAware newValue)
+        {
+            _geometries[newValue.Id] = newValue.TheSqlGeometry;
+        }
+
+        public override void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class MemoryDataSource<T> : FeatureDataSource<T> where T : class, ISqlGeometryAware
@@ -274,7 +284,28 @@ namespace IRI.Ket.DataManagement.DataSource
             this._features[index] = newGeometry as T;
         }
 
-        public virtual void SaveChanges()
+        public override void UpdateFeature(ISqlGeometryAware newGeometry)
+        {
+            if (_idFunc == null)
+            {
+                return;
+            }
+
+            var geometry = _idFunc(newGeometry.Id);
+
+            var index = this._features.IndexOf(geometry);
+
+            //var index = newGeometry.Id;
+
+            //if (index < 0)
+            //{
+            //    return;
+            //}
+
+            _features[index] = newGeometry as T;
+        }
+
+        public override void SaveChanges()
         {
 
         }

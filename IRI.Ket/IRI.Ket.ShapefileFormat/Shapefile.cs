@@ -144,11 +144,11 @@ namespace IRI.Ket.ShapefileFormat
 
             List<T> result = new List<T>(shapes.Count);
 
-            for (int i = 0; i < attributeArray.Count; i++)
+            for (int i = 0; i < attributeArray.Attributes.Count; i++)
             {
                 //shapes[i].Srid = srid;
 
-                var feature = mapFunc(attributeArray[i], shapes[i]);
+                var feature = mapFunc(attributeArray.Attributes[i], shapes[i]);
 
                 result.Add(feature);
             }
@@ -400,9 +400,39 @@ namespace IRI.Ket.ShapefileFormat
         {
             SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
 
-            DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings.Select(m => m.MapFunction).ToList(), attributeMappings.Select(m => m.FieldType).ToList(), encoding, overwrite);
+            DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
         }
 
+        public static void Save<T>(string shpFileName,
+                                      IEnumerable<T> values,
+                                      Func<T, IEsriShape> geometryMap,
+                                      ObjectToDfbFields<T> attributeMappings,
+                                      Encoding encoding,
+                                      SrsBase srs,
+                                      bool overwrite = false)
+        {
+            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
+
+            DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
+        }
+
+
+
+        //public static void Save<T>(string shpFileName,
+        //                             IEnumerable<T> values,
+        //                             Func<T, IEsriShape> geometryMap,
+        //                             List<Func<T, object>> attributeMapping,
+        //                             List<DbfFieldDescriptor> fields,
+        //                             Encoding encoding,
+        //                             SrsBase srs,
+        //                             bool overwrite = false)
+        //{
+        //    SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
+
+        //    DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMapping, fields, encoding, overwrite);
+
+        //    //DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings.Select(m => m.MapFunction).ToList(), attributeMappings.Select(m => m.FieldType).ToList(), encoding, overwrite);
+        //}
 
         public static void SaveAsShapefile(string shpFileName, IEnumerable<IEsriShape> data, bool createEmptyDbf, SrsBase srs, bool overwrite = false)
         {

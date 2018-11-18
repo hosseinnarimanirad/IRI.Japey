@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Map
 {
-    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : ISqlGeometryAware
+    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : class, ISqlGeometryAware
     {
         public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
@@ -151,6 +151,15 @@ namespace IRI.Jab.Common.Model.Map
             //var highlight = HighlightedFeatures.Single(h => h.Id == oldGeometry.Id)
         }
 
+        public void UpdateFeature(object item)
+        {
+            var itemValue = item as T;
+
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
+
+            dataSource.UpdateFeature(itemValue);
+        }
+
         public Action<IEnumerable<ISqlGeometryAware>> FeaturesChangedAction { get; set; }
 
         public Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
@@ -160,6 +169,11 @@ namespace IRI.Jab.Common.Model.Map
         public Action<IEnumerable<ISqlGeometryAware>, Action> RequestZoomTo { get; set; }
 
         public Action<ISqlGeometryAware> RequestEdit { get; set; }
+
+        public void Save()
+        {
+            (this.AssociatedLayer as VectorLayer).DataSource.SaveChanges();
+        }
 
         public Action RequestRemove { get; set; }
 
@@ -202,6 +216,24 @@ namespace IRI.Jab.Common.Model.Map
                 }
 
                 return _editCommand;
+            }
+        }
+
+        private RelayCommand _saveCommand;
+
+        public RelayCommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(param =>
+                    {
+                        this.Save();
+                    });
+                }
+
+                return _saveCommand;
             }
         }
 

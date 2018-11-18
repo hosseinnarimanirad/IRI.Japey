@@ -277,7 +277,8 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
         }
 
-        public static List<Dictionary<string, object>> Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
+        //public static List<Dictionary<string, object>> Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
+        public static EsriAttributeDictionary Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
         {
             dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
@@ -306,7 +307,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
-            List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
+            List<DbfFieldDescriptor> fields = new List<DbfFieldDescriptor>();
 
             if ((header.LengthOfHeader - 33) % 32 != 0) { throw new NotImplementedException(); }
 
@@ -316,13 +317,13 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             {
                 buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfFieldDescriptor)));
 
-                columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
+                fields.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
 
 
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
 
-            var result = new List<Dictionary<string, object>>(header.NumberOfRecords);
+            var attributes = new List<Dictionary<string, object>>(header.NumberOfRecords);
 
             ((FileStream)reader.BaseStream).Seek(header.LengthOfHeader, SeekOrigin.Begin);
 
@@ -341,24 +342,24 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 Dictionary<string, object> values = new Dictionary<string, object>();
 
-                for (int j = 0; j < columns.Count; j++)
+                for (int j = 0; j < fields.Count; j++)
                 {
-                    int fieldLenth = columns[j].Length;
+                    int fieldLenth = fields[j].Length;
 
                     //values[j] = MapFunction[columns[j].Type](recordReader.ReadBytes(fieldLenth));
-                    values.Add(columns[j].Name, _mapFunctions[columns[j].Type](recordReader.ReadBytes(fieldLenth)));
+                    values.Add(fields[j].Name, _mapFunctions[fields[j].Type](recordReader.ReadBytes(fieldLenth)));
                 }
 
                 recordReader.Close();
 
-                result.Add(values);
+                attributes.Add(values);
             }
 
             reader.Close();
 
             stream.Close();
 
-            return result;
+            return new EsriAttributeDictionary(attributes, fields);
         }
 
         public static object[][] ReadToObject(string dbfFileName, string tableName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
@@ -366,7 +367,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
             ChangeEncoding(dataEncoding);
-             
+
             DbfFile._fieldsEncoding = fieldHeaderEncoding ?? _arabicEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
@@ -442,36 +443,57 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         //public static object[][] ReadToObject(string dbfFileName, string tableName)
         //{
-           
+
         //}
 
         public static void Write(string fileName, int numberOfRecords, bool overwrite = false)
         {
             List<int> attributes = Enumerable.Range(0, numberOfRecords).ToList();
 
+            List<ObjectToDbfTypeMap<int>> mapping = new List<ObjectToDbfTypeMap<int>>() { new ObjectToDbfTypeMap<int>(DbfFieldDescriptors.GetIntegerField("Id"), i => i) };
+
             Write(fileName,
                 attributes,
-                new List<Func<int, object>>() { i => i },
-                new List<DbfFieldDescriptor>() { DbfFieldDescriptors.GetIntegerField("Id") },
+                mapping,
                 Encoding.ASCII,
                 overwrite);
 
+            //Write(fileName,
+            //    attributes,
+            //    new List<Func<int, object>>() { i => i },
+            //    new List<DbfFieldDescriptor>() { DbfFieldDescriptors.GetIntegerField("Id") },
+            //    Encoding.ASCII,
+            //    overwrite);
+
         }
+
+        //public static void Write<T>(string dbfFileName,
+        //                                IEnumerable<T> values,
+        //                                List<Func<T, object>> mapping,
+        //                                List<DbfFieldDescriptor> columns,
+        //                                Encoding encoding,
+        //                                bool overwrite = false)
+        //{
+
+        //}
 
         public static void Write<T>(string dbfFileName,
                                         IEnumerable<T> values,
-                                        List<Func<T, object>> mapping,
-                                        List<DbfFieldDescriptor> columns,
+                                        List<ObjectToDbfTypeMap<T>> mapping,
                                         Encoding encoding,
                                         bool overwrite = false)
         {
+            //Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
+
+            var columns = mapping.Select(m => m.FieldType).ToList();
+
             int control = 0;
             try
             {
-                if (columns.Count != mapping.Count)
-                {
-                    throw new NotImplementedException();
-                }
+                //if (columns.Count != mapping.Count)
+                //{
+                //    throw new NotImplementedException();
+                //}
 
                 //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
                 var mode = Shapefile.GetMode(dbfFileName, overwrite);
@@ -502,7 +524,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                     {
                         byte[] temp = new byte[columns[j].Length];
 
-                        object value = mapping[j](values.ElementAt(i));
+                        object value = mapping[j].MapFunction(values.ElementAt(i));
 
                         if (value != null)
                         {
@@ -536,14 +558,133 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         }
 
         public static void Write<T>(string dbfFileName,
-                                        IEnumerable<T> values,
-                                        List<ObjectToDbfTypeMap<T>> mapping,
-                                        Encoding encoding,
-                                        bool overwrite = false)
+                                       IEnumerable<T> values,
+                                       ObjectToDfbFields<T> mapping,
+                                       Encoding encoding,
+                                       bool overwrite = false)
         {
-            Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
+            //Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
+
+            var columns = mapping.Fields;
+
+            int control = 0;
+
+            try
+            {
+                //if (columns.Count != mapping.Count)
+                //{
+                //    throw new NotImplementedException();
+                //}
+
+                //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
+                var mode = Shapefile.GetMode(dbfFileName, overwrite);
+
+                System.IO.Stream stream = new System.IO.FileStream(dbfFileName, mode);
+
+                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
+
+                DbfHeader header = new DbfHeader(values.Count(), columns.Count, GetRecordLength(columns), encoding);
+
+                writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
+
+                foreach (var item in columns)
+                {
+                    writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
+                }
+
+                //Terminator
+                writer.Write(byte.Parse("0D", System.Globalization.NumberStyles.HexNumber));
+
+                for (int i = 0; i < values.Count(); i++)
+                {
+                    control = i;
+                    // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
+                    writer.Write(byte.Parse("20", System.Globalization.NumberStyles.HexNumber));
+
+                    var fieldValues = mapping.ExtractAttributesFunc(values.ElementAt(i));
+
+                    for (int j = 0; j < columns.Count; j++)
+                    {
+                        byte[] temp = new byte[columns[j].Length];
+
+                        if (fieldValues[j] != null)
+                        {
+                            //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);
+                            temp = GetBytes(fieldValues[j]?.ToString(), temp, encoding);
+                        }
+
+                        //string tt = encoding.GetString(temp);
+                        //var le = tt.Length;
+                        writer.Write(temp);
+                    }
+                }
+
+                //End of file
+                writer.Write(byte.Parse("1A", System.Globalization.NumberStyles.HexNumber));
+
+                writer.Close();
+
+                stream.Close();
+
+                System.IO.File.WriteAllText(Shapefile.GetCpgFileName(dbfFileName), encoding.BodyName);
+
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+
+                string m2 = message + " " + control.ToString();
+
+            }
         }
 
+
+        public static void Write(string dbfFileName,
+                                    List<Dictionary<string, object>> attributes,
+                                    Encoding encoding,
+                                    bool overwirte = false)
+        {
+            if (attributes == null || attributes.Count < 1)
+            {
+                return;
+            }
+
+            //make schema
+            var columns = MakeDbfFields(attributes.First());
+
+
+            List<ObjectToDbfTypeMap<Dictionary<string, object>>> mapping = new List<ObjectToDbfTypeMap<Dictionary<string, object>>>();
+
+            var counter = 0;
+
+            foreach (var item in attributes.First())
+            {
+                mapping.Add(new ObjectToDbfTypeMap<Dictionary<string, object>>(columns[counter], d => d[item.Key]));
+            }
+
+            Write(dbfFileName, attributes, mapping, encoding, overwirte);
+
+
+            //1397.08.27
+            //List<Func<Dictionary<string, object>, object>> mappings = new List<Func<Dictionary<string, object>, object>>();
+            //foreach (var item in attributes.First())
+            //{
+            //    mappings.Add(d => d[item.Key]);
+            //}
+            //Write(dbfFileName, attributes, mappings, columns, encoding, overwirte);
+        }
+
+        public static List<DbfFieldDescriptor> MakeDbfFields(Dictionary<string, object> dictionary)
+        {
+            List<DbfFieldDescriptor> result = new List<DbfFieldDescriptor>();
+
+            foreach (var item in dictionary)
+            {
+                result.Add(new DbfFieldDescriptor(item.Key, 'C', 255, 0));
+            }
+
+            return result;
+        }
 
         #region DataTable
 

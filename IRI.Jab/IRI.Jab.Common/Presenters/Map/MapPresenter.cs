@@ -808,6 +808,11 @@ namespace IRI.Jab.Common.Presenter.Map
                     Refresh();
                 };
 
+                //selectedLayer.RequestSave = l =>
+                //{
+                //    l.Save();
+                //};
+
                 this.SelectedLayers.Add(selectedLayer);
 
                 CurrentLayer = selectedLayer;
@@ -1131,7 +1136,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         public void ClearAll()
-        { 
+        {
             this.Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
 
             this.DrawingItems.Clear();

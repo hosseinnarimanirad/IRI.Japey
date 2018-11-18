@@ -137,6 +137,11 @@ namespace IRI.Jab.Common.Model.Legend
 
                 var newLayer = new Model.Map.SelectedLayer<T>(layer);
 
+                //newLayer.RequestSave = l =>
+                //{
+                //    layer.sou
+                //};
+
                 if (features == null)
                 {
                     newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>();

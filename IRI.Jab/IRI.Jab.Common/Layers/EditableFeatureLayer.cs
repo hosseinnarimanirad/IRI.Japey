@@ -31,10 +31,7 @@ namespace IRI.Jab.Common
         string _cancel = "لغو";
         string _displayCoordinates = "نمایش مختصات";
 
-
-        private Model.EditableFeatureLayerOptions _options;
-
-        public Model.EditableFeatureLayerOptions Options { get => _options; }
+        public Model.EditableFeatureLayerOptions Options { get; }
 
         private Geometry _webMercatorGeometry;
 
@@ -57,6 +54,24 @@ namespace IRI.Jab.Common
         // Vertext Coordinates 
         private SpecialPointLayer _primaryVerticesLabelLayer;
 
+        //1397.08.19
+        //private bool _massEdit;
+        //public bool MassEdit
+        //{
+        //    get { return _massEdit; }
+        //    set
+        //    {
+        //        if (_massEdit == value)
+        //        {
+        //            return;
+        //        }
+
+        //        _massEdit = value;
+        //        RaisePropertyChanged();
+
+        //        ReconstructLocateables();
+        //    }
+        //}
 
         Transform _toScreen;
 
@@ -152,9 +167,9 @@ namespace IRI.Jab.Common
         public EditableFeatureLayer(string name, Geometry mercatorGeometry, Transform toScreen, Func<double, double> screenToMap, Model.EditableFeatureLayerOptions options = null)
         {
             //this._isNewDrawingMode = isNewDrawing;
-            this._options = options ?? Model.EditableFeatureLayerOptions.CreateDefault();
+            this.Options = options ?? Model.EditableFeatureLayerOptions.CreateDefault();
 
-            this._options.RequestHandleIsEdgeLabelVisibleChanged = () =>
+            this.Options.RequestHandleIsEdgeLabelVisibleChanged = () =>
             {
                 //what if editable feature layer was already removed from map?
                 UpdateEdgeLables();
@@ -292,20 +307,21 @@ namespace IRI.Jab.Common
                 _primaryVerticesLayer.Items.Add(item);
             }
 
-
             UpdateEdgeLables();
-
-
         }
 
+
+        //1397.08.26
+        //why this methods calls multiple time. enable break point to see why
         private void UpdateEdgeLables()
         {
             this._edgeLabelLayer.Items.Clear();
 
-            if (this._webMercatorGeometry.NumberOfPoints <= 1)
-            {
-                return;
-            }
+            //if (this._webMercatorGeometry?.GetAllPoints().Length <= 1)
+            ////if (this._webMercatorGeometry.NumberOfPoints <= 1 || temp <= 1)
+            //{
+            //    return;
+            //}
 
             if (Options.IsEdgeLabelVisible)
             {
@@ -326,7 +342,13 @@ namespace IRI.Jab.Common
 
                 var element = new View.MapMarkers.RectangleLabelMarker(MeasureLabel);
 
-                element.TooltipValue = MeasureValue;
+                //do not show length/area when geometry has just one/two point or new part has just one/two point
+                if (double.IsNaN(MeasureValue))
+                {
+                    return;
+                }
+
+                element.TooltipValue = MeasureValue.ToInvariantString();
 
                 var offset = _screenToMap(20);
 
@@ -366,6 +388,11 @@ namespace IRI.Jab.Common
                 primaryCollection.Values = new List<Locateable>();
 
                 midCollection.Values = new List<Locateable>();
+
+                //if (MassEdit)
+                //{
+                //    return;
+                //}
 
                 for (int i = 0; i < geometry.Points.Length; i++)
                 {
@@ -938,7 +965,10 @@ namespace IRI.Jab.Common
 
                 primaryCollection.Values.Add(locateable);
 
+                //if (!MassEdit)
+                //{
                 this._primaryVerticesLayer.Items.Add(locateable);
+                //}
 
                 if (geometry.Points.Length > 1 && Options.IsEdgeLabelVisible)
                 {
@@ -975,9 +1005,9 @@ namespace IRI.Jab.Common
             return this._webMercatorGeometry != null ? this._webMercatorGeometry.HasAnyPoint() : false;
         }
 
-        public string MeasureValue
+        public double MeasureValue
         {
-            get { return _webMercatorGeometry.GetMeasure(MapProjects.WebMercatorToGeodeticWgs84).ToString(); }
+            get { return _webMercatorGeometry.GetMeasure(MapProjects.WebMercatorToGeodeticWgs84); }
         }
 
         public string MeasureLabel
@@ -1140,7 +1170,17 @@ namespace IRI.Jab.Common
             this.RequestZoomToGeometry?.Invoke(part);
         }
 
+        public void FindNearestPoint(Point point)
+        {
+            var nearestPoint = _webMercatorGeometry.GetNearestPoint(point);
+
+            this._primaryVerticesLabelLayer.Items.Clear();
+
+            this._primaryVerticesLabelLayer.Items.Add(ToPrimaryLocateable(nearestPoint));
+        }
+
         #endregion
+
 
         #region Commands
 

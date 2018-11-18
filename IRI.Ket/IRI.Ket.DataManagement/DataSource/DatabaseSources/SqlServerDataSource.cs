@@ -787,5 +787,10 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             Remove(feature.Id);
         }
+
+        public override void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

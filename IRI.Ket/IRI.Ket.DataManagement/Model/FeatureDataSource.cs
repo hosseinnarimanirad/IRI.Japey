@@ -179,6 +179,9 @@ namespace IRI.Ket.DataManagement.Model
 
         public abstract void Update(ISqlGeometryAware newValue);
 
+        public abstract void UpdateFeature(ISqlGeometryAware feature);
+
+        public abstract void SaveChanges(); 
     }
 
     public abstract class FeatureDataSource<T> : FeatureDataSource where T : class, ISqlGeometryAware
@@ -217,5 +220,11 @@ namespace IRI.Ket.DataManagement.Model
             throw new NotImplementedException();
         }
 
+        public override void UpdateFeature(ISqlGeometryAware newValue)
+        {
+            //Update(newValue as T, valueId);
+            throw new NotImplementedException();
+        }
+         
     }
 }

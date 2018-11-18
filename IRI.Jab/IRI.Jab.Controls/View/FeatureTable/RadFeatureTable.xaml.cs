@@ -35,6 +35,16 @@ namespace IRI.Jab.Controls.View
             DependencyProperty.Register(nameof(CanUserEditGeometry), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
 
 
+        public bool CanUserEditAttribute
+        {
+            get { return (bool)GetValue(CanUserEditAttributeProperty); }
+            set { SetValue(CanUserEditAttributeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanUserEditAttribute.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanUserEditAttributeProperty =
+            DependencyProperty.Register(nameof(CanUserEditAttribute), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
 
         public ISelectedLayer Presenter { get { return this.DataContext as ISelectedLayer; } }
 
@@ -54,6 +64,27 @@ namespace IRI.Jab.Controls.View
         private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
             this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<ISqlGeometryAware>());
+        }
+
+        private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
+        {
+            if (e.EditAction == Telerik.Windows.Controls.GridView.GridViewEditAction.Commit)
+            {
+                if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Edit)
+                {
+                    var item = e.EditedItem;
+
+                    Presenter.UpdateFeature(item);
+                }
+                else if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Insert)
+                {
+
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
     }
 }

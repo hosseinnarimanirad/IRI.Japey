@@ -263,6 +263,16 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public override void UpdateFeature(ISqlGeometryAware feature)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
 

@@ -55,7 +55,7 @@ namespace IRI.Jab.Common
                 _isSelectedInToc = value;
                 RaisePropertyChanged();
 
-                ChangeSymbologyCommand?.CanExecute(null);
+                //ChangeSymbologyCommand?.CanExecute(null);
 
                 OnIsSelectedInTocChanged?.Invoke(this, new CustomEventArgs<BaseLayer>(this));
             }
@@ -138,7 +138,8 @@ namespace IRI.Jab.Common
             {
                 if (_changeSymbologyCommand == null)
                 {
-                    _changeSymbologyCommand = new RelayCommand(param => { this.RequestChangeSymbology?.Invoke(this); }, param => IsSelectedInToc);
+                    //_changeSymbologyCommand = new RelayCommand(param => { this.RequestChangeSymbology?.Invoke(this); }, param => IsSelectedInToc);
+                    _changeSymbologyCommand = new RelayCommand(param => { this.RequestChangeSymbology?.Invoke(this); });
                 }
 
                 return _changeSymbologyCommand;

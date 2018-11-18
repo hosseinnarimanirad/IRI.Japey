@@ -883,6 +883,39 @@ namespace IRI.Msh.Common.Primitives
         }
 
 
+        //must be reviewed: 
+        public IPoint GetNearestPoint(Point point)
+        {
+            if (this.Points == null)
+            {
+                var nearestPoints = this.Geometries.Select(g => g.GetNearestPoint(point)).ToList();
+
+                //must be reviewed
+                return nearestPoints.First();
+            }
+            else
+            {
+                var minDistance = double.MaxValue;
+
+                IPoint result = null;
+
+                for (int i = 0; i < this.Points.Length; i++)
+                {
+                    var distance = this.Points[i].DistanceTo(point);
+
+                    if (minDistance > distance)
+                    {
+                        result = Points[i];
+
+                        minDistance = distance;
+                    }
+                }
+
+                return result;
+            }
+        }
+
+
         #region Static Methods
 
 
@@ -953,6 +986,7 @@ namespace IRI.Msh.Common.Primitives
         {
             return new Geometry(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, isLongFirst)).ToArray(), geometryType, srid);
         }
+
 
         #endregion
     }

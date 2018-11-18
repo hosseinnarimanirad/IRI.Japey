@@ -2433,7 +2433,7 @@ namespace IRI.Jab.MapViewer
                     if (remove && tag.Layer != null)
                     {
                         _layerManager.Remove(tag.Layer, forceRemove);
-                    } 
+                    }
                 }
             }
         }
@@ -2449,7 +2449,7 @@ namespace IRI.Jab.MapViewer
                 {
                     if (criteria(tag.Layer))
                     {
-                        this.mapView.Children.RemoveAt(i); 
+                        this.mapView.Children.RemoveAt(i);
                     }
                 }
             }
@@ -4422,6 +4422,30 @@ namespace IRI.Jab.MapViewer
                             "edit", geometry.Clone(),
                             this.viewTransform, ScreenToMap,
                             options);
+            //{
+            //    MassEdit = true
+            //};
+
+            //1397.08.19
+            //var tempCurrentPosition = new Point();
+
+            //this.OnMapMouseMove += (sender, e) =>
+            //{
+            //    var screenPoint = e.GetPosition(this.mapView);
+
+            //    var mapPoint = ScreenToMap(screenPoint).AsPoint();
+
+            //    var tempDistance = tempCurrentPosition.AsPoint().DistanceTo(screenPoint.AsPoint());
+
+            //    if (tempDistance < 10)
+            //    {
+            //        return;
+            //    }
+
+            //    tempCurrentPosition = screenPoint;
+
+            //    CurrentEditingLayer?.FindNearestPoint(mapPoint);
+            //};
 
             CurrentEditingLayer.RequestRightClickOptions = (i1, i2, i3) =>
             {
