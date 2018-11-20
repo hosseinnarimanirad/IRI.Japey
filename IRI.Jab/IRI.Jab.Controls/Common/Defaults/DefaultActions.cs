@@ -37,18 +37,20 @@ namespace IRI.Jab.Controls.Common.Defaults
             var view = new IRI.Jab.Controls.View.Symbology.SymbologyView();
 
             var presenter = new IRI.Jab.Common.Presenters.Symbology.SymbologyPresenter();
-
+             
             if (layer is DrawingItemLayer)
-            {
+            { 
                 presenter.Symbology = (layer as DrawingItemLayer).OriginalSymbology.Clone();
             }
             else
-            {
+            { 
                 presenter.Symbology = layer.VisualParameters.Clone();
             }
-
-
-            presenter.RequestCloseAction = () => { view.Close(); };
+             
+            presenter.RequestCloseAction = () =>
+            {
+                view.Close();
+            };
 
             presenter.RequestApplyAction = p =>
             {
@@ -59,6 +61,9 @@ namespace IRI.Jab.Controls.Common.Defaults
                     (layer as DrawingItemLayer).OriginalSymbology.Stroke = p.Symbology.Stroke;
                     (layer as DrawingItemLayer).OriginalSymbology.StrokeThickness = p.Symbology.StrokeThickness;
 
+                    //update symbology
+                    if (!layer.IsSelectedInToc)
+                        (layer as DrawingItemLayer).RequestHighlightGeometry?.Invoke(layer as DrawingItemLayer);
                 }
                 else
                 {
