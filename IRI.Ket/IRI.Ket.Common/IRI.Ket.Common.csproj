@@ -107,7 +107,6 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PersianCalendarExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Gpx\GpxFormat.cs" />
     <Compile Include="Gpx\GpxTrack.cs" />
     <Compile Include="Gpx\GpxTrackPoint.cs" />

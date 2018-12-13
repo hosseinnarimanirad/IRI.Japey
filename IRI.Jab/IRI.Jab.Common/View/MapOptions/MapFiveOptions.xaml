@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
              Width="150" Height="130" Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <ResourceDictionary Source="/IRI.Jab.Common;component/Assets/Styles/CircleButton.xaml"/>
+        <ResourceDictionary Source="/IRI.Jab.Common;component/Assets/Styles/ButtonStyles.xaml"/>
     </UserControl.Resources>
     <UserControl.RenderTransform>
         <TransformGroup>

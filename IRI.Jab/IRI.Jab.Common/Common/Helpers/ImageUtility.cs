@@ -366,7 +366,7 @@ namespace IRI.Jab.Common.Helpers
                 return;
             }
 
-            var sizeoff = System.Drawing.Image.GetPixelFormatSize(System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            //var sizeoff = System.Drawing.Image.GetPixelFormatSize(System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             var minX = tiles.Min(t => t.ColumnNumber);
 
@@ -407,6 +407,46 @@ namespace IRI.Jab.Common.Helpers
 
             Ket.WorldfileFormat.WorldfileManager.SaveWorldFile(Ket.WorldfileFormat.WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
         }
+
+        public static bool HasAnyImage(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc)
+        {
+            if (tiles == null || tiles.Count < 1)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                var fileName = fileNameFunc(tiles[i]);
+
+                if (File.Exists(fileName))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool HasAllImage(string folderPath, List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc)
+        {
+            if (tiles == null || tiles.Count < 1 || !System.IO.Directory.Exists(folderPath))
+            {
+                return false;
+            }
+
+            var files = new HashSet<string>(System.IO.Directory.EnumerateFiles(folderPath));
+
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                var fileName = fileNameFunc(tiles[i]);
+
+                if (!files.Contains(fileName))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }        
 
         public static void MergeTilesAndSaveByGdiplusInGeodetic(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc, string outputFileName, string waterMarkText = null)
         {

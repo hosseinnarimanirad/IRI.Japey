@@ -23,7 +23,7 @@ namespace IRI.Jab.Common.Presenters.Security
         {
             get { return _userName; }
             set
-            {
+               {
                 _userName = value;
                 RaisePropertyChanged();
             }

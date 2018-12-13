@@ -50,6 +50,14 @@
                     .Replace('\u066B', '.');
         }
 
-       
+        public static bool ContainsIgnoreCase(this string value, string term)
+        {
+            return value.IndexOf(term, StringComparison.InvariantCultureIgnoreCase) >= 0;
+        }
+
+        public static bool EqualsIgnoreCase(this string theString, string value)
+        {
+            return theString.Equals(value, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }
