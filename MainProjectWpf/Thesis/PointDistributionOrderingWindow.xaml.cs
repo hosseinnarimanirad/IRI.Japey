@@ -18,9 +18,9 @@ namespace IRI.MainProjectWPF
     /// <summary>
     /// Interaction logic for SfcWindow.xaml
     /// </summary>
-    public partial class SfcWindow : Window
+    public partial class PointDistributionOrderingWindow : Window
     {
-        public SfcWindow()
+        public PointDistributionOrderingWindow()
         {
             InitializeComponent();
         }

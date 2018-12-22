@@ -1,5 +1,8 @@
-﻿using System;
+﻿using IRI.Ket.DataManagement.DataSource;
+using IRI.Ket.SpatialExtensions;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,14 +29,14 @@ namespace IRI.MainProjectWPF.Thesis
 
 
 
-            var folder = @"E:\Data\Iran\GSI Categorized\250kJPEGWm";
+            //var folder = @"E:\Data\Iran\GSI Categorized\250kJPEGWm";
 
-            System.IO.DirectoryInfo info = new DirectoryInfo(folder);
+            //System.IO.DirectoryInfo info = new DirectoryInfo(folder);
 
-            foreach (var file in info.EnumerateFiles("*.jpg"))
-            {
-                IRI.Ket.WorldfileFormat.WorldfilePyramid.Create(file.FullName, 0.00026458386250105835);
-            }
+            //foreach (var file in info.EnumerateFiles("*.jpg"))
+            //{
+            //    IRI.Ket.WorldfileFormat.WorldfilePyramid.Create(file.FullName, 0.00026458386250105835);
+            //}
 
         }
         private double GetUnitDistance()
@@ -82,14 +85,41 @@ namespace IRI.MainProjectWPF.Thesis
             RasterSfcWindow window = new RasterSfcWindow();
 
             window.Show();
-             
+
         }
 
         private void pointSorting(object sender, RoutedEventArgs e)
         {
-            SfcWindow window = new SfcWindow();
+            PointDistributionOrderingWindow window = new PointDistributionOrderingWindow();
 
             window.Show();
+        }
+
+        private void BigDataSetButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+
+            //read the points
+            SqlServerDataSource source = new SqlServerDataSource("data source=.;integrated security=true;initial catalog = IRI.Database", "Earthquakes", "Location");
+            var points = source.SelectFeatures("SELECT lat,_long FROM Earthquakes").Select(d => new IRI.Msh.Common.Primitives.Point((double)d["lat"], (double)d["_long"])).ToList();
+            watch.Stop();
+            Debug.WriteLine("STEP 1: " + watch.ElapsedMilliseconds);
+            watch.Restart();
+
+            //var points = source.GetGeometries().Select(i => (IRI.Msh.Common.Primitives.Point)i.AsPoint()).ToList();
+
+            watch.Stop();
+            Debug.WriteLine("STEP 2 (READ): " + watch.ElapsedMilliseconds);
+            watch.Restart();
+
+            //order the points
+            IRI.Ket.Spatial.PointSorting.PointOrdering.GraySorter(points.ToArray());
+
+            watch.Stop();
+            Debug.WriteLine("STEP 3 (SORT): " + watch.ElapsedMilliseconds);
+            watch.Restart();
+
+            //show result
         }
     }
 }

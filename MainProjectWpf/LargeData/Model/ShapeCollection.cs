@@ -76,7 +76,7 @@ namespace IRI.MainProjectWPF.LargeData.Model
 
             this.Shapes = shapes;
 
-            this.Geometries = shapes.Select(i => i.AsSqlGeometry(0)).ToList();
+            this.Geometries = shapes.Select(i => i.AsSqlGeometry()).ToList();
 
 
             this.Statistics = new AreaStatistics(shapes);

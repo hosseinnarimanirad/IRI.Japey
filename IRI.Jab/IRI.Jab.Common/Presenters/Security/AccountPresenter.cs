@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Model.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace IRI.Jab.Common.Presenters.Security
         {
             get { return _userName; }
             set
-               {
+            {
                 _userName = value;
                 RaisePropertyChanged();
             }
@@ -106,6 +107,8 @@ namespace IRI.Jab.Common.Presenters.Security
         #region Actions
 
         public Action RequestClose;
+
+        public Action RequestCloseUpdateAccount;
 
         public Action<AccountPresenter> RequestLogin;
 
@@ -218,6 +221,21 @@ namespace IRI.Jab.Common.Presenters.Security
             }
         }
 
+        private RelayCommand _closeUpdateAccountCommand;
+
+        public RelayCommand CloseUpdateAccountCommand
+        {
+            get
+            {
+                if (_closeUpdateAccountCommand == null)
+                {
+                    _closeUpdateAccountCommand = new RelayCommand(param => this.RequestCloseUpdateAccount());
+                }
+
+                return _closeUpdateAccountCommand;
+            }
+        }
+
 
         #endregion
 
@@ -239,19 +257,24 @@ namespace IRI.Jab.Common.Presenters.Security
 
         private void UpdateAccount(object parameter)
         {
-            var passwords = parameter as object[];
+            var model = parameter as IChangePassword;
 
-            if (passwords != null || passwords.Count() == 2)
+            if (model != null)
             {
-                var oldPassword = passwords[0] as IHavePassword;
+                var oldPassword = model.Password;
 
-                var newPassword = passwords[1] as IHavePassword;
+                var newPassword = model.NewPassword;
+
+                if (!AreEqualPassword(newPassword, model.ConfirmPassword))
+                {
+                    return;
+                }
 
                 if (oldPassword != null && newPassword != null)
                 {
-                    this.Password = oldPassword.Password;
+                    this.Password = oldPassword;
 
-                    this.NewPassword = newPassword.Password;
+                    this.NewPassword = newPassword;
 
                     this.RequestUpdateAccount?.Invoke(this);
 
@@ -262,10 +285,7 @@ namespace IRI.Jab.Common.Presenters.Security
             this.Password = null;
 
             this.NewPassword = null;
-
         }
-
-
 
         public static bool AreEqualPassword(SecureString secureString1, SecureString secureString2)
         {

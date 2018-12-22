@@ -45,8 +45,8 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MahApps.Metro.1.6.4\lib\net46\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,8 +185,14 @@
     <Compile Include="View\Scalebar.xaml.cs">
       <DependentUpon>Scalebar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Security\ChangeUserPasswordView.xaml.cs">
+      <DependentUpon>ChangeUserPasswordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Security\ManageAccount.xaml.cs">
       <DependentUpon>ManageAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Security\UserPasswordInputView.xaml.cs">
+      <DependentUpon>UserPasswordInputView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Symbology\SymbologyView.xaml.cs">
       <DependentUpon>SymbologyView.xaml</DependentUpon>
@@ -303,7 +309,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Security\ChangeUserPasswordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Security\ManageAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Security\UserPasswordInputView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

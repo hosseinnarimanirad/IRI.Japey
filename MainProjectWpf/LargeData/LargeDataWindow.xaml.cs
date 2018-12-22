@@ -77,7 +77,7 @@ namespace IRI.MainProjectWPF.LargeData
         {
             this.Presenter.ShapeCollections.Add(new ShapeCollection(shapes, title));
 
-            var geometries = shapes.Select(i => i.AsSqlGeometry(0)).ToList();
+            var geometries = shapes.Select(i => i.AsSqlGeometry()).ToList();
 
             var vertexes = shapes.ExtractPoints().Select(i => (((Msh.Common.Primitives.IPoint)i).AsSqlGeometry(0))).ToList();
 

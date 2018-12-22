@@ -176,8 +176,8 @@
     <Compile Include="Thesis\SFCControl.xaml.cs">
       <DependentUpon>SFCControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Thesis\SfcWindow.xaml.cs">
-      <DependentUpon>SfcWindow.xaml</DependentUpon>
+    <Compile Include="Thesis\PointDistributionOrderingWindow.xaml.cs">
+      <DependentUpon>PointDistributionOrderingWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="LargeData\LargeDataWindow.xaml">
       <SubType>Designer</SubType>
@@ -231,7 +231,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Thesis\SfcWindow.xaml">
+    <Page Include="Thesis\PointDistributionOrderingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

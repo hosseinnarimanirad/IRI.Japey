@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Presenters.Security
+namespace IRI.Jab.Common.Model.Security
 {
     public interface IHavePassword
     {

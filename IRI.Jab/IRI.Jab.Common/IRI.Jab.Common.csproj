@@ -228,6 +228,8 @@
     <Compile Include="Model\Map\Tile.cs" />
     <Compile Include="Model\Map\TileManager.cs" />
     <Compile Include="Model\NotifiablePoint.cs" />
+    <Compile Include="Model\Security\IChangePassword.cs" />
+    <Compile Include="Model\Security\IHavePassword.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
@@ -247,7 +249,6 @@
     <Compile Include="Presenters\MapPanelPresenter.cs" />
     <Compile Include="Presenters\Map\MapPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
-    <Compile Include="Presenters\Security\IHavePassword.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />
     <Compile Include="Presenters\Symbology\SymbologyPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
