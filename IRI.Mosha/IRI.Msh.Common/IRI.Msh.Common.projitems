@@ -83,6 +83,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnumHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\RandomHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\SecureStringHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StreamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ZipArchiveHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index100k.cs" />

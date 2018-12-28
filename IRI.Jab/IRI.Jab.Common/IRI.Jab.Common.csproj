@@ -230,6 +230,7 @@
     <Compile Include="Model\NotifiablePoint.cs" />
     <Compile Include="Model\Security\IChangePassword.cs" />
     <Compile Include="Model\Security\IHavePassword.cs" />
+    <Compile Include="Model\Security\IUserRepository.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />

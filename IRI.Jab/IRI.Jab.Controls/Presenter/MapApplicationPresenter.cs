@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
+using IRI.Jab.Common.Presenters.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,23 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Controls.Presenter
 {
-    public class MapApplicationPresenter : MapPresenter
+    public class MapApplicationPresenter<TUser> : MapPresenter where TUser : class
     {
         public MapApplicationPresenter()
         {
 
+        }
+
+        private AccountPresenter<TUser> _account;
+
+        public AccountPresenter<TUser> Account
+        {
+            get { return _account; }
+            set
+            {
+                _account = value;
+                RaisePropertyChanged();
+            }
         }
 
         public void Initialize(System.Windows.Window ownerWindow)

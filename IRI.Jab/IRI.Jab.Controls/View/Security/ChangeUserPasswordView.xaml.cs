@@ -59,7 +59,6 @@ namespace IRI.Jab.Controls.View.Security
         // Using a DependencyProperty as the backing store for CanUserChangeUserName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CanUserChangeUserNameProperty =
             DependencyProperty.Register(nameof(CanUserChangeUserName), typeof(bool), typeof(ChangeUserPasswordView), new PropertyMetadata(true));
-
-
+         
     }
 }

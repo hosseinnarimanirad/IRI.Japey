@@ -156,6 +156,8 @@ namespace IRI.Ket.DataManagement.DataSource
             this._idFunc = idFunc;
 
             this.Extent = GetGeometries().GetBoundingBox();
+
+           
         }
 
         protected int GetNewId()
