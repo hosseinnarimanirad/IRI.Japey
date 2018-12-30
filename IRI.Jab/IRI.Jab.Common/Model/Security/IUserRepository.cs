@@ -15,5 +15,7 @@ namespace IRI.Jab.Common.Model.Security
         void DeleteUser(TUser user);
 
         TUser Find(int id);
+
+        TUser Find(string userName);
     }
 }

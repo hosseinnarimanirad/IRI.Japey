@@ -35,7 +35,14 @@ namespace IRI.Jab.Controls.View.Security
 
         public SecureString ConfirmPassword => this.confirmNewPassword.SecurePassword;
 
+        public void ClearInputValues()
+        {
+            this.Password.Clear();
 
+            this.NewPassword.Clear();
+
+            this.ConfirmPassword.Clear();
+        }
 
         public bool IsUserNameShown
         {
@@ -59,6 +66,6 @@ namespace IRI.Jab.Controls.View.Security
         // Using a DependencyProperty as the backing store for CanUserChangeUserName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CanUserChangeUserNameProperty =
             DependencyProperty.Register(nameof(CanUserChangeUserName), typeof(bool), typeof(ChangeUserPasswordView), new PropertyMetadata(true));
-         
+
     }
 }

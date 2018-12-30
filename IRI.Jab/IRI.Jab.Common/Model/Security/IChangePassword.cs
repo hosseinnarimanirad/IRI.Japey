@@ -15,5 +15,7 @@ namespace IRI.Jab.Common.Model.Security
         SecureString NewPassword { get; }
 
         SecureString ConfirmPassword { get; }
+
+        void ClearInputValues();
     }
 }

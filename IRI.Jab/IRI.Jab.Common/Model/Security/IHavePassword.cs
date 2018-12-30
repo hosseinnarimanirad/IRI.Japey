@@ -9,5 +9,7 @@ namespace IRI.Jab.Common.Model.Security
     public interface IHavePassword
     {
         System.Security.SecureString Password { get; }
+
+        void ClearInputValues();
     }
 }

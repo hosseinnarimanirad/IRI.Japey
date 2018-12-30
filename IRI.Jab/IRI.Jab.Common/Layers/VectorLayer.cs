@@ -443,11 +443,19 @@ namespace IRI.Jab.Common
             //}
             var pen = this.VisualParameters.GetWpfPen();
 
+            var shiftX = region.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - region.WebMercatorExtent.Width / 2.0;
+            var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
+
             Brush brush = this.VisualParameters.Fill;
 
-            var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
+            //var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, transform, pen, brush, this.VisualParameters.PointSymbol);
+            var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(
+                                    geometries,
+                                    p => viewTransform(new Point(p.X - shiftX, p.Y - shiftY)),
+                                    pen, 
+                                    brush, 
+                                    this.VisualParameters.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)tileWidth, (int)tileHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -455,7 +463,8 @@ namespace IRI.Jab.Common
 
             if (labels != null)
             {
-                this.DrawLabels(labels, geometries, image, transform);
+                //this.DrawLabels(labels, geometries, image, transform);
+                this.DrawLabels(labels, geometries, image, p => viewTransform(new Point(p.X - shiftX, p.Y - shiftY)));
             }
 
             image.Freeze();
@@ -463,7 +472,7 @@ namespace IRI.Jab.Common
             Path path = new Path()
             {
                 Data = area,
-                Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = region, IsDrawn = true, IsNew = true }
+                Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = new TileInfo(region.RowNumber, region.ColumnNumber, region.ZoomLevel), IsDrawn = true, IsNew = true }
             };
 
             this.Element = path;
@@ -474,7 +483,7 @@ namespace IRI.Jab.Common
         }
 
         //Gdi+ Approach
-        public Path AsTileUsingGdiPlusAsync(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> transform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingGdiPlusAsync(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
                 return null;
@@ -502,7 +511,7 @@ namespace IRI.Jab.Common
                             tileWidth,
                             tileHeight,
                             //transform,
-                            p => transform(new Point(p.X - shiftX, p.Y - shiftY)),
+                            p => viewTransform(new Point(p.X - shiftX, p.Y - shiftY)),
                             pen,
                             this.VisualParameters.Fill.AsGdiBrush(),
                             this.VisualParameters.PointSymbol);

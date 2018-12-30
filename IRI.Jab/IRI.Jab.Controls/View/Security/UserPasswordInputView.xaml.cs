@@ -30,5 +30,9 @@ namespace IRI.Jab.Controls.View.Security
 
         public SecureString Password => this.key.SecurePassword;
 
+        public void ClearInputValues()
+        {
+            this.Password.Clear(); 
+        }
     }
 }

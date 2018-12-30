@@ -225,6 +225,26 @@ namespace IRI.Ket.Spatial.Primitives
                 throw new NotImplementedException();
             }
 
+            if (firstX == this.BaseSize)
+            {
+                firstX--;
+            }
+
+            if (secondX == this.BaseSize)
+            {
+                secondX--;
+            }
+
+            if (firstY == this.BaseSize)
+            {
+                firstY--;
+            }
+
+            if (secondY == this.BaseSize)
+            {
+                secondY--;
+            }
+
             if (firstX == secondX && firstY == secondY)
             {
                 int index = this.GetSubRegionIndex(new Point(firstX, firstY));

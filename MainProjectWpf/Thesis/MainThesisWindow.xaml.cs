@@ -99,25 +99,45 @@ namespace IRI.MainProjectWPF.Thesis
         {
             System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 
-            //read the points
-            SqlServerDataSource source = new SqlServerDataSource("data source=.;integrated security=true;initial catalog = IRI.Database", "Earthquakes", "Location");
-            var points = source.SelectFeatures("SELECT lat,_long FROM Earthquakes").Select(d => new IRI.Msh.Common.Primitives.Point((double)d["lat"], (double)d["_long"])).ToList();
-            watch.Stop();
-            Debug.WriteLine("STEP 1: " + watch.ElapsedMilliseconds);
-            watch.Restart();
+            int k = 1;
 
-            //var points = source.GetGeometries().Select(i => (IRI.Msh.Common.Primitives.Point)i.AsPoint()).ToList();
+            for (int i = 1; i < 124; i++)
+            {
 
-            watch.Stop();
-            Debug.WriteLine("STEP 2 (READ): " + watch.ElapsedMilliseconds);
-            watch.Restart();
+                int n = i * 1000;
 
-            //order the points
-            IRI.Ket.Spatial.PointSorting.PointOrdering.GraySorter(points.ToArray());
+                //read the points
+                SqlServerDataSource source = new SqlServerDataSource("data source=.;integrated security=true;initial catalog = IRI.Database", "Earthquakes", "Location");
+                var points = source.SelectFeatures("SELECT top(" + n + ") lat,_long FROM Earthquakes").Select(d => new IRI.Msh.Common.Primitives.Point((double)d["lat"], (double)d["_long"])).ToList();
+                watch.Stop();
+                //Debug.WriteLine($"STEP 1: {watch.ElapsedMilliseconds}");
+                //Debug.WriteLine($"STEP 1: {watch.ElapsedMilliseconds}");
+                watch.Restart();
 
-            watch.Stop();
-            Debug.WriteLine("STEP 3 (SORT): " + watch.ElapsedMilliseconds);
-            watch.Restart();
+                //order the points
+                IRI.Ket.Spatial.PointSorting.PointOrdering.GraySorter(points.ToArray());
+
+                watch.Stop();
+                Debug.WriteLine($"{n}, {watch.ElapsedMilliseconds}");
+                watch.Restart();
+
+                if (i > 40)
+                {
+                    i += 2;
+                }
+                if (i > 60)
+                {
+                    i += 4;
+                }
+                if (i > 80)
+                {
+                    i += 5;
+                }
+                if (i > 100)
+                {
+                    i += 6;
+                }
+            }
 
             //show result
         }

@@ -67,6 +67,7 @@ namespace IRI.Jab.Common.Presenters.Security
             get { return Message != null && Message.Length > 0; }
         }
 
+        public int? CurrentUserId { get; set; }
 
         public AccountPresenter(IUserRepository<TUser> repository)
         {
@@ -74,23 +75,26 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
         #region Actions
+         
+
+        public Func<bool> RequestAuthenticate;
 
         public Action RequestClose;
 
         public Action RequestCloseUpdateAccount;
 
-        public Action<AccountPresenter<TUser>> RequestLogin;
+        public Action<AccountPresenter<TUser>> RequestLoginSuccessAction;
 
         public Action<AccountPresenter<TUser>> RequestLoginAsGuest;
 
         public Action RequestSignOut;
 
-        public Action<AccountPresenter<TUser>> RequestUpdateAccount;
+        public Action<AccountPresenter<TUser>> RequestUpdate;
 
         #endregion
 
         #region Events
-         
+
 
         #endregion
 
@@ -200,11 +204,22 @@ namespace IRI.Jab.Common.Presenters.Security
             {
                 this.Password = passContainer.Password;
 
-                this.RequestLogin?.Invoke(this);
+                if (this.RequestAuthenticate?.Invoke() != true)
+                {
+                    this.UserName = string.Empty;
+
+                    passContainer.ClearInputValues();
+                }
+                else
+                {
+                    this.RequestLoginSuccessAction?.Invoke(this);
+                }
             }
             else
             {
-                this.Password = null;
+                this.UserName = string.Empty;
+
+                passContainer.ClearInputValues();
             }
         }
 
@@ -214,30 +229,34 @@ namespace IRI.Jab.Common.Presenters.Security
 
             if (model != null)
             {
-                var oldPassword = model.Password;
+                this.Password = model.Password;
 
-                var newPassword = model.NewPassword;
+                this.NewPassword = model.NewPassword;
 
-                if (!SecureStringHelper.SecureStringEqual(newPassword, model.ConfirmPassword))
+                //check old password is correct
+                if (RequestAuthenticate?.Invoke() != true)
                 {
+                    model.ClearInputValues();
+
                     return;
                 }
 
-                if (oldPassword != null && newPassword != null)
+                //update the password
+                if (NewPassword != null && NewPassword.Length > 0)
                 {
-                    this.Password = oldPassword;
+                    //check  new password is confirmed
+                    if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
+                    {
+                        model.ClearInputValues();
 
-                    this.NewPassword = newPassword;
+                        return;
+                    }
 
-                    this.RequestUpdateAccount?.Invoke(this);
-
-                    return;
+                    this.Password = model.NewPassword;
                 }
+
+                this.RequestUpdate?.Invoke(this);
             }
-
-            this.Password = null;
-
-            this.NewPassword = null;
 
             this.RequestClose?.Invoke();
         }
