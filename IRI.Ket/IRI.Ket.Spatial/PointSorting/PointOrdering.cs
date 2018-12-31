@@ -94,7 +94,8 @@ namespace IRI.Ket.Spatial.PointSorting
             Boundary boundary = GetBoundary(array, 5);
 
             SortAlgorithm.QuickSort<Point>(array, (p1, p2) => GrayComparer(p1, p2, boundary));
-            return null;
+
+            return array;
         }
 
         public static Point[] MooreSorter(Point[] array)

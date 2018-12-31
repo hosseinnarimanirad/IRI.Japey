@@ -215,10 +215,6 @@
       <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
       <Name>IRI.Ket.SqlServerSpatialExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
-      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
-      <Name>IRI.Std.OGC</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
       <Name>IRI.Jab.Common</Name>

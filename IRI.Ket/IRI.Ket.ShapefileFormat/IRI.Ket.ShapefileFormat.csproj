@@ -155,9 +155,9 @@
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
-      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
-      <Name>IRI.Std.OGC</Name>
+    <ProjectReference Include="..\IRI.Ket.Ogc\IRI.Ket.Ogc.csproj">
+      <Project>{3016c2ea-f7c9-406c-891f-b2d768c80717}</Project>
+      <Name>IRI.Ket.Ogc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

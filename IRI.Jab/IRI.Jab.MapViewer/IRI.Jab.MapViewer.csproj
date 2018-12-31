@@ -149,10 +149,6 @@
       <Project>{032A00AE-A479-4B2D-8133-5094E323F5F4}</Project>
       <Name>IRI.Ket.SqlServerSpatialExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Standards.OGC.SFA\IRI.Std.OGC.csproj">
-      <Project>{15b2cb87-0a6c-41c3-a754-b4107d385d7f}</Project>
-      <Name>IRI.Std.OGC</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
