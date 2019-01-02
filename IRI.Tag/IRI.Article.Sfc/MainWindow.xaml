@@ -22,6 +22,6 @@
         </Button>
         <Button Grid.Row="1" Grid.Column="1" Content="R-Tree (With SFCs)" Margin="2" Click="openRTreeSfc"/>
         <Button Grid.Row="1" Grid.Column="0" Content="Point sorting" Margin="2" Click="pointSorting"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="Big DataSet" Margin="2" Click="BigDataSetButton_Click" Visibility="Collapsed"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Big DataSet" Margin="2" Click="BigDataSetButton_Click" Visibility="Visible"/>
     </Grid>
 </Window>

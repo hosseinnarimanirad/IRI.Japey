@@ -137,6 +137,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Path=Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"/>
         <ComboBox Grid.Column="1" VerticalAlignment="Center" IsEditable="True" BorderBrush="{StaticResource lightGrayBursh}" MinWidth="200"
+                  Text="{Binding CurrentText, Mode=TwoWay}"
                   ItemsSource="{Binding DataContext.AllItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                   SelectedItem="{Binding DataContext.CurrentSelectedItem, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
                   DisplayMemberPath="{Binding DataContext.DisplayMemberPath, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">

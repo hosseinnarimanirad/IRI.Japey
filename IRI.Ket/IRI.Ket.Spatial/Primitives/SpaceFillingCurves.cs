@@ -102,10 +102,10 @@ namespace IRI.Ket.Spatial.Primitives
         {
             List<Move> movements = new List<Move> { first, second, third };
 
-            List<Transform> transforms = new List<Transform>{Transforms.CompositeTransform(Transforms.DoNothing,Transforms.DoNothing),
-                                                                        Transforms.CompositeTransform(Transforms.Rotate90CW,Transforms.Rotate90CW),
-                                                                        Transforms.CompositeTransform(Transforms.Rotate90CW,Transforms.Rotate90CW),
-                                                                        Transforms.CompositeTransform(Transforms.DoNothing,Transforms.DoNothing)};
+            List<Transform> transforms = new List<Transform>{Transforms.DoNothing,
+                                                                Transforms.Rotate180,
+                                                                Transforms.Rotate180,
+                                                                Transforms.DoNothing};
 
             return new SpaceFillingCurve(2, movements, transforms);
         }
@@ -162,6 +162,15 @@ namespace IRI.Ket.Spatial.Primitives
 
             return new SpaceFillingCurve(2, movements, transforms);
 
+        }
+
+        public static SpaceFillingCurve ZOrdering()
+        {
+            List<Move> movements = new List<Move> { Moves.North, Moves.SouthEast, Moves.North };
+
+            List<Transform> transforms = new List<Transform> { Transforms.DoNothing, Transforms.DoNothing, Transforms.DoNothing, Transforms.DoNothing };
+
+            return new SpaceFillingCurve(2, movements, transforms);
         }
 
         /// <summary>

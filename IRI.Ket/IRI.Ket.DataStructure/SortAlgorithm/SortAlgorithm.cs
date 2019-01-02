@@ -9,6 +9,24 @@ namespace IRI.Ket.DataStructure
 {
     public static class SortAlgorithm
     {
+        public static void BubbleSort<T>(T[] array, Func<T, T, int> comparer)
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                for (int j = 0; j < array.Length - i - 1; j++)
+                {
+                    if (comparer(array[j], array[j + 1]) > 0)
+                    {
+                        var temp = array[j];
+
+                        array[j] = array[j + 1];
+
+                        array[j + 1] = temp;
+                    }
+                }
+            }
+        }
+
         public static T[] Heapsort<T>(T[] array, SortDirection direction) where T : IComparable<T>
         {
             IBinaryHeap<T> heap;
@@ -173,7 +191,7 @@ namespace IRI.Ket.DataStructure
             return result;
         }
 
-        public static T[] CountInversionAndSort<T>(T[] array, Func<T, T, int> comparer, ref long count)
+        private static T[] CountInversionAndSort<T>(T[] array, Func<T, T, int> comparer, ref long count)
         {
             if (array.Length <= 1)
             {

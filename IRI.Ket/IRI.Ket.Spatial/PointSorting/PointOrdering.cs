@@ -70,87 +70,119 @@ namespace IRI.Ket.Spatial.PointSorting
 
         public static Point[] HilbertSorter(Point[] array)
         {
-            Boundary boundary = GetBoundary(array, 5);
+            Boundary boundary = GetBoundary(array, 0.0005);
 
-            return IRI.Ket.DataStructure.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.Hilbert(Moves.North, Moves.East);
+
+            //IRI.Ket.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //return array;
+
+            //Array.Sort(array, new Comparison<Point>((p1, p2) => sfc.ComparePoints(p1, p2, boundary)));
+            //return array;
+
+            //return IRI.Ket.DataStructure.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+
+
+            IRI.Ket.DataStructure.SortAlgorithm.BubbleSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            return array;
+
         }
 
         public static Point[] HosseinSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => HosseinComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.Hossein(Moves.North, Moves.East);
+
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] NOrderingSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.NOrdering(Moves.North, Moves.SouthEast);
+
+            //return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
+            //return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
+            //IRI.Ket.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
+            //return array;
+
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] GraySorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            SortAlgorithm.QuickSort<Point>(array, (p1, p2) => GrayComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.Gray(Moves.North, Moves.East, Moves.South);
 
-            return array;
+            return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+
+            //return array;
         }
 
         public static Point[] MooreSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => MooreComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.Moore(Moves.North, Moves.East);
+
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] ZOrderingSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => ZOrderingComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.ZOrdering();
+
+            return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] DiagonalLebesgueSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => DiagonalLebesgueComparer(p1, p2, boundary));
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => DiagonalLebesgueComparer(p1, p2, boundary));
         }
 
         public static Point[] UOrderOrLebesgueSquareSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => UOrderOrLebesgueSquareComparer(p1, p2, boundary));
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => UOrderOrLebesgueSquareComparer(p1, p2, boundary));
         }
 
         public static Point[] PeanoSorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => PeanoComparer(p1, p2, boundary));
+            var sfc = SpaceFillingCurves.Peano(Moves.North, Moves.East);
+
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] Peano02Sorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => Peano02Comparer(p1, p2, boundary));
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => Peano02Comparer(p1, p2, boundary));
         }
 
         public static Point[] Peano03Sorter(Point[] array)
         {
             Boundary boundary = GetBoundary(array, 5);
 
-            return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => Peano03Comparer(p1, p2, boundary));
+            return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => Peano03Comparer(p1, p2, boundary));
         }
 
 
 
 
-        public static Boundary GetBoundary(Point[] array, int expandFactor)
+        public static Boundary GetBoundary(Point[] array, double expandFactor)
         {
             double xMin = array[0].X;
 

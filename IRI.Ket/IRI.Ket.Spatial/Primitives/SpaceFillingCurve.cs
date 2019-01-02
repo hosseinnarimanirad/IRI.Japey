@@ -83,7 +83,12 @@ namespace IRI.Ket.Spatial.Primitives
 
             for (int i = 0; i < this.NumberOfSteps - 1; i++)
             {
-                newBMFs.Add(mTFs[transformInex](this.bMFs[i]));
+                //97.10.11: slow approach but functional
+                //newBMFs.Add(mTFs[transformInex](this.bMFs[i]));
+
+                //97.10.12: fast approach but not using FoG
+                var displacement = mTFs[transformInex](this.bMFs[i])(new Point(0, 0), 1);
+                newBMFs.Add((p, step) => new Point(p.X + step * displacement.X, p.Y + step * displacement.Y));
             }
 
             return new SpaceFillingCurve(this.BaseSize, newBMFs, this.mTFs);
@@ -212,38 +217,38 @@ namespace IRI.Ket.Spatial.Primitives
 
             double deltaX = (tempUnitSize - mbb.Width) / 2.0; double deltaY = (tempUnitSize - mbb.Height) / 2.0;
 
-            int firstX = (int)Math.Floor((first.X - mbb.MinX + deltaX) / (tempUnitSize / this.BaseSize));
+            int firstX = (int)Math.Floor(Math.Round((first.X - mbb.MinX + deltaX) / (tempUnitSize / this.BaseSize), 13));
 
-            int secondX = (int)Math.Floor((second.X - mbb.MinX + deltaX) / (tempUnitSize / this.BaseSize));
+            int secondX = (int)Math.Floor(Math.Round((second.X - mbb.MinX + deltaX) / (tempUnitSize / this.BaseSize), 13));
 
-            int firstY = (int)Math.Floor((first.Y - mbb.MinY + deltaY) / (tempUnitSize / this.BaseSize));
+            int firstY = (int)Math.Floor(Math.Round((first.Y - mbb.MinY + deltaY) / (tempUnitSize / this.BaseSize), 13));
 
-            int secondY = (int)Math.Floor((second.Y - mbb.MinY + deltaY) / (tempUnitSize / this.BaseSize));
+            int secondY = (int)Math.Floor(Math.Round((second.Y - mbb.MinY + deltaY) / (tempUnitSize / this.BaseSize), 13));
 
             if (firstX.Equals(double.NaN))
             {
                 throw new NotImplementedException();
             }
 
-            if (firstX == this.BaseSize)
-            {
-                firstX--;
-            }
+            //if (firstX == this.BaseSize)
+            //{
+            //    firstX--;
+            //}
 
-            if (secondX == this.BaseSize)
-            {
-                secondX--;
-            }
+            //if (secondX == this.BaseSize)
+            //{
+            //    secondX--;
+            //}
 
-            if (firstY == this.BaseSize)
-            {
-                firstY--;
-            }
+            //if (firstY == this.BaseSize)
+            //{
+            //    firstY--;
+            //}
 
-            if (secondY == this.BaseSize)
-            {
-                secondY--;
-            }
+            //if (secondY == this.BaseSize)
+            //{
+            //    secondY--;
+            //}
 
             if (firstX == secondX && firstY == secondY)
             {
