@@ -30,12 +30,20 @@ namespace IRI.Jab.Controls.Presenter
 
         public void Initialize(System.Windows.Window ownerWindow)
         {
+
+            this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
+
+            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);
+
+        }
+
+        public override void Initialize()
+        {
             this.RequestClearAll = () =>
             {
                 this.ClearAll();// (new Predicate<ILayer>(l => l.CanUserDelete == true), true);
             };
-
-
+             
             this.RequestOpenFile = (filter) =>
             {
                 Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog() { Filter = filter };
@@ -65,16 +73,11 @@ namespace IRI.Jab.Controls.Presenter
 
             this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;
 
-            this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
-
-            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);
-
             this.SetMapCursorSet1();
 
             this.RegisterMapOptions();
 
             this.IsPanMode = true;
-
         }
 
 

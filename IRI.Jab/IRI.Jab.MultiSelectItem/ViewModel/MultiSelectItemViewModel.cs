@@ -26,15 +26,43 @@ namespace IRI.Jab.MultiSelectItem.ViewModel
 
         public event EventHandler OnItemAddedToAllItems;
 
-        public MultiSelectItemViewModel(IEnumerable<T> possibleValues, Func<T, string> getValueTitle, Func<string, T> createFunc = null)
+        public MultiSelectItemViewModel(IEnumerable<T> allItems, Func<T, string> getValueTitle, Func<string, T> createFunc = null) : this(allItems, null, getValueTitle, createFunc)
+        {
+            //this._allItems = new ObservableCollection<T>();
+
+            //this._selectedItems = new ObservableCollection<SelectedItemModel<T>>();
+
+            //if (allItems != null)
+            //{
+            //    foreach (var item in allItems)
+            //    {
+            //        this.AllItems.Add(item);
+            //    }
+            //}
+
+            //this._getSelectedItemTitleFunc = getValueTitle;
+
+            //this._createFunc = createFunc;
+
+            //this._selectedItems.CollectionChanged += (sender, e) =>
+            //{
+            //    //ForceValidation();
+
+            //    this.OnItemsChanged?.Invoke(this, EventArgs.Empty);
+            //};
+
+            ////ForceValidation();
+        }
+
+        public MultiSelectItemViewModel(IEnumerable<T> allItems, ICollection<T> listToBind, Func<T, string> getValueTitle, Func<string, T> createFunc = null)
         {
             this._allItems = new ObservableCollection<T>();
 
             this._selectedItems = new ObservableCollection<SelectedItemModel<T>>();
 
-            if (possibleValues != null)
+            if (allItems != null)
             {
-                foreach (var item in possibleValues)
+                foreach (var item in allItems)
                 {
                     this.AllItems.Add(item);
                 }
@@ -46,12 +74,51 @@ namespace IRI.Jab.MultiSelectItem.ViewModel
 
             this._selectedItems.CollectionChanged += (sender, e) =>
             {
-                //ForceValidation();
-
                 this.OnItemsChanged?.Invoke(this, EventArgs.Empty);
             };
 
-            //ForceValidation();
+            if (listToBind == null)
+                return;
+
+            foreach (var item in listToBind)
+            {
+                this.Add(item);
+            }
+
+            this.OnItemsChanged += (sender, e) =>
+            {
+                listToBind.Clear();
+
+                for (int i = 0; i < this.SelectedValues.Count(); i++)
+                {
+                    listToBind.Add(this.SelectedValues.ElementAt(i));
+                }
+            };
+        }
+
+        public void BindWith(List<T> selectedItems)
+        {
+            if (selectedItems == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            foreach (var item in selectedItems)
+            {
+                this.Add(item);
+            }
+
+            this.OnItemsChanged = null;
+
+            this.OnItemsChanged += (sender, e) =>
+            {
+                selectedItems.Clear();
+
+                for (int i = 0; i < this.SelectedValues.Count(); i++)
+                {
+                    selectedItems.Add(this.SelectedValues.ElementAt(i));
+                }
+            };
         }
 
         private ObservableCollection<T> _allItems;
