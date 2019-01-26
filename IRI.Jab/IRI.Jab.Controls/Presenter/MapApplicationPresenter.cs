@@ -43,26 +43,29 @@ namespace IRI.Jab.Controls.Presenter
             {
                 this.ClearAll();// (new Predicate<ILayer>(l => l.CanUserDelete == true), true);
             };
-             
-            this.RequestOpenFile = (filter) =>
-            {
-                Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog() { Filter = filter };
 
-                if (dialog.ShowDialog() == true)
-                    return dialog.FileName;
-                else
-                    return string.Empty;
-            };
+            this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService();
 
-            this.RequestSaveFile = (filter) =>
-            {
-                Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog() { Filter = filter };
+            //13971106
+            //this.RequestOpenFile = (filter) =>
+            //{
+            //    Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog() { Filter = filter };
 
-                if (dialog.ShowDialog() == true)
-                    return dialog.FileName;
-                else
-                    return string.Empty;
-            };
+            //    if (dialog.ShowDialog() == true)
+            //        return dialog.FileName;
+            //    else
+            //        return string.Empty;
+            //};
+
+            //this.RequestSaveFile = (filter) =>
+            //{
+            //    Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog() { Filter = filter };
+
+            //    if (dialog.ShowDialog() == true)
+            //        return dialog.FileName;
+            //    else
+            //        return string.Empty;
+            //};
 
             this.RequestShowMessage = msg => System.Windows.MessageBox.Show(msg);
 

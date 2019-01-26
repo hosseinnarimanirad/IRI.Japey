@@ -84,6 +84,7 @@
     <Reference Include="System.Printing" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -97,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Animations\GridLengthAnimation.cs" />
+    <Compile Include="Assets\Behaviors\ListboxAutoScrollToSelectedItemBehavior.cs" />
     <Compile Include="Assets\ColorBrushes\MapAppColors.cs" />
     <Compile Include="Assets\Commands\RelayCommand.cs" />
     <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
@@ -144,6 +146,9 @@
     <Compile Include="Assets\ShapeStrings\MaterialDesign.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
     <Compile Include="Assets\ShapeStrings\TheNounProject.cs" />
+    <Compile Include="Assets\ValidationRules\BaseValidationRule.cs" />
+    <Compile Include="Assets\ValidationRules\EmailValidation.cs" />
+    <Compile Include="Assets\ValidationRules\KodeMelliValidation.cs" />
     <Compile Include="Common\Defaults\DefaultRighClickOptions.cs" />
     <Compile Include="Common\Event\CallbackEventArgs.cs" />
     <Compile Include="Common\Event\ChangeEventArgs.cs" />
@@ -264,6 +269,7 @@
     <Compile Include="Raster\Model\ContinousRangeColor.cs" />
     <Compile Include="Raster\Model\DiscreteRangeColor.cs" />
     <Compile Include="Raster\RasterCalculus.cs" />
+    <Compile Include="Service\Dialog\IDialogService.cs" />
     <Compile Include="TileServices\BingMapProvider.cs" />
     <Compile Include="TileServices\MapProviderFactory.cs" />
     <Compile Include="TileServices\CustomMapProvider.cs" />
@@ -505,6 +511,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

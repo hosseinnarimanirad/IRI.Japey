@@ -1686,7 +1686,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             this.IsBusy = true;
 
-            var fileName = this.RequestOpenFile("shapefile|*.shp");
+            var fileName = this.OpenFile("shapefile|*.shp");
 
             if (!File.Exists(fileName))
             {
@@ -1735,7 +1735,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             this.IsBusy = true;
 
-            var fileName = this.RequestOpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
+            var fileName = this.OpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
 
             if (!File.Exists(fileName))
             {

@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Converters\ILayerToLegendConverter.cs" />
+    <Compile Include="Assets\Telerik\RadGridViewAutoScrollToSelectedItemBehavior.cs" />
     <Compile Include="Assets\Telerik\RadMultiSelectBehavior.cs" />
     <Compile Include="Common\Defaults\DefaultActions.cs" />
     <Compile Include="Extensions\GeometryExtensions.cs" />
@@ -122,6 +123,8 @@
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Presenter\MapApplicationPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Dialog\DefaultDialogService.cs" />
+    <Compile Include="ViewModel\Dialogs\DialogViewModel.cs" />
     <Compile Include="View\CoordinateEditor\LineStringEditorView.xaml.cs">
       <DependentUpon>LineStringEditorView.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,9 @@
     </Compile>
     <Compile Include="View\CoordinateEditor\PolygonEditorView.xaml.cs">
       <DependentUpon>PolygonEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\DialogView.xaml.cs">
+      <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FeatureTable\RadFeatureTable.xaml.cs">
       <DependentUpon>RadFeatureTable.xaml</DependentUpon>
@@ -234,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CoordinateEditor\PolygonEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
