@@ -1,4 +1,6 @@
 ﻿using IRI.Jab.Common.Service.Dialog;
+using IRI.Jab.Common.ViewModel.Dialogs;
+using IRI.Jab.Controls.ViewModel.Dialogs;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public string ShowOpenFileDialog(string filter, Window owner)
         {
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
 
             string result = null;
 
@@ -43,6 +45,46 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (dialog.ShowDialog(owner) == true)
                 result = dialog.FileName;
+
+            if (owner != null)
+            {
+                owner.Effect = defaultEffect;
+            }
+
+            return result;
+        }
+
+
+
+        public string[] ShowOpenFilesDialog(string filter)
+        {
+            return ShowOpenFilesDialog(filter, null);
+        }
+
+        public string[] ShowOpenFilesDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowOpenFilesDialog(filter, owner);
+        }
+
+        public string[] ShowOpenFilesDialog(string filter, Window owner)
+        {
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
+
+            string[] result = null;
+
+            Effect defaultEffect = null;
+
+            if (owner != null)
+            {
+                defaultEffect = owner.Effect;
+
+                owner.Effect = new BlurEffect() { Radius = 5 };
+            }
+
+            if (dialog.ShowDialog(owner) == true)
+                result = dialog.FileNames;
 
             if (owner != null)
             {
@@ -151,7 +193,124 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public Task ShowMessage<T>(string message, string pathMarkup, string title = null)
         {
-            throw new NotImplementedException();
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowMessage(owner, pathMarkup, message, title);
+        }
+
+        public Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title)
+        {
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+
+            IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
+            {
+                Message = message,
+                Title = title,
+                IsTwoOptionsMode = false,
+                IconPathMarkup = pathMarkup
+            };
+
+            View.Dialogs.MessageBoxView dialog = new View.Dialogs.MessageBoxView();
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                dialog.Owner = owner;
+            }
+            //dialog.Owner = Application.Current.MainWindow;
+
+            var ownerDefaultEffect = owner?.Effect;
+
+            if (owner != null)
+            {
+                owner.Effect = new BlurEffect() { Radius = 10 };
+            }
+
+            dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.IsOk); };
+
+            viewModel.RequestClose = () =>
+            {
+                dialog.Close();
+
+                if (owner != null)
+                {
+                    owner.Effect = ownerDefaultEffect;
+                }
+
+            };
+
+            dialog.DataContext = viewModel;
+
+            dialog.ShowDialog();
+
+            return tcs.Task;
+        }
+
+
+        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>()
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowUserNameSignUpDialog(owner);
+        }
+
+        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow)
+        {
+            TaskCompletionSource<SignUpDialogViewModel> tcs = new TaskCompletionSource<SignUpDialogViewModel>();
+
+            View.Dialogs.UserNameSignUpDialogView dialog = new View.Dialogs.UserNameSignUpDialogView();
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                dialog.Owner = owner;
+            }
+
+            var ownerDefaultEffect = owner?.Effect;
+
+            if (owner != null)
+            {
+                owner.Effect = new BlurEffect() { Radius = 10 };
+            }
+
+            Action requestClose = () =>
+            {
+                dialog.Close();
+
+                if (owner != null)
+                {
+                    owner.Effect = ownerDefaultEffect;
+                }
+            };
+
+            IRI.Jab.Common.ViewModel.Dialogs.SignUpDialogViewModel viewModel = new Jab.Common.ViewModel.Dialogs.SignUpDialogViewModel(requestClose);
+            //{
+            //    Message = message,
+            //    Title = title,
+            //    IsTwoOptionsMode = false,
+            //    IconPathMarkup = pathMarkup
+            //};
+
+            dialog.Closed += (sender, e) =>
+            {
+                if (viewModel.IsOk)
+                {
+                    tcs.SetResult(viewModel);
+                }
+                else
+                {
+                    tcs.SetResult(null);
+                }
+
+            };
+
+            dialog.DataContext = viewModel;
+
+            dialog.ShowDialog();
+
+            return tcs.Task;
         }
     }
 }

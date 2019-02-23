@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Security
 {
-    public interface IHavePassword : ISecurityBase
+    public interface ISecurityBase
     {
-        System.Security.SecureString Password { get; }
-
-
+        void ClearInputValues();
     }
 }

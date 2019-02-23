@@ -11,7 +11,9 @@
                     <Grid>
                         <Border Margin="0" Background="{TemplateBinding Property=Background}"
                                     CornerRadius="2,2,2,2"/>
-                        <ContentPresenter/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

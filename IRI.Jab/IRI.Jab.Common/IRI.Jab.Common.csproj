@@ -178,6 +178,7 @@
     <Compile Include="Common\Helpers\ColorHelper.cs" />
     <Compile Include="Common\Helpers\ImageUtility.cs" />
     <Compile Include="Common\Helpers\PrintHelper.cs" />
+    <Compile Include="Common\Helpers\ResourceHelper.cs" />
     <Compile Include="Common\Helpers\RichTextBoxHelper.cs" />
     <Compile Include="Common\Helpers\WorldfilePyramid.cs" />
     <Compile Include="Layers\BaseLayer.cs" />
@@ -234,8 +235,12 @@
     <Compile Include="Model\Map\TileManager.cs" />
     <Compile Include="Model\NotifiablePoint.cs" />
     <Compile Include="Model\Security\IChangePassword.cs" />
+    <Compile Include="Model\Security\IDefineNewPassword.cs" />
     <Compile Include="Model\Security\IHavePassword.cs" />
+    <Compile Include="Model\Security\INewSimpleUserPass.cs" />
+    <Compile Include="Model\Security\ISecurityBase.cs" />
     <Compile Include="Model\Security\IUserRepository.cs" />
+    <Compile Include="Model\Security\SimpleUserPassModel.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
@@ -249,6 +254,7 @@
     <Compile Include="Common\Event\PanEventArgs.cs" />
     <Compile Include="Common\Event\PointEventArgs.cs" />
     <Compile Include="Presenters\BasePresenter.cs" />
+    <Compile Include="Presenters\Dialogs\SignUpDialogViewModel.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
     <Compile Include="Presenters\LegendPresenter.cs" />
     <Compile Include="Presenters\MapOptions\MapOptionsPresenter.cs" />
@@ -256,6 +262,7 @@
     <Compile Include="Presenters\Map\MapPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />
+    <Compile Include="Presenters\Security\SignUpViewModel.cs" />
     <Compile Include="Presenters\Symbology\SymbologyPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

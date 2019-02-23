@@ -48,11 +48,16 @@ namespace IRI.Jab.Common.Presenter
 
         //public Func<string, string> RequestSaveFile;
 
-        public Action<string> RequestShowMessage;
-
-        public void ShowMessage(string message)
+        public string[] OpenFiles(string filter)
         {
-            this.RequestShowMessage?.Invoke(message);
+            return DialogService.ShowOpenFilesDialog(filter);
+            //return this.RequestOpenFile?.Invoke(filter);
+        }
+
+        public string[] OpenFiles<T>(string filter)
+        {
+            return DialogService.ShowOpenFilesDialog<T>(filter);
+            //return this.RequestOpenFile?.Invoke(filter);
         }
 
         public string OpenFile(string filter)
@@ -90,7 +95,7 @@ namespace IRI.Jab.Common.Presenter
 
             //this.RequestOpenFile = arg => presenter.RequestOpenFile(arg);
             //this.RequestSaveFile = arg => presenter.RequestSaveFile(arg);
-            this.RequestShowMessage = message => presenter.ShowMessage(message);
+            //this.RequestShowMessage = message => presenter.ShowMessage(message);
         }
 
         public async Task<bool> RequestYesNoDialog<T>(string message, string title)
@@ -101,6 +106,19 @@ namespace IRI.Jab.Common.Presenter
         public async Task<bool> RequestYesNoDialog(object owner, string message, string title)
         {
             return await DialogService?.ShowYesNoDialog(owner, message, title);
+        }
+
+        //public Action<string> RequestShowMessage;
+
+        public async Task ShowMessage<T>(string message, string title = null)
+        {
+            await DialogService?.ShowMessage<T>(message, null, title);
+        }
+
+        public async Task ShowMessage(object owner, string message, string title = null)
+        {
+            await DialogService?.ShowMessage(owner, null, message, title);
+            //this.RequestShowMessage?.Invoke(message);
         }
 
         public IDialogService DialogService { get; set; }

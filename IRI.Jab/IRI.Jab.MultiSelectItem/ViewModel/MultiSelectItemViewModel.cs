@@ -4,6 +4,7 @@ using IRI.Jab.MultiSelectItem.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace IRI.Jab.MultiSelectItem.ViewModel
 
         private Func<T, string> _getSelectedItemTitleFunc;
 
-        public event EventHandler OnItemsChanged;
+        public event NotifyCollectionChangedEventHandler OnItemsChanged;
 
         private Func<string, T> _createFunc;
 
@@ -74,7 +75,7 @@ namespace IRI.Jab.MultiSelectItem.ViewModel
 
             this._selectedItems.CollectionChanged += (sender, e) =>
             {
-                this.OnItemsChanged?.Invoke(this, EventArgs.Empty);
+                this.OnItemsChanged?.Invoke(sender, e);
             };
 
             if (listToBind == null)
@@ -87,12 +88,34 @@ namespace IRI.Jab.MultiSelectItem.ViewModel
 
             this.OnItemsChanged += (sender, e) =>
             {
-                listToBind.Clear();
-
-                for (int i = 0; i < this.SelectedValues.Count(); i++)
+                switch (e.Action)
                 {
-                    listToBind.Add(this.SelectedValues.ElementAt(i));
+                    case NotifyCollectionChangedAction.Add:
+                        foreach (var item in e.NewItems)
+                        {
+                            listToBind.Add((item as SelectedItemModel<T>).Value);
+                        }
+
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        foreach (var item in e.OldItems)
+                        {
+                            listToBind.Remove((item as SelectedItemModel<T>).Value);
+                        }
+
+                        break;
+                    case NotifyCollectionChangedAction.Replace:
+                    case NotifyCollectionChangedAction.Move:
+                    case NotifyCollectionChangedAction.Reset:
+                    default:
+                        throw new NotImplementedException("source: MultiSelectItemViewModel");
                 }
+                //listToBind.Clear();
+
+                //for (int i = 0; i < this.SelectedValues.Count(); i++)
+                //{
+                //    listToBind.Add(this.SelectedValues.ElementAt(i));
+                //}
             };
         }
 

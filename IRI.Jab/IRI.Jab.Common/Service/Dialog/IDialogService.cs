@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Jab.Common.ViewModel.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,10 @@ namespace IRI.Jab.Common.Service.Dialog
 {
     public interface IDialogService
     {
+        string[] ShowOpenFilesDialog(string filter);
+
+        string[] ShowOpenFilesDialog<T>(string filter);
+
         string ShowOpenFileDialog(string filter);
 
         string ShowOpenFileDialog<T>(string filter);
@@ -23,5 +28,11 @@ namespace IRI.Jab.Common.Service.Dialog
 
         Task ShowMessage<T>(string message, string pathMarkup, string title);
 
+        Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title);
+
+        Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>();
+         
+        Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow);
+        
     }
 }

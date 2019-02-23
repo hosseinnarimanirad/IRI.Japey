@@ -1723,7 +1723,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message);
+                ShowMessage(null, ex.Message);
             }
             finally
             {
@@ -1769,7 +1769,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                ShowMessage(ex.Message);
+                ShowMessage(null, ex.Message);
             }
             finally
             {

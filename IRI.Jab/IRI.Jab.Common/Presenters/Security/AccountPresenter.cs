@@ -75,13 +75,15 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
         #region Actions
-         
+
 
         public Func<bool> RequestAuthenticate;
 
         public Action RequestClose;
 
-        public Action RequestCloseUpdateAccount;
+        public Action RequestCloseForUpdateAccountView;
+
+        public Action RequestCloseForSignUpView;
 
         public Action<AccountPresenter<TUser>> RequestLoginSuccessAction;
 
@@ -91,14 +93,35 @@ namespace IRI.Jab.Common.Presenters.Security
 
         public Action<AccountPresenter<TUser>> RequestUpdate;
 
-        #endregion
-
-        #region Events
-
+        public Action<INewSimpleUserPass> RequestSignUp;
 
         #endregion
 
         #region Commands
+
+        private RelayCommand _clearInputValuesCommand;
+
+        public RelayCommand ClearInputValuesCommand
+        {
+            get
+            {
+                if (_clearInputValuesCommand == null)
+                {
+                    _clearInputValuesCommand = new RelayCommand(param =>
+                    {
+                        var view = param as ISecurityBase;
+
+                        if (view != null)
+                        {
+                            view.ClearInputValues();
+                        }
+                    });
+                }
+
+                return _clearInputValuesCommand;
+            }
+        }
+
 
         private RelayCommand _closeCommand;
 
@@ -186,10 +209,46 @@ namespace IRI.Jab.Common.Presenters.Security
             {
                 if (_closeUpdateAccountCommand == null)
                 {
-                    _closeUpdateAccountCommand = new RelayCommand(param => this.RequestCloseUpdateAccount());
+                    _closeUpdateAccountCommand = new RelayCommand(param => this.RequestCloseForUpdateAccountView());
                 }
 
                 return _closeUpdateAccountCommand;
+            }
+        }
+
+
+
+
+        private RelayCommand _signUpCommand;
+
+        public RelayCommand SignUpCommand
+        {
+            get
+            {
+                if (this._signUpCommand == null)
+                {
+                    this._signUpCommand = new RelayCommand(param => SignUp(param));
+                }
+
+                return this._signUpCommand;
+            }
+        }
+
+        private RelayCommand _closeSignUpCommand;
+
+        public RelayCommand CloseSignUpCommand
+        {
+            get
+            {
+                if (_closeSignUpCommand == null)
+                {
+                    _closeSignUpCommand = new RelayCommand(param =>
+                    {
+                        this.RequestCloseForSignUpView?.Invoke();
+                    });
+                }
+
+                return _closeSignUpCommand;
             }
         }
 
@@ -261,10 +320,39 @@ namespace IRI.Jab.Common.Presenters.Security
             this.RequestClose?.Invoke();
         }
 
-        public static bool Validate(SecureString secureString, string stringValue)
+        public void SignUp(object parameter)
         {
-            return SecureStringHelper.SecureStringEqual(secureString, new NetworkCredential("", stringValue).SecurePassword);
+            var model = parameter as INewSimpleUserPass;
+
+            if (model != null)
+            {
+
+                this.NewPassword = model.NewPassword;
+
+                //update the password
+                if (NewPassword != null && NewPassword.Length > 0)
+                {
+                    //check  new password is confirmed
+                    if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
+                    {
+                        model.ClearInputValues();
+
+                        return;
+                    }
+
+                    //this.Password = model.NewPassword;
+                    this.RequestSignUp(model);
+                }
+
+            }
+
+            this.RequestClose?.Invoke();
         }
+
+        //public static bool Validate(SecureString secureString, string stringValue)
+        //{
+        //    return SecureStringHelper.SecureStringEqual(secureString, new NetworkCredential("", stringValue).SecurePassword);
+        //}
 
 
     }

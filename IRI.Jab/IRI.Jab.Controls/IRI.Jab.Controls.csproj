@@ -140,6 +140,12 @@
     <Compile Include="View\Dialogs\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Dialogs\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Dialogs\UserNameSignUpDialogView.xaml.cs">
+      <DependentUpon>UserNameSignUpDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FeatureTable\RadFeatureTable.xaml.cs">
       <DependentUpon>RadFeatureTable.xaml</DependentUpon>
     </Compile>
@@ -194,8 +200,14 @@
     <Compile Include="View\Security\ChangeUserPasswordView.xaml.cs">
       <DependentUpon>ChangeUserPasswordView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Security\EmailSignUpView.xaml.cs">
+      <DependentUpon>EmailSignUpView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Security\ManageAccount.xaml.cs">
       <DependentUpon>ManageAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Security\UserNameSignUpView.xaml.cs">
+      <DependentUpon>UserNameSignUpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Security\UserPasswordInputView.xaml.cs">
       <DependentUpon>UserPasswordInputView.xaml</DependentUpon>
@@ -244,6 +256,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Dialogs\DialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\MessageBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\UserNameSignUpDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -319,7 +339,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Security\EmailSignUpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Security\ManageAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Security\UserNameSignUpView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Security
 {
-    public interface IHavePassword : ISecurityBase
+    public class SimpleUserPassModel
     {
-        System.Security.SecureString Password { get; }
+        public string UserName { get; set; }
 
-
+        public string Password { get; set; }
     }
 }
