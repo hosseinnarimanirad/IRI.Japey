@@ -1,19 +1,21 @@
-﻿using IRI.Jab.Common;
-using IRI.Jab.Common.Assets.Commands;
+﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
 using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs
 {
-    public class SignUpDialogViewModel : Notifier
-    {         
+    public class ChangePasswordDialogViewModel : Notifier
+    {
         public Action RequestClose;
-         
+
+        public Func<string, bool> RequestAuthenticate;
+
         public bool IsOk { get; private set; } = false;
 
         private string _title;
@@ -54,52 +56,67 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
-        private SimpleUserPassModel _model;
-
-        public SimpleUserPassModel Model
+        public ChangePasswordDialogViewModel(Action requestClose, Func<string, bool> requestAuthenticate)
         {
-            get { return _model; }
+            this.RequestClose = requestClose;
+
+            this.RequestAuthenticate = requestAuthenticate;
+        }
+
+
+        private string _oldPassword;
+
+        public string OldPassword
+        {
+            get { return _oldPassword; }
             set
             {
-                _model = value;
+                _oldPassword = value;
                 RaisePropertyChanged();
             }
         }
 
-        public SignUpDialogViewModel(Action requestClose)
-        {
-            this.Model = new SimpleUserPassModel();
 
-            this.RequestClose = requestClose; 
+        private string _newPassword;
+
+        public string NewPassword
+        {
+            get { return _newPassword; }
+            set
+            {
+                _newPassword = value;
+                RaisePropertyChanged();
+            }
         }
 
-        private RelayCommand _signUpCommand;
 
-        public RelayCommand SignUpCommand
+        private RelayCommand _changePasswordCommand;
+
+        public RelayCommand ChangePasswordCommand
         {
             get
             {
-                if (_signUpCommand == null)
+                if (_changePasswordCommand == null)
                 {
-                    _signUpCommand = new RelayCommand(param =>
+                    _changePasswordCommand = new RelayCommand(param =>
                     {
-                        var model = param as INewSimpleUserPass;
+                        var model = param as IChangePassword;
 
                         if (model == null)
                         {
                             return;
                         }
 
-                        if (!model.IsNewPasswordValid())
+                        this.OldPassword = SecureStringHelper.GetString(model.Password);
+
+                        if (!model.IsNewPasswordValid() || this.RequestAuthenticate?.Invoke(OldPassword) != true)
                         {
                             model.ClearInputValues();
 
                             return;
                         }
 
-                        this.Model.UserName = model.UserName;
-
-                        this.Model.Password = SecureStringHelper.GetString(model.NewPassword);
+                        this.NewPassword = SecureStringHelper.GetString(model.NewPassword);
 
                         this.IsOk = true;
 
@@ -107,7 +124,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                     });
                 }
 
-                return _signUpCommand;
+                return _changePasswordCommand;
             }
         }
 

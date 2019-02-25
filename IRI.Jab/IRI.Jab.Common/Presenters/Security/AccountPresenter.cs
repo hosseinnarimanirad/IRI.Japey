@@ -1,5 +1,7 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
+using IRI.Jab.Common.Service.Dialog;
+using IRI.Jab.Common.ViewModel.Dialogs;
 using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,8 @@ namespace IRI.Jab.Common.Presenters.Security
     public class AccountPresenter<TUser> : Notifier where TUser : class
     {
         IUserRepository<TUser> _repository;
+
+        IDialogService _dialogService;
 
         //private Guid _id = Guid.NewGuid();
 
@@ -69,15 +73,19 @@ namespace IRI.Jab.Common.Presenters.Security
 
         public int? CurrentUserId { get; set; }
 
-        public AccountPresenter(IUserRepository<TUser> repository)
+        public AccountPresenter(IUserRepository<TUser> repository, IDialogService dialogService)
         {
             this._repository = repository;
+
+            this._dialogService = dialogService;
         }
 
         #region Actions
 
 
         public Func<bool> RequestAuthenticate;
+
+        public Func<string, bool> RequestAuthenticateByPassword;
 
         public Action RequestClose;
 
@@ -94,6 +102,12 @@ namespace IRI.Jab.Common.Presenters.Security
         public Action<AccountPresenter<TUser>> RequestUpdate;
 
         public Action<INewSimpleUserPass> RequestSignUp;
+
+        public Action<SignUpDialogViewModel> RequestSignUpDialogView;
+
+        public Action<ChangePasswordDialogViewModel> RequestChangePasswordDialogView;
+
+        public Action RequestResetPassword;
 
         #endregion
 
@@ -217,6 +231,97 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
 
+        private RelayCommand _resetPasswordCommand;
+
+        public RelayCommand ResetPasswordCommand
+        {
+            get
+            {
+                if (_resetPasswordCommand == null)
+                {
+                    _resetPasswordCommand = new RelayCommand(param =>
+                    {
+                        this.RequestResetPassword?.Invoke();
+                    });
+                }
+
+                return _resetPasswordCommand;
+            }
+        }
+
+
+
+        private RelayCommand _showSignUpDialogViewCommand;
+
+        public RelayCommand ShowSignUpDialogViewCommand
+        {
+            get
+            {
+                if (_showSignUpDialogViewCommand == null)
+                {
+                    //owner window should be passed via param
+                    //sample: CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type esiDb:Shell}}}"
+                    _showSignUpDialogViewCommand = new RelayCommand(async param =>
+                    {
+                        var model = await _dialogService.ShowUserNameSignUpDialog(param);
+
+                        if (model == null)
+                        {
+                            return;
+                        }
+
+                        try
+                        {
+                            this.RequestSignUpDialogView?.Invoke(model);
+
+                            await _dialogService?.ShowMessage(param, null, "کاربر جدید با موفقیت اضافه شد", "پیغام");
+                        }
+                        catch (Exception ex)
+                        {
+                            await _dialogService?.ShowMessage(param, null, ex.Message, "خطا");
+                        }
+
+                    });
+                }
+
+                return _showSignUpDialogViewCommand;
+            }
+        }
+
+
+        private RelayCommand _showChangePasswordDialogViewCommand;
+
+        public RelayCommand ShowChangePasswordDialogViewCommand
+        {
+            get
+            {
+                if (_showChangePasswordDialogViewCommand == null)
+                {
+                    _showChangePasswordDialogViewCommand = new RelayCommand(async param =>
+                    {
+                        var model = await _dialogService.ShowChangePasswordDialog(param, RequestAuthenticateByPassword);
+
+                        if (model == null)
+                        {
+                            return;
+                        }
+
+                        try
+                        { 
+                            this.RequestChangePasswordDialogView?.Invoke(model);
+
+                            await _dialogService?.ShowMessage(param, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
+                        }
+                        catch (Exception ex)
+                        {
+                            await _dialogService?.ShowMessage(param, null, ex.Message, "خطا");
+                        }
+                    });
+                }
+
+                return _showChangePasswordDialogViewCommand;
+            }
+        }
 
 
         private RelayCommand _signUpCommand;

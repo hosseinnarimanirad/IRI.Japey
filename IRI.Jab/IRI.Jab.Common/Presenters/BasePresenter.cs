@@ -43,6 +43,7 @@ namespace IRI.Jab.Common.Presenter
 
         public event EventHandler<string> UserChanged;
 
+        public Action RequestClose;
 
         //public Func<string, string> RequestOpenFile;
 

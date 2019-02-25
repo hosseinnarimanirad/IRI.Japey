@@ -33,6 +33,10 @@ namespace IRI.Jab.Common.Service.Dialog
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>();
          
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow);
-        
+
+
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<string, bool> requestAuthenticate);
+
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<string, bool> requestAuthenticate);
     }
 }

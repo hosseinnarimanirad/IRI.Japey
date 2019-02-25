@@ -254,6 +254,7 @@
     <Compile Include="Common\Event\PanEventArgs.cs" />
     <Compile Include="Common\Event\PointEventArgs.cs" />
     <Compile Include="Presenters\BasePresenter.cs" />
+    <Compile Include="Presenters\Dialogs\ChangePasswordDialogViewModel.cs" />
     <Compile Include="Presenters\Dialogs\SignUpDialogViewModel.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
     <Compile Include="Presenters\LegendPresenter.cs" />

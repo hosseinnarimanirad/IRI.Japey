@@ -312,5 +312,72 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             return tcs.Task;
         }
+
+
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<string, bool> requestAuthenticate)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowChangePasswordDialog(owner, requestAuthenticate);
+        }
+
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<string, bool> requestAuthenticate)
+        {
+            TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
+
+            View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                dialog.Owner = owner;
+            }
+
+            var ownerDefaultEffect = owner?.Effect;
+
+            if (owner != null)
+            {
+                owner.Effect = new BlurEffect() { Radius = 10 };
+            }
+
+            Action requestClose = () =>
+            {
+                dialog.Close();
+
+                if (owner != null)
+                {
+                    owner.Effect = ownerDefaultEffect;
+                }
+            };
+
+            ChangePasswordDialogViewModel viewModel = new ChangePasswordDialogViewModel(requestClose, requestAuthenticate);
+            //{
+            //    Message = message,
+            //    Title = title,
+            //    IsTwoOptionsMode = false,
+            //    IconPathMarkup = pathMarkup
+            //};
+
+            dialog.Closed += (sender, e) =>
+            {
+                if (viewModel.IsOk)
+                {
+                    tcs.SetResult(viewModel);
+                }
+                else
+                {
+                    tcs.SetResult(null);
+                }
+
+            };
+
+            dialog.DataContext = viewModel;
+
+            dialog.ShowDialog();
+
+            return tcs.Task;
+        }
+
     }
 }

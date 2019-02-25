@@ -19,28 +19,20 @@ using System.Windows.Shapes;
 namespace IRI.Jab.Controls.View.Security
 {
     /// <summary>
-    /// Interaction logic for SimpleSignUpView.xaml
+    /// Interaction logic for ChangePasswordView.xaml
     /// </summary>
-    public partial class UserNameSignUpView : UserControl, INewSimpleUserPass
+    public partial class ChangePasswordView : UserControl, IChangePassword
     {
-        public UserNameSignUpView()
+        public ChangePasswordView()
         {
             InitializeComponent();
         }
 
-        public SecureString NewPassword => this.key.SecurePassword;
+        public SecureString NewPassword => this.newPassword.SecurePassword;
 
-        public SecureString ConfirmPassword => this.confirmPassword.SecurePassword;
+        public SecureString ConfirmPassword => this.confirmNewPassword.SecurePassword;
 
-        public string UserName
-        {
-            get { return (string)GetValue(UsreNameProperty); }
-            set { SetValue(UsreNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for UsreName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UsreNameProperty =
-            DependencyProperty.Register(nameof(UserName), typeof(string), typeof(UserNameSignUpView), new PropertyMetadata(string.Empty));
+        public SecureString Password => this.key.SecurePassword;
 
 
         public Brush InputBorderBrush
@@ -51,7 +43,7 @@ namespace IRI.Jab.Controls.View.Security
 
         // Using a DependencyProperty as the backing store for InputBorderBrush.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty InputBorderBrushProperty =
-            DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(UserNameSignUpView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(ChangePasswordView), new PropertyMetadata(null));
 
 
         public Thickness InputBorderThickness
@@ -62,7 +54,7 @@ namespace IRI.Jab.Controls.View.Security
 
         // Using a DependencyProperty as the backing store for InputBorderThickness.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty InputBorderThicknessProperty =
-            DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(UserNameSignUpView), new PropertyMetadata(new Thickness()));
+            DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(ChangePasswordView), new PropertyMetadata(new Thickness()));
 
 
         //same code exist in EmailSignUpView & ChangeUserPasswordView
@@ -75,9 +67,9 @@ namespace IRI.Jab.Controls.View.Security
         {
             this.key.Clear();
 
-            this.confirmPassword.Clear();
+            this.newPassword.Clear();
 
-            this.UserName = string.Empty;
+            this.confirmNewPassword.Clear();
         }
     }
 }

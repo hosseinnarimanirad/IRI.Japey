@@ -137,6 +137,9 @@
     <Compile Include="View\CoordinateEditor\PolygonEditorView.xaml.cs">
       <DependentUpon>PolygonEditorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Dialogs\ChangePasswordDialogView.xaml.cs">
+      <DependentUpon>ChangePasswordDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Dialogs\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
@@ -197,6 +200,9 @@
     <Compile Include="View\Scalebar.xaml.cs">
       <DependentUpon>Scalebar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Security\ChangePasswordView.xaml.cs">
+      <DependentUpon>ChangePasswordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Security\ChangeUserPasswordView.xaml.cs">
       <DependentUpon>ChangeUserPasswordView.xaml</DependentUpon>
     </Compile>
@@ -252,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CoordinateEditor\PolygonEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Dialogs\ChangePasswordDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -334,6 +344,10 @@
     <Page Include="View\Scalebar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Security\ChangePasswordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Security\ChangeUserPasswordView.xaml">
       <SubType>Designer</SubType>

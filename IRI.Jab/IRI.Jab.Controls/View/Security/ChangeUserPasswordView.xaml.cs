@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common.Model.Security;
 using IRI.Jab.Common.Presenters.Security;
+using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,13 +36,19 @@ namespace IRI.Jab.Controls.View.Security
 
         public SecureString ConfirmPassword => this.confirmNewPassword.SecurePassword;
 
+        //same code exist in EmailSignUpView & UserNameSignUpView
+        public bool IsNewPasswordValid()
+        {
+            return NewPassword != null && NewPassword.Length > 0 && !SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
+        }
+
         public void ClearInputValues()
         {
-            this.Password.Clear();
+            this.key.Clear();
 
-            this.NewPassword.Clear();
+            this.newPassword.Clear();
 
-            this.ConfirmPassword.Clear();
+            this.confirmNewPassword.Clear();
         }
 
         public bool IsUserNameShown
@@ -53,7 +60,6 @@ namespace IRI.Jab.Controls.View.Security
         // Using a DependencyProperty as the backing store for IsUserNameShown.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsUserNameShownProperty =
             DependencyProperty.Register(nameof(IsUserNameShown), typeof(bool), typeof(ChangeUserPasswordView), new PropertyMetadata(true));
-
 
 
 

@@ -1,9 +1,7 @@
-﻿using IRI.Jab.Common.Model.Security;
-using IRI.Jab.Common.Presenters.Security;
+﻿using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,23 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Security
+namespace IRI.Jab.Controls.View.Dialogs
 {
     /// <summary>
-    /// Interaction logic for UserPasswordInputView.xaml
+    /// Interaction logic for ChangePasswordDialogView.xaml
     /// </summary>
-    public partial class UserPasswordInputView : UserControl, IHavePassword
+    public partial class ChangePasswordDialogView : MetroWindow
     {
-        public UserPasswordInputView()
+        public ChangePasswordDialogView()
         {
             InitializeComponent();
-        }
-
-        public SecureString Password => this.key.SecurePassword;
-
-        public void ClearInputValues()
-        {
-            this.key.Clear(); 
         }
     }
 }
