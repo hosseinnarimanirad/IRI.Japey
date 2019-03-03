@@ -30,5 +30,16 @@ namespace IRI.Jab.Common.Helpers
             }
 
         }
+
+
+        /// <summary>
+        /// Get string of a file with build action=Resource
+        /// </summary>
+        /// <param name="fileAddress">e.g. @"Restaurant;component/Asset/Images/myImage.png"  </param>
+        /// <returns></returns>
+        public static string ReadAllTextFromResource(string fileAddress)
+        {
+            return new StreamReader(Application.GetResourceStream(new Uri(fileAddress, UriKind.Relative)).Stream).ReadToEnd();
+        }
     }
 }

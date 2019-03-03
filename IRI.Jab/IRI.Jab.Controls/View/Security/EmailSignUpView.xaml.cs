@@ -21,7 +21,7 @@ namespace IRI.Jab.Controls.View.Security
     /// <summary>
     /// Interaction logic for EmailSignUpView.xaml
     /// </summary>
-    public partial class EmailSignUpView : UserControl, INewSimpleUserPass
+    public partial class EmailSignUpView : UserControl, INewUserPassword
     {
         public EmailSignUpView()
         {

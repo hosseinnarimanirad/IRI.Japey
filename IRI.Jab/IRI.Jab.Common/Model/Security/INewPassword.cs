@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Security
 {
-    public interface IDefineNewPassword : ISecurityBase
+    public interface INewPassword : ISecurityBase
     {
         SecureString NewPassword { get; }
 

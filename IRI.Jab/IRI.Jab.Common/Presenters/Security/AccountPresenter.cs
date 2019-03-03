@@ -36,22 +36,10 @@ namespace IRI.Jab.Common.Presenters.Security
                 RaisePropertyChanged();
             }
         }
+         
+        //public System.Security.SecureString Password { get; private set; }
 
-        private string _newUserName;
-
-        public string NewUserName
-        {
-            get { return _newUserName; }
-            set
-            {
-                _newUserName = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public System.Security.SecureString Password { get; private set; }
-
-        public System.Security.SecureString NewPassword { get; set; }
+        //public System.Security.SecureString NewPassword { get; set; }
 
         private string _message;
 
@@ -71,7 +59,7 @@ namespace IRI.Jab.Common.Presenters.Security
             get { return Message != null && Message.Length > 0; }
         }
 
-        public int? CurrentUserId { get; set; }
+        //public int? CurrentUserId { get; set; }
 
         public AccountPresenter(IUserRepository<TUser> repository, IDialogService dialogService)
         {
@@ -82,34 +70,28 @@ namespace IRI.Jab.Common.Presenters.Security
 
         #region Actions
 
+        public Action RequestLoginWithGoogleOAuth;
 
-        public Func<bool> RequestAuthenticate;
-
-        public Func<string, bool> RequestAuthenticateByPassword;
+        public Action RequestHelpWithForgetPassword;
 
         public Action RequestClose;
 
-        public Action RequestCloseForUpdateAccountView;
-
-        public Action RequestCloseForSignUpView;
-
+        public Func<IHavePassword, bool> RequestAuthenticate;
+          
         public Action<AccountPresenter<TUser>> RequestLoginSuccessAction;
 
         public Action<AccountPresenter<TUser>> RequestLoginAsGuest;
 
         public Action RequestSignOut;
+         
+        public Action<SignUpDialogViewModel> RequestShowSignUpDialogView;
 
-        public Action<AccountPresenter<TUser>> RequestUpdate;
-
-        public Action<INewSimpleUserPass> RequestSignUp;
-
-        public Action<SignUpDialogViewModel> RequestSignUpDialogView;
-
-        public Action<ChangePasswordDialogViewModel> RequestChangePasswordDialogView;
+        public Action<ChangePasswordDialogViewModel> RequestShowChangePasswordDialogView;
 
         public Action RequestResetPassword;
 
         #endregion
+
 
         #region Commands
 
@@ -168,6 +150,7 @@ namespace IRI.Jab.Common.Presenters.Security
             }
         }
 
+
         private RelayCommand _loginGuestCommand;
 
         public RelayCommand LoginGuestCommand
@@ -200,35 +183,35 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
 
-        private RelayCommand _updateAccountCommand;
+        //private RelayCommand _updateAccountCommand;
 
-        public RelayCommand UpdateAccountCommand
-        {
-            get
-            {
-                if (this._updateAccountCommand == null)
-                {
-                    this._updateAccountCommand = new RelayCommand(param => this.UpdateAccount(param));
-                }
+        //public RelayCommand UpdateAccountCommand
+        //{
+        //    get
+        //    {
+        //        if (this._updateAccountCommand == null)
+        //        {
+        //            this._updateAccountCommand = new RelayCommand(param => this.UpdateAccount(param));
+        //        }
 
-                return this._updateAccountCommand;
-            }
-        }
+        //        return this._updateAccountCommand;
+        //    }
+        //}
 
-        private RelayCommand _closeUpdateAccountCommand;
+        //private RelayCommand _closeUpdateAccountCommand;
 
-        public RelayCommand CloseUpdateAccountCommand
-        {
-            get
-            {
-                if (_closeUpdateAccountCommand == null)
-                {
-                    _closeUpdateAccountCommand = new RelayCommand(param => this.RequestCloseForUpdateAccountView());
-                }
+        //public RelayCommand CloseUpdateAccountCommand
+        //{
+        //    get
+        //    {
+        //        if (_closeUpdateAccountCommand == null)
+        //        {
+        //            _closeUpdateAccountCommand = new RelayCommand(param => this.RequestCloseForUpdateAccountView());
+        //        }
 
-                return _closeUpdateAccountCommand;
-            }
-        }
+        //        return _closeUpdateAccountCommand;
+        //    }
+        //}
 
 
         private RelayCommand _resetPasswordCommand;
@@ -250,9 +233,46 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
 
+        private RelayCommand _helpWithForgetPasswordCommand;
+
+        public RelayCommand HelpWithForgetPasswordCommand
+        {
+            get
+            {
+                if (_helpWithForgetPasswordCommand == null)
+                {
+                    _helpWithForgetPasswordCommand = new RelayCommand(param =>
+                    {
+                        this.RequestHelpWithForgetPassword?.Invoke();
+                    });
+                }
+
+                return _helpWithForgetPasswordCommand;
+            }
+        }
+
+        private RelayCommand _loginWithGoogleOAuthCommand;
+
+        public RelayCommand LoginWithGoogleOAuthCommand
+        {
+            get
+            {
+                if (_loginWithGoogleOAuthCommand == null)
+                {
+                    _loginWithGoogleOAuthCommand = new RelayCommand(param =>
+                    {
+                        this.RequestLoginWithGoogleOAuth?.Invoke();
+                    });
+                }
+
+                return _loginWithGoogleOAuthCommand;
+            }
+        }
+
+
 
         private RelayCommand _showSignUpDialogViewCommand;
-
+         
         public RelayCommand ShowSignUpDialogViewCommand
         {
             get
@@ -272,7 +292,7 @@ namespace IRI.Jab.Common.Presenters.Security
 
                         try
                         {
-                            this.RequestSignUpDialogView?.Invoke(model);
+                            this.RequestShowSignUpDialogView?.Invoke(model);
 
                             await _dialogService?.ShowMessage(param, null, "کاربر جدید با موفقیت اضافه شد", "پیغام");
                         }
@@ -287,7 +307,7 @@ namespace IRI.Jab.Common.Presenters.Security
                 return _showSignUpDialogViewCommand;
             }
         }
-
+         
 
         private RelayCommand _showChangePasswordDialogViewCommand;
 
@@ -299,7 +319,7 @@ namespace IRI.Jab.Common.Presenters.Security
                 {
                     _showChangePasswordDialogViewCommand = new RelayCommand(async param =>
                     {
-                        var model = await _dialogService.ShowChangePasswordDialog(param, RequestAuthenticateByPassword);
+                        var model = await _dialogService.ShowChangePasswordDialog(param, RequestAuthenticate);
 
                         if (model == null)
                         {
@@ -307,8 +327,8 @@ namespace IRI.Jab.Common.Presenters.Security
                         }
 
                         try
-                        { 
-                            this.RequestChangePasswordDialogView?.Invoke(model);
+                        {
+                            this.RequestShowChangePasswordDialogView?.Invoke(model);
 
                             await _dialogService?.ShowMessage(param, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
                         }
@@ -324,38 +344,38 @@ namespace IRI.Jab.Common.Presenters.Security
         }
 
 
-        private RelayCommand _signUpCommand;
+        //private RelayCommand _signUpCommand;
 
-        public RelayCommand SignUpCommand
-        {
-            get
-            {
-                if (this._signUpCommand == null)
-                {
-                    this._signUpCommand = new RelayCommand(param => SignUp(param));
-                }
+        //public RelayCommand SignUpCommand
+        //{
+        //    get
+        //    {
+        //        if (this._signUpCommand == null)
+        //        {
+        //            this._signUpCommand = new RelayCommand(param => SignUp(param));
+        //        }
 
-                return this._signUpCommand;
-            }
-        }
+        //        return this._signUpCommand;
+        //    }
+        //}
 
-        private RelayCommand _closeSignUpCommand;
+        //private RelayCommand _closeSignUpCommand;
 
-        public RelayCommand CloseSignUpCommand
-        {
-            get
-            {
-                if (_closeSignUpCommand == null)
-                {
-                    _closeSignUpCommand = new RelayCommand(param =>
-                    {
-                        this.RequestCloseForSignUpView?.Invoke();
-                    });
-                }
+        //public RelayCommand CloseSignUpCommand
+        //{
+        //    get
+        //    {
+        //        if (_closeSignUpCommand == null)
+        //        {
+        //            _closeSignUpCommand = new RelayCommand(param =>
+        //            {
+        //                this.RequestCloseForSignUpView?.Invoke();
+        //            });
+        //        }
 
-                return _closeSignUpCommand;
-            }
-        }
+        //        return _closeSignUpCommand;
+        //    }
+        //}
 
 
         #endregion
@@ -366,9 +386,9 @@ namespace IRI.Jab.Common.Presenters.Security
 
             if (passContainer != null)
             {
-                this.Password = passContainer.Password;
+                //this.Password = passContainer.Password;
 
-                if (this.RequestAuthenticate?.Invoke() != true)
+                if (this.RequestAuthenticate?.Invoke(passContainer) != true)
                 {
                     this.UserName = string.Empty;
 
@@ -387,78 +407,72 @@ namespace IRI.Jab.Common.Presenters.Security
             }
         }
 
-        private void UpdateAccount(object parameter)
-        {
-            var model = parameter as IChangePassword;
-
-            if (model != null)
-            {
-                this.Password = model.Password;
-
-                this.NewPassword = model.NewPassword;
-
-                //check old password is correct
-                if (RequestAuthenticate?.Invoke() != true)
-                {
-                    model.ClearInputValues();
-
-                    return;
-                }
-
-                //update the password
-                if (NewPassword != null && NewPassword.Length > 0)
-                {
-                    //check  new password is confirmed
-                    if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
-                    {
-                        model.ClearInputValues();
-
-                        return;
-                    }
-
-                    this.Password = model.NewPassword;
-                }
-
-                this.RequestUpdate?.Invoke(this);
-            }
-
-            this.RequestClose?.Invoke();
-        }
-
-        public void SignUp(object parameter)
-        {
-            var model = parameter as INewSimpleUserPass;
-
-            if (model != null)
-            {
-
-                this.NewPassword = model.NewPassword;
-
-                //update the password
-                if (NewPassword != null && NewPassword.Length > 0)
-                {
-                    //check  new password is confirmed
-                    if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
-                    {
-                        model.ClearInputValues();
-
-                        return;
-                    }
-
-                    //this.Password = model.NewPassword;
-                    this.RequestSignUp(model);
-                }
-
-            }
-
-            this.RequestClose?.Invoke();
-        }
-
-        //public static bool Validate(SecureString secureString, string stringValue)
+        //private void UpdateAccount(object parameter)
         //{
-        //    return SecureStringHelper.SecureStringEqual(secureString, new NetworkCredential("", stringValue).SecurePassword);
+        //    var model = parameter as IChangePassword;
+
+        //    if (model != null)
+        //    {
+        //        this.Password = model.Password;
+
+        //        this.NewPassword = model.NewPassword;
+
+        //        //check old password is correct
+        //        if (RequestAuthenticate?.Invoke(model) != true)
+        //        {
+        //            model.ClearInputValues();
+
+        //            return;
+        //        }
+
+        //        //update the password
+        //        if (NewPassword != null && NewPassword.Length > 0)
+        //        {
+        //            //check  new password is confirmed
+        //            if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
+        //            {
+        //                model.ClearInputValues();
+
+        //                return;
+        //            }
+
+        //            this.Password = model.NewPassword;
+        //        }
+
+        //        this.RequestUpdate?.Invoke(this);
+        //    }
+
+        //    this.RequestClose?.Invoke();
         //}
 
+        //public void SignUp(object parameter)
+        //{
+        //    var model = parameter as INewUserPassword;
 
+        //    if (model != null)
+        //    {
+
+        //        this.NewPassword = model.NewPassword;
+
+        //        //update the password
+        //        if (NewPassword != null && NewPassword.Length > 0)
+        //        {
+        //            //check  new password is confirmed
+        //            if (!SecureStringHelper.SecureStringEqual(this.NewPassword, model.ConfirmPassword))
+        //            {
+        //                model.ClearInputValues();
+
+        //                return;
+        //            }
+
+        //            //this.Password = model.NewPassword;
+        //            this.RequestSignUp(model);
+        //        }
+
+        //    }
+
+        //    this.RequestClose?.Invoke();
+        //}
+         
     }
 }

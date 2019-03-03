@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Common.Service.Dialog;
+﻿using IRI.Jab.Common.Model.Security;
+using IRI.Jab.Common.Service.Dialog;
 using IRI.Jab.Common.ViewModel.Dialogs;
 using IRI.Jab.Controls.ViewModel.Dialogs;
 using Microsoft.Win32;
@@ -139,16 +140,16 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #endregion
 
-        public Task<bool> ShowYesNoDialog<T>(string message, string title)
+        public Task<bool?> ShowYesNoDialog<T>(string message, string title)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
             return ShowYesNoDialog(owner, message, title);
         }
 
-        public Task<bool> ShowYesNoDialog(object ownerWindow, string message, string title)
+        public Task<bool?> ShowYesNoDialog(object ownerWindow, string message, string title)
         {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
 
             IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
             {
@@ -171,7 +172,7 @@ namespace IRI.Jab.Controls.Services.Dialog
                 owner.Effect = new BlurEffect() { Radius = 10 };
             }
 
-            dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.IsOk); };
+            dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.DialogResult); };
 
             viewModel.RequestClose = () =>
             {
@@ -200,7 +201,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title)
         {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
 
             IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
             {
@@ -227,7 +228,7 @@ namespace IRI.Jab.Controls.Services.Dialog
                 owner.Effect = new BlurEffect() { Radius = 10 };
             }
 
-            dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.IsOk); };
+            dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.DialogResult); };
 
             viewModel.RequestClose = () =>
             {
@@ -314,14 +315,14 @@ namespace IRI.Jab.Controls.Services.Dialog
         }
 
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<string, bool> requestAuthenticate)
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
             return ShowChangePasswordDialog(owner, requestAuthenticate);
         }
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<string, bool> requestAuthenticate)
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate)
         {
             TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
@@ -375,6 +376,60 @@ namespace IRI.Jab.Controls.Services.Dialog
             dialog.DataContext = viewModel;
 
             dialog.ShowDialog();
+
+            return tcs.Task;
+        }
+
+
+        public Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel)
+        {
+            var owner = Application.Current.Windows.OfType<TParent>().FirstOrDefault() as Window;
+
+            return ShowDialog<TParent>(owner, view, viewModel);
+        }
+
+        public Task<bool?> ShowDialog<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel)
+        {
+            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                view.Owner = owner;
+            }
+
+            var ownerDefaultEffect = owner?.Effect;
+
+            if (owner != null)
+            {
+                owner.Effect = new BlurEffect() { Radius = 10 };
+            }
+
+            view.Closed += (sender, e) =>
+            {
+                if (owner != null)
+                {
+                    owner.Effect = ownerDefaultEffect;
+                }
+            };
+              
+            viewModel.OnSetResult += (sender, e) =>
+            {
+                if (viewModel.DialogResult == true)
+                {
+                    tcs.SetResult(viewModel.DialogResult);
+                }
+                else
+                {
+                    tcs.SetResult(null);
+                }
+
+            };
+
+            view.DataContext = viewModel;
+
+            view.ShowDialog();
 
             return tcs.Task;
         }

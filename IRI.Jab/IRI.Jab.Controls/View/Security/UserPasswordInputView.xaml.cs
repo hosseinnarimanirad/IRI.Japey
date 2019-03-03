@@ -34,5 +34,19 @@ namespace IRI.Jab.Controls.View.Security
         {
             this.key.Clear(); 
         }
+
+
+
+        public string UserNameWatermark
+        {
+            get { return (string)GetValue(UserNameWatermarkProperty); }
+            set { SetValue(UserNameWatermarkProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UserNameWatermark.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UserNameWatermarkProperty =
+            DependencyProperty.Register(nameof(UserNameWatermark), typeof(string), typeof(UserPasswordInputView), new PropertyMetadata("نام کاربری"));
+
+
     }
 }

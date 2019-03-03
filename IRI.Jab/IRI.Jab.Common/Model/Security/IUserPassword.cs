@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Security
 {
-    public interface INewSimpleUserPass : IDefineNewPassword
+    public interface IUserPassword : IHavePassword
     {
         string UserName { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Common.ViewModel.Dialogs;
+﻿using IRI.Jab.Common.Model.Security;
+using IRI.Jab.Common.ViewModel.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,21 +23,27 @@ namespace IRI.Jab.Common.Service.Dialog
 
         string ShowSaveFileDialog<T>(string filter);
 
-        Task<bool> ShowYesNoDialog<T>(string message, string title = null);
+        Task<bool?> ShowYesNoDialog<T>(string message, string title = null);
 
-        Task<bool> ShowYesNoDialog(object owner, string message, string title);
+        Task<bool?> ShowYesNoDialog(object owner, string message, string title);
 
         Task ShowMessage<T>(string message, string pathMarkup, string title);
 
         Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title);
 
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>();
-         
+
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow);
 
 
-        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<string, bool> requestAuthenticate);
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate);
 
-        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<string, bool> requestAuthenticate);
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate);
+
+
+        Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel);
+
+        Task<bool?> ShowDialog<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel);
+
     }
 }

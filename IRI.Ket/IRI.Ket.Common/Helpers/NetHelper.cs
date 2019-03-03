@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
 using System.Text;
@@ -104,6 +105,47 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
+        public static void SendHtmlMail(string from, string to, string host, string user, string password, string subject, string html, int port = 25, bool enableSsl = false)
+        {
+            using (MailMessage mail = new MailMessage(from, to))
+            {
+                using (SmtpClient client = new SmtpClient())
+                {
+                    client.Port = port;
+
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                    client.UseDefaultCredentials = false;
+
+                    client.Credentials = new System.Net.NetworkCredential(user, password);
+
+                    client.EnableSsl = enableSsl;
+
+                    client.Host = host;
+
+                    mail.Subject = subject;
+
+                    mail.IsBodyHtml = true;
+
+                    mail.Body = html;
+
+                    client.Send(mail);
+                }
+            }
+        }
+
+        public static int GetRandomUnusedPort()
+        {
+            var listener = new System.Net.Sockets.TcpListener(IPAddress.Loopback, 0);
+
+            listener.Start();
+
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+
+            listener.Stop();
+
+            return port;
+        }
 
         //Http Get
         public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class

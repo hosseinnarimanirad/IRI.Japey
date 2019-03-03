@@ -15,7 +15,7 @@
                     </ControlTemplate.Triggers>
                     <Grid>
                         <Border Margin="0" Background="{TemplateBinding Property=Background}"
-                                    CornerRadius="2,2,2,2"/>
+                                    CornerRadius="{TemplateBinding Border.CornerRadius}"/>
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"/>
@@ -45,7 +45,7 @@
                     </ControlTemplate.Triggers>
                     <Grid>
                         <Border Margin="0" Background="{TemplateBinding Property=Background}"
-                                    CornerRadius="2,2,2,2"/>
+                                    CornerRadius="{TemplateBinding Border.CornerRadius}"/>
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"/>
@@ -59,6 +59,35 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="flatButtonPrimaryRound2" TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
+        <Setter Property="Border.CornerRadius" Value="2"/>
+    </Style>
+    <Style x:Key="flatButtonGrayRound2" TargetType="Button" BasedOn="{StaticResource flatButtonGray}">
+        <Setter Property="Border.CornerRadius" Value="2"/>
+    </Style>
+
+    <Style x:Key="flatButtonPrimaryRound4" TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
+        <Setter Property="Border.CornerRadius" Value="4"/>
+    </Style>
+    <Style x:Key="flatButtonGrayRound4" TargetType="Button" BasedOn="{StaticResource flatButtonGray}">
+        <Setter Property="Border.CornerRadius" Value="4"/>
+    </Style>
+
+    <Style x:Key="flatButtonPrimaryRound6" TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
+        <Setter Property="Border.CornerRadius" Value="6"/>
+    </Style>
+    <Style x:Key="flatButtonGrayRound6" TargetType="Button" BasedOn="{StaticResource flatButtonGray}">
+        <Setter Property="Border.CornerRadius" Value="6"/>
+    </Style>
+
+    <Style x:Key="flatButtonPrimaryRound8" TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
+        <Setter Property="Border.CornerRadius" Value="8"/>
+    </Style>
+    <Style x:Key="flatButtonGrayRound8" TargetType="Button" BasedOn="{StaticResource flatButtonGray}">
+        <Setter Property="Border.CornerRadius" Value="8"/>
+    </Style>
+
 
     <Style TargetType="Button" x:Key="circleButton">
         <Setter Property="Width" Value="40"/>

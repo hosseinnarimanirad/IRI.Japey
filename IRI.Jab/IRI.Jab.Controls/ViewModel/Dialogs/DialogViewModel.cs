@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.ViewModel.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,11 @@ using System.Windows.Media;
 
 namespace IRI.Jab.Controls.ViewModel.Dialogs
 {
-    public class DialogViewModel : Notifier
+    public class DialogViewModel : DialogViewModelBase
     {
         public Action _requestFirstAction, _requestSecondAction;
 
         public Action RequestClose;
-
-        public bool IsOk { get; private set; } = false;
 
         private string _title;
 
@@ -121,7 +120,7 @@ namespace IRI.Jab.Controls.ViewModel.Dialogs
                     {
                         _requestFirstAction?.Invoke();
 
-                        this.IsOk = true;
+                        this.DialogResult = true;
 
                         RequestClose?.Invoke();
                     });
@@ -180,8 +179,8 @@ namespace IRI.Jab.Controls.ViewModel.Dialogs
                     _secondOptionCommand = new RelayCommand(param =>
                     {
                         _requestSecondAction?.Invoke();
-
-                        IsOk = false;
+                        
+                        DialogResult = false;
 
                         RequestClose?.Invoke();
                     });

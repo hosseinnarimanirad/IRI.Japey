@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs
 {
-    public class SignUpDialogViewModel : Notifier
-    {         
+    public class SignUpDialogViewModel : DialogViewModelBase
+    {
         public Action RequestClose;
-         
+
         public bool IsOk { get; private set; } = false;
 
         private string _title;
@@ -70,7 +70,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
         {
             this.Model = new SimpleUserPassModel();
 
-            this.RequestClose = requestClose; 
+            this.RequestClose = requestClose;
         }
 
         private RelayCommand _signUpCommand;
@@ -83,7 +83,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _signUpCommand = new RelayCommand(param =>
                     {
-                        var model = param as INewSimpleUserPass;
+                        var model = param as INewUserPassword;
 
                         if (model == null)
                         {

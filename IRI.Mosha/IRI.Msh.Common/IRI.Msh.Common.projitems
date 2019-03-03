@@ -124,6 +124,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleDistanceMatrixResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleGeolocationParameters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleGeolocationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleOAuthUserInfoResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GooglePlacesResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Here\HereIsolineResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ImageSource.cs" />

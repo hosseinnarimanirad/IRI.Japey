@@ -14,7 +14,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
     {
         public Action RequestClose;
 
-        public Func<string, bool> RequestAuthenticate;
+        public Func<IHavePassword, bool> RequestAuthenticate;
 
         public bool IsOk { get; private set; } = false;
 
@@ -56,7 +56,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
-        public ChangePasswordDialogViewModel(Action requestClose, Func<string, bool> requestAuthenticate)
+        public ChangePasswordDialogViewModel(Action requestClose, Func<IHavePassword, bool> requestAuthenticate)
         {
             this.RequestClose = requestClose;
 
@@ -109,18 +109,21 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
                         this.OldPassword = SecureStringHelper.GetString(model.Password);
 
-                        if (!model.IsNewPasswordValid() || this.RequestAuthenticate?.Invoke(OldPassword) != true)
+                        if (model.IsNewPasswordValid() && this.RequestAuthenticate?.Invoke(model) == true)
+                        {
+                            this.NewPassword = SecureStringHelper.GetString(model.NewPassword);
+
+                            this.IsOk = true;
+
+                            this.RequestClose?.Invoke();
+                        }
+                        else
                         {
                             model.ClearInputValues();
 
                             return;
                         }
 
-                        this.NewPassword = SecureStringHelper.GetString(model.NewPassword);
-
-                        this.IsOk = true;
-
-                        this.RequestClose?.Invoke();
                     });
                 }
 

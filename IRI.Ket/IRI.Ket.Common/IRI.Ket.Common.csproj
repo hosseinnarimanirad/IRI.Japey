@@ -73,6 +73,7 @@
     <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
     <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
+    <Compile Include="Service\Google\GoogleOAuthApi.cs" />
     <Compile Include="Service\Google\GoogleServiceUtility.cs" />
     <Compile Include="Service\Here\HereRoutingApi.cs" />
     <Compile Include="Service\Mapzen\MapzenService.cs" />

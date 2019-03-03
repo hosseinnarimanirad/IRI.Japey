@@ -235,10 +235,11 @@
     <Compile Include="Model\Map\TileManager.cs" />
     <Compile Include="Model\NotifiablePoint.cs" />
     <Compile Include="Model\Security\IChangePassword.cs" />
-    <Compile Include="Model\Security\IDefineNewPassword.cs" />
+    <Compile Include="Model\Security\INewPassword.cs" />
     <Compile Include="Model\Security\IHavePassword.cs" />
-    <Compile Include="Model\Security\INewSimpleUserPass.cs" />
+    <Compile Include="Model\Security\INewUserPassword.cs" />
     <Compile Include="Model\Security\ISecurityBase.cs" />
+    <Compile Include="Model\Security\IUserPassword.cs" />
     <Compile Include="Model\Security\IUserRepository.cs" />
     <Compile Include="Model\Security\SimpleUserPassModel.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
@@ -255,6 +256,8 @@
     <Compile Include="Common\Event\PointEventArgs.cs" />
     <Compile Include="Presenters\BasePresenter.cs" />
     <Compile Include="Presenters\Dialogs\ChangePasswordDialogViewModel.cs" />
+    <Compile Include="Presenters\Dialogs\DialogViewModelBase.cs" />
+    <Compile Include="Presenters\Dialogs\LoginDialogViewModel.cs" />
     <Compile Include="Presenters\Dialogs\SignUpDialogViewModel.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
     <Compile Include="Presenters\LegendPresenter.cs" />
@@ -489,6 +492,7 @@
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
     <Resource Include="Assets\Images\imageNotFound.jpg" />
+    <Content Include="Assets\Images\Logos\google.png" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
   <ItemGroup>
