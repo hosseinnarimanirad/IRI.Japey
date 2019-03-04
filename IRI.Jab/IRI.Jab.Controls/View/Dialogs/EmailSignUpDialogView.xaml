@@ -62,7 +62,7 @@
             <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="یا" Background="White" Padding="8,1" Foreground="Gray"/>
         </Grid>
 
-        <Button Grid.Row="4" Background="White" Margin="8" BorderBrush="#4285F4" BorderThickness="1" Padding="0" HorizontalContentAlignment="Stretch">
+        <!--<Button Grid.Row="4" Background="White" Margin="8" BorderBrush="#4285F4" BorderThickness="1" Padding="0" HorizontalContentAlignment="Stretch">
             <Grid FlowDirection="LeftToRight" HorizontalAlignment="Stretch" Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -83,6 +83,43 @@
                 </Viewbox>
                 <Border Background="#4285F4" HorizontalAlignment="Stretch" Grid.Column="1" >
                     <TextBlock Text="ورود با حساب گوگل" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="16" />
+                </Border>
+            </Grid>
+        </Button>-->
+        <Button Grid.Row="4" Margin="8" BorderBrush="#4285F4" BorderThickness="0" Padding="0" HorizontalContentAlignment="Stretch"
+                            Width="296" Command="{Binding LoginWithGoogleOAuthCommand}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
+                    <!--<Setter Property="Background" Value="#4285F4"/>-->
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource HighlightBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <Grid FlowDirection="LeftToRight" HorizontalAlignment="Stretch" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Border Background="White" Margin="0">
+                    <Viewbox Grid.Column="0" Height="24" Margin="8">
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="Path">
+                                    <Setter Property="FlowDirection" Value="LeftToRight"/>
+                                </Style>
+                            </Grid.Resources>
+                            <Path Data="M43.609375,20.082031L42,20.082031 42,20 24,20 24,28 35.304688,28C33.652344,32.65625 29.222656,36 24,36 17.371094,36 12,30.628906 12,24 12,17.371094 17.371094,12 24,12 27.058594,12 29.84375,13.152344 31.960938,15.039063L37.617188,9.382813C34.046875,6.054688 29.269531,4 24,4 12.953125,4 4,12.953125 4,24 4,35.046875 12.953125,44 24,44 35.046875,44 44,35.046875 44,24 44,22.660156 43.863281,21.351563 43.609375,20.082031z" Fill="#FFFFC107" />
+                            <Path Data="M6.304688,14.691406L12.878906,19.511719C14.65625,15.109375 18.960938,12 24,12 27.058594,12 29.84375,13.152344 31.960938,15.039063L37.617188,9.382813C34.046875,6.054688 29.269531,4 24,4 16.316406,4 9.65625,8.335938 6.304688,14.691406z" Fill="#FFFF3D00" />
+                            <Path Data="M24,44C29.164063,44,33.859375,42.023438,37.410156,38.808594L31.21875,33.570313C29.210938,35.089844 26.714844,36 24,36 18.796875,36 14.382813,32.683594 12.71875,28.054688L6.195313,33.078125C9.503906,39.554688,16.226563,44,24,44z" Fill="#FF4CAF50" />
+                            <Path Data="M43.609375,20.082031L42,20.082031 42,20 24,20 24,28 35.304688,28C34.511719,30.238281 33.070313,32.164063 31.214844,33.570313 31.21875,33.570313 31.21875,33.570313 31.21875,33.570313L37.410156,38.808594C36.972656,39.203125 44,34 44,24 44,22.660156 43.863281,21.351563 43.609375,20.082031z" Fill="#FF1976D2" />
+                        </Grid>
+                    </Viewbox>
+                </Border>
+                <Border HorizontalAlignment="Stretch" Grid.Column="1">
+                    <TextBlock Grid.Column="1" Text="ثبت نام با حساب گوگل" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="16" />
                 </Border>
             </Grid>
         </Button>

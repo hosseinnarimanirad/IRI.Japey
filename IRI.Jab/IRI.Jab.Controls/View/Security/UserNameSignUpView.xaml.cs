@@ -21,7 +21,7 @@ namespace IRI.Jab.Controls.View.Security
     /// <summary>
     /// Interaction logic for SimpleSignUpView.xaml
     /// </summary>
-    public partial class UserNameSignUpView : UserControl, INewUserPassword
+    public partial class UserNameSignUpView : SecurityInputUserControl, INewUserEmailPassword
     {
         public UserNameSignUpView()
         {
@@ -32,40 +32,6 @@ namespace IRI.Jab.Controls.View.Security
 
         public SecureString ConfirmPassword => this.confirmPassword.SecurePassword;
 
-        public string UserName
-        {
-            get { return (string)GetValue(UsreNameProperty); }
-            set { SetValue(UsreNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for UsreName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UsreNameProperty =
-            DependencyProperty.Register(nameof(UserName), typeof(string), typeof(UserNameSignUpView), new PropertyMetadata(string.Empty));
-
-
-        public Brush InputBorderBrush
-        {
-            get { return (Brush)GetValue(InputBorderBrushProperty); }
-            set { SetValue(InputBorderBrushProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for InputBorderBrush.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty InputBorderBrushProperty =
-            DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(UserNameSignUpView), new PropertyMetadata(null));
-
-
-        public Thickness InputBorderThickness
-        {
-            get { return (Thickness)GetValue(InputBorderThicknessProperty); }
-            set { SetValue(InputBorderThicknessProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for InputBorderThickness.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty InputBorderThicknessProperty =
-            DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(UserNameSignUpView), new PropertyMetadata(new Thickness()));
-
-
-        //same code exist in EmailSignUpView & ChangeUserPasswordView
         public bool IsNewPasswordValid()
         {
             return NewPassword != null && NewPassword.Length > 0 && SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
@@ -77,7 +43,43 @@ namespace IRI.Jab.Controls.View.Security
 
             this.confirmPassword.Clear();
 
-            this.UserName = string.Empty;
+            this.UserNameOrEmail = string.Empty;
         }
+
+        public string UserNameOrEmail
+        {
+            get { return (string)GetValue(UsreNameProperty); }
+            set { SetValue(UsreNameProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UsreName.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UsreNameProperty =
+            DependencyProperty.Register(nameof(UserNameOrEmail), typeof(string), typeof(UserNameSignUpView), new PropertyMetadata(string.Empty));
+
+
+        //public Brush InputBorderBrush
+        //{
+        //    get { return (Brush)GetValue(InputBorderBrushProperty); }
+        //    set { SetValue(InputBorderBrushProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for InputBorderBrush.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty InputBorderBrushProperty =
+        //    DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(UserNameSignUpView), new PropertyMetadata(null));
+
+
+        //public Thickness InputBorderThickness
+        //{
+        //    get { return (Thickness)GetValue(InputBorderThicknessProperty); }
+        //    set { SetValue(InputBorderThicknessProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for InputBorderThickness.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty InputBorderThicknessProperty =
+        //    DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(UserNameSignUpView), new PropertyMetadata(new Thickness()));
+
+
+        //same code exist in EmailSignUpView & ChangeUserPasswordView
+
     }
 }

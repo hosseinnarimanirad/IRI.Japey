@@ -1,9 +1,7 @@
 ﻿using IRI.Jab.Common.Model.Security;
-using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,20 +17,33 @@ using System.Windows.Shapes;
 namespace IRI.Jab.Controls.View.Security
 {
     /// <summary>
-    /// Interaction logic for ChangePasswordView.xaml
+    /// Interaction logic for ForgetPasswordView.xaml
     /// </summary>
-    public partial class ChangePasswordView : SecurityInputUserControl, IChangePassword
+    public partial class ForgetPasswordView : SecurityInputUserControl, IHaveEmail
     {
-        public ChangePasswordView()
+        public ForgetPasswordView()
         {
             InitializeComponent();
         }
 
-        public SecureString NewPassword => this.newPassword.SecurePassword;
+        public string Email { get => EmailAddress; set => EmailAddress = value; }
 
-        public SecureString ConfirmPassword => this.confirmNewPassword.SecurePassword;
+        public void ClearInputValues()
+        {
+            this.EmailAddress = string.Empty;
+        }
 
-        public SecureString Password => this.key.SecurePassword;
+
+
+        public string EmailAddress
+        {
+            get { return (string)GetValue(EmailAddressProperty); }
+            set { SetValue(EmailAddressProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EmailAddress.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EmailAddressProperty =
+            DependencyProperty.Register(nameof(EmailAddress), typeof(string), typeof(ForgetPasswordView), new PropertyMetadata(string.Empty));
 
 
         //public Brush InputBorderBrush
@@ -43,7 +54,7 @@ namespace IRI.Jab.Controls.View.Security
 
         //// Using a DependencyProperty as the backing store for InputBorderBrush.  This enables animation, styling, binding, etc...
         //public static readonly DependencyProperty InputBorderBrushProperty =
-        //    DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(ChangePasswordView), new PropertyMetadata(null));
+        //    DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(ForgetPasswordView), new PropertyMetadata(null));
 
 
         //public Thickness InputBorderThickness
@@ -54,22 +65,7 @@ namespace IRI.Jab.Controls.View.Security
 
         //// Using a DependencyProperty as the backing store for InputBorderThickness.  This enables animation, styling, binding, etc...
         //public static readonly DependencyProperty InputBorderThicknessProperty =
-        //    DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(ChangePasswordView), new PropertyMetadata(new Thickness()));
+        //    DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(ForgetPasswordView), new PropertyMetadata(new Thickness()));
 
-
-        //same code exist in EmailSignUpView & ChangeUserPasswordView
-        public bool IsNewPasswordValid()
-        {
-            return NewPassword != null && NewPassword.Length > 0 && SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
-        }
-
-        public void ClearInputValues()
-        {
-            this.key.Clear();
-
-            this.newPassword.Clear();
-
-            this.confirmNewPassword.Clear();
-        }
     }
 }

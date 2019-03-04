@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Presenters.Security
+namespace IRI.Jab.Common.Model.Security
 {
-    public class SignUpViewModel : Notifier
+    public interface IHaveEmail : ISecurityBase
     {
-
+        string Email { get; set; }
     }
 }

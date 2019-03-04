@@ -234,12 +234,14 @@
     <Compile Include="Model\Map\Tile.cs" />
     <Compile Include="Model\Map\TileManager.cs" />
     <Compile Include="Model\NotifiablePoint.cs" />
+    <Compile Include="Model\Security\AuthenticationType.cs" />
     <Compile Include="Model\Security\IChangePassword.cs" />
+    <Compile Include="Model\Security\IHaveEmail.cs" />
     <Compile Include="Model\Security\INewPassword.cs" />
     <Compile Include="Model\Security\IHavePassword.cs" />
-    <Compile Include="Model\Security\INewUserPassword.cs" />
+    <Compile Include="Model\Security\INewUserEmailPassword.cs" />
     <Compile Include="Model\Security\ISecurityBase.cs" />
-    <Compile Include="Model\Security\IUserPassword.cs" />
+    <Compile Include="Model\Security\IUserEmailPassword.cs" />
     <Compile Include="Model\Security\IUserRepository.cs" />
     <Compile Include="Model\Security\SimpleUserPassModel.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
@@ -266,7 +268,6 @@
     <Compile Include="Presenters\Map\MapPresenter.cs" />
     <Compile Include="Presenters\PagedResultPresenter.cs" />
     <Compile Include="Presenters\Security\AccountPresenter.cs" />
-    <Compile Include="Presenters\Security\SignUpViewModel.cs" />
     <Compile Include="Presenters\Symbology\SymbologyPresenter.cs" />
     <Compile Include="Presenters\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

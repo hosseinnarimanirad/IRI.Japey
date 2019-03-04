@@ -13,13 +13,33 @@
                             <Setter Property="Background" Value="Gray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                    <Grid>
-                        <Border Margin="0" Background="{TemplateBinding Property=Background}"
-                                    CornerRadius="{TemplateBinding Border.CornerRadius}"/>
+                    <!--<Grid>
+                        <Grid.OpacityMask>
+                            <VisualBrush Visual="{Binding ElementName=border}" />
+                        </Grid.OpacityMask>-->
+                    <Border x:Name="border" Margin="0" Background="{TemplateBinding Property=Background}"
+                                CornerRadius="{TemplateBinding Border.CornerRadius}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.OpacityMask>
+                            <VisualBrush>
+                                <VisualBrush.Visual>
+                                    <Border 
+                                            Background="Black"
+                                            SnapsToDevicePixels="True"
+                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Border.OpacityMask>
+                        <!--if put ContentPresenter here, OpacityMask effect will not work. e.g. controls go beyound rounded edges when using CornerRadius-->
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"/>
-                    </Grid>
+                    </Border>
+
+                    <!--</Grid>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -43,13 +63,27 @@
                             <Setter Property="Background" Value="Gray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
-                    <Grid>
-                        <Border Margin="0" Background="{TemplateBinding Property=Background}"
-                                    CornerRadius="{TemplateBinding Border.CornerRadius}"/>
+                    <Border x:Name="border" Margin="0" Background="{TemplateBinding Property=Background}"
+                                CornerRadius="{TemplateBinding Border.CornerRadius}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border.OpacityMask>
+                            <VisualBrush>
+                                <VisualBrush.Visual>
+                                    <Border 
+                                            Background="Black"
+                                            SnapsToDevicePixels="True"
+                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Border.OpacityMask>
+                        <!--if put ContentPresenter here, OpacityMask effect will not work. e.g. controls go beyound rounded edges when using CornerRadius-->
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Margin="{TemplateBinding Padding}"/>
-                    </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -156,5 +190,5 @@
         </Setter>
 
     </Style>
-    
+
 </ResourceDictionary>

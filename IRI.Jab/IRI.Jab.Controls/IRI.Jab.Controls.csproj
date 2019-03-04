@@ -209,12 +209,19 @@
     <Compile Include="View\Security\ChangeUserPasswordView.xaml.cs">
       <DependentUpon>ChangeUserPasswordView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Security\EmailPasswordInputView.xaml.cs">
+      <DependentUpon>EmailPasswordInputView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Security\EmailSignUpView.xaml.cs">
       <DependentUpon>EmailSignUpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Security\ForgetPasswordView.xaml.cs">
+      <DependentUpon>ForgetPasswordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Security\ManageAccount.xaml.cs">
       <DependentUpon>ManageAccount.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Security\SecurityInpuUserControl.cs" />
     <Compile Include="View\Security\UserNameSignUpView.xaml.cs">
       <DependentUpon>UserNameSignUpView.xaml</DependentUpon>
     </Compile>
@@ -360,7 +367,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Security\EmailPasswordInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Security\EmailSignUpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Security\ForgetPasswordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

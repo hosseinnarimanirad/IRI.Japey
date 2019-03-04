@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Security
 {
-    public interface IUserPassword : IHavePassword
+    public enum AuthenticationType
     {
-        string UserName { get; set; }
+        UserPassword,
+        EmailPassword
     }
 }

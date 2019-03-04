@@ -10,6 +10,15 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 {
     public class LoginDialogViewModel : DialogViewModelBase
     {
+        public LoginDialogViewModel(AuthenticationType type)
+        {
+            this.Type = type;
+        }
+
+        public Action RequestSignUp;
+
+        public Action RequestSignOut;
+
         public Action RequestLoginWithGoogleOAuth;
 
         public Action RequestHelpWithForgetPassword;
@@ -18,20 +27,101 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         public Action RequestResetPassword;
 
-        public Func<IHavePassword, bool> RequestAuthenticate;
+        public Func<IUserEmailPassword, bool> RequestAuthenticate;
 
 
-        private string _userName;
+        public AuthenticationType Type { get; private set; }
+         
+        private bool _isForgetPasswordMode;
 
-        public string UserName
+        public bool IsForgetPasswordMode
         {
-            get { return _userName; }
+            get { return _isForgetPasswordMode; }
             set
             {
-                _userName = value;
+                if (_isForgetPasswordMode == value)
+                    return;
+
+                _isForgetPasswordMode = value;
                 RaisePropertyChanged();
+
+                if (value)
+                {
+                    IsNormalMode = false;
+                    IsRegisterMode = false;
+                }
             }
         }
+
+
+        private bool _isRegisterMode;
+
+        public bool IsRegisterMode
+        {
+            get { return _isRegisterMode; }
+            set
+            {
+                if (_isRegisterMode == value)
+                    return;
+
+                _isRegisterMode = value;
+                RaisePropertyChanged();
+
+                if (value)
+                {
+                    IsNormalMode = false;
+                    IsForgetPasswordMode = false;
+                }
+            }
+        }
+
+
+        private bool _isNormalMode = true;
+
+        public bool IsNormalMode
+        {
+            get { return _isNormalMode; }
+            set
+            {
+                if (_isNormalMode == value)
+                    return;
+
+                _isNormalMode = value;
+                RaisePropertyChanged();
+
+                if (value)
+                {
+                    IsForgetPasswordMode = false;
+                    IsRegisterMode = false;
+                }
+            }
+        }
+
+
+        //private string _userName;
+
+        //public string UserName
+        //{
+        //    get { return _userName; }
+        //    set
+        //    {
+        //        _userName = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+
+        //private string _emailAddress;
+
+        //public string EmailAddress
+        //{
+        //    get { return _emailAddress; }
+        //    set
+        //    {
+        //        _emailAddress = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
         private RelayCommand _clearInputValuesCommand;
@@ -66,7 +156,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 if (this._loginCommand == null)
                 {
-                    this._loginCommand = new RelayCommand(param => this.Login(param), param => { return !string.IsNullOrEmpty(this.UserName); });
+                    this._loginCommand = new RelayCommand(param => this.Login(param));
                 }
 
                 return this._loginCommand;
@@ -124,6 +214,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _helpWithForgetPasswordCommand = new RelayCommand(param =>
                     {
+                        IsForgetPasswordMode = true;
+
                         this.RequestHelpWithForgetPassword?.Invoke();
                     });
                 }
@@ -151,10 +243,95 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        private RelayCommand _goToNormalModeCommand;
+
+        public RelayCommand GoToNormalModeCommand
+        {
+            get
+            {
+                if (_goToNormalModeCommand == null)
+                {
+                    _goToNormalModeCommand = new RelayCommand(param =>
+                    {
+                        IsNormalMode = true;
+                    });
+                }
+
+                return _goToNormalModeCommand;
+            }
+        }
+
+        private RelayCommand _goToRegisterModeCommand;
+
+        public RelayCommand GoToRegisterModeCommand
+        {
+            get
+            {
+                if (_goToRegisterModeCommand == null)
+                {
+                    _goToRegisterModeCommand = new RelayCommand(param =>
+                    {
+                        IsRegisterMode = true;
+                    });
+                }
+
+                return _goToRegisterModeCommand;
+            }
+        }
+
+        private RelayCommand _gotoForgetPasswordModeCommand;
+
+        public RelayCommand GoToForgetPasswordModeCommand
+        {
+            get
+            {
+                if (_gotoForgetPasswordModeCommand == null)
+                {
+                    _gotoForgetPasswordModeCommand = new RelayCommand(param =>
+                    {
+                        IsForgetPasswordMode = true;
+                    });
+                }
+
+                return _gotoForgetPasswordModeCommand;
+            }
+        }
+
+
+        private RelayCommand _signOutCommand;
+
+        public RelayCommand SignOutCommand
+        {
+            get
+            {
+                if (this._signOutCommand == null)
+                {
+                    this._signOutCommand = new RelayCommand(param => this.RequestSignOut?.Invoke());
+                }
+
+                return this._signOutCommand;
+            }
+        }
+
+        private RelayCommand _signUpCommand;
+
+        public RelayCommand SignUpCommand
+        {
+            get
+            {
+                if (this._signUpCommand == null)
+                {
+                    this._signUpCommand = new RelayCommand(param => this.RequestSignUp?.Invoke());
+                }
+
+                return this._signUpCommand;
+            }
+        }
+
 
         protected void Login(object parameter)
         {
-            var passContainer = parameter as IHavePassword;
+            var passContainer = parameter as IUserEmailPassword;
 
             if (passContainer != null)
             {
@@ -162,8 +339,6 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
                 if (this.RequestAuthenticate?.Invoke(passContainer) != true)
                 {
-                    this.UserName = string.Empty;
-
                     passContainer.ClearInputValues();
                 }
                 else
@@ -173,8 +348,6 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
             else
             {
-                this.UserName = string.Empty;
-
                 passContainer.ClearInputValues();
             }
         }

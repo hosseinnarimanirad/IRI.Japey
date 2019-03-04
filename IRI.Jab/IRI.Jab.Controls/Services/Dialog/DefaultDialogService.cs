@@ -412,18 +412,25 @@ namespace IRI.Jab.Controls.Services.Dialog
                 {
                     owner.Effect = ownerDefaultEffect;
                 }
+
+                tcs.SetResult(viewModel.DialogResult);
             };
-              
+
             viewModel.OnSetResult += (sender, e) =>
             {
-                if (viewModel.DialogResult == true)
-                {
-                    tcs.SetResult(viewModel.DialogResult);
-                }
-                else
-                {
-                    tcs.SetResult(null);
-                }
+                view.Close();
+                //if (viewModel.DialogResult == true)
+                //{
+                //    tcs.SetResult(viewModel.DialogResult);
+
+                //    view.Close();
+                //}
+                //else
+                //{
+                //    tcs.SetResult(null);
+
+                //    view.Close();
+                //}
 
             };
 

@@ -22,7 +22,7 @@ namespace IRI.Jab.Controls.View.Security
     /// <summary>
     /// Interaction logic for ChangeUserPasswordView.xaml
     /// </summary>
-    public partial class ChangeUserPasswordView : UserControl, IChangePassword
+    public partial class ChangeUserPasswordView : SecurityInputUserControl, IChangePassword
     {
         public ChangeUserPasswordView()
         {
@@ -72,6 +72,28 @@ namespace IRI.Jab.Controls.View.Security
         // Using a DependencyProperty as the backing store for CanUserChangeUserName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CanUserChangeUserNameProperty =
             DependencyProperty.Register(nameof(CanUserChangeUserName), typeof(bool), typeof(ChangeUserPasswordView), new PropertyMetadata(true));
+
+
+        //public Brush InputBorderBrush
+        //{
+        //    get { return (Brush)GetValue(InputBorderBrushProperty); }
+        //    set { SetValue(InputBorderBrushProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for InputBorderBrush.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty InputBorderBrushProperty =
+        //    DependencyProperty.Register(nameof(InputBorderBrush), typeof(Brush), typeof(ChangeUserPasswordView), new PropertyMetadata(null));
+
+
+        //public Thickness InputBorderThickness
+        //{
+        //    get { return (Thickness)GetValue(InputBorderThicknessProperty); }
+        //    set { SetValue(InputBorderThicknessProperty, value); }
+        //}
+
+        //// Using a DependencyProperty as the backing store for InputBorderThickness.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty InputBorderThicknessProperty =
+        //    DependencyProperty.Register(nameof(InputBorderThickness), typeof(Thickness), typeof(ChangeUserPasswordView), new PropertyMetadata(new Thickness()));
 
     }
 }

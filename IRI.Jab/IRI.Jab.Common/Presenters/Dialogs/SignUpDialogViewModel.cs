@@ -83,7 +83,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _signUpCommand = new RelayCommand(param =>
                     {
-                        var model = param as INewUserPassword;
+                        var model = param as INewUserEmailPassword;
 
                         if (model == null)
                         {
@@ -97,7 +97,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                             return;
                         }
 
-                        this.Model.UserName = model.UserName;
+                        this.Model.UserName = model.UserNameOrEmail;
 
                         this.Model.Password = SecureStringHelper.GetString(model.NewPassword);
 
