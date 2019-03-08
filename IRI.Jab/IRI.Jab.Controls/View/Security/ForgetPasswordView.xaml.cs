@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Security;
+using IRI.Ket.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,10 @@ namespace IRI.Jab.Controls.View.Security
             this.EmailAddress = string.Empty;
         }
 
+        public bool IsValidEmail( )
+        {
+            return NetHelper.IsValidEmail(Email);
+        }
 
 
         public string EmailAddress

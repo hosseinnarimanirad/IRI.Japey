@@ -155,6 +155,9 @@
     <Compile Include="View\FeatureTable\RadFeatureTable.xaml.cs">
       <DependentUpon>RadFeatureTable.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\General\DottedBusyIndicatorView.xaml.cs">
+      <DependentUpon>DottedBusyIndicatorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Imaging\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
     </Compile>
@@ -292,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FeatureTable\RadFeatureTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\General\DottedBusyIndicatorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

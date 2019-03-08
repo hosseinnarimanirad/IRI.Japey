@@ -22,6 +22,16 @@ namespace IRI.Ket.Common.Service
         public string ErrorMessage { get; set; }
 
         public T Result { get; set; }
+
+        //public bool HasValidNotNullResult()
+        //{
+        //    return IsCanceled != true && IsFailed != true && Result != null;
+        //}
+
+        public bool FailedOrCanceled()
+        {
+            return IsCanceled == true || IsFailed == true;
+        }
     }
 
     public static class ResponseFactory

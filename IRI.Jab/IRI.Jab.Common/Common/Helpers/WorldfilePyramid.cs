@@ -80,7 +80,7 @@ namespace IRI.Jab.Common.Helpers
 
             ZipFile.CreateFromDirectory(outputDirectory, Path.ChangeExtension(imageFileName, "pyrmd"));
 
-            DirectoryHelper.DeleteDirectory(outputDirectory);
+            IOHelper.DeleteDirectory(outputDirectory);
         }
 
         private static void WriteBoundingBox(BoundingBox webMercatorBoundingBox, string outputDirectory)

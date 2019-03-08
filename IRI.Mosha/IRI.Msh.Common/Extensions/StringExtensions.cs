@@ -59,5 +59,15 @@
         {
             return theString.Equals(value, StringComparison.InvariantCultureIgnoreCase);
         }
+
+        public static string ToBase64String(this string value)
+        {
+            return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(value));
+        }
+
+        public static string Base64ToNormalString(this string base64String)
+        {
+            return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
+        }
     }
 }

@@ -4,6 +4,8 @@
     
     <converters:ArabicStringToFarsiStringConverter x:Key="arabicToFarsiConverter"/>
 
+    <converters:Base64ToByteArrayConverter x:Key="base64ToByteArrayConverter"/>
+
     <converters:BoolToBoldFontConverter x:Key="boolToBoldFontConverter"/>
     <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
     <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>

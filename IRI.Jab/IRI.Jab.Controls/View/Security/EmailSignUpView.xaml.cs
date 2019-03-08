@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Security;
+using IRI.Ket.Common.Helpers;
 using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,11 @@ namespace IRI.Jab.Controls.View.Security
         public SecureString ConfirmPassword => this.confirmPassword.SecurePassword;
 
         public string UserNameOrEmail { get => EmailAddress; set => EmailAddress = value; }
+
+        public bool IsValidEmail()
+        {
+            return NetHelper.IsValidEmail(UserNameOrEmail);
+        }
 
         public string EmailAddress
         {
@@ -75,7 +81,7 @@ namespace IRI.Jab.Controls.View.Security
         //same code exist in UserNameSignUpView & ChangeUserPasswordView
         public bool IsNewPasswordValid()
         {
-            return NewPassword != null && NewPassword.Length > 0 && !SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
+            return NewPassword != null && NewPassword.Length > 0 && SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
         }
 
         public void ClearInputValues()
@@ -85,6 +91,18 @@ namespace IRI.Jab.Controls.View.Security
             this.confirmPassword.Clear();
 
             this.EmailAddress = string.Empty;
+        }
+
+        public string GetNewPasswordText()
+        {
+            if (IsNewPasswordValid())
+            {
+                return SecureStringHelper.GetString(NewPassword);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

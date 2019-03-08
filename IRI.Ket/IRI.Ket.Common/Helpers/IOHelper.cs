@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Helpers
 {
-    public static class DirectoryHelper
+    public static class IOHelper
     {
         /// <summary>
         /// Depth-first recursive delete, with handling for descendant 
@@ -49,6 +49,11 @@ namespace IRI.Ket.Common.Helpers
             {
                 return false;
             }
+        }
+
+        public static string GetExtensionWithoutDot(string path)
+        {
+            return System.IO.Path.GetExtension(path).Replace(".", "");
         }
     }
 }

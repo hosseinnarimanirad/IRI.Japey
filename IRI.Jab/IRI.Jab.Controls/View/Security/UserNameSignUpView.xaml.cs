@@ -1,4 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Security;
+using IRI.Ket.Common.Helpers;
 using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,24 @@ namespace IRI.Jab.Controls.View.Security
 
             this.UserNameOrEmail = string.Empty;
         }
+
+        public string GetNewPasswordText()
+        {
+            if (IsNewPasswordValid())
+            {
+                return SecureStringHelper.GetString(NewPassword);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public bool IsValidEmail()
+        {
+            return NetHelper.IsValidEmail(UserNameOrEmail);
+        }
+
 
         public string UserNameOrEmail
         {

@@ -9,5 +9,7 @@ namespace IRI.Jab.Common.Model.Security
     public interface IHaveEmail : ISecurityBase
     {
         string Email { get; set; }
+
+        bool IsValidEmail( ); 
     }
 }

@@ -14,5 +14,7 @@ namespace IRI.Jab.Common.Model.Security
         SecureString ConfirmPassword { get; }
 
         bool IsNewPasswordValid();
+
+        string GetNewPasswordText();
     }
 }

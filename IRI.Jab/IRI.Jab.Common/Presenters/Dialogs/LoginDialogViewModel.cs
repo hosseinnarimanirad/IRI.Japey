@@ -15,7 +15,10 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             this.Type = type;
         }
 
-        public Action RequestSignUp;
+
+        public Action<IHaveEmail> RequestValidateEmailAddress;
+
+        public Action<INewUserEmailPassword> RequestSignUp;
 
         public Action RequestSignOut;
 
@@ -27,11 +30,80 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         public Action RequestResetPassword;
 
-        public Func<IUserEmailPassword, bool> RequestAuthenticate;
+        public Func<IUserEmailPassword, Task<bool>> RequestAuthenticate;
 
 
         public AuthenticationType Type { get; private set; }
-         
+
+        private bool _confirmTermOfUser;
+
+        public bool ConfirmTermOfUser
+        {
+            get { return _confirmTermOfUser; }
+            set
+            {
+                _confirmTermOfUser = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private string _signUpMessage;
+
+        public string SignUpMessage
+        {
+            get { return _signUpMessage; }
+            set
+            {
+                _signUpMessage = value?.Trim(Environment.NewLine.ToCharArray());
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(HasSignUpMessage));
+            }
+        }
+
+        public bool HasSignUpMessage
+        {
+            get { return SignUpMessage?.Length > 0; }
+        }
+
+
+        private string _loginMessage;
+
+        public string LoginMessage
+        {
+            get { return _loginMessage; }
+            set
+            {
+                _loginMessage = value?.Trim(Environment.NewLine.ToCharArray());
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(HasLoginMessage));
+            }
+        }
+
+        public bool HasLoginMessage
+        {
+            get { return LoginMessage?.Length > 0; }
+        }
+
+
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set
+            {
+                if (value == true)
+                {
+                    SignUpMessage = string.Empty;
+                    LoginMessage = string.Empty;
+                }
+
+                _isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private bool _isForgetPasswordMode;
 
         public bool IsForgetPasswordMode
@@ -49,6 +121,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     IsNormalMode = false;
                     IsRegisterMode = false;
+                    IsEmailVerificationMode = false;
                 }
             }
         }
@@ -71,6 +144,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     IsNormalMode = false;
                     IsForgetPasswordMode = false;
+                    IsEmailVerificationMode = false;
                 }
             }
         }
@@ -93,6 +167,26 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     IsForgetPasswordMode = false;
                     IsRegisterMode = false;
+                    IsEmailVerificationMode = false;
+                }
+            }
+        }
+
+        private bool _isEmailVerificationMode;
+
+        public bool IsEmailVerificationMode
+        {
+            get { return _isEmailVerificationMode; }
+            set
+            {
+                _isEmailVerificationMode = value;
+                RaisePropertyChanged();
+
+                if (value)
+                {
+                    IsNormalMode = false;
+                    IsRegisterMode = false;
+                    IsForgetPasswordMode = false;
                 }
             }
         }
@@ -224,6 +318,25 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        private RelayCommand _verifyEmailAddressCommand;
+
+        public RelayCommand VerifyEmailAddressCommand
+        {
+            get
+            {
+                if (_verifyEmailAddressCommand == null)
+                {
+                    _verifyEmailAddressCommand = new RelayCommand(param =>
+                    {
+                        this.RequestValidateEmailAddress?.Invoke(param as IHaveEmail);
+                    });
+                }
+
+                return _verifyEmailAddressCommand;
+            }
+        }
+
+
 
         private RelayCommand _loginWithGoogleOAuthCommand;
 
@@ -242,6 +355,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 return _loginWithGoogleOAuthCommand;
             }
         }
+
 
         private RelayCommand _goToNormalModeCommand;
 
@@ -297,6 +411,24 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        private RelayCommand _gotoEmailVerificationModeCommand;
+
+        public RelayCommand GotoEmailVerificationModeCommand
+        {
+            get
+            {
+                if (_gotoEmailVerificationModeCommand == null)
+                {
+                    _gotoEmailVerificationModeCommand = new RelayCommand(param =>
+                    {
+                        IsEmailVerificationMode = true;
+                    });
+                }
+
+                return _gotoEmailVerificationModeCommand;
+            }
+        }
+
 
         private RelayCommand _signOutCommand;
 
@@ -321,35 +453,53 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 if (this._signUpCommand == null)
                 {
-                    this._signUpCommand = new RelayCommand(param => this.RequestSignUp?.Invoke());
+                    this._signUpCommand = new RelayCommand(param => this.RequestSignUp?.Invoke(param as INewUserEmailPassword));
                 }
 
                 return this._signUpCommand;
             }
         }
 
+       
 
-        protected void Login(object parameter)
-        {
-            var passContainer = parameter as IUserEmailPassword;
-
-            if (passContainer != null)
+        protected async void Login(object parameter)
+        {            
+            try
             {
-                //this.Password = passContainer.Password;
+                this.IsBusy = true;
 
-                if (this.RequestAuthenticate?.Invoke(passContainer) != true)
+                var passContainer = parameter as IUserEmailPassword;
+
+                if (passContainer != null)
                 {
-                    passContainer.ClearInputValues();
+                    //this.Password = passContainer.Password;                
+
+                    if (this.RequestAuthenticate != null)
+                    {
+                        if (await this.RequestAuthenticate(passContainer) != true)
+                        {
+                            passContainer.ClearInputValues();
+                        }
+                        else
+                        {
+                            this.DialogResult = true;
+                        }
+                    }
+
                 }
                 else
                 {
-                    this.DialogResult = true;
+                    passContainer.ClearInputValues();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                passContainer.ClearInputValues();
+                 
             }
+            finally
+            {
+                this.IsBusy = false;    
+            }             
         }
     }
 }

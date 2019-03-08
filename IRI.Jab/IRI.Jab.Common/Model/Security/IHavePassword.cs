@@ -10,6 +10,6 @@ namespace IRI.Jab.Common.Model.Security
     {
         System.Security.SecureString Password { get; }
 
-
+        string GetPasswordText();
     }
 }

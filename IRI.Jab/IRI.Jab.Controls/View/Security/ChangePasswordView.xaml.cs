@@ -71,5 +71,23 @@ namespace IRI.Jab.Controls.View.Security
 
             this.confirmNewPassword.Clear();
         }
+
+        public string GetPasswordText()
+        {
+            return SecureStringHelper.GetString(Password);
+        }
+
+        public string GetNewPasswordText()
+        {
+            if (IsNewPasswordValid())
+            {
+                return SecureStringHelper.GetString(NewPassword);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

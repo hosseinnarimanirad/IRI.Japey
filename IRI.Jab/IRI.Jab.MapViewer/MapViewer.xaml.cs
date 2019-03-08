@@ -852,7 +852,7 @@ namespace IRI.Jab.MapViewer
         {
             var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = ScaleInterval.All };
 
-            if (isCachEnabled && DirectoryHelper.TryCreateDirectory(cacheDirectory))
+            if (isCachEnabled && IOHelper.TryCreateDirectory(cacheDirectory))
             {
                 layer.EnableCaching(cacheDirectory);
             }

@@ -102,6 +102,7 @@
     <Compile Include="Assets\ColorBrushes\MapAppColors.cs" />
     <Compile Include="Assets\Commands\RelayCommand.cs" />
     <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
+    <Compile Include="Assets\Converters\Base64ToByteArrayConverter.cs" />
     <Compile Include="Assets\Converters\BoolToBoldFontConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGeometryConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGridLengthConverter.cs" />

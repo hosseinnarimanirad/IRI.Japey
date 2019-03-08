@@ -9,5 +9,7 @@ namespace IRI.Jab.Common.Model.Security
     public interface IUserEmailPassword : IHavePassword
     {
         string UserNameOrEmail { get; set; }
+
+        bool IsValidEmail();
     }
 }

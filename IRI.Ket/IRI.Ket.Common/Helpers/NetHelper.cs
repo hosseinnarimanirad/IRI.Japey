@@ -105,6 +105,21 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         public static void SendHtmlMail(string from, string to, string host, string user, string password, string subject, string html, int port = 25, bool enableSsl = false)
         {
             using (MailMessage mail = new MailMessage(from, to))
@@ -176,12 +191,12 @@ namespace IRI.Ket.Common.Helpers
 
 
         //Http Post
-        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson)
         {
             return await HttpPostAsync<T>(address, data, Encoding.UTF8, contentType);
         }
 
-        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson)
         {
             try
             {
@@ -203,7 +218,7 @@ namespace IRI.Ket.Common.Helpers
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
 
@@ -232,7 +247,7 @@ namespace IRI.Ket.Common.Helpers
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
 
@@ -265,7 +280,7 @@ namespace IRI.Ket.Common.Helpers
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
 
