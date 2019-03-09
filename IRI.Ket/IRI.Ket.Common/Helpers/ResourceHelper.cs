@@ -23,7 +23,7 @@ namespace IRI.Ket.Common.Helpers
             {
                 if (stream == null)
                 {
-                    stream.Dispose();
+                    //stream.Dispose(); throws null exception
 
                     return null;
                 }

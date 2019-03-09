@@ -24,7 +24,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         public Action RequestLoginWithGoogleOAuth;
 
-        public Action RequestHelpWithForgetPassword;
+        public Action<IHaveEmail> RequestHelpWithForgetPassword;
 
         public Action RequestLoginAsGuest;
 
@@ -34,6 +34,19 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
 
         public AuthenticationType Type { get; private set; }
+
+        private string _termsOfUseWebPageUrl;
+
+        public string TermsOfUseWebPageUrl
+        {
+            get { return _termsOfUseWebPageUrl; }
+            set
+            {
+                _termsOfUseWebPageUrl = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private bool _confirmTermOfUser;
 
@@ -307,10 +320,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 if (_helpWithForgetPasswordCommand == null)
                 {
                     _helpWithForgetPasswordCommand = new RelayCommand(param =>
-                    {
-                        IsForgetPasswordMode = true;
-
-                        this.RequestHelpWithForgetPassword?.Invoke();
+                    { 
+                        this.RequestHelpWithForgetPassword?.Invoke(param as IHaveEmail);
                     });
                 }
 
@@ -333,6 +344,24 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 }
 
                 return _verifyEmailAddressCommand;
+            }
+        }
+
+        private RelayCommand _goToTermsOfUserWebPage;
+
+        public RelayCommand GoToTermsOfUserWebPage
+        {
+            get
+            {
+                if (_goToTermsOfUserWebPage == null)
+                {
+                    _goToTermsOfUserWebPage = new RelayCommand(param =>
+                    {
+                        System.Diagnostics.Process.Start(TermsOfUseWebPageUrl);
+                    });
+                }
+
+                return _goToTermsOfUserWebPage;
             }
         }
 
