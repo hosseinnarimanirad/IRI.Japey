@@ -1,6 +1,7 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Presenters.Security;
+using IRI.Jab.Common.ViewModel.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,20 @@ namespace IRI.Jab.Controls.Presenter
 
         }
 
-        private AccountPresenter<TUser> _account;
+        //private AccountPresenter<TUser> _account;
 
-        public AccountPresenter<TUser> Account
+        //public AccountPresenter<TUser> Account
+        //{
+        //    get { return _account; }
+        //    set
+        //    {
+        //        _account = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        private AccountDialogViewModel _account;
+
+        public AccountDialogViewModel Account
         {
             get { return _account; }
             set
@@ -33,8 +45,7 @@ namespace IRI.Jab.Controls.Presenter
 
             this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
-            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);
-
+            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);           
         }
 
         public override void Initialize()

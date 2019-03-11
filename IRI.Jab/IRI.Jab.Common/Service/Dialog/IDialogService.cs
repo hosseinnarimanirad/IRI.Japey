@@ -36,9 +36,9 @@ namespace IRI.Jab.Common.Service.Dialog
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow);
 
 
-        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate);
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>( );
 
-        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate);
+        Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow);
 
 
         Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel);

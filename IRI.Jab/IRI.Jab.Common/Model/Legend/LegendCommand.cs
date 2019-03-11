@@ -184,7 +184,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                 var drawingResult = await map.GetDrawingAsync(Model.DrawMode.Polygon, options);
 
-                if (!drawingResult.HasValidResult())
+                if (!drawingResult.HasNotNullResult())
                     return;
 
                 var features = layer.GetFeatures<T>(drawingResult.Result.AsSqlGeometry());
@@ -328,7 +328,7 @@ namespace IRI.Jab.Common.Model.Legend
                     map.ClearLayer(layer);
                 }
 
-                if (editResult.HasValidResult())
+                if (editResult.HasNotNullResult())
                 {
                     layer.Geometry = editResult.Result;
 

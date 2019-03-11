@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Jab.Common.Presenter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs
 {
-    public abstract class DialogViewModelBase : Notifier
+    public abstract class DialogViewModelBase : BasePresenter
     {
         private bool? _dialogResult = false;
 

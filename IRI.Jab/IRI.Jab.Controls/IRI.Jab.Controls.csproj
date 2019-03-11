@@ -225,6 +225,9 @@
       <DependentUpon>ManageAccount.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Security\SecurityInpuUserControl.cs" />
+    <Compile Include="View\Security\SetPasswordViewInputView.xaml.cs">
+      <DependentUpon>SetPasswordViewInputView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Security\UserNameSignUpView.xaml.cs">
       <DependentUpon>UserNameSignUpView.xaml</DependentUpon>
     </Compile>
@@ -387,6 +390,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Security\ManageAccount.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Security\SetPasswordViewInputView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

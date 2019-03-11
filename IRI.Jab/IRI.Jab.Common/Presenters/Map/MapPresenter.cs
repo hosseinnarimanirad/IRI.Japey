@@ -792,7 +792,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     var editResult = await EditAsync(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
 
-                    if (editResult.HasValidResult())
+                    if (editResult.HasNotNullResult())
                     {
                         SqlFeature f = new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = g.Id };
 
@@ -1001,7 +1001,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var drawingResult = await this.GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
 
-            if (!drawingResult.HasValidResult())
+            if (!drawingResult.HasNotNullResult())
             {
                 return;
             }

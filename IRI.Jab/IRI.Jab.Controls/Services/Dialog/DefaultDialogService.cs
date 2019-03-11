@@ -315,14 +315,14 @@ namespace IRI.Jab.Controls.Services.Dialog
         }
 
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate)
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>()
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowChangePasswordDialog(owner, requestAuthenticate);
+            return ShowChangePasswordDialog(owner);
         }
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate)
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow)
         {
             TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
@@ -352,7 +352,7 @@ namespace IRI.Jab.Controls.Services.Dialog
                 }
             };
 
-            ChangePasswordDialogViewModel viewModel = new ChangePasswordDialogViewModel(requestClose, requestAuthenticate);
+            ChangePasswordDialogViewModel viewModel = new ChangePasswordDialogViewModel(requestClose);
             //{
             //    Message = message,
             //    Title = title,

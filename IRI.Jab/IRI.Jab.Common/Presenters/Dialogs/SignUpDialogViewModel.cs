@@ -54,9 +54,9 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
-        private SimpleUserPassModel _model;
+        private SimpleUserEmailPasswordModel _model;
 
-        public SimpleUserPassModel Model
+        public SimpleUserEmailPasswordModel Model
         {
             get { return _model; }
             set
@@ -68,7 +68,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         public SignUpDialogViewModel(Action requestClose)
         {
-            this.Model = new SimpleUserPassModel();
+            //this.Model = new SimpleUserEmailPasswordModel();
 
             this.RequestClose = requestClose;
         }
@@ -97,9 +97,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                             return;
                         }
 
-                        this.Model.UserName = model.UserNameOrEmail;
+                        this.Model = new SimpleUserEmailPasswordModel(model.NewPassword) { UserNameOrEmail = model.UserNameOrEmail };
 
-                        this.Model.Password = SecureStringHelper.GetString(model.NewPassword);
+                        //this.Model.UserName = model.UserNameOrEmail;
+
+                        //this.Model.Password = SecureStringHelper.GetString(model.NewPassword);
 
                         this.IsOk = true;
 

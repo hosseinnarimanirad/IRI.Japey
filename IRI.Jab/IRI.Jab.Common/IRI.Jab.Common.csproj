@@ -244,7 +244,7 @@
     <Compile Include="Model\Security\ISecurityBase.cs" />
     <Compile Include="Model\Security\IUserEmailPassword.cs" />
     <Compile Include="Model\Security\IUserRepository.cs" />
-    <Compile Include="Model\Security\SimpleUserPassModel.cs" />
+    <Compile Include="Model\Security\SimpleUserEmailPasswordModel.cs" />
     <Compile Include="Model\Spatialable\EnvelopeMarkupLabelTriple.cs" />
     <Compile Include="Model\Spatialable\GeometryLabelPair.cs" />
     <Compile Include="Model\Spatialable\GeometryMarkupLabelTriple.cs" />
@@ -260,7 +260,7 @@
     <Compile Include="Presenters\BasePresenter.cs" />
     <Compile Include="Presenters\Dialogs\ChangePasswordDialogViewModel.cs" />
     <Compile Include="Presenters\Dialogs\DialogViewModelBase.cs" />
-    <Compile Include="Presenters\Dialogs\LoginDialogViewModel.cs" />
+    <Compile Include="Presenters\Dialogs\AccountDialogViewModel.cs" />
     <Compile Include="Presenters\Dialogs\SignUpDialogViewModel.cs" />
     <Compile Include="Presenters\General\AboutMePresenter.cs" />
     <Compile Include="Presenters\LegendPresenter.cs" />

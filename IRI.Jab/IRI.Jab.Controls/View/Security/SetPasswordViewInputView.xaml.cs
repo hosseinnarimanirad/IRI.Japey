@@ -1,5 +1,4 @@
 ﻿using IRI.Jab.Common.Model.Security;
-using IRI.Ket.Common.Helpers;
 using IRI.Msh.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -20,19 +19,23 @@ using System.Windows.Shapes;
 namespace IRI.Jab.Controls.View.Security
 {
     /// <summary>
-    /// Interaction logic for SimpleSignUpView.xaml
+    /// Interaction logic for SetPasswordViewInputView.xaml
     /// </summary>
-    public partial class UserNameSignUpView : SecurityInputUserControl, INewUserEmailPassword
+    public partial class SetPasswordViewInputView : SecurityInputUserControl, INewPassword
     {
-        public UserNameSignUpView()
+        public SetPasswordViewInputView()
         {
             InitializeComponent();
         }
 
-        public SecureString NewPassword => this.key.SecurePassword;
+         
+        public SecureString ConfirmPassword => this.confirmNewPassword.SecurePassword;
 
-        public SecureString ConfirmPassword => this.confirmPassword.SecurePassword;
+        public SecureString NewPassword => this.newPassword.SecurePassword;
 
+         
+
+        //same code exist in EmailSignUpView & ChangeUserPasswordView
         public bool IsNewPasswordValid()
         {
             return NewPassword != null && NewPassword.Length > 0 && SecureStringHelper.SecureStringEqual(this.NewPassword, this.ConfirmPassword);
@@ -40,13 +43,11 @@ namespace IRI.Jab.Controls.View.Security
 
         public void ClearInputValues()
         {
-            this.key.Clear();
-
-            this.confirmPassword.Clear();
-
-            this.UserNameOrEmail = string.Empty;
+            this.newPassword.Clear();
+             
+            this.confirmNewPassword.Clear();
         }
-
+          
         public string GetNewPasswordText()
         {
             if (IsNewPasswordValid())
@@ -58,22 +59,5 @@ namespace IRI.Jab.Controls.View.Security
                 return null;
             }
         }
-
-        public bool IsValidEmail()
-        {
-            return true;
-        }
-
-
-        public string UserNameOrEmail
-        {
-            get { return (string)GetValue(UsreNameProperty); }
-            set { SetValue(UsreNameProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for UsreName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty UsreNameProperty =
-            DependencyProperty.Register(nameof(UserNameOrEmail), typeof(string), typeof(UserNameSignUpView), new PropertyMetadata(string.Empty));
-         
     }
 }

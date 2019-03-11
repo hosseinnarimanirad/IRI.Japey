@@ -45,6 +45,8 @@ namespace IRI.Jab.Common.Presenter
 
         public Action RequestClose;
 
+        public Action RequestActivateWindow;
+
         //public Func<string, string> RequestOpenFile;
 
         //public Func<string, string> RequestSaveFile;

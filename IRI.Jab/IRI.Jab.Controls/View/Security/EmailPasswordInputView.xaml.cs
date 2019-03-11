@@ -30,9 +30,7 @@ namespace IRI.Jab.Controls.View.Security
         }
 
         public SecureString Password => this.key.SecurePassword;
-
-        public string UserNameOrEmail { get => EmailAddress; set => EmailAddress = value; }
-
+         
         public bool IsValidEmail()
         {
             return NetHelper.IsValidEmail(UserNameOrEmail);
@@ -42,7 +40,7 @@ namespace IRI.Jab.Controls.View.Security
         {
             this.key.Clear();
 
-            this.EmailAddress = string.Empty;
+            this.UserNameOrEmail = string.Empty;
         }
 
         public string GetPasswordText()
@@ -50,15 +48,15 @@ namespace IRI.Jab.Controls.View.Security
             return SecureStringHelper.GetString(Password);
         }
 
-        public string EmailAddress
+        public string UserNameOrEmail
         {
-            get { return (string)GetValue(EmailAddressProperty); }
-            set { SetValue(EmailAddressProperty, value); }
+            get { return (string)GetValue(UsreNameProperty); }
+            set { SetValue(UsreNameProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for UsreName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty EmailAddressProperty =
-            DependencyProperty.Register(nameof(EmailAddress), typeof(string), typeof(EmailPasswordInputView), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty UsreNameProperty =
+            DependencyProperty.Register(nameof(UserNameOrEmail), typeof(string), typeof(EmailPasswordInputView), new PropertyMetadata(string.Empty));
 
     }
 }
