@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Security
 {
-    public class EncryptedMessage<T> where T : class
+    public class EncryptedMessage
     {
         [JsonProperty("k")]
         public string IV { get; set; }
@@ -25,31 +25,49 @@ namespace IRI.Ket.Common.Security
 
         }
 
-        public EncryptedMessage(T value, string base64Token)
+        public static EncryptedMessage Create(object value, string base64Token)
         {
             //base64Token is a public key in base64 string format
 
-            RijndaelManaged rm = new RijndaelManaged();
+            try
+            {
+                EncryptedMessage result = new EncryptedMessage();
 
-            var encryptedMessage = CryptographyHelper.AesEncrypt(Newtonsoft.Json.JsonConvert.SerializeObject(value), rm.Key, rm.IV);
+                RijndaelManaged rm = new RijndaelManaged();
 
-            this.Token = CryptographyHelper.RsaEncrypt(Convert.ToBase64String(rm.Key), base64Token);
+                var encryptedMessage = CryptographyHelper.AesEncrypt(Newtonsoft.Json.JsonConvert.SerializeObject(value), rm.Key, rm.IV);
 
-            this.IV = Convert.ToBase64String(rm.IV);
+                result.Token = CryptographyHelper.RsaEncrypt(Convert.ToBase64String(rm.Key), base64Token);
 
-            this.Message = encryptedMessage;
+                result.IV = Convert.ToBase64String(rm.IV);
+
+                result.Message = encryptedMessage;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
         }
 
-        public T Decrypt(string base64PriKey)
+        public T Decrypt<T>(string base64PriKey) where T : class
         {
-            byte[] key = Convert.FromBase64String(CryptographyHelper.RsaDecrypt(Token, base64PriKey));
+            try
+            {
+                byte[] key = Convert.FromBase64String(CryptographyHelper.RsaDecrypt(Token, base64PriKey));
 
-            byte[] iv = Convert.FromBase64String(IV);
+                byte[] iv = Convert.FromBase64String(IV);
 
-            var decryptedParameters = CryptographyHelper.AesDecrypt(Message, key, iv);
+                var decryptedParameters = CryptographyHelper.AesDecrypt(Message, key, iv);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(decryptedParameters);
-
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(decryptedParameters);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

@@ -12,6 +12,8 @@ namespace IRI.Jab.Common.Presenter
     //TO DO: consider replacing Action methods with "IDialogService" 
     public class BasePresenter : Notifier
     {
+        public IDialogService DialogService { get; set; }
+
         private string _userName;
 
         public string UserName
@@ -42,6 +44,7 @@ namespace IRI.Jab.Common.Presenter
         }
 
         public event EventHandler<string> UserChanged;
+
 
         public Action RequestClose;
 
@@ -124,6 +127,5 @@ namespace IRI.Jab.Common.Presenter
             //this.RequestShowMessage?.Invoke(message);
         }
 
-        public IDialogService DialogService { get; set; }
     }
 }

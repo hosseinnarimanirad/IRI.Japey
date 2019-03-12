@@ -1,6 +1,5 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
-using IRI.Jab.Common.Presenters.Security;
 using IRI.Jab.Common.ViewModel.Dialogs;
 using System;
 using System.Collections.Generic;

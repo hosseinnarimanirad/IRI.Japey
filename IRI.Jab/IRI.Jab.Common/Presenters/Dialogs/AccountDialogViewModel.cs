@@ -21,7 +21,6 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         //login
         public Func<IUserEmailPassword, Task<bool>> RequestAuthenticateAsync;
-
         public Func<IUserEmailPassword, bool> RequestAuthenticate;
 
         public Action<Response<GoogleOAuthUserInfoResult>> RequestLoginWithGoogleOAuth;
@@ -48,7 +47,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
         //dialog
         public Action<SignUpDialogViewModel> RequestShowSignUpDialogView;
 
-        public Action<ChangePasswordDialogViewModel> RequestShowChangePasswordDialogView;
+        //public Action<ChangePasswordDialogViewModel> RequestShowChangePasswordDialogView;
 
         #endregion
 
@@ -308,6 +307,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        //****************************************************   Login  *****************************************************
         private RelayCommand _loginCommand;
 
         public RelayCommand LoginCommand
@@ -323,6 +323,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        //****************************************************   Login Guest  ***********************************************
         private RelayCommand _loginGuestCommand;
 
         public RelayCommand LoginGuestCommand
@@ -343,6 +344,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        //****************************************************   Login Google OAuth  ****************************************
         private RelayCommand _loginWithGoogleOAuthCommand;
 
         public RelayCommand LoginWithGoogleOAuthCommand
@@ -365,7 +367,10 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
         }
 
 
+
         //sign out/sign up
+
+        //****************************************************   Sign Up  ***************************************************
         private RelayCommand _signUpCommand;
 
         public RelayCommand SignUpCommand
@@ -381,6 +386,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+
+        //****************************************************   Sign Out  **************************************************
         private RelayCommand _signOutCommand;
 
         public RelayCommand SignOutCommand
@@ -397,7 +404,10 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
         }
 
 
+
         //password
+
+        //****************************************************   Reset Password  ********************************************
         private RelayCommand _resetPasswordCommand;
 
         public RelayCommand ResetPasswordCommand
@@ -416,6 +426,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+
+        //****************************************************   Forget Password  *******************************************
         private RelayCommand _handleForgetPasswordCommand;
 
         public RelayCommand HandleForgetPasswordCommand
@@ -434,6 +446,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+
+        //****************************************************   Change Password  *******************************************
         private RelayCommand _changePasswordCommand;
 
         public RelayCommand ChangePasswordCommand
@@ -453,6 +467,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
         }
 
 
+        //****************************************************   Show Dialog Change Password  *******************************
         private RelayCommand _showChangePasswordDialogViewCommand;
 
         public RelayCommand ShowChangePasswordDialogViewCommand
@@ -463,23 +478,31 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _showChangePasswordDialogViewCommand = new RelayCommand(async param =>
                     {
-                        var model = await DialogService.ShowChangePasswordDialog(param);
 
-                        if (model == null)
+                        var viewModel = await DialogService.ShowChangePasswordDialog(param, ihp =>
                         {
-                            return;
-                        }
+                            var parameter = new SimpleUserEmailPasswordModel(ihp.Password) { UserNameOrEmail = UserName };
 
-                        try
-                        {
-                            this.RequestShowChangePasswordDialogView?.Invoke(model);
+                            return RequestAuthenticate(parameter);
+                        });
 
-                            await DialogService?.ShowMessage(param, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
-                        }
-                        catch (Exception ex)
-                        {
-                            await DialogService?.ShowMessage(param, null, ex.Message, "خطا");
-                        }
+                        await ChangePassword(viewModel, param);
+
+                        //if (model == null)
+                        //{
+                        //    return;
+                        //}
+
+                        //try
+                        //{
+                        //    this.RequestChangePassword?.Invoke(model.Model);
+
+                        //    //await DialogService?.ShowMessage(param, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    await DialogService?.ShowMessage(param, null, ex.Message, "خطا");
+                        //}
                     });
                 }
 
@@ -487,6 +510,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+
+        //****************************************************   Show Dialog Sign Up  ***************************************
         private RelayCommand _showSignUpDialogViewCommand;
 
         public RelayCommand ShowSignUpDialogViewCommand
@@ -544,6 +569,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+
         private RelayCommand _goToTermsOfUserWebPage;
 
         public RelayCommand GoToTermsOfUserWebPage
@@ -562,6 +588,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 return _goToTermsOfUserWebPage;
             }
         }
+
 
         private RelayCommand _clearInputValuesCommand;
 
@@ -588,6 +615,61 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
 
         #endregion
+
+
+        #region Async Commands
+
+
+        private RelayCommand _showChangePasswordDialogViewAsyncCommand;
+
+        public RelayCommand ShowChangePasswordDialogViewAsyncCommand
+        {
+            get
+            {
+                if (_showChangePasswordDialogViewAsyncCommand == null)
+                {
+                    _showChangePasswordDialogViewAsyncCommand = new RelayCommand(async param =>
+                    {
+
+                        var viewModel = await DialogService.ShowChangePasswordDialog(param, ihp =>
+                        {
+                            var parameter = new SimpleUserEmailPasswordModel(ihp.Password) { UserNameOrEmail = UserName };
+
+                            return RequestAuthenticateAsync(parameter);
+                        });
+
+                        await ChangePassword(viewModel, param);
+                    });
+                }
+
+                return _showChangePasswordDialogViewAsyncCommand;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+        private async Task ChangePassword(ChangePasswordDialogViewModel viewModel, object ownerWindow)
+        {
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            try
+            {
+                this.RequestChangePassword?.Invoke(viewModel.Model);
+
+                await DialogService?.ShowMessage(ownerWindow, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
+            }
+            catch (Exception ex)
+            {
+                await DialogService?.ShowMessage(ownerWindow, null, ex.Message, "خطا");
+            }
+        }
+
+        #endregion
+
 
         #region Commands (Go To Mode)
 

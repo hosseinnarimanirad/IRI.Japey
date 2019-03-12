@@ -14,7 +14,9 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
     {
         public Action RequestClose;
 
-        //public Func<IHavePassword, bool> RequestAuthenticate;
+        public Func<IHavePassword, bool> RequestAuthenticate;
+
+        public Func<IHavePassword, Task<bool>> RequestAuthenticateAsync;
 
         public bool IsOk { get; private set; } = false;
 
@@ -56,35 +58,75 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
-        public ChangePasswordDialogViewModel(Action requestClose)
-        {
-            this.RequestClose = requestClose;
+        //public ChangePasswordDialogViewModel(Action requestClose)
+        //{
+        //    this.RequestClose = requestClose;
 
-            //this.RequestAuthenticate = requestAuthenticate;
+        //    //this.RequestAuthenticate = requestAuthenticate;
+        //}
+
+        public bool IsAsync { get; protected set; }
+
+        public static ChangePasswordDialogViewModel Create(Action requestClose, Func<IHavePassword, bool> requestAuthenticate)
+        {
+            ChangePasswordDialogViewModel result = new ChangePasswordDialogViewModel();
+
+            result.IsAsync = false;
+
+            result.RequestClose = requestClose;
+
+            result.RequestAuthenticate = requestAuthenticate;
+
+            return result;
+        }
+
+        public static ChangePasswordDialogViewModel Create(Action requestClose, Func<IHavePassword, Task<bool>> requestAuthenticate)
+        {
+            ChangePasswordDialogViewModel result = new ChangePasswordDialogViewModel();
+
+            result.IsAsync = true;
+
+            result.RequestClose = requestClose;
+
+            result.RequestAuthenticateAsync = requestAuthenticate;
+
+            return result;
         }
 
 
-        private string _oldPassword;
+        //private string _oldPassword;
 
-        public string OldPassword
+        //public string OldPassword
+        //{
+        //    get { return _oldPassword; }
+        //    set
+        //    {
+        //        _oldPassword = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+
+        //private string _newPassword;
+
+        //public string NewPassword
+        //{
+        //    get { return _newPassword; }
+        //    set
+        //    {
+        //        _newPassword = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+        private IChangePassword _model;
+
+        public IChangePassword Model
         {
-            get { return _oldPassword; }
+            get { return _model; }
             set
             {
-                _oldPassword = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private string _newPassword;
-
-        public string NewPassword
-        {
-            get { return _newPassword; }
-            set
-            {
-                _newPassword = value;
+                _model = value;
                 RaisePropertyChanged();
             }
         }
@@ -98,7 +140,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 if (_changePasswordCommand == null)
                 {
-                    _changePasswordCommand = new RelayCommand(param =>
+                    _changePasswordCommand = new RelayCommand(async param =>
                     {
                         var model = param as IChangePassword;
 
@@ -107,14 +149,16 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                             return;
                         }
 
-                        this.OldPassword = SecureStringHelper.GetString(model.Password);
+                        //this.OldPassword = SecureStringHelper.GetString(model.Password);
 
-                        //if (model.IsNewPasswordValid() && this.RequestAuthenticate?.Invoke(model) == true)
-                        if (model.IsNewPasswordValid())
+                        if (model.IsNewPasswordValid() && (await TryAuthenticate(model)))
+                        //if (model.IsNewPasswordValid())
                         {
-                            this.NewPassword = SecureStringHelper.GetString(model.NewPassword);
+                            //this.NewPassword = SecureStringHelper.GetString(model.NewPassword);
 
                             this.IsOk = true;
+
+                            this.Model = model;
 
                             this.RequestClose?.Invoke();
                         }
@@ -132,6 +176,22 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             }
         }
 
+        private async Task<bool> TryAuthenticate(IHavePassword model)
+        {
+            if (IsAsync)
+            {
+                if (RequestAuthenticateAsync != null)
+                {
+                    return await this.RequestAuthenticateAsync(model);
+                }
+            }
+            else
+            {
+                return this.RequestAuthenticate(model);
+            }
+
+            return false;
+        }
 
         private RelayCommand _cancelCommand;
 

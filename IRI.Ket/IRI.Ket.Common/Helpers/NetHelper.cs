@@ -1,4 +1,5 @@
-﻿using IRI.Ket.Common.Service;
+﻿using IRI.Ket.Common.Security;
+using IRI.Ket.Common.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -162,6 +163,8 @@ namespace IRI.Ket.Common.Helpers
             return port;
         }
 
+
+
         //Http Get
         public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class
         {
@@ -188,6 +191,55 @@ namespace IRI.Ket.Common.Helpers
                 return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
+
+        public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
+        {
+            return HttpGet<T>(address, Encoding.UTF8, contentType);
+        }
+
+        public static Response<T> HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                client.Encoding = encoding;
+
+
+                var stringResult = client.DownloadString(address);
+
+                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<T>(ex.Message);
+            }
+        }
+
+        public async static Task<Response<TResponse>> EncryptedHttpGetAsync<TResponse>(string url, string decPriKey) where TResponse : class
+        {
+            try
+            {
+                var response = await NetHelper.HttpGetAsync<EncryptedMessage>(url);
+
+                if (response.HasNotNullResult())
+                {
+                    return ResponseFactory.Create<TResponse>(response.Result.Decrypt<TResponse>(decPriKey));
+                }
+                else
+                {
+                    return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<TResponse>(ex.Message);
+            }
+        }
+
 
 
         //Http Post
@@ -221,38 +273,7 @@ namespace IRI.Ket.Common.Helpers
                 return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
-
-
-        //Http Get
-        public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
-        {
-            return HttpGet<T>(address, Encoding.UTF8, contentType);
-        }
-
-        public static Response<T> HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
-        {
-            try
-            {
-                WebClient client = new WebClient();
-
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
-
-                client.Encoding = encoding;
-
-
-                var stringResult = client.DownloadString(address);
-
-                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
-            }
-            catch (Exception ex)
-            {
-                return ResponseFactory.CreateError<T>(ex.Message);
-            }
-        }
-
-
-        //Http Post
+         
         public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
         {
             return HttpPost<T>(address, data, Encoding.UTF8, contentType);
@@ -281,6 +302,29 @@ namespace IRI.Ket.Common.Helpers
             catch (Exception ex)
             {
                 return ResponseFactory.CreateError<T>(ex.Message);
+            }
+        }
+
+        public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, string encPubKey, string decPriKey) where TResponse : class
+        {
+            try
+            {
+                var message = EncryptedMessage.Create(parameter, encPubKey);
+
+                var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message);
+
+                if (response.HasNotNullResult())
+                {
+                    return ResponseFactory.Create<TResponse>(response.Result.Decrypt<TResponse>(decPriKey));
+                }
+                else
+                {
+                    return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<TResponse>(ex.Message);
             }
         }
 

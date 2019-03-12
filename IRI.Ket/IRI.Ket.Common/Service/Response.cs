@@ -12,11 +12,13 @@ namespace IRI.Ket.Common.Service
 
         public bool? IsFailed { get; set; }
 
-        public bool HasValidResult()
+        public bool HasNotNullResult()
         {
-            return !(IsCanceled == true) &&
-                    !(IsFailed == true) &&
-                    Result != null;
+            //return !(IsCanceled == true) &&
+            //        !(IsFailed == true) &&
+            //        Result != null;
+
+            return !FailedOrCanceled() && Result != null;
         }
 
         public string ErrorMessage { get; set; }

@@ -315,14 +315,98 @@ namespace IRI.Jab.Controls.Services.Dialog
         }
 
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>()
+        #region Change Password Dialog
+
+        
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, Task<bool>> requestAuthenticateAsync)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowChangePasswordDialog(owner);
+            return ShowChangePasswordDialog(owner, requestAuthenticateAsync);
         }
 
-        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow)
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, Task<bool>> requestAuthenticateAsync)
+        {
+            //requestClose parameter for viewModel is set in the next function
+            ChangePasswordDialogViewModel viewModel = ChangePasswordDialogViewModel.Create(null, requestAuthenticateAsync);
+
+            return ShowChangePasswordDialog(ownerWindow, viewModel);
+        }
+
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+             
+            return ShowChangePasswordDialog(owner, requestAuthenticate);
+        }
+         
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate)
+        {
+            //requestClose parameter for viewModel is set in the next function
+            ChangePasswordDialogViewModel viewModel = ChangePasswordDialogViewModel.Create(null, requestAuthenticate);
+
+            return ShowChangePasswordDialog(ownerWindow, viewModel);
+        }
+
+        //public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate)
+        //{
+        //    TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
+
+        //    View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
+
+        //    var owner = ownerWindow as Window;
+
+        //    if (owner != null)
+        //    {
+        //        dialog.Owner = owner;
+        //    }
+
+        //    var ownerDefaultEffect = owner?.Effect;
+
+        //    if (owner != null)
+        //    {
+        //        owner.Effect = new BlurEffect() { Radius = 10 };
+        //    }
+
+        //    Action requestClose = () =>
+        //    {
+        //        dialog.Close();
+
+        //        if (owner != null)
+        //        {
+        //            owner.Effect = ownerDefaultEffect;
+        //        }
+        //    };
+
+        //    ChangePasswordDialogViewModel viewModel = ChangePasswordDialogViewModel.Create(requestClose, requestAuthenticate);
+        //    //{
+        //    //    Message = message,
+        //    //    Title = title,
+        //    //    IsTwoOptionsMode = false,
+        //    //    IconPathMarkup = pathMarkup
+        //    //};
+
+        //    dialog.Closed += (sender, e) =>
+        //    {
+        //        if (viewModel.IsOk)
+        //        {
+        //            tcs.SetResult(viewModel);
+        //        }
+        //        else
+        //        {
+        //            tcs.SetResult(null);
+        //        }
+
+        //    };
+
+        //    dialog.DataContext = viewModel;
+
+        //    dialog.ShowDialog();
+
+        //    return tcs.Task;
+        //}
+
+        public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, ChangePasswordDialogViewModel viewModel)
         {
             TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
@@ -352,13 +436,7 @@ namespace IRI.Jab.Controls.Services.Dialog
                 }
             };
 
-            ChangePasswordDialogViewModel viewModel = new ChangePasswordDialogViewModel(requestClose);
-            //{
-            //    Message = message,
-            //    Title = title,
-            //    IsTwoOptionsMode = false,
-            //    IconPathMarkup = pathMarkup
-            //};
+            viewModel.RequestClose = requestClose;
 
             dialog.Closed += (sender, e) =>
             {
@@ -370,7 +448,6 @@ namespace IRI.Jab.Controls.Services.Dialog
                 {
                     tcs.SetResult(null);
                 }
-
             };
 
             dialog.DataContext = viewModel;
@@ -380,6 +457,7 @@ namespace IRI.Jab.Controls.Services.Dialog
             return tcs.Task;
         }
 
+        #endregion
 
         public Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel)
         {
