@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
+using IRI.Jab.Common.Service.Dialog;
 using IRI.Ket.Common.Service;
 using IRI.Msh.Common.Model.Google;
 using System;
@@ -12,9 +13,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 {
     public class AccountDialogViewModel : DialogViewModelBase
     {
-        public AccountDialogViewModel(AuthenticationType type)
+        public AccountDialogViewModel(AuthenticationType type, IDialogService dialogService)
         {
             this.Type = type;
+
+            this.DialogService = dialogService;
         }
 
         #region Actions & Funcs
@@ -478,12 +481,12 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _showChangePasswordDialogViewCommand = new RelayCommand(async param =>
                     {
-
-                        var viewModel = await DialogService.ShowChangePasswordDialog(param, ihp =>
+                        
+                        var viewModel = await DialogService?.ShowChangePasswordDialog(param, ihp =>
                         {
                             var parameter = new SimpleUserEmailPasswordModel(ihp.Password) { UserNameOrEmail = UserName };
 
-                            return RequestAuthenticate(parameter);
+                            return RequestAuthenticate?.Invoke(parameter) == true;
                         });
 
                         await ChangePassword(viewModel, param);
@@ -524,7 +527,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                     //sample: CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type esiDb:Shell}}}"
                     _showSignUpDialogViewCommand = new RelayCommand(async param =>
                     {
-                        var model = await DialogService.ShowUserNameSignUpDialog(param);
+                        var model = await DialogService?.ShowUserNameSignUpDialog(param);
 
                         if (model == null)
                         {
@@ -630,8 +633,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _showChangePasswordDialogViewAsyncCommand = new RelayCommand(async param =>
                     {
-
-                        var viewModel = await DialogService.ShowChangePasswordDialog(param, ihp =>
+                        var viewModel = await DialogService?.ShowChangePasswordDialog(param, ihp =>
                         {
                             var parameter = new SimpleUserEmailPasswordModel(ihp.Password) { UserNameOrEmail = UserName };
 
@@ -808,6 +810,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                             this.IsSignedIn = false;
 
                             passContainer.ClearInputValues();
+                            passContainer.Password.Clear();
                         }
                         else
                         {

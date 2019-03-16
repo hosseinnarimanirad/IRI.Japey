@@ -1,5 +1,6 @@
 ﻿using IRI.Msh.Common.Model.Mapping;
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -71,6 +72,16 @@ namespace IRI.Msh.Common.Mapping
         public static List<BoundingBox> Find25kIndexes(BoundingBox geographicIntersectRegion)
         {
             return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize);
+        }
+
+        public static List<BoundingBox> Find10kIndex(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight);
+        }
+
+        public static List<BoundingBox> Find5kIndex(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight);
         }
 
         public static List<BoundingBox> FindIndexes(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
@@ -259,6 +270,67 @@ namespace IRI.Msh.Common.Mapping
             }
         }
 
+        private static string Get10kSheetName(double minLongitude, double minLatitude)
+        {
+            var sheet50k = Get50kIndexSheet(minLongitude, minLatitude);
+
+            //  K   L   M
+            //1
+            //2
+            //3
+            //4
+            //5
+            //************
+
+            //var center50k = sheet50k.Extent.Center;
+            var xKmin = sheet50k.Extent.XMin;
+            var xLmin = sheet50k.Extent.XMin + _10kWidth;
+            var xMmin = sheet50k.Extent.XMax - _10kWidth;
+
+            //var yMin5 = sheet50k.Extent.YMin;
+            //var yMin4 = sheet50k.Extent.YMin + 1 * _10kHeight;
+            //var yMin3 = sheet50k.Extent.YMin + 2 * _10kHeight;
+            //var yMin2 = sheet50k.Extent.YMin + 3 * _10kHeight;
+            //var yMin1 = sheet50k.Extent.YMin + 4 * _10kHeight;
+
+            //row is between 1 and 5
+            var row = 5 - Math.Round((minLongitude - sheet50k.Extent.YMin) / _10kHeight);
+
+            var column = xKmin == minLatitude ? "K" : (xLmin == minLatitude) ? "L" : (xMmin == minLatitude) ? "M" : throw new Exception();
+
+            return FormattableString.Invariant($"{sheet50k.SheetName} {column}{row}");
+        }
+
+        private static string Get5kSheetName(double minLongitude, double minLatitude)
+        {
+            var sheet25k = Get25kIndexSheet(minLongitude, minLatitude);
+
+            //  A   B   C
+            //1
+            //2
+            //3
+            //4
+            //5
+            //************
+
+            //var center50k = sheet50k.Extent.Center;
+            var xAmin = sheet25k.Extent.XMin;
+            var xBmin = sheet25k.Extent.XMin + _10kWidth;
+            var xCmin = sheet25k.Extent.XMax - _10kWidth;
+
+            //var yMin5 = sheet50k.Extent.YMin;
+            //var yMin4 = sheet50k.Extent.YMin + 1 * _10kHeight;
+            //var yMin3 = sheet50k.Extent.YMin + 2 * _10kHeight;
+            //var yMin2 = sheet50k.Extent.YMin + 3 * _10kHeight;
+            //var yMin1 = sheet50k.Extent.YMin + 4 * _10kHeight;
+
+            //row is between 1 and 5
+            var row = 5 - Math.Round((minLongitude - sheet25k.Extent.YMin) / _5kHeight);
+
+            var column = xAmin == minLatitude ? "A" : (xBmin == minLatitude) ? "B" : (xCmin == minLatitude) ? "C" : throw new Exception();
+
+            return FormattableString.Invariant($"{sheet25k.SheetName} {column}{row}");
+        }
 
 
 
@@ -276,6 +348,18 @@ namespace IRI.Msh.Common.Mapping
         {
             return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize, (minLongitude, minLatitude) => Get25kSheetName(minLongitude, minLatitude));
         }
+
+        public static List<IndexSheet> FindNcc10kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight, (minLongitude, minLatitude) => Get10kSheetName(minLongitude, minLatitude));
+        }
+
+        public static List<IndexSheet> FindNcc5kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight, (minLongitude, minLatitude) => Get5kSheetName(minLongitude, minLatitude));
+        }
+
+
 
         /// <summary>
         /// 
@@ -314,6 +398,112 @@ namespace IRI.Msh.Common.Mapping
             return result;
         }
 
+        #region Index Lines
+
+        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, Indexes type)
+        {
+            switch (type)
+            {
+                case Indexes.Ncc250k:
+                    return Get250kIndexLines(geographicIntersectRegion);
+
+                case Indexes.Ncc100k:
+                    return Get100kIndexLines(geographicIntersectRegion);
+
+                case Indexes.Ncc50k:
+                    return Get50kIndexLines(geographicIntersectRegion);
+
+                case Indexes.Ncc25k:
+                    return Get25kIndexLines(geographicIntersectRegion);
+
+                case Indexes.Ncc10k:
+                    return Get10kIndexLines(geographicIntersectRegion);
+
+                case Indexes.Ncc5k:
+                    return Get5kIndexLines(geographicIntersectRegion);
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static List<Geometry> Get250kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _250kWidth, _250kHeight);
+        }
+
+        private static List<Geometry> Get100kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _100kSize, _100kSize);
+        }
+
+        private static List<Geometry> Get50kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _50kSize, _50kSize);
+        }
+
+        private static List<Geometry> Get25kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _25kSize, _25kSize);
+        }
+
+        private static List<Geometry> Get10kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _10kWidth, _10kHeight);
+        }
+
+        private static List<Geometry> Get5kIndexLines(BoundingBox geographicIntersectRegion)
+        {
+            return GetIndexLines(geographicIntersectRegion, _5kWidth, _5kHeight);
+        }
+
+        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
+        {
+            var startLongitude = Math.Floor(geographicIntersectRegion.XMin / indexWidth) * indexWidth;
+
+            var endLongitude = Math.Ceiling(geographicIntersectRegion.XMax / indexWidth) * indexWidth;
+
+            var startLatitdue = Math.Floor(geographicIntersectRegion.YMin / indexHeight) * indexHeight;
+
+            var endLatitdue = Math.Ceiling(geographicIntersectRegion.YMax / indexHeight) * indexHeight;
+
+            List<Geometry> result = new List<Geometry>();
+
+            for (double i = startLongitude; i < endLongitude; i += indexWidth)
+            {
+                var p1 = new Point(i, geographicIntersectRegion.YMin);
+
+                var p2 = new Point(i, geographicIntersectRegion.YMax);
+
+                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+            }
+
+            for (double j = startLatitdue; j < endLatitdue; j += indexHeight)
+            {
+                var p1 = new Point(geographicIntersectRegion.XMin, j);
+
+                var p2 = new Point(geographicIntersectRegion.XMax, j);
+
+                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+            }
+
+            return result;
+        }
+
+
+        #endregion
+
+
+
+        public static List<Index50k> Generate50kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return GenerateIndexes<Index50k>(geographicIntersectRegion, _50kSize, _50kSize, (lng, lat) => new Index50k()
+            {
+                MinLatitude = lat,
+                MinLongitude = lng,
+                SheetNameEn = Get50kSheetName(lng, lat)
+            });
+        }
 
         public static List<Index25k> Generate25kIndexes(BoundingBox geographicIntersectRegion)
         {
@@ -324,14 +514,24 @@ namespace IRI.Msh.Common.Mapping
                 SheetNameEn = Get50kSheetName(lng, lat)
             });
         }
-         
-        public static List<Index50k> Generate50kIndexes(BoundingBox geographicIntersectRegion)
+
+        public static List<Index10k> Generate10kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return GenerateIndexes<Index50k>(geographicIntersectRegion, _50kSize, _50kSize, (lng, lat) => new Index50k()
+            return GenerateIndexes<Index10k>(geographicIntersectRegion, _10kWidth, _10kHeight, (lng, lat) => new Index10k()
             {
                 MinLatitude = lat,
                 MinLongitude = lng,
-                SheetNameEn = Get50kSheetName(lng, lat)
+                SheetNameEn = Get10kSheetName(lng, lat)
+            });
+        }
+
+        public static List<Index5k> Generate5kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return GenerateIndexes<Index5k>(geographicIntersectRegion, _5kWidth, _5kHeight, (lng, lat) => new Index5k()
+            {
+                MinLatitude = lat,
+                MinLongitude = lng,
+                SheetNameEn = Get5kSheetName(lng, lat)
             });
         }
 

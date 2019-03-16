@@ -1025,6 +1025,21 @@ namespace IRI.Jab.MapViewer
             {
                 AddSpecialLineLayer(layer as SpecialLineLayer, null);
             }
+            else if (layer is GridLayer)
+            {
+                Action action = async () =>
+                { 
+                    await AddGridLayer(layer as GridLayer);
+                };
+
+                var extent = this.CurrentExtent;
+
+                Task.Run(() =>
+                   this.jobs.Add(new Job(
+                      new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
+                      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                  ); 
+            }
             else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
             {
                 Action action = () =>
@@ -1075,7 +1090,14 @@ namespace IRI.Jab.MapViewer
 
                     Action action = () =>
                     {
-                        if (!layer.Extent.Intersects(this.CurrentExtent) && !layer.Type.HasFlag(LayerType.BaseMap))
+                        var rasterLayer = layer as RasterLayer;
+
+                        if (rasterLayer == null)
+                        {
+                            return;
+                        }
+
+                        if (!layer.Extent.Intersects(this.CurrentExtent) && !layer.Type.HasFlag(LayerType.BaseMap) && !(rasterLayer.DataSource is OfflineGoogleMapDataSource<object>))
                         {
                             System.Diagnostics.Debug.WriteLine($"raster layer escaped!");
                             return;
@@ -1099,6 +1121,20 @@ namespace IRI.Jab.MapViewer
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private async Task AddGridLayer(GridLayer gridLayer)
+        {
+            var extent = this.CurrentExtent;
+
+            var mapScale = this.MapScale;
+
+            //consider if layer was Labeled
+            var lines = gridLayer.GetLines(extent);
+
+            VectorLayer layer = new VectorLayer("temp grid", lines, gridLayer.VisualParameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+
+            await this.AddNonTiledLayer(layer);
         }
 
         #endregion
@@ -1815,11 +1851,11 @@ namespace IRI.Jab.MapViewer
                     return;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+                //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
                 var geoImage = await layer.GetTileAsync(tile, this.Proxy);
 
-                System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+                //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
                 if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
                 {
@@ -1863,7 +1899,7 @@ namespace IRI.Jab.MapViewer
                     //Tag = new LayerTag(GoogleMapsUtility.GetGoogleMapScale(tile.ZoomLevel)) { Layer = layer, LayerType = layer.Type, Tile = tile }
                 };
 
-                System.Diagnostics.Debug.WriteLine($"path after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+                //System.Diagnostics.Debug.WriteLine($"path after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
                 layer.Element = path;
 
@@ -1900,14 +1936,14 @@ namespace IRI.Jab.MapViewer
             if (tiles == null)
                 return;
 
-            System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
+            //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
 
             foreach (var tile in tiles)
             {
                 RefreshTiles(tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
             }
 
-            System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
+            //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
         }
 
 
@@ -2016,7 +2052,7 @@ namespace IRI.Jab.MapViewer
 
             Action action = async () =>
             {
-                System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
+                //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
 
                 foreach (ILayer item in infos)
                 {
@@ -2901,13 +2937,13 @@ namespace IRI.Jab.MapViewer
 
             this._layerManager.Add(layer);
 
-            Debug.WriteLine("AddNonTiledLayer [MapViewer] start");
+            //Debug.WriteLine("AddNonTiledLayer [MapViewer] start");
 
-            Debug.WriteLine($"{geometries?.Count} Geometries Selected");
+            //Debug.WriteLine($"{geometries?.Count} Geometries Selected");
 
             await AddNonTiledLayer(layer);
 
-            Debug.WriteLine("AddNonTiledLayer [MapViewer] end");
+            //Debug.WriteLine("AddNonTiledLayer [MapViewer] end");
         }
 
         #endregion
@@ -3321,12 +3357,12 @@ namespace IRI.Jab.MapViewer
                 animation.Completed += new EventHandler(
                     delegate (object o, EventArgs e)
                     {
-                        Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name + "animation called");
+                        //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name + "animation called");
 
                         if (++counter != counterValue)
                             return;
 
-                        Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name + "animation completed", _refreshCalled);
+                        //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name + "animation completed", _refreshCalled);
 
                         UpdateTileInfos();
 
@@ -4288,7 +4324,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                if (result.HasValidResult())
+                if (result.HasNotNullResult())
                 {
                     return ResponseFactory.Create(result.Result.AsSqlGeometry().MakeValid().AsGeometry());
                 }
@@ -4664,7 +4700,7 @@ namespace IRI.Jab.MapViewer
 
             var drawingResult = await GetDrawingAsync(DrawMode.Polyline);
 
-            if (!drawingResult.HasValidResult())
+            if (!drawingResult.HasNotNullResult())
             {
                 bezierCancellationToken.Cancel();
             }
@@ -4704,7 +4740,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                if (result.HasValidResult())
+                if (result.HasNotNullResult())
                 {
                     RemovePolyBezierLayer(result.Result);
                 }
@@ -4806,7 +4842,7 @@ namespace IRI.Jab.MapViewer
 
             this.ClearLayer(measureLayer, remove: true, forceRemove: true);
 
-            if (result.HasValidResult())
+            if (result.HasNotNullResult())
             {
                 result = await EditGeometryAsync(result.Result, editingOptions);
             }

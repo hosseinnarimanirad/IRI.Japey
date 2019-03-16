@@ -1,7 +1,6 @@
 ﻿using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using Newtonsoft.Json;
 using System;
@@ -12,17 +11,17 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Mapping
 {
-    public class SqlIndex100k : Index100k, ISqlGeometryAware
+    public class SqlIndex10k : Index10k, ISqlGeometryAware
     {
         [JsonIgnore]
         SqlGeometry ISqlGeometryAware.TheSqlGeometry { get => TheGeometry.AsSqlGeometry(); set => throw new NotImplementedException(); }
 
-        public SqlIndex100k()
+        public SqlIndex10k()
         {
 
         }
 
-        public SqlIndex100k(Index100k index)
+        public SqlIndex10k(Index10k index)
         {
             this.MinLatitude = index.MinLatitude;
 
@@ -32,11 +31,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Mapping
 
             this.SheetNameFa = index.SheetNameFa;
 
-            this.SheetNumber = index.SheetNumber;
-
-            this.BlockName = index.BlockName;
-
-            this.BlockNumber = index.BlockNumber;
+            this.SheetNumber = index.SheetNumber; 
         }
     }
 }

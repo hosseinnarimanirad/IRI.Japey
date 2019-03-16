@@ -153,7 +153,7 @@ namespace IRI.Jab.Common
             {
                 var googleDataSource = this.DataSource as OfflineGoogleMapDataSource<object>;
 
-                var tiles = googleDataSource.GetTiles(region.Transform(Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator), mapScale);
+                var tiles = googleDataSource.GetTiles(region.Transform(Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
                 foreach (var item in tiles)
                 {

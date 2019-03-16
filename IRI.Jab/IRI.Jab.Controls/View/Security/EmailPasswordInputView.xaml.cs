@@ -40,7 +40,7 @@ namespace IRI.Jab.Controls.View.Security
         {
             this.key.Clear();
 
-            this.UserNameOrEmail = string.Empty;
+            //this.UserNameOrEmail = string.Empty;
         }
 
         public string GetPasswordText()

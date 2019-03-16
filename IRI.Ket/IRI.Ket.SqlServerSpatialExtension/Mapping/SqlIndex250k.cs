@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace IRI.Ket.SqlServerSpatialExtension.Mapping
 {
   
-    public class SqlIndex250k : Index250k, ISqlGeometryAware, IGeometryAware
+    public class SqlIndex250k : Index250k, ISqlGeometryAware
     {
         [JsonIgnore]
         SqlGeometry ISqlGeometryAware.TheSqlGeometry { get => TheGeometry.AsSqlGeometry(); set => throw new NotImplementedException(); }

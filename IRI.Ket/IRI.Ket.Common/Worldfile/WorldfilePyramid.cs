@@ -14,7 +14,9 @@ namespace IRI.Ket.WorldfileFormat
 
         public static void Create(string imageFileName, double pixelSize, string outputDirectory = null)
         {
+
             using (var bitmap = new Bitmap(imageFileName))
+            //using (var bitmap = (Bitmap)Image.FromStream(new System.IO.StreamReader(imageFileName).BaseStream, false, false))
             {
                 var worldfileName = WorldfileManager.TryGetAssociatedWorldfileName(imageFileName);
 
@@ -102,12 +104,12 @@ namespace IRI.Ket.WorldfileFormat
                 }
                 else
                 {
-                    tileImage.Save(System.IO.Path.Combine(outputDirectory, $"{tile.ToShortString()}.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);                    
+                    tileImage.Save(System.IO.Path.Combine(outputDirectory, $"{tile.ToShortString()}.jpg"), System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
 
             }
         }
-         
+
         private static Bitmap CopyRegionIntoImage(Bitmap srcBitmap, RectangleF srcRegion, RectangleF destRegion)
         {
             Bitmap result = new Bitmap(256, 256);

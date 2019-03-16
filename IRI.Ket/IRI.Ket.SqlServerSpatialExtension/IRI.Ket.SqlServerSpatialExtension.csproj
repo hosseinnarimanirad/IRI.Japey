@@ -59,8 +59,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,9 +87,12 @@
     <Compile Include="Helpers\SqlSpatialHelper.cs" />
     <Compile Include="Helpers\WebMercatorHelper.cs" />
     <Compile Include="Mapping\SqlIndex100k.cs" />
+    <Compile Include="Mapping\SqlIndex10k.cs" />
     <Compile Include="Mapping\SqlIndex250k.cs" />
     <Compile Include="Mapping\SqlIndex25k.cs" />
     <Compile Include="Mapping\SqlIndex50k.cs" />
+    <Compile Include="Mapping\SqlIndex5k.cs" />
+    <Compile Include="Mapping\SqlIndexBase.cs" />
     <Compile Include="Model\SqlFeature.cs" />
     <Compile Include="Model\SqlFeatureSet.cs" />
     <Compile Include="Model\NamedSqlGeometry.cs" />

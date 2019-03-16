@@ -74,9 +74,6 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
                             Attributes = new Dictionary<string, object>() { { nameof(b.SheetName), b.SheetName } }
                         })
                         .ToList();
-        }
-
-
-         
+        } 
     }
 }

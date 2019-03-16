@@ -15,6 +15,10 @@ namespace IRI.Jab.Controls.Services.Dialog
 {
     public class DefaultDialogService : IDialogService
     {
+
+        public int BlurRadius { get; set; } = 5;
+
+
         #region Open File Dialog
 
         public string ShowOpenFileDialog(string filter)
@@ -41,7 +45,7 @@ namespace IRI.Jab.Controls.Services.Dialog
             {
                 defaultEffect = owner.Effect;
 
-                owner.Effect = new BlurEffect() { Radius = 5 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             if (dialog.ShowDialog(owner) == true)
@@ -81,7 +85,7 @@ namespace IRI.Jab.Controls.Services.Dialog
             {
                 defaultEffect = owner.Effect;
 
-                owner.Effect = new BlurEffect() { Radius = 5 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             if (dialog.ShowDialog(owner) == true)
@@ -124,7 +128,7 @@ namespace IRI.Jab.Controls.Services.Dialog
             {
                 defaultEffect = owner.Effect;
 
-                owner.Effect = new BlurEffect() { Radius = 5 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             if (dialog.ShowDialog(owner) == true)
@@ -169,7 +173,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (owner != null)
             {
-                owner.Effect = new BlurEffect() { Radius = 10 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.DialogResult); };
@@ -225,7 +229,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (owner != null)
             {
-                owner.Effect = new BlurEffect() { Radius = 10 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             dialog.Closed += (sender, e) => { tcs.SetResult(viewModel.DialogResult); };
@@ -273,7 +277,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (owner != null)
             {
-                owner.Effect = new BlurEffect() { Radius = 10 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             Action requestClose = () =>
@@ -365,7 +369,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         //    if (owner != null)
         //    {
-        //        owner.Effect = new BlurEffect() { Radius = 10 };
+        //        owner.Effect = new BlurEffect() { Radius = BlurRadius };
         //    }
 
         //    Action requestClose = () =>
@@ -423,7 +427,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (owner != null)
             {
-                owner.Effect = new BlurEffect() { Radius = 10 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             Action requestClose = () =>
@@ -481,7 +485,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             if (owner != null)
             {
-                owner.Effect = new BlurEffect() { Radius = 10 };
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
             }
 
             view.Closed += (sender, e) =>

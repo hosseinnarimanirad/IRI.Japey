@@ -87,12 +87,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StreamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ZipArchiveHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index100k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index10k.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index250k.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index25k.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index50k.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index5k.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapIndexes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Indexes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\WebMercatorUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\EigenvaluesEigenvectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Exceptions.cs" />
@@ -178,6 +181,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Mapping\Model\" />
   </ItemGroup>
 </Project>

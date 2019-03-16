@@ -194,7 +194,7 @@ namespace IRI.Ket.Common.Extensions
 
         public static readonly DateTime JulianDate = new DateTime(1970, 1, 1, 0, 0, 0);
 
-        public static string GetPersianEllapsedValue(this DateTime dateTime)
+        public static string GetPersianEllapsedTimeCoarse(this DateTime dateTime)
         {
             var interval = (DateTime.Now - dateTime);
 
@@ -217,6 +217,44 @@ namespace IRI.Ket.Common.Extensions
                 result = $"{interval.Days / 360} سال پیش";
             }
 
+            return result.LatinNumbersToFarsiNumbers();
+        }
+
+        public static string GetPersianEllapsedTimeFine(this DateTime dateTime)
+        {
+            var duration = DateTime.Now - dateTime;
+
+            var result = string.Empty;
+
+            if (duration < TimeSpan.FromSeconds(60))
+            {
+                result = $"{duration.Seconds} ثانیه پیش";
+            }
+            else if (duration < TimeSpan.FromMinutes(60))
+            {
+                result = $"{duration.Minutes} دقیقه پیش";
+            }
+            else if (duration < TimeSpan.FromHours(24))
+            {
+                result = $"{duration.Hours} ساعت پیش";
+            }
+            else if (duration < TimeSpan.FromDays(7))
+            {
+                result = $"هفتهٔ گذشته";
+            }
+            else if (duration < TimeSpan.FromDays(30))
+            {
+                result = $"{duration.Days} روز پیش";
+            }
+            else if (duration < TimeSpan.FromMinutes(365))
+            {
+                result = $"{duration.Days / 30} ماه پیش";
+            }
+            else
+            {
+                result = $"{duration.Days / 365} سال پیش";
+            }
+             
             return result.LatinNumbersToFarsiNumbers();
         }
     }

@@ -89,5 +89,48 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return result;
         }
+
+
+
+        public List<GeoReferencedImage> GetTilesForGoogleEarth(BoundingBox geographicBoundingBox, double mapScale)
+        {
+            //94.12.17
+            //int zoomLevel = GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+
+            var result = new List<GeoReferencedImage>();
+
+            //What if there were no imagesource for this zoom level
+            if (!this.ImageSources.Any(i => i.ZoomLevel == zoomLevel))
+            {
+                return result;
+            }
+
+            var lowerLeft = WebMercatorUtility.LatLonToImageNumber(geographicBoundingBox.YMin, geographicBoundingBox.XMin, zoomLevel);
+
+            var upperRight = WebMercatorUtility.LatLonToImageNumber(geographicBoundingBox.YMax, geographicBoundingBox.XMax, zoomLevel);
+
+            var imageSource = this.ImageSources.Single(i => i.ZoomLevel == zoomLevel);
+
+            for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
+            {
+                for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
+                {  
+                    string fileName = imageSource.GetFileName(j, i);
+
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        result.Add(new GeoReferencedImage(
+                            System.IO.File.ReadAllBytes(fileName),
+                            WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
+                    }
+                }
+            }
+
+            System.Diagnostics.Trace.WriteLine(string.Format("{0} Images founded; zoom level = {1}", result.Count, zoomLevel));
+
+            return result;
+        }
+
     }
 }

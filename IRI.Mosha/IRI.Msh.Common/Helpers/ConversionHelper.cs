@@ -47,5 +47,9 @@ namespace IRI.Msh.Common.Helpers
             return result;
         }
 
+        public static readonly string[] FarsiNumbers =
+        {
+            "صفر", "یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه"
+        };
     }
 }
