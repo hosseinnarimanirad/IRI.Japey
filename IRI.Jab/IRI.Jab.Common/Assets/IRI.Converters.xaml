@@ -6,6 +6,7 @@
 
     <converters:Base64ToByteArrayConverter x:Key="base64ToByteArrayConverter"/>
 
+    <converters:BoolToBrushConverter x:Key="boolToBrushConverter"/>
     <converters:BoolToBoldFontConverter x:Key="boolToBoldFontConverter"/>
     <converters:BoolToGeometryConverter x:Key="boolToGeometryConverter"/>
     <converters:BoolToGridLengthConverter x:Key="boolToGridLengthConverter"/>
@@ -13,7 +14,8 @@
 
     <converters:CenterChildParentConverter x:Key="centerChildParentConverter"/>
     <converters:CountLessThanOneToBoolConverter x:Key="countLessThanOneToBoolConverter"/>
- 
+
+    <converters:DateTimeToPersianEllapsedDateCoarseConverter x:Key="dateTimeToPersianEllapsedDateCoarseConverter"/>
     <converters:DoubleToDoubleInverseConverter x:Key="doubleInverseConverter"/>
     <converters:DoubleToMarginTopConverter x:Key="doubleToMarginTopConverter"/>
     <converters:DoubleToReducedDoubleByPercentConverter x:Key="doubleToReducedDoubleByPercentConverter"/>

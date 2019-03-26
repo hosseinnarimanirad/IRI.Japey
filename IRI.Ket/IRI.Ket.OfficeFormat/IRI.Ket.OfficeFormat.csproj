@@ -45,6 +45,7 @@
     <Compile Include="ExcelHelper.cs" />
     <Compile Include="Extensions\ShapefileExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Word\WordHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">

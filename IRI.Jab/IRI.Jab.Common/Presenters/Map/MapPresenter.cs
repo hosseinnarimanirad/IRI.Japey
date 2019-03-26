@@ -32,7 +32,7 @@ using IRI.Msh.Common.Helpers;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
-    public class MapPresenter : BasePresenter
+    public abstract class MapPresenter : BasePresenter
     {
         #region Properties
 
@@ -1778,6 +1778,42 @@ namespace IRI.Jab.Common.Presenter.Map
 
         }
 
+        public virtual async Task AddZippedImagePyramid(object owner)
+        {
+            try
+            {
+                this.IsBusy = true;
+
+                var fileName = this.OpenFile("Image Pyramid file|*.pyrmd", owner);
+
+                if (!File.Exists(fileName))
+                {
+                    this.IsBusy = false;
+
+                    return;
+                }
+
+                var rasterLayer = new RasterLayer(new ZippedImagePyramidDataSource(fileName),
+                    System.IO.Path.GetFileNameWithoutExtension(fileName),
+                    ScaleInterval.All,
+                    false,
+                    true,
+                    System.Windows.Visibility.Visible,
+                    1);
+
+                this.AddLayer(rasterLayer);
+            }
+            catch (Exception ex)
+            {
+                await this.ShowMessage(owner, ex.Message, "خطا");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+        }
+
         #endregion
 
 
@@ -1922,6 +1958,23 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _addWorldfileCommand;
             }
         }
+
+
+        private RelayCommand _addZippedImagePyramidCommand;
+
+        public RelayCommand AddZippedImagePyramidCommand
+        {
+            get
+            {
+                if (_addZippedImagePyramidCommand == null)
+                {
+                    _addZippedImagePyramidCommand = new RelayCommand(async param => await AddZippedImagePyramid(param));
+                }
+
+                return _addZippedImagePyramidCommand;
+            }
+        }
+
 
         private RelayCommand _cancelNewDrawingCommand;
 
@@ -2221,6 +2274,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public virtual void Initialize()
         {
         }
+
 
         public virtual void RegisterMapOptions()
         {

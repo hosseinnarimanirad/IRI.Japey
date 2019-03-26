@@ -54,9 +54,9 @@ namespace IRI.Jab.Common.Presenter
 
         //public Func<string, string> RequestSaveFile;
 
-        public string[] OpenFiles(string filter)
+        public string[] OpenFiles(string filter, object owner = null)
         {
-            return DialogService.ShowOpenFilesDialog(filter);
+            return DialogService.ShowOpenFilesDialog(filter, owner);
             //return this.RequestOpenFile?.Invoke(filter);
         }
 
@@ -66,9 +66,9 @@ namespace IRI.Jab.Common.Presenter
             //return this.RequestOpenFile?.Invoke(filter);
         }
 
-        public string OpenFile(string filter)
+        public string OpenFile(string filter, object owner = null)
         {
-            return DialogService.ShowOpenFileDialog(filter);
+            return DialogService.ShowOpenFileDialog(filter, owner);
             //return this.RequestOpenFile?.Invoke(filter);
         }
 
@@ -78,9 +78,9 @@ namespace IRI.Jab.Common.Presenter
             //return this.RequestOpenFile?.Invoke(filter);
         }
 
-        public string SaveFile(string filter)
+        public string SaveFile(string filter, object owner = null)
         {
-            return DialogService.ShowSaveFileDialog(filter);
+            return DialogService.ShowSaveFileDialog(filter, owner);
             //return this.RequestSaveFile?.Invoke(filter);
         }
 
@@ -111,7 +111,7 @@ namespace IRI.Jab.Common.Presenter
 
         public async Task<bool?> RequestYesNoDialog(object owner, string message, string title)
         {
-            return await DialogService?.ShowYesNoDialog(owner, message, title);
+            return await DialogService?.ShowYesNoDialog(message, title, owner);
         }
 
         //public Action<string> RequestShowMessage;
@@ -123,7 +123,7 @@ namespace IRI.Jab.Common.Presenter
 
         public async Task ShowMessage(object owner, string message, string title = null)
         {
-            await DialogService?.ShowMessage(owner, null, message, title);
+            await DialogService?.ShowMessage(null, message, title, owner);
             //this.RequestShowMessage?.Invoke(message);
         }
 

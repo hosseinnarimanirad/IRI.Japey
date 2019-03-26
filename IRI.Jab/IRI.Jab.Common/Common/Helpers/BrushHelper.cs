@@ -47,6 +47,13 @@ namespace IRI.Jab.Common.Helpers
             return result;
         }
 
+        public static Brush CreateFromNameOrHex(string colorNameOrHex)
+        {
+            var converter = new BrushConverter();
+
+            return converter.ConvertFromString(colorNameOrHex) as SolidColorBrush;
+        }
+
         public static Brush CreateBrush(string hexColor)
         {
             if (hexColor == null)

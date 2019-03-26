@@ -11,25 +11,30 @@ namespace IRI.Jab.Common.Service.Dialog
 {
     public interface IDialogService
     {
-        string[] ShowOpenFilesDialog(string filter);
-
         string[] ShowOpenFilesDialog<T>(string filter);
 
-        string ShowOpenFileDialog(string filter);
+        string[] ShowOpenFilesDialog(string filter, object owner);
+
 
         string ShowOpenFileDialog<T>(string filter);
 
-        string ShowSaveFileDialog(string filter);
+        string ShowOpenFileDialog(string filter, object owner);
+
 
         string ShowSaveFileDialog<T>(string filter);
 
+        string ShowSaveFileDialog(string filter, object owner);
+
+
         Task<bool?> ShowYesNoDialog<T>(string message, string title = null);
 
-        Task<bool?> ShowYesNoDialog(object owner, string message, string title);
+        Task<bool?> ShowYesNoDialog(string message, string title, object owner);
+
 
         Task ShowMessage<T>(string message, string pathMarkup, string title);
 
-        Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title);
+        Task ShowMessage(string pathMarkup, string message, string title, object ownerWindow);
+
 
         Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>();
 

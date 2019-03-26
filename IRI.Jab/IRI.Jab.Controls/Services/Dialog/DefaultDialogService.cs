@@ -19,27 +19,18 @@ namespace IRI.Jab.Controls.Services.Dialog
         public int BlurRadius { get; set; } = 5;
 
 
+
         #region Open File Dialog
 
-        public string ShowOpenFileDialog(string filter)
-        {
-            return ShowOpenFileDialog(filter, null);
-        }
-
-        public string ShowOpenFileDialog<T>(string filter)
-        {
-            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
-
-            return ShowOpenFileDialog(filter, owner);
-        }
-
-        public string ShowOpenFileDialog(string filter, Window owner)
+        public string ShowOpenFileDialog(string filter, object ownerWindow)
         {
             OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
 
             string result = null;
 
             Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
 
             if (owner != null)
             {
@@ -59,27 +50,24 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
-
-
-        public string[] ShowOpenFilesDialog(string filter)
-        {
-            return ShowOpenFilesDialog(filter, null);
-        }
-
-        public string[] ShowOpenFilesDialog<T>(string filter)
+        public string ShowOpenFileDialog<T>(string filter)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowOpenFilesDialog(filter, owner);
+            return ShowOpenFileDialog(filter, owner);
         }
+          
 
-        public string[] ShowOpenFilesDialog(string filter, Window owner)
+
+        public string[] ShowOpenFilesDialog(string filter, object ownerWindow)
         {
             OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
 
             string[] result = null;
 
             Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
 
             if (owner != null)
             {
@@ -99,30 +87,27 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
+        public string[] ShowOpenFilesDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowOpenFilesDialog(filter, owner);
+        }
+         
         #endregion
 
 
         #region Save File Dialog
 
-        public string ShowSaveFileDialog(string filter)
-        {
-            return ShowSaveFileDialog(filter, null);
-        }
-
-        public string ShowSaveFileDialog<T>(string filter)
-        {
-            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
-
-            return ShowSaveFileDialog(filter, owner);
-        }
-
-        public string ShowSaveFileDialog(string filter, Window owner)
+        public string ShowSaveFileDialog(string filter, object ownerWindow)
         {
             SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
 
             string result = null;
 
             Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
 
             if (owner != null)
             {
@@ -142,16 +127,24 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
+        public string ShowSaveFileDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowSaveFileDialog(filter, owner);
+        }
+         
+
         #endregion
 
         public Task<bool?> ShowYesNoDialog<T>(string message, string title)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowYesNoDialog(owner, message, title);
+            return ShowYesNoDialog(message, title, owner);
         }
 
-        public Task<bool?> ShowYesNoDialog(object ownerWindow, string message, string title)
+        public Task<bool?> ShowYesNoDialog(string message, string title, object ownerWindow)
         {
             TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
 
@@ -200,10 +193,10 @@ namespace IRI.Jab.Controls.Services.Dialog
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowMessage(owner, pathMarkup, message, title);
+            return ShowMessage(pathMarkup, message, title, owner);
         }
 
-        public Task ShowMessage(object ownerWindow, string pathMarkup, string message, string title)
+        public Task ShowMessage(string pathMarkup, string message, string title, object ownerWindow)
         {
             TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
 
@@ -321,7 +314,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #region Change Password Dialog
 
-        
+
         public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, Task<bool>> requestAuthenticateAsync)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
@@ -340,10 +333,10 @@ namespace IRI.Jab.Controls.Services.Dialog
         public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog<T>(Func<IHavePassword, bool> requestAuthenticate)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
-             
+
             return ShowChangePasswordDialog(owner, requestAuthenticate);
         }
-         
+
         public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, Func<IHavePassword, bool> requestAuthenticate)
         {
             //requestClose parameter for viewModel is set in the next function

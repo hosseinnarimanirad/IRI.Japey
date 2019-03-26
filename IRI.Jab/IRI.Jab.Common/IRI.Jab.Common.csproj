@@ -104,10 +104,12 @@
     <Compile Include="Assets\Converters\ArabicStringToFarsiStringConverter.cs" />
     <Compile Include="Assets\Converters\Base64ToByteArrayConverter.cs" />
     <Compile Include="Assets\Converters\BoolToBoldFontConverter.cs" />
+    <Compile Include="Assets\Converters\BoolToBrushConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGeometryConverter.cs" />
     <Compile Include="Assets\Converters\BoolToGridLengthConverter.cs" />
     <Compile Include="Assets\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Assets\Converters\CenterChildParentConverter.cs" />
+    <Compile Include="Assets\Converters\DateTimeToPersianEllapsedDateCoarseConverter.cs" />
     <Compile Include="Assets\Converters\DoubleToDoubleInverseConverter.cs" />
     <Compile Include="Assets\Converters\DoubleToMarginTopConverter.cs" />
     <Compile Include="Assets\Converters\DoubleToReducedDoubleByPercentConverter.cs" />

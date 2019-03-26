@@ -538,11 +538,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                         {
                             this.RequestShowSignUpDialogView?.Invoke(model);
 
-                            await DialogService?.ShowMessage(param, null, "کاربر جدید با موفقیت اضافه شد", "پیغام");
+                            await DialogService?.ShowMessage(null, "کاربر جدید با موفقیت اضافه شد", "پیغام", param);
                         }
                         catch (Exception ex)
                         {
-                            await DialogService?.ShowMessage(param, null, ex.Message, "خطا");
+                            await DialogService?.ShowMessage(null, ex.Message, "خطا", param);
                         }
 
                     });
@@ -662,11 +662,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 this.RequestChangePassword?.Invoke(viewModel.Model);
 
-                await DialogService?.ShowMessage(ownerWindow, null, "رمز عبور با موفقیت تغییر یافت", "پیغام");
+                await DialogService?.ShowMessage(null, "رمز عبور با موفقیت تغییر یافت", "پیغام", ownerWindow);
             }
             catch (Exception ex)
             {
-                await DialogService?.ShowMessage(ownerWindow, null, ex.Message, "خطا");
+                await DialogService?.ShowMessage(null, ex.Message, "خطا", ownerWindow);
             }
         }
 
