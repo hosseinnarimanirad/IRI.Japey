@@ -246,7 +246,7 @@ namespace IRI.Jab.Common
                       region.YMin);
 
                 //??
-                var table = await ((IRI.Ket.DataManagement.Model.FeatureDataSource)this.DataSource).GetEntireFeatureAsync(whereClouse);
+                var table = await ((RelationalDbSource<Ket.SqlServerSpatialExtension.Model.SqlFeature>)this.DataSource).GetEntireFeatureAsync(whereClouse);
 
                 foreach (System.Data.DataRow item in table.Rows)
                 {
@@ -261,10 +261,6 @@ namespace IRI.Jab.Common
                                                         yMax: double.Parse(item["ImageMaxY"].ToString()));
 
                     //94.12.16
-                    //int width = (int)(boundingBox.Width * mapScale / unitDistance);
-
-                    //int height = (int)(boundingBox.Width * mapScale / unitDistance);
-
                     RasterLayer layer =
                         new RasterLayer(this, this.LayerName,
                                             Helpers.ImageUtility.ToImage((byte[])item["Image"]),

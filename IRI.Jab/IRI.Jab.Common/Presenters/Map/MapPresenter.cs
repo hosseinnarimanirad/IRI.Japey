@@ -1711,7 +1711,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             try
             {
-                var dataSource = await ShapefileDataSource.CreateAsync(fileName, new WebMercator());
+                var dataSource = await ShapefileDataSourceFactory.CreateAsync(fileName, new WebMercator());
 
                 var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(fileName), dataSource,
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),

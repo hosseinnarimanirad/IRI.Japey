@@ -40,10 +40,10 @@ namespace IRI.Ket.DataManagement.DataSource
             return this._geometries;
         }
 
-        public override List<object> GetAttributes(string attributeColumn, string whereClause)
-        {
-            throw new NotImplementedException();
-        }
+        //public override List<object> GetAttributes(string attributeColumn, string whereClause)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
@@ -157,7 +157,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             this.Extent = GetGeometries().GetBoundingBox();
 
-           
+
         }
 
         protected int GetNewId()
@@ -204,10 +204,10 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
-        public override List<object> GetAttributes(string attributeColumn, string whereClause)
-        {
-            throw new NotImplementedException();
-        }
+        //public override List<object> GetAttributes(string attributeColumn, string whereClause)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         //GetEntireFeatures
         //public override DataTable GetEntireFeatures(string whereClause)
@@ -312,8 +312,4 @@ namespace IRI.Ket.DataManagement.DataSource
 
         }
     }
-
-
-
-
 }

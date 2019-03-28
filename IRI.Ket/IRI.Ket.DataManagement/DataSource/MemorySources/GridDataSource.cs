@@ -21,7 +21,7 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
         //In degree
         public double GridHeight { get; private set; }
 
-        public Indexes Type { get; private set; }
+        public NccIndexType Type { get; private set; }
 
         public GridDataSource()
         {
@@ -31,7 +31,7 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
         {
         }
 
-        public static GridDataSource Create(Indexes indexType)
+        public static GridDataSource Create(NccIndexType indexType)
         {
             GridDataSource result = new GridDataSource();
 
@@ -58,9 +58,22 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
         public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
         {
+            var utmZone = 39;
+
             var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-            return MapIndexes.GetIndexLines(geographicBoundingBox, this.Type)
+            return MapIndexes.GetIndexLines(geographicBoundingBox, this.Type, utmZone)
+                   .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
+                   .ToList();
+        }
+
+        public override List<SqlGeometry> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
+        {
+            var utmZone = 39;
+
+            var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
+
+            return MapIndexes.GetIndexLines(geographicBoundingBox, this.Type, utmZone)
                    .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
                    .ToList();
         }

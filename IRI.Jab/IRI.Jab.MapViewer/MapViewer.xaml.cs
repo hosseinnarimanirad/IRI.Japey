@@ -1287,7 +1287,7 @@ namespace IRI.Jab.MapViewer
 
             layerTile.IsProcessing = true;
 
-            var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
+            var geoLabelPair = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, tile.WebMercatorExtent);
 
             if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
             {
@@ -1381,7 +1381,7 @@ namespace IRI.Jab.MapViewer
                 var mapScale = this.MapScale;
 
                 //consider if layer was Labeled
-                var geoLabledPairs = await layer.GetGeometryLabelPairAsync(mapScale, extent);
+                var geoLabledPairs = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, extent);
 
                 if (this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;

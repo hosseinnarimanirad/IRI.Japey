@@ -1,6 +1,6 @@
 ﻿using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.DataManagement.Model
+namespace IRI.Ket.DataManagement.DataSource
 {
     public interface IDataSource
     {

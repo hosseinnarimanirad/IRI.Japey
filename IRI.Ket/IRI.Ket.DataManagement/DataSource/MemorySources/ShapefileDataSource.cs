@@ -23,40 +23,6 @@ using IRI.Ket.ShapefileFormat.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public static class ShapefileDataSource
-    {
-        static Func<SqlGeometry, Dictionary<string, object>, SqlFeature> mapShapeToSqlFeature = (geometry, attributes) => new SqlFeature(geometry, attributes);
-
-        static List<Func<SqlFeature, object>> CreateInverseAttributeMap(SqlFeature feature)
-        {
-            List<Func<SqlFeature, object>> result = new List<Func<SqlFeature, object>>();
-
-            foreach (var item in feature.Attributes)
-            {
-                result.Add(d => d.Attributes[item.Key]);
-            }
-
-            return result;
-        }
-
-
-        public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
-        {
-            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
-
-            return ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
-        }
-
-
-        public static async Task<ShapefileDataSource<SqlFeature>> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
-        {
-            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
-
-            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
-        }
-
-    }
-
     public class ShapefileDataSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
     {
         string _shapefileName;
@@ -241,6 +207,40 @@ namespace IRI.Ket.DataManagement.DataSource
 
             IRI.Ket.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
         }
+    }
+
+    public static class ShapefileDataSourceFactory
+    {
+        static Func<SqlGeometry, Dictionary<string, object>, SqlFeature> mapShapeToSqlFeature = (geometry, attributes) => new SqlFeature(geometry, attributes);
+
+        static List<Func<SqlFeature, object>> CreateInverseAttributeMap(SqlFeature feature)
+        {
+            List<Func<SqlFeature, object>> result = new List<Func<SqlFeature, object>>();
+
+            foreach (var item in feature.Attributes)
+            {
+                result.Add(d => d.Attributes[item.Key]);
+            }
+
+            return result;
+        }
+
+
+        public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
+        {
+            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
+
+            return ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+        }
+
+
+        public static async Task<ShapefileDataSource<SqlFeature>> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
+        {
+            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
+
+            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+        }
+
     }
 }
 

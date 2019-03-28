@@ -1,6 +1,6 @@
 ﻿using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.Common.Model.Mapping;
+using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
@@ -32,6 +32,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
         {
             return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find25kIndexes);
         }
+
 
 
         public static List<SqlFeature> Get100kIndexSheets(SqlGeometry webMercatorGeometry)

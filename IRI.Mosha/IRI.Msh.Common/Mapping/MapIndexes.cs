@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Model.Mapping;
-using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,8 @@ namespace IRI.Msh.Common.Mapping
 {
     public static class MapIndexes
     {
+        #region Constants
+
         internal const double _250kWidth = 1.5;
 
         internal const double _250kHeight = 1.0;
@@ -32,154 +34,18 @@ namespace IRI.Msh.Common.Mapping
 
         internal const double _5kHeight = 1.5 / 60.0;
 
-
-        #region BoundingBox
-
-        public static List<BoundingBox> Find250kIndexes(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _250kWidth, _250kHeight);
-            //var startLongitude = (int)Math.Floor(geographicIntersectRegion.XMin / _nioc250kWidth);
-
-            //var endLongitude = (int)Math.Ceiling(geographicIntersectRegion.XMax / _nioc250kWidth);
-
-            //var startLatitdue = (int)Math.Floor(geographicIntersectRegion.YMin / _nioc250kHeight);
-
-            //var endLatitdue = (int)Math.Floor(geographicIntersectRegion.YMax / _nioc250kHeight);
-
-            //List<BoundingBox> result = new List<BoundingBox>();
-
-            //for (int i = startLongitude; i < endLongitude; i++)
-            //{
-            //    for (int j = startLatitdue; j < endLatitdue; j++)
-            //    {
-            //        result.Add(new BoundingBox(i, j, i + _nioc250kWidth, j + _nioc250kHeight));
-            //    }
-            //}
-
-            //return result;
-        }
-
-        public static List<BoundingBox> Find100kIndexes(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _100kSize, _100kSize);
-        }
-
-        public static List<BoundingBox> Find50kIndexes(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _50kSize, _50kSize);
-        }
-
-        public static List<BoundingBox> Find25kIndexes(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize);
-        }
-
-        public static List<BoundingBox> Find10kIndex(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight);
-        }
-
-        public static List<BoundingBox> Find5kIndex(BoundingBox geographicIntersectRegion)
-        {
-            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight);
-        }
-
-        public static List<BoundingBox> FindIndexes(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
-        {
-            var startLongitude = Math.Floor(geographicIntersectRegion.XMin / indexWidth) * indexWidth;
-
-            var endLongitude = Math.Ceiling(geographicIntersectRegion.XMax / indexWidth) * indexWidth;
-
-            var startLatitdue = Math.Floor(geographicIntersectRegion.YMin / indexHeight) * indexHeight;
-
-            var endLatitdue = Math.Ceiling(geographicIntersectRegion.YMax / indexHeight) * indexHeight;
-
-            List<BoundingBox> result = new List<BoundingBox>();
-
-            for (double i = startLongitude; i < endLongitude; i += indexWidth)
-            {
-                for (double j = startLatitdue; j < endLatitdue; j += indexHeight)
-                {
-                    result.Add(new BoundingBox(i, j, i + indexWidth, j + indexHeight));
-                }
-            }
-
-            return result;
-        }
+        internal const double _2kUtmXmin = 164000;
+        internal const double _2kUtmXmax = 836000;
+        internal const double _2kUtmYmin = 2752800;
+        internal const double _2kUtmYmax = 4432800;
+        internal const double _2kUtmBlockWidth = 32000;
+        internal const double _2kUtmBlockHeight = 24000;
+        internal const double _2kUtmMapWidth = 1600;
+        internal const double _2kUtmMapHeight = 1200;
 
         #endregion
 
-
-        #region IndexSheet
-
-        public static IndexSheet Get100kIndexSheet(string ncc100kSheetName)
-        {
-            if (!string.IsNullOrWhiteSpace(ncc100kSheetName) && ncc100kSheetName.Length == 4)
-            {
-                double firstPart, secondPart;
-
-                if (double.TryParse(ncc100kSheetName.Substring(0, 2), out firstPart))
-                {
-                    if (double.TryParse(ncc100kSheetName.Substring(2, 2), out secondPart))
-                    {
-                        var xMin = (firstPart + 40) / 2.0;
-
-                        var yMin = (secondPart + 10) / 2.0;
-
-                        return new IndexSheet()
-                        {
-                            SheetName = ncc100kSheetName,
-                            Extent = new BoundingBox(xMin, yMin, xMin + _100kSize, yMin + _100kSize)
-                        };
-
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public static IndexSheet Get100kIndexSheet(double longitude, double latitude)
-        {
-            var minLongitude = Math.Floor(longitude / _100kSize) * _100kSize;
-
-            var minLatitude = Math.Floor(latitude / _100kSize) * _100kSize;
-
-            return new IndexSheet()
-            {
-                Extent = new BoundingBox(minLongitude, minLatitude, minLongitude + _100kSize, minLatitude + _100kSize),
-                SheetName = Get100kSheetName(minLongitude, minLatitude)
-            };
-        }
-
-        public static IndexSheet Get50kIndexSheet(double longitude, double latitude)
-        {
-            var minLongitude = Math.Floor(longitude / _50kSize) * _50kSize;
-
-            var minLatitude = Math.Floor(latitude / _50kSize) * _50kSize;
-
-            return new IndexSheet()
-            {
-                Extent = new BoundingBox(minLongitude, minLatitude, minLongitude + _50kSize, minLatitude + _50kSize),
-                SheetName = Get50kSheetName(minLongitude, minLatitude)
-            };
-        }
-
-        public static IndexSheet Get25kIndexSheet(double longitude, double latitude)
-        {
-            var minLongitude = Math.Floor(longitude / _25kSize) * _25kSize;
-
-            var minLatitude = Math.Floor(latitude / _25kSize) * _25kSize;
-
-            return new IndexSheet()
-            {
-                Extent = new BoundingBox(minLongitude, minLatitude, minLongitude + _25kSize, minLatitude + _25kSize),
-                SheetName = Get25kSheetName(minLongitude, minLatitude)
-            };
-        }
-
-        #endregion
-
+        #region Get SheetNames (LAT/LONG > SHEET NAME)
 
         private static string Get100kSheetName(double minLongitude, double minLatitude)
         {
@@ -332,34 +198,102 @@ namespace IRI.Msh.Common.Mapping
             return FormattableString.Invariant($"{sheet25k.SheetName} {column}{row}");
         }
 
+        #endregion
 
+
+        #region Get IndexSheet by name or lat/long (LAT/LONG OR NAME > IndexSheet)
+
+        public static IndexSheet Get100kIndexSheet(string ncc100kSheetName)
+        {
+            if (!string.IsNullOrWhiteSpace(ncc100kSheetName) && ncc100kSheetName.Length == 4)
+            {
+                double firstPart, secondPart;
+
+                if (double.TryParse(ncc100kSheetName.Substring(0, 2), out firstPart))
+                {
+                    if (double.TryParse(ncc100kSheetName.Substring(2, 2), out secondPart))
+                    {
+                        var xMin = (firstPart + 40) / 2.0;
+
+                        var yMin = (secondPart + 10) / 2.0;
+
+                        return new IndexSheet(new BoundingBox(xMin, yMin, xMin + _100kSize, yMin + _100kSize), NccIndexType.Ncc100k)
+                        {
+                            SheetName = ncc100kSheetName,
+                        };
+
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static IndexSheet Get100kIndexSheet(double longitude, double latitude)
+        {
+            var minLongitude = Math.Floor(longitude / _100kSize) * _100kSize;
+
+            var minLatitude = Math.Floor(latitude / _100kSize) * _100kSize;
+
+            return new IndexSheet(new BoundingBox(minLongitude, minLatitude, minLongitude + _100kSize, minLatitude + _100kSize), NccIndexType.Ncc100k)
+            {
+                SheetName = Get100kSheetName(minLongitude, minLatitude)
+            };
+        }
+
+        public static IndexSheet Get50kIndexSheet(double longitude, double latitude)
+        {
+            var minLongitude = Math.Floor(longitude / _50kSize) * _50kSize;
+
+            var minLatitude = Math.Floor(latitude / _50kSize) * _50kSize;
+
+            return new IndexSheet(new BoundingBox(minLongitude, minLatitude, minLongitude + _50kSize, minLatitude + _50kSize), NccIndexType.Ncc50k)
+            {
+                SheetName = Get50kSheetName(minLongitude, minLatitude)
+            };
+        }
+
+        public static IndexSheet Get25kIndexSheet(double longitude, double latitude)
+        {
+            var minLongitude = Math.Floor(longitude / _25kSize) * _25kSize;
+
+            var minLatitude = Math.Floor(latitude / _25kSize) * _25kSize;
+
+            return new IndexSheet(new BoundingBox(minLongitude, minLatitude, minLongitude + _25kSize, minLatitude + _25kSize), NccIndexType.Ncc25k)
+            {
+                SheetName = Get25kSheetName(minLongitude, minLatitude)
+            };
+        }
+
+        #endregion
+
+
+        #region Get IndexSheets in a Region (BoundingBox > List<IndexSheet>)
 
         public static List<IndexSheet> FindNcc100kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return FindIndexes(geographicIntersectRegion, _100kSize, _100kSize, (minLongitude, minLatitude) => Get100kSheetName(minLongitude, minLatitude));
+            return FindIndexes(geographicIntersectRegion, _100kSize, _100kSize, (minLongitude, minLatitude) => Get100kSheetName(minLongitude, minLatitude), NccIndexType.Ncc100k);
         }
 
         public static List<IndexSheet> FindNcc50kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return FindIndexes(geographicIntersectRegion, _50kSize, _50kSize, (minLongitude, minLatitude) => Get50kSheetName(minLongitude, minLatitude));
+            return FindIndexes(geographicIntersectRegion, _50kSize, _50kSize, (minLongitude, minLatitude) => Get50kSheetName(minLongitude, minLatitude), NccIndexType.Ncc50k);
         }
 
         public static List<IndexSheet> FindNcc25kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize, (minLongitude, minLatitude) => Get25kSheetName(minLongitude, minLatitude));
+            return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize, (minLongitude, minLatitude) => Get25kSheetName(minLongitude, minLatitude), NccIndexType.Ncc25k);
         }
 
         public static List<IndexSheet> FindNcc10kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight, (minLongitude, minLatitude) => Get10kSheetName(minLongitude, minLatitude));
+            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight, (minLongitude, minLatitude) => Get10kSheetName(minLongitude, minLatitude), NccIndexType.Ncc10k);
         }
 
         public static List<IndexSheet> FindNcc5kIndexes(BoundingBox geographicIntersectRegion)
         {
-            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight, (minLongitude, minLatitude) => Get5kSheetName(minLongitude, minLatitude));
+            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight, (minLongitude, minLatitude) => Get5kSheetName(minLongitude, minLatitude), NccIndexType.Ncc5k);
         }
-
-
 
         /// <summary>
         /// 
@@ -369,7 +303,7 @@ namespace IRI.Msh.Common.Mapping
         /// <param name="indexHeight"></param>
         /// <param name="namingFunc">Based on Lower Left Coordinate</param>
         /// <returns></returns>
-        public static List<IndexSheet> FindIndexes(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight, Func<double, double, string> namingFunc)
+        public static List<IndexSheet> FindIndexes(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight, Func<double, double, string> namingFunc, NccIndexType type)
         {
             var startLongitude = Math.Floor(geographicIntersectRegion.XMin / indexWidth) * indexWidth;
 
@@ -387,9 +321,8 @@ namespace IRI.Msh.Common.Mapping
                 {
                     var sheetName = namingFunc(i, j);
 
-                    result.Add(new IndexSheet()
+                    result.Add(new IndexSheet(new BoundingBox(i, j, i + indexWidth, j + indexHeight), type)
                     {
-                        Extent = new BoundingBox(i, j, i + indexWidth, j + indexHeight),
                         SheetName = sheetName
                     });
                 }
@@ -398,64 +331,147 @@ namespace IRI.Msh.Common.Mapping
             return result;
         }
 
-        #region Index Lines
+        #endregion
 
-        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, Indexes type)
+
+        #region Get Index BoundingBoxes in a Region (BoundingBox > List<BoundingBox>)
+
+        public static List<BoundingBox> Find250kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _250kWidth, _250kHeight);
+            //var startLongitude = (int)Math.Floor(geographicIntersectRegion.XMin / _nioc250kWidth);
+
+            //var endLongitude = (int)Math.Ceiling(geographicIntersectRegion.XMax / _nioc250kWidth);
+
+            //var startLatitdue = (int)Math.Floor(geographicIntersectRegion.YMin / _nioc250kHeight);
+
+            //var endLatitdue = (int)Math.Floor(geographicIntersectRegion.YMax / _nioc250kHeight);
+
+            //List<BoundingBox> result = new List<BoundingBox>();
+
+            //for (int i = startLongitude; i < endLongitude; i++)
+            //{
+            //    for (int j = startLatitdue; j < endLatitdue; j++)
+            //    {
+            //        result.Add(new BoundingBox(i, j, i + _nioc250kWidth, j + _nioc250kHeight));
+            //    }
+            //}
+
+            //return result;
+        }
+
+        public static List<BoundingBox> Find100kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _100kSize, _100kSize);
+        }
+
+        public static List<BoundingBox> Find50kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _50kSize, _50kSize);
+        }
+
+        public static List<BoundingBox> Find25kIndexes(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _25kSize, _25kSize);
+        }
+
+        public static List<BoundingBox> Find10kIndex(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _10kWidth, _10kHeight);
+        }
+
+        public static List<BoundingBox> Find5kIndex(BoundingBox geographicIntersectRegion)
+        {
+            return FindIndexes(geographicIntersectRegion, _5kWidth, _5kHeight);
+        }
+
+        public static List<BoundingBox> FindIndexes(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
+        {
+            var startLongitude = Math.Floor(geographicIntersectRegion.XMin / indexWidth) * indexWidth;
+
+            var endLongitude = Math.Ceiling(geographicIntersectRegion.XMax / indexWidth) * indexWidth;
+
+            var startLatitdue = Math.Floor(geographicIntersectRegion.YMin / indexHeight) * indexHeight;
+
+            var endLatitdue = Math.Ceiling(geographicIntersectRegion.YMax / indexHeight) * indexHeight;
+
+            List<BoundingBox> result = new List<BoundingBox>();
+
+            for (double i = startLongitude; i < endLongitude; i += indexWidth)
+            {
+                for (double j = startLatitdue; j < endLatitdue; j += indexHeight)
+                {
+                    result.Add(new BoundingBox(i, j, i + indexWidth, j + indexHeight));
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
+        #region Get Index Lines (BoundingBox > List<Geometry>)
+
+        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, NccIndexType type, int utmZone = 0)
         {
             switch (type)
             {
-                case Indexes.Ncc250k:
-                    return Get250kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc250k:
+                    return GetIndexLines(geographicIntersectRegion, _250kWidth, _250kHeight);
 
-                case Indexes.Ncc100k:
-                    return Get100kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc100k:
+                    return GetIndexLines(geographicIntersectRegion, _100kSize, _100kSize);
 
-                case Indexes.Ncc50k:
-                    return Get50kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc50k:
+                    return GetIndexLines(geographicIntersectRegion, _50kSize, _50kSize);
 
-                case Indexes.Ncc25k:
-                    return Get25kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc25k:
+                    return GetIndexLines(geographicIntersectRegion, _25kSize, _25kSize);
 
-                case Indexes.Ncc10k:
-                    return Get10kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc10k:
+                    return GetIndexLines(geographicIntersectRegion, _10kWidth, _10kHeight);
 
-                case Indexes.Ncc5k:
-                    return Get5kIndexLines(geographicIntersectRegion);
+                case NccIndexType.Ncc5k:
+                    return GetIndexLines(geographicIntersectRegion, _5kWidth, _5kHeight);
+
+                case NccIndexType.Ncc2k:
+                    return Get2kIndexBlockLines(geographicIntersectRegion, utmZone);
 
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private static List<Geometry> Get250kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _250kWidth, _250kHeight);
-        }
+        //private static List<Geometry> Get250kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _250kWidth, _250kHeight);
+        //}
 
-        private static List<Geometry> Get100kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _100kSize, _100kSize);
-        }
+        //private static List<Geometry> Get100kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _100kSize, _100kSize);
+        //}
 
-        private static List<Geometry> Get50kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _50kSize, _50kSize);
-        }
+        //private static List<Geometry> Get50kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _50kSize, _50kSize);
+        //}
 
-        private static List<Geometry> Get25kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _25kSize, _25kSize);
-        }
+        //private static List<Geometry> Get25kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _25kSize, _25kSize);
+        //}
 
-        private static List<Geometry> Get10kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _10kWidth, _10kHeight);
-        }
+        //private static List<Geometry> Get10kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _10kWidth, _10kHeight);
+        //}
 
-        private static List<Geometry> Get5kIndexLines(BoundingBox geographicIntersectRegion)
-        {
-            return GetIndexLines(geographicIntersectRegion, _5kWidth, _5kHeight);
-        }
+        //private static List<Geometry> Get5kIndexLines(BoundingBox geographicIntersectRegion)
+        //{
+        //    return GetIndexLines(geographicIntersectRegion, _5kWidth, _5kHeight);
+        //}
 
         public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
         {
@@ -490,6 +506,164 @@ namespace IRI.Msh.Common.Mapping
             return result;
         }
 
+
+        public static List<Geometry> Get2kIndexBlockLines(BoundingBox geographicIntersectRegion, int utmZone)
+        {
+            //return GetUtmBasedIndexLines(geographicIntersectRegion, _2kUtmMapWidth, _2kUtmMapHeight);
+            return GetUtmBasedIndexLines(geographicIntersectRegion, _2kUtmBlockWidth, _2kUtmBlockHeight, utmZone);
+
+
+
+            //var utmBound = geographicIntersectRegion.Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, 39, true));
+
+            //utmBound = new BoundingBox(
+            //    xMin: Math.Max(utmBound.XMin, _2kUtmXmin),
+            //    yMin: Math.Max(utmBound.YMin, _2kUtmYmin),
+            //    xMax: Math.Min(utmBound.XMax, _2kUtmXmax),
+            //    yMax: Math.Min(utmBound.YMax, _2kUtmYmax));
+
+            //var startX = _2kUtmXmin + Math.Floor((utmBound.XMin - _2kUtmXmin) / _2kUtmBlockWidth) * _2kUtmBlockWidth;
+
+            //var endX = _2kUtmXmin + Math.Ceiling((utmBound.XMax - _2kUtmXmin) / _2kUtmBlockWidth) * _2kUtmBlockWidth;
+
+            //var startY = _2kUtmYmin + Math.Floor((utmBound.YMin - _2kUtmYmin) / _2kUtmBlockHeight) * _2kUtmBlockHeight;
+
+            //var endY = _2kUtmYmin + Math.Ceiling((utmBound.YMax - _2kUtmYmin) / _2kUtmBlockHeight) * _2kUtmBlockHeight;
+
+            //List<Geometry> result = new List<Geometry>();
+
+            //for (double i = startX; i < endX; i += _2kUtmBlockWidth)
+            //{
+            //    var p1 = new Point(i, utmBound.YMin);
+
+            //    var p2 = new Point(i, utmBound.YMax);
+
+            //    result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+            //}
+
+            //for (double j = startY; j < endY; j += _2kUtmBlockHeight)
+            //{
+            //    var p1 = new Point(utmBound.XMin, j);
+
+            //    var p2 = new Point(utmBound.XMax, j);
+
+            //    result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+            //}
+
+            //return result.Select(g => g.Transform(p => MapProjects.UTMToGeodetic(p, 39))).ToList();
+        }
+
+        public static List<Geometry> GetUtmBasedIndexLines(BoundingBox geographicIntersectRegion, double utmWidth, double utmHeight, int utmZone)
+        {
+            ////this approach start the grid at upper Y of the actual region
+            //var utmBound = geographicIntersectRegion.Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, 39, true));
+
+            //utmBound = new BoundingBox(
+            //    xMin: Math.Max(utmBound.XMin, _2kUtmXmin),
+            //    yMin: Math.Max(utmBound.YMin, _2kUtmYmin),
+            //    xMax: Math.Min(utmBound.XMax, _2kUtmXmax),
+            //    yMax: Math.Min(utmBound.YMax, _2kUtmYmax));
+
+
+            //var meanX = (_2kUtmXmin + _2kUtmXmax) / 2.0;
+            //var meanY = (_2kUtmYmin + _2kUtmYmax) / 2.0;
+
+            //var minLatitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y; //min
+            ////var minLatitude2 = MapProjects.UTMToGeodetic(new Point(meanX, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y;
+            ////var minLatitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y;
+
+            //var maxLatitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;
+            ////var maxLatitude2 = MapProjects.UTMToGeodetic(new Point(meanX, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;       //max
+            ////var maxLatitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;
+
+            //var minLongitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmin), Ellipsoids.WGS84, utmZone).X;
+            ////var minLongitude2 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, meanY), Ellipsoids.WGS84, utmZone).X;
+            ////var minLongitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmax), Ellipsoids.WGS84, utmZone).X;  //min
+
+            //var maxLongitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmin), Ellipsoids.WGS84, utmZone).X; //max
+            ////var maxLongitude2 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, meanY), Ellipsoids.WGS84, utmZone).X;
+            ////var maxLongitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmax), Ellipsoids.WGS84, utmZone).X;
+
+
+
+            ////var geoXMin = Math.Max(Math.Min(minLongitude1, minLongitude3), geographicIntersectRegion.XMin);
+            ////var geoXMax = Math.Min(Math.Max(maxLongitude1, maxLongitude3), geographicIntersectRegion.XMax);
+            ////var geoMeanX = (geoXMin + geoXMax) / 2.0;
+
+            ////var geoYMin = Math.Max(Math.Min(minLatitude1, minLatitude2), geographicIntersectRegion.YMin);
+            ////var geoYMax = Math.Min(Math.Max(maxLatitude1, maxLatitude2), geographicIntersectRegion.YMax);
+
+            //var geoXMin = Math.Max(minLongitude1, geographicIntersectRegion.XMin);
+            //var geoXMax = Math.Min(maxLongitude1, geographicIntersectRegion.XMax);
+
+            //var geoYMin = Math.Max(minLatitude1, geographicIntersectRegion.YMin);
+            //var geoYMax = Math.Min(maxLatitude1, geographicIntersectRegion.YMax);
+
+
+            //var xMin = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMin), Ellipsoids.WGS84, utmZone).X;
+            //var xMax = MapProjects.GeodeticToUTM(new Point(geoXMax, geoYMin), Ellipsoids.WGS84, utmZone).X;
+
+            //var yMin = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMin), Ellipsoids.WGS84, utmZone).Y;
+            //var yMax = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMax), Ellipsoids.WGS84, utmZone).Y;
+
+
+            //to get the actual ymin/ymax consider middle of lower/uper edge of rectangle
+            //var yMin = MapProjects.GeodeticToUTM(new Point(geographicIntersectRegion.Center.X, geoYMin), Ellipsoids.WGS84, utmZone).Y;
+            //var yMax = MapProjects.GeodeticToUTM(new Point(geographicIntersectRegion.Center.X, geoYMax), Ellipsoids.WGS84, utmZone).Y;
+
+
+            //var utmBound = new BoundingBox(
+            //    xMin: Math.Max(xMin, _2kUtmXmin),
+            //    yMin: Math.Max(yMin, _2kUtmYmin),
+            //    xMax: Math.Min(xMax, _2kUtmXmax),
+            //    yMax: Math.Min(yMax, _2kUtmYmax));
+
+
+            var utmBound = new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax)
+                                .Transform(p => MapProjects.UTMToGeodetic(p, utmZone))
+                                .Intersect(geographicIntersectRegion)
+                                .Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
+
+
+            List<Geometry> result = new List<Geometry>();
+
+            if (utmBound.IsNaN())
+            {
+                return result;
+            }
+
+            var startX = _2kUtmXmin + Math.Floor((utmBound.XMin - _2kUtmXmin) / utmWidth) * utmWidth;
+
+            var endX = _2kUtmXmin + Math.Ceiling((utmBound.XMax - _2kUtmXmin) / utmWidth) * utmWidth;
+
+            var middleX = (startX + endX) / 2.0;
+
+            var startY = _2kUtmYmin + Math.Floor((utmBound.YMin - _2kUtmYmin) / utmHeight) * utmHeight;
+
+            var endY = _2kUtmYmin + Math.Ceiling((utmBound.YMax - _2kUtmYmin) / utmHeight) * utmHeight;
+
+            for (double i = startX; i <= endX; i += utmWidth)
+            {
+                var p1 = new Point(i, startY);
+
+                var p2 = new Point(i, endY);
+
+                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, 0));
+            }
+
+            for (double j = startY; j <= endY; j += utmHeight)
+            {
+                var p1 = new Point(startX, j);
+
+                var p2 = new Point(middleX, j);
+
+                var p3 = new Point(endX, j);
+
+                result.Add(new Geometry(new Point[] { p1, p2, p3 }, GeometryType.LineString, 0));
+            }
+
+            return result.Select(g => g.Transform(p => MapProjects.UTMToGeodetic(p, utmZone), SridHelper.GeodeticWGS84)).ToList();
+        }
 
         #endregion
 

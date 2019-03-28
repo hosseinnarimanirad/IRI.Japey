@@ -14,7 +14,7 @@ namespace IRI.Jab.Common
 {
     public class GridLayer : BaseLayer
     {
-        public override LayerType Type { get; protected set; }
+        public override LayerType Type { get; protected set; } = LayerType.VectorLayer;
 
         public override BoundingBox Extent { get; protected set; }
 

@@ -14,7 +14,7 @@ using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class PostGisDataSource : FeatureDataSource
+    public class PostGisDataSource : RelationalDbSource<SqlFeature>
     {
         public override BoundingBox Extent { get; protected set; }
 
@@ -122,8 +122,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return GetGeometriesWhereIntersects(wktRegion);
         }
-
-
+         
         #region Override Methods
 
         public override List<SqlGeometry> GetGeometries()
@@ -131,7 +130,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries(string.Empty);
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
+        public override List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
         {
             throw new NotImplementedException();
         }
@@ -273,9 +272,12 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public override List<SqlFeature> GetFeatures(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
-
-
 
     }
 }

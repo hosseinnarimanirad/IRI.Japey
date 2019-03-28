@@ -18,7 +18,7 @@ using IRI.Msh.Common.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlServerDataSource : FeatureDataSource<SqlFeature>
+    public class SqlServerDataSource : RelationalDbSource<SqlFeature>
     {
         const string _outputSpatialAttribute = "_shape";
 
@@ -540,7 +540,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
+        public override List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
         {
             //List<string> attributes = GetAttributes(_labelColumnName).Select(i => i.ToString()).ToList();
 
@@ -781,6 +781,11 @@ namespace IRI.Ket.DataManagement.DataSource
         public override void Update(ISqlGeometryAware newFeature)
         {
             this.UpdateAction?.Invoke(newFeature);
+        }
+
+        public override void UpdateFeature(ISqlGeometryAware feature)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Remove(ISqlGeometryAware feature)

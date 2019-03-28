@@ -95,7 +95,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapIndexes.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Indexes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\NccIndexType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\WebMercatorUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\EigenvaluesEigenvectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Exceptions.cs" />

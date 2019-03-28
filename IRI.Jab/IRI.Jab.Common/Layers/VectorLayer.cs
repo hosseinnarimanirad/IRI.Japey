@@ -453,8 +453,8 @@ namespace IRI.Jab.Common
             var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(
                                     geometries,
                                     p => viewTransform(new Point(p.X - shiftX, p.Y - shiftY)),
-                                    pen, 
-                                    brush, 
+                                    pen,
+                                    brush,
                                     this.VisualParameters.PointSymbol);
 
             RenderTargetBitmap image = new RenderTargetBitmap((int)tileWidth, (int)tileHeight, 96, 96, PixelFormats.Pbgra32);
@@ -731,7 +731,7 @@ namespace IRI.Jab.Common
 
                 foreach (var tile in googleTiles)
                 {
-                    var geometries = this.GetGeometries(scale, tile.WebMercatorExtent);
+                    var geometries = this.GetGeometriesForDisplay(scale, tile.WebMercatorExtent);
 
                     var transform = IRI.Msh.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
@@ -756,13 +756,13 @@ namespace IRI.Jab.Common
             }
         }
 
-        public async Task<GeometryLabelPairs> GetGeometryLabelPairAsync(double mapScale, sb.BoundingBox mapExtent)
+        public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
         {
             List<SqlGeometry> geometries; List<string> labels = null;
 
             if (this.IsLabeled(mapScale))
             {
-                var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsAsync(mapExtent);
+                var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
 
                 geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
 
@@ -770,19 +770,19 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = await this.GetGeometriesAsync(mapScale, mapExtent);
+                geometries = await this.GetGeometriesForDisplayAsync(mapScale, mapExtent);
             }
 
             return new GeometryLabelPairs(geometries, labels);
         }
 
-        public GeometryLabelPairs GetGeometryLabelPair(double mapScale, sb.BoundingBox mapExtent)
+        public GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
         {
             List<SqlGeometry> geometries; List<string> labels = null;
 
             if (this.IsLabeled(mapScale))
             {
-                var geoLabelPairs = this.DataSource.GetGeometryLabelPairs(mapExtent);
+                var geoLabelPairs = this.DataSource.GetGeometryLabelPairsForDisplay(mapExtent);
 
                 geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
 
@@ -790,7 +790,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = this.GetGeometries(mapScale, mapExtent);
+                geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
             }
 
             return new GeometryLabelPairs(geometries, labels);
@@ -820,7 +820,9 @@ namespace IRI.Jab.Common
             //}
             //else if (element is System.Windows.Controls.Image)
             //{
+
             Binding binding4 = new Binding() { Source = this, Path = new PropertyPath("VisualParameters.Visibility"), Mode = BindingMode.TwoWay };
+            //Binding binding4 = new Binding() { Source = this, Path = new PropertyPath(nameof(VisualParameters.Visibility)), Mode = BindingMode.TwoWay }; try using this line insted of above
             element.SetBinding(Path.VisibilityProperty, binding4);
 
             Binding binding5 = new Binding() { Source = this, Path = new PropertyPath("VisualParameters.Opacity"), Mode = BindingMode.TwoWay };
@@ -859,7 +861,7 @@ namespace IRI.Jab.Common
             }
         }
 
-        public async Task<List<SqlGeometry>> GetGeometriesAsync(double mapScale, sb.BoundingBox boundingBox)
+        public async Task<List<SqlGeometry>> GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
         {
             List<SqlGeometry> geometries = new List<SqlGeometry>();
 
@@ -869,7 +871,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = await this.DataSource.GetGeometriesAsync(boundingBox);
+                geometries = await this.DataSource.GetGeometriesForDisplayAsync(mapScale, boundingBox);
             }
 
             if (geometries.Count == 0)
@@ -878,7 +880,7 @@ namespace IRI.Jab.Common
             return geometries;
         }
 
-        public List<SqlGeometry> GetGeometries(double mapScale, sb.BoundingBox boundingBox)
+        public List<SqlGeometry> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
         {
             List<SqlGeometry> geometries = new List<SqlGeometry>();
 
@@ -888,7 +890,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = this.DataSource.GetGeometries(boundingBox);
+                geometries = this.DataSource.GetGeometriesForDisplay(mapScale, boundingBox);
             }
 
             if (geometries.Count == 0)

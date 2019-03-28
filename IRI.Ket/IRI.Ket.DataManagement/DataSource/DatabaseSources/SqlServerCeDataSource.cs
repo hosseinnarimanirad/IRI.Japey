@@ -15,7 +15,7 @@ using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlServerCeDataSource : FeatureDataSource
+    public class SqlServerCeDataSource : RelationalDbSource<SqlFeature>
     {
         public override BoundingBox Extent { get; protected set; }
 
@@ -222,7 +222,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, MakeWhereClause(whereClause)));
         }
          
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(BoundingBox boundingBox)
+        public override List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
         {
             SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
@@ -267,6 +267,11 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public override void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SqlFeature> GetFeatures(SqlGeometry geometry)
         {
             throw new NotImplementedException();
         }

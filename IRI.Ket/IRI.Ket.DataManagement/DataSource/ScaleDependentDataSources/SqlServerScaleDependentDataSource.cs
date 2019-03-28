@@ -135,6 +135,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
         }
 
 
+
         public List<SqlGeometry> GetGeometries(double mapScale)
         {
             return GetGeometries(mapScale, string.Empty);
@@ -179,7 +180,6 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
 
 
-
         public List<NamedSqlGeometry> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
         {
             int srid = GetSrid();
@@ -193,7 +193,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             {
                 //zoomLevel = _levels.Max();
 
-                return GetGeometryLabelPairs(boundingBox);
+                return GetGeometryLabelPairsForDisplay(boundingBox);
             }
             else
             {

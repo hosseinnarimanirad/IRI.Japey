@@ -11,7 +11,7 @@ using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class OfflineGoogleMapDataSource<T> : Model.IDataSource
+    public class OfflineGoogleMapDataSource<T> : IDataSource
     {
         public BoundingBox Extent
         {
