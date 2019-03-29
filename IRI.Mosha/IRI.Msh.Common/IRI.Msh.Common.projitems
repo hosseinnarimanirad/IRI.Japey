@@ -143,6 +143,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbGeometryType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBoxes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBoxHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Feature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\GeometryType.cs" />

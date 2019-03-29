@@ -564,67 +564,37 @@ namespace IRI.Msh.Common.Mapping
             //    xMax: Math.Min(utmBound.XMax, _2kUtmXmax),
             //    yMax: Math.Min(utmBound.YMax, _2kUtmYmax));
 
-
-            //var meanX = (_2kUtmXmin + _2kUtmXmax) / 2.0;
-            //var meanY = (_2kUtmYmin + _2kUtmYmax) / 2.0;
-
-            //var minLatitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y; //min
-            ////var minLatitude2 = MapProjects.UTMToGeodetic(new Point(meanX, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y;
-            ////var minLatitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmin), Ellipsoids.WGS84, utmZone).Y;
-
-            //var maxLatitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;
-            ////var maxLatitude2 = MapProjects.UTMToGeodetic(new Point(meanX, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;       //max
-            ////var maxLatitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmax), Ellipsoids.WGS84, utmZone).Y;
-
-            //var minLongitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmin), Ellipsoids.WGS84, utmZone).X;
-            ////var minLongitude2 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, meanY), Ellipsoids.WGS84, utmZone).X;
-            ////var minLongitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmin, _2kUtmYmax), Ellipsoids.WGS84, utmZone).X;  //min
-
-            //var maxLongitude1 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmin), Ellipsoids.WGS84, utmZone).X; //max
-            ////var maxLongitude2 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, meanY), Ellipsoids.WGS84, utmZone).X;
-            ////var maxLongitude3 = MapProjects.UTMToGeodetic(new Point(_2kUtmXmax, _2kUtmYmax), Ellipsoids.WGS84, utmZone).X;
+            //var utmBound = new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax)
+            //                    .Transform(p => MapProjects.UTMToGeodetic(p, utmZone))
+            //                    .Intersect(geographicIntersectRegion)
+            //                    .Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
 
 
+            //var control1 = new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax)
+            //                    .Transform(p => MapProjects.UTMToGeodetic(p, utmZone));
 
-            ////var geoXMin = Math.Max(Math.Min(minLongitude1, minLongitude3), geographicIntersectRegion.XMin);
-            ////var geoXMax = Math.Min(Math.Max(maxLongitude1, maxLongitude3), geographicIntersectRegion.XMax);
-            ////var geoMeanX = (geoXMin + geoXMax) / 2.0;
+            //var control11 = BoundingBoxHelper.UtmMbbToGeodeticWgs84Mbb(new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax), utmZone);
 
-            ////var geoYMin = Math.Max(Math.Min(minLatitude1, minLatitude2), geographicIntersectRegion.YMin);
-            ////var geoYMax = Math.Min(Math.Max(maxLatitude1, maxLatitude2), geographicIntersectRegion.YMax);
+            //var control2 = new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax)
+            //                    .Transform(p => MapProjects.UTMToGeodetic(p, utmZone))
+            //                    .Intersect(geographicIntersectRegion);
 
-            //var geoXMin = Math.Max(minLongitude1, geographicIntersectRegion.XMin);
-            //var geoXMax = Math.Min(maxLongitude1, geographicIntersectRegion.XMax);
-
-            //var geoYMin = Math.Max(minLatitude1, geographicIntersectRegion.YMin);
-            //var geoYMax = Math.Min(maxLatitude1, geographicIntersectRegion.YMax);
+            //var control22 = control11.Intersect(geographicIntersectRegion);
 
 
-            //var xMin = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMin), Ellipsoids.WGS84, utmZone).X;
-            //var xMax = MapProjects.GeodeticToUTM(new Point(geoXMax, geoYMin), Ellipsoids.WGS84, utmZone).X;
+            //var control4 = control2.Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
+            //var control44 = BoundingBoxHelper.GeodeticWgs84MbbToUtmMbb(control2);
 
-            //var yMin = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMin), Ellipsoids.WGS84, utmZone).Y;
-            //var yMax = MapProjects.GeodeticToUTM(new Point(geoXMin, geoYMax), Ellipsoids.WGS84, utmZone).Y;
-
-
-            //to get the actual ymin/ymax consider middle of lower/uper edge of rectangle
-            //var yMin = MapProjects.GeodeticToUTM(new Point(geographicIntersectRegion.Center.X, geoYMin), Ellipsoids.WGS84, utmZone).Y;
-            //var yMax = MapProjects.GeodeticToUTM(new Point(geographicIntersectRegion.Center.X, geoYMax), Ellipsoids.WGS84, utmZone).Y;
+            //var control5 = control22.Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
+            //var control55 = BoundingBoxHelper.GeodeticWgs84MbbToUtmMbb(control22);
 
 
-            //var utmBound = new BoundingBox(
-            //    xMin: Math.Max(xMin, _2kUtmXmin),
-            //    yMin: Math.Max(yMin, _2kUtmYmin),
-            //    xMax: Math.Min(xMax, _2kUtmXmax),
-            //    yMax: Math.Min(yMax, _2kUtmYmax));
+            var geoBound = BoundingBoxHelper.UtmMbbToGeodeticWgs84Mbb(new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax), utmZone)
+                              .Intersect(geographicIntersectRegion);
 
-
-            var utmBound = new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax)
-                                .Transform(p => MapProjects.UTMToGeodetic(p, utmZone))
-                                .Intersect(geographicIntersectRegion)
-                                .Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
-
-
+            var utmBound = BoundingBoxHelper.GeodeticWgs84MbbToUtmMbb(geoBound, utmZone)
+                            .Intersect(new BoundingBox(_2kUtmXmin, _2kUtmYmin, _2kUtmXmax, _2kUtmYmax));
+             
             List<Geometry> result = new List<Geometry>();
 
             if (utmBound.IsNaN())

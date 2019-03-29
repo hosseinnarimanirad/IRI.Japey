@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
-    
+
     public struct BoundingBox
     {
         private double xMin, yMin, xMax, yMax;
@@ -56,12 +56,39 @@ namespace IRI.Msh.Common.Primitives
         }
 
         [JsonIgnore]
+        public Point TopRight { get { return new Point(xMax, YMax); } }
+
+        [JsonIgnore]
         //The system is asumed to be right handed
         public Point TopLeft { get { return new Point(XMin, YMax); } }
 
         [JsonIgnore]
         //The system is asumed to be right handed
         public Point BottomRight { get { return new Point(XMax, YMin); } }
+
+        [JsonIgnore]
+        public Point BottomLeft { get { return new Point(XMin, YMin); } }
+
+        [JsonIgnore]
+        public Point MiddleRight { get { return new Point(xMax, Center.Y); } }
+
+        [JsonIgnore]
+        public Point MiddleLeft { get { return new Point(XMin, Center.Y); } }
+
+        [JsonIgnore]
+        public Point MiddleTop { get { return new Point(Center.X, YMax); } }
+
+        [JsonIgnore]
+        public Point MiddleBottom { get { return new Point(Center.X, YMin); } }
+
+        //var lowerEdgeMiddle = new Point(boundingBox.Center.X, boundingBox.YMin);
+
+        //var leftEdgeMiddle = new Point(boundingBox.XMin, boundingBox.Center.Y);
+
+        //var rightEdgeMiddle = new Point(boundingBox.XMax, boundingBox.Center.Y);
+
+        //var topEdgeMiddle = new Point(boundingBox.Center.X, boundingBox.YMax);
+
 
         private bool IsInRange(double value, double minRange, double maxRange)
         {
@@ -220,6 +247,40 @@ namespace IRI.Msh.Common.Primitives
             var newButtomRight = func(this.BottomRight);
 
             return new BoundingBox(newTopLeft.X, newButtomRight.Y, newButtomRight.X, newTopLeft.Y);
+        }
+
+        public Geometry TransofrmBy4Point(Func<Point, Point> func)
+        {
+            var p1 = func(this.BottomLeft);
+
+            var p3 = func(this.TopLeft);
+
+            var p5 = func(this.TopRight);
+
+            var p7 = func(this.BottomRight);
+
+            return Geometry.Create(new Point[] { p1, p3, p5, p7 }, GeometryType.Polygon, 0);
+        }
+
+        public Geometry TransofrmBy8Point(Func<Point, Point> func)
+        {
+            var p1 = func(this.BottomLeft);
+
+            var p2 = func(this.MiddleLeft);
+
+            var p3 = func(this.TopLeft);
+
+            var p4 = func(this.MiddleTop);
+
+            var p5 = func(this.TopRight);
+
+            var p6 = func(this.MiddleRight);
+
+            var p7 = func(this.BottomRight);
+
+            var p8 = func(this.MiddleBottom);
+
+            return Geometry.Create(new Point[] { p1, p2, p3, p4, p5, p6, p7, p8 }, GeometryType.Polygon, 0);
         }
 
         public override string ToString()

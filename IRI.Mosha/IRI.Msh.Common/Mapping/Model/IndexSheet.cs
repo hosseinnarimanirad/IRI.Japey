@@ -20,7 +20,9 @@ namespace IRI.Msh.Common.Mapping
 
         public IndexSheet(BoundingBox extent, NccIndexType type)
         {
+            this.Extent = extent;
 
+            this.Type = type;
         }
     }
 }
