@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Primitives; 
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 
 namespace IRI.Msh.CoordinateSystem.MapProjection

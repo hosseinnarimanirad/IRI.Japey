@@ -5,8 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using IRI.Msh.Common.Primitives;
+using System.Text; 
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
 {

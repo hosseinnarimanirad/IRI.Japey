@@ -13,41 +13,65 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 {
     public static class IndexHelper
     {
-        public static List<SqlGeometry> Get250kIndex(SqlGeometry webMercatorGeometry)
+        public static List<SqlGeometry> GetIndexes(SqlGeometry webMercatorGeometry, NccIndexType type)
         {
-            return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find250kIndexes);
+            switch (type)
+            {
+                case NccIndexType.Ncc250k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find250kIndexMbbs);
+
+                case NccIndexType.Ncc100k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find100kIndexMbbs);
+
+                case NccIndexType.Ncc50k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find50kIndexMbbs);
+
+                case NccIndexType.Ncc25k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find25kIndexMbbs);
+
+                case NccIndexType.Ncc10k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find10kIndexMbbs);
+
+                case NccIndexType.Ncc5k:
+                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find5kIndexMbbs);
+
+                case NccIndexType.NccUtmBased2kSheet:
+                case NccIndexType.NccUtmBased1k:
+                case NccIndexType.NccUtmBased500:
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
-        public static List<SqlGeometry> Get100kIndex(SqlGeometry webMercatorGeometry)
+        public static List<SqlFeature> GetIndexSheets(SqlGeometry webMercatorGeometry, NccIndexType type)
         {
-            return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find100kIndexes);
-        }
+            switch (type)
+            {
+                case NccIndexType.Ncc250k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find250kIndexSheets);
 
-        public static List<SqlGeometry> Get50kIndex(SqlGeometry webMercatorGeometry)
-        {
-            return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find50kIndexes);
-        }
+                case NccIndexType.Ncc100k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find100kIndexSheets);
 
-        public static List<SqlGeometry> Get25kIndex(SqlGeometry webMercatorGeometry)
-        {
-            return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find25kIndexes);
-        }
+                case NccIndexType.Ncc50k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find50kIndexSheets);
+
+                case NccIndexType.Ncc25k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find25kIndexSheets);
+
+                case NccIndexType.Ncc10k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find10kIndexSheets);
+
+                case NccIndexType.Ncc5k:
+                    return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.Find5kIndexSheets);
 
 
-
-        public static List<SqlFeature> Get100kIndexSheets(SqlGeometry webMercatorGeometry)
-        {
-            return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.FindNcc100kIndexes);
-        }
-
-        public static List<SqlFeature> Get50kIndexSheets(SqlGeometry webMercatorGeometry)
-        {
-            return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.FindNcc50kIndexes);
-        }
-
-        public static List<SqlFeature> Get25kIndexSheets(SqlGeometry webMercatorGeometry)
-        {
-            return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.MapIndexes.FindNcc25kIndexes);
+                case NccIndexType.NccUtmBased2kSheet:
+                case NccIndexType.NccUtmBased1k:
+                case NccIndexType.NccUtmBased500:
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public static List<SqlGeometry> GetIndexes(SqlGeometry webMercatorRegion, Func<BoundingBox, List<BoundingBox>> indexFunc)
@@ -75,6 +99,6 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
                             Attributes = new Dictionary<string, object>() { { nameof(b.SheetName), b.SheetName } }
                         })
                         .ToList();
-        } 
+        }
     }
 }

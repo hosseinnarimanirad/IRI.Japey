@@ -30,9 +30,9 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         //    }
         //}
 
-        //private IRI.Msh.Common.CoordinateSystems.SpatialReferenceType _spatialReference;
+        //private IRI.Msh.Common.CoordinateSystem.SpatialReferenceType _spatialReference;
 
-        //public IRI.Msh.Common.CoordinateSystems.SpatialReferenceType SpatialReference
+        //public IRI.Msh.Common.CoordinateSystem.SpatialReferenceType SpatialReference
         //{
         //    get { return _spatialReference; }
         //    set

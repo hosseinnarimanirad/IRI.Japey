@@ -12,8 +12,10 @@ namespace IRI.Msh.Common.Mapping
         Ncc25k,
         Ncc10k,
         Ncc5k,
-        Ncc2k,
-        Ncc1k,
-        Ncc500
+
+        NccUtmBased2kBlock,
+        NccUtmBased2kSheet,
+        NccUtmBased1k,
+        NccUtmBased500
     }
 }

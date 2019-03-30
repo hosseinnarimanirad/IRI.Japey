@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.CoordinateSystems.MapProjection;
+﻿
 using IRI.Msh.MeasurementUnit;
 using System;
 using System.Collections.Generic;

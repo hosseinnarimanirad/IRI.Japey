@@ -10,6 +10,7 @@ namespace IRI.Msh.Common.Mapping
     {
         public BoundingBox Extent { get; set; }
 
+
         public string SheetName { get; set; }
 
         public string SubTitle { get { return SheetName.Contains(" ") ? SheetName.Split(' ')?.Last() : string.Empty; } }

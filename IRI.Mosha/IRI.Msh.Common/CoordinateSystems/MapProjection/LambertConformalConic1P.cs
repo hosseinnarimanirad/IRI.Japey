@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.CoordinateSystems.MapProjection
+namespace IRI.Msh.CoordinateSystem.MapProjection
 {
     public class LambertConformalConic1P : MapProjectionBase
     {
