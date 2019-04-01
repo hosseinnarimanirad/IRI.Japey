@@ -179,7 +179,7 @@ namespace IRI.Jab.Common
 
             var geometries = dataSource.GetGeometries();
 
-            if (geometries.Count > 0)
+            if (geometries?.Count > 0)
             {
                 this.Type = type | GetGeometryType(geometries.FirstOrDefault(g => g != null));
             }
@@ -188,7 +188,7 @@ namespace IRI.Jab.Common
                 this.Type = type;
             }
 
-            this.Extent = geometries.GetBoundingBox();
+            this.Extent = geometries?.GetBoundingBox()?? sb.BoundingBox.NaN;
 
             this.LayerName = layerName;
 
@@ -911,10 +911,6 @@ namespace IRI.Jab.Common
 
         public List<T> GetFeatures<T>(SqlGeometry geometry) where T : class, ISqlGeometryAware
         {
-            //if (DataSource as FeatureDataSource != null)
-            //{
-            //    return (DataSource as FeatureDataSource).GetGeometries(geometry).Cast<T>().ToList();
-            //}
             if (DataSource as FeatureDataSource<T> != null)
             {
                 return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
@@ -948,14 +944,14 @@ namespace IRI.Jab.Common
             {
                 for (int i = 0; i < labels.Count; i++)
                 {
-                    Point location = mapToScreen(mapCoordinates[i]);
-
                     FormattedText formattedText =
-                        new FormattedText(labels[i], System.Globalization.CultureInfo.CurrentCulture, System.Windows.FlowDirection.RightToLeft,
+                        new FormattedText(labels[i], System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
                         new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
                         this.Labels.FontSize, this.Labels.Foreground);
+                    
+                    Point location = mapToScreen(mapCoordinates[i]);
 
-                    drawingContext.DrawText(formattedText, location);
+                    drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
                 }
             }
 
@@ -987,14 +983,14 @@ namespace IRI.Jab.Common
             {
                 for (int i = 0; i < labels.Count; i++)
                 {
-                    Point location = mapToScreen(mapCoordinates[i]);
-
                     FormattedText formattedText =
-                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, FlowDirection.RightToLeft,
+                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
                         new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
                         this.Labels.FontSize, this.Labels.Foreground);
 
-                    drawingContext.DrawText(formattedText, location);
+                    Point location = mapToScreen(mapCoordinates[i]);
+
+                    drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
                 }
             }
 

@@ -79,6 +79,19 @@ namespace IRI.Jab.Common
             }
         }
 
+        private bool _isRtl = true;
+
+        public bool IsRtl
+        {
+            get { return _isRtl; }
+            set
+            {
+                _isRtl = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private bool _isOn;
 
         public bool IsOn

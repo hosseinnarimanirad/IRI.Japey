@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public enum NccIndexType
+    public enum GeodeticIndexType
     {
         Ncc250k,
         Ncc100k,
@@ -12,10 +12,5 @@ namespace IRI.Msh.Common.Mapping
         Ncc25k,
         Ncc10k,
         Ncc5k,
-
-        NccUtmBased2kBlock,
-        NccUtmBased2kSheet,
-        NccUtmBased1k,
-        NccUtmBased500
     }
 }

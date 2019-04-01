@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public class UtmSheet
+    public class UtmSheet : IGeometryAware
     {
         internal const int _2kUtmSheetRowCount = 20;
         internal const int _2kUtmSheetColumnCount = 20;
@@ -17,27 +17,42 @@ namespace IRI.Msh.Common.Mapping
         internal static readonly char[] _2kUtmBlockColumns;
         internal static readonly char[] _2kUtmSheetColumns;
 
-        public BoundingBox UtmExtent { get; set; }
-
-        public BoundingBox GeodeticExtent
+        public Geometry TheGeometry
         {
             get
             {
-                return UtmExtent.Transform(p => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, UtmZone));
+                var geodeticExtent = UtmExtent.TransofrmBy4Point(p => MapProjects.UTMToGeodetic(p, UtmZone));
+
+                return geodeticExtent.Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator);
             }
+
+            set => throw new NotImplementedException();
         }
+
+        public int Id { get; set; }
+
+        public BoundingBox UtmExtent { get; set; }
+
+        //public Geometry GeodeticExtent
+        //{
+        //    get
+        //    {
+        //        return UtmExtent.TransofrmBy4Point(p => MapProjects.UTMToGeodetic(p, UtmZone));
+        //        //return UtmExtent.Transform(p => MapProjects.UTMToGeodetic(p, UtmZone)).AsGeometry(SridHelper.GeodeticWGS84);
+        //    }
+        //}
 
         public int Row { get; set; }
 
         public int Column { get; set; }
 
-        public string Title { get; set; }
+        public string SheetName { get; set; }
 
-        public NccIndexType Type { get; set; }
+        public UtmIndexType Type { get; set; }
 
-        public double Width { get; set; }
+        //public double Width { get; set; }
 
-        public double Height { get; set; }
+        //public double Height { get; set; }
 
         public int UtmZone { get; set; }
 
@@ -48,23 +63,68 @@ namespace IRI.Msh.Common.Mapping
             _2kUtmSheetColumns = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' };
         }
 
-        private UtmSheet()
+        protected UtmSheet()
         {
 
         }
 
+        //From BoundingBox
+        public static UtmSheet Create(BoundingBox utmBoundingBox, UtmIndexType type, int utmZone)
+        {
+            var centerLatLong = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
+
+            switch (type)
+            {
+                case UtmIndexType.Ncc2kBlock:
+                    return Create2kUtmBlock(centerLatLong.X, centerLatLong.Y, utmZone);
+
+                case UtmIndexType.Ncc2kSheet:
+                    return Create2kUtmSheet(centerLatLong.X, centerLatLong.Y, utmZone);
+
+                case UtmIndexType.Ncc1k:
+                    return Create1kUtmSheet(centerLatLong.X, centerLatLong.Y, utmZone);
+
+                case UtmIndexType.Ncc500:
+                    return Create500UtmSheet(centerLatLong.X, centerLatLong.Y, utmZone);
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        //private static UtmSheet Create2kBlock(BoundingBox utmBoundingBox, int utmZone)
+        //{
+        //    UtmSheet result = new UtmSheet()
+        //    {
+        //        Column = (int)Math.Round((utmBoundingBox.XMin - UtmIndexes._2kUtmXmin) / utmBoundingBox.Width),
+        //        Row = (int)Math.Round((UtmIndexes._2kUtmYmax - utmBoundingBox.YMax) / utmBoundingBox.Height),
+        //        UtmZone = utmZone,
+        //        UtmExtent = utmBoundingBox,
+        //        Type = UtmIndexType.Ncc2kBlock
+        //    };
+
+        //    result.SheetName = $"{utmZone}{_2kUtmBlockColumns[result.Column]}{result.Row.ToString("00")}";
+
+        //    return result;
+        //}
+
+        //private static UtmSheet Create2kSheet(BoundingBox utmBoundingBox, int utmZone)
+        //{
+
+        //}
 
         //From lat/long
+
         public static UtmSheet Create2kUtmBlock(double longitude, double latitude, int utmZone)
         {
             var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
-            if (!MapIndexes._2kUtmBoudingBox.Intersects(utmPoint))
+            if (!UtmIndexes._2kUtmBoudingBox.Intersects(utmPoint))
             {
                 return null;
             }
 
-            var rowColumn = CalculateRowColumn(MapIndexes._2kUtmBoudingBox, utmPoint, MapIndexes._2kUtmBlockWidth, MapIndexes._2kUtmBlockHeight);
+            var rowColumn = CalculateRowColumn(UtmIndexes._2kUtmBoudingBox, utmPoint, UtmIndexes._2kUtmBlockWidth, UtmIndexes._2kUtmBlockHeight);
 
             return UtmSheet.Create2kBlock(rowColumn.Row, rowColumn.Column, utmZone);
         }
@@ -73,14 +133,14 @@ namespace IRI.Msh.Common.Mapping
         {
             var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
-            if (!MapIndexes._2kUtmBoudingBox.Intersects(utmPoint))
+            if (!UtmIndexes._2kUtmBoudingBox.Intersects(utmPoint))
             {
                 return null;
             }
 
             var block = Create2kUtmBlock(longitude, latitude, utmZone);
 
-            var rowColumn = CalculateRowColumn(block.UtmExtent, utmPoint, MapIndexes._2kUtmSheetWidth, MapIndexes._2kUtmSheetHeight);
+            var rowColumn = CalculateRowColumn(block.UtmExtent, utmPoint, UtmIndexes._2kUtmSheetWidth, UtmIndexes._2kUtmSheetHeight);
 
             return UtmSheet.Create2kSheet(block, rowColumn.Row, rowColumn.Column);
         }
@@ -89,14 +149,14 @@ namespace IRI.Msh.Common.Mapping
         {
             var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
-            if (!MapIndexes._2kUtmBoudingBox.Intersects(utmPoint))
+            if (!UtmIndexes._2kUtmBoudingBox.Intersects(utmPoint))
             {
                 return null;
             }
 
             var utm2kSheet = Create2kUtmSheet(longitude, latitude, utmZone);
 
-            var rowColumn = CalculateRowColumn(utm2kSheet.UtmExtent, utmPoint, MapIndexes._1kUtmSheetWidth, MapIndexes._1kUtmSheetHeight);
+            var rowColumn = CalculateRowColumn(utm2kSheet.UtmExtent, utmPoint, UtmIndexes._1kUtmSheetWidth, UtmIndexes._1kUtmSheetHeight);
 
             return UtmSheet.Create1kSheet(utm2kSheet, rowColumn.Row, rowColumn.Column);
         }
@@ -105,14 +165,14 @@ namespace IRI.Msh.Common.Mapping
         {
             var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
-            if (!MapIndexes._2kUtmBoudingBox.Intersects(utmPoint))
+            if (!UtmIndexes._2kUtmBoudingBox.Intersects(utmPoint))
             {
                 return null;
             }
 
             var utm1kSheet = Create1kUtmSheet(longitude, latitude, utmZone);
 
-            var rowColumn = CalculateRowColumn(utm1kSheet.UtmExtent, utmPoint, MapIndexes._500UtmSheetWidth, MapIndexes._500UtmSheetHeight);
+            var rowColumn = CalculateRowColumn(utm1kSheet.UtmExtent, utmPoint, UtmIndexes._500UtmSheetWidth, UtmIndexes._500UtmSheetHeight);
 
             return UtmSheet.Create500Sheet(utm1kSheet, rowColumn.Row, rowColumn.Column);
         }
@@ -126,11 +186,9 @@ namespace IRI.Msh.Common.Mapping
                 Row = row,
                 Column = column,
                 UtmZone = utmZone,
-                Title = $"{utmZone}{_2kUtmBlockColumns[column]}{row.ToString("00")}",
-                Type = NccIndexType.NccUtmBased2kBlock,
-                Width = MapIndexes._2kUtmBlockWidth,
-                Height = MapIndexes._2kUtmBlockHeight,
-                UtmExtent = CreateBound(row, column, MapIndexes._2kUtmXmin, MapIndexes._2kUtmYmax, MapIndexes._2kUtmBlockWidth, MapIndexes._2kUtmBlockHeight)
+                SheetName = $"{utmZone}{_2kUtmBlockColumns[column]}{(row + 1).ToString("00")}",
+                Type = UtmIndexType.Ncc2kBlock,
+                UtmExtent = CreateBound(row, column, UtmIndexes._2kUtmXmin, UtmIndexes._2kUtmYmax, UtmIndexes._2kUtmBlockWidth, UtmIndexes._2kUtmBlockHeight)
                 //Extent = new BoundingBox(MapIndexes._2kUtmXmin + column * MapIndexes._2kUtmBlockWidth,
                 //                         MapIndexes._2kUtmYmax - (row + 1) * MapIndexes._2kUtmBlockHeight,
                 //                         MapIndexes._2kUtmXmin + (column + 1) * MapIndexes._2kUtmBlockWidth,
@@ -142,7 +200,7 @@ namespace IRI.Msh.Common.Mapping
 
         private static UtmSheet Create2kSheet(UtmSheet utm2kBlock, int row, int column)
         {
-            if (utm2kBlock.Type != NccIndexType.NccUtmBased2kBlock)
+            if (utm2kBlock.Type != UtmIndexType.Ncc2kBlock)
             {
                 throw new NotImplementedException();
             }
@@ -152,11 +210,9 @@ namespace IRI.Msh.Common.Mapping
                 Row = row,
                 Column = column,
                 UtmZone = utm2kBlock.UtmZone,
-                Title = $"{utm2kBlock.Title}{_2kUtmSheetColumns[column]}{row.ToString("00")}",
-                Type = NccIndexType.NccUtmBased2kSheet,
-                Width = MapIndexes._2kUtmSheetWidth,
-                Height = MapIndexes._2kUtmSheetHeight,
-                UtmExtent = CreateBound(row, column, utm2kBlock.UtmExtent.XMin, utm2kBlock.UtmExtent.YMax, MapIndexes._2kUtmSheetWidth, MapIndexes._2kUtmSheetHeight)
+                SheetName = $"{utm2kBlock.SheetName}{_2kUtmSheetColumns[column]}{(row + 1).ToString("00")}",
+                Type = UtmIndexType.Ncc2kSheet,
+                UtmExtent = CreateBound(row, column, utm2kBlock.UtmExtent.XMin, utm2kBlock.UtmExtent.YMax, UtmIndexes._2kUtmSheetWidth, UtmIndexes._2kUtmSheetHeight)
             };
 
             return result;
@@ -164,7 +220,7 @@ namespace IRI.Msh.Common.Mapping
 
         private static UtmSheet Create1kSheet(UtmSheet utm2kSheet, int row, int column)
         {
-            if (utm2kSheet.Type != NccIndexType.NccUtmBased2kSheet)
+            if (utm2kSheet.Type != UtmIndexType.Ncc2kSheet)
             {
                 throw new NotImplementedException();
             }
@@ -174,11 +230,9 @@ namespace IRI.Msh.Common.Mapping
                 Row = row,
                 Column = column,
                 UtmZone = utm2kSheet.UtmZone,
-                Title = $"{utm2kSheet.Title}{RowColumnToSheetNumber(row, column)}",
-                Type = NccIndexType.NccUtmBased1k,
-                Width = MapIndexes._1kUtmSheetWidth,
-                Height = MapIndexes._1kUtmSheetHeight,
-                UtmExtent = CreateBound(row, column, utm2kSheet.UtmExtent.XMin, utm2kSheet.UtmExtent.YMax, MapIndexes._1kUtmSheetWidth, MapIndexes._1kUtmSheetHeight)
+                SheetName = $"{utm2kSheet.SheetName}{RowColumnToSheetNumber(row, column)}",
+                Type = UtmIndexType.Ncc1k,
+                UtmExtent = CreateBound(row, column, utm2kSheet.UtmExtent.XMin, utm2kSheet.UtmExtent.YMax, UtmIndexes._1kUtmSheetWidth, UtmIndexes._1kUtmSheetHeight)
             };
 
             return result;
@@ -186,7 +240,7 @@ namespace IRI.Msh.Common.Mapping
 
         private static UtmSheet Create500Sheet(UtmSheet utm1kSheet, int row, int column)
         {
-            if (utm1kSheet.Type != NccIndexType.NccUtmBased1k)
+            if (utm1kSheet.Type != UtmIndexType.Ncc1k)
             {
                 throw new NotImplementedException();
             }
@@ -196,11 +250,9 @@ namespace IRI.Msh.Common.Mapping
                 Row = row,
                 Column = column,
                 UtmZone = utm1kSheet.UtmZone,
-                Title = $"{utm1kSheet.Title}{RowColumnToSheetNumber(row, column)}",
-                Type = NccIndexType.NccUtmBased500,
-                Width = MapIndexes._500UtmSheetWidth,
-                Height = MapIndexes._500UtmSheetHeight,
-                UtmExtent = CreateBound(row, column, utm1kSheet.UtmExtent.XMin, utm1kSheet.UtmExtent.YMax, MapIndexes._500UtmSheetWidth, MapIndexes._500UtmSheetHeight)
+                SheetName = $"{utm1kSheet.SheetName}{RowColumnToSheetNumber(row, column)}",
+                Type = UtmIndexType.Ncc500,
+                UtmExtent = CreateBound(row, column, utm1kSheet.UtmExtent.XMin, utm1kSheet.UtmExtent.YMax, UtmIndexes._500UtmSheetWidth, UtmIndexes._500UtmSheetHeight)
             };
 
             return result;

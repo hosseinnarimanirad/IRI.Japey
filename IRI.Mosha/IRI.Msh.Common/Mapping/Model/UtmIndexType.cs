@@ -4,9 +4,10 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public enum NccUtmBasedIndexType
+    public enum UtmIndexType
     {
-        Ncc2k,
+        Ncc2kBlock,
+        Ncc2kSheet,
         Ncc1k,
         Ncc500
     }

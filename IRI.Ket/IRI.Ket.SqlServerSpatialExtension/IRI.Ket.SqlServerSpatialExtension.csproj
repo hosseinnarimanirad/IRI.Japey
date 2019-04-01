@@ -86,13 +86,14 @@
     <Compile Include="Helpers\ShapefileHelper.cs" />
     <Compile Include="Helpers\SqlSpatialHelper.cs" />
     <Compile Include="Helpers\WebMercatorHelper.cs" />
+    <Compile Include="Mapping\SqlGeodeticSheet.cs" />
     <Compile Include="Mapping\SqlIndex100k.cs" />
     <Compile Include="Mapping\SqlIndex10k.cs" />
     <Compile Include="Mapping\SqlIndex250k.cs" />
     <Compile Include="Mapping\SqlIndex25k.cs" />
     <Compile Include="Mapping\SqlIndex50k.cs" />
     <Compile Include="Mapping\SqlIndex5k.cs" />
-    <Compile Include="Mapping\SqlIndexBase.cs" />
+    <Compile Include="Mapping\SqlUtmSheet.cs" />
     <Compile Include="Model\SqlFeature.cs" />
     <Compile Include="Model\SqlFeatureSet.cs" />
     <Compile Include="Model\NamedSqlGeometry.cs" />

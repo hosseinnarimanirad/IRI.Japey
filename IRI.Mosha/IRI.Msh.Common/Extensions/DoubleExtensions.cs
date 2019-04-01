@@ -31,5 +31,10 @@ namespace System
 
             return ((decimal)value).ToString("G17", CultureInfo.InvariantCulture);
         }
+
+        public static bool AreEqual(this double first, double second)
+        {
+            return Math.Abs(first - second) < 1E-13;
+        }
     }
 }

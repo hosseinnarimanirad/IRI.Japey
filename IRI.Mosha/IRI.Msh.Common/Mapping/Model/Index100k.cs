@@ -7,9 +7,9 @@ namespace IRI.Msh.Common.Mapping
 {
     public class Index100k : IndexBase
     {
-        public override double Height { get => MapIndexes._100kSize; }
+        public override double Height { get => GeodeticIndexes._100kSize; }
 
-        public override double Width { get => MapIndexes._100kSize; }
+        public override double Width { get => GeodeticIndexes._100kSize; }
 
         public string BlockName { get; set; }
 

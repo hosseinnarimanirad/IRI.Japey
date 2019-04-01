@@ -7,9 +7,9 @@ namespace IRI.Msh.Common.Mapping
 {
     public class Index5k : IndexBase
     {
-        public override double Height { get => MapIndexes._5kHeight; }
+        public override double Height { get => GeodeticIndexes._5kHeight; }
 
-        public override double Width { get => MapIndexes._5kWidth; }
+        public override double Width { get => GeodeticIndexes._5kWidth; }
 
         public string ShortSheetNumber { get { return SheetNumber?.Split(' ').Last(); } }
     }

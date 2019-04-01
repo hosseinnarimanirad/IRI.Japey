@@ -119,8 +119,6 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<int, T> _idFunc;
 
-        public Func<List<T>, DataTable> ToDataTableMappingFunc;
-
         public override int GetSrid()
         {
             return this._features?.SkipWhile(g => g == null || g.TheSqlGeometry == null || g.TheSqlGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheSqlGeometry.GetSrid() ?? 0;
@@ -222,17 +220,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return GetEntireFeatures(geometry);
         //}
 
-        public override DataTable GetEntireFeatures(SqlGeometry geometry)
-        {
-
-            return ToDataTableMappingFunc(GetFeatures(geometry));
-            //return ToDataTableMappingFunc(this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList()); 
-        }
-
-        public override DataTable GetEntireFeatures()
-        {
-            return ToDataTableMappingFunc(_features);
-        }
+     
 
         //GetGeometryLabelPairs
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()

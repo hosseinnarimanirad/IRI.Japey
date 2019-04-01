@@ -190,7 +190,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
     public abstract class FeatureDataSource<T> : FeatureDataSource where T : class, ISqlGeometryAware
     {
-        public List<T> GetFeatures()
+        public virtual List<T> GetFeatures()
         {
             SqlGeometry geometry = null;
 
@@ -198,6 +198,20 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public abstract List<T> GetFeatures(SqlGeometry geometry);
+         
+        public Func<List<T>, DataTable> ToDataTableMappingFunc;
+
+        public override DataTable GetEntireFeatures(SqlGeometry geometry)
+        {
+
+            return ToDataTableMappingFunc(GetFeatures(geometry));
+            //return ToDataTableMappingFunc(this._features.Where(i => i.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList()); 
+        }
+
+        public override DataTable GetEntireFeatures()
+        {
+            return ToDataTableMappingFunc(GetFeatures());
+        }
 
         //public abstract void Add(ISqlGeometryAware newGeometry);
 

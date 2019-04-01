@@ -73,6 +73,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DoubleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\GeometryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IntExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NullableBoolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PathHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\PointExtension.cs" />
@@ -94,11 +95,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\Index5k.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapUtility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\MapIndexes.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\NccIndexType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\NccUtmBasedIndexType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\GeodeticIndexes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\GeodeticIndexType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\RowColumn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\UtmIndexType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\UtmSheet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\UtmIndexes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\WebMercatorUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\EigenvaluesEigenvectors.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Exceptions.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GooglePlacesResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Here\HereIsolineResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ImageSource.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\IndexSheet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\GeodeticSheet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenIsochroneResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenRouteCostingModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Field.cs" />

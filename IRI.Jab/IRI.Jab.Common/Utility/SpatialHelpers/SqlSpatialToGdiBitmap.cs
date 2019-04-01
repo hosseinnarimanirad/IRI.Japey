@@ -268,7 +268,16 @@ namespace IRI.Jab.Common.Convertor
             {
                 var location = mapToScreen(mapCoordinates[i]);
 
-                graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y, drawing.StringFormat.GenericDefault);
+                System.Drawing.StringFormat format = new drawing.StringFormat();
+
+                if (labelParameters.IsRtl)
+                {
+                    format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+                }
+
+                var stringSize = graphic.MeasureString(labels[i], font);
+
+                graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
             }
 
             graphic.Flush();
@@ -301,7 +310,16 @@ namespace IRI.Jab.Common.Convertor
 
                 var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry).AsWpfPoint());
 
-                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+                System.Drawing.StringFormat format = new drawing.StringFormat();
+
+                if (labelParameters.IsRtl)
+                {
+                    format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+                }
+
+                var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
+
+                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
             }
 
             graphic.Flush();

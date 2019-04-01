@@ -19,7 +19,7 @@ namespace IRI.Msh.Common.Primitives
 
         public static BoundingBox GeodeticWgs84MbbToUtmMbb(BoundingBox boundingBox, int? zone = null)
         {
-            return GeodeticWgs84MbbToUtmGeometry(boundingBox).GetBoundingBox();
+            return GeodeticWgs84MbbToUtmGeometry(boundingBox, zone).GetBoundingBox();
         }
 
         public static Geometry UtmMbbToGeodeticWgs84Geometry(BoundingBox boundingBox, int zone)
