@@ -129,8 +129,9 @@
         </Grid.Resources>
         <RadioButton Margin="2" Style="{StaticResource {x:Type ToggleButton}}" BorderThickness="0" HorizontalAlignment="Stretch" IsChecked="True"
                      >-->
-
-        <StackPanel HorizontalAlignment="Stretch" Margin="0">
+        <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
+                           Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=True}"/>
+        <StackPanel HorizontalAlignment="Stretch" Margin="0" Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}">
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
                 <Border Margin="0,0,4,0" Width="17" Height="17" BorderThickness="1"

@@ -1,5 +1,6 @@
 ﻿using IRI.Jab.Common.Model.Map;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,26 @@ namespace IRI.Jab.Controls.View
 
         private void RadGridView_AutoGeneratingColumn(object sender, Telerik.Windows.Controls.GridViewAutoGeneratingColumnEventArgs e)
         {
-            if (e.Column.Header.ToString().ToLower() == nameof(ISqlGeometryAware.TheSqlGeometry))
+            if (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType) == TypeCode.Object)
+            {
+                e.Cancel = true;
+            }
+
+            switch (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType))
+            {
+                case TypeCode.Double:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Decimal:
+                case TypeCode.SByte:
+                case TypeCode.Single:
+                    e.Column.TextAlignment = TextAlignment.Left;
+                    break;
+                default:
+                    break;
+            }
+             
+            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(ISqlGeometryAware.TheSqlGeometry)) || e.Column.Header.ToString().EqualsIgnoreCase(nameof(IGeometryAware.TheGeometry)))
             {
                 e.Cancel = true;
             }

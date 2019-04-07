@@ -72,6 +72,18 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        private CoordinatePanelPresenter _coordinatePanel;
+
+        public CoordinatePanelPresenter CoordinatePanel
+        {
+            get { return _coordinatePanel; }
+            set
+            {
+                _coordinatePanel = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private List<EnvelopeMarkupLabelTriple> _ostanha;
         public List<EnvelopeMarkupLabelTriple> Ostanha
@@ -230,8 +242,19 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private Dictionary<string, Func<TileType, IMapProvider>> _mapProviders;
-        public Dictionary<string, Func<TileType, IMapProvider>> MapProviders
+        //private Dictionary<string, Func<TileType, IMapProvider>> _mapProviders;
+        //public Dictionary<string, Func<TileType, IMapProvider>> MapProviders
+        //{
+        //    get { return _mapProviders; }
+        //    set
+        //    {
+        //        _mapProviders = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        private List<TileMapProvider> _mapProviders;
+
+        public List<TileMapProvider> MapProviders
         {
             get { return _mapProviders; }
             set
@@ -242,38 +265,38 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private TileType _baseMapType = TileType.None;
-        public TileType BaseMapType
+        //private TileType _baseMapType = TileType.None;
+        //public TileType BaseMapType
+        //{
+        //    get { return _baseMapType; }
+        //    set
+        //    {
+        //        if (_baseMapType == value)
+        //            return;
+
+        //        _baseMapType = value;
+        //        RaisePropertyChanged();
+
+        //        //SetTileService(ProviderType, value, MapSettings.GetFileName);
+        //        UpdateBaseMap();
+        //    }
+        //}
+
+
+        private string _providerTypeFullName = "GOOGLESatellite";
+        public string ProviderTypeFullName
         {
-            get { return _baseMapType; }
-            set
-            {
-                if (_baseMapType == value)
-                    return;
-
-                _baseMapType = value;
-                RaisePropertyChanged();
-
-                //SetTileService(ProviderType, value, MapSettings.GetFileName);
-                UpdateBaseMap();
-            }
-        }
-
-
-        private string _providerType = "GOOGLE";
-        public string ProviderType
-        {
-            get { return _providerType; }
+            get { return _providerTypeFullName; }
             set
             {
                 var providerType = value?.ToUpper();
 
-                if (_providerType == providerType)
+                if (_providerTypeFullName == providerType)
                 {
                     return;
                 }
 
-                _providerType = providerType;
+                _providerTypeFullName = providerType;
                 RaisePropertyChanged();
 
                 UpdateBaseMap();
@@ -493,12 +516,15 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public MapPresenter()
         {
-            this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
-            {
-                {"GOOGLE", tileType => new GoogleMapProvider(tileType) },
-                {"BING", tileType => new BingMapProvider(tileType) },
-                {"NOKIA", tileType => new NokiaMapProvider(tileType) },
-            };
+            //this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
+            //{
+            //    {"GOOGLE", tileType => new GoogleMapProvider(tileType) },
+            //    {"BING", tileType => new BingMapProvider(tileType) },
+            //    {"NOKIA", tileType => new NokiaMapProvider(tileType) },
+            //    {"OPENSTREETMAP", tileType => new OsmMapProvider(tileType) },
+            //    {"WAZE", tileType => new WazeMapProvider(tileType) },
+            //};
+            this.MapProviders = TileMapProviderFactory.GetAll();
 
             this.MapPanel = new MapPanelPresenter();
 
@@ -513,6 +539,8 @@ namespace IRI.Jab.Common.Presenter.Map
                   this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
 
               });
+
+            this.CoordinatePanel = new CoordinatePanelPresenter();
         }
 
 
@@ -536,7 +564,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<bool> RequestSetConnectedState;
 
-        public Action<IMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
+        public Action<TileMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
 
         public Action RequestRemoveAllTileServices;
 
@@ -678,7 +706,16 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async void UpdateBaseMap()
         {
-            await SetTileService(ProviderType, BaseMapType, MapSettings.GetFileName);
+            //await SetTileService(ProviderType, BaseMapType, MapSettings.GetFileName);
+
+            var provider = this.MapProviders.SingleOrDefault(m => m.FullName.EqualsIgnoreCase(ProviderTypeFullName));
+
+            if (provider == null)
+            {
+                return;
+            }
+
+            await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);
         }
 
         public void RemoveAllTileServices()
@@ -686,73 +723,70 @@ namespace IRI.Jab.Common.Presenter.Map
             this.Clear(l => l.Type == LayerType.BaseMap, true);
         }
 
-        public void AddProvider(IMapProvider mapProvider)
+        public void AddProvider(TileMapProvider mapProviderFullName)
         {
-            var nameInUpper = mapProvider?.ProviderName?.ToUpper();
+            var nameInUpper = mapProviderFullName?.ProviderName?.ToUpper();
 
-            if (!MapProviders.ContainsKey(nameInUpper))
+            if (!MapProviders.Any(m => m.FullName?.ToUpper() == nameInUpper))
             {
-                this.MapProviders.Add(nameInUpper, t =>
-                {
-                    mapProvider.TileType = t;
+                this.MapProviders.Add(mapProviderFullName);
 
-                    return mapProvider;
-                });
+                //this.MapProviders.Add(nameInUpper, t =>
+                //{
+                //    mapProvider.TileType = t;
+
+                //    return mapProvider;
+                //});
             }
         }
 
-        public void RemoveProvider(string name)
-        {
-            var nameInUpper = name?.ToUpper();
+        //public void RemoveProvider(string name)
+        //{
+        //    var nameInUpper = name?.ToUpper();
 
-            if (MapProviders.ContainsKey(nameInUpper))
-            {
-                this.MapProviders.Remove(nameInUpper);
-            }
-        }
+        //    if (MapProviders.ContainsKey(nameInUpper))
+        //    {
+        //        this.MapProviders.Remove(nameInUpper);
+        //    }
+        //}
 
-        public async Task SetTileService(IMapProvider baseMap, Func<TileInfo, string> getFileName = null)
+        public async Task SetTileService(TileMapProvider baseMap, Func<TileInfo, string> getLocalFileName)
         {
-            if (MapProviders.ContainsKey(baseMap.ProviderName))
-            {
-                this.MapProviders.Add(baseMap.ProviderName, t => { baseMap.TileType = t; return baseMap; });
-            }
+            //98.01.18
+            //if (MapProviders.ContainsKey(baseMap.ProviderName))
+            //{
+            //    this.MapProviders.Add(baseMap.ProviderName, t => { baseMap.TileType = t; return baseMap; });
+            //}
+
 
             if (!IsConnected)
             {
                 await CheckInternetAccess();
             }
 
-            this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getFileName);
+            this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName);
 
         }
 
-        public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)
-        {
-            provider = provider.ToUpper();
+        //public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)
+        //{
+        //    provider = provider.ToUpper();
 
-            System.Diagnostics.Debug.WriteLine($"SetTileService begin; {DateTime.Now.ToLongTimeString()}");
+        //    if (!IsConnected)
+        //    {
+        //        await CheckInternetAccess();
+        //    }
 
-            if (!IsConnected)
-            {
-                System.Diagnostics.Debug.WriteLine($"CheckInternetAccess before; {DateTime.Now.ToLongTimeString()}");
+        //    if (!MapProviders.ContainsKey(provider))
+        //    {
+        //        return;
+        //    }
 
-                await CheckInternetAccess();
+        //    var mapProvider = MapProviders[provider](tileType);
 
-                System.Diagnostics.Debug.WriteLine($"CheckInternetAccess after; {DateTime.Now.ToLongTimeString()}");
-            }
+        //    this.RequestSetTileService?.Invoke(mapProvider, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getFileName);
 
-            if (!MapProviders.ContainsKey(provider))
-            {
-                return;
-            }
-
-            var mapProvider = MapProviders[provider](tileType);
-
-            this.RequestSetTileService?.Invoke(mapProvider, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getFileName);
-
-            System.Diagnostics.Debug.WriteLine($"SetTileService end {DateTime.Now.ToLongTimeString()}");
-        }
+        //}
 
         #endregion
 
@@ -1292,6 +1326,11 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestSetLayer?.Invoke(layer);
         }
 
+        public void RegisterLayerWidthMap(VectorLayer layer)
+        {
+            layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+        }
+
         protected void TrySetCommands(ILayer layer)
         {
 
@@ -1423,7 +1462,10 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddLayer(ILayer layer)
         {
-            TrySetCommands(layer);
+            if (!layer.IsGroupLayer)
+            {
+                TrySetCommands(layer);
+            }
 
             this.RequestAddLayer?.Invoke(layer);
         }
@@ -1505,9 +1547,9 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleScale(int googleScale, IRI.Msh.Common.Primitives.Point center, Action callback)
+        public void ZoomToGoogleScale(int googleScale, IRI.Msh.Common.Primitives.Point mapCenter, Action callback)
         {
-            this.RequestZoomToGoogleScale?.Invoke(center, googleScale, callback);
+            this.RequestZoomToGoogleScale?.Invoke(mapCenter, googleScale, callback);
         }
 
         public void ZoomToExtent(IRI.Msh.Common.Primitives.BoundingBox boundingBox, bool isExactExtent, Action callback = null)
@@ -2076,24 +2118,20 @@ namespace IRI.Jab.Common.Presenter.Map
                     {
                         try
                         {
-                            var args = param.ToString().Split(',');
+                            //var args = param.ToString().Split(',');
 
-                            //MapProviderType provider = (MapProviderType)Enum.Parse(typeof(MapProviderType), args[0]);
-                            var provider = args[0];
+                            //var provider = args[0];
 
-                            TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
+                            //TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 
-                            this.ProviderType = provider;
+                            //this.ProviderTypeFullName = provider;
 
-                            this.BaseMapType = tileType;
-                            //if (provider != this.ProviderType || tileType != this.BaseMapType)
-                            //{
-                            //    SetTileService(provider, tileType);
-                            //}
+                            this.ProviderTypeFullName = param?.ToString();
+
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Debug.WriteLine("exception: " + ex);
+                            System.Diagnostics.Debug.WriteLine("exception at ChangeBaseMapCommand: " + ex);
                         }
                     });
                 }

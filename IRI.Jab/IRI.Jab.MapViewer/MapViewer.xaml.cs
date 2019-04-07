@@ -339,6 +339,23 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        public sb.Point CurrentExtentCenterInWgs84
+        {
+            get
+            {
+                var extent = CurrentExtent;
+
+                if (extent.IsValidPlus())
+                {
+                    return MapProjects.WebMercatorToGeodeticWgs84(CurrentExtent.Center);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public MapViewer()
         {
             InitializeComponent();
@@ -509,11 +526,11 @@ namespace IRI.Jab.MapViewer
 
 
             //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func< TileInfo, string> getFileName = null
-            presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName) =>
+            presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName) =>
             {
                 this.UnSetTileServices();
 
-                this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getFileName);
+                this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName);
 
                 //this.RefreshTiles();
                 this.RefreshBaseMaps();
@@ -550,7 +567,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
 
-            presenter.RequestZoomToGoogleScale = (center, googleScale, callback) => this.ZoomToGoogleScale(googleScale, center, callback);
+            presenter.RequestZoomToGoogleScale = (mapCenter, googleScale, callback) => this.ZoomToGoogleScale(googleScale, mapCenter, callback);
 
             presenter.RequestRegisterMapOptions = (arg) => { this.RegisterRightClickContextOptions(arg.View, arg.DataContext); };
 
@@ -848,7 +865,7 @@ namespace IRI.Jab.MapViewer
         //    SetTileService(ScaleInterval.All, provider, type, isCachEnabled, cacheDirectory, isOffline, getFileName);
         //}
 
-        public void SetTileService(IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
+        public void SetTileService(TileMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
         {
             var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = ScaleInterval.All };
 
@@ -876,9 +893,9 @@ namespace IRI.Jab.MapViewer
         //    this._layerManager.Add(layer);
         //}
 
-        public void UnSetTileService(string provider, TileType type)
+        public void UnSetTileService(string providerFullName/*, TileType type*/)
         {
-            this._layerManager.Remove(provider, type, forceRemove: true);
+            this._layerManager.RemoveTile(providerFullName, /*type, */forceRemove: true);
         }
 
         public void UnSetTileServices(int groupId = 1)
@@ -991,6 +1008,16 @@ namespace IRI.Jab.MapViewer
 
         public void AddLayer(ILayer layer)
         {
+            if (layer.IsGroupLayer)
+            {
+                foreach (var item in layer.SubLayers)
+                {
+                    AddLayer(item);
+                }
+
+                return;
+            }
+
             if (layer.VisualParameters.Visibility != Visibility.Visible)
                 return;
 
@@ -1028,7 +1055,7 @@ namespace IRI.Jab.MapViewer
             else if (layer is GridLayer)
             {
                 Action action = async () =>
-                { 
+                {
                     await AddGridLayer(layer as GridLayer);
                 };
 
@@ -1038,7 +1065,7 @@ namespace IRI.Jab.MapViewer
                    this.jobs.Add(new Job(
                       new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
                       Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                  ); 
+                  );
             }
             else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
             {
@@ -1123,6 +1150,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        //consider removing GridLayer and use VectorLayer instead
         private async Task AddGridLayer(GridLayer gridLayer)
         {
             var extent = this.CurrentExtent;
@@ -1132,7 +1160,9 @@ namespace IRI.Jab.MapViewer
             //consider if layer was Labeled
             var lines = gridLayer.GetLines(extent);
 
-            VectorLayer layer = new VectorLayer("temp grid", lines, gridLayer.VisualParameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
+            VectorLayer layer = new VectorLayer("temp grid", lines, LayerType.VectorLayer,
+                RenderingApproach.Default,
+                RasterizationApproach.DrawingVisual);
 
             await this.AddNonTiledLayer(layer);
         }
@@ -1845,7 +1875,7 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
+                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType ||*/ !layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
                 {
                     //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
@@ -1857,7 +1887,7 @@ namespace IRI.Jab.MapViewer
 
                 //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
-                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (layer.TileType != this._presenter?.BaseMapType || layer.Provider != this._presenter?.ProviderType)))
+                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType || */!layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
                 {
                     //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
@@ -3602,7 +3632,11 @@ namespace IRI.Jab.MapViewer
 
                 int newZoomLevel = WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel);
 
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), mapBoundingBox.GetCenter().AsPoint(), callback);
+                var mapCenter = mapBoundingBox.GetCenter().AsPoint();
+
+                var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+
+                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
 
                 return;
             }
@@ -3798,25 +3832,20 @@ namespace IRI.Jab.MapViewer
             //    return;
             //}
 
-            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)));
+            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), CurrentExtentCenterInWgs84?.Y));
         }
 
-        public void ZoomToGoogleScale(int googleZoomLevel, sb.Point center, Action callback)
+        public void ZoomToGoogleScale(int googleZoomLevel, sb.Point mapCenter, Action callback)
         {
             //if (googleZoomLevel < 1 || googleZoomLevel > 23)
             //{
             //    return;
             //}
 
-            ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel)), center, callback);
+            var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+
+            ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), wgs84Center?.Y), mapCenter, callback);
         }
-
-        //public void Zoom(double mapScale, sb.Point mapPoint)
-        //{
-        //    var point = MapToScreen(mapPoint.AsWpfPoint());
-
-        //    Zoom(mapScale, mapPoint);
-        //}
 
         public void Zoom(double mapScale, Point windowCenter, Action callback = null)
         {
@@ -3854,18 +3883,20 @@ namespace IRI.Jab.MapViewer
             ZoomToExtent(boundingBox, false, true, callback, withAnimation);
         }
 
+        public void ZoomToLevelAndCenter(int zoomLevel, sb.Point centerMapPoint, Action callback = null, bool withAnimation = true)
+        {
+            var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(centerMapPoint);
+
+            var mapScale = WebMercatorUtility.GetGoogleMapScale(zoomLevel, wgs84Center?.Y);
+
+            ZoomAndCenter(mapScale, centerMapPoint, callback, withAnimation);
+        }
+
         public void ZoomAndCenter(double mapScale, sb.Point centerMapPoint, Action callback = null, bool withAnimation = true)
         {
             var windowCenter = MapToScreen(new Point(centerMapPoint.X, centerMapPoint.Y));
 
             ZoomAndCenter(mapScale, windowCenter, callback, withAnimation);
-        }
-
-        public void ZoomToLevelAndCenter(int zoomLevel, sb.Point centerMapPoint, Action callback = null, bool withAnimation = true)
-        {
-            var mapScale = WebMercatorUtility.GetGoogleMapScale(zoomLevel);
-
-            ZoomAndCenter(mapScale, centerMapPoint, callback, withAnimation);
         }
 
         public void Zoom(double mapScale, sb.IPoint centerMapPoint, Action callback = null)
@@ -3878,7 +3909,6 @@ namespace IRI.Jab.MapViewer
         private void Zoom(bool zoomIn, Point windowCenter)
         {
             //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
-
             //Debug.Print($"e.Delta: {zoomIn}");
 
             if (IsGoogleZoomLevelsEnabled)
@@ -3889,6 +3919,7 @@ namespace IRI.Jab.MapViewer
 
                 Debug.Print($"newZoomLevel: {newZoomLevel}");
 
+                //98.01.18. consider using
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), windowCenter);
             }
             else
@@ -3901,7 +3932,6 @@ namespace IRI.Jab.MapViewer
             }
 
             //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
-
         }
 
         private void ZoomToFeature(SqlGeometry geometry)
@@ -3913,6 +3943,7 @@ namespace IRI.Jab.MapViewer
 
             if (geometry.GetOpenGisType() == OpenGisGeometryType.Point)
             {
+                //98.01.18. consider using
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(13), geometry.AsPoint());
             }
             else

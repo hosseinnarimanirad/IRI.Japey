@@ -25,7 +25,8 @@ namespace IRI.Jab.Common.Model
         ImagePyramid = 8192,
         MoveableItem = 16384,
         EditableItem= 32768,
-        None = 65536
+        GroupLayer = 65536,
+        None = 131072
 
         //UserInterface = 1024
     }

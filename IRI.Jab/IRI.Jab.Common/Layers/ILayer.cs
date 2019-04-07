@@ -6,6 +6,7 @@ using System.Windows;
 using System.Collections.Generic;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Assets.Commands;
+using System.Collections.ObjectModel;
 
 namespace IRI.Jab.Common
 {
@@ -37,6 +38,10 @@ namespace IRI.Jab.Common
 
         bool IsSelectedInToc { get; set; }
 
+        bool IsGroupLayer { get; set; }
+
+        Guid ParentLayerId { get; set; }
+
         bool ShowInToc { get; set; }
 
         bool CanUserDelete { get; }
@@ -44,6 +49,8 @@ namespace IRI.Jab.Common
         int NumberOfSelectedFeatures { get; set; }
 
         List<ILegendCommand> Commands { get; set; }
+
+        ObservableCollection<ILayer> SubLayers { get; set; }
 
         RelayCommand ChangeSymbologyCommand { get;   }
 

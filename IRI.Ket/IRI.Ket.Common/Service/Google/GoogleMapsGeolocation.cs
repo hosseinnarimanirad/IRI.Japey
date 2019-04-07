@@ -49,7 +49,7 @@ namespace IRI.Ket.Common.Service.Google
             }
         }
 
-        public static async Task<Response<GoogleGeolocationResult>> GetLocationAsync(string key, Wifiaccesspoint[] networks)
+        public static async Task<Response<GoogleGeolocationResult>> GetLocationAsync(string key, Wifiaccesspoint[] networks, System.Net.WebProxy proxy = null)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter);
+                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter, proxy);
             }
             catch (Exception ex)
             {

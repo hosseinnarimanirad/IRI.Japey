@@ -13,6 +13,7 @@ namespace IRI.Jab.Common.TileServices
         Yahoo,
         Nokia,
         OpenStreetMap,
+        Waze,
         Custom
     }
 }

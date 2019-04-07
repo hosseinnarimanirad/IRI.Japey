@@ -48,6 +48,14 @@ namespace IRI.Jab.MapViewer
             this.allLayers.Add(layer);
 
             this.allLayers = this.allLayers.OrderBy(i => i.Type == LayerType.Complex).ToList();
+
+            if (layer.IsGroupLayer)
+            {
+                foreach (var item in layer.SubLayers)
+                {
+                    Add(item);
+                }
+            }
         }
 
         public void Remove(ILayer layer, bool forceRemove)
@@ -113,7 +121,7 @@ namespace IRI.Jab.MapViewer
             //}
         }
 
-        public void Remove(string provider, TileType type, bool forceRemove)
+        public void RemoveTile(string providerFullName, /*TileType type, */bool forceRemove)
         {
             //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
             //{
@@ -130,7 +138,7 @@ namespace IRI.Jab.MapViewer
             //    }
             //}
 
-            Clear(layer => (layer as TileServiceLayer)?.Provider == provider?.ToUpper() && (layer as TileServiceLayer)?.TileType == type, forceRemove);
+            Clear(layer => (layer as TileServiceLayer)?.ProviderFullName?.ToUpper() == providerFullName?.ToUpper() /*&& (layer as TileServiceLayer)?.TileType == type*/, forceRemove);
         }
 
 

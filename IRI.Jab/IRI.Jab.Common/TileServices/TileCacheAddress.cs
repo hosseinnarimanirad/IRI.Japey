@@ -11,55 +11,55 @@ namespace IRI.Jab.Common.TileServices
 {
     public class TileCacheAddress
     {
-        private string provider;
+        private string _provider;
 
         public string Provider
         {
-            get { return provider; }
+            get { return _provider; }
             set
             {
-                provider = value;
+                _provider = value;
 
-                url = MakeUrl();
+                _url = MakeUrl();
             }
         }
 
 
-        private TileType type;
+        private string _subTitle;
 
-        public TileType Type
+        public string SubTitle
         {
-            get { return type; }
+            get { return _subTitle; }
             set
             {
-                type = value;
+                _subTitle = value;
 
-                url = MakeUrl();
+                _url = MakeUrl();
             }
         }
 
 
-        private string baseDirectory;
+        private string _baseDirectory;
 
         public string BaseDirectory
         {
-            get { return baseDirectory; }
+            get { return _baseDirectory; }
             set
             {
-                baseDirectory = value;
+                _baseDirectory = value;
 
-                url = MakeUrl();
+                _url = MakeUrl();
             }
         }
 
 
-        private string url;
+        private string _url;
 
-        public string Url { get { return url; } }
+        public string Url { get { return _url; } }
 
         private Func<TileInfo, string> _getFileName;
 
-        public TileCacheAddress(string provider, TileType type, Func<TileInfo, string> getFileName = null)
+        public TileCacheAddress(string provider, string subTitle, Func<TileInfo, string> getFileName = null)
         {
             if (getFileName == null)
             {
@@ -72,13 +72,13 @@ namespace IRI.Jab.Common.TileServices
 
             Provider = provider;
 
-            Type = type;
+            SubTitle = subTitle;
         }
 
         private string MakeUrl()
         {
             //return $"{BaseDirectory}\\{Enum.GetName(typeof(MapProviderType), Provider)}\\{Enum.GetName(typeof(TileType), Type)}";
-            return $"{BaseDirectory}\\{Provider}\\{Enum.GetName(typeof(TileType), Type)}";
+            return $"{BaseDirectory}\\{Provider}\\{SubTitle}";
         }
 
         private string GetFilePath(TileInfo tile)

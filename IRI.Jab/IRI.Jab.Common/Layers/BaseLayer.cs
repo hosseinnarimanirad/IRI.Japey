@@ -5,6 +5,7 @@ using IRI.Jab.Common.Model;
 using System.Windows;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Assets.Commands;
+using System.Collections.ObjectModel;
 
 namespace IRI.Jab.Common
 {
@@ -17,6 +18,8 @@ namespace IRI.Jab.Common
             this.VisibleRange = ScaleInterval.All;
 
             this.VisualParameters = VisualParameters.CreateNew(1);
+
+            this.ParentLayerId = Guid.Empty;
         }
 
         public abstract LayerType Type { get; protected set; }
@@ -36,6 +39,24 @@ namespace IRI.Jab.Common
 
         public Guid LayerId { get; protected set; }
 
+        private bool _isGroupLayer;
+
+        public bool IsGroupLayer
+        {
+            get { return _isGroupLayer; }
+            set
+            {
+                _isGroupLayer = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ShowOptions));
+            }
+        }
+
+
+        public Guid ParentLayerId { get; set; }
+
+        public ObservableCollection<ILayer> SubLayers { get; set; }
+
         public bool IsValid { get; set; } = true;
 
         public int ZIndex { get; set; }
@@ -54,11 +75,16 @@ namespace IRI.Jab.Common
 
                 _isSelectedInToc = value;
                 RaisePropertyChanged();
-
+                RaisePropertyChanged(nameof(ShowOptions));
                 //ChangeSymbologyCommand?.CanExecute(null);
 
                 OnIsSelectedInTocChanged?.Invoke(this, new CustomEventArgs<BaseLayer>(this));
             }
+        }
+
+        public bool ShowOptions
+        {
+            get { return IsSelectedInToc && Commands?.Count > 0 && !IsGroupLayer; }
         }
 
         private bool _showInToc = true;
@@ -127,6 +153,7 @@ namespace IRI.Jab.Common
             {
                 _commands = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ShowOptions));
             }
         }
 

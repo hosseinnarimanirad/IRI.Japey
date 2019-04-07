@@ -106,6 +106,11 @@ namespace IRI.Msh.Common.Primitives
                     !double.IsInfinity(this.Width + this.Height);
         }
 
+        public bool IsValidPlus()
+        {
+            return IsValid() && this.Width * this.Height > 0;
+        }
+
         public BoundingBox Add(BoundingBox secondBoundingBox)
         {
             return new BoundingBox(xMin: Math.Min(this.XMin, secondBoundingBox.XMin),

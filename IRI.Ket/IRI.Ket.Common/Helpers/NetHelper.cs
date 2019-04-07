@@ -168,19 +168,24 @@ namespace IRI.Ket.Common.Helpers
         //Http Get
         public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class
         {
-            return await HttpGetAsync<T>(address, Encoding.UTF8);
+            return await HttpGetAsync<T>(address, Encoding.UTF8, null);
         }
 
-        public static async Task<Response<T>> HttpGetAsync<T>(string address, Encoding encoding) where T : class
+        public static async Task<Response<T>> HttpGetAsync<T>(string address, Encoding encoding, WebProxy proxy, string contentType = contentTypeJson) where T : class
         {
             try
             {
                 WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
                 client.Encoding = encoding;
+
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
 
                 var stringResult = await client.DownloadStringTaskAsync(address);
 
@@ -194,10 +199,10 @@ namespace IRI.Ket.Common.Helpers
 
         public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
         {
-            return HttpGet<T>(address, Encoding.UTF8, contentType);
+            return HttpGet<T>(address, Encoding.UTF8, contentType, null);
         }
 
-        public static Response<T> HttpGet<T>(string address, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpGet<T>(string address, Encoding encoding, string contentType, WebProxy proxy) where T : class
         {
             try
             {
@@ -208,6 +213,10 @@ namespace IRI.Ket.Common.Helpers
 
                 client.Encoding = encoding;
 
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
 
                 var stringResult = client.DownloadString(address);
 
@@ -219,36 +228,36 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public async static Task<Response<TResponse>> EncryptedHttpGetAsync<TResponse>(string url, string decPriKey) where TResponse : class
-        {
-            try
-            {
-                var response = await NetHelper.HttpGetAsync<EncryptedMessage>(url);
+        //public async static Task<Response<TResponse>> EncryptedHttpGetAsync<TResponse>(string url, string decPriKey) where TResponse : class
+        //{
+        //    try
+        //    {
+        //        var response = await NetHelper.HttpGetAsync<EncryptedMessage>(url);
 
-                if (response.HasNotNullResult())
-                {
-                    return ResponseFactory.Create<TResponse>(response.Result.Decrypt<TResponse>(decPriKey));
-                }
-                else
-                {
-                    return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
-                }
-            }
-            catch (Exception ex)
-            {
-                return ResponseFactory.CreateError<TResponse>(ex.Message);
-            }
-        }
+        //        if (response.HasNotNullResult())
+        //        {
+        //            return ResponseFactory.Create<TResponse>(response.Result.Decrypt<TResponse>(decPriKey));
+        //        }
+        //        else
+        //        {
+        //            return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ResponseFactory.CreateError<TResponse>(ex.Message);
+        //    }
+        //}
 
 
 
         //Http Post
-        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, string contentType = contentTypeJson)
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, WebProxy proxy, string contentType = contentTypeJson)
         {
-            return await HttpPostAsync<T>(address, data, Encoding.UTF8, contentType);
+            return await HttpPostAsync<T>(address, data, Encoding.UTF8, proxy, contentType);
         }
 
-        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson)
+        public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, Encoding encoding, WebProxy proxy, string contentType = contentTypeJson)
         {
             try
             {
@@ -258,6 +267,11 @@ namespace IRI.Ket.Common.Helpers
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
                 client.Encoding = encoding;
+
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -273,13 +287,13 @@ namespace IRI.Ket.Common.Helpers
                 return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
-         
+
         public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
         {
-            return HttpPost<T>(address, data, Encoding.UTF8, contentType);
+            return HttpPost<T>(address, data, Encoding.UTF8, null, contentType);
         }
 
-        public static Response<T> HttpPost<T>(string address, object data, Encoding encoding, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpPost<T>(string address, object data, Encoding encoding, WebProxy proxy, string contentType = contentTypeJson) where T : class
         {
             try
             {
@@ -289,6 +303,11 @@ namespace IRI.Ket.Common.Helpers
                 client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
                 client.Encoding = encoding;
+
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -305,13 +324,13 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, string encPubKey, string decPriKey) where TResponse : class
+        public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey, string decPriKey) where TResponse : class
         {
             try
             {
                 var message = EncryptedMessage.Create(parameter, encPubKey);
 
-                var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message);
+                var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, proxy);
 
                 if (response.HasNotNullResult())
                 {

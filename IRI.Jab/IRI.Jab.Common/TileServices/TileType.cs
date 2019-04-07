@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.TileServices
 {
-    public enum TileType
+    internal enum TileType
     {
         Satellite,
         RoadMap,

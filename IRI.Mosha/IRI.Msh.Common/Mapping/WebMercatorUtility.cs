@@ -119,7 +119,50 @@ namespace IRI.Msh.Common.Mapping
             }
             else
             {
+
+                var temp1 = ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).InverseScale;
+                var temp2 = (591657550.50 * Math.Cos(35 * Math.PI / 180) / Math.Pow(2, zoomLevel));
+
                 return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).Scale;
+            }
+        }
+
+        public static double GetGoogleMapScale(int zoomLevel, double? latitude)
+        {
+            if (latitude == null)
+            {
+                return GetGoogleMapScale(zoomLevel);
+            }
+
+            if (zoomLevel < minZoomLevel)
+            {
+                return GetGoogleMapScale(minZoomLevel, latitude);
+            }
+            else if (zoomLevel > maxZoomLevel)
+            {
+                return GetGoogleMapScale(maxZoomLevel, latitude);
+            }
+            else
+            {
+                //591657550.50
+                //return 1.0 / (591657550.50 * Math.Cos(latitude.Value * Math.PI / 180) / Math.Pow(2, zoomLevel));//ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).Scale;
+                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).GetScaleAt(latitude.Value);
+            }
+        }
+
+        private static ZoomScale GetGoogleZoomScale(int zoomLevel)
+        {
+            if (zoomLevel < minZoomLevel)
+            {
+                return GetGoogleZoomScale(minZoomLevel);
+            }
+            else if (zoomLevel > maxZoomLevel)
+            {
+                return GetGoogleZoomScale(maxZoomLevel);
+            }
+            else
+            {
+                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel);
             }
         }
 
@@ -180,7 +223,7 @@ namespace IRI.Msh.Common.Mapping
 
         private static double GetLevel(double mapScale, double latitude)
         {
-            return Math.Log(EarthCircumference * Math.Cos(latitude * Math.PI / 180.0) * ConversionHelper.MeterToPixelFactor / 256 * mapScale, 2);
+            return Math.Log(EarthCircumference * Math.Cos(latitude * Math.PI / 180.0) * ConversionHelper.MeterToPixelFactor / 256.0 * mapScale, 2);
         }
 
         private static int AdjustLevel(int level)
@@ -398,7 +441,7 @@ namespace IRI.Msh.Common.Mapping
             }
 
         }
-         
+
         public static void WriteWebMercatorBoundingBoxToGoogleTileRegions(string fileName, BoundingBox webMercatorBoundingBox, int zoomLevel)
         {
             var geographicBoundingBox = webMercatorBoundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);

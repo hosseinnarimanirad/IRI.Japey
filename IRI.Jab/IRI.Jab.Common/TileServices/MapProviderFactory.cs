@@ -1,90 +1,68 @@
 ﻿
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Model;
-using IRI.Jab.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using IRI.Msh.Common.Helpers;
+//using IRI.Msh.Common.Model;
+//using IRI.Jab.Common;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.TileServices
-{
-    public static class MapProviderFactory
-    {
-        public static string GoogleProvider = "GOOGLE";
-        public static string BingProvider = "BING";
-        public static string NokiaProvider = "NOKIA";
+//namespace IRI.Jab.Common.TileServices
+//{
+//    public static class MapProviderFactory
+//    {
+//        public static string GoogleProvider = "GOOGLE";
+//        public static string BingProvider = "BING";
+//        public static string NokiaProvider = "NOKIA";
+//        public static string OsmProvider = "OPENSTREETMAP";
+//        public static string WazeProvider = "WAZE";
 
-        public static int GetServer(int min = 1, int max = 4)
-        {
-            return RandomHelper.Get(min, max);
-        }
+//        public static readonly char[] _serverChar;
 
-        public static IMapProvider CreateKnownProvider(MapProviderType provider, TileType type)
-        {
-            switch (provider)
-            {
-                case MapProviderType.Google:
-                    return new GoogleMapProvider(type);
+//        static MapProviderFactory()
+//        {
+//            _serverChar = new char[] { 'a', 'b', 'c', 'd' };
+//        }
 
-                case MapProviderType.Bing:
-                    return new BingMapProvider(type);
+//        public static int GetServer(int min = 1, int max = 4)
+//        {
+//            return RandomHelper.Get(min, max);
+//        }
 
-                case MapProviderType.Nokia:
-                    return new NokiaMapProvider(type);
+//        public static char GetServerCharacter(int min = 1, int max = 4)
+//        {
+//            var random = RandomHelper.Get(min, max);
 
-                case MapProviderType.Yahoo:
-                case MapProviderType.OpenStreetMap:
-                case MapProviderType.Custom:
-                default:
-                    return null;
-            }
-        }
+//            return _serverChar[random];
+//        }
 
+//        public static IMapProvider CreateKnownProvider(MapProviderType provider, TileType type)
+//        {
+//            switch (provider)
+//            {
+//                case MapProviderType.Google:
+//                    return new GoogleMapProvider(type);
 
-        //Google
+//                case MapProviderType.Bing:
+//                    return new BingMapProvider(type);
 
-        //private static string GetGoogleUrl(TileType type, TileInfo tile)
-        //{
-        //    switch (type)
-        //    {
-        //        case TileType.Satellite:
-        //            return MakeGoogleSatelliteUrl(tile, GetServer(0, 3));
+//                case MapProviderType.Nokia:
+//                    return new NokiaMapProvider(type);
 
-        //        case TileType.RoadMap:
-        //            return MakeGoogleRoadMapUrl(tile, GetServer(0, 3));
+//                case MapProviderType.OpenStreetMap:
+//                    return new OsmMapProvider(type);
 
-        //        case TileType.Terrain:
-        //            return MakeGoogleTerrainUrl(tile, GetServer(0, 3));
+//                case MapProviderType.Waze:
+//                    return new WazeMapProvider(type);
 
-        //        case TileType.Hybrid:
-        //            return MakeGoogleHybridUrl(tile, GetServer(0, 3));
-        //        default:
-        //            return null;
-        //    }
-        //}
+//                case MapProviderType.Yahoo:
+//                case MapProviderType.Custom:
+//                default:
+//                    return null;
+//            }
+//        }
 
-
-        //
-        //public static string GetUrl(MapProviderType provider, TileType type, TileInfo tile)
-        //{
-        //    switch (provider)
-        //    {
-        //        case MapProviderType.Google:
-        //            return GetGoogleUrl(type, tile);
-
-        //        case MapProviderType.Nokia:
-        //            return GetNokiaUrl(type, tile);
-
-        //        case MapProviderType.Bing:
-        //            return GetBingUrl(type, tile);
-
-        //        case MapProviderType.Yahoo:
-        //        case MapProviderType.OpenStreetMap:
-        //        default:
-        //            return null;
-        //    }
-        //}
-    }
-}
+         
+//    }
+//}

@@ -32,7 +32,7 @@ namespace IRI.Jab.Common
 
         private TileServices.TileCacheAddress _cache;
 
-        private TileServices.IMapProvider _mapProvider;
+        private TileServices.TileMapProvider _mapProvider;
 
 
         private bool _isCacheEnabled;
@@ -46,75 +46,31 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged();
             }
         }
-
-        //private TileServices.MapProviderType _provider;
-
-        public string Provider
+         
+        public string ProviderFullName
         {
-            get { return _mapProvider.ProviderName; }
-            //set { _provider = value; }
+            get { return _mapProvider.FullName; }
         }
-
-        //private TileServices.TileType _tileType;
-
-        public TileServices.TileType TileType
-        {
-            get { return _mapProvider.TileType; }
-            //private set { _tileType = value; }
-        }
+         
+        //public TileServices.TileType TileType
+        //{
+        //    get { return _mapProvider.TileType; }
+        //}
 
         public bool IsOffline { get; set; }
+         
 
-        //private TileServiceLayer()
-        //{
-
-        //}
-
-        //public TileServiceLayer(TileServices.MapProviderType provider, TileServices.TileType type, Func<TileInfo, string> getFileName = null)
-        //{
-        //    //this.Provider = provider;
-
-        //    //this.TileType = type;
-
-        //    this._cache = new TileServices.TileCacheAddress(provider, type, getFileName);
-
-        //    this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
-
-        //    this._mapProvider = TileServices.MapProviderFactory.CreateKnownProvider(provider, type);
-        //}
-
-        public TileServiceLayer(TileServices.IMapProvider mapProvider, Func<TileInfo, string> getFileName = null)
+        public TileServiceLayer(TileServices.TileMapProvider mapProvider, Func<TileInfo, string> getFileName = null)
         {
             //this.Provider = TileServices.MapProviderType.Custom;
 
-            this._cache = new TileServices.TileCacheAddress(mapProvider.ProviderName, mapProvider.TileType, getFileName);
+            this._cache = new TileServices.TileCacheAddress(mapProvider.ProviderName, mapProvider.SubTitle, getFileName);
 
             this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
 
             this._mapProvider = mapProvider;
         }
-
-        //public static TileServiceLayer Create(TileServices.MapProviderType provider, TileServices.TileType type, Func<TileInfo, string> getFileName = null)
-        //{
-        //    var mapProvider = TileServices.MapProviderFactory.CreateKnownProvider(provider, type);
-
-        //    if (mapProvider == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    TileServiceLayer result = new TileServiceLayer();
-
-        //    //result.Provider = provider;
-
-        //    result._mapProvider = mapProvider;
-
-        //    result._cache = new TileServices.TileCacheAddress(provider, type, getFileName);
-
-        //    result.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
-
-        //    return result;
-        //}
+         
 
         public override BoundingBox Extent
         {
@@ -124,65 +80,20 @@ namespace IRI.Jab.Common
             }
             protected set { }
         }
-
-        //public Guid Id { get; private set; }
-
-        //public bool IsValid { get; set; }
-
-        //private string _layerName;
-
-        //public string LayerName
-        //{
-        //    get { return _layerName; }
-        //    set
-        //    {
-        //        _layerName = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
+         
 
         public override RenderingApproach Rendering
         {
             get { return RenderingApproach.Tiled; }
             protected set { }
         }
-
-        //public RasterizationApproach ToRasterTechnique { get { return RasterizationApproach.None; } }
-
+         
         public override LayerType Type
         {
             get { return LayerType.BaseMap; }
             protected set { }
         }
-
-        //private VisualParameters _visualParameters;
-
-        //public VisualParameters VisualParameters
-        //{
-        //    get { return _visualParameters; }
-        //    set
-        //    {
-        //        _visualParameters = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //private ScaleInterval _visibleRange;
-
-        //public ScaleInterval VisibleRange
-        //{
-        //    get { return _visibleRange; }
-        //    set
-        //    {
-        //        _visibleRange = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //public int ZIndex { get; set; }
-
-        //public void Invalidate() => IsValid = false;
-
+         
         private FrameworkElement frameworkElement;
 
         public FrameworkElement Element

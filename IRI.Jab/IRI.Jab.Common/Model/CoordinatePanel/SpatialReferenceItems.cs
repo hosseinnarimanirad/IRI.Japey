@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Controls.Model.CoordinatePanel
+namespace IRI.Jab.Common.Model.CoordinatePanel
 {
     public static class SpatialReferenceItems
     {

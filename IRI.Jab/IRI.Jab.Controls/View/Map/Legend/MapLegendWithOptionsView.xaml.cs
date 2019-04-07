@@ -120,7 +120,8 @@ namespace IRI.Jab.Controls.View.Map
                    item.ShowInToc && (
                    (ShowVectorLayers && item.Type.HasFlag(LayerType.VectorLayer)) ||
                    (ShowRasterLayers && item.Type.HasFlag(LayerType.Raster)) ||
-                   (ShowRasterLayers && item.Type.HasFlag(LayerType.ImagePyramid)));
+                   (ShowRasterLayers && item.Type.HasFlag(LayerType.ImagePyramid)) ||
+                   item.Type.HasFlag(LayerType.GroupLayer));
 
                 //e.Accepted =
                 //    item.Layer.ShowInToc && (

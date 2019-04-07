@@ -55,7 +55,7 @@ namespace IRI.Jab.Common.Model.Map
 
         private Func<TileInfo, string> _getFileName = null;
 
-        public Func<TileInfo, string> GetFileName
+        public Func<TileInfo, string> GetLocalFileName
         {
             get { return _getFileName; }
             set

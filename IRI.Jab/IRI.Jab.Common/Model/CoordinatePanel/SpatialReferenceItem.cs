@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Controls.Model.CoordinatePanel
+namespace IRI.Jab.Common.Model.CoordinatePanel
 {
     public class SpatialReferenceItem : Notifier
     {
@@ -45,7 +45,7 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         private Func<IPoint, IPoint> _fromWgs84Geodetic;
 
         private Func<double, string> _toString;
-
+         
         public SpatialReferenceItem(Func<IPoint, IPoint> fromWgs84Geodetic, Func<double, string> toString, PersianEnglishItem titleItem, PersianEnglishItem subTitleItem, PersianEnglishItem xLabel, PersianEnglishItem yLabel)
         {
             this._fromWgs84Geodetic = fromWgs84Geodetic;
@@ -329,5 +329,17 @@ namespace IRI.Jab.Controls.Model.CoordinatePanel
         }
 
         public Action<SpatialReferenceItem> FireIsSelectedChanged;
+
+
+        public string GetPositionString(IPoint geodeticPoint)
+        {
+            var point = FromWgs84Geodetic(geodeticPoint);
+
+            var x = _toString(point.X);
+
+            var y = _toString(point.Y);
+
+            return $"{x},{y}";
+        }
     }
 }

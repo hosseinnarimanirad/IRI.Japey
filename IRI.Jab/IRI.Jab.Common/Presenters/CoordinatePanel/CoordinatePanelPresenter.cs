@@ -1,5 +1,5 @@
 ﻿using IRI.Jab.Common;
-using IRI.Jab.Controls.Model.CoordinatePanel;
+using IRI.Jab.Common.Model.CoordinatePanel;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Collections.Generic;
@@ -9,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Jab.Common.Model;
 using System.Windows;
+using IRI.Msh.Common.Primitives;
 
-namespace IRI.Jab.Controls.Presenter
+namespace IRI.Jab.Common.Presenter
 {
     public class CoordinatePanelPresenter : Notifier
     {
@@ -58,14 +59,14 @@ namespace IRI.Jab.Controls.Presenter
         }
 
         private void UpdateSelectedItem()
-        { 
+        {
             foreach (var item in SpatialReferences)
             {
                 item.FireIsSelectedChanged = e => { this.SelectedItem = e; };
             }
         }
 
-        internal void SetLanguage(LanguageMode value)
+        public void SetLanguage(LanguageMode value)
         {
             foreach (var item in SpatialReferences)
             {
@@ -88,5 +89,9 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
+        public string GetCurrentPosstionString(IPoint geodeticPoint)
+        {
+            return this.SelectedItem?.GetPositionString(geodeticPoint);
+        }
     }
 }

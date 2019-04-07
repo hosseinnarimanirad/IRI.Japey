@@ -190,6 +190,7 @@
     <Compile Include="Layers\DrawingLayer.cs" />
     <Compile Include="Layers\EditableFeatureLayer.cs" />
     <Compile Include="Layers\GridLayer.cs" />
+    <Compile Include="Layers\GroupLayer.cs" />
     <Compile Include="Layers\ILayer.cs" />
     <Compile Include="Layers\MeasurableLayer.cs" />
     <Compile Include="Layers\PolyBezierLayer.cs" />
@@ -209,6 +210,8 @@
     <Compile Include="Model\Common\SpecialDateTime.cs" />
     <Compile Include="Model\Common\VisualParameters.cs" />
     <Compile Include="Model\Common\VisualParametersStaticValues.cs" />
+    <Compile Include="Model\CoordinatePanel\SpatialReferenceItem.cs" />
+    <Compile Include="Model\CoordinatePanel\SpatialReferenceItems.cs" />
     <Compile Include="Model\DataStructure\RecursiveCollection.cs" />
     <Compile Include="Model\EditCommandAwareItem.cs" />
     <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
@@ -220,7 +223,6 @@
     <Compile Include="Model\Legend\LegendItem.cs" />
     <Compile Include="Model\Legend\LegendItemEventArgs.cs" />
     <Compile Include="Model\Legend\LegendToggleCommand.cs" />
-    <Compile Include="Model\Legend\MapLegendItemWithOptionsModel.cs" />
     <Compile Include="Model\MapAction.cs" />
     <Compile Include="Model\MapMarkers\IMapMarker.cs" />
     <Compile Include="Model\MapStatus.cs" />
@@ -261,6 +263,7 @@
     <Compile Include="Common\Event\PanEventArgs.cs" />
     <Compile Include="Common\Event\PointEventArgs.cs" />
     <Compile Include="Presenters\BasePresenter.cs" />
+    <Compile Include="Presenters\CoordinatePanel\CoordinatePanelPresenter.cs" />
     <Compile Include="Presenters\Dialogs\ChangePasswordDialogViewModel.cs" />
     <Compile Include="Presenters\Dialogs\DialogViewModelBase.cs" />
     <Compile Include="Presenters\Dialogs\AccountDialogViewModel.cs" />
@@ -293,8 +296,12 @@
     <Compile Include="TileServices\IMapProvider.cs" />
     <Compile Include="TileServices\MapProviderType.cs" />
     <Compile Include="TileServices\NokiaMapProvider.cs" />
+    <Compile Include="TileServices\OsmMapProvider.cs" />
     <Compile Include="TileServices\TileCacheAddress.cs" />
+    <Compile Include="TileServices\TileMapProvider.cs" />
+    <Compile Include="TileServices\TileMapProviderFactory.cs" />
     <Compile Include="TileServices\TileType.cs" />
+    <Compile Include="TileServices\WazeMapProvider.cs" />
     <Compile Include="Utility\Legend\TocManager.cs" />
     <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToDrawingVisual.cs" />
@@ -497,6 +504,9 @@
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
     <Resource Include="Assets\Images\imageNotFound.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\openStreetMap.png" />
+    <Resource Include="Assets\Images\BaseMaps\openTopoMap.png" />
+    <Resource Include="Assets\Images\BaseMaps\Waze.png" />
     <Content Include="Assets\Images\Logos\google.png" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>

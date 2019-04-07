@@ -112,13 +112,10 @@
     <Compile Include="Model\CoordinateEditor\MultiPolygonEditorModel.cs" />
     <Compile Include="Model\CoordinateEditor\PointEditorModel.cs" />
     <Compile Include="Model\CoordinateEditor\PolygonEditorModel.cs" />
-    <Compile Include="Model\CoordinatePanel\SpatialReferenceItem.cs" />
-    <Compile Include="Model\CoordinatePanel\SpatialReferenceItems.cs" />
     <Compile Include="Model\CoordinateTypes.cs" />
     <Compile Include="Model\DegreeMinuteSecondModel.cs" />
     <Compile Include="Model\GoTo\HamburgerGoToMenuItem.cs" />
     <Compile Include="Assets\DataTemplateSelectors\CommandDataTemplateSelector.cs" />
-    <Compile Include="Presenter\CoordinatePanelPresenter.cs" />
     <Compile Include="Presenter\GoToPresenter.cs" />
     <Compile Include="Presenter\InputCoordinatePresenter.cs" />
     <Compile Include="Presenter\MapApplicationPresenter.cs" />
@@ -414,6 +411,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Model\CoordinatePanel\" />
     <Folder Include="Model\Legend\" />
     <Folder Include="Model\Telerik\" />
     <Folder Include="View\Map\Auxilary\" />

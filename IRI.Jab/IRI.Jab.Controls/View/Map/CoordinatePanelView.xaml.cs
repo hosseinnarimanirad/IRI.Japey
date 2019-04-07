@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using IRI.Jab.Common.Extensions;
+using IRI.Jab.Common.Model.CoordinatePanel;
+using IRI.Jab.Common.Presenter;
 
 namespace IRI.Jab.Controls.View.Map
 {
@@ -38,9 +40,7 @@ namespace IRI.Jab.Controls.View.Map
 
         public CoordinatePanelView()
         {
-            InitializeComponent();
-
-            this.DataContext = new CoordinatePanelPresenter();
+            InitializeComponent(); 
         }
 
 
@@ -138,68 +138,6 @@ namespace IRI.Jab.Controls.View.Map
         {
             Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
 
-            //this.zone.Visibility = System.Windows.Visibility.Collapsed;
-
-            //this.region.Visibility = System.Windows.Visibility.Collapsed;
-
-            //if (geodeticDms.IsChecked == true)
-            //{
-            //    IRI.Msh.MeasurementUnit.Degree longitude = new IRI.Msh.MeasurementUnit.Degree(geodeticPoint.X);
-
-            //    IRI.Msh.MeasurementUnit.Degree latitude = new IRI.Msh.MeasurementUnit.Degree(geodeticPoint.Y);
-
-            //    this.XValue = DegreeHelper.ToDms(geodeticPoint.X, true);
-
-            //    //string.Format("{0:D3}° {1:D2} {2:00.0}''", longitude.DegreePart, longitude.MinutePart, longitude.SecondPart);
-
-            //    //this.YLabel = string.Format("{0:D3}° {1:D2}' {2:00.0}''", latitude.DegreePart, latitude.MinutePart, latitude.SecondPart);
-
-            //    this.YValue = DegreeHelper.ToDms(geodeticPoint.Y, true);
-            //}
-            //else if (geodeticDd.IsChecked == true)
-            //{
-            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.X.ToString("#,#.#####"));
-
-            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", geodeticPoint.Y.ToString("#,#.#####"));
-            //}
-            //else if (utm.IsChecked == true)
-            //{
-            //    Point tempUtm = GeodeticToUTM(geodeticPoint);
-
-            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
-
-            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-
-            //    this.zone.Visibility = System.Windows.Visibility.Visible;
-
-            //    this.region.Visibility = System.Windows.Visibility.Visible;
-
-            //    this.zone.Content = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X);
-            //}
-            //else if (mercator.IsChecked == true)
-            //{
-            //    Point tempUtm = GeodeticToMercator(geodeticPoint);
-
-            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
-
-            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            //}
-            //else if (cea.IsChecked == true)
-            //{
-            //    Point tempUtm = GeodeticToCylindricalEqualArea(geodeticPoint);
-
-            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
-
-            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            //}
-            //else if (tm.IsChecked == true)
-            //{
-            //    Point tempUtm = GeodeticToTransverseMercator(geodeticPoint);
-
-            //    this.XValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.X.ToString("#,#.#####"));
-
-            //    this.YValue = string.Format(CultureInfo.InvariantCulture, "{0:F5}", tempUtm.Y.ToString("#,#.#####"));
-            //}
 
         }
 
@@ -404,6 +342,7 @@ namespace IRI.Jab.Controls.View.Map
             }
         }
 
+         
 
     }
 }
