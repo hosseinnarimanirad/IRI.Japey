@@ -496,17 +496,27 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\BaseMaps\roadmap.jpg" />
-    <Resource Include="Assets\Images\BaseMaps\satellite.jpg" />
-    <Resource Include="Assets\Images\BaseMaps\terrain.png" />
-    <Resource Include="Assets\Images\BaseMaps\bingSatellite.png" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\PrecisionSelect.cur" />
-    <Resource Include="Assets\Images\imageNotFound.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\bingHybrid.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\bingSatellite.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\bingSatellite.png" />
+    <Resource Include="Assets\Images\BaseMaps\bingStreet.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\cartoDark.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\cartoLight.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\googleHybrid.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\googleRoadmap.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\googleSatellite.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\googleTerrain.png" />
+    <Resource Include="Assets\Images\BaseMaps\mapyTourism.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\mapyWinter.jpg" />
     <Resource Include="Assets\Images\BaseMaps\openStreetMap.png" />
     <Resource Include="Assets\Images\BaseMaps\openTopoMap.png" />
     <Resource Include="Assets\Images\BaseMaps\Waze.png" />
+    <Resource Include="Assets\Images\imageNotFound.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\osmHikeBike.jpg" />
+    <Resource Include="Assets\Images\BaseMaps\stamenWatercolor.jpg" />
     <Content Include="Assets\Images\Logos\google.png" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>

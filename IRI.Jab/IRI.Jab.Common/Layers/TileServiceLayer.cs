@@ -46,31 +46,31 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged();
             }
         }
-         
+
         public string ProviderFullName
         {
-            get { return _mapProvider.FullName; }
+            get { return _mapProvider.Name; }
         }
-         
+
         //public TileServices.TileType TileType
         //{
         //    get { return _mapProvider.TileType; }
         //}
 
         public bool IsOffline { get; set; }
-         
+
 
         public TileServiceLayer(TileServices.TileMapProvider mapProvider, Func<TileInfo, string> getFileName = null)
         {
             //this.Provider = TileServices.MapProviderType.Custom;
 
-            this._cache = new TileServices.TileCacheAddress(mapProvider.ProviderName, mapProvider.SubTitle, getFileName);
+            this._cache = new TileServices.TileCacheAddress(mapProvider.Provider.EnglishTitle, mapProvider.MapType.EnglishTitle, getFileName);
 
             this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
 
             this._mapProvider = mapProvider;
         }
-         
+
 
         public override BoundingBox Extent
         {
@@ -80,20 +80,20 @@ namespace IRI.Jab.Common
             }
             protected set { }
         }
-         
+
 
         public override RenderingApproach Rendering
         {
             get { return RenderingApproach.Tiled; }
             protected set { }
         }
-         
+
         public override LayerType Type
         {
             get { return LayerType.BaseMap; }
             protected set { }
         }
-         
+
         private FrameworkElement frameworkElement;
 
         public FrameworkElement Element
@@ -175,6 +175,8 @@ namespace IRI.Jab.Common
                 {
                     return GetNotFoundImage(tile);
                 }
+
+                System.Diagnostics.Debug.WriteLine("Getting Tile at " + url);
 
                 var byteImage = await client.DownloadDataTaskAsync(url);
 

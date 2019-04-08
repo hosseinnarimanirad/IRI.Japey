@@ -70,5 +70,10 @@ namespace IRI.Jab.Common.Model.Globalization
 
             this.UILanguage = uiLanguage;
         }
+
+        public override string ToString()
+        {
+            return Title;
+        }
     }
 }

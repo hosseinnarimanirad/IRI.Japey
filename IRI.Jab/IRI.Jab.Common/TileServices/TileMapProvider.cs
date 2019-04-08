@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Model;
+﻿using IRI.Jab.Common.Model.Globalization;
+using IRI.Msh.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,45 +12,95 @@ namespace IRI.Jab.Common.TileServices
     {
         public bool RequireInternetConnection { get; set; } = true;
 
-        private string _subTitle = "ROAD";
+        //private string _mapName ;
 
-        public string SubTitle
+        //public string MapName
+        //{
+        //    get { return _mapName; }
+        //    set
+        //    {
+        //        _mapName = value;
+        //        RaisePropertyChanged();
+        //        RaisePropertyChanged(nameof(FullTitle));
+        //    }
+        //}
+
+        //private string _providerName;
+
+        //public string ProviderName
+        //{
+        //    get { return _providerName; }
+        //    protected set
+        //    {
+        //        _providerName = value;
+        //        RaisePropertyChanged();
+        //        RaisePropertyChanged(nameof(FullTitle));
+        //    }
+        //}
+
+        private PersianEnglishItem _mapType;
+
+        public PersianEnglishItem MapType
         {
-            get { return _subTitle; }
+            get { return _mapType; }
             set
             {
-                _subTitle = value;
+                _mapType = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(FullTitle));
             }
         }
 
-        private string _providerName;
+        private PersianEnglishItem _provider;
 
-        public string ProviderName
+        public PersianEnglishItem Provider
         {
-            get { return _providerName; }
-            protected set
+            get { return _provider; }
+            set
             {
-                _providerName = value;
+                _provider = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(FullTitle));
             }
         }
 
-        public string FullTitle { get { return $"{ProviderName} - {SubTitle}"; } }
+        private byte[] _thumbnail;
 
-        public string FullName { get { return $"{ProviderName}{SubTitle}"; } }
+        public byte[] Thumbnail
+        {
+            get { return _thumbnail; }
+            set
+            {
+                _thumbnail = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        //public string FullTitle { get { return $"{ProviderName} - {MapName}"; } }
+
+        public string Name { get { return $"{Provider?.EnglishTitle}{MapType?.EnglishTitle}"; } }
+
+        public string Title { get { return $"{Provider} {MapType}"; } }
 
         protected Func<TileInfo, string> MakeUrl { get; set; }
 
-        public TileMapProvider(string providerName, string subTitle, Func<TileInfo, string> urlFunction)
+        public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction)
+            : this(new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English),
+                    new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English),
+                    urlFunction)
+        {
+            //this.MakeUrl = urlFunction;
+
+            //this.Provider = new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English);
+
+            //this.MapType = new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English);
+        }
+
+        public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction)
         {
             this.MakeUrl = urlFunction;
 
-            this.ProviderName = providerName;
+            this.Provider = provider;
 
-            this.SubTitle = subTitle;
+            this.MapType = mapType;
         }
 
         public virtual string GetUrl(TileInfo tile)
@@ -59,9 +110,30 @@ namespace IRI.Jab.Common.TileServices
 
         public override string ToString()
         {
-            return FullTitle;
+            return Title;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (object.Equals(obj, null))
+            {
+                return false;
+            }
+
+            return (obj as TileMapProvider)?.Name?.EqualsIgnoreCase(this.Name) == true;
+        }
+
+        public static bool operator ==(TileMapProvider first, TileMapProvider second)
+        {
+            //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case 
+            return object.Equals(first, second);
+        }
+
+        public static bool operator !=(TileMapProvider first, TileMapProvider second)
+        {
+            //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case
+            return !object.Equals(first, second);
+        }
 
     }
 }

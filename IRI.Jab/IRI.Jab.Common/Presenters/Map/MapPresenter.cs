@@ -524,7 +524,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //    {"OPENSTREETMAP", tileType => new OsmMapProvider(tileType) },
             //    {"WAZE", tileType => new WazeMapProvider(tileType) },
             //};
-            this.MapProviders = TileMapProviderFactory.GetAll();
+            this.MapProviders = TileMapProviderFactory.GetDefault();
 
             this.MapPanel = new MapPanelPresenter();
 
@@ -708,7 +708,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             //await SetTileService(ProviderType, BaseMapType, MapSettings.GetFileName);
 
-            var provider = this.MapProviders.SingleOrDefault(m => m.FullName.EqualsIgnoreCase(ProviderTypeFullName));
+            var provider = this.MapProviders.SingleOrDefault(m => m.Name?.EqualsIgnoreCase(ProviderTypeFullName) == true);
 
             if (provider == null)
             {
@@ -723,13 +723,13 @@ namespace IRI.Jab.Common.Presenter.Map
             this.Clear(l => l.Type == LayerType.BaseMap, true);
         }
 
-        public void AddProvider(TileMapProvider mapProviderFullName)
+        public void AddProvider(TileMapProvider mapProvider)
         {
-            var nameInUpper = mapProviderFullName?.ProviderName?.ToUpper();
+            //var nameInUpper = mapProviderFullName?.Provider?.EnglishTitle?.ToUpper();
 
-            if (!MapProviders.Any(m => m.FullName?.ToUpper() == nameInUpper))
+            if (!MapProviders.Any(m => m == mapProvider))
             {
-                this.MapProviders.Add(mapProviderFullName);
+                this.MapProviders.Add(mapProvider);
 
                 //this.MapProviders.Add(nameInUpper, t =>
                 //{
@@ -765,7 +765,6 @@ namespace IRI.Jab.Common.Presenter.Map
             }
 
             this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName);
-
         }
 
         //public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)

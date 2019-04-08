@@ -13,7 +13,7 @@ namespace IRI.Jab.Common.Helpers
         /// <summary>
         /// Get byte array of a file with build action=Resource
         /// </summary>
-        /// <param name="fileAddress">e.g. @"Restaurant;component/Asset/Images/myImage.png"  </param>
+        /// <param name="fileAddress">e.g. @"IRI.Jab.Common;component/Assets/Images/BaseMaps/satellite.jpg" </param>
         /// <returns></returns>
         public static byte[] ReadBinaryStreamFromResource(string fileAddress)
         {
