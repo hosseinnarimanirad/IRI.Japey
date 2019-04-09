@@ -91,6 +91,8 @@ namespace IRI.Jab.Common
 
             this.VisualParameters = parameters ?? VisualParameters.CreateNew(1);
 
+            this.ZIndex = int.MaxValue;
+
             Update(symbol, pointCollection, canEdit, polyBezierMode);
         }
 

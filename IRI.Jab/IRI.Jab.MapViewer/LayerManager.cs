@@ -43,7 +43,8 @@ namespace IRI.Jab.MapViewer
 
             this.CurrentLayers.Add(layer);
 
-            layer.ZIndex = this.allLayers.Count(i => !i.Type.HasFlag(LayerType.Complex) && !i.Type.HasFlag(LayerType.Drawing));
+            //98.01.20
+            //layer.ZIndex = this.allLayers.Count(i => !i.Type.HasFlag(LayerType.Complex) && !i.Type.HasFlag(LayerType.Drawing));
 
             this.allLayers.Add(layer);
 

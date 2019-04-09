@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
              mc:Ignorable="d"  x:Name="root"
              xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View.Map"
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" >
     <Grid>
         <ListBox ItemsSource="{Binding DrawingItems}" SelectionMode="Extended">
             <ListBox.Resources>
@@ -59,8 +59,17 @@
                 <DataTemplate>
                     <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}" DataContext="{Binding }"
                                  IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{Binding ToggleSelectedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
                         <iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding VisualParameters}"  
-                                                                     IsEditable="True" Commands="{Binding Commands}" IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                                                     IsEditable="True" Commands="{Binding Commands}" 
+                                                                     IsChecked="{Binding IsSelectedInToc}"/>
+                        <!--<iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding VisualParameters}"  
+                                                                     IsEditable="True" Commands="{Binding Commands}" 
+                                                                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>-->
 
 
                         <!--<StackPanel Orientation="Horizontal">

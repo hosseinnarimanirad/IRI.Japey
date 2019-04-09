@@ -44,10 +44,10 @@ namespace IRI.Jab.Controls.Presenter
 
             this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
-            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer);           
+            this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer, this);
         }
 
-        public override void Initialize()
+        public override   void Initialize()
         {
             this.RequestClearAll = () =>
             {
@@ -84,9 +84,9 @@ namespace IRI.Jab.Controls.Presenter
             this.MapSettings.MaxGoogleZoomLevel = 18;
             this.MapSettings.MinGoogleZoomLevel = 4;
 
-            //this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;
-            this.ProviderTypeFullName = "GoogleSatellite";
+            this.SetTileBaseMap("GOOGLESATELLITE");
 
+            //this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;
             this.SetMapCursorSet1();
 
             this.RegisterMapOptions();

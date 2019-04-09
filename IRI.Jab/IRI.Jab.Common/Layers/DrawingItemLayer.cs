@@ -30,7 +30,7 @@ namespace IRI.Jab.Common
 
         public FeatureDataSource OriginalSource { get; set; }
 
-        public VisualParameters OriginalSymbology { get; set; }
+        //public VisualParameters OriginalSymbology { get; set; }
 
         private Geometry _shape;
 
@@ -85,18 +85,16 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged();
             }
         }
-         
+
         public Action<DrawingItemLayer> RequestHighlightGeometry;
-         
+
         public DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
         {
-            //this._id = Guid.NewGuid().ToString();
-
             this.Extent = geometry.GetBoundingBox();
 
             this.VisualParameters = VisualParameters.GetRandomVisualParameters();
 
-            this.OriginalSymbology = VisualParameters.Clone();
+            //this.OriginalSymbology = VisualParameters.Clone();
 
             var featureType =
                 (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint) ? LayerType.Point :
@@ -113,6 +111,8 @@ namespace IRI.Jab.Common
 
             this.OriginalSource = source;
 
+            this.ZIndex = int.MaxValue;
+
             //this.DataSource = new MemoryDataSource(new List<SqlGeometry>() { geometry.AsSqlGeometry() });
 
             this.Title = title;
@@ -126,5 +126,8 @@ namespace IRI.Jab.Common
                 this.RequestHighlightGeometry?.Invoke(this);
             };
         }
+
+        
+
     }
 }

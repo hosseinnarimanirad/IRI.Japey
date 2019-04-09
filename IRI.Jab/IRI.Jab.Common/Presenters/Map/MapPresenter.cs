@@ -283,24 +283,33 @@ namespace IRI.Jab.Common.Presenter.Map
         //}
 
 
-        private string _providerTypeFullName = "GOOGLESatellite";
+        private string _providerTypeFullName = string.Empty;
         public string ProviderTypeFullName
         {
             get { return _providerTypeFullName; }
-            set
+        }
+
+        public async Task SetTileBaseMap(string tileMapFullName)
+        {
+            var tileMapFullNameToUpper = tileMapFullName?.ToUpper();
+
+            if (_providerTypeFullName == tileMapFullNameToUpper)
             {
-                var providerType = value?.ToUpper();
-
-                if (_providerTypeFullName == providerType)
-                {
-                    return;
-                }
-
-                _providerTypeFullName = providerType;
-                RaisePropertyChanged();
-
-                UpdateBaseMap();
+                return;
             }
+
+            _providerTypeFullName = tileMapFullNameToUpper;
+
+            RaisePropertyChanged(nameof(ProviderTypeFullName));
+
+            var provider = this.MapProviders.SingleOrDefault(m => m.Name?.EqualsIgnoreCase(ProviderTypeFullName) == true);
+
+            if (provider == null)
+            {
+                return;
+            }
+
+            await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
         }
 
 
@@ -704,19 +713,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Map Providers & TileServices***********************************************
         #region Map Providers & TileServices            
 
-        public async void UpdateBaseMap()
-        {
-            //await SetTileService(ProviderType, BaseMapType, MapSettings.GetFileName);
 
-            var provider = this.MapProviders.SingleOrDefault(m => m.Name?.EqualsIgnoreCase(ProviderTypeFullName) == true);
-
-            if (provider == null)
-            {
-                return;
-            }
-
-            await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);
-        }
 
         public void RemoveAllTileServices()
         {
@@ -941,19 +938,34 @@ namespace IRI.Jab.Common.Presenter.Map
 
         }
 
+        public async Task SelectDrawingItem(DrawingItemLayer layer)
+        {
+            var highlightGeo = layer.Geometry.AsSqlGeometry();
+
+            var visualParameters = VisualParameters.GetDefaultForSelection();
+             
+            await SelectGeometry(highlightGeo, visualParameters);
+        }
+
+        public async Task SelectGeometry(SqlGeometry geometry)
+        {
+            await SelectGeometries(new List<SqlGeometry>() { geometry });
+        }
+
+        public async Task SelectGeometry(SqlGeometry geometry, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        {
+            await SelectGeometries(new List<SqlGeometry>() { geometry }, visualParameters, pointSymbol);
+        }
 
         public async Task SelectGeometries(List<SqlGeometry> geometries)
         {
-            Debug.WriteLine("SelectGeometries 343 start");
-            await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
-            Debug.WriteLine("SelectGeometries 343 end");
+            //await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
+            await this.SelectGeometries(geometries, VisualParameters.GetDefaultForSelection());
         }
 
         public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
         {
-            Debug.WriteLine("SelectGeometries 675 start [MapPresenter]");
             await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
-            Debug.WriteLine("SelectGeometries 675 end [MapPresenter]");
         }
 
 
@@ -1375,47 +1387,60 @@ namespace IRI.Jab.Common.Presenter.Map
                         LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
                     };
 
-            layer.RequestHighlightGeometry = di =>
-            {
-                var defaultFill = layer.OriginalSymbology.Fill.AsSolidColor();
+            layer.RequestHighlightGeometry = async di =>
+             {
+                 //this.ClearLayer(layer, true);
 
-                var defaultStroke = layer.OriginalSymbology.Stroke.AsSolidColor();
+                 //this.AddLayer(layer);
+
+                 if (di.IsSelectedInToc)
+                 {
+                     await SelectDrawingItem(di);
+                 }
+                 else
+                 {
+                     ClearLayer(LayerType.Selection, true, true);
+                 }
+
+                 //var defaultFill = layer.OriginalSymbology.Fill.AsSolidColor();
+
+                 //var defaultStroke = layer.OriginalSymbology.Stroke.AsSolidColor();
 
 
-                if (di.IsSelectedInToc)
-                {
-                    if (defaultFill != null)
-                    {
-                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
-                    }
+                 //if (di.IsSelectedInToc)
+                 //{
+                 //    if (defaultFill != null)
+                 //    {
+                 //        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
+                 //    }
 
-                    if (defaultStroke != null)
-                    {
-                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
-                    }
+                 //    if (defaultStroke != null)
+                 //    {
+                 //        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
+                 //    }
 
-                    this.ClearLayer(layer, true);
+                 //    this.ClearLayer(layer, true);
 
-                    this.AddLayer(layer);
-                }
-                else
-                {
-                    if (defaultFill != null)
-                    {
-                        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
-                    }
+                 //    this.AddLayer(layer);
+                 //}
+                 //else
+                 //{
+                 //    if (defaultFill != null)
+                 //    {
+                 //        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
+                 //    }
 
-                    if (defaultStroke != null)
-                    {
-                        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
-                    }
+                 //    if (defaultStroke != null)
+                 //    {
+                 //        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
+                 //    }
 
-                    this.ClearLayer(layer, true);
+                 //    this.ClearLayer(layer, true);
 
-                    this.AddLayer(layer);
-                }
+                 //    this.AddLayer(layer);
+                 //}
 
-            };
+             };
 
             if (layer.RequestChangeSymbology == null)
             {
@@ -2113,7 +2138,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_changeBaseMapCommand == null)
                 {
-                    _changeBaseMapCommand = new RelayCommand(param =>
+                    _changeBaseMapCommand = new RelayCommand(async param =>
                     {
                         try
                         {
@@ -2125,7 +2150,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                             //this.ProviderTypeFullName = provider;
 
-                            this.ProviderTypeFullName = param?.ToString();
+                            await this.SetTileBaseMap(param?.ToString());
 
                         }
                         catch (Exception ex)

@@ -250,7 +250,7 @@ namespace IRI.Jab.Common
         {
             GeoReferencedImage result;
 
-            if (IsCacheEnabled)
+            if (IsCacheEnabled && _mapProvider.AllowCache)
             {
                 result = await _cache.GetTileAsync(tile);
 

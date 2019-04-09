@@ -663,9 +663,9 @@ namespace IRI.Jab.MapViewer
                   this.AddPolyBezierLayer(layer);
               };
 
-            presenter.RequestAddGeometries = (g, n, p) =>
+            presenter.RequestAddGeometries = (geometries, layerName, visualParameters) =>
             {
-                return this.DrawGeometriesAsync(g, n, p);
+                return this.DrawGeometriesAsync(geometries, layerName, visualParameters);
             };
 
             presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
@@ -996,7 +996,9 @@ namespace IRI.Jab.MapViewer
 
                 AddPanablePathToMapView(controlPath);
 
-                Canvas.SetZIndex(controlPath, layer.ZIndex + 1);
+                //98.01.20
+                //Canvas.SetZIndex(controlPath, layer.ZIndex + 1);
+                Canvas.SetZIndex(controlPath, int.MaxValue);
 
                 if (layer.IsControlsShown)
                 {
@@ -1447,7 +1449,7 @@ namespace IRI.Jab.MapViewer
 
                 if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;
-
+                 
                 if (layer.IsValid)
                 {
                     this.mapView.Children.Add(path);
@@ -1492,7 +1494,8 @@ namespace IRI.Jab.MapViewer
                 {
                     this.mapView.Children.Add(item);
 
-                    Canvas.SetZIndex(item, int.MaxValue);
+                    //Canvas.SetZIndex(item, int.MaxValue);
+                    Canvas.SetZIndex(item, layer.ZIndex);
                 }
             }
 
@@ -1763,7 +1766,7 @@ namespace IRI.Jab.MapViewer
 
             if (withAnimation)
             {
-                AddToCanvasWithAnimation(element, element.Opacity, specialPointLayer.AlwaysTop);
+                AddToCanvasWithAnimation(element, element.Opacity, specialPointLayer);
             }
             else
             {
@@ -1774,13 +1777,14 @@ namespace IRI.Jab.MapViewer
 
                 if (specialPointLayer.AlwaysTop)
                 {
-                    Canvas.SetZIndex(element, int.MaxValue);
+                    //Canvas.SetZIndex(element, int.MaxValue);
+                    Canvas.SetZIndex(element, specialPointLayer.ZIndex);
                 }
 
             }
         }
 
-        private void AddToCanvasWithAnimation(FrameworkElement element, double finalOpacity, bool insertTop = true)
+        private void AddToCanvasWithAnimation(FrameworkElement element, double finalOpacity, SpecialPointLayer specialPointLayer)
         {
             if (this.mapView.Children.Contains(element))
                 return;
@@ -1797,9 +1801,13 @@ namespace IRI.Jab.MapViewer
 
             this.mapView.Children.Add(element);
 
-            if (insertTop)
+            if (specialPointLayer.AlwaysTop)
             {
                 Canvas.SetZIndex(element, int.MaxValue);
+            }
+            else
+            {
+                Canvas.SetZIndex(element, specialPointLayer.ZIndex);
             }
 
             element.BeginAnimation(OpacityProperty, animation);
@@ -2773,7 +2781,7 @@ namespace IRI.Jab.MapViewer
         #endregion
 
 
-        #region Drawing & Anot
+        #region DrawGeometries & Anot
 
         public void Flash(List<IRI.Msh.Common.Primitives.Point> points)
         {
@@ -2963,17 +2971,15 @@ namespace IRI.Jab.MapViewer
                 RenderingApproach.Default,
                 RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
-                new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
+                new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol })
+            {
+                ZIndex = int.MaxValue
+            };
 
             this._layerManager.Add(layer);
 
-            //Debug.WriteLine("AddNonTiledLayer [MapViewer] start");
-
-            //Debug.WriteLine($"{geometries?.Count} Geometries Selected");
-
             await AddNonTiledLayer(layer);
 
-            //Debug.WriteLine("AddNonTiledLayer [MapViewer] end");
         }
 
         #endregion
@@ -3540,7 +3546,7 @@ namespace IRI.Jab.MapViewer
 
             this.mapView.Children.Add(rectangle);
 
-            Canvas.SetZIndex(rectangle, this.mapView.Children.Count);
+            Canvas.SetZIndex(rectangle, int.MaxValue);
 
             this.mapView.MouseUp -= mapView_MouseUpForZoom;
             this.mapView.MouseUp += mapView_MouseUpForZoom;

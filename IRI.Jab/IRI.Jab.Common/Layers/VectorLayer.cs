@@ -188,7 +188,7 @@ namespace IRI.Jab.Common
                 this.Type = type;
             }
 
-            this.Extent = geometries?.GetBoundingBox()?? sb.BoundingBox.NaN;
+            this.Extent = geometries?.GetBoundingBox() ?? sb.BoundingBox.NaN;
 
             this.LayerName = layerName;
 
@@ -262,7 +262,7 @@ namespace IRI.Jab.Common
             //pen.DashStyle = this.VisualParameters.DashStyle;
 
             var pen = this.VisualParameters.GetWpfPen();
-
+             
             Brush brush = this.VisualParameters.Fill;
 
             DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
@@ -281,7 +281,7 @@ namespace IRI.Jab.Common
             Path path = new Path()
             {
                 Data = area,
-                Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false }
+                Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false },
             };
 
             this.Element = path;
@@ -948,7 +948,7 @@ namespace IRI.Jab.Common
                         new FormattedText(labels[i], System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
                         new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
                         this.Labels.FontSize, this.Labels.Foreground);
-                    
+
                     Point location = mapToScreen(mapCoordinates[i]);
 
                     drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));

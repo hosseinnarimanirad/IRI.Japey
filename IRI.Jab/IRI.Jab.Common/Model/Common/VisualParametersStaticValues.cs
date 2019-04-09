@@ -38,7 +38,7 @@ namespace IRI.Jab.Common
 
         public static VisualParameters GetDefaultForSelection()
         {
-            return new VisualParameters(DefaultSelectionFill, DefaultSelectionStroke, 2, .8);
+            return new VisualParameters(DefaultSelectionFill, DefaultSelectionStroke, 2, .9);
         }
 
         public static VisualParameters GetDefaultForHighlight()
@@ -71,7 +71,7 @@ namespace IRI.Jab.Common
 
         public static SolidColorBrush DefaultSelectionStroke = new SolidColorBrush(Colors.Cyan);
 
-        public static SolidColorBrush DefaultSelectionFill = new SolidColorBrush(new Color() { B = 255, G = 255, R = 0, A = 50 });
+        public static SolidColorBrush DefaultSelectionFill = new SolidColorBrush(new Color() { B = 255, G = 255, R = 0, A = 160 });
 
 
         public static SolidColorBrush DefaultDrawingStroke = new SolidColorBrush(new Color() { R = 255, G = 200, B = 0, A = 250 });

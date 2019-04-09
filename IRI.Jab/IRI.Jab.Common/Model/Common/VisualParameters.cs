@@ -136,7 +136,7 @@ namespace IRI.Jab.Common
                 var oldIsInScaleRange = ((bool)dpE.OldValue);
 
                 if (newIsInScaleRange != oldIsInScaleRange)
-                { 
+                {
                     obj.OnChanged?.Invoke(obj, new CustomEventArgs<VisualParameters>(obj));
                 }
             })));
@@ -259,6 +259,11 @@ namespace IRI.Jab.Common
             if (DashStyle != null && result != null)
             {
                 result.DashStyle = DashStyle;
+            }
+
+            if (result != null)
+            {
+                result.LineJoin = PenLineJoin.Round;
             }
 
             return result;

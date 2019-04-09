@@ -68,10 +68,10 @@ namespace IRI.Jab.Common
             get { return _isSelectedInToc; }
             set
             {
-                if (_isSelectedInToc == value)
+                if (value && _isSelectedInToc == value)
                 {
-                    return;
-                }
+                    value = false;
+                } 
 
                 _isSelectedInToc = value;
                 RaisePropertyChanged();

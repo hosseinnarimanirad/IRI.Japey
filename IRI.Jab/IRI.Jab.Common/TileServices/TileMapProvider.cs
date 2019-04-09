@@ -12,6 +12,9 @@ namespace IRI.Jab.Common.TileServices
     {
         public bool RequireInternetConnection { get; set; } = true;
 
+        //in the case of google traffic map, caching should be avoided
+        public bool AllowCache { get; set; } = true;
+
         //private string _mapName ;
 
         //public string MapName
@@ -121,6 +124,11 @@ namespace IRI.Jab.Common.TileServices
             }
 
             return (obj as TileMapProvider)?.Name?.EqualsIgnoreCase(this.Name) == true;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode() ;
         }
 
         public static bool operator ==(TileMapProvider first, TileMapProvider second)

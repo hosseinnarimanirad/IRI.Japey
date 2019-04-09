@@ -182,6 +182,8 @@ namespace IRI.Jab.Common
 
             this.LayerName = name;
 
+            this.ZIndex = int.MaxValue;
+
             this.Items = new ObservableCollection<Locateable>();
 
             this.Items.CollectionChanged -= Items_CollectionChanged;
