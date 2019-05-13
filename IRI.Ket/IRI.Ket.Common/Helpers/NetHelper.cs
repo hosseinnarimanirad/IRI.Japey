@@ -228,6 +228,56 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
+        public static Response<byte[]> HttpGetDownloadData(string address, string contentType, WebProxy proxy = null)
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
+
+                var resultByteArray = client.DownloadData(address);
+
+                return ResponseFactory.Create(resultByteArray);
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<byte[]>(ex.Message);
+            }
+        }
+
+        public static Response<string> HttpGetString(string address, string contentType = contentTypeJson, WebProxy proxy = null)
+        {
+            try
+            {
+                WebClient client = new WebClient();
+
+                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                if (proxy?.Address != null)
+                {
+                    client.Proxy = proxy;
+                }
+
+                var stringResult = client.DownloadString(address);
+
+                return ResponseFactory.Create(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<string>(ex.Message);
+            }
+        }
+
+        #region old
+
         //public async static Task<Response<TResponse>> EncryptedHttpGetAsync<TResponse>(string url, string decPriKey) where TResponse : class
         //{
         //    try
@@ -248,7 +298,7 @@ namespace IRI.Ket.Common.Helpers
         //        return ResponseFactory.CreateError<TResponse>(ex.Message);
         //    }
         //}
-
+        #endregion
 
 
         //Http Post

@@ -77,13 +77,31 @@ namespace IRI.Jab.Common.TileServices
             }
         }
 
+        private byte[] _thumbnail72;
+
+        public byte[] Thumbnail72
+        {
+            get { return _thumbnail72; }
+            set
+            {
+                _thumbnail72 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         //public string FullTitle { get { return $"{ProviderName} - {MapName}"; } }
 
         public string Name { get { return $"{Provider?.EnglishTitle}{MapType?.EnglishTitle}"; } }
 
         public string Title { get { return $"{Provider} {MapType}"; } }
 
-        protected Func<TileInfo, string> MakeUrl { get; set; }
+        public Func<TileInfo, string> MakeUrl { get; protected set; }
+
+        protected TileMapProvider()
+        {
+
+        }
 
         public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction)
             : this(new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English),
@@ -128,7 +146,7 @@ namespace IRI.Jab.Common.TileServices
 
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode() ;
+            return this.ToString().GetHashCode();
         }
 
         public static bool operator ==(TileMapProvider first, TileMapProvider second)

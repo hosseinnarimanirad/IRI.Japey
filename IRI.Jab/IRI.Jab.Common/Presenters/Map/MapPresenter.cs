@@ -264,6 +264,18 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        private TileMapProvider _selectedMapProvider;
+
+        public TileMapProvider SelectedMapProvider
+        {
+            get { return _selectedMapProvider; }
+            set
+            {
+                _selectedMapProvider = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         //private TileType _baseMapType = TileType.None;
         //public TileType BaseMapType

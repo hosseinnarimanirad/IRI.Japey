@@ -11,7 +11,7 @@ namespace IRI.Ket.Common.Helpers
     {
         public static byte[] ToByteArray(string hexString)
         {
-            if (hexString.Length % 2 != 0)
+            if (hexString == null || hexString.Length % 2 != 0)
             {
                 throw new NotImplementedException();
             }
@@ -59,7 +59,7 @@ namespace IRI.Ket.Common.Helpers
             }
 
             var result = new string(c);
-             
+
             return append0x ? $"0x{result}" : result;
         }
     }

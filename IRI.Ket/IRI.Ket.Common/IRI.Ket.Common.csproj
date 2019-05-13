@@ -70,6 +70,7 @@
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ZipFileHelper.cs" />
     <Compile Include="Security\EncryptedMessage.cs" />
+    <Compile Include="Security\RsaMessage.cs" />
     <Compile Include="Service\Bing\BingMap.cs" />
     <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
     <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />

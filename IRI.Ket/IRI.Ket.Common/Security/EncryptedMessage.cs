@@ -25,7 +25,7 @@ namespace IRI.Ket.Common.Security
 
         }
 
-        public static EncryptedMessage Create(object value, string base64Token)
+        public static EncryptedMessage Create(object value, string base64PubKey)
         {
             //base64Token is a public key in base64 string format
 
@@ -37,7 +37,7 @@ namespace IRI.Ket.Common.Security
 
                 var encryptedMessage = CryptographyHelper.AesEncrypt(Newtonsoft.Json.JsonConvert.SerializeObject(value), rm.Key, rm.IV);
 
-                result.Token = CryptographyHelper.RsaEncrypt(Convert.ToBase64String(rm.Key), base64Token);
+                result.Token = CryptographyHelper.RsaEncrypt(Convert.ToBase64String(rm.Key), base64PubKey);
 
                 result.IV = Convert.ToBase64String(rm.IV);
 
