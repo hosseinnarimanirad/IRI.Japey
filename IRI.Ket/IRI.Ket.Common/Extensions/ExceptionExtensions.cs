@@ -17,5 +17,17 @@ namespace IRI.Ket.Common.Extensions
 
             return $"MESSAGE: { ex.Message} INNER: {ex.InnerException?.Message ?? string.Empty}";
         }
+
+        public static string GetFullMessage(this Exception ex)
+        {
+            if (ex == null)
+            {
+                return string.Empty;
+            }
+
+            var innerException = ex?.Message + " - " + GetFullMessage(ex.InnerException);
+
+            return $"{ex.Message}" + innerException != null ? $" {Environment.NewLine} {innerException}" : string.Empty;
+        }
     }
 }

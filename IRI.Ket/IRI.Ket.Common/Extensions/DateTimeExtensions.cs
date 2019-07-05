@@ -10,6 +10,11 @@ namespace IRI.Ket.Common.Extensions
     {
         internal static readonly DateTime _midValidPersianDateTime = new DateTime(622, 3, 22);
 
+        public static long AsUnixTimestamp(this DateTime time)
+        {
+            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        }
+
         private static readonly System.Globalization.PersianCalendar _calendar = new System.Globalization.PersianCalendar();
 
         public static bool IsAM(this DateTime dateTime)

@@ -175,17 +175,18 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                client.Encoding = encoding;
+                //client.Encoding = encoding;
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, encoding, proxy, bearer: null);
 
                 var stringResult = await client.DownloadStringTaskAsync(address);
 
@@ -206,17 +207,18 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                client.Encoding = encoding;
+                //client.Encoding = encoding;
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, encoding, proxy, bearer: null);
 
                 var stringResult = client.DownloadString(address);
 
@@ -232,15 +234,16 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, null, proxy, bearer: null);
 
                 var resultByteArray = client.DownloadData(address);
 
@@ -256,15 +259,18 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //client.Encoding = Encoding.UTF8;
+
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, Encoding.UTF8, proxy, bearer: null);
 
                 var stringResult = client.DownloadString(address);
 
@@ -311,17 +317,18 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                client.Encoding = encoding;
+                //client.Encoding = encoding;
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, encoding, proxy, bearer: null);
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -330,7 +337,9 @@ namespace IRI.Ket.Common.Helpers
 
                 var stringResult = await client.UploadStringTaskAsync(address, stringData);
 
-                return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+                var result = ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -347,17 +356,18 @@ namespace IRI.Ket.Common.Helpers
         {
             try
             {
-                WebClient client = new WebClient();
+                //WebClient client = new WebClient();
 
-                client.Headers.Add(HttpRequestHeader.ContentType, contentType);
-                client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
 
-                client.Encoding = encoding;
+                //client.Encoding = encoding;
 
-                if (proxy?.Address != null)
-                {
-                    client.Proxy = proxy;
-                }
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, encoding, proxy);
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -373,6 +383,102 @@ namespace IRI.Ket.Common.Helpers
                 return ResponseFactory.CreateError<T>(ex.Message);
             }
         }
+
+
+        public static Response<string> HttpPostXml(string address, string xmlData, Encoding encoding, WebProxy proxy = null)
+        {
+            try
+            {
+                //WebClient client = new WebClient();
+
+                //client.Headers.Add(HttpRequestHeader.ContentType, "text/xml");
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                //client.Encoding = encoding;
+
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient("text/xml", encoding, proxy, bearer: null);
+
+                var stringResult = client.UploadString(address, xmlData);
+
+                return ResponseFactory.Create<string>(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<string>(ex.Message);
+            }
+        }
+
+        public static async Task<Response<string>> HttpPostXmlAsync(string address, string xmlData, Encoding encoding, WebProxy proxy = null)
+        {
+            try
+            {
+                //WebClient client = new WebClient();
+
+                //client.Headers.Add(HttpRequestHeader.ContentType, "text/xml");
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                //client.Encoding = encoding;
+
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient("text/xml", encoding, proxy);
+
+                var stringResult = await client.UploadStringTaskAsync(address, xmlData);
+
+                return ResponseFactory.Create<string>(stringResult);
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<string>(ex.Message);
+            }
+        }
+
+
+
+        public static Response<byte[]> HttpPostDownloadData(string address, object data, Encoding encoding, string contentType = contentTypeJson, WebProxy proxy = null, string bearer = null)
+        {
+            try
+            {
+                //WebClient client = new WebClient();
+
+                //client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+                //client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+                //if (!string.IsNullOrWhiteSpace(bearer))
+                //{
+                //    client.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {bearer}");
+                //}
+
+                //client.Encoding = encoding;
+
+                //if (proxy?.Address != null)
+                //{
+                //    client.Proxy = proxy;
+                //}
+                var client = CreateWebClient(contentType, encoding, proxy, bearer);
+
+                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+                {
+                    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+                });
+
+                var result = client.UploadData(address, Encoding.UTF8.GetBytes(stringData));
+
+                return ResponseFactory.Create(result);
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<byte[]>(ex.Message);
+            }
+
+        }
+
 
         public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey, string decPriKey) where TResponse : class
         {
@@ -395,6 +501,31 @@ namespace IRI.Ket.Common.Helpers
             {
                 return ResponseFactory.CreateError<TResponse>(ex.Message);
             }
+        }
+
+        private static WebClient CreateWebClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null)
+        {
+            WebClient client = new WebClient();
+
+            client.Headers.Add(HttpRequestHeader.ContentType, contentType);
+            client.Headers.Add(HttpRequestHeader.UserAgent, "application!");
+
+            if (!string.IsNullOrWhiteSpace(bearer))
+            {
+                client.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {bearer}");
+            }
+
+            if (encoding != null)
+            {
+                client.Encoding = encoding;
+            }
+
+            if (proxy?.Address != null)
+            {
+                client.Proxy = proxy;
+            }
+
+            return client;
         }
 
     }

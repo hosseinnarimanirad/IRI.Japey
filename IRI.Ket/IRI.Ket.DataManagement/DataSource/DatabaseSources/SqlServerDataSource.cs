@@ -754,7 +754,12 @@ namespace IRI.Ket.DataManagement.DataSource
 
         }
 
+        public SqlFeatureSet QueryFeaturesWhereIntersects(BoundingBox boundingBox)
+        { 
+            var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
 
+            return QueryFeatures(MakeSelectCommand(whereClause, false));
+        }
 
         #endregion
 

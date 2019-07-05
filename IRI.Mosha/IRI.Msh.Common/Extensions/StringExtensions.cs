@@ -68,6 +68,10 @@
         public static string Base64ToNormalString(this string base64String)
         {
             return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
+
+            
         }
+
+        
     }
 }

@@ -61,7 +61,7 @@
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK">
       <HintPath>..\..\IRI.Deploy\OpenTK\OpenTK.dll</HintPath>
@@ -366,6 +366,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\BYekan.ttf" />
+    <None Include="Assets\Fonts\FontAwesome.ttf" />
     <None Include="packages.config" />
     <Resource Include="Assets\Fonts\IRANSans.ttf" />
   </ItemGroup>
