@@ -69,8 +69,6 @@
     <Compile Include="Extensions\NullableIntExtensions.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ZipFileHelper.cs" />
-    <Compile Include="Security\EncryptedMessage.cs" />
-    <Compile Include="Security\RsaMessage.cs" />
     <Compile Include="Service\Bing\BingMap.cs" />
     <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
     <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
@@ -133,7 +131,6 @@
     </Compile>
     <Compile Include="Model\GeoTaggedImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\AES.cs" />
     <Compile Include="Helpers\HardwareHelper.cs" />
     <Compile Include="Security\SignedJsonWebToken.cs" />
     <Compile Include="Service\DateTime\DateTimeServices.cs" />

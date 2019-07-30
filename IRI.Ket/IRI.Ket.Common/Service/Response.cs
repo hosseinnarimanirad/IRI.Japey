@@ -11,7 +11,7 @@ namespace IRI.Ket.Common.Service
         public bool? IsCanceled { get; set; }
 
         public bool? IsFailed { get; set; }
-
+        
         public bool HasNotNullResult()
         {
             //return !(IsCanceled == true) &&
