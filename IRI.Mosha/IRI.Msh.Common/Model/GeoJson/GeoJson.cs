@@ -11,7 +11,7 @@ namespace IRI.Msh.Common.Model.GeoJson
         public static IEnumerable<GeoJsonFeature> ReadFeatures(string fileName)
         {
             var geoJsonString = System.IO.File.ReadAllText(fileName);
-             
+
             var parsedObject = Newtonsoft.Json.Linq.JObject.Parse(geoJsonString);
 
             return parsedObject["features"].Select(f => JsonConvert.DeserializeObject<GeoJsonFeature>(f.ToString()));
@@ -27,5 +27,16 @@ namespace IRI.Msh.Common.Model.GeoJson
             return ParseToGeoJsonFeatureCollection(geoJsonFeature).features;
         }
 
+        public const string Point = "Point";
+        public const string MultiPoint = "MultiPoint";
+        public const string LineString = "LineString";
+        public const string MultiLineString = "MultiLineString";
+        public const string Polygon = "Polygon";
+        public const string MultiPolygon = "MultiPolygon";
+
+        internal static string Serialize(IGeoJsonGeometry geoJson, bool indented)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(geoJson, indented ? Formatting.Indented : Formatting.None);
+        }
     }
 }

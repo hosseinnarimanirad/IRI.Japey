@@ -19,5 +19,7 @@ namespace IRI.Msh.Common.Model.GeoJson
         Geometry Parse(bool isLongitudeFirst = false, int srid = 0);
 
         bool IsNullOrEmpty();
+
+        string Serialize(bool indented);
     }
 }

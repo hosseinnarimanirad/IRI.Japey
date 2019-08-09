@@ -29,6 +29,11 @@ namespace IRI.Msh.Common.Model.GeoJson
         {
             return Geometry.ParsePointToGeometry(Coordinates, isLongitudeFirst, srid);
         }
+
+        public string Serialize(bool indented)
+        {
+            return GeoJson.Serialize(this, indented);
+        }
     }
 
 }

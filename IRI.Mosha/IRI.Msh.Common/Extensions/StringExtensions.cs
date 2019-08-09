@@ -20,6 +20,19 @@
                 .Replace(arabicKaf, farsiKaf);
         }
 
+        public static string FixPersianChars(this string str)
+        {
+            return str.Replace("ﮎ", "ک")
+                .Replace("ﮏ", "ک")
+                .Replace("ﮐ", "ک")
+                .Replace("ﮑ", "ک")
+                .Replace("ك", "ک")
+                .Replace("ي", "ی")
+                .Replace(" ", " ")
+                .Replace("‌", " ")
+                .Replace("ھ", "ه");//.Replace("ئ", "ی");
+        }
+
         public static string LatinNumbersToFarsiNumbers(this string value)
         {
             return value.Replace('1', '۱')
@@ -47,7 +60,18 @@
                         .Replace('۸', '8')
                         .Replace('۹', '9')
                         .Replace('۰', '0')
-                    .Replace('\u066B', '.');
+                        .Replace('\u066B', '.')
+                        //iphone numeric
+                        .Replace("٠", "0")
+                        .Replace("١", "1")
+                        .Replace("٢", "2")
+                        .Replace("٣", "3")
+                        .Replace("٤", "4")
+                        .Replace("٥", "5")
+                        .Replace("٦", "6")
+                        .Replace("٧", "7")
+                        .Replace("٨", "8")
+                        .Replace("٩", "9"); 
         }
 
         public static bool ContainsIgnoreCase(this string value, string term)

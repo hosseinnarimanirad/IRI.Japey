@@ -29,5 +29,10 @@ namespace IRI.Msh.Common.Model.GeoJson
         {
             return new Geometry(Coordinates?.Select(c => Geometry.ParsePolygonToGeometry(c, GeometryType.Polygon, isLongitudeFirst, srid)).ToArray(), this.GeometryType, srid);
         }
+
+        public string Serialize(bool indented)
+        {
+            return GeoJson.Serialize(this, indented);
+        }
     }
 }

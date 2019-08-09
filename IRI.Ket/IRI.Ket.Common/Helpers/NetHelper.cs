@@ -20,6 +20,8 @@ namespace IRI.Ket.Common.Helpers
 
         const string _defaultUri = "https://google.com";
 
+        public const string ContentTypeApplicationJson = contentTypeJson;
+
         public static bool PingHost(string nameOrAddress, int timeout = 3000)
         {
             bool pingable = false;
@@ -41,21 +43,23 @@ namespace IRI.Ket.Common.Helpers
             return pingable;
         }
 
-        public static async Task<bool> PingHostAsync(string nameOrAddress, int timeout = 5000)
+        public static async Task<bool> PingHostAsync(string hostNameOrAddress, int timeout = 5000)
         {
             bool pingable = false;
 
-            Ping pingSender = new Ping();
-
-            try
+            using (Ping pingSender = new Ping())
             {
-                var reply = await pingSender.SendPingAsync(nameOrAddress, timeout);
 
-                pingable = reply.Status == IPStatus.Success;
-            }
-            catch (Exception ex)
-            {
-                return false;
+                try
+                {
+                    var reply = await pingSender.SendPingAsync(hostNameOrAddress, timeout);
+
+                    pingable = reply?.Status == IPStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
 
             return pingable;
@@ -63,6 +67,11 @@ namespace IRI.Ket.Common.Helpers
 
         public static async Task<bool> IsConnectedToInternet(WebProxy proxy, string address = null)
         {
+            var networkAvailable = NetworkInterface.GetIsNetworkAvailable();
+
+            if (!networkAvailable)
+                return false;
+
             if (proxy == null)
             {
                 var isConnected = await PingHostAsync(address ?? _defaulHost);
@@ -349,10 +358,10 @@ namespace IRI.Ket.Common.Helpers
 
         public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
         {
-            return HttpPost<T>(address, data, Encoding.UTF8, null, contentType);
+            return HttpPost<T>(address, data, Encoding.UTF8, null, contentType, null);
         }
 
-        public static Response<T> HttpPost<T>(string address, object data, Encoding encoding, WebProxy proxy, string contentType = contentTypeJson) where T : class
+        public static Response<T> HttpPost<T>(string address, object data, Encoding encoding, WebProxy proxy, string contentType = contentTypeJson, Dictionary<string, string> headers = null) where T : class
         {
             try
             {
@@ -367,7 +376,7 @@ namespace IRI.Ket.Common.Helpers
                 //{
                 //    client.Proxy = proxy;
                 //}
-                var client = CreateWebClient(contentType, encoding, proxy);
+                var client = CreateWebClient(contentType, encoding, proxy, null, headers);
 
                 var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
@@ -503,7 +512,7 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        private static WebClient CreateWebClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null)
+        private static WebClient CreateWebClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null, Dictionary<string, string> headers = null)
         {
             WebClient client = new WebClient();
 
@@ -513,6 +522,14 @@ namespace IRI.Ket.Common.Helpers
             if (!string.IsNullOrWhiteSpace(bearer))
             {
                 client.Headers.Add(HttpRequestHeader.Authorization, $"Bearer {bearer}");
+            }
+
+            if (headers != null && headers.Any())
+            {
+                foreach (var header in headers)
+                {
+                    client.Headers.Add(header.Key, header.Value);
+                }
             }
 
             if (encoding != null)

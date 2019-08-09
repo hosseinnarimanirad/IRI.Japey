@@ -108,7 +108,6 @@
     <Compile Include="Encodings\EncodingConverter.cs" />
     <Compile Include="Encodings\PersianDOS.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PersianCalendarExtensions.cs" />
     <Compile Include="Gpx\GpxFormat.cs" />
     <Compile Include="Gpx\GpxTrack.cs" />

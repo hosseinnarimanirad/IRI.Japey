@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Msh.Common.Model.GeoJson
 {
-    //[JsonConverter(typeof(GeoJsonGeometryConverter))]
+    [JsonConverter(typeof(GeoJsonGeometryConverter))]
     public class GeoJsonLineString : IGeoJsonGeometry
     {
         [JsonProperty("type")]
@@ -30,6 +30,10 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Geometry.ParseLineStringToGeometry(Coordinates, this.GeometryType, isLongitudeFirst, srid);
         }
 
+        public string Serialize(bool indented)
+        {
+            return GeoJson.Serialize(this, indented);
+        }
 
     }
 }
