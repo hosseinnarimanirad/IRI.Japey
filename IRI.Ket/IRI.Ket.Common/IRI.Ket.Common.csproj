@@ -63,27 +63,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Data\ISecurityRepository.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
-    <Compile Include="Extensions\NullableIntExtensions.cs" />
-    <Compile Include="Helpers\SecurityHelper.cs" />
-    <Compile Include="Helpers\ZipFileHelper.cs" />
-    <Compile Include="Service\Bing\BingMap.cs" />
-    <Compile Include="Service\Google\GoogleDirectionsApi.cs" />
-    <Compile Include="Service\Google\GoogleDistanceMatrix.cs" />
+    <Compile Include="Helpers\HardwareHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Model\GeoTaggedImage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
-    <Compile Include="Service\Google\GoogleOAuthApi.cs" />
-    <Compile Include="Service\Google\GoogleServiceUtility.cs" />
-    <Compile Include="Service\Here\HereRoutingApi.cs" />
-    <Compile Include="Service\Mapzen\MapzenService.cs" />
-    <Compile Include="Service\News\LiveuaMapApiResults.cs" />
-    <Compile Include="Service\News\LiveuaMapService.cs" />
-    <Compile Include="Service\Oxford\OxfordDictionaryResult.cs" />
-    <Compile Include="Service\Oxford\OxfordDictionaryService.cs" />
-    <Compile Include="Service\Response.cs" />
-    <Compile Include="Service\Waze\WazeGeoRssResult.cs" />
-    <Compile Include="Service\Waze\WazeService.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AuthenticationMethod.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AvailableNetworkPack.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssNetworkPack.cs" />
@@ -104,39 +88,6 @@
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\BaseMethod.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\NativeMethod.cs" />
     <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\SafeClientHandle.cs" />
-    <Compile Include="Encodings\Base64UrlEncoding.cs" />
-    <Compile Include="Encodings\EncodingConverter.cs" />
-    <Compile Include="Encodings\PersianDOS.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Extensions\PersianCalendarExtensions.cs" />
-    <Compile Include="Gpx\GpxFormat.cs" />
-    <Compile Include="Gpx\GpxTrack.cs" />
-    <Compile Include="Gpx\GpxTrackPoint.cs" />
-    <Compile Include="Gpx\GpxTrackSegment.cs" />
-    <Compile Include="Gpx\GpxWaypoint.cs" />
-    <Compile Include="Helpers\CryptographyHelper.cs" />
-    <Compile Include="Helpers\DegreeHelper.cs" />
-    <Compile Include="Helpers\IOHelper.cs" />
-    <Compile Include="Helpers\HexStringHelper.cs" />
-    <Compile Include="Helpers\ImageHelper.cs" />
-    <Compile Include="Helpers\JsonHelper.cs" />
-    <Compile Include="Helpers\NetHelper.cs" />
-    <Compile Include="Helpers\ResourceHelper.cs" />
-    <Compile Include="Helpers\UnitHelper.cs" />
-    <Compile Include="Helpers\XmlHelper.cs" />
-    <Compile Include="Helpers\XsdHelper.cs" />
-    <Compile Include="Model\WiseWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Model\GeoTaggedImage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\HardwareHelper.cs" />
-    <Compile Include="Security\SignedJsonWebToken.cs" />
-    <Compile Include="Service\DateTime\DateTimeServices.cs" />
-    <Compile Include="Service\Google\GooglePlaces.cs" />
-    <Compile Include="Service\Google\GoogleStaticMapProvider.cs" />
-    <Compile Include="Web\SpatialQueryParameters.cs" />
-    <Compile Include="Worldfile\Worldfile.cs" />
     <Compile Include="Worldfile\WorldfileManager.cs" />
     <Compile Include="Worldfile\WorldfilePyramid.cs" />
   </ItemGroup>
@@ -146,13 +97,14 @@
     <None Include="ThirdPartyLibraries\ManagedNativeWifi\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Deploy\" />
-    <Folder Include="Model\Esri\" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+      <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
+      <Name>IRI.Sta.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ThirdPartyLibraries\ManagedNativeWifi\LICENSE.txt" />
   </ItemGroup>
-  <Import Project="..\..\IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

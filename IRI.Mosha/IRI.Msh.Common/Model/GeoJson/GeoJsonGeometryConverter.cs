@@ -93,7 +93,7 @@ namespace IRI.Msh.Common.Model.GeoJson
                     break;
                 case GeoJson.MultiLineString:
                     //writer.WriteValue(geometry as GeoJsonMultiLineString);
-                    writer.WriteRaw(JsonConvert.SerializeObject((geometry as GeoJsonLineString).Coordinates));
+                    writer.WriteRaw(JsonConvert.SerializeObject((geometry as GeoJsonMultiLineString).Coordinates));
                     break;
                 case GeoJson.Polygon:
                     //writer.WriteValue(geometry as GeoJsonPolygon);

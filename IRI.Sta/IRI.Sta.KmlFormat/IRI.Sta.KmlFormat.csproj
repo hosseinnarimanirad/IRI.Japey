@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Ogckml22.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Update="OgcKml22Urn.cs">
+      <SubType>code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
