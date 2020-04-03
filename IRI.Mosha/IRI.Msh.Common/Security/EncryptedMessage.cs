@@ -36,7 +36,7 @@ namespace IRI.Ket.Common.Security
                 RijndaelManaged rm = new RijndaelManaged();
 
                 var encryptedMessage = CryptographyHelper.AesEncrypt(Newtonsoft.Json.JsonConvert.SerializeObject(value), rm.Key, rm.IV);
-
+                 
                 result.Token = CryptographyHelper.RsaEncrypt(Convert.ToBase64String(rm.Key), base64PubKey);
 
                 result.IV = Convert.ToBase64String(rm.IV);

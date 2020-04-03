@@ -12,11 +12,11 @@ namespace IRI.Msh.Common.Model.Google
 
         //[DataMember]
         [JsonProperty]
-        public int homeMobileCountryCode { get; set; }
+        public int? homeMobileCountryCode { get; set; }
 
         //[DataMember]
         [JsonProperty]
-        public int homeMobileNetworkCode { get; set; }
+        public int? homeMobileNetworkCode { get; set; }
 
         //[DataMember]
         [JsonProperty]

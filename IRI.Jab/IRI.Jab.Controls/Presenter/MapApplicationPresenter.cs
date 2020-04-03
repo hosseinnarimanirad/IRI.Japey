@@ -47,7 +47,7 @@ namespace IRI.Jab.Controls.Presenter
             this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer, this);
         }
 
-        public override   void Initialize()
+        public override void Initialize()
         {
             this.RequestClearAll = () =>
             {

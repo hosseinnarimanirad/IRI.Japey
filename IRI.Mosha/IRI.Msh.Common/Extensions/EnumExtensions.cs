@@ -1,7 +1,9 @@
-﻿using System;
+﻿using IRI.Msh.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,17 +23,69 @@ namespace IRI.Ket.Common.Extensions
 
             var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            // return  
             return attributes.Length == 0 ? value.ToString() : ((DescriptionAttribute)attributes[0]).Description;
+             
+            //return enumValue.GetType()
+            //     .GetMember(enumValue.ToString())
+            //     ?.First()
+            //     ?.GetCustomAttribute<DescriptionAttribute>()
+            //     ?.Description ?? string.Empty;
         }
 
-        public static IEnumerable<T> GetEnumValues<T>(this T input) where T : struct
+        public static string GetDescription(object value)
+        {
+            return value.GetType()
+                  .GetMember(value.ToString())
+                  ?.First()
+                  ?.GetCustomAttribute<DescriptionAttribute>()
+                  ?.Description ?? string.Empty;
+        }
+
+        //public static IEnumerable<T> GetEnumValues<T>(this T input) where T : struct
+        //{
+        //    if (!typeof(T).IsEnum)
+        //        throw new NotSupportedException();
+
+        //    return Enum.GetValues(input.GetType()).Cast<T>();
+        //}
+
+        public static List<T> GetEnums<T>()
         {
             if (!typeof(T).IsEnum)
                 throw new NotSupportedException();
 
-            return Enum.GetValues(input.GetType()).Cast<T>();
+            return Enum.GetValues(typeof(T)).Cast<T>().ToList();
         }
+
+        public static string GetName(this Enum enumValue)
+        {
+            return Enum.GetName(enumValue.GetType(), enumValue);
+        }
+
+
+        public static List<EnumInfo> Parse<T>() where T : struct, IConvertible
+        {
+            var type = typeof(T);
+
+            return GetEnums<T>().Select(e => new EnumInfo()
+            {
+                Id = (int)(object)e,
+                PropertyNameEn = Enum.GetName(type, e),
+                PropertyNameFa = GetDescription(e)
+            }).ToList();
+        }
+
+
+        //public static List<T> GetEnums<T>()
+        //{
+        //    return Enum.GetValues(typeof(T)).Cast<T>().ToList();
+        //}
+
+        public static List<Enum> GetValues(this Enum value)
+        {
+            return Enum.GetValues(value.GetType()).Cast<Enum>().ToList();
+        }
+
 
         public static IEnumerable<T> GetEnumFlags<T>(this T input) where T : struct
         {

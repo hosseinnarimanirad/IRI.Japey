@@ -418,6 +418,13 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public double InverseMapScale
+        {
+            get
+            {
+                return 1.0 / MapScale;
+            }
+        }
 
         public double MapScale
         {
@@ -427,6 +434,23 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public double CurrentPointInverseMapScale
+        {
+            get
+            {
+                var scale = this.RequestCurrentPointScale?.Invoke() ?? 1;
+
+                return Math.Round(1.0 / scale, 2);
+            }
+        }
+
+        public double CurrentPointGroundResolution
+        {
+            get
+            {
+                return this.RequestCurrentPointGroundResolution?.Invoke() ?? 1;
+            }
+        }
 
         public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
 
@@ -591,6 +615,10 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<double> RequestMapScale;
 
+        public Func<double> RequestCurrentPointScale;
+
+        public Func<double> RequestCurrentPointGroundResolution;
+
         public Func<int> RequestCurrentZoomLevel;
 
         public Func<IRI.Msh.Common.Primitives.BoundingBox> RequestCurrentExtent;
@@ -675,6 +703,8 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
 
         public Action<ILayer> RequestSetLayer;
+
+        public Action<ILayer> RequestUnSetLayer;
 
         //public Func<ILayer, Task> RequestAddLayer;
         public Action<ILayer> RequestAddLayer;
@@ -955,7 +985,7 @@ namespace IRI.Jab.Common.Presenter.Map
             var highlightGeo = layer.Geometry.AsSqlGeometry();
 
             var visualParameters = VisualParameters.GetDefaultForSelection();
-             
+
             await SelectGeometry(highlightGeo, visualParameters);
         }
 
@@ -1050,6 +1080,34 @@ namespace IRI.Jab.Common.Presenter.Map
 
         //*****************************************Drawing Items*********************************************************
         #region Drawing Items
+
+        List<Func<DrawingItemLayer, ILegendCommand>> drawingItemCommands = null;
+
+        public List<Func<DrawingItemLayer, ILegendCommand>> DrawingItemCommands
+        {
+            get
+            {
+                if (drawingItemCommands == null)
+                {
+                    drawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>()
+                    {
+                       layer=> LegendCommand.CreateZoomToExtentCommand(this, layer),
+                       layer=> LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
+                       layer=> LegendCommand.CreateEditDrawingItemLayer(this, layer),
+                       layer=> LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                    };
+                }
+
+                return drawingItemCommands;
+            }
+            set { drawingItemCommands = value; }
+        }
+
+        public void AddDrawingItemCommand(Func<DrawingItemLayer, ILegendCommand> drawingItemCommandFunc)
+        {
+            this.DrawingItemCommands.Add(drawingItemCommandFunc);
+        }
+
 
         private async Task DrawAsync(DrawMode mode)
         {
@@ -1245,6 +1303,9 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             this.CurrentPoint = new IRI.Msh.Common.Primitives.Point(currentPoint.X, currentPoint.Y);
 
+            RaisePropertyChanged(nameof(CurrentPointInverseMapScale));
+            RaisePropertyChanged(nameof(CurrentPointGroundResolution));
+
             this.OnMouseMove?.Invoke(this, currentPoint);
         }
 
@@ -1258,6 +1319,8 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RaisePropertyChanged(nameof(this.CurrentZoomLevel));
 
             this.OnZoomChanged?.Invoke(this, mapScale);
+
+            RaisePropertyChanged(nameof(InverseMapScale));
         }
 
         #endregion
@@ -1349,6 +1412,11 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestSetLayer?.Invoke(layer);
         }
 
+        public void UnSetLayer(ILayer layer)
+        {
+            this.RequestUnSetLayer?.Invoke(layer);
+        }
+
         public void RegisterLayerWidthMap(VectorLayer layer)
         {
             layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
@@ -1391,13 +1459,16 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void TrySetCommandsForDrawingItemLayer(DrawingItemLayer layer)
         {
-            layer.Commands = new List<ILegendCommand>()
-                    {
-                        LegendCommand.CreateZoomToExtentCommand(this, layer),
-                        LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
-                        LegendCommand.CreateEditDrawingItemLayer(this, layer),
-                        LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
-                    };
+            layer.Commands = this.DrawingItemCommands.Select(dic => dic(layer))?.ToList();
+
+            //1398.11.14
+            //layer.Commands = new List<ILegendCommand>()
+            //        {
+            //            LegendCommand.CreateZoomToExtentCommand(this, layer),
+            //            LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
+            //            LegendCommand.CreateEditDrawingItemLayer(this, layer),
+            //            LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
+            //        };
 
             layer.RequestHighlightGeometry = async di =>
              {

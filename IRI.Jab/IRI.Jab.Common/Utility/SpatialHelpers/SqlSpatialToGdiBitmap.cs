@@ -9,8 +9,7 @@ using Microsoft.SqlServer.Types;
 using IRI.Jab.Common.Extensions;
 //using sb = IRI.Msh.Common;
 using System.Windows.Media;
-using IRI.Ket.SpatialExtensions;
-using IRI.Jab.Common.Extensions;
+using IRI.Ket.SpatialExtensions; 
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
@@ -41,6 +40,14 @@ namespace IRI.Jab.Common.Convertor
             }
 
             //return image;
+        }
+
+        internal static void WriteToImage(drawing.Graphics graphics, SqlGeometry geometry, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        {
+            if (geometry != null)
+            {
+                AddGeometry(graphics, geometry, transform, pen, brush, pointSymbol);
+            }
         }
 
         public static drawing.Bitmap ParseSqlGeometry(List<SqlGeometry> geometries, double width, double height, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
@@ -324,5 +331,8 @@ namespace IRI.Jab.Common.Convertor
 
             graphic.Flush();
         }
+
+
+
     }
 }

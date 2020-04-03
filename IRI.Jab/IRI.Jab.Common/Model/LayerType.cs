@@ -24,10 +24,10 @@ namespace IRI.Jab.Common.Model
         AnimatingItem = 4096,
         ImagePyramid = 8192,
         MoveableItem = 16384,
-        EditableItem= 32768,
+        EditableItem = 32768,
         GroupLayer = 65536,
-        None = 131072
-
+        None = 131072,
+        FeatureLayer = 262144
         //UserInterface = 1024
     }
 }

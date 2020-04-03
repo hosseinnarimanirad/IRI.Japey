@@ -108,9 +108,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Exceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Matrix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Algebra\Vector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ChiSquare.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Discretization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\AttributeGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\ClassFrequency.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\IntervalInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ZeroSizeArrayException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Bing\BingIsolineResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Enum\EnumInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriFeature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriFeatureSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriJsonGeometry.cs" />
@@ -142,6 +148,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenIsochroneResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenRouteCostingModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Field.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Interval.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\SpatialRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\TileInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\TileInfoCollection.cs" />

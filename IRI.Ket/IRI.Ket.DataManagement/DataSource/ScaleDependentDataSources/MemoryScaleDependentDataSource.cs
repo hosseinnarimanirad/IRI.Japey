@@ -54,7 +54,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<SqlGeometry> GetGeometries(double scale, BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             return GetGeometries(scale, boundary);
 
@@ -119,7 +119,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<SqlGeometry> GetGeometries(double scale, BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry();
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
 
             return GetGeometries(scale, boundary);
 

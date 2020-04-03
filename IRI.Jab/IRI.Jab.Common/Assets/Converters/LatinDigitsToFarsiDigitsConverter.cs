@@ -24,7 +24,14 @@ namespace IRI.Jab.Common.Assets.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value != null)
+            {
+                return value.ToString().FarsiNumbersToLatinNumbers();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

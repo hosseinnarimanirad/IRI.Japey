@@ -21,6 +21,11 @@ namespace IRI.Ket.SpatialExtensions
             return geography == null || geography.IsNull || geography.STIsEmpty().IsTrue;
         }
 
+        public static bool IsNotValidOrEmpty(this SqlGeography geography)
+        {
+            return geography.IsNullOrEmpty() || geography.STIsValid().IsFalse;
+        }
+
         public static bool IsNullOrEmpty(this SqlGeometry geometry)
         {
             return geometry == null || geometry.IsNull || geometry.STIsEmpty().IsTrue;
@@ -160,6 +165,26 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
+        public static OpenGisGeographyType GetOpenGisType(this SqlGeography geography)
+        {
+            if (geography == null)
+            {
+                return OpenGisGeographyType.GeometryCollection;
+            }
+            else
+            {
+                return (OpenGisGeographyType)Enum.Parse(typeof(OpenGisGeographyType), geography.STGeometryType().Value, true);
+            }
+
+            //if (geometry.IsNullOrEmpty())
+            //{
+            //    return OpenGisGeometryType.GeometryCollection;
+            //}
+            //else
+            //{
+            //    return (OpenGisGeometryType)Enum.Parse(typeof(OpenGisGeometryType), geometry.STGeometryType().Value, true);
+            //}
+        }
 
         public static OpenGisGeometryType GetOpenGisType(this SqlGeometry geometry)
         {
@@ -597,7 +622,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-        public static SqlGeography WebMercatorToGeographic(this SqlGeometry geometry)
+        public static SqlGeography WebMercatorToGeodeticWgs84(this SqlGeometry geometry)
         {
             return geometry.Project(Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
         }
@@ -808,7 +833,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #endregion
 
-         
+
         #region Esri Json Geometry
 
         public static EsriJsonGeometry ParseToEsriJsonGeometry(this SqlGeometry geometry)
@@ -1172,32 +1197,7 @@ namespace IRI.Ket.SpatialExtensions
 
 
 
-        #region GeoJson
-
-        private static double[] GetGeoJsonObjectPoint(SqlGeometry point)
-        {
-            if (point.IsNullOrEmpty())
-                return new double[0];
-
-            return new double[] { point.STX.Value, point.STY.Value };
-        }
-
-        private static double[][] GetGeoJsonLineStringOrRing(SqlGeometry lineStringOrRing)
-        {
-            if (lineStringOrRing.IsNullOrEmpty())
-                return new double[0][];
-
-            int numberOfPoints = lineStringOrRing.STNumPoints().Value;
-
-            double[][] result = new double[numberOfPoints][];
-
-            for (int i = 1; i <= numberOfPoints; i++)
-            {
-                result[i - 1] = GetGeoJsonObjectPoint(lineStringOrRing.STPointN(i));
-            }
-
-            return result;
-        }
+        #region Geometry To GeoJson
 
         public static IGeoJsonGeometry ParseToGeoJson(this SqlGeometry geometry)
         {
@@ -1235,6 +1235,31 @@ namespace IRI.Ket.SpatialExtensions
                 case OpenGisGeometryType.MultiPolygon:
                     return SqlMultiPolygonToGeoJsonMultiPolygon(geometry);
             }
+        }
+
+        private static double[] GetGeoJsonObjectPoint(SqlGeometry point)
+        {
+            if (point.IsNullOrEmpty())
+                return new double[0];
+
+            return new double[] { point.STX.Value, point.STY.Value };
+        }
+
+        private static double[][] GetGeoJsonLineStringOrRing(SqlGeometry lineStringOrRing)
+        {
+            if (lineStringOrRing.IsNullOrEmpty())
+                return new double[0][];
+
+            int numberOfPoints = lineStringOrRing.STNumPoints().Value;
+
+            double[][] result = new double[numberOfPoints][];
+
+            for (int i = 1; i <= numberOfPoints; i++)
+            {
+                result[i - 1] = GetGeoJsonObjectPoint(lineStringOrRing.STPointN(i));
+            }
+
+            return result;
         }
 
         private static GeoJsonPoint SqlPointToGeoJsonPoint(this SqlGeometry geometry)
@@ -1375,6 +1400,208 @@ namespace IRI.Ket.SpatialExtensions
 
         #endregion
 
+
+        #region SqlGeography To GeoJson
+
+        public static IGeoJsonGeometry ParseToGeoJson(this SqlGeography geography)
+        {
+
+            OpenGisGeographyType geometryType = geography.GetOpenGisType();
+
+            switch (geometryType)
+            {
+                case OpenGisGeographyType.Point:
+                    return geography.SqlPointToGeoJsonPoint();
+
+                case OpenGisGeographyType.MultiPoint:
+                    return SqlMultiPointToGeoJsonMultiPoint(geography);
+
+                case OpenGisGeographyType.LineString:
+                    return SqlLineStringToGeoJsonPolyline(geography);
+
+                case OpenGisGeographyType.MultiLineString:
+                    return SqlMultiLineStringToGeoJsonPolyline(geography);
+
+                case OpenGisGeographyType.Polygon:
+                    return SqlPolygonToGeoJsonPolygon(geography);
+
+                case OpenGisGeographyType.MultiPolygon:
+                    return SqlMultiPolygonToGeoJsonMultiPolygon(geography);
+
+                case OpenGisGeographyType.GeometryCollection:
+                case OpenGisGeographyType.CircularString:
+                case OpenGisGeographyType.CompoundCurve:
+                case OpenGisGeographyType.CurvePolygon:
+                case OpenGisGeographyType.FullGlobe:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static double[] GetGeoJsonObjectPoint(SqlGeography point)
+        {
+            if (point.IsNullOrEmpty())
+                return new double[0];
+
+            return new double[] { point.Long.Value, point.Lat.Value };
+        }
+
+        private static double[][] GetGeoJsonLineStringOrRing(SqlGeography lineStringOrRing)
+        {
+            if (lineStringOrRing.IsNullOrEmpty())
+                return new double[0][];
+
+            int numberOfPoints = lineStringOrRing.STNumPoints().Value;
+
+            double[][] result = new double[numberOfPoints][];
+
+            for (int i = 1; i <= numberOfPoints; i++)
+            {
+                result[i - 1] = GetGeoJsonObjectPoint(lineStringOrRing.STPointN(i));
+            }
+
+            return result;
+        }
+
+        private static GeoJsonPoint SqlPointToGeoJsonPoint(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonPoint()
+                {
+                    Type = GeoJson.Point,
+                };
+
+            return new GeoJsonPoint()
+            {
+                Type = GeoJson.Point,
+                Coordinates = new double[] { geometry.Long.Value, geometry.Lat.Value }
+            };
+        }
+
+        private static GeoJsonMultiPoint SqlMultiPointToGeoJsonMultiPoint(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonMultiPoint()
+                {
+                    Type = GeoJson.MultiPoint,
+                    Coordinates = new double[0][],
+                };
+
+            var numberOfGeometries = geometry.STNumGeometries().Value;
+
+            double[][] points = new double[numberOfGeometries][];
+
+            for (int i = 1; i <= numberOfGeometries; i++)
+            {
+                points[i - 1] = GetGeoJsonObjectPoint(geometry.STGeometryN(i));
+            }
+
+            return new GeoJsonMultiPoint()
+            {
+                Coordinates = points,
+                Type = GeoJson.MultiPoint,
+            };
+        }
+
+        //Not supportig Z and M Values
+        private static GeoJsonLineString SqlLineStringToGeoJsonPolyline(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonLineString()
+                {
+                    Type = GeoJson.LineString,
+                    Coordinates = new double[0][],
+                };
+
+            double[][] paths = GetGeoJsonLineStringOrRing(geometry);
+
+            return new GeoJsonLineString()
+            {
+                Coordinates = paths,
+                Type = GeoJson.LineString,
+            };
+        }
+
+        //Not supportig Z and M Values
+        private static GeoJsonMultiLineString SqlMultiLineStringToGeoJsonPolyline(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonMultiLineString()
+                {
+                    Type = GeoJson.MultiLineString,
+                    Coordinates = new double[0][][],
+                };
+
+            int numberOfParts = geometry.STNumGeometries().Value;
+
+            double[][][] result = new double[numberOfParts][][];
+
+            for (int i = 1; i <= numberOfParts; i++)
+            {
+                result[i - 1] = GetGeoJsonLineStringOrRing(geometry.STGeometryN(i));
+            }
+
+            return new GeoJsonMultiLineString()
+            {
+                Coordinates = result,
+                Type = GeoJson.MultiLineString,
+            };
+        }
+
+        //Not supportig Z and M Values
+        private static GeoJsonPolygon SqlPolygonToGeoJsonPolygon(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonPolygon()
+                {
+                    Type = GeoJson.Polygon,
+                    Coordinates = new double[0][][],
+                };
+
+            double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
+
+            return new GeoJsonPolygon()
+            {
+                Coordinates = rings,
+                Type = GeoJson.Polygon,
+            };
+        }
+
+        //Not supportig Z and M Values
+        private static GeoJsonMultiPolygon SqlMultiPolygonToGeoJsonMultiPolygon(this SqlGeography geometry)
+        {
+            //This check is required
+            if (geometry.IsNullOrEmpty())
+                return new GeoJsonMultiPolygon()
+                {
+                    Type = GeoJson.MultiPolygon,
+                    Coordinates = new double[0][][][],
+                };
+
+            int numberOfParts = geometry.STNumGeometries().Value;
+
+            double[][][][] rings = new double[numberOfParts][][][];
+
+            for (int i = 1; i <= numberOfParts; i++)
+            {
+                rings[i - 1] = geometry.STGeometryN(i).SqlPolygonToGeoJsonPolygon().Coordinates;
+            }
+
+            return new GeoJsonMultiPolygon()
+            {
+                Coordinates = rings,
+                Type = GeoJson.MultiPolygon,
+            };
+        }
+
+
+
+        #endregion
 
 
         #region Model

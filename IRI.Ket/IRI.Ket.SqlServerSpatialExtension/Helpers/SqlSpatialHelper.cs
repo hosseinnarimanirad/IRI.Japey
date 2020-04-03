@@ -13,6 +13,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 {
     public static class SqlSpatialHelper
     {
+        #region SqlGeometry
 
         public static SqlGeometry Parse(string wkt)
         {
@@ -105,7 +106,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
                 case GeometryType.CurvePolygon:
 
                 default:
-                    throw new NotImplementedException();
+                    return null;
             }
 
         }
@@ -166,5 +167,155 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             return new BoundingBox(xValues.Min(), yValues.Min(), xValues.Max(), yValues.Max());
         }
 
+        #endregion
+
+
+        #region SqlGeography
+
+        public static void AddEmptySqlGeometry(SqlGeographyBuilder builder, GeometryType type)
+        {
+            switch (type)
+            {
+                case GeometryType.LineString:
+                    builder.BeginGeography(OpenGisGeographyType.LineString);
+                    break;
+
+                case GeometryType.MultiLineString:
+                    builder.BeginGeography(OpenGisGeographyType.MultiLineString);
+                    break;
+
+                case GeometryType.MultiPoint:
+                    builder.BeginGeography(OpenGisGeographyType.MultiPoint);
+                    break;
+
+                case GeometryType.MultiPolygon:
+                    builder.BeginGeography(OpenGisGeographyType.MultiPolygon);
+                    break;
+
+                case GeometryType.Point:
+                    builder.BeginGeography(OpenGisGeographyType.Point);
+                    break;
+
+                case GeometryType.Polygon:
+                    builder.BeginGeography(OpenGisGeographyType.Polygon);
+                    break;
+
+                case GeometryType.GeometryCollection:
+                    builder.BeginGeography(OpenGisGeographyType.GeometryCollection);
+                    break;
+
+                case GeometryType.CircularString:
+                    builder.BeginGeography(OpenGisGeographyType.CircularString);
+                    break;
+
+                case GeometryType.CompoundCurve:
+                    builder.BeginGeography(OpenGisGeographyType.CompoundCurve);
+                    break;
+
+                case GeometryType.CurvePolygon:
+                    builder.BeginGeography(OpenGisGeographyType.CurvePolygon);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            builder.EndGeography();
+        }
+
+        public static SqlGeography CreateEmptySqlGeography(GeometryType type, int srid)
+        {
+            switch (type)
+            {
+                case GeometryType.LineString:
+                    return CreateEmptyGeoLineString(srid);
+
+                case GeometryType.MultiLineString:
+                    return CreateEmptyGeoMultiLineString(srid);
+
+                case GeometryType.MultiPoint:
+                    return CreateEmptyGeoMultipoint(srid);
+
+                case GeometryType.MultiPolygon:
+                    return CreateEmptyGeoMultiPolygon(srid);
+
+                case GeometryType.Point:
+                    return CreateEmptyGeoPoint(srid);
+
+                case GeometryType.Polygon:
+                    return CreateEmptyGeoPolygon(srid);
+
+                case GeometryType.GeometryCollection:
+                    return CreateEmptyGeographyCollection(srid);
+
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+
+                default:
+                    return null;
+            }
+
+        }
+
+        public static SqlGeography CreateEmptyGeoPoint(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("POINT EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeoLineString(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("LINESTRING EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeoPolygon(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("POLYGON EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeoMultipoint(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("MULTIPOINT EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeoMultiLineString(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("MULTILINESTRING EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeoMultiPolygon(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("MULTIPOLYGON EMPTY"), srid);
+        }
+
+        public static SqlGeography CreateEmptyGeographyCollection(int srid)
+        {
+            return SqlGeography.STGeomFromText(new System.Data.SqlTypes.SqlChars("GEOGRAPHY EMPTY"), srid);
+        }
+
+        public static BoundingBox GetBoundingBoxFromEnvelopes(List<SqlGeography> envelopes)
+        {
+            if (envelopes == null)
+            {
+                return BoundingBox.NaN;
+            }
+
+            var validEnvelopes = envelopes.Where(i => !i.IsNotValidOrEmpty()).ToList();
+
+            if (validEnvelopes.Count == 0)
+            {
+                return BoundingBox.NaN;
+            }
+
+            var xValues = validEnvelopes.SelectMany(i => new double[] { i.STPointN(1).Long.Value, i.STPointN(2).Long.Value, i.STPointN(3).Long.Value, i.STPointN(4).Long.Value });
+
+            var yValues = validEnvelopes.SelectMany(i => new double[] { i.STPointN(1).Lat.Value, i.STPointN(2).Lat.Value, i.STPointN(3).Lat.Value, i.STPointN(4).Lat.Value });
+
+            return new BoundingBox(xValues.Min(), yValues.Min(), xValues.Max(), yValues.Max());
+        }
+
+
+
+        #endregion
     }
 }

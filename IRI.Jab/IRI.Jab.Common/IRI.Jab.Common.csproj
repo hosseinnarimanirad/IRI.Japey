@@ -189,6 +189,7 @@
     <Compile Include="Layers\DrawingItemLayer.cs" />
     <Compile Include="Layers\DrawingLayer.cs" />
     <Compile Include="Layers\EditableFeatureLayer.cs" />
+    <Compile Include="Layers\FeatureLayer.cs" />
     <Compile Include="Layers\GridLayer.cs" />
     <Compile Include="Layers\GroupLayer.cs" />
     <Compile Include="Layers\ILayer.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="TileServices\WazeMapProvider.cs" />
     <Compile Include="Utility\Legend\TocManager.cs" />
     <Compile Include="Utility\SpatialHelpers\GeometryHelper.cs" />
+    <Compile Include="Utility\SpatialHelpers\SqlFeatureToGdiBitmap.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToDrawingVisual.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToGdiBitmap.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToOpenTKBitmap.cs" />

@@ -257,7 +257,7 @@ namespace IRI.Msh.Statistics
             return Statistics.CalculateSum(values) / values.Length;
         }
 
-        private static double CalculateMean(List<double> values)
+        public static double CalculateMean(List<double> values)
         {
             if (values.Count < 0)
             {

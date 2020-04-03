@@ -18,18 +18,18 @@ namespace IRI.Jab.Common.Extensions
             return solidBrush != null ? solidBrush.Color : (Color?)null;
         }
 
-        public static System.Drawing.Color? AsGdiSolidColor(this Brush brush)
+        public static System.Drawing.Color? AsGdiSolidColor(this Brush brush, double? opacity = null)
         {
             var color = brush.AsSolidColor();
 
-            return color.HasValue ? color.Value.AsGdiColor() : (System.Drawing.Color?)null;
+            return color.HasValue ? color.Value.AsGdiColor(opacity) : (System.Drawing.Color?)null;
         }
 
-        public static System.Drawing.Brush AsGdiBrush(this Brush brush)
+        public static System.Drawing.Brush AsGdiBrush(this Brush brush, double? opacity = null)
         {
             var solidColorBrush = brush as SolidColorBrush;
 
-            return solidColorBrush != null ? new System.Drawing.SolidBrush(solidColorBrush.Color.AsGdiColor()) : null;
+            return solidColorBrush != null ? new System.Drawing.SolidBrush(solidColorBrush.Color.AsGdiColor(opacity)) : null;
         }
 
 

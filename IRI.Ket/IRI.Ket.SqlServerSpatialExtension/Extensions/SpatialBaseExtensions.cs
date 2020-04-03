@@ -15,81 +15,6 @@ namespace IRI.Ket.SpatialExtensions
         //without counting the last point
         const int minimumPolygonPoints = 3;
 
-        //ERROR PRONE: NaN and Infinity points are not supported
-        public static SqlGeometry AsSqlGeometry(this IPoint point, int srid = 0)
-        {
-            //if (double.IsNaN(point.X + point.Y) || double.IsInfinity(point.X + point.Y))
-            //{
-
-            //}
-            //return SqlGeometry.Parse(new System.Data.SqlTypes.SqlString(string.Format(CultureInfo.InvariantCulture, "POINT({0:G16} {1:G16})", point.X, point.Y)));
-            return SqlGeometry.Point(point.X, point.Y, srid);
-        }
-
-        public static SqlGeography AsSqlGeography(this IPoint point)
-        {
-            return SqlGeography.Point(point.Y, point.X, SridHelper.GeodeticWGS84);
-        }
-
-        //public static SqlGeometry AsSqlGeometry(this IPoint point, int srid)
-        //{
-        //    return SqlGeometry.STPointFromText(new System.Data.SqlTypes.SqlChars(new System.Data.SqlTypes.SqlString(string.Format(CultureInfo.InvariantCulture, "POINT({0:G16} {1:G16})", point.X, point.Y))), srid);
-        //}
-
-        public static SqlGeometry AsSqlGeometry(this Geometry geometry)
-        {
-            var type = geometry.Type;
-
-            if (geometry.IsNullOrEmpty())
-            {
-                return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);
-            }
-
-            SqlGeometryBuilder builder = new SqlGeometryBuilder();
-
-            builder.SetSrid(geometry.Srid);
-
-            switch (type)
-            {
-                case GeometryType.GeometryCollection:
-                    AddGeometryCollection(builder, geometry);
-                    break;
-
-                case GeometryType.Point:
-                    AddPoint(builder, geometry);
-                    break;
-
-                case GeometryType.MultiPoint:
-                    AddMultiPoint(builder, geometry);
-                    break;
-
-                case GeometryType.LineString:
-                    AddLineString(builder, geometry);
-                    break;
-
-                case GeometryType.MultiLineString:
-                    AddMultiLineString(builder, geometry);
-                    break;
-
-                case GeometryType.MultiPolygon:
-                    AddMultiPolygon(builder, geometry);
-                    break;
-
-                case GeometryType.Polygon:
-                    AddPolygon(builder, geometry);
-                    break;
-
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return builder.ConstructedGeometry.MakeValid();
-
-        }
-
         public static double GetArea(this Geometry geometry)
         {
             var sqlGeometry = geometry.AsSqlGeometry();
@@ -221,6 +146,74 @@ namespace IRI.Ket.SpatialExtensions
                         throw new NotImplementedException();
                 }
             }
+        }
+
+
+        #region SqlGeometry
+
+        //ERROR PRONE: NaN and Infinity points are not supported
+        public static SqlGeometry AsSqlGeometry(this IPoint point, int srid = 0)
+        {
+            //if (double.IsNaN(point.X + point.Y) || double.IsInfinity(point.X + point.Y))
+            //{
+
+            //}
+            //return SqlGeometry.Parse(new System.Data.SqlTypes.SqlString(string.Format(CultureInfo.InvariantCulture, "POINT({0:G16} {1:G16})", point.X, point.Y)));
+            return SqlGeometry.Point(point.X, point.Y, srid);
+        }
+
+        public static SqlGeometry AsSqlGeometry(this Geometry geometry)
+        {
+            var type = geometry.Type;
+
+            if (geometry.IsNullOrEmpty())
+            {
+                return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);
+            }
+
+            SqlGeometryBuilder builder = new SqlGeometryBuilder();
+
+            builder.SetSrid(geometry.Srid);
+
+            switch (type)
+            {
+                case GeometryType.GeometryCollection:
+                    AddGeometryCollection(builder, geometry);
+                    break;
+
+                case GeometryType.Point:
+                    AddPoint(builder, geometry);
+                    break;
+
+                case GeometryType.MultiPoint:
+                    AddMultiPoint(builder, geometry);
+                    break;
+
+                case GeometryType.LineString:
+                    AddLineString(builder, geometry);
+                    break;
+
+                case GeometryType.MultiLineString:
+                    AddMultiLineString(builder, geometry);
+                    break;
+
+                case GeometryType.MultiPolygon:
+                    AddMultiPolygon(builder, geometry);
+                    break;
+
+                case GeometryType.Polygon:
+                    AddPolygon(builder, geometry);
+                    break;
+
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return builder.ConstructedGeometry.MakeValid();
+
         }
 
         public static OpenGisGeometryType ToOpenGisGeometryType(this GeometryType type)
@@ -415,7 +408,6 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-
         private static void AddLineStringOrRing(SqlGeometryBuilder builder, Geometry geometry, bool isRing)
         {
             builder.BeginFigure(geometry.Points[0].X, geometry.Points[0].Y);
@@ -432,6 +424,245 @@ namespace IRI.Ket.SpatialExtensions
 
             builder.EndFigure();
         }
+
+        #endregion
+
+
+
+        #region SqlGeography
+
+        public static SqlGeography AsSqlGeography(this IPoint point)
+        {
+            return SqlGeography.Point(latitude: point.Y, longitude: point.X, srid: SridHelper.GeodeticWGS84);
+        }
+
+        public static SqlGeography AsSqlGeography(this Geometry geometry)
+        {
+            var type = geometry.Type;
+
+            if (geometry.IsNullOrEmpty())
+            {
+                return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeography(type, geometry.Srid);
+            }
+
+            SqlGeographyBuilder builder = new SqlGeographyBuilder();
+
+            builder.SetSrid(geometry.Srid);
+
+            switch (type)
+            {
+                case GeometryType.GeometryCollection:
+                    AddGeographyCollection(builder, geometry);
+                    break;
+
+                case GeometryType.Point:
+                    AddPoint(builder, geometry);
+                    break;
+
+                case GeometryType.MultiPoint:
+                    AddMultiPoint(builder, geometry);
+                    break;
+
+                case GeometryType.LineString:
+                    AddLineString(builder, geometry);
+                    break;
+
+                case GeometryType.MultiLineString:
+                    AddMultiLineString(builder, geometry);
+                    break;
+
+                case GeometryType.MultiPolygon:
+                    AddMultiPolygon(builder, geometry);
+                    break;
+
+                case GeometryType.Polygon:
+                    AddPolygon(builder, geometry);
+                    break;
+
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return builder.ConstructedGeography.MakeValid();
+
+        }
+
+        private static void AddPoint(SqlGeographyBuilder builder, Geometry point)
+        {
+            builder.BeginGeography(OpenGisGeographyType.Point);
+
+            builder.BeginFigure(longitude: point.Points[0].X, latitude: point.Points[0].Y);
+
+            builder.EndFigure();
+
+            builder.EndGeography();
+        }
+
+        private static void AddMultiPoint(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            builder.BeginGeography(OpenGisGeographyType.MultiPoint);
+
+            foreach (var item in geometry.Geometries)
+            {
+                builder.BeginGeography(OpenGisGeographyType.Point);
+
+                builder.BeginFigure(longitude: item.Points[0].X, latitude: item.Points[0].Y);
+
+                builder.EndFigure();
+
+                builder.EndGeography();
+            }
+
+            builder.EndGeography();
+        }
+
+        private static void AddLineString(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            builder.BeginGeography(OpenGisGeographyType.LineString);
+
+            AddLineStringOrRing(builder, geometry, false);
+
+            builder.EndGeography();
+        }
+
+        private static void AddMultiLineString(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            builder.BeginGeography(OpenGisGeographyType.MultiLineString);
+
+            foreach (var item in geometry.Geometries)
+            {
+                builder.BeginGeography(OpenGisGeographyType.LineString);
+
+                AddLineStringOrRing(builder, item, false);
+
+                builder.EndGeography();
+            }
+
+            builder.EndGeography();
+        }
+
+        private static void AddPolygon(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            builder.BeginGeography(OpenGisGeographyType.Polygon);
+
+            foreach (var item in geometry.Geometries)
+            {
+                if (item.NumberOfPoints < minimumPolygonPoints)
+                {
+                    Trace.WriteLine($"CreatePolygon escape!");
+                    continue;
+                }
+
+                AddLineStringOrRing(builder, item, true);
+            }
+
+            builder.EndGeography();
+
+            //return builder.ConstructedGeometry.MakeValid();
+        }
+
+        private static void AddMultiPolygon(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            //return CreatePolygon(points, srid);
+            //SqlGeometryBuilder builder = new SqlGeometryBuilder();
+
+            //builder.SetSrid(geometry.Srid);
+
+            builder.BeginGeography(OpenGisGeographyType.MultiPolygon);
+
+            foreach (var item in geometry.Geometries)
+            {
+                builder.BeginGeography(OpenGisGeographyType.Polygon);
+
+                foreach (var lines in item.Geometries)
+                {
+                    if (lines.NumberOfPoints < minimumPolygonPoints)
+                    {
+                        Trace.WriteLine($"CreateMultiPolygon escape!");
+                        continue;
+                    }
+
+                    AddLineStringOrRing(builder, lines, true);
+                }
+
+                builder.EndGeography();
+            }
+
+            builder.EndGeography();
+
+            //return builder.ConstructedGeometry.MakeValid();
+        }
+
+        private static void AddGeographyCollection(SqlGeographyBuilder builder, Geometry geometry)
+        {
+            //SqlGeometryBuilder builder = new SqlGeometryBuilder();
+
+            //builder.SetSrid(geometry.Srid);
+
+            builder.BeginGeography(OpenGisGeographyType.GeometryCollection);
+
+            foreach (var item in geometry.Geometries)
+            {
+                if (geometry.IsNullOrEmpty())
+                {
+                    IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
+                }
+
+                switch (item.Type)
+                {
+                    case GeometryType.Point:
+                        AddPoint(builder, item);
+                        break;
+                    case GeometryType.LineString:
+                        AddLineString(builder, item);
+                        break;
+                    case GeometryType.Polygon:
+                        AddPolygon(builder, item);
+                        break;
+                    case GeometryType.MultiPoint:
+                        AddMultiPoint(builder, item);
+                        break;
+                    case GeometryType.MultiLineString:
+                        AddMultiLineString(builder, item);
+                        break;
+                    case GeometryType.MultiPolygon:
+                        AddMultiPolygon(builder, item);
+                        break;
+                    case GeometryType.GeometryCollection:
+                    case GeometryType.CircularString:
+                    case GeometryType.CompoundCurve:
+                    case GeometryType.CurvePolygon:
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+
+            builder.EndGeography();
+
+            //return builder.ConstructedGeometry.MakeValid();
+        }
+
+        private static void AddLineStringOrRing(SqlGeographyBuilder builder, Geometry geometry, bool isRing)
+        {
+            builder.BeginFigure(longitude: geometry.Points[0].X, latitude: geometry.Points[0].Y);
+
+            for (int i = 1; i < geometry.Points.Length; i++)
+            {
+                builder.AddLine(longitude: geometry.Points[i].X, latitude: geometry.Points[i].Y);
+            }
+
+            if (isRing)
+            {
+                builder.AddLine(longitude: geometry.Points[0].X, latitude: geometry.Points[0].Y);
+            }
+
+            builder.EndFigure();
+        }
+
+        #endregion
 
 
 
@@ -453,24 +684,6 @@ namespace IRI.Ket.SpatialExtensions
             var length = CalculateLength(line, toGeodeticWgs84Func);
 
             return Common.Helpers.UnitHelper.GetLengthLabel(length);
-            //if (length < 1)
-            //{
-            //    return $"{length * 10:N3} cm";
-            //}
-            //else if (length < 1000)
-            //{
-            //    return $"{length:N3} m";
-            //}
-            //else if (length < 1E6)
-            //{
-            //    return $"{length / 1E3:N3} Km";
-            //}
-            ////else if (length < 1E9)
-            //else
-            //{
-            //    return $"{length / 1E6:N3} Mm";
-            //}
-
         }
 
         #endregion
@@ -498,6 +711,6 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-      
+
     }
 }

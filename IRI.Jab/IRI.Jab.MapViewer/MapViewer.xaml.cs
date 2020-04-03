@@ -318,6 +318,10 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        public double CurrentPointScale { get; set; }
+
+        public double CurrentPointGroundResolution { get; set; }
+
         public sb.BoundingBox CurrentExtent
         {
             get
@@ -396,6 +400,13 @@ namespace IRI.Jab.MapViewer
             this.mapView.MouseMove += (sender, e) =>
             {
                 this.CurrentPoint = ScreenToGeodetic(e.GetPosition(this.mapView));
+
+                if (this.CurrentPoint != null && !double.IsNaN(this.CurrentPoint.Y))
+                {
+                    this.CurrentPointScale = WebMercatorUtility.CalculateMapScale(this.CurrentZoomLevel, CurrentPoint.Y);
+
+                    this.CurrentPointGroundResolution = WebMercatorUtility.CalculateGroundResolution(this.CurrentZoomLevel, CurrentPoint.Y);
+                }
 
                 this.OnMapMouseMove?.Invoke(sender, e);
             };
@@ -538,6 +549,10 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestMapScale = () => { return this.MapScale; };
 
+            presenter.RequestCurrentPointGroundResolution = () => { return this.CurrentPointGroundResolution; };
+
+            presenter.RequestCurrentPointScale = () => { return this.CurrentPointScale; };
+
             presenter.RequestCurrentExtent = () => { return this.CurrentExtent; };
 
             presenter.RequestCurrentZoomLevel = () => { return this.CurrentZoomLevel; };
@@ -622,6 +637,8 @@ namespace IRI.Jab.MapViewer
             };
 
             presenter.RequestSetLayer = (l) => { this.SetLayer(l); };
+
+            presenter.RequestUnSetLayer = (l) => { this.RemoveLayer(l); };
 
             presenter.RequestAddLayer = (l) =>
             {
@@ -936,8 +953,11 @@ namespace IRI.Jab.MapViewer
         public void UnSetLayer(string layerName)
         {
             this._layerManager.Remove(layerName, true);
+        }
 
-            //Refresh();
+        public void RemoveLayer(ILayer layer)
+        {
+            this._layerManager.Remove(layer, true);
         }
 
         public void SetSpecialPointLayer(ScaleInterval scaleInterval, string layerName, List<Locateable> items, double opacity = 1)
@@ -1020,7 +1040,7 @@ namespace IRI.Jab.MapViewer
                 return;
             }
 
-            if (layer.VisualParameters.Visibility != Visibility.Visible)
+            if (layer.VisualParameters == null || layer.VisualParameters.Visibility != Visibility.Visible)
                 return;
 
             var mapScale = this.MapScale;
@@ -1068,6 +1088,21 @@ namespace IRI.Jab.MapViewer
                       new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
                       Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
                   );
+            }
+            else if (layer is FeatureLayer)
+            {
+                Action action = async () =>
+                {
+                    await AddFeatureLayer(layer as FeatureLayer);
+                };
+
+                var extent = this.CurrentExtent;
+
+                Task.Run(() =>
+                    this.jobs.Add(new Job(
+                        new LayerTag(mapScale) { LayerType = LayerType.FeatureLayer, BoundingBox = extent },
+                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+                     );
             }
             else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
             {
@@ -1167,6 +1202,65 @@ namespace IRI.Jab.MapViewer
                 RasterizationApproach.DrawingVisual);
 
             await this.AddNonTiledLayer(layer);
+        }
+
+        private async Task AddFeatureLayer(FeatureLayer featureLayer)
+        {
+            try
+            {
+                var extent = this.CurrentExtent;
+
+                var mapScale = this.MapScale;
+
+                //consider if layer was Labeled
+                var features = featureLayer.DataSource.GetFeatures(extent.AsSqlGeometry(SridHelper.WebMercator));
+
+                if (this.MapScale != mapScale || this.CurrentExtent != extent)
+                    return;
+
+                var area = ParseToRectangleGeometry(extent);
+
+                Path path;
+
+                switch (featureLayer.ToRasterTechnique)
+                {
+                    case RasterizationApproach.GdiPlus:
+                        path = featureLayer.AsBitmapUsingGdiPlus(features, null, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        break;
+                    //case RasterizationApproach.OpenTk:
+                    //    path = featureLayer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    //    break;
+                    //case RasterizationApproach.DrawingVisual:
+                    //    path = featureLayer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    //    break;
+                    //case RasterizationApproach.WriteableBitmap:
+                    //    path = featureLayer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    //    break;
+                    //case RasterizationApproach.StreamGeometry:
+                    //    path = featureLayer.AsShape(geoLabledPairs.Geometries, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight,
+                    //        this.viewTransform,
+                    //        this.panTransformForPoints,
+                    //        this.MapToScreen);
+                    //    break;
+                    case RasterizationApproach.None:
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
+                    return;
+
+                if (featureLayer.IsValid)
+                {
+                    this.mapView.Children.Add(path);
+
+                    Canvas.SetZIndex(path, featureLayer.ZIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         #endregion
@@ -1449,19 +1543,16 @@ namespace IRI.Jab.MapViewer
 
                 if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;
-                 
+
                 if (layer.IsValid)
                 {
                     this.mapView.Children.Add(path);
 
                     Canvas.SetZIndex(path, layer.ZIndex);
                 }
-
-
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
@@ -2120,6 +2211,10 @@ namespace IRI.Jab.MapViewer
                         else if (item is TileServiceLayer)
                         {
                             await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
+                        }
+                        else if (item is FeatureLayer)
+                        {
+
                         }
                         else
                         {
@@ -4859,7 +4954,7 @@ namespace IRI.Jab.MapViewer
 
                     geo.AddLastPoint(p.AsPoint());
 
-                    var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeographic().MakeValid();
+                    var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeodeticWgs84().MakeValid();
 
                     var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
 

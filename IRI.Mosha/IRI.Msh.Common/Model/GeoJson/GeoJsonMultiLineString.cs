@@ -1,5 +1,6 @@
 ﻿
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Coordinates == null || Coordinates.Length < 1;
         }
 
-        public Geometry Parse(bool isLongitudeFirst = false, int srid = 0)
+        public Geometry Parse(bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)
         {
             return new Geometry(Coordinates?.Select(c => Geometry.ParseLineStringToGeometry(c, GeometryType.LineString, isLongitudeFirst, srid)).ToArray(), this.GeometryType, srid);
         }

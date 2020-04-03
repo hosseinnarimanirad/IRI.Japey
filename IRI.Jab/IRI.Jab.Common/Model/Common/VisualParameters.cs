@@ -269,9 +269,9 @@ namespace IRI.Jab.Common
             return result;
         }
 
-        public System.Drawing.Pen GetGdiPlusPen()
+        public System.Drawing.Pen GetGdiPlusPen(double? opacity = null)
         {
-            var result = Stroke != null ? new System.Drawing.Pen(Stroke.AsGdiBrush(), (int)StrokeThickness) : null;
+            var result = Stroke != null ? new System.Drawing.Pen(Stroke.AsGdiBrush(opacity), (int)StrokeThickness) : null;
 
             if (DashStyle != null && result != null)
             {
@@ -286,9 +286,9 @@ namespace IRI.Jab.Common
             return result;
         }
 
-        public System.Drawing.Brush GetGdiPlusFillBrush()
+        public System.Drawing.Brush GetGdiPlusFillBrush(double? opacity = null)
         {
-            return Fill.AsGdiBrush();
+            return Fill.AsGdiBrush(opacity);
         }
 
 
