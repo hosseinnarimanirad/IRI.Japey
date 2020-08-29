@@ -21,7 +21,7 @@ namespace IRI.Jab.Common.Convertor
 
         //static Brush brush;
 
-        double pointSymbolWidth, pointSymbolHeight;
+        double pointSymbolWidth = 4, pointSymbolHeight = 4;
 
         double pointSymbolMinX, pointSymbolMinY;
 

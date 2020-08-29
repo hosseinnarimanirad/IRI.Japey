@@ -86,6 +86,16 @@ namespace SqlServerTypes
             LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial130.dll");
         }
 
+        public static void LoadNativeAssembliesv14(string rootApplicationPath)
+        {
+            var nativeBinaryPath = Environment.Is64BitProcess
+            ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
+            : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
+
+            LoadNativeAssembly(nativeBinaryPath, "msvcr120.dll");
+            LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial140.dll");
+        }
+
         public static void UnloadNativeAssemblies()
         {
             lock (loadedAssemblies)

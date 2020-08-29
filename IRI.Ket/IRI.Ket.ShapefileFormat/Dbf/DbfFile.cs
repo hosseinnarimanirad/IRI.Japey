@@ -526,6 +526,11 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                         object value = mapping[j].MapFunction(values.ElementAt(i));
 
+                        if (value is DateTime dt)
+                        {
+                            value = dt.ToString("yyyyMMdd");
+                        }
+
                         if (value != null)
                         {
                             //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);

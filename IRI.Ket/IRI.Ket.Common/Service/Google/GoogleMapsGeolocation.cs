@@ -56,8 +56,8 @@ namespace IRI.Ket.Common.Service.Google
                 var parameter = new GoogleGeolocationParameters() { wifiAccessPoints = networks };
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
-                 
-                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter, proxy);
+
+                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(url, parameter, null, proxy);
             }
             catch (Exception ex)
             {
@@ -78,7 +78,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(url, parameter);
+                return Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(url, parameter, null, null);
             }
             catch (Exception ex)
             {

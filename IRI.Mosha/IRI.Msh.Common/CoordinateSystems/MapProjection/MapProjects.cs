@@ -404,7 +404,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         {
             var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
 
-            double longitude = (webMercator.X / a) * 180 / Math.PI;
+            double longitude = (webMercator.X / a) * 180 / Math.PI; //a = 6378137.0
 
             double latitude = 2.0 * (Math.Atan(Math.Exp(webMercator.Y / a)) - Math.PI / 4.0) * 180 / Math.PI;
 

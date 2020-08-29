@@ -909,6 +909,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void RemoveSelectedLayer(ILayer layer)
         {
+            if (layer == null)
+            {
+                return;
+            }
+
             var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
 
             layer.NumberOfSelectedFeatures = 0;

@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 namespace IRI.Ket.Common.Helpers
 {
     public static class ResourceHelper
-    {/// <summary>
-     /// 
-     /// </summary>
-     /// <param name="assembly"></param>
-     /// <param name="resourceName">ProjectName.FolderName.FileName</param>
-     /// <returns></returns>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="resourceName">ProjectName.FolderName.FileName</param>
+        /// <returns></returns>
         public static string ReadAllText(Assembly assembly, string resourceName)
-        { 
+        {
             string result;
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))

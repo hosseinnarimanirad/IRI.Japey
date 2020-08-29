@@ -2994,7 +2994,7 @@ namespace IRI.Jab.MapViewer
                 visualElements,
                 LayerType.Drawing,
                 RenderingApproach.Default,
-                RasterizationApproach.GdiPlus,
+                RasterizationApproach.DrawingVisual,
                 ScaleInterval.All,
                 pointSymbol: null,
                 labeling: parameters);
