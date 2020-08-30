@@ -22,5 +22,7 @@ namespace IRI.Msh.Common.Model
         }
         
         public bool IsValid { get; set; }
+
+        public static GeoReferencedImage NaN { get => new GeoReferencedImage(null, BoundingBox.NaN, false); }
     }
 }

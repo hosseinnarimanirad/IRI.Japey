@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Extensions;
+﻿using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
@@ -254,6 +255,47 @@ namespace IRI.Msh.Common.Primitives
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public Geometry Simplify(double threshold, SimplificationType type, double areaThreshold = double.NaN)
+        {
+            Func<IPoint[], IPoint[]> filter;
+
+            switch (type)
+            {
+                case SimplificationType.ByArea:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold);
+                    break;
+
+                case SimplificationType.AdditiveByArea:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold);
+                    break;
+
+                case SimplificationType.AdditiveByAreaPlus:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold);
+                    break;
+
+                case SimplificationType.ByAngle:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold);
+                    break;
+
+                case SimplificationType.AdditiveByAngle:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold);
+                    break;
+
+                case SimplificationType.AdditiveByDistance:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold);
+                    break;
+
+                case SimplificationType.AdditiveByAreaAngle:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold);
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return this.SelectPoints(filter);
         }
 
         public static Geometry CreatePointOrLineString(IPoint[] points, int srid)

@@ -1,5 +1,4 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,10 +109,7 @@ namespace IRI.Msh.Common.Analysis
             filtered.Add(points.Length - 1);
 
             var output1 = filtered.Select(i => points[i]).ToArray();
-            //if (!output1[0].Equals(output1[output1.Length - 1]))
-            //{
-
-            //}
+            
             return output1;
         }
 

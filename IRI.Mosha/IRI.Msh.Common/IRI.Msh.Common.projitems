@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Common\General.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\VisualSimplification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\AxisType.cs" />

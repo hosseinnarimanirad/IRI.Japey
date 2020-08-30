@@ -121,7 +121,7 @@ namespace IRI.Jab.Common.Presenter
             await DialogService?.ShowMessage<T>(message, null, title);
         }
 
-        public async Task ShowMessage(object owner, string message, string title = null)
+        public async Task ShowMessageAsync(object owner, string message, string title = null)
         {
             await DialogService?.ShowMessage(null, message, title, owner);
             //this.RequestShowMessage?.Invoke(message);

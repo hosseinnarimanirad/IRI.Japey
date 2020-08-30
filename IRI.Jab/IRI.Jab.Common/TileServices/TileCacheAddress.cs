@@ -97,13 +97,21 @@ namespace IRI.Jab.Common.TileServices
             {
                 return Task.Run(() =>
                 {
-                    var bytes = System.IO.File.ReadAllBytes(filePath);
+                    try
+                    {
+                        var bytes = System.IO.File.ReadAllBytes(filePath);
 
-                    return new GeoReferencedImage(bytes, tile.GeodeticExtent);
+                        return new GeoReferencedImage(bytes, tile.GeodeticExtent);
+                    }
+                    catch (Exception ex)
+                    {
+                        return GeoReferencedImage.NaN;
+                    }
                 });
             }
             else
-                return Task.Run(() => { return new GeoReferencedImage(null, BoundingBox.NaN, false); });
+                //return Task.Run(() => { return new GeoReferencedImage(null, BoundingBox.NaN, false); });
+                return Task.Run(() => { return GeoReferencedImage.NaN; });
         }
 
         public GeoReferencedImage GetTile(TileInfo tile)

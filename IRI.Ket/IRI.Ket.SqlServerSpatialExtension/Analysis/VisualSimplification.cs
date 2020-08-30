@@ -1,11 +1,11 @@
 ﻿using IRI.Msh.Common.Primitives;
 using IRI.Ket.SpatialExtensions;
-using IRI.Ket.SqlServerSpatialExtension.Analysis;
 using IRI.Ket.SqlServerSpatialExtension.GeoStatistics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IRI.Msh.Common.Analysis;
 
 namespace Microsoft.SqlServer.Types
 {
@@ -21,33 +21,59 @@ namespace Microsoft.SqlServer.Types
         /// <returns></returns>
         public static SqlGeometry Simplify(this SqlGeometry geometry, double threshold, SimplificationType type, double areaThreshold = double.NaN)
         {
-            switch (type)
+            if (geometry.IsNotValidOrEmpty())
             {
-                case SimplificationType.ByArea:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold));
-
-                case SimplificationType.AdditiveByArea:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold));
-
-                case SimplificationType.AdditiveByAreaPlus:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold));
-
-                case SimplificationType.ByAngle:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold));
-
-                case SimplificationType.AdditiveByAngle:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold));
-
-                case SimplificationType.AdditiveByDistance:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
-
-                case SimplificationType.AdditiveByAreaAngle:
-                    return Process(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold));
-
-                default:
-                    throw new NotImplementedException();
+                return geometry;
             }
+
+            var extractedGeometry = geometry.AsGeometry();
+
+            var filteredGeometry = extractedGeometry.Simplify(threshold, type, areaThreshold);
+
+            return filteredGeometry.AsSqlGeometry().MakeValid();
+
+            //switch (type)
+            //{
+            //    case SimplificationType.ByArea:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold));
+
+            //    case SimplificationType.AdditiveByArea:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold));
+
+            //    case SimplificationType.AdditiveByAreaPlus:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold));
+
+            //    case SimplificationType.ByAngle:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold));
+
+            //    case SimplificationType.AdditiveByAngle:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold));
+
+            //    case SimplificationType.AdditiveByDistance:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
+
+            //    case SimplificationType.AdditiveByAreaAngle:
+            //        return FilterPoints(geometry, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold));
+
+            //    default:
+            //        throw new NotImplementedException();
+            //}
         }
+
+        //private static SqlGeometry FilterPoints(SqlGeometry geometry, Func<IPoint[], IPoint[]> filter)
+        //{
+        //    if (geometry.IsNotValidOrEmpty())
+        //    {
+        //        return geometry;
+        //    }
+
+        //    var extractedGeometry = geometry.AsGeometry();
+
+        //    var filteredGeometry = extractedGeometry.SelectPoints(filter);
+
+        //    return filteredGeometry.AsSqlGeometry().MakeValid();
+        //}
+
 
         public static List<SqlGeometry> Simplify(this List<SqlGeometry> geometries, SimplificationType type, int zoomLevel, bool reduceToPoint = true, double averageLatitude = 35, double angleThreshold = .98)
         {
@@ -76,32 +102,47 @@ namespace Microsoft.SqlServer.Types
 
                 Stopwatch watch = Stopwatch.StartNew();
 
-                switch (type)
+                 
+                for (int i = 0; i < geometries.Count; i++)
                 {
-                    case SimplificationType.ByArea:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, areaThreshold));
-                        break;
-                    case SimplificationType.AdditiveByArea:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, areaThreshold));
-                        break;
-                    case SimplificationType.AdditiveByAreaPlus:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, areaThreshold));
-                        break;
-                    case SimplificationType.ByAngle:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, angleThreshold));
-                        break;
-                    case SimplificationType.AdditiveByAngle:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, angleThreshold));
-                        break;
-                    case SimplificationType.AdditiveByDistance:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
-                        break;
-                    case SimplificationType.AdditiveByAreaAngle:
-                        result = Process(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, angleThreshold, areaThreshold));
-                        break;
-                    default:
-                        throw new NotImplementedException();
+                    try
+                    {
+                        result.Add(geometries[i].Simplify(threshold, type, areaThreshold));
+                        //result.Add(FilterPoints(geometries[i], filter));
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
                 }
+                 
+                //switch (type)
+                //{
+                //    case SimplificationType.ByArea:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, areaThreshold));
+                //        break;
+                //    case SimplificationType.AdditiveByArea:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, areaThreshold));
+                //        break;
+                //    case SimplificationType.AdditiveByAreaPlus:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, areaThreshold));
+                //        break;
+                //    case SimplificationType.ByAngle:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, angleThreshold));
+                //        break;
+                //    case SimplificationType.AdditiveByAngle:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, angleThreshold));
+                //        break;
+                //    case SimplificationType.AdditiveByDistance:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold));
+                //        break;
+                //    case SimplificationType.AdditiveByAreaAngle:
+                //        result = FilterPoints(geometries, pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, angleThreshold, areaThreshold));
+                //        break;
+                //    default:
+                //        throw new NotImplementedException();
+                //}
 
                 watch.Stop();
                 var tSimplify = watch.ElapsedMilliseconds / 1000; // System.Diagnostics.Debug.WriteLine($"CALL PROCESS {watch.ElapsedMilliseconds / 1000} s", "PYRAMID");
@@ -156,89 +197,59 @@ namespace Microsoft.SqlServer.Types
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
 
-        private static List<SqlGeometry> Process(List<SqlGeometry> geometries, Func<IPoint[], IPoint[]> filter)
-        {
-            List<SqlGeometry> result = new List<SqlGeometry>(geometries.Count);
+        //private static List<SqlGeometry> FilterPoints(List<SqlGeometry> geometries, Func<IPoint[], IPoint[]> filter)
+        //{
+        //    List<SqlGeometry> result = new List<SqlGeometry>(geometries.Count);
 
-            for (int i = 0; i < geometries.Count; i++)
-            {
-                try
-                {
-                    result.Add(Process(geometries[i], filter));
-                }
-                catch (Exception ex)
-                {
+        //    for (int i = 0; i < geometries.Count; i++)
+        //    {
+        //        try
+        //        {
+        //            //result.Add(FilterPoints(geometries[i], filter));
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    throw;
-                }
-            }
+        //            throw;
+        //        }
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
-        private static SqlGeometry Process(SqlGeometry geometry, Func<IPoint[], IPoint[]> filter)
-        {
-            if (geometry.IsNotValidOrEmpty())
-            {
-                return geometry;
-            }
+        //public static List<SqlGeometry> Simplify(this List<SqlGeometry> source, bool reduceToPoint = false)
+        //{
+        //    var boundingBox = source.GetBoundingBox();
 
-            var extractedGeometry = geometry.AsGeometry();
+        //    var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Math.Max(boundingBox.Width, boundingBox.Height), 30, 1500);
 
-            var filteredGeometry = extractedGeometry.SelectPoints(filter);
+        //    var simplifiedByAngleGeometries = source.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
-            return filteredGeometry.AsSqlGeometry().MakeValid();
-        }
+        //    var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(fitLevel, 40);
 
-        public static List<SqlGeometry> Simplify(this List<SqlGeometry> source, bool reduceToPoint = false)
-        {
-            var boundingBox = source.GetBoundingBox();
+        //    var temp = simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveByAreaPlus).MakeValid())
+        //                                            .Where(g => !g.IsNullOrEmpty())
+        //                                            .ToList();
 
-            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Math.Max(boundingBox.Width, boundingBox.Height), 30, 1500);
+        //    if (reduceToPoint)
+        //    {
+        //        for (int g = 0; g < temp.Count; g++)
+        //        {
+        //            var length = temp[g].STLength().Value;
 
-            var simplifiedByAngleGeometries = source.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
+        //            if (length < threshold)
+        //            {
+        //                temp[g] = temp[g].STPointN(1);
+        //            }
+        //        }
+        //    }
 
-            //for (int i = fitLevel; i < 18; i += 4)
-            //{
-            var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(fitLevel, 40);
-
-            //Debug.Print($"threshold: {threshold}, level:{i}");
-
-            //var inverseScale = IRI.Msh.Common.Mapping.GoogleMapsUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
-
-            //source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveSimplifyByArea)).Where(g => g.IsValid()).ToList());
-
-            var temp = simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveByAreaPlus).MakeValid())
-                                                    .Where(g => !g.IsNullOrEmpty())
-                                                    .ToList();
-
-            //if (reduceToPoint && result.IsValid() && result.STLength().Value < threshold)
-            //{
-            //    result = result.STPointN(1);
-            //}
-
-            if (reduceToPoint)
-            {
-                for (int g = 0; g < temp.Count; g++)
-                {
-                    var length = temp[g].STLength().Value;
-
-                    if (length < threshold)
-                    {
-                        temp[g] = temp[g].STPointN(1);
-                    }
-                }
-            }
-
-            //}
-
-            return temp;
-        }
+        //    return temp;
+        //}
 
         public static List<SqlGeometry> RemoveOverlappingPoints(this List<SqlGeometry> source, double minDistance)
         {
@@ -256,7 +267,6 @@ namespace Microsoft.SqlServer.Types
                 //var cFast = KdTreePointClusters<Point>.GetClusterCenters(points, Point.NaN, minDistance).Count;
 
 
-
                 ////************************************************************************************************
                 //watch.Stop();
                 //var tFast = watch.ElapsedMilliseconds / 1000;
@@ -264,10 +274,8 @@ namespace Microsoft.SqlServer.Types
                 ////************************************************************************************************
 
 
-
                 //var clusters = new PointClusters<Point>(points);
                 //var cSlow = clusters.GetClusters((p1, p2) => Point.EuclideanDistance(p1, p2) < minDistance).Count;
-
 
 
                 ////************************************************************************************************
@@ -277,10 +285,8 @@ namespace Microsoft.SqlServer.Types
                 ////************************************************************************************************
 
 
-
                 var kdtreeCluster = new KdTreePointClusters<Point>(points, new Group<Point>(Point.NaN));
                 kdtreeCluster.GetClusters((p1, p2) => Point.EuclideanDistance(p1, p2) < minDistance);
-
 
 
                 //************************************************************************************************
@@ -290,9 +296,7 @@ namespace Microsoft.SqlServer.Types
                 //************************************************************************************************
 
 
-
                 var centers = kdtreeCluster.GetGroupCenters();
-
 
 
                 //************************************************************************************************
@@ -300,8 +304,6 @@ namespace Microsoft.SqlServer.Types
                 var tGetGroupCenters = watch.ElapsedMilliseconds / 1000;
                 watch.Restart();
                 //************************************************************************************************
-
-
 
 
                 for (int i = 0; i < source.Count; i++)
@@ -343,8 +345,6 @@ namespace Microsoft.SqlServer.Types
                 var tAddPoints = watch.ElapsedMilliseconds / 1000;//System.Diagnostics.Debug.WriteLine($"\t\tADDPOINTS {centers.Count} - {watch.ElapsedMilliseconds / 1000} s", "PYRAMID");
                 watch.Restart();
                 //************************************************************************************************
-
-
 
 
                 //Debug.WriteLine($"\t\t [Points :{points.Count}] , [Slow-(c: {cSlow} , t: {tSlow})], [Normal-(c:{centers.Count} , t: {tNormal})]", "PYRAMID");

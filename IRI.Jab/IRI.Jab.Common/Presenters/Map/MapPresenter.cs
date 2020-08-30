@@ -29,6 +29,7 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Service;
 using IRI.Msh.Common.Helpers;
+using System.Windows.Threading;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -72,8 +73,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private CoordinatePanelPresenter _coordinatePanel;
 
+        private CoordinatePanelPresenter _coordinatePanel;
         public CoordinatePanelPresenter CoordinatePanel
         {
             get { return _coordinatePanel; }
@@ -217,6 +218,10 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public ILayer GetSelectedLayerInToc()
+        {
+            return this.Layers.SingleOrDefault(l => l.IsSelectedInToc);
+        }
 
         private ObservableCollection<DrawingItemLayer> _drawingItems = new ObservableCollection<DrawingItemLayer>();
         public ObservableCollection<DrawingItemLayer> DrawingItems
@@ -303,6 +308,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async Task SetTileBaseMap(string tileMapFullName)
         {
+            if (string.IsNullOrEmpty(tileMapFullName))
+            {
+                RemoveAllTileServices();
+
+                return;
+            }
+
             var tileMapFullNameToUpper = tileMapFullName?.ToUpper();
 
             if (_providerTypeFullName == tileMapFullNameToUpper)
@@ -320,6 +332,8 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 return;
             }
+
+            this.SelectedMapProvider = provider;
 
             await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
         }
@@ -609,9 +623,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<bool> RequestSetConnectedState;
 
+        public Action RequestRefreshBaseMaps;
+
         public Action<TileMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
 
-        public Action RequestRemoveAllTileServices;
+        //public Action RequestRemoveAllTileServices;
 
         public Func<double> RequestMapScale;
 
@@ -759,7 +775,14 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void RemoveAllTileServices()
         {
-            this.Clear(l => l.Type == LayerType.BaseMap, true);
+            this.Clear(l => l.Type == LayerType.BaseMap, true, true);
+
+            this.RefreshBaseMaps();
+        }
+
+        public void RefreshBaseMaps()
+        {
+            this.RequestRefreshBaseMaps?.Invoke();
         }
 
         public void AddProvider(TileMapProvider mapProvider)
@@ -779,6 +802,13 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public void RemoveAllProviders()
+        {
+            this.MapProviders = new List<TileMapProvider>();
+
+            RemoveAllTileServices();
+        }
+
         //public void RemoveProvider(string name)
         //{
         //    var nameInUpper = name?.ToUpper();
@@ -788,6 +818,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //        this.MapProviders.Remove(nameInUpper);
         //    }
         //}
+
 
         public async Task SetTileService(TileMapProvider baseMap, Func<TileInfo, string> getLocalFileName)
         {
@@ -991,26 +1022,26 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var visualParameters = VisualParameters.GetDefaultForSelection();
 
-            await SelectGeometry(highlightGeo, visualParameters);
+            await SelectGeometryAsync(highlightGeo, visualParameters);
         }
 
-        public async Task SelectGeometry(SqlGeometry geometry)
+        public async Task SelectGeometryAsync(SqlGeometry geometry)
         {
-            await SelectGeometries(new List<SqlGeometry>() { geometry });
+            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry });
         }
 
-        public async Task SelectGeometry(SqlGeometry geometry, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometryAsync(SqlGeometry geometry, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
         {
-            await SelectGeometries(new List<SqlGeometry>() { geometry }, visualParameters, pointSymbol);
+            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry }, visualParameters, pointSymbol);
         }
 
-        public async Task SelectGeometries(List<SqlGeometry> geometries)
+        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries)
         {
             //await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
-            await this.SelectGeometries(geometries, VisualParameters.GetDefaultForSelection());
+            await this.SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection());
         }
 
-        public async Task SelectGeometries(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
         {
             await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
         }
@@ -1836,7 +1867,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************General**************************************************************
         #region Shapefile/Worldfile
 
-        public async virtual void AddShapefile()
+        public virtual void AddShapefile()
         {
             this.IsBusy = true;
 
@@ -1849,7 +1880,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            FileInfo info = new FileInfo(fileName);
+            //FileInfo info = new FileInfo(fileName);
 
             //if (info.Length / 10000.0 > 1000) //5k
             //{
@@ -1858,7 +1889,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
-            await AddShapefile(fileName);
+            AddShapefile(fileName);
         }
 
         public async Task AddShapefile(string fileName)
@@ -1877,7 +1908,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                ShowMessage(null, ex.Message);
+                await ShowMessageAsync(null, ex.Message);
             }
             finally
             {
@@ -1923,7 +1954,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                ShowMessage(null, ex.Message);
+                ShowMessageAsync(null, ex.Message);
             }
             finally
             {
@@ -1959,7 +1990,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await this.ShowMessage(owner, ex.Message, "خطا");
+                await this.ShowMessageAsync(owner, ex.Message, "خطا");
             }
             finally
             {
@@ -2093,11 +2124,16 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_addShapefileCommand == null)
                 {
-                    _addShapefileCommand = new RelayCommand(param => { AddShapefile(); });
+                    _addShapefileCommand = new RelayCommand(param =>
+                    {
+                        AddShapefile();
+                    });
                 }
                 return _addShapefileCommand;
             }
         }
+
+
 
         private RelayCommand _addWorldfileCommand;
 
@@ -2421,8 +2457,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         #endregion
 
-        public virtual void Initialize()
+        public virtual Task Initialize()
         {
+            return Task.CompletedTask;
         }
 
 

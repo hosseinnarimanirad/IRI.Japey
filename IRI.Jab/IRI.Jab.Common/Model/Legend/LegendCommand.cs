@@ -374,7 +374,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    map.ShowMessage(null, ex.Message);
+                    map.ShowMessageAsync(null, ex.Message);
                 }
             });
 
