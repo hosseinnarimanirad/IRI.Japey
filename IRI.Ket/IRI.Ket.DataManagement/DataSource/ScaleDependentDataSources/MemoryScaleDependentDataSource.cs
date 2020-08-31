@@ -11,6 +11,7 @@ using System.Diagnostics;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -29,7 +30,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
 
-            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
+            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
             for (int i = fitLevel; i < 18; i += 4)
             {
@@ -39,7 +40,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
-                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
+                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
             }
         }
 
@@ -94,7 +95,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
 
-            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
+            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
             for (int i = fitLevel; i < 18; i += 4)
             {
@@ -104,7 +105,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
-                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
+                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(threshold, SimplificationType.AdditiveByArea)).Where(g => !g.IsNotValidOrEmpty()).ToList());
             }
         }
 

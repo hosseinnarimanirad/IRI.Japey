@@ -218,6 +218,21 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
+        //LegendCommand.CreateZoomToExtentCommand(this, layer),
+        //                LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer) layer),
+        //                LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer) layer),
+        //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
+        //                LegendCommand.CreateRemoveLayer(this, layer),
+
+        private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<SqlFeature>();
+
+        public List<Func<MapPresenter, ILayer, ILegendCommand>> DefaultVectorLayerCommands
+        {
+            get { return _defaultVectorLayerCommands; }
+            set { value = _defaultVectorLayerCommands; }
+        }
+
         public ILayer GetSelectedLayerInToc()
         {
             return this.Layers.SingleOrDefault(l => l.IsSelectedInToc);
@@ -1573,14 +1588,24 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (!(layer?.Commands?.Count > 0))
                 {
-                    layer.Commands = new List<ILegendCommand>()
+                    //1399.06.10
+                    //layer.Commands = new List<ILegendCommand>()
+                    //{
+                    //    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    //    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateRemoveLayer(this, layer),
+                    //};
+
+                    var commands = new List<ILegendCommand>();
+
+                    foreach (var item in DefaultVectorLayerCommands)
                     {
-                        LegendCommand.CreateZoomToExtentCommand(this, layer),
-                        LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
-                        LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
-                        LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                        LegendCommand.CreateRemoveLayer(this, layer),
-                    };
+                        commands.Add(item(this, layer));
+                    }
+
+                    layer.Commands = commands;
                 }
                 if ((layer as VectorLayer).RequestChangeSymbology == null)
                 {

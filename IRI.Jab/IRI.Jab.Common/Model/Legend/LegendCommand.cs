@@ -82,8 +82,22 @@ namespace IRI.Jab.Common.Model.Legend
 
         public ILayer Layer { get; set; }
 
+        public static LegendCommand Create(ILayer layer, Action action, string markup, string tooltip)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = markup,
+                Command = new RelayCommand(param => action()),
+                ToolTip = tooltip
+            };
+
+            result.Command = new RelayCommand(param => action());
+
+            return result;
+        }
 
 
+        public static Func<MapPresenter, ILayer, LegendCommand> CreateZoomToExtentCommandFunc = (presenter, layer) => CreateZoomToExtentCommand(presenter, layer);
         public static LegendCommand CreateZoomToExtentCommand(MapPresenter map, ILayer layer)
         {
             var result = new LegendCommand()
@@ -104,6 +118,11 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, ISqlGeometryAware
+        {
+            return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer);
+        }
         public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, ILayer layer) where T : class, ISqlGeometryAware
         {
             var result = new LegendCommand()
@@ -167,6 +186,11 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, ISqlGeometryAware
+        {
+            return (presenter, layer) => CreateSelectByDrawing<T>(presenter, layer as VectorLayer);
+        }
         public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, ISqlGeometryAware
         {
             var result = new LegendCommand()
@@ -210,20 +234,8 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        public static LegendCommand Create(ILayer layer, Action action, string markup, string tooltip)
-        {
-            var result = new LegendCommand()
-            {
-                PathMarkup = markup,
-                Command = new RelayCommand(param => action()),
-                ToolTip = tooltip
-            };
 
-            result.Command = new RelayCommand(param => action());
-
-            return result;
-        }
-
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateClearSelectedFunc = (presenter, layer) => CreateClearSelected(presenter, layer as VectorLayer);
         public static ILegendCommand CreateClearSelected(MapPresenter map, VectorLayer layer)
         {
             var result = new LegendCommand()
@@ -244,6 +256,8 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateRemoveLayerFunc = (presenter, layer) => CreateRemoveLayer(presenter, layer);
         public static ILegendCommand CreateRemoveLayer(MapPresenter map, ILayer layer)
         {
             var result = new LegendCommand()
@@ -259,6 +273,23 @@ namespace IRI.Jab.Common.Model.Legend
             });
 
             return result;
+        }
+
+
+        internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
+        {
+            //LegendCommand.CreateZoomToExtentCommand(this, layer),
+            //                LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer) layer),
+            //                LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer) layer),
+            //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
+            //                LegendCommand.CreateRemoveLayer(this, layer),
+            return new List<Func<MapPresenter, ILayer, ILegendCommand>>()
+            {
+                CreateSelectByDrawingFunc<T>(),
+                CreateShowAttributeTableFunc<T>(),
+                CreateClearSelectedFunc,
+                CreateRemoveLayerFunc
+            };
         }
 
         public static ILegendCommand CreateShowSymbologyView(ILayer layer, Action showSymbologyViewAction)
@@ -289,7 +320,6 @@ namespace IRI.Jab.Common.Model.Legend
 
 
         #region DrawingItemLayer Default Commands
-
 
         public static ILegendCommand CreateRemoveDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
         {
@@ -380,8 +410,6 @@ namespace IRI.Jab.Common.Model.Legend
 
             return result;
         }
-
-
 
         #endregion
     }

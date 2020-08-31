@@ -1,12 +1,8 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -30,7 +26,7 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
-        public static double GetArea(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        public static double GetTrueArea(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
         {
             try
             {
@@ -72,7 +68,7 @@ namespace IRI.Ket.SpatialExtensions
 
                     case GeometryType.Polygon:
                     case GeometryType.MultiPolygon:
-                        return geometry.GetArea(toWgs84Geodetic);
+                        return geometry.GetTrueArea(toWgs84Geodetic);
 
                     case GeometryType.Point:
                     case GeometryType.MultiPoint:
@@ -103,7 +99,7 @@ namespace IRI.Ket.SpatialExtensions
 
                     case GeometryType.Polygon:
                     case GeometryType.MultiPolygon:
-                        return Common.Helpers.UnitHelper.GetAreaLabel(geometry.GetArea(toWgs84Geodetic));
+                        return Common.Helpers.UnitHelper.GetAreaLabel(geometry.GetTrueArea(toWgs84Geodetic));
 
                     case GeometryType.Point:
                     case GeometryType.MultiPoint:
@@ -426,8 +422,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         #endregion
-
-
+         
 
         #region SqlGeography
 
@@ -663,8 +658,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         #endregion
-
-
+         
 
         #region LineSegment
 
@@ -688,9 +682,9 @@ namespace IRI.Ket.SpatialExtensions
 
         #endregion
 
+
         #region Projection
-
-
+         
         public static IPoint Project(this IPoint point, SrsBase sourceSrs, SrsBase targetSrs)
         {
             if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))

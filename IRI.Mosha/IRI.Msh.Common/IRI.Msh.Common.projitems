@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Common\General.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\AreaStatistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />

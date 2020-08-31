@@ -435,7 +435,7 @@ namespace IRI.Jab.MapViewer
         #endregion
 
 
-        public void Register(Common.Presenter.Map.MapPresenter presenter)
+        public async Task Register(Common.Presenter.Map.MapPresenter presenter)
         {
             if (presenter == null)
             {
@@ -456,7 +456,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestGetActualWidth = () => this.mapView.ActualWidth;
 
-            presenter.RegisterAction = (i) => { this.Register(i); };
+            presenter.RegisterAction = async (i) => { await this.Register(i); };
 
             presenter.RequestSetDefaultCursor = (ma, c) => { this.SetDefaultCursor(ma, c); };
 
@@ -535,6 +535,10 @@ namespace IRI.Jab.MapViewer
             //    this.RefreshBaseMaps();
             //};
 
+            presenter.RequestRefreshBaseMaps = () =>
+            {
+                this.RefreshBaseMaps();
+            };
 
             //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func< TileInfo, string> getFileName = null
             presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName) =>
@@ -726,7 +730,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.SetMapCursorSet1();
 
-            presenter.Initialize();
+            await presenter.Initialize();
 
             presenter.RegisterMapOptions();
 
@@ -3565,7 +3569,7 @@ namespace IRI.Jab.MapViewer
         };
 
         public void FullExtent()
-        {
+        {    
             ZoomToExtent(this._layerManager.CalculateMapExtent(), false);
         }
 
@@ -4952,7 +4956,7 @@ namespace IRI.Jab.MapViewer
                 {
                     var geo = drawingLayer.GetFinalGeometry().Clone();
 
-                    geo.AddLastPoint(p.AsPoint());
+                    geo.InsertLastPoint(p.AsPoint());
 
                     var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeodeticWgs84().MakeValid();
 

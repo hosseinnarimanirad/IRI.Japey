@@ -231,7 +231,7 @@ namespace IRI.Jab.Common
 
         internal void StartNewPart(Point webMercatorPoint)
         {
-            this._webMercatorGeometry.Geometries.Last().AddLastPoint(webMercatorPoint);
+            this._webMercatorGeometry.Geometries.Last().InsertLastPoint(webMercatorPoint);
             //this.AddVertex(webMercatorPoint);
             MakePathGeometry();
 
@@ -961,7 +961,7 @@ namespace IRI.Jab.Common
                 if (geometry.Points.Length > 0 && geometry.Points.Last().AreExactlyTheSame(webMercatorPoint) == true)
                     return;
 
-                geometry.AddLastPoint(webMercatorPoint);
+                geometry.InsertLastPoint(webMercatorPoint);
 
                 primaryCollection.Values.Add(locateable);
 
@@ -1017,7 +1017,7 @@ namespace IRI.Jab.Common
 
         public string AreaLabel
         {
-            get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetArea(MapProjects.WebMercatorToGeodeticWgs84)); }
+            get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetTrueArea(MapProjects.WebMercatorToGeodeticWgs84)); }
         }
 
         public string LengthLabel

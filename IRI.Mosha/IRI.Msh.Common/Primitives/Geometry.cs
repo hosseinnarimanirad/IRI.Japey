@@ -11,62 +11,8 @@ namespace IRI.Msh.Common.Primitives
 {
     public class Geometry
     {
-        private static readonly Geometry _null = new Geometry();
-
-        public static Geometry Null { get { return _null; } }
-
-        //public static readonly Geometry EmptyPoint = new Geometry(new IPoint[0], GeometryType.Point);
-        //public static readonly Geometry EmptyLineString = new Geometry(new IPoint[0], GeometryType.LineString);
-        //public static readonly Geometry EmptyPolygon = new Geometry(new IPoint[0], GeometryType.Polygon);
-        //public static readonly Geometry EmptyMultiPoint = new Geometry(new Geometry[0], GeometryType.MultiPoint);
-        //public static readonly Geometry EmptyMultiLineString = new Geometry(new Geometry[0], GeometryType.MultiLineString);
-        //public static readonly Geometry EmptyMultiPolygon = new Geometry(new Geometry[0], GeometryType.MultiPolygon);
-
-        public static Geometry CreateEmpty(GeometryType type, int srid)
-        {
-            switch (type)
-            {
-                case GeometryType.GeometryCollection:
-                    return new Geometry(new Geometry[0], GeometryType.GeometryCollection) { Srid = srid };
-
-                case GeometryType.LineString:
-                    return new Geometry(new Point[0], GeometryType.LineString) { Srid = srid };
-
-                case GeometryType.MultiLineString:
-                    return new Geometry(new Geometry[0], GeometryType.MultiLineString) { Srid = srid };
-
-                case GeometryType.MultiPoint:
-                    return new Geometry(new Geometry[0], GeometryType.MultiPoint) { Srid = srid };
-
-                case GeometryType.MultiPolygon:
-                    return new Geometry(new Geometry[0], GeometryType.MultiPolygon) { Srid = srid };
-
-                case GeometryType.Point:
-                    return new Geometry(new Point[0], GeometryType.Point) { Srid = srid };
-
-                case GeometryType.Polygon:
-                    return new Geometry(new Geometry[0], GeometryType.Polygon) { Srid = srid };
-
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public bool IsRingBase()
-        {
-            return this.Type == GeometryType.Polygon || this.Type == GeometryType.MultiPolygon || this.Type == GeometryType.CurvePolygon;
-        }
-
         public GeometryType Type { get; set; }
 
-        public bool IsNullOrEmpty()
-        {
-            return (this.Points == null || this.Points?.Length == 0) &&
-                    (this.Geometries == null || this.Geometries?.Length == 0);
-        }
 
         private IPoint[] _points;
 
@@ -84,10 +30,6 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        private Geometry()
-        {
-
-        }
 
         private Geometry[] _geometries;
 
@@ -108,6 +50,11 @@ namespace IRI.Msh.Common.Primitives
         public int NumberOfPoints { get { return Points?.Length ?? 0; } }
 
         public int Srid { get; set; }
+
+        private Geometry()
+        {
+
+        }
 
         public Geometry(IPoint[] points, GeometryType type, int srid = 0) : this(points, type, false, srid)
         {
@@ -171,43 +118,58 @@ namespace IRI.Msh.Common.Primitives
 
         }
 
-
-        public static Geometry Create(double x, double y, int srid = 0)
+        public override string ToString()
         {
-            return new Geometry(new Point[] { new Point(x, y) }, GeometryType.Point, srid);
+            return $"{Type} - #Points: {NumberOfPoints} - #Parts: {Geometries?.Count()}";
         }
 
-        /// <summary>
-        /// For Polygons do not repeat first point in the last point
-        /// </summary>
-        /// <param name="points"></param>
-        /// <param name="type"></param>
-        /// <param name="srid"></param>
-        /// <returns></returns>
-        public static Geometry Create(IPoint[] points, GeometryType type, int srid = 0)
-        {
-            if (points == null)
-            {
-                CreateEmpty(type, srid);
-            }
 
-            switch (type)
+        public bool IsRingBase()
+        {
+            return this.Type == GeometryType.Polygon || this.Type == GeometryType.MultiPolygon || this.Type == GeometryType.CurvePolygon;
+        }
+
+        public bool IsNullOrEmpty()
+        {
+            return (this.Points == null || this.Points?.Length == 0) &&
+                    (this.Geometries == null || this.Geometries?.Length == 0);
+        }
+
+        public bool HasAnyPoint()
+        {
+            if (Points != null)
+            {
+                return Points.Length > 0;
+            }
+            else if (Geometries != null)
+            {
+                return Geometries.Any(g => g.HasAnyPoint());
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsValid()
+        {
+            switch (this.Type)
             {
                 case GeometryType.Point:
-                    return new Geometry(points, GeometryType.Point) { Srid = srid };
-                //return CreatePointOrLineString(points, srid); //do not use this method: what if making a new Geometry LineString with first point
+                    return this.Points?.Length == 1;
 
                 case GeometryType.LineString:
-                    return new Geometry(points, GeometryType.LineString) { Srid = srid };
-                //return CreatePointOrLineString(points, srid);
+                    return this.Points.Length > 1;
 
                 case GeometryType.Polygon:
-                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon, srid);
+                    return this.Geometries.Length > 0 && this.Geometries.All(g => g.Points?.Length >= 3);
 
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:
                 case GeometryType.MultiPolygon:
                 case GeometryType.GeometryCollection:
+                    return this.Geometries?.All(g => g.IsValid()) == true;
+
                 case GeometryType.CircularString:
                 case GeometryType.CompoundCurve:
                 case GeometryType.CurvePolygon:
@@ -216,12 +178,18 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        public BoundingBox GetBoundingBox()
+        {
+            return BoundingBox.CalculateBoundingBox(GetAllPoints());
+        }
+
+
         /// <summary>
         /// Does not filter point and multipoint features
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Geometry SelectPoints(Func<IPoint[], IPoint[]> filter)
+        public Geometry FilterPoints(Func<IPoint[], IPoint[]> filter)
         {
             switch (this.Type)
             {
@@ -231,7 +199,7 @@ namespace IRI.Msh.Common.Primitives
                     return Geometry.Null;
 
                 case GeometryType.GeometryCollection:
-                    return new Geometry(this.Geometries.Select(i => i.SelectPoints(filter)).ToArray(), GeometryType.GeometryCollection) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.GeometryCollection) { Srid = this.Srid };
 
                 case GeometryType.MultiPoint:
                     return new Geometry(this.Geometries, GeometryType.MultiPoint) { Srid = this.Srid };
@@ -244,13 +212,13 @@ namespace IRI.Msh.Common.Primitives
                     return CreatePointOrLineString(filter(this.Points), this.Srid);
 
                 case GeometryType.MultiLineString:
-                    return new Geometry(this.Geometries.Select(i => i.SelectPoints(filter)).ToArray(), GeometryType.MultiLineString) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiLineString) { Srid = this.Srid };
 
                 case GeometryType.Polygon:
-                    return new Geometry(this.Geometries.Select(i => i.SelectPoints(filter)).ToArray(), GeometryType.Polygon) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.Polygon) { Srid = this.Srid };
 
                 case GeometryType.MultiPolygon:
-                    return new Geometry(this.Geometries.Select(i => i.SelectPoints(filter)).ToArray(), GeometryType.MultiPolygon) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiPolygon) { Srid = this.Srid };
 
                 default:
                     throw new NotImplementedException();
@@ -295,22 +263,8 @@ namespace IRI.Msh.Common.Primitives
                     throw new NotImplementedException();
             }
 
-            return this.SelectPoints(filter);
+            return this.FilterPoints(filter);
         }
-
-        public static Geometry CreatePointOrLineString(IPoint[] points, int srid)
-        {
-            if (points.Length == 1)
-            {
-                return new Geometry(points, GeometryType.Point) { Srid = srid };
-            }
-            else
-            {
-                return new Geometry(points, GeometryType.LineString) { Srid = srid };
-            }
-        }
-
-
 
         public Geometry Transform(Func<IPoint, IPoint> transform, int newSrid = 0)
         {
@@ -346,78 +300,8 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public IPoint[] GetAllPoints()
-        {
-            if (Points != null)
-            {
-                return Points;
-            }
-            else if (Geometries != null)
-            {
-                return Geometries.SelectMany(i => i.GetAllPoints()).ToArray();
-            }
-            else
-            {
-                return null;
-            }
-        }
 
-        public bool HasAnyPoint()
-        {
-            if (Points != null)
-            {
-                return Points.Length > 0;
-            }
-            else if (Geometries != null)
-            {
-                return Geometries.Any(g => g.HasAnyPoint());
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public IPoint GetLastPoint()
-        {
-            if (Points?.Any() == true)
-            {
-                return Points.Last();
-            }
-            else if (Geometries?.Length > 0)
-            {
-                return Geometries.Last().GetLastPoint();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"{Type} - #Points: {NumberOfPoints} - #Parts: {Geometries?.Count()}";
-        }
-
-        public BoundingBox GetBoundingBox()
-        {
-            return BoundingBox.CalculateBoundingBox(GetAllPoints());
-        }
-
-        public IPoint[] GetLastPart()
-        {
-            if (this.Points == null && this.Geometries == null)
-                return null;
-
-            if (this.Points == null)
-            {
-                return this.Geometries.Last().GetLastPart();
-            }
-            else
-            {
-                return this.Points;
-            }
-        }
+        #region Find
 
         public bool TryFindPoint(IPoint point, out int pointIndex, out int geometryIndex, out int subGeometryIndex)
         {
@@ -512,6 +396,105 @@ namespace IRI.Msh.Common.Primitives
             return false; ;
         }
 
+        #endregion
+
+
+        #region Analysis
+
+        public Point GetMeanPoint()
+        {
+            var allPoints = GetAllPoints();
+
+            return new Point(allPoints.Sum(i => i.X) / allPoints.Length, allPoints.Sum(i => i.Y) / allPoints.Length);
+        }
+
+        #endregion
+
+
+        #region Geometry Manipulation
+
+        public IPoint[] GetAllPoints()
+        {
+            if (Points != null)
+            {
+                return Points;
+            }
+            else if (Geometries != null)
+            {
+                return Geometries.SelectMany(i => i.GetAllPoints()).ToArray();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IPoint GetLastPoint()
+        {
+            if (Points?.Any() == true)
+            {
+                return Points.Last();
+            }
+            else if (Geometries?.Length > 0)
+            {
+                return Geometries.Last().GetLastPoint();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void StartNewGeometry(IPoint startPoint, GeometryType type)
+        {
+            if (this.Geometries == null)
+                throw new NotImplementedException();
+
+            var geometries = this.Geometries.ToList();
+
+            geometries.Add(new Geometry(new IPoint[] { startPoint }, type));
+
+            this.Geometries = geometries.ToArray();
+        }
+
+        public Geometry Clone()
+        {
+            if (this.Points != null)
+            {
+                IPoint[] points = new IPoint[this.Points.Length];
+
+                for (int i = 0; i < this.Points.Length; i++)
+                {
+                    points[i] = new Point(this.Points[i].X, this.Points[i].Y);
+                }
+
+                return Geometry.Create(points, this.Type, this.Srid);
+            }
+            if (this.Geometries != null)
+            {
+                return new Geometry(this.Geometries.Select(g => g.Clone()).ToArray(), this.Type, this.Srid);
+            }
+
+            return new Geometry(null, this.Type, false, this.Srid);
+        }
+
+        //This method can better using Array.Resize()
+        public void InsertLastPoint(IPoint newPoint)
+        {
+            if (this.Points != null)
+            {
+                var points = this.Points.ToList();
+
+                points.Add(newPoint);
+
+                this.Points = points.ToArray();
+            }
+            else
+            {
+                this.Geometries.Last().InsertLastPoint(newPoint);
+            }
+        }
+
         public void InsertPoint(IPoint newPoint, int index)
         {
             var points = this.Points.ToList();
@@ -547,142 +530,19 @@ namespace IRI.Msh.Common.Primitives
             this.Points = list.ToArray();
         }
 
-        //This method can better using Array.Resize()
-        public void AddLastPoint(IPoint newPoint)
+        public IPoint[] GetLastPart()
         {
-            if (this.Points != null)
+            if (this.Points == null && this.Geometries == null)
+                return null;
+
+            if (this.Points == null)
             {
-                var points = this.Points.ToList();
-
-                points.Add(newPoint);
-
-                this.Points = points.ToArray();
+                return this.Geometries.Last().GetLastPart();
             }
             else
             {
-                this.Geometries.Last().AddLastPoint(newPoint);
+                return this.Points;
             }
-        }
-
-        public void AddGeometry(IPoint startPoint, GeometryType type)
-        {
-            if (this.Geometries == null)
-                throw new NotImplementedException();
-
-            var geometries = this.Geometries.ToList();
-
-            geometries.Add(new Geometry(new IPoint[] { startPoint }, type));
-
-            this.Geometries = geometries.ToArray();
-        }
-
-
-        public Geometry Clone()
-        {
-            if (this.Points != null)
-            {
-                IPoint[] points = new IPoint[this.Points.Length];
-
-                for (int i = 0; i < this.Points.Length; i++)
-                {
-                    points[i] = new Point(this.Points[i].X, this.Points[i].Y);
-                }
-
-                return Geometry.Create(points, this.Type, this.Srid);
-            }
-            if (this.Geometries != null)
-            {
-                return new Geometry(this.Geometries.Select(g => g.Clone()).ToArray(), this.Type, this.Srid);
-            }
-
-            return new Geometry(null, this.Type, false, this.Srid);
-        }
-
-        public bool IsValid()
-        {
-            switch (this.Type)
-            {
-                case GeometryType.Point:
-                    return this.Points?.Length == 1;
-
-                case GeometryType.LineString:
-                    return this.Points.Length > 1;
-
-                case GeometryType.Polygon:
-                    return this.Geometries.Length > 0 && this.Geometries.All(g => g.Points?.Length >= 3);
-
-                case GeometryType.MultiPoint:
-                case GeometryType.MultiLineString:
-                case GeometryType.MultiPolygon:
-                case GeometryType.GeometryCollection:
-                    return this.Geometries?.All(g => g.IsValid()) == true;
-
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public List<LineSegment> GetLineSegments()
-        {
-            switch (this.Type)
-            {
-                case GeometryType.LineString:
-                    return GetLineSegments(false);
-
-                case GeometryType.Polygon:
-                    return Geometries.SelectMany(i => i.GetLineSegments(true)).ToList();
-
-                case GeometryType.MultiLineString:
-                    return Geometries.SelectMany(i => i.GetLineSegments(false)).ToList();
-
-                case GeometryType.MultiPolygon:
-                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
-
-                case GeometryType.GeometryCollection:
-                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
-
-                case GeometryType.Point:
-                case GeometryType.MultiPoint:
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        private List<LineSegment> GetLineSegments(bool isClosed)
-        {
-            List<LineSegment> result = new List<LineSegment>();
-
-            if (Points != null)
-            {
-                for (int i = 0; i < this.Points.Length - 1; i++)
-                {
-                    result.Add(new LineSegment(Points[i], Points[i + 1]));
-                }
-
-                if (isClosed)
-                {
-                    //prevent returning segment when polygon has one point
-                    if (Points.Length > 1)
-                    {
-                        result.Add(new LineSegment(Points[Points.Length - 1], Points[0]));
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public Point GetMeanPoint()
-        {
-            var allPoints = GetAllPoints();
-
-            return new Point(allPoints.Sum(i => i.X) / allPoints.Length, allPoints.Sum(i => i.Y) / allPoints.Length);
         }
 
         //Returns last geometry ring or point
@@ -701,6 +561,66 @@ namespace IRI.Msh.Common.Primitives
             }
 
             return null;
+        }
+
+        public void ClearEmptyGeometries()
+        {
+            if (Geometries == null)
+            {
+                return;
+            }
+
+            for (int i = Geometries.Length; i >= 0; i--)
+            {
+                if (Geometries[i].HasAnyPoint())
+                {
+                    Geometries[i].ClearEmptyGeometries();
+                }
+                else
+                {
+                    this.Geometries.RemoveAt(i);
+                }
+            }
+        }
+
+        public Geometry GetRingOrLineStringPassingPoint(double x, double y)
+        {
+            int index;
+
+            switch (this.Type)
+            {
+                case GeometryType.LineString:
+                    if (TryFind(this.Points, x, y, out index))
+                    {
+                        return this;
+                    }
+
+                    return null;
+
+                case GeometryType.Polygon:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    for (int i = 0; i < this.Geometries.Length; i++)
+                    {
+                        var geo = this.Geometries[i].GetRingOrLineStringPassingPoint(x, y);
+
+                        if (geo != null)
+                        {
+                            return geo;
+                        }
+                    }
+
+                    return null;
+
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public bool TryAddNewPart()
@@ -770,66 +690,6 @@ namespace IRI.Msh.Common.Primitives
             return true;
         }
 
-        public void ClearEmptyGeometries()
-        {
-            if (Geometries == null)
-            {
-                return;
-            }
-
-            for (int i = Geometries.Length; i >= 0; i--)
-            {
-                if (Geometries[i].HasAnyPoint())
-                {
-                    Geometries[i].ClearEmptyGeometries();
-                }
-                else
-                {
-                    this.Geometries.RemoveAt(i);
-                }
-            }
-        }
-
-        public Geometry GetRingOrLineStringPassingPoint(double x, double y)
-        {
-            int index;
-
-            switch (this.Type)
-            {
-                case GeometryType.LineString:
-                    if (TryFind(this.Points, x, y, out index))
-                    {
-                        return this;
-                    }
-
-                    return null;
-
-                case GeometryType.Polygon:
-                case GeometryType.MultiLineString:
-                case GeometryType.MultiPolygon:
-                    for (int i = 0; i < this.Geometries.Length; i++)
-                    {
-                        var geo = this.Geometries[i].GetRingOrLineStringPassingPoint(x, y);
-
-                        if (geo != null)
-                        {
-                            return geo;
-                        }
-                    }
-
-                    return null;
-
-                case GeometryType.Point:
-                case GeometryType.MultiPoint:
-                case GeometryType.GeometryCollection:
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
         public bool TryRemovePart(Geometry geometry)
         {
             if (this.Geometries?.Length > 0)
@@ -896,6 +756,64 @@ namespace IRI.Msh.Common.Primitives
             return false;
         }
 
+        public List<LineSegment> GetLineSegments()
+        {
+            switch (this.Type)
+            {
+                case GeometryType.LineString:
+                    return GetLineSegments(false);
+
+                case GeometryType.Polygon:
+                    return Geometries.SelectMany(i => i.GetLineSegments(true)).ToList();
+
+                case GeometryType.MultiLineString:
+                    return Geometries.SelectMany(i => i.GetLineSegments(false)).ToList();
+
+                case GeometryType.MultiPolygon:
+                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
+
+                case GeometryType.GeometryCollection:
+                    return Geometries.SelectMany(i => i.GetLineSegments()).ToList();
+
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private List<LineSegment> GetLineSegments(bool isClosed)
+        {
+            List<LineSegment> result = new List<LineSegment>();
+
+            if (Points != null)
+            {
+                for (int i = 0; i < this.Points.Length - 1; i++)
+                {
+                    result.Add(new LineSegment(Points[i], Points[i + 1]));
+                }
+
+                if (isClosed)
+                {
+                    //prevent returning segment when polygon has one point
+                    if (Points.Length > 1)
+                    {
+                        result.Add(new LineSegment(Points[Points.Length - 1], Points[0]));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
+        #region Project & Srs
+
         public SrsBase GetSrs()
         {
             return SridHelper.AsSrsBase(Srid);
@@ -923,6 +841,8 @@ namespace IRI.Msh.Common.Primitives
                 return c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid);
             }
         }
+
+        #endregion
 
 
         //must be reviewed: 
@@ -956,6 +876,111 @@ namespace IRI.Msh.Common.Primitives
                 return result;
             }
         }
+
+
+        #region Static Create
+
+        private static readonly Geometry _null = new Geometry();
+
+        public static Geometry Null { get { return _null; } }
+
+        //public static readonly Geometry EmptyPoint = new Geometry(new IPoint[0], GeometryType.Point);
+        //public static readonly Geometry EmptyLineString = new Geometry(new IPoint[0], GeometryType.LineString);
+        //public static readonly Geometry EmptyPolygon = new Geometry(new IPoint[0], GeometryType.Polygon);
+        //public static readonly Geometry EmptyMultiPoint = new Geometry(new Geometry[0], GeometryType.MultiPoint);
+        //public static readonly Geometry EmptyMultiLineString = new Geometry(new Geometry[0], GeometryType.MultiLineString);
+        //public static readonly Geometry EmptyMultiPolygon = new Geometry(new Geometry[0], GeometryType.MultiPolygon);
+
+        public static Geometry CreateEmpty(GeometryType type, int srid)
+        {
+            switch (type)
+            {
+                case GeometryType.GeometryCollection:
+                    return new Geometry(new Geometry[0], GeometryType.GeometryCollection) { Srid = srid };
+
+                case GeometryType.LineString:
+                    return new Geometry(new Point[0], GeometryType.LineString) { Srid = srid };
+
+                case GeometryType.MultiLineString:
+                    return new Geometry(new Geometry[0], GeometryType.MultiLineString) { Srid = srid };
+
+                case GeometryType.MultiPoint:
+                    return new Geometry(new Geometry[0], GeometryType.MultiPoint) { Srid = srid };
+
+                case GeometryType.MultiPolygon:
+                    return new Geometry(new Geometry[0], GeometryType.MultiPolygon) { Srid = srid };
+
+                case GeometryType.Point:
+                    return new Geometry(new Point[0], GeometryType.Point) { Srid = srid };
+
+                case GeometryType.Polygon:
+                    return new Geometry(new Geometry[0], GeometryType.Polygon) { Srid = srid };
+
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static Geometry Create(double x, double y, int srid = 0)
+        {
+            return new Geometry(new Point[] { new Point(x, y) }, GeometryType.Point, srid);
+        }
+
+        /// <summary>
+        /// For Polygons do not repeat first point in the last point
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="type"></param>
+        /// <param name="srid"></param>
+        /// <returns></returns>
+        public static Geometry Create(IPoint[] points, GeometryType type, int srid = 0)
+        {
+            if (points == null)
+            {
+                CreateEmpty(type, srid);
+            }
+
+            switch (type)
+            {
+                case GeometryType.Point:
+                    return new Geometry(points, GeometryType.Point) { Srid = srid };
+                //return CreatePointOrLineString(points, srid); //do not use this method: what if making a new Geometry LineString with first point
+
+                case GeometryType.LineString:
+                    return new Geometry(points, GeometryType.LineString) { Srid = srid };
+                //return CreatePointOrLineString(points, srid);
+
+                case GeometryType.Polygon:
+                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon, srid);
+
+                case GeometryType.MultiPoint:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static Geometry CreatePointOrLineString(IPoint[] points, int srid)
+        {
+            if (points.Length == 1)
+            {
+                return new Geometry(points, GeometryType.Point) { Srid = srid };
+            }
+            else
+            {
+                return new Geometry(points, GeometryType.LineString) { Srid = srid };
+            }
+        }
+
+        #endregion
 
 
         #region Static Methods
@@ -1029,6 +1054,87 @@ namespace IRI.Msh.Common.Primitives
             return new Geometry(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, isLongFirst)).ToArray(), geometryType, srid);
         }
 
+
+        #endregion
+
+
+        #region Area
+
+        public double CalculateUnsignedEuclideanArea()
+        {
+            if (this.Points == null && this.Geometries == null)
+                return 0;
+
+            if (this.Points.Length < 1 && this.Geometries.Length < 1)
+                return 0;
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                case GeometryType.LineString:
+                case GeometryType.MultiLineString:
+                    return 0;
+
+                case GeometryType.Polygon:
+                    return CalculateUnsignedEuclideanAreaForPolygon(this);
+
+                case GeometryType.MultiPolygon:
+                    return Geometries.Sum(g => g.CalculateUnsignedEuclideanArea());
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+
+
+        }
+
+        //1399.06.10
+        //یک چندضلعی از یک رینگ بزرگ که ممکنه حفره داشته باشه
+        //تشکیل شده. بنابر این بزرگ‌ترین مساحت متعلق به رینگ بزرگ 
+        //و باقی همه حفره‌ها هستن
+        //این الگوریتم اگه چندضلعی معتبر نباشه درست جواب نمی‌ده
+        private static double CalculateUnsignedEuclideanAreaForPolygon(Geometry geometry)
+        {
+            if (geometry == null || geometry.Geometries.Length == 0)
+            {
+                return 0;
+            }
+
+            List<double> areas = new List<double>();
+
+            for (int i = 0; i < geometry.Geometries.Length; i++)
+            {
+                areas.Add(CalculateUnsignedEuclideanAreaForRing(geometry.Geometries[i].GetAllPoints()));
+            }
+
+            var outerRingArea = areas.Max();
+
+            //مساحت رینگ اصلی دو مرتبه حساب شده
+            //تا از خودش داخل ارایه کم شود
+            return 2 * outerRingArea - areas.Sum();
+        }
+
+        private static double CalculateUnsignedEuclideanAreaForRing(IPoint[] points)
+        {
+            if (points == null || points.Length < 3)
+                return 0;
+              
+            double area = 0;
+
+            for (int i = 0; i < points.Length - 1; i++)
+            {
+                double temp = points[i].X * points[i + 1].Y - points[i].Y * points[i + 1].X;
+
+                area += temp;
+            }
+
+            return Math.Abs(area);
+        }
 
         #endregion
     }

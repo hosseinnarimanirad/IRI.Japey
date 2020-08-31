@@ -9,6 +9,7 @@ using System.Globalization;
 using IRI.Ket.SpatialExtensions;
 using System.Linq;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 {
@@ -89,9 +90,9 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             {
                 System.Diagnostics.Debug.WriteLine(string.Empty);
 
-                var geometries = originalGeometries.Simplify(SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByAreaAngle, i);
+                var geometries = originalGeometries.Simplify(SimplificationType.AdditiveByAreaAngle, i);
 
-                geometries = geometries.Simplify(SqlServerSpatialExtension.Analysis.SimplificationType.AdditiveByArea, i);
+                geometries = geometries.Simplify(SimplificationType.AdditiveByArea, i);
 
                 CopyToSqlServer(_pyramidParameters.TableName, geometries, i - 1);
             }
