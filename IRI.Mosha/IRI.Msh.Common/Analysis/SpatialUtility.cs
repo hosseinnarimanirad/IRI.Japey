@@ -18,13 +18,19 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
+        //1399.06.11
+        //در این جا فرض شده که نقطه اخر چند حلقه تکرار 
+        //نشده
         /// <summary>
-        /// Returns the signed area
+        /// Calculate unsigned Euclidean area for ring. 
         /// </summary>
-        /// <param name="points"></param>
+        /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double CalculateArea(IPoint[] points)
+        public static double CalculateUnsignedAreaForRing(IPoint[] points)
         {
+            if (points == null || points.Length < 3)
+                return 0;
+
             double area = 0;
 
             for (int i = 0; i < points.Length - 1; i++)
@@ -34,17 +40,174 @@ namespace IRI.Msh.Common.Analysis
                 area += temp;
             }
 
-            return area;
+            //1399.06.11
+            //تکرار نقطه اخر چند ضلعی
+            //فرض بر این هست که داخل لیست نقطه‌ها
+            //این نقطه تکرار نشده باشه
+            area += points[points.Length - 1].X * points[0].Y - points[points.Length - 1].Y * points[0].X;
+
+            return Math.Abs(area / 2.0);
         }
 
-        public static double CalculateTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+
+        /// <summary>
+        /// Calculate unsigned Euclidean area for triangle
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
+        public static double CalculateUnsignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
-            return Math.Abs(firstPoint.X * (middlePoint.Y - lastPoint.Y) + middlePoint.X * (lastPoint.Y - firstPoint.Y) + lastPoint.X * (firstPoint.Y - middlePoint.Y)) / 2.0;
+            return Math.Abs(CalculateSignedTriangleArea(firstPoint, middlePoint, lastPoint));
         }
 
-        public static double CalculateTriangleSignedArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+
+        /// <summary>
+        /// Calculate signed Euclidean area for triangle
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
+        public static double CalculateSignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             return (firstPoint.X * (middlePoint.Y - lastPoint.Y) + middlePoint.X * (lastPoint.Y - firstPoint.Y) + lastPoint.X * (firstPoint.Y - middlePoint.Y)) / 2.0;
+        }
+
+        //1399.06.11
+        //مساحت مثلت‌های تشکیل دهنده یک خط یا 
+        //حلقه توسط نقاط ورودی
+        public static List<double> GetPrimitiveAreas(IPoint[] points, bool isClosed)
+        {
+            List<double> result = new List<double>();
+
+            var n = points.Length;
+
+            if (points == null || n < 3)
+                return result;
+
+            //double[] result = new double[n - 1];
+
+            for (int i = 0; i < n - 2; i++)
+            {
+                //result[i] = CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
+                result.Add(CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]));
+            }
+
+            if (isClosed && n > 3)
+            {
+                //result[n - 2] = CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]);
+                result.Add(CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]));
+            }
+
+            return result;
+        }
+
+        //1399.06.11
+        //مساحت مثلت‌های تشکیل دهنده شکل هندسی
+        public static List<double> GetPrimitiveAreas(Geometry geometry)
+        {
+            var result = new List<double>();
+
+            if (geometry == null)
+            {
+                return result;
+            }
+
+            switch (geometry.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                    return result;
+
+                case GeometryType.LineString:
+                    return GetPrimitiveAreas(geometry.Points, false);
+
+                case GeometryType.Polygon:
+                    return geometry.Geometries.SelectMany(g => GetPrimitiveAreas(g.Points, true)).ToList();
+
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return geometry.Geometries.SelectMany(g => GetPrimitiveAreas(g)).ToList();
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("SpatialUtility.cs > GetPrimitiveAreas");
+            }
+        }
+
+        public static List<double> GetPrimitiveAreas(List<Geometry> geometries)
+        {
+            if (geometries == null)
+            {
+                return new List<double>();
+            }
+
+            return geometries.SelectMany(g => GetPrimitiveAreas(g)).ToList();
+        }
+
+        public static double GetCosineOfAngle(IPoint p1, IPoint p2, IPoint p3)
+        {
+            if (p1.Equals(p2) || p2.Equals(p3))
+            {
+                return 1;
+            }
+
+            //cos(theta) = (A.B)/(|A|*|B|)
+            var ax = p3.X - p2.X;
+            var ay = p3.Y - p2.Y;
+
+            var bx = p2.X - p1.X;
+            var by = p2.Y - p1.Y;
+
+            var dotProduct = ax * bx + ay * by;
+
+            var result = dotProduct * dotProduct / ((ax * ax + ay * ay) * (bx * bx + by * by));
+
+            if (double.IsNaN(result))
+            {
+
+            }
+
+            return result;
+        }
+
+        public static double[] GetCosineOfAngles(IPoint[] points)
+        {
+            if (points == null || points.Length == 0 || points.Length == 2)
+                return null;
+
+            double[] result = new double[points.Length - 2];
+
+            for (int i = 0; i < points.Length - 2; i++)
+            {
+                result[i] = GetCosineOfAngle(points[i], points[i + 1], points[i + 2]);
+            }
+
+            return result;
+        }
+
+        private static double CalculateDotProduct(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        {
+            if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
+            {
+                return 1;
+            }
+
+            //cos(theta) = (A.B)/(|A|*|B|)
+            var ax = lastPoint.X - middlePoint.X;
+            var ay = lastPoint.Y - middlePoint.Y;
+
+            var bx = middlePoint.X - firstPoint.X;
+            var by = middlePoint.Y - firstPoint.Y;
+
+            var dotProduct = ax * bx + ay * by;
+
+            return dotProduct;
         }
 
         public static double CalculateSemiCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
@@ -73,6 +236,7 @@ namespace IRI.Msh.Common.Analysis
 
             return dotProduct < 0 ? -1 * result : result;
         }
+
 
 
         /// <summary>
@@ -112,6 +276,8 @@ namespace IRI.Msh.Common.Analysis
 
             return values.Sum() > 0;
         }
+
+
 
         public static bool CircleRectangleIntersects(IPoint circleCenter, double circleRadius, BoundingBox axisAlignedRectangle)
         {
@@ -203,5 +369,11 @@ namespace IRI.Msh.Common.Analysis
                 return SpatialRelation.Disjoint;
             }
         }
+
+
+
+
+
+
     }
 }

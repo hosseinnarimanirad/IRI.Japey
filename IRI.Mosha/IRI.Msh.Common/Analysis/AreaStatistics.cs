@@ -8,99 +8,28 @@ namespace IRI.Msh.Common.Analysis
 {
     public class AreaStatistics
     {
-        public AreaStatistics(Geometry shapes)
+        public AreaStatistics(List<Geometry> geometries)
         {
-            this.Areas = new List<double>();
+            this.NumberOfPoints = geometries.Sum(g => g.TotalNumberOfPoints);
 
-            this.NumberOfPoints = 0;
-
-            Threshold = 0;
-
-            foreach (var item in shapes.)
-            {
-                this.NumberOfPoints += item.Points.Length;
-
-                //var areas = ShapeUtility.GetAreas(item.Points);
-
-                //if (areas != null && areas.Length > 0)
-                //{
-                //    this.Areas.AddRange(areas);
-                //}
-            }
+            this.Areas = SpatialUtility.GetPrimitiveAreas(geometries);
         }
 
-        private void Calculate(Geometry geometry)
+        public AreaStatistics(Geometry geometry)
         {
-            switch (geometry.Type)
-            {
-                case GeometryType.Point:
-                case GeometryType.MultiPoint:
-                case GeometryType.GeometryCollection:
-                case GeometryType.CircularString:
-                case GeometryType.CompoundCurve:
-                case GeometryType.CurvePolygon:
-                    break;
+            this.NumberOfPoints = geometry.TotalNumberOfPoints;
 
-                case GeometryType.LineString:
-                    break;
-
-                case GeometryType.Polygon:
-                    break;
-
-                case GeometryType.MultiLineString:
-                    break;
-
-                case GeometryType.MultiPolygon:
-                    break;
-
-                default:
-                    break;
-            }
+            this.Areas = SpatialUtility.GetPrimitiveAreas(geometry);            
         }
-
-        private List<double> GetAreas(Geometry lineString)
-        {
-            List<double> result = new List<double>();
-
-            if (lineString == null || lineString.NumberOfPoints == 0)
-            {
-                return result;
-            }
-
-            if (lineString.Type != GeometryType.LineString)
-            {
-                throw new NotImplementedException();
-            }
-
-            var points = lineString.GetAllPoints();
-
-        }
-
-
-        public static double[] GetAreas(IPoint[] points)
-        {
-            if (points == null || points.Length == 0 || points.Length == 2)
-                return null;
-
-            double[] result = new double[points.Length - 2];
-
-            for (int i = 0; i < points.Length - 2; i++)
-            {
-                result[i] = GetArea(points[i], points[i + 1], points[i + 2]);
-            }
-
-            return result;
-        }
-
-
-        //public void Init()
-        //{
-        //    Areas = new List<double>();
-        //}
 
         internal int NumberOfPoints;
 
         internal List<double> Areas;
+
+        public string Description
+        {
+            get { return GetDescription(); }
+        }
 
         internal double GetAverage()
         {
@@ -125,13 +54,7 @@ namespace IRI.Msh.Common.Analysis
                 return "EMPTY STAT";
             }
 
-            return string.Format("Threshold: {0}, St.Dev.: {1}, AvgArea: {2}, Number of Points: {3}, MinArea: {4}, MaxArea: {5}",
-                GetStandardDeviation(),
-                Areas.Average(),
-                NumberOfPoints,
-                Areas.Min(),
-                Areas.Max()
-                );
+            return $"St.Dev.: {GetStandardDeviation()}, AvgArea: {Areas.Average()}, Number of Points: {NumberOfPoints}, MinArea: {Areas.Min()}, MaxArea: {Areas.Max()}";
         }
 
         public string ToCSV()
@@ -141,13 +64,7 @@ namespace IRI.Msh.Common.Analysis
                 return "EMPTY STAT";
             }
 
-            return string.Format("{0}; {1}; {2}; {3}; {4}; {5}",
-             GetStandardDeviation(),
-             Areas.Average(),
-             NumberOfPoints,
-             Areas.Min(),
-             Areas.Max()
-             );
+            return $"{GetStandardDeviation()}; {Areas.Average()}; {NumberOfPoints}; {Areas.Min()}; {Areas.Max()}";
         }
 
         public string GetDescription()

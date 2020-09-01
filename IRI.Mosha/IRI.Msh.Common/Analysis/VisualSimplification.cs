@@ -28,7 +28,7 @@ namespace IRI.Msh.Common.Analysis
 
             while (thirdIndex < points.Length)
             {
-                var area = SpatialUtility.CalculateTriangleSignedArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.CalculateSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 tempArea += area;
 
@@ -81,9 +81,9 @@ namespace IRI.Msh.Common.Analysis
 
             while (thirdIndex < points.Length)
             {
-                var area = SpatialUtility.CalculateTriangleSignedArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.CalculateSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
-                var areaCheck2 = SpatialUtility.CalculateTriangleArea(points[firstIndex], points[(int)((firstIndex + thirdIndex) / 2.0)], points[thirdIndex]);
+                var areaCheck2 = SpatialUtility.CalculateUnsignedTriangleArea(points[firstIndex], points[(int)((firstIndex + thirdIndex) / 2.0)], points[thirdIndex]);
 
                 tempArea += area;
 
@@ -128,7 +128,7 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < points.Length - 2; i++)
             {
-                var area = SpatialUtility.CalculateTriangleArea(points[i], points[i + 1], points[i + 2]);
+                var area = SpatialUtility.CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
 
                 areas.Add(new Tuple<int, double>(i + 1, area));
             }
@@ -262,7 +262,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
-                var area = SpatialUtility.CalculateTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.CalculateUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 tempArea += area;
 

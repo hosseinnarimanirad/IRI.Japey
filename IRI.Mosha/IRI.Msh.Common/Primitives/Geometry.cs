@@ -49,6 +49,21 @@ namespace IRI.Msh.Common.Primitives
 
         public int NumberOfPoints { get { return Points?.Length ?? 0; } }
 
+        public int TotalNumberOfPoints
+        {
+            get
+            {
+                if (Points!=null)
+                {
+                    return Points.Length;
+                }
+                else
+                {
+                    return Geometries.Sum(g => g.TotalNumberOfPoints);
+                }
+            }
+        }
+
         public int Srid { get; set; }
 
         private Geometry()
@@ -1060,12 +1075,10 @@ namespace IRI.Msh.Common.Primitives
 
         #region Area
 
+
         public double CalculateUnsignedEuclideanArea()
         {
             if (this.Points == null && this.Geometries == null)
-                return 0;
-
-            if (this.Points.Length < 1 && this.Geometries.Length < 1)
                 return 0;
 
             switch (this.Type)
@@ -1107,33 +1120,112 @@ namespace IRI.Msh.Common.Primitives
 
             List<double> areas = new List<double>();
 
+            int maxAreaIndex = 0;
+
+            double maxArea = 0;
+
             for (int i = 0; i < geometry.Geometries.Length; i++)
             {
-                areas.Add(CalculateUnsignedEuclideanAreaForRing(geometry.Geometries[i].GetAllPoints()));
+                var area = SpatialUtility.CalculateUnsignedAreaForRing(geometry.Geometries[i].GetAllPoints());
+
+                if (area > maxArea)
+                {
+                    maxArea = area;
+                    maxAreaIndex = i;
+                }
+
+                areas.Add(area);
             }
 
-            var outerRingArea = areas.Max();
+            areas.RemoveAt(maxAreaIndex);
 
-            //مساحت رینگ اصلی دو مرتبه حساب شده
-            //تا از خودش داخل ارایه کم شود
-            return 2 * outerRingArea - areas.Sum();
+            ////مساحت رینگ اصلی دو مرتبه حساب شده
+            ////تا از خودش داخل ارایه کم شود
+            //return 2 * outerRingArea - areas.Sum();
+
+            return maxArea - areas.Sum();
         }
 
-        private static double CalculateUnsignedEuclideanAreaForRing(IPoint[] points)
+        ////1399.06.11
+        ////در این جا فرض شده که نقطه اخر چند حلقه تکرار 
+        ////نشده
+        //private static double CalculateUnsignedEuclideanAreaForRing(IPoint[] points)
+        //{
+        //    if (points == null || points.Length < 3)
+        //        return 0;
+
+        //    double area = 0;
+
+        //    for (int i = 0; i < points.Length - 1; i++)
+        //    {
+        //        double temp = points[i].X * points[i + 1].Y - points[i].Y * points[i + 1].X;
+
+        //        area += temp;
+        //    }
+
+        //    //1399.06.11
+        //    //تکرار نقطه اخر چند ضلعی
+        //    //فرض بر این هست که داخل لیست نقطه‌ها
+        //    //این نقطه تکرار نشده باشه
+        //    area += points[points.Length - 1].X * points[0].Y - points[points.Length - 1].Y * points[0].X;
+
+        //    return Math.Abs(area / 2.0);
+        //}
+
+        #endregion
+
+        #region Length
+
+        public double CalculateEuclideanLength()
         {
-            if (points == null || points.Length < 3)
+            if (this.Points == null && this.Geometries == null)
                 return 0;
-              
-            double area = 0;
 
-            for (int i = 0; i < points.Length - 1; i++)
+            switch (this.Type)
             {
-                double temp = points[i].X * points[i + 1].Y - points[i].Y * points[i + 1].X;
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                    return 0;
 
-                area += temp;
+                case GeometryType.LineString:
+                    return CalculateEuclideanLengthForLineStringOrRing(false);
+
+                case GeometryType.Polygon:
+                    return Geometries.Sum(g => g.CalculateEuclideanLengthForLineStringOrRing(true));
+
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return Geometries.Sum(g => g.CalculateEuclideanLength());
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry.cs > CalculateEuclideanLength");
+            }
+        }
+
+        private double CalculateEuclideanLengthForLineStringOrRing(bool isRing)
+        {
+            if (this.Points == null || this.Points.Length < 2)
+            {
+                return 0;
             }
 
-            return Math.Abs(area);
+            double result = 0;
+
+            for (int i = 0; i < this.Points.Length - 1; i++)
+            {
+                result += this.Points[i].DistanceTo(this.Points[i + 1]);
+            }
+
+            if (isRing)
+            {
+                result += this.Points[this.Points.Length - 1].DistanceTo(this.Points[0]);
+            }
+
+            return result;
         }
 
         #endregion

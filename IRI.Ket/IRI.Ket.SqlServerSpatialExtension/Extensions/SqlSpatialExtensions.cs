@@ -105,6 +105,7 @@ namespace IRI.Ket.SpatialExtensions
             return IRI.Ket.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
         }
 
+
         public static List<SqlGeometry> GetGeometries(this SqlGeometry geometry)
         {
             if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
@@ -278,6 +279,10 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
+        public static IPoint[] GetAllPoints(this SqlGeometry geometry)
+        {
+            return geometry.AsGeometry().GetAllPoints();
+        }
 
 
 
@@ -640,7 +645,7 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-        #region Extract Points (Geometry)
+        #region To Geometry
 
         public static Geometry AsGeometry(this SqlGeometry geometry)
         {
@@ -834,7 +839,7 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-        #region Esri Json Geometry
+        #region To Esri Json Geometry
 
         public static EsriJsonGeometry ParseToEsriJsonGeometry(this SqlGeometry geometry)
         {
@@ -1047,7 +1052,7 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-        #region Path Markup
+        #region To Path Markup
 
         public static string ParseToPathMarkup(this SqlGeometry geometry, double decimals = double.NaN)
         {
@@ -1196,8 +1201,7 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-
-        #region Geometry To GeoJson
+        #region To GeoJson
 
         public static IGeoJsonGeometry ParseToGeoJson(this SqlGeometry geometry)
         {

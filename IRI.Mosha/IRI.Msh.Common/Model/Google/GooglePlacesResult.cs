@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace IRI.Msh.Common.Model.Google
@@ -47,7 +48,8 @@ namespace IRI.Msh.Common.Model.Google
         public GoogleLocation Southwest { get; set; }
     }
 
-    public class Geometry
+
+    public class GoogleGeometry
     {
 
         [JsonProperty("location")]
@@ -90,7 +92,7 @@ namespace IRI.Msh.Common.Model.Google
         public string FormattedAddress { get; set; }
 
         [JsonProperty("geometry")]
-        public Geometry Geometry { get; set; }
+        public GoogleGeometry Geometry { get; set; }
 
         [JsonProperty("icon")]
         public string Icon { get; set; }

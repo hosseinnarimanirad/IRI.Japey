@@ -6,6 +6,8 @@ using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Ket.SpatialExtensions;
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.SqlServerSpatialExtension
 {
@@ -106,5 +108,31 @@ namespace IRI.Ket.SqlServerSpatialExtension
 
             return result;
         }
+
+
+        //1399.06.11
+        //مساحت مثلت‌های تشکیل دهنده شکل هندسی
+        public static List<double> GetPrimitiveAreas(SqlGeometry geometry)
+        {
+            var result = new List<double>();
+
+            if (geometry == null)
+            {
+                return result;
+            }
+
+            return SpatialUtility.GetPrimitiveAreas(geometry.AsGeometry());
+        }
+
+        public static List<double> GetPrimitiveAreas(List<SqlGeometry> geometries)
+        {
+            if (geometries == null)
+            {
+                return new List<double>();
+            }
+
+            return geometries.SelectMany(g => GetPrimitiveAreas(g)).ToList();
+        }
+
     }
 }
