@@ -70,6 +70,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\ReferenceDatum\OrientationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\SpatialReferenceType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\Transformation\Transformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\BinaryHeap\BinaryHeap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\BinaryHeap\IBinaryHeap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\BinaryHeap\MaxBinaryHeap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\BinaryHeap\MinBinaryHeap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\SortAlgorithm\SortAlgorithm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataStructures\SortAlgorithm\SortDirection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DoubleExtensions.cs" />
@@ -115,6 +121,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\AttributeGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\ClassFrequency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\IntervalInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\StatisticsSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ZeroSizeArrayException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Bing\BingIsolineResult.cs" />
@@ -202,5 +209,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
+    <Folder Include="$(MSBuildThisFileDirectory)DataStructures\SortAlgorithm\" />
   </ItemGroup>
 </Project>

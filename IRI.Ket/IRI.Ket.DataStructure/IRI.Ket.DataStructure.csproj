@@ -87,10 +87,6 @@
     <Compile Include="AdvancedStructures\BalancedKdTreeNode.cs" />
     <Compile Include="AdvancedStructures\KdTree.cs" />
     <Compile Include="AdvancedStructures\KdTreeNode.cs" />
-    <Compile Include="BinaryHeap\BinaryHeap.cs" />
-    <Compile Include="BinaryHeap\IBinaryHeap.cs" />
-    <Compile Include="BinaryHeap\MinBinaryHeap.cs" />
-    <Compile Include="BinaryHeap\MaxBinaryHeap.cs" />
     <Compile Include="DisjointSet\DisjointSetLinkedList.cs" />
     <Compile Include="Graph\Clustring\GreedyClustring.cs" />
     <Compile Include="Graph\GraphRepresentation\AdjacencyList.cs" />
@@ -118,9 +114,7 @@
     <Compile Include="MyStructures\Triple.cs" />
     <Compile Include="MyStructures\UniquePairs.cs" />
     <Compile Include="Optimization\KnapsackProblem.cs" />
-    <Compile Include="SortAlgorithm\SortAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SortAlgorithm\SortDirection.cs" />
     <Compile Include="Trees\BinarySearchTree.cs" />
     <Compile Include="Trees\BinarySearchNode.cs" />
     <Compile Include="Trees\BTree.cs" />

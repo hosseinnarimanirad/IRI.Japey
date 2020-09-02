@@ -24,7 +24,7 @@ namespace IRI.Msh.Common.Analysis
 
         internal int NumberOfPoints;
 
-        internal List<double> Areas;
+        public readonly List<double> Areas;
 
         public string Description
         {
