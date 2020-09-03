@@ -307,11 +307,11 @@ namespace IRI.Ket.Geometry
         #endregion
         
         /*Sort
-        //public void Sort(IRI.Ket.DataStructure.SortDirection direction, PointComparisonPriority priority)
+        //public void Sort(IRI.Msh.DataStructure.SortDirection direction, PointComparisonPriority priority)
         //{
         //    Point.ComparisonPriority = priority;
 
-        //    IRI.Ket.DataStructure.SortAlgorithm.Heapsort<Point>(ref this.points, direction);
+        //    IRI.Msh.DataStructure.SortAlgorithm.Heapsort<Point>(ref this.points, direction);
 
         //    //RefreshCodes();
         //}

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <Import Project="..\..\IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems" Label="Shared" />
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
+  </ItemGroup>
+</Project>

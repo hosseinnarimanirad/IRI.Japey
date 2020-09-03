@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using IRI.Msh.Algebra;
-using IRI.Ket.DataStructure;
+using IRI.Msh.Algebra; 
 using System.Linq;
 
 namespace IRI.Msh.Statistics
@@ -630,34 +629,6 @@ namespace IRI.Msh.Statistics
         #endregion
 
         #region Other
-
-        public static Model.StatisticsSummary CalculateSummary(double[] values)
-        {
-            if (values == null)
-            {
-                return new Model.StatisticsSummary();
-            }
-
-            var length = values.Length;
-
-            var sortedValues = SortAlgorithm.MergeSort<double>(values, (a, b) => a.CompareTo(b));
-
-            var result = new Model.StatisticsSummary();
-
-            result.Min = sortedValues.First();
-
-            result.Max = sortedValues.Last();
-
-            result.FirstQuartile = sortedValues[length / 4];
-
-            result.Median = sortedValues[length / 2];
-
-            result.ThirdQuartile = sortedValues[length * 3 / 4];
-
-            result.Mean = CalculateMean(values);
-
-            return result;
-        }
 
         #endregion
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using IRI.Ket.Spatial.Primitives;
 using IRI.Ket.Spatial;
-using IRI.Ket.DataStructure;
+using IRI.Msh.DataStructure;
 using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.Spatial.PointSorting
@@ -74,17 +74,17 @@ namespace IRI.Ket.Spatial.PointSorting
 
             var sfc = SpaceFillingCurves.Hilbert(Moves.North, Moves.East);
 
-            //IRI.Ket.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //IRI.Msh.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
             //return array;
 
             //Array.Sort(array, new Comparison<Point>((p1, p2) => sfc.ComparePoints(p1, p2, boundary)));
             //return array;
 
-            //return IRI.Ket.DataStructure.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
-            //return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //return IRI.Msh.DataStructure.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            //return IRI.Msh.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
 
 
-            IRI.Ket.DataStructure.SortAlgorithm.BubbleSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            IRI.Msh.DataStructure.SortAlgorithm.BubbleSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
             return array;
 
         }
@@ -106,7 +106,7 @@ namespace IRI.Ket.Spatial.PointSorting
 
             //return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
             //return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
-            //IRI.Ket.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
+            //IRI.Msh.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
             //return array;
 
             return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
@@ -118,7 +118,7 @@ namespace IRI.Ket.Spatial.PointSorting
 
             var sfc = SpaceFillingCurves.Gray(Moves.North, Moves.East, Moves.South);
 
-            return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            return IRI.Msh.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
             //SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
 
             //return array;
@@ -139,7 +139,7 @@ namespace IRI.Ket.Spatial.PointSorting
 
             var sfc = SpaceFillingCurves.ZOrdering();
 
-            return IRI.Ket.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+            return IRI.Msh.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         }
 
         public static Point[] DiagonalLebesgueSorter(Point[] array)

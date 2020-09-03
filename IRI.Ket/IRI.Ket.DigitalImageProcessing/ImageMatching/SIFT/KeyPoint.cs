@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using IRI.Msh.Algebra;
-using IRI.Ket.DataStructure;
+using IRI.Msh.DataStructure;
 using System.Xml.Serialization;
 
 namespace IRI.Ket.DigitalImageProcessing.ImageMatching

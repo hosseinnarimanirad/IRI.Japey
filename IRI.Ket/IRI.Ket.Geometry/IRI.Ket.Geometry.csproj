@@ -120,13 +120,13 @@
       <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
       <Name>IRI.Sta.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj">
+      <Project>{a9c79ad2-04b7-4c06-a8fa-8681d4cd2b73}</Project>
+      <Name>IRI.Sta.DataStructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
-      <Project>{F420034F-75C8-448D-B11B-B8CBF26C8946}</Project>
-      <Name>IRI.Ket.DataStructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

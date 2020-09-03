@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using IRI.Ket.Geometry;
 using IRI.Msh.Algebra;
-using IRI.Ket.DataStructure;
+using IRI.Msh.DataStructure;
 
 namespace IRI.Ket.DigitalTerrainModeling
 {
