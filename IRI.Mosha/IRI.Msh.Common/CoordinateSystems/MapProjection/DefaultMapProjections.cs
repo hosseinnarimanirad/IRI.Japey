@@ -86,6 +86,8 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         {
             GeodeticWgs84 = new NoProjection();
 
+            WebMercator = new WebMercator();
+
             //https://epsg.io/3200
             //LccFd58 = new LambertConformalConic(
             //   ellipsoid: Ellipsoids.FD58,
@@ -149,6 +151,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
                 scaleFactor: 0.9987864078);
 
 
+        }
+
+        public static WebMercator WebMercator
+        {
+            get; private set;
         }
 
 

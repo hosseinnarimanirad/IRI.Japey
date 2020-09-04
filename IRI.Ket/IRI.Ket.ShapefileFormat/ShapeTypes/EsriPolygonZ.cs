@@ -111,7 +111,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-             
+
             this.parts = parts;
 
             this.points = points;
@@ -172,7 +172,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             this.boundingBox = boundingBox;
-             
+
             this.parts = parts;
 
             this.points = points;
@@ -315,7 +315,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                     parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
                 }
 
-                return new Geometry(parts, GeometryType.Polygon);
+                return new Geometry(parts, GeometryType.Polygon, Srid);
             }
             else
             {

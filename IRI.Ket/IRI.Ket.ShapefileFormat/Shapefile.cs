@@ -200,7 +200,7 @@ namespace IRI.Ket.ShapefileFormat
         //    return result;
         //}
 
-        public static List<Feature> ReadAsFeature(string shpFileName, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int? defaultSrid = null)
+        public static List<Feature> ReadAsFeature(string shpFileName, int? defaultSrid = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
         {
             //return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
 
@@ -209,10 +209,10 @@ namespace IRI.Ket.ShapefileFormat
                 {
                     Attributes = d,
                     TheGeometry = ies.AsGeometry()
-                }, 
-                correctFarsiCharacters, 
-                dataEncoding, 
-                defaultSrid, 
+                },
+                correctFarsiCharacters,
+                dataEncoding,
+                defaultSrid,
                 headerEncoding);
 
             //var shapes = ReadShapes(shpFileName);

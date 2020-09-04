@@ -71,6 +71,9 @@ namespace IRI.Ket.ShapefileFormat.Prj
         public EsriPrjFile(string prjFileName)
         {
             this._root = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
+
+            this._srid = GetCrsSrid();
+
         }
 
         public static EsriPrjFile Parse(string esriWktPrj)
@@ -238,7 +241,19 @@ namespace IRI.Ket.ShapefileFormat.Prj
         {
             var crsAuthorityNode = _root.Children.SingleOrDefault(i => i.Name == _authority);
 
-            return GetSridFromAuthorityNode(crsAuthorityNode);
+            var srid = GetSridFromAuthorityNode(crsAuthorityNode);
+
+            //1399.06.13
+            //in the authority field was not available
+            if (srid == 0)
+            {
+                if (Type == EsriSrType.Geogcs && Ellipsoid.Name.ToUpper() == "WGS_1984")
+                {
+                    srid = SridHelper.GeodeticWGS84;
+                }
+            }
+
+            return srid;
         }
 
         private int GetEllipsoidSrid()

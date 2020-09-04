@@ -18,5 +18,25 @@ namespace IRI.Msh.Statistics.Model
         public double Max { get; set; }
 
         public double Mean { get; set; }
+
+        public override string ToString()
+        {
+            return $"Min: {Min:N2}, Max: {Max:N2}, Mean: {Mean:N2}, FirstQuartile: {FirstQuartile:N2}, SecondQuartile (Median): {Median:N2}, ThirdQuartile: {ThirdQuartile:N2}";
+        }
+
+        public string AsCsvLine(string seperator, string numberFormat)
+        {
+            var result = new List<string>()
+            {
+                Min.ToString(numberFormat),
+                Max.ToString(numberFormat),
+                Mean.ToString(numberFormat),
+                FirstQuartile.ToString(numberFormat),
+                Median.ToString(numberFormat),
+                ThirdQuartile.ToString(numberFormat),            
+            };
+
+            return string.Join(seperator, result);
+        }
     }
 }

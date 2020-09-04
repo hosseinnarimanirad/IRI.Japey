@@ -54,7 +54,7 @@ namespace IRI.Msh.Common.Analysis
                 return "EMPTY STAT";
             }
 
-            return $"St.Dev.: {GetStandardDeviation()}, AvgArea: {Areas.Average()}, Number of Points: {NumberOfPoints}, MinArea: {Areas.Min()}, MaxArea: {Areas.Max()}";
+            return $"NumberOfTriangles: {Areas.Count}, St.Dev.: {GetStandardDeviation()}, AvgArea: {Areas.Average()}, Number of Points: {NumberOfPoints}, MinArea: {Areas.Min()}, MaxArea: {Areas.Max()}";
         }
 
         public string ToCSV()
@@ -64,7 +64,7 @@ namespace IRI.Msh.Common.Analysis
                 return "EMPTY STAT";
             }
 
-            return $"{GetStandardDeviation()}; {Areas.Average()}; {NumberOfPoints}; {Areas.Min()}; {Areas.Max()}";
+            return $"{Areas.Count}; {GetStandardDeviation()}; {Areas.Average()}; {NumberOfPoints}; {Areas.Min()}; {Areas.Max()}";
         }
 
         public string GetDescription()

@@ -708,7 +708,7 @@ namespace IRI.Ket.SpatialExtensions
             if (point.IsNullOrEmpty())
                 return Geometry.CreateEmpty(GeometryType.Point, srid);
 
-            return new Geometry(new IPoint[] { point.AsPoint() }, GeometryType.Point) { Srid = srid };
+            return new Geometry(new IPoint[] { point.AsPoint() }, GeometryType.Point, srid);
         }
 
         private static Geometry SqlMultiPointToGeometry(SqlGeometry multiPoint)
@@ -728,7 +728,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i - 1] = SqlPointToGeometry(multiPoint.STGeometryN(i));
             }
 
-            return new Geometry(result, GeometryType.MultiPoint) { Srid = srid };
+            return new Geometry(result, GeometryType.MultiPoint, srid);
         }
 
         private static Geometry SqlLineStringToGeometry(SqlGeometry lineString, bool isRing)
@@ -748,7 +748,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i - 1] = new Point(lineString.STPointN(i).STX.Value, lineString.STPointN(i).STY.Value);
             }
 
-            return new Geometry(result, GeometryType.LineString) { Srid = srid };
+            return new Geometry(result, GeometryType.LineString, srid);
         }
 
         private static Geometry SqlMultiLineStringToGeometry(SqlGeometry multiLineString)
@@ -768,7 +768,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i - 1] = SqlLineStringToGeometry(multiLineString.STGeometryN(i), false);
             }
 
-            return new Geometry(result, GeometryType.MultiLineString) { Srid = srid };
+            return new Geometry(result, GeometryType.MultiLineString, srid);
         }
 
         private static Geometry SqlPolygonToGeometry(SqlGeometry polygon)
@@ -793,7 +793,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i] = SqlLineStringToGeometry(polygon.STInteriorRingN(i), true);
             }
 
-            return new Geometry(result, GeometryType.Polygon) { Srid = srid };
+            return new Geometry(result, GeometryType.Polygon, srid);
         }
 
         private static Geometry SqlMultiPolygonToGeometry(SqlGeometry multiPolygon)
@@ -813,7 +813,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i] = SqlPolygonToGeometry(multiPolygon.STGeometryN(i + 1));
             }
 
-            return new Geometry(result, GeometryType.MultiPolygon) { Srid = srid };
+            return new Geometry(result, GeometryType.MultiPolygon, srid);
         }
 
         private static Geometry SqlGeometryCollectionToGeometry(SqlGeometry geometryCollection)
@@ -833,7 +833,7 @@ namespace IRI.Ket.SpatialExtensions
                 result[i - 1] = geometryCollection.STGeometryN(i).AsGeometry();
             }
 
-            return new Geometry(result, GeometryType.GeometryCollection) { Srid = srid };
+            return new Geometry(result, GeometryType.GeometryCollection, srid);
         }
 
         #endregion

@@ -11,7 +11,7 @@ namespace IRI.Sta.DataMining
     {
         public static StatisticsSummary CalculateSummary(double[] values)
         {
-            if (values == null)
+            if (values == null || values.Length == 0)
             {
                 return new StatisticsSummary();
             }

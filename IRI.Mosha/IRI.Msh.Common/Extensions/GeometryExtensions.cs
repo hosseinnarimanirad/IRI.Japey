@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,6 @@ namespace IRI.Msh.Common.Primitives
 
             return result;
         }
-
+         
     }
 }

@@ -261,7 +261,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                     parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
                 }
 
-                return new Geometry(parts, GeometryType.Polygon);
+                return new Geometry(parts, GeometryType.Polygon, Srid);
             }
             else
             {

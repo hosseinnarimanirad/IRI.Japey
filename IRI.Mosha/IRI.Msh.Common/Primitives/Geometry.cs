@@ -53,7 +53,7 @@ namespace IRI.Msh.Common.Primitives
         {
             get
             {
-                if (Points!=null)
+                if (Points != null)
                 {
                     return Points.Length;
                 }
@@ -71,12 +71,12 @@ namespace IRI.Msh.Common.Primitives
 
         }
 
-        public Geometry(IPoint[] points, GeometryType type, int srid = 0) : this(points, type, false, srid)
+        public Geometry(IPoint[] points, GeometryType type, int srid) : this(points, type, false, srid)
         {
 
         }
 
-        public Geometry(IPoint[] points, GeometryType type, bool isClosed, int srid = 0)
+        public Geometry(IPoint[] points, GeometryType type, bool isClosed, int srid)
         {
             if (type == GeometryType.LineString || type == GeometryType.Point)
             {
@@ -104,7 +104,7 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public Geometry(Geometry[] geometries, GeometryType type, int srid = 0)
+        public Geometry(Geometry[] geometries, GeometryType type, int srid)
         {
             if (type != GeometryType.MultiLineString && type != GeometryType.MultiPoint && type != GeometryType.MultiPolygon && type != GeometryType.Polygon && type != GeometryType.GeometryCollection)
             {
@@ -214,26 +214,26 @@ namespace IRI.Msh.Common.Primitives
                     return Geometry.Null;
 
                 case GeometryType.GeometryCollection:
-                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.GeometryCollection) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.GeometryCollection, this.Srid);
 
                 case GeometryType.MultiPoint:
-                    return new Geometry(this.Geometries, GeometryType.MultiPoint) { Srid = this.Srid };
+                    return new Geometry(this.Geometries, GeometryType.MultiPoint, this.Srid);
 
                 case GeometryType.Point:
-                    return new Geometry(this.Points, GeometryType.Point) { Srid = this.Srid };
+                    return new Geometry(this.Points, GeometryType.Point, this.Srid);
 
                 case GeometryType.LineString:
                     //return new Geometry(filter(this.Points), GeometryType.LineString) { Srid = this.Srid };
                     return CreatePointOrLineString(filter(this.Points), this.Srid);
 
                 case GeometryType.MultiLineString:
-                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiLineString) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiLineString, this.Srid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.Polygon) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.Polygon, this.Srid);
 
                 case GeometryType.MultiPolygon:
-                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiPolygon) { Srid = this.Srid };
+                    return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiPolygon, this.Srid);
 
                 default:
                     throw new NotImplementedException();
@@ -293,22 +293,22 @@ namespace IRI.Msh.Common.Primitives
                     return Geometry.Null;
 
                 case GeometryType.MultiPoint:
-                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiPoint) { Srid = newSrid };
+                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiPoint, newSrid);
 
                 case GeometryType.Point:
-                    return new Geometry(this.Points.Select(i => transform(i)).ToArray(), GeometryType.Point) { Srid = newSrid };
+                    return new Geometry(this.Points.Select(i => transform(i)).ToArray(), GeometryType.Point, newSrid);
 
                 case GeometryType.LineString:
-                    return new Geometry(this.Points.Select(i => transform(i)).ToArray(), GeometryType.LineString) { Srid = newSrid };
+                    return new Geometry(this.Points.Select(i => transform(i)).ToArray(), GeometryType.LineString, newSrid);
 
                 case GeometryType.MultiLineString:
-                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiLineString) { Srid = newSrid };
+                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiLineString, newSrid);
 
                 case GeometryType.MultiPolygon:
-                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiPolygon) { Srid = newSrid };
+                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.MultiPolygon, newSrid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.Polygon) { Srid = newSrid };
+                    return new Geometry(this.Geometries.Select(i => i.Transform(transform)).ToArray(), GeometryType.Polygon, newSrid);
 
                 default:
                     throw new NotImplementedException();
@@ -467,7 +467,7 @@ namespace IRI.Msh.Common.Primitives
 
             var geometries = this.Geometries.ToList();
 
-            geometries.Add(new Geometry(new IPoint[] { startPoint }, type));
+            geometries.Add(new Geometry(new IPoint[] { startPoint }, type, this.Srid));
 
             this.Geometries = geometries.ToArray();
         }
@@ -653,7 +653,7 @@ namespace IRI.Msh.Common.Primitives
                 case GeometryType.Point:
                     this.Geometries = new Geometry[2];
                     this.Geometries[0] = currentGeometry;
-                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.Point);
+                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.Point, this.Srid);
                     this.Points = null;
                     this.Type = GeometryType.MultiPoint;
                     break;
@@ -662,7 +662,7 @@ namespace IRI.Msh.Common.Primitives
                     this.Points = null;
                     this.Geometries = new Geometry[2];
                     this.Geometries[0] = currentGeometry;
-                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.LineString);
+                    this.Geometries[1] = new Geometry(new IPoint[0], GeometryType.LineString, this.Srid);
 
                     this.Type = GeometryType.MultiLineString;
                     break;
@@ -670,25 +670,25 @@ namespace IRI.Msh.Common.Primitives
                 case GeometryType.Polygon:
                     this.Geometries = new Geometry[2];
                     this.Geometries[0] = currentGeometry;
-                    this.Geometries[1] = new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString) }, GeometryType.Polygon);
+                    this.Geometries[1] = new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString, this.Srid) }, GeometryType.Polygon, this.Srid);
                     this.Type = GeometryType.MultiPolygon;
                     break;
 
                 case GeometryType.MultiPoint:
                     var points = this.Geometries.ToList();
-                    points.Add(new Geometry(new IPoint[0], GeometryType.Point));
+                    points.Add(new Geometry(new IPoint[0], GeometryType.Point, this.Srid));
                     this.Geometries = points.ToArray();
                     break;
 
                 case GeometryType.MultiLineString:
                     var lines = this.Geometries.ToList();
-                    lines.Add(new Geometry(new IPoint[0], GeometryType.LineString));
+                    lines.Add(new Geometry(new IPoint[0], GeometryType.LineString, this.Srid));
                     this.Geometries = lines.ToArray();
                     break;
 
                 case GeometryType.MultiPolygon:
                     var polygons = this.Geometries.ToList();
-                    polygons.Add(new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString) }, GeometryType.Polygon));
+                    polygons.Add(new Geometry(new Geometry[] { new Geometry(new IPoint[0], GeometryType.LineString, this.Srid) }, GeometryType.Polygon, this.Srid));
                     this.Geometries = polygons.ToArray();
                     break;
 
@@ -843,7 +843,11 @@ namespace IRI.Msh.Common.Primitives
 
         public Geometry Project(SrsBase sourceSrs, SrsBase targetSrs)
         {
-            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
+            if (sourceSrs.Srid == targetSrs.Srid && sourceSrs.Srid != 0)
+            {
+                return this;
+            }
+            else if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
             {
                 var c1 = this.Transform(p => sourceSrs.ToGeodetic(p), SridHelper.GeodeticWGS84);
 
@@ -911,25 +915,25 @@ namespace IRI.Msh.Common.Primitives
             switch (type)
             {
                 case GeometryType.GeometryCollection:
-                    return new Geometry(new Geometry[0], GeometryType.GeometryCollection) { Srid = srid };
+                    return new Geometry(new Geometry[0], GeometryType.GeometryCollection, srid);
 
                 case GeometryType.LineString:
-                    return new Geometry(new Point[0], GeometryType.LineString) { Srid = srid };
+                    return new Geometry(new Point[0], GeometryType.LineString, srid);
 
                 case GeometryType.MultiLineString:
-                    return new Geometry(new Geometry[0], GeometryType.MultiLineString) { Srid = srid };
+                    return new Geometry(new Geometry[0], GeometryType.MultiLineString, srid);
 
                 case GeometryType.MultiPoint:
-                    return new Geometry(new Geometry[0], GeometryType.MultiPoint) { Srid = srid };
+                    return new Geometry(new Geometry[0], GeometryType.MultiPoint, srid);
 
                 case GeometryType.MultiPolygon:
-                    return new Geometry(new Geometry[0], GeometryType.MultiPolygon) { Srid = srid };
+                    return new Geometry(new Geometry[0], GeometryType.MultiPolygon, srid);
 
                 case GeometryType.Point:
-                    return new Geometry(new Point[0], GeometryType.Point) { Srid = srid };
+                    return new Geometry(new Point[0], GeometryType.Point, srid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(new Geometry[0], GeometryType.Polygon) { Srid = srid };
+                    return new Geometry(new Geometry[0], GeometryType.Polygon, srid);
 
                 case GeometryType.CircularString:
                 case GeometryType.CompoundCurve:
@@ -961,15 +965,15 @@ namespace IRI.Msh.Common.Primitives
             switch (type)
             {
                 case GeometryType.Point:
-                    return new Geometry(points, GeometryType.Point) { Srid = srid };
+                    return new Geometry(points, GeometryType.Point, srid);
                 //return CreatePointOrLineString(points, srid); //do not use this method: what if making a new Geometry LineString with first point
 
                 case GeometryType.LineString:
-                    return new Geometry(points, GeometryType.LineString) { Srid = srid };
+                    return new Geometry(points, GeometryType.LineString, srid);
                 //return CreatePointOrLineString(points, srid);
 
                 case GeometryType.Polygon:
-                    return new Geometry(new Geometry(points, GeometryType.LineString), GeometryType.Polygon, srid);
+                    return new Geometry(new Geometry(points, GeometryType.LineString, srid), GeometryType.Polygon, srid);
 
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:
@@ -987,11 +991,11 @@ namespace IRI.Msh.Common.Primitives
         {
             if (points.Length == 1)
             {
-                return new Geometry(points, GeometryType.Point) { Srid = srid };
+                return new Geometry(points, GeometryType.Point, srid);
             }
             else
             {
-                return new Geometry(points, GeometryType.LineString) { Srid = srid };
+                return new Geometry(points, GeometryType.LineString, srid);
             }
         }
 
@@ -1056,7 +1060,7 @@ namespace IRI.Msh.Common.Primitives
 
         public static Geometry ParsePointToGeometry(double[] xy, bool isLongitudeFirst, int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry(new Point[] { Point.Parse(xy, isLongitudeFirst) }, GeometryType.Point) { Srid = srid };
+            return new Geometry(new Point[] { Point.Parse(xy, isLongitudeFirst) }, GeometryType.Point, srid);
         }
 
         public static Geometry ParseLineStringToGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)

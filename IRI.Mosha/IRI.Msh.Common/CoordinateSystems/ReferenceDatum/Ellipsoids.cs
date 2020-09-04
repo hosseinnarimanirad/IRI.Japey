@@ -85,7 +85,7 @@ namespace IRI.Msh.CoordinateSystem
             {
                 return new Ellipsoid<Meter, Degree>("Nahrwan 67 ", new Meter(6378249.145), 293.465,
                     new Cartesian3DPoint<Meter>(new Meter(-245.0), new Meter(-153.9), new Meter(382.8)),
-                    new OrientationParameter(new Degree(), new Degree(), new Degree()), 
+                    new OrientationParameter(new Degree(), new Degree(), new Degree()),
                     int.MinValue)
                 { EsriName = "Nahrwan 1967 (deg)" };
             }
@@ -235,13 +235,7 @@ namespace IRI.Msh.CoordinateSystem
             }
         }
 
-        public static Ellipsoid<Meter, Degree> WGS84
-        {
-            get
-            {
-                return new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563, SridHelper.GeodeticWGS84) { EsriName = "WGS_1984" };
-            }
-        }
+        public static Ellipsoid<Meter, Degree> WGS84 { get; } = new Ellipsoid<Meter, Degree>("WGS 84", new Meter(6378137.0), 298.257223563, SridHelper.GeodeticWGS84) { EsriName = "WGS_1984" };
 
         public static Ellipsoid<Meter, Degree> Sphere
         {
