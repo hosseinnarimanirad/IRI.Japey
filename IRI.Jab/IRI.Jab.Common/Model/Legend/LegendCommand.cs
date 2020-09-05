@@ -5,6 +5,7 @@ using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Windows;
 using System.Collections.Generic;
+using IRI.Jab.Common.Extensions;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -18,6 +19,7 @@ namespace IRI.Jab.Common.Model.Legend
 
         private const string _saveToolTip = "ذخیره‌سازی";
 
+        private const string _exportAsBitmapToolTip = "خروجی عکسی";
 
         private RelayCommand _command;
 
@@ -82,6 +84,10 @@ namespace IRI.Jab.Common.Model.Legend
 
         public ILayer Layer { get; set; }
 
+
+
+        #region Defaults for ILayer
+
         public static LegendCommand Create(ILayer layer, Action action, string markup, string tooltip)
         {
             var result = new LegendCommand()
@@ -119,11 +125,39 @@ namespace IRI.Jab.Common.Model.Legend
         }
 
 
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateRemoveLayerFunc = (presenter, layer) => CreateRemoveLayer(presenter, layer);
+        public static ILegendCommand CreateRemoveLayer(MapPresenter map, ILayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete,
+                Layer = layer,
+                ToolTip = "حذف لایه",
+            };
+
+            result.Command = new RelayCommand(param =>
+            {
+                map.ClearLayer(layer, true);
+            });
+
+            return result;
+        }
+         
+        public static ILegendCommand CreateShowSymbologyView(ILayer layer, Action showSymbologyViewAction)
+        {
+            return Create(layer, showSymbologyViewAction, Assets.ShapeStrings.Appbar.appbarCart, "سمبل‌گذاری");
+        }
+
+        #endregion
+
+
+        #region Defaults for VectorLayer
+
         public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, ISqlGeometryAware
         {
-            return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer);
+            return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer as VectorLayer);
         }
-        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, ILayer layer) where T : class, ISqlGeometryAware
+        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, ISqlGeometryAware
         {
             var result = new LegendCommand()
             {
@@ -256,25 +290,35 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        public static Func<MapPresenter, ILayer, ILegendCommand> CreateRemoveLayerFunc = (presenter, layer) => CreateRemoveLayer(presenter, layer);
-        public static ILegendCommand CreateRemoveLayer(MapPresenter map, ILayer layer)
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateExportAsPngFunc = (presenter, layer) => CreateExportAsPng(presenter, layer as VectorLayer);
+        public static ILegendCommand CreateExportAsPng(MapPresenter map, VectorLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
                 Layer = layer,
-                ToolTip = "حذف لایه",
+                ToolTip = _exportAsBitmapToolTip,
             };
 
-            result.Command = new RelayCommand(param =>
+            result.Command = new RelayCommand(async param =>
             {
-                map.ClearLayer(layer, true);
+                try
+                {
+                    var file = map.SaveFile("*.png|*.png");
+
+                    if (string.IsNullOrWhiteSpace(file))
+                        return;
+
+                    layer.SaveAsPng(file, map.CurrentExtent, map.ActualWidth, map.ActualHeight, map.MapScale);
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
             });
 
             return result;
         }
-
 
         internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
         {
@@ -288,14 +332,13 @@ namespace IRI.Jab.Common.Model.Legend
                 CreateSelectByDrawingFunc<T>(),
                 CreateShowAttributeTableFunc<T>(),
                 CreateClearSelectedFunc,
-                CreateRemoveLayerFunc
+                CreateRemoveLayerFunc,
+                CreateExportAsPngFunc
             };
         }
 
-        public static ILegendCommand CreateShowSymbologyView(ILayer layer, Action showSymbologyViewAction)
-        {
-            return Create(layer, showSymbologyViewAction, Assets.ShapeStrings.Appbar.appbarCart, "سمبل‌گذاری");
-        }
+        #endregion
+
 
         //public static ILegendCommand CreateShowModal(MapPresenter map, ILayer layer, Window window)
         //{

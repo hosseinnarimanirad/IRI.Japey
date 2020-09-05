@@ -109,7 +109,7 @@ namespace IRI.Msh.Common.Analysis
             filtered.Add(points.Length - 1);
 
             var output1 = filtered.Select(i => points[i]).ToArray();
-            
+
             return output1;
         }
 
@@ -133,13 +133,16 @@ namespace IRI.Msh.Common.Analysis
                 areas.Add(new Tuple<int, double>(i + 1, area));
             }
 
-            var filter1 = areas.Where(i => i.Item2 > threshold).Select(i => i.Item1).ToList();
+            var filteredIndexes = areas.Where(i => i.Item2 > threshold).Select(i => i.Item1).ToList();
 
-            filter1.Insert(0, 0);
+            filteredIndexes.Insert(0, 0);
 
-            filter1.Add(points.Length - 1);
+            if (!points[0].Equals(points[points.Length - 1]))
+            {
+                filteredIndexes.Add(points.Length - 1);
+            }
 
-            var output1 = filter1.Select(i => points[i]).ToArray();
+            var output1 = filteredIndexes.Select(i => points[i]).ToArray();
 
             return output1;
         }

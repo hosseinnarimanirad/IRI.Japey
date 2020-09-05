@@ -23,7 +23,7 @@ using IRI.Msh.Common.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
-using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Ket.SqlServerSpatialExtension.Model; 
 
 namespace IRI.Jab.Common
 {
@@ -213,6 +213,9 @@ namespace IRI.Jab.Common
 
         #endregion
 
+
+
+        #region Default Rendering
         //StreamGeometry Approach
         public Path AsShape(List<SqlGeometry> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
             double height, TransformGroup viewTransform, TranslateTransform viewTransformForPoints, Func<Point, Point> mapToScreen)
@@ -262,7 +265,7 @@ namespace IRI.Jab.Common
             //pen.DashStyle = this.VisualParameters.DashStyle;
 
             var pen = this.VisualParameters.GetWpfPen();
-             
+
             Brush brush = this.VisualParameters.Fill;
 
             DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
@@ -291,6 +294,7 @@ namespace IRI.Jab.Common
             return path;
         }
 
+        //Gdi+
         public Path AsBitmapUsingGdiPlus(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (geometries == null)
@@ -374,6 +378,7 @@ namespace IRI.Jab.Common
             return path;
         }
 
+        //OpenTK
         public Path AsBitmapUsingOpenTK(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (geometries == null)
@@ -427,7 +432,10 @@ namespace IRI.Jab.Common
             return path;
         }
 
+        #endregion
 
+
+        #region Tile Rendering
 
         //DrawingVisual Approach
         public Path AsTileUsingDrawingVisual(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
@@ -641,6 +649,9 @@ namespace IRI.Jab.Common
             return path;
         }
 
+        #endregion
+
+
         ////StreamGeometry Approach
         //public Path AsTileUsingStreamGeometry(List<SqlGeometry> geometries, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area,
         //    Transform viewTransform, sb.BoundingBox totalExtent, TranslateTransform viewTransformForPoints)
@@ -705,95 +716,6 @@ namespace IRI.Jab.Common
             var mapShift = (mapBoundingBoxOfTile.Center - new sb.Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
 
             return p => { return viewTransform.Transform(new Point(p.X - mapShift.X, p.Y - mapShift.Y)).AsPoint(); };
-        }
-
-        public void SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
-        {
-            if (maxLevel < minLevel)
-            {
-                throw new NotImplementedException("(ERROR IN VECTOR LAYER): minLevel must be less than maxLevel");
-            }
-
-            var zoomLevels = Enumerable.Range(minLevel, maxLevel - minLevel + 1);
-
-            foreach (var zoom in zoomLevels)
-            {
-                var googleTiles = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(this.Extent, zoom);
-
-                var scale = GoogleScale.Scales.Single(i => i.ZoomLevel == zoom).InverseScale;
-
-                var directory = $"{outputFolderPath}\\{zoom}";
-
-                if (!System.IO.Directory.Exists(directory))
-                {
-                    System.IO.Directory.CreateDirectory(directory);
-                }
-
-                foreach (var tile in googleTiles)
-                {
-                    var geometries = this.GetGeometriesForDisplay(scale, tile.WebMercatorExtent);
-
-                    var transform = IRI.Msh.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
-
-                    Func<Point, Point> mapToScreen = p =>
-                    {
-                        return transform(p.AsPoint()).AsWpfPoint();
-                    };
-
-                    var pen = this.VisualParameters.GetGdiPlusPen();
-                    pen.Width = 2;
-                    var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
-                                    geometries,
-                                    256,
-                                    256,
-                                    mapToScreen,
-                                    pen,
-                                    this.VisualParameters.Fill.AsGdiBrush(),
-                                    this.VisualParameters.PointSymbol);
-
-                    image.Save($"{directory}\\{tile.ZoomLevel}, {tile.RowNumber}, {tile.ColumnNumber}.jpg");
-                }
-            }
-        }
-
-        public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
-        {
-            List<SqlGeometry> geometries; List<string> labels = null;
-
-            if (this.IsLabeled(mapScale))
-            {
-                var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
-
-                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
-
-                labels = geoLabelPairs.Select(i => i.Label).ToList();
-            }
-            else
-            {
-                geometries = await this.GetGeometriesForDisplayAsync(mapScale, mapExtent);
-            }
-
-            return new GeometryLabelPairs(geometries, labels);
-        }
-
-        public GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
-        {
-            List<SqlGeometry> geometries; List<string> labels = null;
-
-            if (this.IsLabeled(mapScale))
-            {
-                var geoLabelPairs = this.DataSource.GetGeometryLabelPairsForDisplay(mapExtent);
-
-                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
-
-                labels = geoLabelPairs.Select(i => i.Label).ToList();
-            }
-            else
-            {
-                geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
-            }
-
-            return new GeometryLabelPairs(geometries, labels);
         }
 
         public void BindWithFrameworkElement(FrameworkElement element)
@@ -861,6 +783,208 @@ namespace IRI.Jab.Common
             }
         }
 
+        #region Save And Export Methods
+
+        public void SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
+        {
+            if (maxLevel < minLevel)
+            {
+                throw new NotImplementedException("(ERROR IN VECTOR LAYER): minLevel must be less than maxLevel");
+            }
+
+            var zoomLevels = Enumerable.Range(minLevel, maxLevel - minLevel + 1);
+
+            foreach (var zoom in zoomLevels)
+            {
+                var googleTiles = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(this.Extent, zoom);
+
+                var scale = GoogleScale.Scales.Single(i => i.ZoomLevel == zoom).InverseScale;
+
+                var directory = $"{outputFolderPath}\\{zoom}";
+
+                if (!System.IO.Directory.Exists(directory))
+                {
+                    System.IO.Directory.CreateDirectory(directory);
+                }
+
+                foreach (var tile in googleTiles)
+                {
+                    var geometries = this.GetGeometriesForDisplay(scale, tile.WebMercatorExtent);
+
+                    var transform = IRI.Msh.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+
+                    Func<Point, Point> mapToScreen = p =>
+                    {
+                        return transform(p.AsPoint()).AsWpfPoint();
+                    };
+
+                    var pen = this.VisualParameters.GetGdiPlusPen();
+                    pen.Width = 2;
+                    var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+                                    geometries,
+                                    256,
+                                    256,
+                                    mapToScreen,
+                                    pen,
+                                    this.VisualParameters.Fill.AsGdiBrush(),
+                                    this.VisualParameters.PointSymbol);
+
+                    image.Save($"{directory}\\{tile.ZoomLevel}, {tile.RowNumber}, {tile.ColumnNumber}.jpg");
+                }
+            }
+        }
+
+        public void SaveAsPng(string fileName, sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            switch (this.ToRasterTechnique)
+            {
+
+                case RasterizationApproach.StreamGeometry:
+                case RasterizationApproach.DrawingVisual:
+                    SaveAsPngDrawingVisual(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                    break;
+
+                case RasterizationApproach.WriteableBitmap:
+                case RasterizationApproach.OpenTk:
+                case RasterizationApproach.GdiPlus:
+                case RasterizationApproach.None:
+                default:
+                    SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                    break;
+            }
+        }
+
+        public async Task<System.Drawing.Bitmap> ParseToBitmapImage(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+
+            if (geoLabledPairs.Geometries == null)
+                return null;
+
+            var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
+
+            var pen = this.VisualParameters.GetGdiPlusPen();
+
+            double xScale = imageWidth / mapExtent.Width;
+            double yScale = imageHeight / mapExtent.Height;
+            double scale = xScale > yScale ? yScale : xScale;
+
+            Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+
+            var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+                geoLabledPairs.Geometries,
+                imageWidth,
+                imageHeight,
+                mapToScreen,
+                pen,
+                this.VisualParameters.Fill.AsGdiBrush(),
+                this.VisualParameters.PointSymbol);
+
+            if (image == null)
+                return null;
+
+            if (geoLabledPairs.Labels != null)
+            {
+                SqlSpatialToGdiBitmap.DrawLabels(geoLabledPairs.Labels, geoLabledPairs.Geometries, image, mapToScreen, this.Labels);
+            }
+
+            return image;
+        }
+
+        private async void SaveAsPngGdiPlus(string fileName, sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
+             
+            image.Save(fileName);
+
+            image.Dispose();
+        }
+
+        private async void SaveAsPngDrawingVisual(string fileName, sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+
+            if (geoLabledPairs.Geometries == null)
+                return;
+
+            double xScale = imageWidth / mapExtent.Width;
+            double yScale = imageHeight / mapExtent.Height;
+            double scale = xScale > yScale ? yScale : xScale;
+
+            Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+
+            var pen = this.VisualParameters.GetWpfPen();
+
+            Brush brush = this.VisualParameters.Fill;
+
+            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+
+            RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
+
+            image.Render(drawingVisual);
+
+            if (this.IsLabeled(mapScale))
+            {
+                this.DrawLabels(geoLabledPairs.Labels, geoLabledPairs.Geometries, image, mapToScreen);
+            }
+
+            image.Freeze();
+
+            PngBitmapEncoder pngImage = new PngBitmapEncoder();
+
+            pngImage.Frames.Add(BitmapFrame.Create(image));
+
+            using (System.IO.Stream stream = System.IO.File.Create(fileName))
+            {
+                pngImage.Save(stream);
+            }
+
+        }
+
+        #endregion
+
+        #region GetGeometry & GetFeature Methods
+
+        public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
+        {
+            List<SqlGeometry> geometries; List<string> labels = null;
+
+            if (this.IsLabeled(mapScale))
+            {
+                var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
+
+                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
+
+                labels = geoLabelPairs.Select(i => i.Label).ToList();
+            }
+            else
+            {
+                geometries = await this.GetGeometriesForDisplayAsync(mapScale, mapExtent);
+            }
+
+            return new GeometryLabelPairs(geometries, labels);
+        }
+
+        public GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
+        {
+            List<SqlGeometry> geometries; List<string> labels = null;
+
+            if (this.IsLabeled(mapScale))
+            {
+                var geoLabelPairs = this.DataSource.GetGeometryLabelPairsForDisplay(mapExtent);
+
+                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
+
+                labels = geoLabelPairs.Select(i => i.Label).ToList();
+            }
+            else
+            {
+                geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
+            }
+
+            return new GeometryLabelPairs(geometries, labels);
+        }
+
         public async Task<List<SqlGeometry>> GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
         {
             List<SqlGeometry> geometries = new List<SqlGeometry>();
@@ -919,12 +1043,49 @@ namespace IRI.Jab.Common
             return null;
         }
 
+        #endregion
+
 
 
         public bool IsLabeled(double mapScale)
         {
             return this.Labels?.IsLabeled(1.0 / mapScale) == true;
         }
+
+        //POTENTIALLY ERROR PROUNE; formattedText is always RTL
+        public void DrawLabels(List<string> labels, List<SqlGeometry> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
+        {
+            if (labels.Count != geometries.Count)
+                return;
+
+            var mapCoordinates = geometries.ConvertAll(
+                      (g) =>
+                      {
+                          SqlGeometry point = this.Labels.PositionFunc(g);
+                          return new Point(point.STX.Value, point.STY.Value);
+                      }).ToList();
+
+            DrawingVisual drawingVisual = new DrawingVisual();
+
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                for (int i = 0; i < labels.Count; i++)
+                {
+                    FormattedText formattedText =
+                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
+                        new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
+                        this.Labels.FontSize, this.Labels.Foreground);
+
+                    Point location = mapToScreen(mapCoordinates[i]);
+
+                    drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
+                }
+            }
+
+            bmp.Render(drawingVisual);
+        }
+
+
 
         private Image DrawLabels(List<string> labels, List<SqlGeometry> geometries, double width, double height, Func<Point, Point> mapToScreen)
         {
@@ -963,41 +1124,6 @@ namespace IRI.Jab.Common
 
             return image;
         }
-
-        //POTENTIALLY ERROR PROUNE; formattedText is always RTL
-        public void DrawLabels(List<string> labels, List<SqlGeometry> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
-        {
-            if (labels.Count != geometries.Count)
-                return;
-
-            var mapCoordinates = geometries.ConvertAll(
-                      (g) =>
-                      {
-                          SqlGeometry point = this.Labels.PositionFunc(g);
-                          return new Point(point.STX.Value, point.STY.Value);
-                      }).ToList();
-
-            DrawingVisual drawingVisual = new DrawingVisual();
-
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                for (int i = 0; i < labels.Count; i++)
-                {
-                    FormattedText formattedText =
-                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
-                        new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
-                        this.Labels.FontSize, this.Labels.Foreground);
-
-                    Point location = mapToScreen(mapCoordinates[i]);
-
-                    drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
-                }
-            }
-
-            bmp.Render(drawingVisual);
-        }
-
-
 
         private void DrawLabels(List<string> labels, List<SqlGeometry> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
         {

@@ -1404,7 +1404,7 @@ namespace IRI.Jab.Common.Presenter.Map
             return result;
         }
 
-        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, EditableFeatureLayerOptions options = null)
+        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, int srid, EditableFeatureLayerOptions options = null)
         {
             if (points == null || points.Count < 1)
             {
@@ -1416,8 +1416,8 @@ namespace IRI.Jab.Common.Presenter.Map
             //this.MapPanel.Options = options;
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
-
-            Geometry geometry = new Geometry(points.ToArray(), type);
+            
+            Geometry geometry = new Geometry(points.ToArray(), type, srid);
 
             return EditAsync(geometry, options);
         }
@@ -1480,14 +1480,23 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (!(layer?.Commands?.Count > 0))
                 {
-                    layer.Commands = new List<ILegendCommand>()
+                    var commands = new List<ILegendCommand>();
+
+                    foreach (var item in DefaultVectorLayerCommands)
                     {
-                        LegendCommand.CreateZoomToExtentCommand(this, layer),
-                        LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
-                        LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
-                        LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                        LegendCommand.CreateRemoveLayer(this, layer),
-                    };
+                        commands.Add(item(this, layer));
+                    }
+
+                    layer.Commands = commands;
+
+                    //layer.Commands = new List<ILegendCommand>()
+                    //{
+                    //    LegendCommand.CreateZoomToExtentCommand(this, layer),
+                    //    LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+                    //    LegendCommand.CreateRemoveLayer(this, layer),
+                    //};
                 }
 
                 if ((layer as VectorLayer).RequestChangeSymbology == null)
@@ -1582,50 +1591,50 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        protected void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
-        {
-            if (layer is VectorLayer)
-            {
-                if (!(layer?.Commands?.Count > 0))
-                {
-                    //1399.06.10
-                    //layer.Commands = new List<ILegendCommand>()
-                    //{
-                    //    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    //    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateRemoveLayer(this, layer),
-                    //};
+        //protected void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
+        //{
+        //    if (layer is VectorLayer)
+        //    {
+        //        if (!(layer?.Commands?.Count > 0))
+        //        {
+        //            //1399.06.10
+        //            //layer.Commands = new List<ILegendCommand>()
+        //            //{
+        //            //    LegendCommand.CreateZoomToExtentCommand(this, layer),
+        //            //    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
+        //            //    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
+        //            //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
+        //            //    LegendCommand.CreateRemoveLayer(this, layer),
+        //            //};
 
-                    var commands = new List<ILegendCommand>();
+        //            var commands = new List<ILegendCommand>();
 
-                    foreach (var item in DefaultVectorLayerCommands)
-                    {
-                        commands.Add(item(this, layer));
-                    }
+        //            foreach (var item in DefaultVectorLayerCommands)
+        //            {
+        //                commands.Add(item(this, layer));
+        //            }
 
-                    layer.Commands = commands;
-                }
-                if ((layer as VectorLayer).RequestChangeSymbology == null)
-                {
-                    (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
-                }
-            }
+        //            layer.Commands = commands;
+        //        }
+        //        if ((layer as VectorLayer).RequestChangeSymbology == null)
+        //        {
+        //            (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+        //        }
+        //    }
 
-            //this should not happed because source must be FeatureDataSource<T>
-            else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
-            {
-                if (!(layer?.Commands?.Count > 0))
-                {
-                    layer.Commands = new List<ILegendCommand>()
-                    {
-                        LegendCommand.CreateZoomToExtentCommand(this, layer),
-                        LegendCommand.CreateRemoveLayer(this, layer),
-                    };
-                }
-            }
-        }
+        //    //this should not happed because source must be FeatureDataSource<T>
+        //    else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
+        //    {
+        //        if (!(layer?.Commands?.Count > 0))
+        //        {
+        //            layer.Commands = new List<ILegendCommand>()
+        //            {
+        //                LegendCommand.CreateZoomToExtentCommand(this, layer),
+        //                LegendCommand.CreateRemoveLayer(this, layer),
+        //            };
+        //        }
+        //    }
+        //}
 
 
         public void AddLayer(ILayer layer)
@@ -1640,7 +1649,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddLayer<T>(ILayer layer) where T : class, ISqlGeometryAware
         {
-            TrySetCommands<T>(layer);
+            TrySetCommands(layer);
 
             this.RequestAddLayer?.Invoke(layer);
         }
