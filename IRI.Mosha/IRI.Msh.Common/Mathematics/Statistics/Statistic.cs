@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using IRI.Msh.Algebra; 
+using IRI.Msh.Algebra;
 using System.Linq;
 
 namespace IRI.Msh.Statistics
@@ -138,6 +138,24 @@ namespace IRI.Msh.Statistics
 
             return resultVlaue;
 
+        }
+         
+        public static double GetMin(List<double> values)
+        {
+            if (values.Count < 0)
+            {
+                throw new ZeroSizeArrayException();
+            }
+
+            double resultVlaue = values[0];
+
+            for (int i = 1; i < values.Count; i++)
+            {
+                if (resultVlaue > values[i])
+                    resultVlaue = values[i];
+            }
+
+            return resultVlaue;
         }
 
         public static int GetMin(int[] values)

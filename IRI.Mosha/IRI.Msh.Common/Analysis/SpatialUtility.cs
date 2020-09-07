@@ -78,11 +78,11 @@ namespace IRI.Msh.Common.Analysis
         //1399.06.11
         //مساحت مثلت‌های تشکیل دهنده یک خط یا 
         //حلقه توسط نقاط ورودی
-        public static List<double> GetPrimitiveAreas(IPoint[] points, bool isClosed)
+        public static List<double> GetPrimitiveAreas(IEnumerable<IPoint> points, bool isClosed)
         {
             List<double> result = new List<double>();
 
-            var n = points.Length;
+            var n = points.Count();
 
             if (points == null || n < 3)
                 return result;
@@ -92,13 +92,13 @@ namespace IRI.Msh.Common.Analysis
             for (int i = 0; i < n - 2; i++)
             {
                 //result[i] = CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
-                result.Add(CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]));
+                result.Add(CalculateUnsignedTriangleArea(points.ElementAt(i), points.ElementAt(i + 1), points.ElementAt(i + 2)));
             }
 
             if (isClosed && n > 3)
             {
                 //result[n - 2] = CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]);
-                result.Add(CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]));
+                result.Add(CalculateUnsignedTriangleArea(points.ElementAt(n - 2), points.ElementAt(n - 1), points.ElementAt(0)));
             }
 
             return result;

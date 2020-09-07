@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
+using IRI.Msh.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -346,6 +347,56 @@ namespace IRI.Msh.Common.Analysis
             var output1 = filtered.Select(i => points[i]).ToArray();
 
             return output1;
+        }
+
+        //ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
+        internal static IPoint[] SimplifyByVisvalingham(IPoint[] pArray, double threshold, bool isRing)
+        {
+            var areas = SpatialUtility.GetPrimitiveAreas(pArray, isRing);
+
+            List<IPoint> pList = pArray.ToList();
+
+            List<int> removedPoints = new List<int>();
+
+            while (true)
+            {
+                var minArea = Statistics.Statistics.GetMin(areas);
+
+                if (minArea < threshold)
+                {
+                    break;
+                }
+
+                //remove min areas
+                for (int i = areas.Count - 1; i >= 0; i--)
+                {
+                    if (areas[i] == minArea)
+                    {
+                        pList.RemoveAt(i + 1);
+                        areas.RemoveAt(i);
+
+                        //update areas
+                        if (i > 0)
+                        {
+                            areas[i - 1] = SpatialUtility.CalculateUnsignedTriangleArea(pList[i - 1], pList[i], pList[i + 1]);
+                        }
+
+                        if (i < areas.Count - 1)
+                        {
+                            areas[i] = SpatialUtility.CalculateUnsignedTriangleArea(pList[i], pList[i + 1], pList[i + 2]);
+                        }
+                    }
+                }
+
+                //recalculate adjacent areas
+            }
+
+            return pList.ToArray();
+        }
+
+        private static List<int> GetPoints(int areaIndex)
+        {
+            return new List<int>() { areaIndex, areaIndex + 1, areaIndex + 2 };
         }
     }
 }

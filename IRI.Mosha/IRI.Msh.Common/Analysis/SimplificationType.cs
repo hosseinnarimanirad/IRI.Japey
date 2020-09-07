@@ -18,5 +18,7 @@ namespace IRI.Msh.Common.Analysis
         AdditiveByDistance,
 
         AdditiveByAreaAngle,
+
+        Visvalingham
     }
 }

@@ -274,6 +274,10 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold);
                     break;
 
+                case SimplificationType.Visvalingham:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingham(pList, threshold, this.IsRingBase());
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
