@@ -19,6 +19,7 @@ namespace IRI.Msh.Common.Analysis
 
         AdditiveByAreaAngle,
 
-        Visvalingham
+        Visvalingham,
+        DouglasPeucker
     }
 }

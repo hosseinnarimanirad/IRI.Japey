@@ -372,7 +372,45 @@ namespace IRI.Msh.Common.Analysis
 
 
 
+        public static double PointToLineSegmentDistance(Point lineSegmentStart, Point lineSegmentEnd, Point targetPoint)
+        {
+            var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 
+            var dxSegment = (lineSegmentEnd.X - lineSegmentStart.X);
+
+            //اگر دو نقطه پاره خط منطبق بودند
+            //فاصله بین آن‌ها تا نقطه هدف در 
+            //نظر گرفته می‌شود.
+            if (dxSegment == 0 && dySegment == 0)
+            {
+                return lineSegmentStart.DistanceTo(targetPoint);
+            }
+
+            return Math.Abs(dySegment * targetPoint.X - dxSegment * targetPoint.Y + lineSegmentEnd.X * lineSegmentStart.Y - lineSegmentEnd.Y * lineSegmentStart.X)
+                    /
+                    Math.Sqrt(dySegment * dySegment + dxSegment * dxSegment);
+        }
+
+        public static double SemiPointToLineSegmentDistance(Point lineSegmentStart, Point lineSegmentEnd, Point targetPoint)
+        {
+            var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
+
+            var dxSegment = (lineSegmentEnd.X - lineSegmentStart.X);
+
+            //اگر دو نقطه پاره خط منطبق بودند
+            //فاصله بین آن‌ها تا نقطه هدف در 
+            //نظر گرفته می‌شود.
+            if (dxSegment == 0 && dySegment == 0)
+            {
+                return lineSegmentStart.DistanceTo(targetPoint);
+            }
+
+            var numerator = (dySegment * targetPoint.X - dxSegment * targetPoint.Y + lineSegmentEnd.X * lineSegmentStart.Y - lineSegmentEnd.Y * lineSegmentStart.X);
+
+            return numerator * numerator
+                    /
+                    dySegment * dySegment + dxSegment * dxSegment)
+        }
 
 
     }

@@ -350,7 +350,7 @@ namespace IRI.Msh.Common.Analysis
         }
 
         //ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
-        internal static IPoint[] SimplifyByVisvalingham(IPoint[] pArray, double threshold, bool isRing)
+        public static IPoint[] SimplifyByVisvalingham(IPoint[] pArray, double threshold, bool isRing)
         {
             var areas = SpatialUtility.GetPrimitiveAreas(pArray, isRing);
 
@@ -394,9 +394,23 @@ namespace IRI.Msh.Common.Analysis
             return pList.ToArray();
         }
 
-        private static List<int> GetPoints(int areaIndex)
+
+        //ref: https://doi.org/10.3138/FM57-6770-U75U-7727
+        public static IPoint[] SimplifyByDouglasPeucker(IPoint[] pArray, double threshold, bool isRing)
         {
-            return new List<int>() { areaIndex, areaIndex + 1, areaIndex + 2 };
+            if (isRing)
+            {
+                return null;
+            }
+
+            List<Point> point = new List<Point>();
+
+            var numberOfPoints = pArray.Length;
+
+            //
+
+            return point.ToArray();
         }
+
     }
 }
