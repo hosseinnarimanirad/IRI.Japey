@@ -8,13 +8,13 @@ namespace IRI.Msh.Common.Analysis
 {
     public class VisualSimplification
     {
-        public static IPoint[] AdditiveSimplifyByArea(IPoint[] points, double threshold)
+        public static List<T> AdditiveSimplifyByArea<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
@@ -27,7 +27,7 @@ namespace IRI.Msh.Common.Analysis
 
             double tempArea = 0;
 
-            while (thirdIndex < points.Length)
+            while (thirdIndex < points.Count)
             {
                 var area = SpatialUtility.CalculateSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
@@ -52,20 +52,20 @@ namespace IRI.Msh.Common.Analysis
                 filtered.Add(points.Count() / 2);
             }
 
-            filtered.Add(points.Length - 1);
+            filtered.Add(points.Count - 1);
 
-            var output1 = filtered.Select(i => points[i]).ToArray();
+            var result = filtered.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
-        public static IPoint[] AdditiveSimplifyByAreaPlus(IPoint[] points, double threshold)
+        public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
@@ -80,7 +80,7 @@ namespace IRI.Msh.Common.Analysis
 
             double tempArea = 0;
 
-            while (thirdIndex < points.Length)
+            while (thirdIndex < points.Count)
             {
                 var area = SpatialUtility.CalculateSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
@@ -107,27 +107,27 @@ namespace IRI.Msh.Common.Analysis
                 filtered.Add(points.Count() / 2);
             }
 
-            filtered.Add(points.Length - 1);
+            filtered.Add(points.Count - 1);
 
-            var output1 = filtered.Select(i => points[i]).ToArray();
+            var result = filtered.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
-        public static IPoint[] SimplifyByArea(IPoint[] points, double threshold)
+        public static List<T> SimplifyByArea<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
 
             List<Tuple<int, double>> areas = new List<Tuple<int, double>>();
 
-            for (int i = 0; i < points.Length - 2; i++)
+            for (int i = 0; i < points.Count - 2; i++)
             {
                 var area = SpatialUtility.CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
 
@@ -138,14 +138,14 @@ namespace IRI.Msh.Common.Analysis
 
             filteredIndexes.Insert(0, 0);
 
-            if (!points[0].Equals(points[points.Length - 1]))
+            if (!points[0].Equals(points[points.Count - 1]))
             {
-                filteredIndexes.Add(points.Length - 1);
+                filteredIndexes.Add(points.Count - 1);
             }
 
-            var output1 = filteredIndexes.Select(i => points[i]).ToArray();
+            var result = filteredIndexes.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
         /// <summary>
@@ -154,20 +154,20 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static IPoint[] SimplifyByAngle(IPoint[] points, double threshold)
+        public static List<T> SimplifyByAngle<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
 
             List<Tuple<int, double>> angles = new List<Tuple<int, double>>();
 
-            for (int i = 0; i < points.Length - 2; i++)
+            for (int i = 0; i < points.Count - 2; i++)
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[i], points[i + 1], points[i + 2]);
 
@@ -179,11 +179,11 @@ namespace IRI.Msh.Common.Analysis
 
             filter1.Insert(0, 0);
 
-            filter1.Add(points.Length - 1);
+            filter1.Add(points.Count - 1);
 
-            var output1 = filter1.Select(i => points[i]).ToArray();
+            var result = filter1.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
         /// <summary>
@@ -192,13 +192,13 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static IPoint[] AdditiveSimplifyByAngle(IPoint[] points, double threshold)
+        public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
@@ -209,7 +209,7 @@ namespace IRI.Msh.Common.Analysis
 
             int firstIndex = 0, secondIndex = 1, thirdIndex = 2;
 
-            while (thirdIndex < points.Length)
+            while (thirdIndex < points.Count)
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
@@ -230,11 +230,11 @@ namespace IRI.Msh.Common.Analysis
                 filtered.Add(points.Count() / 2);
             }
 
-            filtered.Add(points.Length - 1);
+            filtered.Add(points.Count - 1);
 
-            var output1 = filtered.Select(i => points[i]).ToArray();
+            var result = filtered.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
         /// <summary>
@@ -243,13 +243,13 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="anglethreshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static IPoint[] AdditiveSimplifyByAngleArea(IPoint[] points, double angleThreshold, double areaThreshold)
+        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, double angleThreshold, double areaThreshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
@@ -262,7 +262,7 @@ namespace IRI.Msh.Common.Analysis
 
             double tempArea = 0;
 
-            while (thirdIndex < points.Length)
+            while (thirdIndex < points.Count)
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
@@ -293,20 +293,20 @@ namespace IRI.Msh.Common.Analysis
                 filtered.Add(points.Count() / 2);
             }
 
-            filtered.Add(points.Length - 1);
+            filtered.Add(points.Count - 1);
 
-            var output1 = filtered.Select(i => points[i]).ToArray();
+            var result = filtered.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
-        public static IPoint[] AdditiveSimplifyByDistance(IPoint[] points, double threshold)
+        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, double threshold) where T : IPoint
         {
-            if (points == null || points.Length == 0)
+            if (points == null || points.Count == 0)
             {
                 return null;
             }
-            else if (points.Length == 2)
+            else if (points.Count == 2)
             {
                 return points;
             }
@@ -319,7 +319,7 @@ namespace IRI.Msh.Common.Analysis
 
             var temp = 0.0;
 
-            while (secondIndex < points.Length)
+            while (secondIndex < points.Count)
             {
                 var semiDistance = SpatialUtility.GetSemiDistance(points[firstIndex], points[secondIndex]);
 
@@ -342,19 +342,19 @@ namespace IRI.Msh.Common.Analysis
                 filtered.Add(points.Count() / 2);
             }
 
-            filtered.Add(points.Length - 1);
+            filtered.Add(points.Count - 1);
 
-            var output1 = filtered.Select(i => points[i]).ToArray();
+            var result = filtered.Select(i => points[i]).ToList();
 
-            return output1;
+            return result;
         }
 
         //ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
-        public static IPoint[] SimplifyByVisvalingham(IPoint[] pArray, double threshold, bool isRing)
+        public static List<T> SimplifyByVisvalingham<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
         {
-            var areas = SpatialUtility.GetPrimitiveAreas(pArray, isRing);
+            var areas = SpatialUtility.GetPrimitiveAreas(pointList, isRing);
 
-            List<IPoint> pList = pArray.ToList();
+            List<T> pList = pointList.ToList();
 
             List<int> removedPoints = new List<int>();
 
@@ -391,25 +391,72 @@ namespace IRI.Msh.Common.Analysis
                 //recalculate adjacent areas
             }
 
-            return pList.ToArray();
+            return pList.ToList();
         }
 
 
         //ref: https://doi.org/10.3138/FM57-6770-U75U-7727
-        public static IPoint[] SimplifyByDouglasPeucker(IPoint[] pArray, double threshold, bool isRing)
+        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
         {
+            var result = new List<T>();
+
             if (isRing)
             {
-                return null;
+                return result;
             }
 
-            List<Point> point = new List<Point>();
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
 
-            var numberOfPoints = pArray.Length;
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
 
             //
+            double maxSemiPerpendicularDistance = 0;
+            int maxIndex = 0;
 
-            return point.ToArray();
+            //1399.06.23
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            double effectiveThreshold = threshold * threshold;
+
+            for (int i = 1; i < numberOfPoints - 1; i++)
+            {
+                var semiPerpendicularDistance = SpatialUtility.SemiPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
+
+                if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
+                {
+                    maxIndex = i;
+                    maxSemiPerpendicularDistance = semiPerpendicularDistance;
+                }
+            }
+
+            if (maxSemiPerpendicularDistance > effectiveThreshold)
+            {
+                var leftList = pointList.Take(maxIndex + 1).ToList();
+
+                result = SimplifyByDouglasPeucker(leftList, threshold, isRing);
+
+                var rightList = pointList.Skip(maxIndex).ToList();
+
+                var rightResult = SimplifyByDouglasPeucker(rightList, threshold, isRing);
+
+                result.AddRange(rightResult.Skip(1));
+
+                return result;
+            }
+            else
+            {
+                return new List<T> { pointList[0], pointList[numberOfPoints - 1] };
+            }
         }
 
     }

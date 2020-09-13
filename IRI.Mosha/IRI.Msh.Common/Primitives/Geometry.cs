@@ -204,7 +204,7 @@ namespace IRI.Msh.Common.Primitives
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Geometry FilterPoints(Func<IPoint[], IPoint[]> filter)
+        public Geometry FilterPoints<T>(Func<List<T>, List<T>> filter) where T : IPoint
         {
             switch (this.Type)
             {
@@ -223,8 +223,8 @@ namespace IRI.Msh.Common.Primitives
                     return new Geometry(this.Points, GeometryType.Point, this.Srid);
 
                 case GeometryType.LineString:
-                    //return new Geometry(filter(this.Points), GeometryType.LineString) { Srid = this.Srid };
-                    return CreatePointOrLineString(filter(this.Points), this.Srid);
+                    //todo: multiple cast consider changing it
+                    return CreatePointOrLineString(filter(this.Points.Select(i => (T)i).ToList()).Select(i => (IPoint)i).ToArray(), this.Srid);
 
                 case GeometryType.MultiLineString:
                     return new Geometry(this.Geometries.Select(i => i.FilterPoints(filter)).ToArray(), GeometryType.MultiLineString, this.Srid);
@@ -242,7 +242,7 @@ namespace IRI.Msh.Common.Primitives
 
         public Geometry Simplify(double threshold, SimplificationType type, double areaThreshold = double.NaN)
         {
-            Func<IPoint[], IPoint[]> filter;
+            Func<List<IPoint>, List<IPoint>> filter;
 
             switch (type)
             {

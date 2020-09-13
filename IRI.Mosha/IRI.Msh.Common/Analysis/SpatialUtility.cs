@@ -78,7 +78,7 @@ namespace IRI.Msh.Common.Analysis
         //1399.06.11
         //مساحت مثلت‌های تشکیل دهنده یک خط یا 
         //حلقه توسط نقاط ورودی
-        public static List<double> GetPrimitiveAreas(IEnumerable<IPoint> points, bool isClosed)
+        public static List<double> GetPrimitiveAreas<T>(IEnumerable<T> points, bool isClosed) where T : IPoint
         {
             List<double> result = new List<double>();
 
@@ -244,7 +244,7 @@ namespace IRI.Msh.Common.Analysis
         /// </summary>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static bool IsClockwise(IList<IPoint> points)
+        public static bool IsClockwise<T>(IList<T> points) where T : IPoint
         {
             int numberOfPoints = points.Count;
 
@@ -372,7 +372,7 @@ namespace IRI.Msh.Common.Analysis
 
 
 
-        public static double PointToLineSegmentDistance(Point lineSegmentStart, Point lineSegmentEnd, Point targetPoint)
+        public static double PointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
             var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 
@@ -391,7 +391,7 @@ namespace IRI.Msh.Common.Analysis
                     Math.Sqrt(dySegment * dySegment + dxSegment * dxSegment);
         }
 
-        public static double SemiPointToLineSegmentDistance(Point lineSegmentStart, Point lineSegmentEnd, Point targetPoint)
+        public static double SemiPointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
             var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 
@@ -407,9 +407,9 @@ namespace IRI.Msh.Common.Analysis
 
             var numerator = (dySegment * targetPoint.X - dxSegment * targetPoint.Y + lineSegmentEnd.X * lineSegmentStart.Y - lineSegmentEnd.Y * lineSegmentStart.X);
 
-            return numerator * numerator
+            return (numerator * numerator)
                     /
-                    dySegment * dySegment + dxSegment * dxSegment)
+                    (dySegment * dySegment + dxSegment * dxSegment);
         }
 
 
