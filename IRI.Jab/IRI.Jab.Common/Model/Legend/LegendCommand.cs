@@ -333,7 +333,8 @@ namespace IRI.Jab.Common.Model.Legend
                 CreateShowAttributeTableFunc<T>(),
                 CreateClearSelectedFunc,
                 CreateRemoveLayerFunc,
-                CreateExportAsPngFunc
+                CreateExportAsPngFunc,
+                CreateZoomToExtentCommandFunc
             };
         }
 

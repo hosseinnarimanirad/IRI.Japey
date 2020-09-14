@@ -148,10 +148,6 @@
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataStructure\IRI.Ket.DataStructure.csproj">
-      <Project>{f420034f-75c8-448d-b11b-b8cbf26c8946}</Project>
-      <Name>IRI.Ket.DataStructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Geometry\IRI.Ket.Geometry.csproj">
       <Project>{1C455C56-2478-40C0-B505-153CE88FF68A}</Project>
       <Name>IRI.Ket.Geometry</Name>
@@ -163,6 +159,10 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
       <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
       <Name>IRI.Sta.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj">
+      <Project>{fedf4540-2440-4b0f-ba23-25d6de33c41e}</Project>
+      <Name>IRI.Sta.DataStructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
