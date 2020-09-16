@@ -274,8 +274,12 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold);
                     break;
 
-                case SimplificationType.Visvalingham:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingham(pList, threshold, this.IsRingBase());
+                case SimplificationType.Visvalingam:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, threshold, this.IsRingBase());
+                    break;
+
+                case SimplificationType.DouglasPeucker:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, threshold, this.IsRingBase());
                     break;
 
                 default:

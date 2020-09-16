@@ -161,7 +161,7 @@
       <Name>IRI.Sta.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj">
-      <Project>{fedf4540-2440-4b0f-ba23-25d6de33c41e}</Project>
+      <Project>{a9c79ad2-04b7-4c06-a8fa-8681d4cd2b73}</Project>
       <Name>IRI.Sta.DataStructure</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using IRI.Article.Sfc.View;
 using IRI.Ket.DataManagement.DataSource;
+using IRI.Msh.DataStructure;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -167,25 +168,25 @@ namespace IRI.Article.Sfc
 
             int[] array10k = Enumerable.Repeat(0, 10000).Select(i => r.Next()).ToArray();
 
-            Msh.DataStructure.SortAlgorithm.Heapsort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
+            SortAlgorithm.Heapsort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
 
             watch.Stop();
             Debug.WriteLine($"Heapsort, {array10k.Length}, {watch.ElapsedMilliseconds / 1000.0}");
             watch.Restart();
 
-            Msh.DataStructure.SortAlgorithm.MergeSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
+            SortAlgorithm.MergeSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
 
             watch.Stop();
             Debug.WriteLine($"MergeSort, {array10k.Length}, {watch.ElapsedMilliseconds / 1000.0}");
             watch.Restart();
 
-            Msh.DataStructure.SortAlgorithm.QuickSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
+            SortAlgorithm.QuickSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
 
             watch.Stop();
             Debug.WriteLine($"QuickSort, {array10k.Length}, {watch.ElapsedMilliseconds / 1000.0}");
             watch.Restart();
 
-            Msh.DataStructure.SortAlgorithm.BubbleSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
+            SortAlgorithm.BubbleSort<int>(array10k, (p1, p2) => p1.CompareTo(p2));
 
             watch.Stop();
             Debug.WriteLine($"BubbleSort, {array10k.Length}, {watch.ElapsedMilliseconds / 1000.0}");

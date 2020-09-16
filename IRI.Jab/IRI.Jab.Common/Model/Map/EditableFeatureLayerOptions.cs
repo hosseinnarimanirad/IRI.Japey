@@ -9,6 +9,7 @@ using System.Windows;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
+using OpenTK.Platform.Windows;
 
 namespace IRI.Jab.Common.Model
 {
@@ -26,9 +27,18 @@ namespace IRI.Jab.Common.Model
             {
                 var brush = (SolidColorBrush)Application.Current.Resources["AccentColorBrush"];
 
-                _fill = new SolidColorBrush(new Color() { A = 100, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+                if (brush == null)
+                {
+                    _fill = _defaultFill;
 
-                _stroke = new SolidColorBrush(new Color() { A = 204, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+                    _stroke = _defaultStroke;
+                }
+                else
+                {
+                    _fill = new SolidColorBrush(new Color() { A = 100, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+
+                    _stroke = new SolidColorBrush(new Color() { A = 204, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B });
+                }
             }
             catch (Exception ex)
             {

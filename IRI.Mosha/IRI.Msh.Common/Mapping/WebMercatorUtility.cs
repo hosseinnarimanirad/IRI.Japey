@@ -8,6 +8,7 @@ using System.Linq;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Primitives;
 
+
 namespace IRI.Msh.Common.Mapping
 {
     public static class WebMercatorUtility
@@ -81,6 +82,28 @@ namespace IRI.Msh.Common.Mapping
             return groundWidth * ConversionHelper.MeterToPixelFactor / screenWidth;
         }
 
+        public static double EstimateInverseMapScale(BoundingBox groundBoundingBox, double screenWidth, double screenHeight)
+        {
+            var scale1 = EstimateInverseMapScale(groundBoundingBox.Width, screenWidth);
+
+            var scale2 = EstimateInverseMapScale(groundBoundingBox.Height, screenHeight);
+
+            return Math.Max(scale1, scale2);
+        }
+
+        //1399.06.26
+        public static System.Drawing.Size CalculateWindowSize(BoundingBox groundBoundingBox, int level, bool exactFit = false)
+        {
+            var scale = GetGoogleMapScale(level);
+
+            var marginFacot = exactFit ? 1.0 : 1.2;
+
+            var width = groundBoundingBox.Width * scale * ConversionHelper.MeterToPixelFactor * marginFacot;
+
+            var height = groundBoundingBox.Height * scale * ConversionHelper.MeterToPixelFactor * marginFacot;
+
+            return new System.Drawing.Size((int)width, (int)height);
+        }
 
         //***************
         public static List<ZoomScale> ZoomLevels;
@@ -173,9 +196,17 @@ namespace IRI.Msh.Common.Mapping
         /// <param name="latitude">In Degree</param>
         /// <param name="screenWidth"></param>
         /// <returns></returns>
-        public static int GetZoomLevel(double groundDistance, double latitude, double screenWidth)
+        public static int EstimateZoomLevel(double groundDistance, double latitude, double screenWidth)
         {
             var inverseScale = EstimateInverseMapScale(groundDistance, screenWidth);
+
+            return GetZoomLevel(1.0 / inverseScale, latitude);
+            //return ZoomLevels.First(i => i.InverseScale > inverseScale).ZoomLevel;
+        }
+
+        public static int EstimateZoomLevel(BoundingBox groundBoundingBox, double latitude, double screenWidth, double screenHeight)
+        {
+            var inverseScale = EstimateInverseMapScale(groundBoundingBox, screenWidth, screenWidth);
 
             return GetZoomLevel(1.0 / inverseScale, latitude);
             //return ZoomLevels.First(i => i.InverseScale > inverseScale).ZoomLevel;
@@ -189,7 +220,7 @@ namespace IRI.Msh.Common.Mapping
 
             var screenSize = scaleX < scaleY ? screenWidth : screenHeight;
 
-            return WebMercatorUtility.GetZoomLevel(Math.Max(mapBoundingBox.Width, mapBoundingBox.Height), 35, screenSize);
+            return WebMercatorUtility.EstimateZoomLevel(Math.Max(mapBoundingBox.Width, mapBoundingBox.Height), 35, screenSize);
 
         }
 

@@ -350,19 +350,24 @@ namespace IRI.Msh.Common.Analysis
         }
 
         //ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
-        public static List<T> SimplifyByVisvalingham<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
+        public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
         {
+            if (pointList == null || pointList.Count < 3)
+            {
+                return pointList;
+            }
+
             var areas = SpatialUtility.GetPrimitiveAreas(pointList, isRing);
 
             List<T> pList = pointList.ToList();
 
             List<int> removedPoints = new List<int>();
 
-            while (true)
+            while (areas.Count > 0)
             {
                 var minArea = Statistics.Statistics.GetMin(areas);
 
-                if (minArea < threshold)
+                if (minArea > threshold)
                 {
                     break;
                 }

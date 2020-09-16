@@ -1,0 +1,62 @@
+﻿<Window x:Class="IRI.Tag.SampleApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IRI.Tag.SampleApp"
+        mc:Ignorable="d" Loaded="Window_Loaded"
+        xmlns:MapViewer="clr-namespace:IRI.Jab.MapViewer;assembly=IRI.Jab.MapViewer" 
+        xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
+        Title="MainWindow" Height="450" Width="800" x:Name="root" >
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="4"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Clear" Command="{Binding ClearAllCommand}"/>
+            <Button Content="Full extent" Command="{Binding FullExtentCommand}"/>
+            <Button Content="Add shapefile" Command="{Binding AddShapefileCommand}"/>
+            <Button Content="Measure Length" Command="{Binding MeasureLengthCommand}"/>
+            <Button Content="Measure Area" Command="{Binding MeasureAreaCommand}"/>
+            <Button Content="Draw Point" Command="{Binding DrawPointCommand}"/>
+            <Button Content="Draw Polyline" Command="{Binding DrawPolylineCommand}"/>
+            <Button Content="Draw Polygon" Command="{Binding DrawPolygonCommand}"/>
+            <Button Content="Go To" Command="{Binding GoToCommand}"/>
+ 
+        </StackPanel>
+        <MapViewer:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"  />
+        <StackPanel Grid.Row="1">
+            <Expander Header="نقشه‌های پایه" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+                <ItemsControl ItemsSource="{Binding MapProviders}" Height="250">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="2" Text="{Binding Name}" Background="Red"  Cursor="Hand">
+                                <TextBlock.InputBindings>
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=root, Path=DataContext.ChangeBaseMapCommand}" CommandParameter="{Binding Name}"/>
+                                </TextBlock.InputBindings>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Expander>
+           
+            <Expander Header="عوارض ترسیمی" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+                <iriJabMapControls:MapDrawingLegendView MinHeight="90"/>
+            </Expander>
+            <Expander Header="لایه‌ها" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
+                <iriJabMapControls:MapLegendWithOptionsView EnableFilterMode="True"  DataContext="{Binding Layers}" GroupName="B"/>
+
+            </Expander>
+        </StackPanel>
+    </Grid>
+</Window>

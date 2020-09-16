@@ -28,7 +28,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var boundingBox = geometries.GetBoundingBox();
 
-            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
+            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
 
             var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 
@@ -93,7 +93,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var boundingBox = geometries.GetBoundingBox();
 
-            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
+            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), averageLatitude, 900);
 
             var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(.98, SimplificationType.AdditiveByAngle)).Where(g => !g.IsNullOrEmpty()).ToList();
 

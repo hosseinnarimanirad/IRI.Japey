@@ -99,8 +99,7 @@ namespace IRI.Article.Sfc.View
 
             int height = 0;
 
-            KdTree<spatial.Point> kdTree02 =
-              new KdTree<spatial.Point>(points, comparers);
+            var kdTree02 = new KdTree<spatial.Point>(points, comparers);
 
             Draw(canvas, kdTree02.Root, 0, 0, canvas.ActualHeight, 0, canvas.ActualWidth, ref height);
 
@@ -131,7 +130,7 @@ namespace IRI.Article.Sfc.View
             return result;
         }
 
-        private void Draw(Canvas canvas, Msh.DataStructure.AdvancedStructures.KdTreeNode<spatial.Point> node, int level, double y1, double y2, double x1, double x2, ref int height)
+        private void Draw(Canvas canvas, KdTreeNode<spatial.Point> node, int level, double y1, double y2, double x1, double x2, ref int height)
         {
             height = Math.Max(height, level);
 

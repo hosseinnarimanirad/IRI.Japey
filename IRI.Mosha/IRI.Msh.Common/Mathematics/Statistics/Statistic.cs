@@ -142,7 +142,7 @@ namespace IRI.Msh.Statistics
          
         public static double GetMin(List<double> values)
         {
-            if (values.Count < 0)
+            if (values.Count <= 0)
             {
                 throw new ZeroSizeArrayException();
             }
