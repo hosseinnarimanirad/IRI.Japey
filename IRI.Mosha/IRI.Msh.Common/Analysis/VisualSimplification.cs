@@ -390,6 +390,8 @@ namespace IRI.Msh.Common.Analysis
                         {
                             areas[i] = SpatialUtility.CalculateUnsignedTriangleArea(pList[i], pList[i + 1], pList[i + 2]);
                         }
+
+                        break;
                     }
                 }
 

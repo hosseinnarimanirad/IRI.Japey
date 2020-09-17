@@ -263,9 +263,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
                 return new Geometry(parts, GeometryType.Polygon, Srid);
             }
-            else
+            else if (this.NumberOfParts == 1)
             {
                 return new Geometry(new Geometry[] { new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid) }, GeometryType.Polygon, Srid);
+            }
+            else
+            {
+                return Geometry.CreateEmpty(GeometryType.Polygon, Srid);
             }
         }
 

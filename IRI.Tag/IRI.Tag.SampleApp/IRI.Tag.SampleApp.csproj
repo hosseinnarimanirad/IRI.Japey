@@ -100,31 +100,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
       <Name>IRI.Jab.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj">
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj">
       <Project>{28b00be7-fe49-4c5d-b1d1-37000028e128}</Project>
       <Name>IRI.Jab.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Jab\IRI.Jab.MapViewer\IRI.Jab.MapViewer.csproj">
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.MapViewer\IRI.Jab.MapViewer.csproj">
       <Project>{f53ffe09-138b-4f3e-9039-3bc0cd107952}</Project>
       <Name>IRI.Jab.MapViewer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
       <Name>IRI.Ket.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagement\IRI.Ket.DataManagement.csproj">
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
       <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
       <Name>IRI.Ket.ShapefileFormat</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
       <Project>{1ED088E6-1806-4D77-9143-2221DCBCF8F1}</Project>
       <Name>IRI.Sta.Common</Name>
     </ProjectReference>
