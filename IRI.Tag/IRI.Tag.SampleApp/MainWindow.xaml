@@ -7,7 +7,7 @@
         mc:Ignorable="d" Loaded="Window_Loaded"
         xmlns:MapViewer="clr-namespace:IRI.Jab.MapViewer;assembly=IRI.Jab.MapViewer" 
         xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
-        Title="MainWindow" Height="450" Width="800" x:Name="root" >
+        Title="MainWindow" Height="600" Width="800" x:Name="root" >
     <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -17,23 +17,34 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Column="1">
+        <StackPanel Grid.Column="1">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="4"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Clear" Command="{Binding ClearAllCommand}"/>
-            <Button Content="Full extent" Command="{Binding FullExtentCommand}"/>
-            <Button Content="Add shapefile" Command="{Binding AddShapefileCommand}"/>
-            <Button Content="Measure Length" Command="{Binding MeasureLengthCommand}"/>
-            <Button Content="Measure Area" Command="{Binding MeasureAreaCommand}"/>
-            <Button Content="Draw Point" Command="{Binding DrawPointCommand}"/>
-            <Button Content="Draw Polyline" Command="{Binding DrawPolylineCommand}"/>
-            <Button Content="Draw Polygon" Command="{Binding DrawPolygonCommand}"/>
-            <Button Content="Go To" Command="{Binding GoToCommand}"/>
- 
+            <Border BorderBrush="Black" BorderThickness="1" Margin="2">
+                <StackPanel Orientation="Horizontal" >
+               
+                <Button Content="Clear" Command="{Binding ClearAllCommand}"/>
+                <Button Content="Full extent" Command="{Binding FullExtentCommand}"/>
+                <Button Content="Add shapefile" Command="{Binding AddShapefileCommand}"/>
+                <Button Content="Measure Length" Command="{Binding MeasureLengthCommand}"/>
+                <Button Content="Measure Area" Command="{Binding MeasureAreaCommand}"/>
+                <Button Content="Draw Point" Command="{Binding DrawPointCommand}"/>
+                <Button Content="Draw Polyline" Command="{Binding DrawPolylineCommand}"/>
+                <Button Content="Draw Polygon" Command="{Binding DrawPolygonCommand}"/>
+                <Button Content="Go To" Command="{Binding GoToCommand}"/>
+            </StackPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="2">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Add Marker Sample" Command="{Binding ShowSpecialPointLayerSampleCommand}"/>
+                    
+                </StackPanel>
+            </Border>
         </StackPanel>
+      
         <MapViewer:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"  />
         <StackPanel Grid.Row="1">
             <Expander Header="نقشه‌های پایه" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
