@@ -100,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Bas\IRI.SqlSpatialLoader\IRI.Bas.SqlSpatialLoader.csproj">
+      <Project>{8f6a2e26-d1b8-4ac6-a0f4-9aba82bb0b80}</Project>
+      <Name>IRI.Bas.SqlSpatialLoader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj">
       <Project>{edb6898c-02c2-4335-b3c0-308d619fab4e}</Project>
       <Name>IRI.Jab.Common</Name>

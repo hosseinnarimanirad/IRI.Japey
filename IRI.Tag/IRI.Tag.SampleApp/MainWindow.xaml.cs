@@ -28,6 +28,15 @@ namespace IRI.Tag.SampleApp
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                SqlServerTypes.Utilities.LoadNativeAssembliesv14(Environment.CurrentDirectory);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("problem #1000");
+            }
+
             var presenter = new ViewModel.AppPresenter();
 
             await this.map.Register(presenter);
