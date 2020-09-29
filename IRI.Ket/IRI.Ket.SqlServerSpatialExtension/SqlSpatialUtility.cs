@@ -89,7 +89,7 @@ namespace IRI.Ket.SqlServerSpatialExtension
 
         public static SqlGeometry UnionAll(List<SqlGeometry> geometries)
         {
-            return Aggregate(geometries, (g1, g2) => g1.STUnion(g2));
+            return Aggregate(geometries, (g1, g2) => g1.STUnion(g2));            
         }
 
         private static SqlGeometry Aggregate(List<SqlGeometry> geometries, Func<SqlGeometry, SqlGeometry, SqlGeometry> map)

@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Ket.SpatialExtensions;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Model
@@ -37,7 +39,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
         {
             this.TheSqlGeometry = geometry;
 
-            this.Attributes = attributes;            
+            this.Attributes = attributes;
         }
 
         public SqlFeature()
@@ -60,7 +62,15 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
             }
         }
 
-
+        public Feature AsFeature()
+        {
+            return new Feature()
+            {
+                Attributes = Attributes,
+                Id = this.Id,
+                TheGeometry = this.TheSqlGeometry.AsGeometry()
+            };
+        }
 
         #region ICustomTypeDescriptor
 

@@ -11,6 +11,9 @@ using IRI.Msh.Common.Helpers;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Model.Esri;
 using IRI.Msh.Common.Model.GeoJson;
+using System.Diagnostics;
+using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Ket.SqlServerSpatialExtension.Extensions;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -1201,7 +1204,7 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-        #region To GeoJson
+        #region SqlGeometry To GeoJson
 
         public static IGeoJsonGeometry ParseToGeoJson(this SqlGeometry geometry)
         {
@@ -1613,6 +1616,46 @@ namespace IRI.Ket.SpatialExtensions
         public static SqlGeometry AsSqlGeometry(this IRI.Msh.Common.Model.TileInfo tile)
         {
             return tile.WebMercatorExtent.AsSqlGeometry();
+        }
+
+        #endregion
+
+
+        #region SqlFeature  
+
+        public static SqlFeature AsSqlFeature(this Feature feature)
+        {
+            if (feature == null)
+            {
+                return null;
+            }
+
+            return new SqlFeature()
+            {
+                Attributes = feature.Attributes,
+                Id = feature.Id,
+                TheSqlGeometry = feature.TheGeometry.AsSqlGeometry()
+            };
+        }
+
+        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<IPoint, IPoint> toWgs84Func)
+        {
+            return new GeoJsonFeature()
+            {
+                geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).ParseToGeoJson(),
+                id = feature.Id.ToString(),
+                properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value.ToString())
+            };
+        }
+
+        public static SqlFeature AsSqlFeature(this GeoJsonFeature feature, bool isLongitudeFirst)
+        {
+            return new SqlFeature()
+            {
+                Attributes = feature.properties.ToDictionary(f => f.Key, f => (object)f.Value),
+                //Id = feature.id,
+                TheSqlGeometry = feature.geometry.AsSqlGeometry(isLongitudeFirst, SridHelper.GeodeticWGS84)
+            };
         }
 
         #endregion

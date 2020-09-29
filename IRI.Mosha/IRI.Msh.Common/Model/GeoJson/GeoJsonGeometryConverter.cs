@@ -106,13 +106,10 @@ namespace IRI.Msh.Common.Model.GeoJson
                 default:
                     break;
             }
-
-             
              
             writer.WriteEndObject();
             //var type = (value as IGeoJsonGeometry).Type;
-
-
+             
         }
     }
 }

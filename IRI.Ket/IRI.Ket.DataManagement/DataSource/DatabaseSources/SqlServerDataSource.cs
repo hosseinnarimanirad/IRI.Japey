@@ -666,6 +666,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Get FeatureSet
 
+        public SqlFeatureSet QueryFeatures()
+        {
+            return QueryFeatures(MakeSelectCommand(null, false));
+        }
+
         public SqlFeatureSet QueryFeaturesWhereIntersects(string wktGeometryFilter)
         {
             //return QueryFeatures(GetCommandString(wktGeometryFilter, false));
@@ -755,7 +760,7 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public SqlFeatureSet QueryFeaturesWhereIntersects(BoundingBox boundingBox)
-        { 
+        {
             var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
 
             return QueryFeatures(MakeSelectCommand(whereClause, false));

@@ -71,6 +71,11 @@ namespace IRI.Msh.Common.Primitives
 
         }
 
+        public Geometry(Point[] points, GeometryType type, int srid) : this(points, type, false, srid)
+        {
+
+        }
+
         public Geometry(IPoint[] points, GeometryType type, int srid) : this(points, type, false, srid)
         {
 
