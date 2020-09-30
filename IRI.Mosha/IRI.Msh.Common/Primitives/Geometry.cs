@@ -245,7 +245,14 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-        public Geometry Simplify(double threshold, SimplificationType type, double areaThreshold = double.NaN)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="threshold"></param>
+        /// <param name="type"></param>
+        /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
+        /// <returns></returns>
+        public Geometry Simplify(double threshold, SimplificationType type, double secondaryParameter = double.NaN)
         {
             Func<List<IPoint>, List<IPoint>> filter;
 
@@ -276,7 +283,7 @@ namespace IRI.Msh.Common.Primitives
                     break;
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, areaThreshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, secondaryParameter);
                     break;
 
                 case SimplificationType.Visvalingam:
@@ -285,6 +292,11 @@ namespace IRI.Msh.Common.Primitives
 
                 case SimplificationType.DouglasPeucker:
                     filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, threshold, this.IsRingBase());
+                    break;
+
+                case SimplificationType.Lang:
+                    secondaryParameter = double.IsNaN(secondaryParameter) ? 5 : secondaryParameter;
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByLang(pList, threshold, (int)secondaryParameter, this.IsRingBase());
                     break;
 
                 default:

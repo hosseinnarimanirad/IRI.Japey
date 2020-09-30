@@ -1,8 +1,10 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Model.Here;
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 
 namespace IRI.Msh.Common.Analysis
 {
@@ -349,7 +351,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        //ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
+        // ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
         public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
         {
             if (pointList == null || pointList.Count < 3)
@@ -402,7 +404,7 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
-        //ref: https://doi.org/10.3138/FM57-6770-U75U-7727
+        // ref: https://doi.org/10.3138/FM57-6770-U75U-7727
         public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, double threshold, bool isRing) where T : IPoint
         {
             var result = new List<T>();
@@ -464,6 +466,88 @@ namespace IRI.Msh.Common.Analysis
             {
                 return new List<T> { pointList[0], pointList[numberOfPoints - 1] };
             }
+        }
+
+        // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
+        // link: 
+        public static List<T> SimplifyByLang<T>(List<T> pointList, double threshold, int lookAhead, bool isRing) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (isRing)
+            {
+                return result;
+            }
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            //
+            double maxSemiPerpendicularDistance = 0;
+
+            //1399.07.09
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            double effectiveThreshold = threshold * threshold;
+
+            int startIndex = 0;
+
+            result.Add(pointList[0]);
+
+            int endIndex = Math.Min(numberOfPoints - 1, lookAhead);
+
+            while (true)
+            {
+                if (endIndex == startIndex)
+                {
+                    break;
+                }
+                else if (endIndex - startIndex == 1)
+                {
+                    result.Add(pointList[endIndex]);
+                    startIndex = endIndex;
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead);
+                }
+
+                if (AnySemiPerpendicularDistanceExceedTolerance(pointList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(), effectiveThreshold, maxSemiPerpendicularDistance))
+                {
+                    result.Add(pointList[endIndex]);
+                    startIndex = endIndex;
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead);
+                }
+                else
+                {
+                    endIndex--;
+                }
+            }
+
+            return result;
+        }
+
+        private static bool AnySemiPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold, double maxSemiPerpendicularDistance) where T : IPoint
+        {
+            for (int i = 1; i < pointList.Count - 1; i++)
+            {
+                var semiPerpendicularDistance = SpatialUtility.SemiPointToLineSegmentDistance(pointList[0], pointList[pointList.Count - 1], pointList[i]);
+
+                if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
     }
