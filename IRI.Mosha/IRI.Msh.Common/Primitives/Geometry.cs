@@ -252,51 +252,51 @@ namespace IRI.Msh.Common.Primitives
         /// <param name="type"></param>
         /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
         /// <returns></returns>
-        public Geometry Simplify(double threshold, SimplificationType type, double secondaryParameter = double.NaN)
+        public Geometry Simplify(double threshold, SimplificationType type, bool retain3Poins, double secondaryParameter = double.NaN)
         {
             Func<List<IPoint>, List<IPoint>> filter;
 
             switch (type)
             {
                 case SimplificationType.ByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.AdditiveByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.AdditiveByAreaPlus:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.ByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.AdditiveByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.AdditiveByDistance:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, secondaryParameter);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, secondaryParameter, retain3Poins);
                     break;
 
                 case SimplificationType.Visvalingam:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, threshold, this.IsRingBase());
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, threshold, this.IsRingBase(), retain3Poins);
                     break;
 
                 case SimplificationType.DouglasPeucker:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, threshold, this.IsRingBase());
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, threshold, retain3Poins);
                     break;
 
                 case SimplificationType.Lang:
-                    secondaryParameter = double.IsNaN(secondaryParameter) ? 5 : secondaryParameter;
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByLang(pList, threshold, (int)secondaryParameter, this.IsRingBase());
+                    secondaryParameter = double.IsNaN(secondaryParameter) ? 10 : secondaryParameter;
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByLang(pList, threshold, (int)secondaryParameter, retain3Poins);
                     break;
 
                 default:
@@ -1255,6 +1255,22 @@ namespace IRI.Msh.Common.Primitives
             }
 
             return result;
+        }
+
+        #endregion
+
+        #region Cleansing
+
+        public bool HasDuplicatePoints()
+        {
+            if (this.Points?.Length > 0)
+            {
+                return this.Points.GroupBy(g => new { x = g.X, y = g.Y }).Any(g => g.Count() > 1);
+            }
+            else
+            {
+                return this.Geometries?.Any(g => g.HasDuplicatePoints()) == true;
+            }
         }
 
         #endregion

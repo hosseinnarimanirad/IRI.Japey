@@ -19,7 +19,7 @@ namespace Microsoft.SqlServer.Types
         /// <param name="type"></param>
         /// <param name="areaThreshold"></param>
         /// <returns></returns>
-        public static SqlGeometry Simplify(this SqlGeometry geometry, double threshold, SimplificationType type, double areaThreshold = double.NaN)
+        public static SqlGeometry Simplify(this SqlGeometry geometry, double threshold, SimplificationType type, bool retain3Points, double areaThreshold = double.NaN)
         {
             if (geometry.IsNotValidOrEmpty())
             {
@@ -28,7 +28,7 @@ namespace Microsoft.SqlServer.Types
 
             var extractedGeometry = geometry.AsGeometry();
 
-            var filteredGeometry = extractedGeometry.Simplify(threshold, type, areaThreshold);
+            var filteredGeometry = extractedGeometry.Simplify(threshold, type, retain3Points, areaThreshold);
 
             return filteredGeometry.AsSqlGeometry().MakeValid();
 
@@ -75,7 +75,7 @@ namespace Microsoft.SqlServer.Types
         //}
 
 
-        public static List<SqlGeometry> Simplify(this List<SqlGeometry> geometries, SimplificationType type, int zoomLevel, bool reduceToPoint = true, double averageLatitude = 35, double angleThreshold = .98)
+        public static List<SqlGeometry> Simplify(this List<SqlGeometry> geometries, SimplificationType type, int zoomLevel, bool retain3Points, bool reduceToPoint = true, double averageLatitude = 35, double angleThreshold = .98)
         {
             try
             {
@@ -102,12 +102,12 @@ namespace Microsoft.SqlServer.Types
 
                 Stopwatch watch = Stopwatch.StartNew();
 
-                 
+
                 for (int i = 0; i < geometries.Count; i++)
                 {
                     try
                     {
-                        result.Add(geometries[i].Simplify(threshold, type, areaThreshold));
+                        result.Add(geometries[i].Simplify(threshold, type, retain3Points, areaThreshold));
                         //result.Add(FilterPoints(geometries[i], filter));
                     }
                     catch (Exception ex)
@@ -116,7 +116,7 @@ namespace Microsoft.SqlServer.Types
                         throw;
                     }
                 }
-                 
+
                 //switch (type)
                 //{
                 //    case SimplificationType.ByArea:
