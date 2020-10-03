@@ -42,7 +42,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             this._latitudeOfOrigin = latitudeOfOrigin;
         }
 
-        public override IPoint FromGeodetic(IPoint point)
+        public override TPoint FromGeodetic<TPoint>(TPoint point)
         {
             var tempLongitude = point.X - _centralMeridian;
 
@@ -50,10 +50,10 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             var result = MapProjects.GeodeticToTransverseMercator(new Point(tempLongitude, tempLatitude), this._ellipsoid);
 
-            return new Point(result.X * _scaleFactor + _falseEasting, result.Y * _scaleFactor + _falseNorthing);
+            return new TPoint() { X = result.X * _scaleFactor + _falseEasting, Y = result.Y * _scaleFactor + _falseNorthing };
         }
 
-        public override IPoint ToGeodetic(IPoint point)
+        public override TPoint ToGeodetic<TPoint>(TPoint point)
         {
             //return MapProjects.TransverseMercatorToGeodetic(point, this._ellipsoid);
 
@@ -63,12 +63,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             Point result = MapProjects.TransverseMercatorToGeodetic(new Point(tempX, tempY), _ellipsoid);
 
-            result.X = result.X + _centralMeridian;
-
-            result.Y = result.Y + _latitudeOfOrigin;
-
-            return result;
-
+            return new TPoint()
+            {
+                X = result.X + _centralMeridian,
+                Y = result.Y + _latitudeOfOrigin
+            };
         }
 
 

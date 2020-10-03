@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace IRI.Msh.Common.Model.GeoJson
 {
     [JsonConverter(typeof(GeoJsonGeometryConverter))]
-    public class GeoJsonMultiPoint : IGeoJsonGeometry
+    public class GeoJsonMultiPoint : IGeoJsonGeometry 
     {
         [JsonProperty("type")]
         public string Type { get; set; }
@@ -25,9 +25,9 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Coordinates == null || Coordinates.Length < 1;
         }
 
-        public Geometry Parse(bool isLongitudeFirst = false, int srid = 0)
+        public Geometry<Point> Parse(bool isLongitudeFirst = false, int srid = 0)
         {
-            return new Geometry(Coordinates?.Select(c => Geometry.ParsePointToGeometry(c, isLongitudeFirst)).ToArray(), this.GeometryType, srid);
+            return new Geometry<Point>(Coordinates?.Select(c => Geometry<Point>.ParsePointToGeometry(c, isLongitudeFirst)).ToList(), this.GeometryType, srid);
         }
 
         public string Serialize(bool indented)

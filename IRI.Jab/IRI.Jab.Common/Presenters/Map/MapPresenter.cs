@@ -30,6 +30,7 @@ using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Service;
 using IRI.Msh.Common.Helpers;
 using System.Windows.Threading;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -1206,7 +1207,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        protected DrawingItemLayer MakeShapeItem(Geometry drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
+        protected DrawingItemLayer MakeShapeItem(Geometry<Msh.Common.Primitives.Point> drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
         {
             var shapeItem = new DrawingItemLayer(name, drawing, id, source);
 
@@ -1417,7 +1418,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
             
-            Geometry geometry = new Geometry(points.ToArray(), type, srid);
+            Geometry geometry = new Geometry(points/*.ToArray()*/, type, srid);
 
             return EditAsync(geometry, options);
         }
@@ -1755,7 +1756,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestPanTo?.Invoke(point, callback);
         }
 
-        public void PanToGeographicPoint(IRI.Msh.Common.Primitives.IPoint point, Action callback = null)
+        public void PanToGeographicPoint(IRI.Msh.Common.Primitives.Point point, Action callback = null)
         {
             var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 

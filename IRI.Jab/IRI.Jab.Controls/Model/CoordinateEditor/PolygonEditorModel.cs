@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model.CoordinateEditor
 {
@@ -67,7 +68,7 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
                 rings.Add(ring.GetGeometry());
             }
 
-            return new Geometry(rings.ToArray(), GeometryType.Polygon, Srid);
+            return new Geometry(rings, GeometryType.Polygon, Srid);
         }
     }
 }

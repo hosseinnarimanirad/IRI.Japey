@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 {
-    public class ShapefileHelper
+    public static class ShapefileHelper
     {
         public static List<SqlFeature> ReadAsSqlFeature(string shpFileName, Encoding dataEncoding, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true, string label = null)
         {
@@ -18,11 +18,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             {
                 var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
 
-                Func<IPoint, IPoint> map = p => p.Project(sourceSrs, targetSrs);
+                Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
 
                 return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
-                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map, targetSrs.Srid).AsSqlGeometry() },
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsSqlGeometry() },
                         //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
                         true,
                         dataEncoding,
@@ -51,11 +51,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             {
                 var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
 
-                Func<IPoint, IPoint> map = p => p.Project(sourceSrs, targetSrs);
+                Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
 
                 return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
-                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map, targetSrs.Srid).AsSqlGeometry() },
+                        (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsSqlGeometry() },
                         //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
                         //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
                         true,

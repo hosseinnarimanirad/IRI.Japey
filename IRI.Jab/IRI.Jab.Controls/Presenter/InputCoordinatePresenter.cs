@@ -121,7 +121,7 @@ namespace IRI.Jab.Controls.Presenter
         //    this.PointCollection.Remove(point);
         //}
 
-        public Func<Task<IRI.Msh.Common.Primitives.Geometry>> RequestGetGeometry;
+        public Func<Task<Geometry<Point>>> RequestGetGeometry;
 
         private RelayCommand _drawGeometryCommand;
 
@@ -138,7 +138,7 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public Geometry Geometry
+        public Geometry<Point> Geometry
         {
             set
             {

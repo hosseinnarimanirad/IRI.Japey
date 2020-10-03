@@ -58,7 +58,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
 
             this.points = points;
 
@@ -162,14 +162,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid) /*where TPoint : IPoint, new()*/
         {
             return new EsriMultiPoint(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray());
         }
 
-        public Geometry AsGeometry()
+        public Geometry<Point> AsGeometry()
         {
-            return new Geometry(points.Select(p => p.AsGeometry()).ToArray(), GeometryType.MultiPoint, Srid);
+            return new Geometry<Point>(points.Select(p => p.AsGeometry()).ToList(), GeometryType.MultiPoint, Srid);
         }
 
         public bool IsNullOrEmpty()

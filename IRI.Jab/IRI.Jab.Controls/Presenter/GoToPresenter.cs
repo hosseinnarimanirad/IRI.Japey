@@ -131,7 +131,7 @@ namespace IRI.Jab.Controls.Presenter
             this.RequestPanTo?.Invoke(new IRI.Msh.Common.Primitives.Point(X, Y));
         }
 
-        public IRI.Msh.Common.Primitives.IPoint GetWgs84Point()
+        public IRI.Msh.Common.Primitives.Point GetWgs84Point()
         {
             var point = new IRI.Msh.Common.Primitives.Point(X, Y);
 
@@ -154,11 +154,11 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public Action<IRI.Msh.Common.Primitives.IPoint> RequestZoomTo;
+        public Action<IRI.Msh.Common.Primitives.Point> RequestZoomTo;
 
-        public Action<IRI.Msh.Common.Primitives.IPoint> RequestPanTo;
+        public Action<IRI.Msh.Common.Primitives.Point> RequestPanTo;
 
-        public GoToPresenter(Action<IPoint> requestPanTo, Action<IPoint> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
+        public GoToPresenter(Action<Point> requestPanTo, Action<Point> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
         {
             this.RequestZoomTo = requestZoomTo;
 

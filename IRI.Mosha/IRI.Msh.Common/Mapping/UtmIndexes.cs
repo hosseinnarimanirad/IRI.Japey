@@ -139,7 +139,7 @@ namespace IRI.Msh.Common.Mapping
         }
 
         //for 2k, 1k, 1:500 scales
-        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, UtmIndexType type, int utmZone)
+        public static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, UtmIndexType type, int utmZone)
         {
             switch (type)
             {
@@ -160,7 +160,7 @@ namespace IRI.Msh.Common.Mapping
             }
         }
 
-        private static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, double utmWidth, double utmHeight, int utmZone)
+        private static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, double utmWidth, double utmHeight, int utmZone)
         {
             ////this approach start the grid at upper Y of the actual region
             //var utmBound = geographicIntersectRegion.Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, 39, true));
@@ -176,7 +176,7 @@ namespace IRI.Msh.Common.Mapping
             //                    .Intersect(geographicIntersectRegion)
             //                    .Transform(p => MapProjects.GeodeticToUTM(p, Ellipsoids.WGS84, utmZone));
 
-            List<Geometry> result = new List<Geometry>();
+            List<Geometry<Point>> result = new List<Geometry<Point>>();
 
             var geoBound = BoundingBoxHelper.UtmMbbToGeodeticWgs84Mbb(_2kUtmBoudingBox, utmZone)
                               .Intersect(geographicIntersectRegion);
@@ -210,7 +210,7 @@ namespace IRI.Msh.Common.Mapping
 
                 var p2 = new Point(i, endY);
 
-                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, 0));
+                result.Add(new Geometry<Point>(new List<Point>() { p1, p2 }, GeometryType.LineString, 0));
             }
 
             for (double j = startY; j <= endY; j += utmHeight)
@@ -221,7 +221,7 @@ namespace IRI.Msh.Common.Mapping
 
                 var p3 = new Point(endX, j);
 
-                result.Add(new Geometry(new Point[] { p1, p2, p3 }, GeometryType.LineString, 0));
+                result.Add(new Geometry<Point>(new List<Point>() { p1, p2, p3 }, GeometryType.LineString, 0));
             }
 
             return result.Select(g => g.Transform(p => MapProjects.UTMToGeodetic(p, utmZone), SridHelper.GeodeticWGS84)).ToList();

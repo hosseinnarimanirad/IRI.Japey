@@ -367,7 +367,7 @@ namespace IRI.Msh.Common.Analysis
             result.Add(points.Last());
 
             //var result = filtered.Select(i => points[i]).ToList();
-
+             
             return result;
         }
 
@@ -494,7 +494,7 @@ namespace IRI.Msh.Common.Analysis
 
         // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
         // link: 
-        public static List<T> SimplifyByLang<T>(List<T> pointList, double threshold, int lookAhead, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByLang<T>(List<T> pointList, double threshold, int? lookAhead, bool retain3Points = false) where T : IPoint
         {
             var result = new List<T>();
 
@@ -506,6 +506,11 @@ namespace IRI.Msh.Common.Analysis
             if (pointList.Count == 2)
             {
                 return pointList;
+            }
+
+            if (lookAhead == null)
+            {
+                lookAhead = Math.Max(3, pointList.Count / 10);
             }
 
             var numberOfPoints = pointList.Count;
@@ -523,7 +528,7 @@ namespace IRI.Msh.Common.Analysis
 
             result.Add(pointList[0]);
 
-            int endIndex = Math.Min(numberOfPoints - 1, lookAhead);
+            int endIndex = Math.Min(numberOfPoints - 1, lookAhead.Value);
 
             while (true)
             {
@@ -535,7 +540,7 @@ namespace IRI.Msh.Common.Analysis
                 {
                     result.Add(pointList[endIndex]);
                     startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead);
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead.Value);
 
                     continue;
                 }
@@ -548,7 +553,7 @@ namespace IRI.Msh.Common.Analysis
                 {
                     result.Add(pointList[endIndex]);
                     startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead);
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead.Value);
                 }
             }
 

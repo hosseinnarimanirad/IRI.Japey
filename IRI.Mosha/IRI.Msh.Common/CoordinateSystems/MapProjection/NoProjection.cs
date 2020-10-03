@@ -30,12 +30,12 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         }
 
-        public override IPoint FromGeodetic(IPoint point)
+        public override TPoint FromGeodetic<TPoint>(TPoint point)
         {
             return point;
         }
 
-        public override IPoint ToGeodetic(IPoint point)
+        public override TPoint ToGeodetic<TPoint>(TPoint point)
         {
             return point;
         }

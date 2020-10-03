@@ -110,7 +110,7 @@ namespace IRI.Jab.Common
 
         }
 
-        public Action<sb.Geometry> RequestFinishEditing;
+        public Action<sb.Geometry<sb.Point>> RequestFinishEditing;
 
         public Action RequestCancelDrawing { get; set; }
 
@@ -136,7 +136,7 @@ namespace IRI.Jab.Common
             this._editableFeatureLayer.AddSemiVertex(webMercatorPoint);
         }
 
-        public sb.Geometry GetFinalGeometry()
+        public sb.Geometry<sb.Point> GetFinalGeometry()
         {
             return this._editableFeatureLayer.GetFinalGeometry();
         }

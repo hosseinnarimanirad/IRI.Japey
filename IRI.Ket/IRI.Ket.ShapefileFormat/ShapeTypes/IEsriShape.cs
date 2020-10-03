@@ -33,9 +33,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null);
 
-        IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid);
+        IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid);// where TPoint : IPoint, new(); 
 
-        Geometry AsGeometry();
+        Geometry<Point> AsGeometry();
 
         bool IsNullOrEmpty();
     }

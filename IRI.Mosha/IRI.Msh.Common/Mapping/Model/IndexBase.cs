@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public abstract class IndexBase : IGeometryAware
+    public abstract class IndexBase : IGeometryAware<Point>
     {
         public int Id { get; set; }
 
@@ -38,7 +38,7 @@ namespace IRI.Msh.Common.Mapping
         }
 
         [JsonIgnore]
-        public Geometry TheGeometry
+        public Geometry<Point> TheGeometry
         {
             //1397.03.21
             get => GetBoundingBox().Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator);

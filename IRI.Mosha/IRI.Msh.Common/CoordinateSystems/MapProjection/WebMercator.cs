@@ -29,12 +29,12 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             this._ellipsoid = Ellipsoids.WGS84;
         }
 
-        public override IPoint FromGeodetic(IPoint geodeticWgs84)
+        public override TPoint FromGeodetic<TPoint>(TPoint geodeticWgs84)
         {
             return MapProjects.GeodeticWgs84ToWebMercator(geodeticWgs84);
         }
 
-        public override IPoint ToGeodetic(IPoint webMercator)
+        public override TPoint ToGeodetic<TPoint>(TPoint webMercator)
         {
             return MapProjects.WebMercatorToGeodeticWgs84(webMercator);
         }

@@ -11,5 +11,7 @@ namespace IRI.Standards.OGC.SFA
         double X { get; }
 
         double Y { get; }
+
+
     }
 }

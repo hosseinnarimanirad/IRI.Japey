@@ -179,16 +179,16 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }
 
-        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid)
+        public IEsriShape Transform(Func<IPoint, IPoint> transform, int newSrid) /*where TPoint : IPoint, new()*/
         {
             var result = transform(this);
 
             return new EsriPoint(result.X, result.Y, newSrid);
         }
 
-        public Geometry AsGeometry()
+        public Geometry<Point> AsGeometry()
         {
-            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
+            return new Geometry<Point>(new List<Point> { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
         public bool IsNullOrEmpty()

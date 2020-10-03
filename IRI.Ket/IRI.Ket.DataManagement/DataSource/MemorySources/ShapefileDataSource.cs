@@ -57,7 +57,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             _targetSrs = targetSrs;
 
-            Func<IPoint, IPoint> transformFunc = null;
+            Func<Point, Point> transformFunc = null;
 
             if (targetSrs != null)
             {
@@ -70,7 +70,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             if (transformFunc != null)
             {
-                this.Extent = this.Extent.Transform(p => (Point)transformFunc(p));
+                this.Extent = this.Extent.Transform(p => transformFunc(p));
             }
 
             this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
@@ -185,7 +185,7 @@ namespace IRI.Ket.DataManagement.DataSource
         public override void SaveChanges()
         {
             //save to shapefile
-            Func<IPoint, IPoint> inverseTransformFunc = null;
+            Func<Point, Point> inverseTransformFunc = null;
 
             if (_targetSrs != null)
             {
@@ -198,7 +198,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             if (_targetSrs == null)
             {
-                geometryMap = t => t.TheSqlGeometry.AsEsriShape(inverseTransformFunc);
+                geometryMap = t => t.TheSqlGeometry.AsEsriShape(inverseTransformFunc as Func<IPoint, IPoint>);
             }
             else
             {

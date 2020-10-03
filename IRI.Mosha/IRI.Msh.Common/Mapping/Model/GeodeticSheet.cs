@@ -7,11 +7,11 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public class GeodeticSheet : IGeometryAware
+    public class GeodeticSheet : IGeometryAware<Point>
     {
         public int Id { get; set; }
 
-        public Geometry TheGeometry { get => GeodeticExtent.Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator); set => throw new NotImplementedException(); }
+        public Geometry<Point> TheGeometry { get => GeodeticExtent.Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator); set => throw new NotImplementedException(); }
 
         public BoundingBox GeodeticExtent { get; set; }
 

@@ -11,7 +11,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
     public class LambertConformalConic1P : MapProjectionBase
     {
         private readonly double n, F, rho0;
-         
+
         public override MapProjectionType Type
         {
             get
@@ -43,9 +43,9 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             this._scaleFactor = scaleFactor;
 
             double m0 = MapProjects.CalculateM(ellipsoid.FirstEccentricity, latitudeOfOrigin * Math.PI / 180.0);
-            
+
             double t0 = GeodeticLatitudeToT(latitudeOfOrigin, ellipsoid.FirstEccentricity);
-           
+
             //REF: MAP PROJECTIONS-A WORKING MANUAL P.108
             this.n = Math.Sin(latitudeOfOrigin * Math.PI / 180);
 
@@ -114,7 +114,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             return new Point(lambda, phi);
         }
 
-        public override IPoint ToGeodetic(IPoint lccPoint)
+        public override TPoint ToGeodetic<TPoint>(TPoint lccPoint)
         {
             double x = lccPoint.X - this._falseEasting;
             double y = lccPoint.Y - this._falseNorthing;
@@ -143,10 +143,10 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
                         (7.0 * e6 / 120.0 + 81.0 * e8 / 1120) * Math.Sin(6 * zeta) +
                         (4279 * e8 / 161280.0) * Math.Sin(8 * zeta);
 
-            return new Point(lambda, phi * 180.0 / Math.PI);
+            return new TPoint() { X = lambda, Y = phi * 180.0 / Math.PI };
         }
 
-        public override IPoint FromGeodetic(IPoint geodeticPoint)
+        public override TPoint FromGeodetic<TPoint>(TPoint geodeticPoint)
         {
             double a = this._ellipsoid.SemiMajorAxis.Value;
 
@@ -160,7 +160,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             double y = rho0 - rho * Math.Cos(theta) + this._falseNorthing;
 
-            return new Point(x, y);
+            return new TPoint() { X = x, Y = y };
         }
 
 

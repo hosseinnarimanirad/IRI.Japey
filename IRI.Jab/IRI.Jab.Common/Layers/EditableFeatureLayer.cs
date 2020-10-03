@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using IRI.Jab.Common.Model.DataStructure;
 using WpfPoint = System.Windows.Point;
-using Geometry = IRI.Msh.Common.Primitives.Geometry;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 using Point = IRI.Msh.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Jab.Common.Model;
@@ -153,7 +153,7 @@ namespace IRI.Jab.Common
         /// <param name="mercatorPoints"></param>
         /// <param name="isClosed"></param>
         public EditableFeatureLayer(string name, List<Point> mercatorPoints, Transform toScreen, Func<double, double> screenToMap, GeometryType type, Model.EditableFeatureLayerOptions options = null)
-            : this(name, Geometry.Create(mercatorPoints.Cast<IPoint>().ToArray(), type, SridHelper.WebMercator), toScreen, screenToMap, options)
+            : this(name, Geometry.Create(mercatorPoints/*.Cast<IPoint>().ToArray()*/, type, SridHelper.WebMercator), toScreen, screenToMap, options)
         {
 
         }
@@ -394,7 +394,7 @@ namespace IRI.Jab.Common
                 //    return;
                 //}
 
-                for (int i = 0; i < geometry.Points.Length; i++)
+                for (int i = 0; i < geometry.Points.Count; i++)
                 {
                     var locateable = ToPrimaryLocateable(geometry.Points[i]);
 
@@ -407,7 +407,7 @@ namespace IRI.Jab.Common
                     if (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint)
                         continue;
 
-                    if (i == geometry.Points.Length - 1)
+                    if (i == geometry.Points.Count - 1)
                     {
                         if (_webMercatorGeometry.IsRingBase())
                         {
@@ -468,12 +468,12 @@ namespace IRI.Jab.Common
             {
                 PathFigure pathFigure = new PathFigure() { IsClosed = _webMercatorGeometry.IsRingBase() };
 
-                if (geometry.Points.Length > 0)
+                if (geometry.Points.Count > 0)
                 {
                     pathFigure.StartPoint = ToScreen(geometry.Points.First().AsWpfPoint());
                 }
 
-                for (int i = 1; i < geometry.Points.Length; i++)
+                for (int i = 1; i < geometry.Points.Count; i++)
                 {
                     var segment = new LineSegment(ToScreen(geometry.Points[i].AsWpfPoint()), true);
 
@@ -741,7 +741,7 @@ namespace IRI.Jab.Common
 
             if (geometry.Points != null)
             {
-                for (int i = 0; i < geometry.Points.Length; i++)
+                for (int i = 0; i < geometry.Points.Count; i++)
                 {
                     if (geometry.Points[i] == startLineSegment)
                     {
@@ -756,7 +756,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                for (int g = 0; g < geometry.Geometries.Length; g++)
+                for (int g = 0; g < geometry.Geometries.Count; g++)
                 {
                     if (TryInsertPoint(webMercatorPoint, startLineSegment, endLineSegment, geometry.Geometries[g]))
                         return true;
@@ -776,7 +776,7 @@ namespace IRI.Jab.Common
                 if (geometry.Points.Count() <= minimumPoints)
                     return false;
 
-                for (int i = 0; i < geometry.Points.Length; i++)
+                for (int i = 0; i < geometry.Points.Count; i++)
                 {
                     if (geometry.Points[i] == point)
                     {
@@ -792,7 +792,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                for (int g = 0; g < geometry.Geometries.Length; g++)
+                for (int g = 0; g < geometry.Geometries.Count; g++)
                 {
                     if (TryDeleteVertex(point, geometry.Geometries[g], geometry.Type == GeometryType.Polygon))
                     {
@@ -824,7 +824,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                for (int g = 0; g < geometry.Geometries.Length; g++)
+                for (int g = 0; g < geometry.Geometries.Count; g++)
                 {
                     if (TryDeleteVertex(x, y, geometry.Geometries[g], geometry.Type == GeometryType.Polygon))
                     {
@@ -889,7 +889,7 @@ namespace IRI.Jab.Common
         {
             if (geometry.Points != null)
             {
-                for (int i = 0; i < geometry.Points.Length; i++)
+                for (int i = 0; i < geometry.Points.Count; i++)
                 {
                     if (geometry.Points[i] == point)
                     {
@@ -901,7 +901,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                for (int g = 0; g < geometry.Geometries.Length; g++)
+                for (int g = 0; g < geometry.Geometries.Count; g++)
                 {
                     var matched = UpdateLineSegment(point, newPoint, geometry.Geometries[g], midCollection.Collections[g]);
 
@@ -957,8 +957,8 @@ namespace IRI.Jab.Common
 
                 var locateable = ToPrimaryLocateable(webMercatorPoint);
 
-                //geometry.Points.Length > 0, is to see if it is not going to add first point of a new part
-                if (geometry.Points.Length > 0 && geometry.Points.Last().AreExactlyTheSame(webMercatorPoint) == true)
+                //geometry.Points.Count > 0, is to see if it is not going to add first point of a new part
+                if (geometry.Points.Count > 0 && geometry.Points.Last().AreExactlyTheSame(webMercatorPoint) == true)
                     return;
 
                 geometry.InsertLastPoint(webMercatorPoint);
@@ -970,9 +970,9 @@ namespace IRI.Jab.Common
                 this._primaryVerticesLayer.Items.Add(locateable);
                 //}
 
-                if (geometry.Points.Length > 1 && Options.IsEdgeLabelVisible)
+                if (geometry.Points.Count > 1 && Options.IsEdgeLabelVisible)
                 {
-                    this._edgeLabelLayer.Items.Add(ToEdgeLengthLocatable(geometry.Points[geometry.Points.Length - 2], webMercatorPoint));
+                    this._edgeLabelLayer.Items.Add(ToEdgeLengthLocatable(geometry.Points[geometry.Points.Count - 2], webMercatorPoint));
                 }
 
             }
@@ -982,11 +982,11 @@ namespace IRI.Jab.Common
             }
         }
 
-        private Locateable ToEdgeLengthLocatable(IPoint first, IPoint second)
+        private Locateable ToEdgeLengthLocatable(Point first, Point second)
         {
-            Func<IPoint, IPoint> toGeodeticWgs84 = p => MapProjects.WebMercatorToGeodeticWgs84(p);
+            Func<Point, Point> toGeodeticWgs84 = p => MapProjects.WebMercatorToGeodeticWgs84(p);
 
-            var edge = new IRI.Msh.Common.Primitives.LineSegment(first, second);
+            var edge = new LineSegment<Point>(first, second);
 
             var element = new View.MapMarkers.RectangleLabelMarker(edge.GetLengthLabel(toGeodeticWgs84));
 
@@ -1080,7 +1080,7 @@ namespace IRI.Jab.Common
             if (_pathGeometry.Figures?.Last()?.Segments?.Count() < 1)
                 AddSemiVertex(newMercatorPoint);
 
-            if (_pathGeometry.Figures.Last().Segments.Count < this._webMercatorGeometry.GetLastPart().Length)
+            if (_pathGeometry.Figures.Last().Segments.Count < this._webMercatorGeometry.GetLastPart().Count)
             {
                 AddSemiVertex(newMercatorPoint);
             }

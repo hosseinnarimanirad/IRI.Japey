@@ -15,7 +15,7 @@ namespace IRI.Jab.Common.Convertor
     {
         static int pointSize = 4;
        
-        internal static void Transform(drawing.Graphics graphics, sb.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        internal static void Transform(drawing.Graphics graphics, sb.Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.Geometries != null)
             {
@@ -42,7 +42,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddLineString(drawing.Graphics graphics, sb.Geometry original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        private static void AddLineString(drawing.Graphics graphics, sb.Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.NumberOfPoints < 1)
                 return;
@@ -58,7 +58,7 @@ namespace IRI.Jab.Common.Convertor
         }
 
 
-        internal static void Transform(WriteableBitmap context, sb.Geometry original, sb.Point location, int border, int fill)
+        internal static void Transform(WriteableBitmap context, sb.Geometry<sb.Point> original, sb.Point location, int border, int fill)
         {
             if (original.Geometries != null)
             {
@@ -85,7 +85,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddLineString(WriteableBitmap context, sb.Geometry original, sb.Point location, int border, int fill)
+        private static void AddLineString(WriteableBitmap context, sb.Geometry<sb.Point> original, sb.Point location, int border, int fill)
         {
             if (original.NumberOfPoints < 1)
                 return;

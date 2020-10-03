@@ -62,9 +62,9 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
             }
         }
 
-        public Feature AsFeature()
+        public Feature<Point> AsFeature()
         {
-            return new Feature()
+            return new Feature<Point>()
             {
                 Attributes = Attributes,
                 Id = this.Id,

@@ -10,9 +10,9 @@ namespace IRI.Msh.Common.Primitives
     public static class GeometryExtensions
     {
 
-        public static List<Geometry> Project(this List<Geometry> values, SrsBase sourceSrs, SrsBase targetSrs)
+        public static List<Geometry<T>> Project<T>(this List<Geometry<T>> values, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
         {
-            List<Geometry> result = new List<Geometry>(values.Count);
+            List<Geometry<T>> result = new List<Geometry<T>>(values.Count);
 
             if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
             {
@@ -35,6 +35,6 @@ namespace IRI.Msh.Common.Primitives
 
             return result;
         }
-         
+
     }
 }

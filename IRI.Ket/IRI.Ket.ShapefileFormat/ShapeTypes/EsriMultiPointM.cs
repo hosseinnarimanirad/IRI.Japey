@@ -79,7 +79,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
              
             this.points = points;
 
@@ -135,7 +135,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
 
             this.Srid = points.First().Srid;
 
@@ -273,9 +273,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriMultiPointM(this.Points.Select(i => i.Transform(transform, newSrid)).Cast<EsriPoint>().ToArray(), this.measures);
         }
 
-        public Geometry AsGeometry()
+        public Geometry<Point> AsGeometry()
         {
-            return new Geometry(points.Select(p => new Point(p.X, p.Y)).ToArray(), GeometryType.MultiPoint, Srid);
+            return new Geometry<Point>(points.Select(p => new Point(p.X, p.Y)).ToList(), GeometryType.MultiPoint, Srid);
         }
 
         public bool IsNullOrEmpty()

@@ -9,7 +9,7 @@ namespace IRI.Jab.Controls.Extensions
 {
     public static class GeometryExtensions
     {
-        public static Model.CoordinateEditor.CoordinateEditor AsCoordinateEditor(this Geometry geometry)
+        public static Model.CoordinateEditor.CoordinateEditor AsCoordinateEditor(this Geometry<Point> geometry)
         {
             if (geometry == null)
                 return null;

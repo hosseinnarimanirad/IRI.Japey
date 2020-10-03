@@ -89,7 +89,7 @@ namespace IRI.Jab.Common.Presenter
             }
         }
 
-        public string GetCurrentPosstionString(IPoint geodeticPoint)
+        public string GetCurrentPosstionString(Msh.Common.Primitives.Point geodeticPoint)
         {
             return this.SelectedItem?.GetPositionString(geodeticPoint);
         }

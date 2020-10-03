@@ -227,7 +227,7 @@ namespace IRI.Msh.Common.Primitives
 
         }
 
-        public static BoundingBox CalculateBoundingBox(IEnumerable<IPoint> points)
+        public static BoundingBox CalculateBoundingBox<T>(IEnumerable<T> points) where T : IPoint, new()
         {
             if (points == null || points.Count() == 0)
             {
@@ -254,7 +254,7 @@ namespace IRI.Msh.Common.Primitives
             return new BoundingBox(newTopLeft.X, newButtomRight.Y, newButtomRight.X, newTopLeft.Y);
         }
 
-        public Geometry TransofrmBy4Point(Func<Point, Point> func)
+        public Geometry<Point> TransofrmBy4Point(Func<Point, Point> func)
         {
             var p1 = func(this.BottomLeft);
 
@@ -264,10 +264,10 @@ namespace IRI.Msh.Common.Primitives
 
             var p7 = func(this.BottomRight);
 
-            return Geometry.Create(new Point[] { p1, p3, p5, p7 }, GeometryType.Polygon, 0);
+            return Geometry<Point>.Create(new List<Point>() { p1, p3, p5, p7 }, GeometryType.Polygon, 0);
         }
 
-        public Geometry TransofrmBy8Point(Func<Point, Point> func)
+        public Geometry<Point> TransofrmBy8Point(Func<Point, Point> func)
         {
             var p1 = func(this.BottomLeft);
 
@@ -285,7 +285,7 @@ namespace IRI.Msh.Common.Primitives
 
             var p8 = func(this.MiddleBottom);
 
-            return Geometry.Create(new Point[] { p1, p2, p3, p4, p5, p6, p7, p8 }, GeometryType.Polygon, 0);
+            return Geometry<Point>.Create(new List<Point>() { p1, p2, p3, p4, p5, p6, p7, p8 }, GeometryType.Polygon, 0);
         }
 
         public override string ToString()
@@ -358,9 +358,9 @@ namespace IRI.Msh.Common.Primitives
         }
 
 
-        public Geometry AsGeometry(int srid)
+        public Geometry<Point> AsGeometry(int srid)
         {
-            return Geometry.Create(GetClockWiseOrderOfEsriPoints().ToArray(), GeometryType.Polygon, srid);
+            return Geometry<Point>.Create<Point>(GetClockWiseOrderOfEsriPoints()/*.ToArray()*/, GeometryType.Polygon, srid);
         }
     }
 }

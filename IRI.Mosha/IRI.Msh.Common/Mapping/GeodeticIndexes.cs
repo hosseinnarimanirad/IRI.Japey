@@ -619,7 +619,7 @@ namespace IRI.Msh.Common.Mapping
         #region Get Index Lines (BoundingBox > List<Geometry>)
 
         //for 250k, 100k, 50k, 25k, 10k, 5k scales
-        public static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, GeodeticIndexType type)
+        public static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, GeodeticIndexType type)
         {
             switch (type)
             {
@@ -646,7 +646,7 @@ namespace IRI.Msh.Common.Mapping
             }
         }
 
-        private static List<Geometry> GetIndexLines(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
+        private static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, double indexWidth, double indexHeight)
         {
             int startLongitude = (int)Math.Floor(geographicIntersectRegion.XMin / indexWidth);
 
@@ -656,7 +656,7 @@ namespace IRI.Msh.Common.Mapping
 
             int endLatitdue = (int)Math.Ceiling(geographicIntersectRegion.YMax / indexHeight);
 
-            List<Geometry> result = new List<Geometry>();
+            List<Geometry<Point>> result = new List<Geometry<Point>>();
 
             for (int i = startLongitude; i < endLongitude; i++)
             {
@@ -664,7 +664,7 @@ namespace IRI.Msh.Common.Mapping
 
                 var p2 = new Point(i * indexWidth, geographicIntersectRegion.YMax);
 
-                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+                result.Add(new Geometry<Point>(new List<Point>() { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
             }
 
             for (int j = startLatitdue; j < endLatitdue; j++)
@@ -673,7 +673,7 @@ namespace IRI.Msh.Common.Mapping
 
                 var p2 = new Point(geographicIntersectRegion.XMax, j * indexHeight);
 
-                result.Add(new Geometry(new Point[] { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
+                result.Add(new Geometry<Point>(new List<Point>() { p1, p2 }, GeometryType.LineString, SridHelper.GeodeticWGS84));
             }
 
             return result;

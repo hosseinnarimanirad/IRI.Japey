@@ -7,7 +7,7 @@ namespace IRI.Msh.Common.Primitives
 {
     public static class BoundingBoxHelper
     {
-        public static Geometry GeodeticWgs84MbbToUtmGeometry(BoundingBox boundingBox, int? zone = null)
+        public static Geometry<Point> GeodeticWgs84MbbToUtmGeometry(BoundingBox boundingBox, int? zone = null)
         {
             zone = zone ?? CoordinateSystem.MapProjection.MapProjects.FindZone(boundingBox.Center.X);
             //var zone = CoordinateSystem.MapProjection.MapProjects.FindZone(boundingBox.Center.X);
@@ -22,7 +22,7 @@ namespace IRI.Msh.Common.Primitives
             return GeodeticWgs84MbbToUtmGeometry(boundingBox, zone).GetBoundingBox();
         }
 
-        public static Geometry UtmMbbToGeodeticWgs84Geometry(BoundingBox boundingBox, int zone)
+        public static Geometry<Point> UtmMbbToGeodeticWgs84Geometry(BoundingBox boundingBox, int zone)
         {
             return boundingBox.TransofrmBy8Point(p => CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, zone));
         }

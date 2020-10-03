@@ -160,7 +160,7 @@ namespace IRI.Ket.SpatialExtensions
                 return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
             }
 
-            var envelopes = spatialFeatures.Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
+            var envelopes = spatialFeatures.AsParallel().Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
 
             return SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
 
@@ -259,7 +259,7 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        public static IPoint AsPoint(this SqlGeometry point)
+        public static Point AsPoint(this SqlGeometry point)
         {
             if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
             {
@@ -282,7 +282,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-        public static IPoint[] GetAllPoints(this SqlGeometry geometry)
+        public static List<Point> GetAllPoints(this SqlGeometry geometry)
         {
             return geometry.AsGeometry().GetAllPoints();
         }
@@ -292,7 +292,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Projection (SqlGeography)
 
-        public static SqlGeometry Project(this SqlGeography geography, Func<IPoint, IPoint> mapFunction, int newSrid = 0)
+        public static SqlGeometry Project(this SqlGeography geography, Func<Point, Point> mapFunction, int newSrid = 0)
         {
 
             SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -347,7 +347,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectMultiPolygon(SqlGeometryBuilder builder, SqlGeography multiPolygon, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiPolygon(SqlGeometryBuilder builder, SqlGeography multiPolygon, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiPolygon.STNumGeometries().Value;
 
@@ -362,7 +362,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectPolygon(SqlGeometryBuilder builder, SqlGeography geometry, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectPolygon(SqlGeometryBuilder builder, SqlGeography geometry, Func<Point, Point> mapFunction)
         {
             //ProjectRing(builder, geometry.STExteriorRing(), mapFunction);
 
@@ -377,7 +377,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectMultiLineSring(SqlGeometryBuilder builder, SqlGeography multiLineString, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiLineSring(SqlGeometryBuilder builder, SqlGeography multiLineString, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiLineString.STNumGeometries().Value;
 
@@ -392,7 +392,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectLineString(SqlGeometryBuilder builder, SqlGeography lineString, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectLineString(SqlGeometryBuilder builder, SqlGeography lineString, Func<Point, Point> mapFunction)
         {
             int numberOfPoints = lineString.STNumPoints().Value;
 
@@ -413,7 +413,7 @@ namespace IRI.Ket.SpatialExtensions
 
         //Not supporting Z and M values
         //?? possible bug: start value for i
-        private static void ProjectMultiPoint(SqlGeometryBuilder builder, SqlGeography multiPoint, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiPoint(SqlGeometryBuilder builder, SqlGeography multiPoint, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiPoint.STNumGeometries().Value;
 
@@ -428,7 +428,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        public static void ProjectPoint(SqlGeometryBuilder builder, SqlGeography point, Func<IPoint, IPoint> mapFunction)
+        public static void ProjectPoint(SqlGeometryBuilder builder, SqlGeography point, Func<Point, Point> mapFunction)
         {
             //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
             var thePoint = mapFunction(point.AsPoint());
@@ -448,17 +448,17 @@ namespace IRI.Ket.SpatialExtensions
 
         public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
         {
-            return Project(geometry, point => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
+            return Project(geometry, point => MapProjects.GeodeticToMercator(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
         }
 
         public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
         {
-            return Project(geometry, point => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
+            return Project(geometry, point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
         }
 
         public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
         {
-            return Project(geometry, point => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
+            return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
         }
 
         #endregion
@@ -466,12 +466,12 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Projection (SqlGeometry)
 
-        public static SqlGeometry Transform(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction, int newSrid = 0)
+        public static SqlGeometry Transform(this SqlGeometry geometry, Func<Point, Point> mapFunction, int newSrid = 0)
         {
             return geometry.AsGeometry().Transform(mapFunction, newSrid).AsSqlGeometry();
         }
 
-        public static SqlGeography Project(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction, int srid)
+        public static SqlGeography Project(this SqlGeometry geometry, Func<Point, Point> mapFunction, int srid)
         {
             var builder = new SqlGeographyBuilder();
 
@@ -528,7 +528,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectMultiPolygon(SqlGeographyBuilder builder, SqlGeometry multiPolygon, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiPolygon(SqlGeographyBuilder builder, SqlGeometry multiPolygon, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiPolygon.STNumGeometries().Value;
 
@@ -543,7 +543,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectPolygon(SqlGeographyBuilder builder, SqlGeometry polygon, Func<Point, Point> mapFunction)
         {
             ProjectLineString(builder, polygon.STExteriorRing(), mapFunction);
 
@@ -558,7 +558,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectMultiLineSring(SqlGeographyBuilder builder, SqlGeometry multiLineString, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiLineSring(SqlGeographyBuilder builder, SqlGeometry multiLineString, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiLineString.STNumGeometries().Value;
 
@@ -573,7 +573,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectLineString(SqlGeographyBuilder builder, SqlGeometry lineString, Func<Point, Point> mapFunction)
         {
             if (lineString.IsNull)
                 return;
@@ -597,7 +597,7 @@ namespace IRI.Ket.SpatialExtensions
 
         //Not supporting Z and M values
         //?? possible bug: start value for i
-        private static void ProjectMultiPoint(SqlGeographyBuilder builder, SqlGeometry multiPoint, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectMultiPoint(SqlGeographyBuilder builder, SqlGeometry multiPoint, Func<Point, Point> mapFunction)
         {
             int numberOfGeometries = multiPoint.STNumGeometries().Value;
 
@@ -612,7 +612,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supporting Z and M values
-        private static void ProjectPoint(SqlGeographyBuilder builder, SqlGeometry point, Func<IPoint, IPoint> mapFunction)
+        private static void ProjectPoint(SqlGeographyBuilder builder, SqlGeometry point, Func<Point, Point> mapFunction)
         {
             //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
             var thePoint = mapFunction(point.AsPoint());
@@ -622,7 +622,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndFigure();
         }
 
-        private static IPoint GetPoint(SqlGeometry geometry, int index)
+        private static Point GetPoint(SqlGeometry geometry, int index)
         {
             return geometry.STPointN(index).AsPoint();
 
@@ -650,7 +650,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region To Geometry
 
-        public static Geometry AsGeometry(this SqlGeometry geometry)
+        public static Geometry<Point> AsGeometry(this SqlGeometry geometry)
         {
             //This check is not required bacause it is already checked at evey ExtractXXXX function
             //this is specially for MultiXXX types. What is multipolygon was not Empty but first GeometryN of it was empty
@@ -659,7 +659,7 @@ namespace IRI.Ket.SpatialExtensions
             //    return Geometry.CreateEmpty(geometry.GetOpenGisType().ToGeometryType(), geometry.GetSrid());
             //}
 
-            Geometry result;
+            Geometry<Point> result;
 
             switch (geometry.GetOpenGisType())
             {
@@ -703,140 +703,151 @@ namespace IRI.Ket.SpatialExtensions
             return result;
         }
 
-        private static Geometry SqlPointToGeometry(SqlGeometry point)
+        private static Geometry<Point> SqlPointToGeometry(SqlGeometry point)
         {
             var srid = point.GetSrid();
 
             //This check is required
             if (point.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.Point, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.Point, srid);
 
-            return new Geometry(new IPoint[] { point.AsPoint() }, GeometryType.Point, srid);
+            return new Geometry<Point>(new List<Point>() { point.AsPoint() }, GeometryType.Point, srid);
         }
 
-        private static Geometry SqlMultiPointToGeometry(SqlGeometry multiPoint)
+        private static Geometry<Point> SqlMultiPointToGeometry(SqlGeometry multiPoint)
         {
             var srid = multiPoint.GetSrid();
 
             //This check is required
             if (multiPoint.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.MultiPoint, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.MultiPoint, srid);
 
             var numberOfGeometries = multiPoint.STNumGeometries().Value;
 
-            Geometry[] result = new Geometry[numberOfGeometries];
+            List<Geometry<Point>> result = new List<Geometry<Point>>(numberOfGeometries);
 
             for (int i = 1; i <= numberOfGeometries; i++)
             {
-                result[i - 1] = SqlPointToGeometry(multiPoint.STGeometryN(i));
+                //1399.07.11
+                //result[i - 1] = SqlPointToGeometry(multiPoint.STGeometryN(i));
+                result.Add(SqlPointToGeometry(multiPoint.STGeometryN(i)));
             }
 
-            return new Geometry(result, GeometryType.MultiPoint, srid);
+            return new Geometry<Point>(result, GeometryType.MultiPoint, srid);
         }
 
-        private static Geometry SqlLineStringToGeometry(SqlGeometry lineString, bool isRing)
+        private static Geometry<Point> SqlLineStringToGeometry(SqlGeometry lineString, bool isRing)
         {
             var srid = lineString.GetSrid();
 
             //This check is required
             if (lineString.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.LineString, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.LineString, srid);
 
             int numberOfPoints = isRing ? lineString.STNumPoints().Value - 1 : lineString.STNumPoints().Value;
 
-            Point[] result = new Point[numberOfPoints];
+            List<Point> result = new List<Point>(numberOfPoints);
 
             for (int i = 1; i <= numberOfPoints; i++)
             {
-                result[i - 1] = new Point(lineString.STPointN(i).STX.Value, lineString.STPointN(i).STY.Value);
+                //1399.07.11
+                //result[i - 1] = new Point(lineString.STPointN(i).STX.Value, lineString.STPointN(i).STY.Value);
+                result.Add(new Point(lineString.STPointN(i).STX.Value, lineString.STPointN(i).STY.Value));
             }
 
-            return new Geometry(result, GeometryType.LineString, srid);
+            return new Geometry<Point>(result, GeometryType.LineString, srid);
         }
 
-        private static Geometry SqlMultiLineStringToGeometry(SqlGeometry multiLineString)
+        private static Geometry<Point> SqlMultiLineStringToGeometry(SqlGeometry multiLineString)
         {
             var srid = multiLineString.GetSrid();
 
             //This check is required
             if (multiLineString.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.MultiLineString, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.MultiLineString, srid);
 
             int numberOfParts = multiLineString.STNumGeometries().Value;
 
-            Geometry[] result = new Geometry[numberOfParts];
+            List<Geometry<Point>> result = new List<Geometry<Point>>(numberOfParts);
 
             for (int i = 1; i <= numberOfParts; i++)
             {
-                result[i - 1] = SqlLineStringToGeometry(multiLineString.STGeometryN(i), false);
+                //1399.07.11
+                //result[i - 1] = SqlLineStringToGeometry(multiLineString.STGeometryN(i), false);
+                result.Add(SqlLineStringToGeometry(multiLineString.STGeometryN(i), false));
             }
 
-            return new Geometry(result, GeometryType.MultiLineString, srid);
+            return new Geometry<Point>(result, GeometryType.MultiLineString, srid);
         }
 
-        private static Geometry SqlPolygonToGeometry(SqlGeometry polygon)
+        private static Geometry<Point> SqlPolygonToGeometry(SqlGeometry polygon)
         {
             var srid = polygon.GetSrid();
 
             //This check is required
             if (polygon.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.Polygon, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.Polygon, srid);
 
             var numberOfInteriorRings = polygon.STNumInteriorRing().Value;
 
-            Geometry exteriorRing = SqlLineStringToGeometry(polygon.STExteriorRing(), true);
+            Geometry<Point> exteriorRing = SqlLineStringToGeometry(polygon.STExteriorRing(), true);
 
-            Geometry[] result = new Geometry[numberOfInteriorRings + 1];
+            List<Geometry<Point>> result = new List<Geometry<Point>>(numberOfInteriorRings + 1);
 
-            result[0] = exteriorRing;
+            //result[0] = exteriorRing;
+            result.Add(exteriorRing);
 
             for (int i = 1; i <= numberOfInteriorRings; i++)
             {
                 //The first result contains the exterior ring so start at i 
-                result[i] = SqlLineStringToGeometry(polygon.STInteriorRingN(i), true);
+                //result[i] = SqlLineStringToGeometry(polygon.STInteriorRingN(i), true);
+                result.Add(SqlLineStringToGeometry(polygon.STInteriorRingN(i), true));
             }
 
-            return new Geometry(result, GeometryType.Polygon, srid);
+            return new Geometry<Point>(result, GeometryType.Polygon, srid);
         }
 
-        private static Geometry SqlMultiPolygonToGeometry(SqlGeometry multiPolygon)
+        private static Geometry<Point> SqlMultiPolygonToGeometry(SqlGeometry multiPolygon)
         {
             var srid = multiPolygon.GetSrid();
 
             //This check is required
             if (multiPolygon.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.MultiPolygon, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.MultiPolygon, srid);
 
             var numberOfGeometries = multiPolygon.STNumGeometries().Value;
 
-            Geometry[] result = new Geometry[numberOfGeometries];
+            List<Geometry<Point>> result = new List<Geometry<Point>>(numberOfGeometries);
 
             for (int i = 0; i < numberOfGeometries; i++)
             {
-                result[i] = SqlPolygonToGeometry(multiPolygon.STGeometryN(i + 1));
+                //result[i] = SqlPolygonToGeometry(multiPolygon.STGeometryN(i + 1));
+                result.Add(SqlPolygonToGeometry(multiPolygon.STGeometryN(i + 1)));
             }
 
-            return new Geometry(result, GeometryType.MultiPolygon, srid);
+            return new Geometry<Point>(result, GeometryType.MultiPolygon, srid);
         }
 
-        private static Geometry SqlGeometryCollectionToGeometry(SqlGeometry geometryCollection)
+        private static Geometry<Point> SqlGeometryCollectionToGeometry(SqlGeometry geometryCollection)
         {
             var srid = geometryCollection.GetSrid();
 
             //This check is required
             if (geometryCollection.IsNullOrEmpty())
-                return Geometry.CreateEmpty(GeometryType.GeometryCollection, srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.GeometryCollection, srid);
 
             var numberOfGeometries = geometryCollection.STNumGeometries().Value;
 
-            Geometry[] result = new Geometry[numberOfGeometries];
+            //Geometry[] result = new Geometry[numberOfGeometries];
+            List<Geometry<Point>> result = new List<Geometry<Point>>(numberOfGeometries);
 
             for (int i = 1; i <= numberOfGeometries; i++)
             {
-                result[i - 1] = geometryCollection.STGeometryN(i).AsGeometry();
+                //result[i - 1] = geometryCollection.STGeometryN(i).AsGeometry();
+                result.Add(geometryCollection.STGeometryN(i).AsGeometry());
             }
 
-            return new Geometry(result, GeometryType.GeometryCollection, srid);
+            return new Geometry<Point>(result, GeometryType.GeometryCollection, srid);
         }
 
         #endregion
@@ -1623,7 +1634,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region SqlFeature  
 
-        public static SqlFeature AsSqlFeature(this Feature feature)
+        public static SqlFeature AsSqlFeature<T>(this Feature<T> feature) where T : IPoint, new()
         {
             if (feature == null)
             {
@@ -1638,7 +1649,7 @@ namespace IRI.Ket.SpatialExtensions
             };
         }
 
-        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<IPoint, IPoint> toWgs84Func)
+        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<Point, Point> toWgs84Func)
         {
             return new GeoJsonFeature()
             {

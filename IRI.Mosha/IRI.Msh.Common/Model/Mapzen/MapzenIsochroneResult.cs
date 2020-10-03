@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IRI.Msh.Common.Primitives;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,15 +81,15 @@ namespace IRI.Msh.Common.Model.Mapzen
             }
         }
 
-        public IRI.Msh.Common.Primitives.Geometry ParseToGeometry()
+        public IRI.Msh.Common.Primitives.Geometry<Point> ParseToGeometry()
         {
             if (type.ToLower().Trim() == "linestring")
             {
-                return IRI.Msh.Common.Primitives.Geometry.ParseLineStringToGeometry(Points, IRI.Msh.Common.Primitives.GeometryType.LineString, true);
+                return IRI.Msh.Common.Primitives.Geometry<Point>.ParseLineStringToGeometry(Points, IRI.Msh.Common.Primitives.GeometryType.LineString, true);
             }
             else if (type.ToLower().Trim() == "polygon")
             {
-                return IRI.Msh.Common.Primitives.Geometry.ParsePolygonToGeometry(Rings, IRI.Msh.Common.Primitives.GeometryType.Polygon, true);
+                return IRI.Msh.Common.Primitives.Geometry<Point>.ParsePolygonToGeometry(Rings, IRI.Msh.Common.Primitives.GeometryType.Polygon, true);
             }
             else
             {

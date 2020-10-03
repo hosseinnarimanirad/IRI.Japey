@@ -26,14 +26,14 @@ namespace IRI.Msh.Common.Analysis
         /// </summary>
         /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double CalculateUnsignedAreaForRing(IPoint[] points)
+        public static double CalculateUnsignedAreaForRing<T>(List<T> points) where T : IPoint, new()
         {
-            if (points == null || points.Length < 3)
+            if (points == null || points.Count < 3)
                 return 0;
 
             double area = 0;
 
-            for (int i = 0; i < points.Length - 1; i++)
+            for (int i = 0; i < points.Count - 1; i++)
             {
                 double temp = points[i].X * points[i + 1].Y - points[i].Y * points[i + 1].X;
 
@@ -44,7 +44,7 @@ namespace IRI.Msh.Common.Analysis
             //تکرار نقطه اخر چند ضلعی
             //فرض بر این هست که داخل لیست نقطه‌ها
             //این نقطه تکرار نشده باشه
-            area += points[points.Length - 1].X * points[0].Y - points[points.Length - 1].Y * points[0].X;
+            area += points[points.Count - 1].X * points[0].Y - points[points.Count - 1].Y * points[0].X;
 
             return Math.Abs(area / 2.0);
         }
@@ -106,7 +106,7 @@ namespace IRI.Msh.Common.Analysis
 
         //1399.06.11
         //مساحت مثلت‌های تشکیل دهنده شکل هندسی
-        public static List<double> GetPrimitiveAreas(Geometry geometry)
+        public static List<double> GetPrimitiveAreas<T>(Geometry<T> geometry) where T : IPoint, new()
         {
             var result = new List<double>();
 
@@ -140,7 +140,7 @@ namespace IRI.Msh.Common.Analysis
             }
         }
 
-        public static List<double> GetPrimitiveAreas(List<Geometry> geometries)
+        public static List<double> GetPrimitiveAreas<T>(List<Geometry<T>> geometries) where T : IPoint, new()
         {
             if (geometries == null)
             {

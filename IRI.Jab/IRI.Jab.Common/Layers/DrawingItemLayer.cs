@@ -13,6 +13,7 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Common
 {

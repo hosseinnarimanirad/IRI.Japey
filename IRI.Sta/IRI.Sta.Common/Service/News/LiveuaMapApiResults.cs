@@ -80,9 +80,9 @@ namespace IRI.Ket.Common.Service.News
         public string fillopacity { get; set; }
         public double[][] points { get; set; }
 
-        public Geometry ParseToGeometry(GeometryType geometryType)
+        public Geometry<Point> ParseToGeometry(GeometryType geometryType)
         { 
-            return Geometry.ParseToGeodeticGeometry(this.points, geometryType);
+            return Geometry<Point>.ParseToGeodeticGeometry(this.points, geometryType);
         }
          
     }

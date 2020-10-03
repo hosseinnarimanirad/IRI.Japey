@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives; 
+﻿using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using System;
@@ -171,13 +171,17 @@ namespace IRI.Jab.Common.Presenters
             {
                 if (this.SpatialReference == SpatialReferenceType.UTM)
                 {
-                    var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(CurrentEditingPoint, CurrentEditingZone);
+                    var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic<NotifiablePoint>(CurrentEditingPoint, CurrentEditingZone);
 
-                    return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+                    var webMercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+
+                    return new Point(webMercator.X, webMercator.Y);
                 }
                 else if (this.SpatialReference == SpatialReferenceType.Geodetic)
                 {
-                    return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+                    var webMercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+
+                    return new Point(webMercator.X, webMercator.Y);
                 }
                 else
                 {

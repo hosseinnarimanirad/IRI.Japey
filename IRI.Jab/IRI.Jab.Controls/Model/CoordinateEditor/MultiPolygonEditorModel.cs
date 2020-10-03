@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model.CoordinateEditor
 {
@@ -42,7 +43,7 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
 
         public override Geometry GetGeometry()
         {
-            return new Geometry(Polygons.Select(i => i.GetGeometry()).ToArray(), GeometryType.MultiPolygon, Srid);
+            return new Geometry(Polygons.Select(i => i.GetGeometry()).ToList(), GeometryType.MultiPolygon, Srid);
         }
     }
 }

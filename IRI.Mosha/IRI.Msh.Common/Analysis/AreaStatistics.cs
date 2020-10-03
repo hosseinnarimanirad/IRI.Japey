@@ -6,20 +6,20 @@ using System.Text;
 
 namespace IRI.Msh.Common.Analysis
 {
-    public class AreaStatistics
+    public class AreaStatistics 
     {
-        public AreaStatistics(List<Geometry> geometries)
+        public AreaStatistics(List<Geometry<Point>> geometries)
         {
             this.NumberOfPoints = geometries.Sum(g => g.TotalNumberOfPoints);
 
             this.Areas = SpatialUtility.GetPrimitiveAreas(geometries);
         }
 
-        public AreaStatistics(Geometry geometry)
+        public AreaStatistics(Geometry<Point> geometry)
         {
             this.NumberOfPoints = geometry.TotalNumberOfPoints;
 
-            this.Areas = SpatialUtility.GetPrimitiveAreas(geometry);            
+            this.Areas = SpatialUtility.GetPrimitiveAreas(geometry);
         }
 
         internal int NumberOfPoints;

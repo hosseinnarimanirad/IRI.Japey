@@ -1,7 +1,8 @@
-﻿using IRI.Msh.Common.Primitives; 
+﻿using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 
@@ -57,22 +58,22 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        public abstract IPoint ToGeodetic(IPoint point);
+        public abstract T ToGeodetic<T>(T point) where T : IPoint, new();
 
-        public IPoint ToWgs84Geodetic(IPoint point)
+        public T ToWgs84Geodetic<T>(T point) where T : IPoint, new()
         {
             return ToGeodetic(point, Ellipsoids.WGS84);
         }
 
         //must be tested
-        public IPoint ToLocalGeodetic(IPoint point)
+        public T ToLocalGeodetic<T>(T point) where T : IPoint, new()
         {
             var geocentricGeodeticPoint = ToGeodetic(point);
 
             return Transformation.ChangeDatum(geocentricGeodeticPoint, this.Ellipsoid.GetGeocentricVersion(0), this.Ellipsoid);
         }
 
-        public IPoint ToGeodetic(IPoint point, Ellipsoid targetEllipsoid)
+        public T ToGeodetic<T>(T point, Ellipsoid targetEllipsoid) where T : IPoint, new()
         {
             var temp = ToGeodetic(point);
 
@@ -80,22 +81,22 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        public abstract IPoint FromGeodetic(IPoint point);
+        public abstract T FromGeodetic<T>(T point) where T : IPoint, new();
 
-        public IPoint FromWgs84Geodetic(IPoint point)
+        public T FromWgs84Geodetic<T>(T point) where T : IPoint, new()
         {
             return FromGeodetic(point, Ellipsoids.WGS84);
         }
 
         //must be tested
-        public IPoint FromLocalGeodetic(IPoint point)
+        public T FromLocalGeodetic<T>(T point) where T : IPoint, new()
         {
             var geocentricGeodeticPoint = Transformation.ChangeDatum(point, this.Ellipsoid, this.Ellipsoid.GetGeocentricVersion(0));
 
             return FromGeodetic(geocentricGeodeticPoint);
         }
 
-        public IPoint FromGeodetic(IPoint point, Ellipsoid sourceEllipsoid)
+        public T FromGeodetic<T>(T point, Ellipsoid sourceEllipsoid) where T : IPoint, new()
         {
             var temp = FromSourceEllipsoid(point, sourceEllipsoid);
 
@@ -103,7 +104,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        protected IPoint ToTargetEllipsoid(IPoint point, Ellipsoid targetEllipsoid)
+        protected T ToTargetEllipsoid<T>(T point, Ellipsoid targetEllipsoid) where T : IPoint, new()
         {
             if (targetEllipsoid != this.Ellipsoid ||
                 targetEllipsoid.SemiMajorAxis.Value != this.Ellipsoid.SemiMajorAxis.Value ||
@@ -117,7 +118,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             }
         }
 
-        protected IPoint FromSourceEllipsoid(IPoint point, Ellipsoid sourceEllipsoid)
+        protected T FromSourceEllipsoid<T>(T point, Ellipsoid sourceEllipsoid) where T : IPoint, new()
         {
             if (sourceEllipsoid != this.Ellipsoid ||
                 sourceEllipsoid.SemiMajorAxis.Value != this.Ellipsoid.SemiMajorAxis.Value ||
@@ -155,7 +156,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         //        case MapProjectionType.UTM:
         //            return (this as UTM).GetSrid(true);
-                    
+
         //        case MapProjectionType.WebMercator:
         //            return SridHelper.WebMercator;
 

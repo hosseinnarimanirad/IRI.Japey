@@ -1,20 +1,15 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model.CoordinateEditor
 {
     public class PointEditorModel : CoordinateEditor
     {
 
-        private IPoint _point;
+        private Point _point;
 
-        public IPoint Point
+        public Point Point
         {
             get { return _point; }
             set
@@ -45,7 +40,7 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
 
         public override Geometry GetGeometry()
         {
-            return Geometry.CreatePointOrLineString(new IPoint[] { Point }, Srid);
+            return Geometry.CreatePointOrLineString(new System.Collections.Generic.List<Point> { Point }, Srid);
         }
     }
 }

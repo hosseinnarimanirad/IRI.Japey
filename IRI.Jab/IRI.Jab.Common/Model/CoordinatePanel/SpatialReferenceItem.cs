@@ -42,11 +42,11 @@ namespace IRI.Jab.Common.Model.CoordinatePanel
         //    }
         //}
 
-        private Func<IPoint, IPoint> _fromWgs84Geodetic;
+        private Func<Point, Point> _fromWgs84Geodetic;
 
         private Func<double, string> _toString;
-         
-        public SpatialReferenceItem(Func<IPoint, IPoint> fromWgs84Geodetic, Func<double, string> toString, PersianEnglishItem titleItem, PersianEnglishItem subTitleItem, PersianEnglishItem xLabel, PersianEnglishItem yLabel)
+
+        public SpatialReferenceItem(Func<Point, Point> fromWgs84Geodetic, Func<double, string> toString, PersianEnglishItem titleItem, PersianEnglishItem subTitleItem, PersianEnglishItem xLabel, PersianEnglishItem yLabel)
         {
             this._fromWgs84Geodetic = fromWgs84Geodetic;
 
@@ -61,7 +61,7 @@ namespace IRI.Jab.Common.Model.CoordinatePanel
             this.YLabelItem = yLabel;
         }
 
-        public IPoint FromWgs84Geodetic(IPoint geodeticPoint)
+        public IPoint FromWgs84Geodetic(Point geodeticPoint)
         {
             return _fromWgs84Geodetic(geodeticPoint);
         }
@@ -331,7 +331,7 @@ namespace IRI.Jab.Common.Model.CoordinatePanel
         public Action<SpatialReferenceItem> FireIsSelectedChanged;
 
 
-        public string GetPositionString(IPoint geodeticPoint)
+        public string GetPositionString(Point geodeticPoint) //where T : IPoint, new()
         {
             var point = FromWgs84Geodetic(geodeticPoint);
 

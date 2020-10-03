@@ -182,9 +182,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return new EsriPointZ(result.X, result.Y, this.Z, this.Measure, newSrid);
         }
 
-        public Geometry AsGeometry()
+        public Geometry<Point> AsGeometry()
         {
-            return new Geometry(new IPoint[] { new Point(X, Y) }, GeometryType.Point, Srid);
+            return new Geometry<Point>(new List<Point>() { new Point(X, Y) }, GeometryType.Point, Srid);
         }
 
         public bool IsNullOrEmpty()

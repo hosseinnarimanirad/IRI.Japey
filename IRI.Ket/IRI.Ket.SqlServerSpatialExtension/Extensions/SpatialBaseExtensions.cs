@@ -11,7 +11,7 @@ namespace IRI.Ket.SpatialExtensions
         //without counting the last point
         const int minimumPolygonPoints = 3;
 
-        public static double GetArea(this Geometry geometry)
+        public static double GetArea<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
             var sqlGeometry = geometry.AsSqlGeometry();
 
@@ -26,7 +26,7 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
-        public static double GetTrueArea(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        public static double GetTrueArea<T>(this Geometry<T> geometry, Func<Point, Point> toWgs84Geodetic) where T : IPoint, new()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace IRI.Ket.SpatialExtensions
             //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
         }
 
-        public static double GetLength(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        public static double GetLength<T>(this Geometry<T> geometry, Func<Point, Point> toWgs84Geodetic) where T : IPoint, new()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace IRI.Ket.SpatialExtensions
             //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
         }
 
-        public static double GetMeasure(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        public static double GetMeasure<T>(this Geometry<T> geometry, Func<Point, Point> toWgs84Geodetic) where T : IPoint, new()
         {
             if (geometry == null)
             {
@@ -83,7 +83,7 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
-        public static string GetMeasureLabel(this Geometry geometry, Func<IPoint, IPoint> toWgs84Geodetic)
+        public static string GetMeasureLabel<T>(this Geometry<T> geometry, Func<Point, Point> toWgs84Geodetic) where T : IPoint, new()
         {
             if (geometry == null)
             {
@@ -114,7 +114,7 @@ namespace IRI.Ket.SpatialExtensions
             //
         }
 
-        public static IPoint GetMeanOrLastPoint(this Geometry geometry)
+        public static IPoint GetMeanOrLastPoint<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
             if (geometry == null)
             {
@@ -148,7 +148,7 @@ namespace IRI.Ket.SpatialExtensions
         #region SqlGeometry
 
         //ERROR PRONE: NaN and Infinity points are not supported
-        public static SqlGeometry AsSqlGeometry(this IPoint point, int srid = 0)
+        public static SqlGeometry AsSqlGeometry<T>(this T point, int srid = 0) where T : IPoint, new()
         {
             //if (double.IsNaN(point.X + point.Y) || double.IsInfinity(point.X + point.Y))
             //{
@@ -158,7 +158,7 @@ namespace IRI.Ket.SpatialExtensions
             return SqlGeometry.Point(point.X, point.Y, srid);
         }
 
-        public static SqlGeometry AsSqlGeometry(this Geometry geometry)
+        public static SqlGeometry AsSqlGeometry<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
             var type = geometry.Type;
 
@@ -222,7 +222,7 @@ namespace IRI.Ket.SpatialExtensions
             return (GeometryType)((int)type);
         }
 
-        private static void AddPoint(SqlGeometryBuilder builder, Geometry point)
+        private static void AddPoint<T>(SqlGeometryBuilder builder, Geometry<T> point) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -238,7 +238,7 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
-        private static void AddMultiPoint(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddMultiPoint<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -262,7 +262,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddLineString(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddLineString<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -277,7 +277,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddMultiLineString(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddMultiLineString<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -299,7 +299,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddPolygon(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddPolygon<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -323,7 +323,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddMultiPolygon(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddMultiPolygon<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //return CreatePolygon(points, srid);
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -355,7 +355,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddGeometryCollection(SqlGeometryBuilder builder, Geometry geometry)
+        private static void AddGeometryCollection<T>(SqlGeometryBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -404,11 +404,11 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddLineStringOrRing(SqlGeometryBuilder builder, Geometry geometry, bool isRing)
+        private static void AddLineStringOrRing<T>(SqlGeometryBuilder builder, Geometry<T> geometry, bool isRing) where T : IPoint, new()
         {
             builder.BeginFigure(geometry.Points[0].X, geometry.Points[0].Y);
 
-            for (int i = 1; i < geometry.Points.Length; i++)
+            for (int i = 1; i < geometry.Points.Count; i++)
             {
                 builder.AddLine(geometry.Points[i].X, geometry.Points[i].Y);
             }
@@ -422,7 +422,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         #endregion
-         
+
 
         #region SqlGeography
 
@@ -431,7 +431,7 @@ namespace IRI.Ket.SpatialExtensions
             return SqlGeography.Point(latitude: point.Y, longitude: point.X, srid: SridHelper.GeodeticWGS84);
         }
 
-        public static SqlGeography AsSqlGeography(this Geometry geometry)
+        public static SqlGeography AsSqlGeography<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
             var type = geometry.Type;
 
@@ -485,7 +485,7 @@ namespace IRI.Ket.SpatialExtensions
 
         }
 
-        private static void AddPoint(SqlGeographyBuilder builder, Geometry point)
+        private static void AddPoint<T>(SqlGeographyBuilder builder, Geometry<T> point) where T : IPoint, new()
         {
             builder.BeginGeography(OpenGisGeographyType.Point);
 
@@ -496,7 +496,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeography();
         }
 
-        private static void AddMultiPoint(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddMultiPoint<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             builder.BeginGeography(OpenGisGeographyType.MultiPoint);
 
@@ -514,7 +514,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeography();
         }
 
-        private static void AddLineString(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddLineString<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             builder.BeginGeography(OpenGisGeographyType.LineString);
 
@@ -523,7 +523,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeography();
         }
 
-        private static void AddMultiLineString(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddMultiLineString<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             builder.BeginGeography(OpenGisGeographyType.MultiLineString);
 
@@ -539,7 +539,7 @@ namespace IRI.Ket.SpatialExtensions
             builder.EndGeography();
         }
 
-        private static void AddPolygon(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddPolygon<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             builder.BeginGeography(OpenGisGeographyType.Polygon);
 
@@ -559,7 +559,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddMultiPolygon(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddMultiPolygon<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //return CreatePolygon(points, srid);
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -591,7 +591,7 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddGeographyCollection(SqlGeographyBuilder builder, Geometry geometry)
+        private static void AddGeographyCollection<T>(SqlGeographyBuilder builder, Geometry<T> geometry) where T : IPoint, new()
         {
             //SqlGeometryBuilder builder = new SqlGeometryBuilder();
 
@@ -640,11 +640,11 @@ namespace IRI.Ket.SpatialExtensions
             //return builder.ConstructedGeometry.MakeValid();
         }
 
-        private static void AddLineStringOrRing(SqlGeographyBuilder builder, Geometry geometry, bool isRing)
+        private static void AddLineStringOrRing<T>(SqlGeographyBuilder builder, Geometry<T> geometry, bool isRing) where T : IPoint, new()
         {
             builder.BeginFigure(longitude: geometry.Points[0].X, latitude: geometry.Points[0].Y);
 
-            for (int i = 1; i < geometry.Points.Length; i++)
+            for (int i = 1; i < geometry.Points.Count; i++)
             {
                 builder.AddLine(longitude: geometry.Points[i].X, latitude: geometry.Points[i].Y);
             }
@@ -658,22 +658,22 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         #endregion
-         
+
 
         #region LineSegment
 
-        public static double CalculateLength(this LineSegment line, Func<IPoint, IPoint> toGeodeticWgs84Func)
+        public static double CalculateLength<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
         {
             var start = toGeodeticWgs84Func(line.Start);
 
             var end = toGeodeticWgs84Func(line.End);
 
-            var geodeticLine = SqlServerSpatialExtension.SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<Point>() { (Point)start, (Point)end }, false);
+            var geodeticLine = SqlServerSpatialExtension.SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<T>() { start, end }, false);
 
             return geodeticLine.STLength().Value;
         }
 
-        public static string GetLengthLabel(this LineSegment line, Func<IPoint, IPoint> toGeodeticWgs84Func)
+        public static string GetLengthLabel<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
         {
             var length = CalculateLength(line, toGeodeticWgs84Func);
 
@@ -684,8 +684,8 @@ namespace IRI.Ket.SpatialExtensions
 
 
         #region Projection
-         
-        public static IPoint Project(this IPoint point, SrsBase sourceSrs, SrsBase targetSrs)
+
+        public static T Project<T>(this T point, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
         {
             if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
             {

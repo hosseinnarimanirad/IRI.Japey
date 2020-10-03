@@ -231,14 +231,16 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoint">(long, lat) pair in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point GeodeticToMercator(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint GeodeticToMercator<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             double q = GeodeticLatitudeToIsometricLatitude(geodeticPoint.Y, ellipsoid.FirstEccentricity);
 
-            return
-                new Point(
+            return new TPoint()
+            {
+                X =
                     ellipsoid.SemiMajorAxis.Value * geodeticPoint.X * Math.PI / 180,
-                    ellipsoid.SemiMajorAxis.Value * q * Math.PI / 180);
+                Y = ellipsoid.SemiMajorAxis.Value * q * Math.PI / 180
+            };
         }
 
         /// <summary>
@@ -246,7 +248,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// </summary>
         /// <param name="geodeticPoint"></param>
         /// <returns></returns>
-        public static Point GeodeticToMercator(IPoint geodeticPoint)
+        public static TPoint GeodeticToMercator<TPoint>(TPoint geodeticPoint) where TPoint : IPoint, new()
         {
             return GeodeticToMercator(geodeticPoint, Ellipsoids.WGS84);
         }
@@ -257,9 +259,9 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoints">Array of (long, lat) pairs in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point[] GeodeticToMercator(IPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint[] GeodeticToMercator<TPoint>(TPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
-            Point[] result = new Point[geodeticPoints.Length];
+            TPoint[] result = new TPoint[geodeticPoints.Length];
 
             for (int i = 0; i < geodeticPoints.Length; i++)
             {
@@ -293,7 +295,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        public static Point MercatorToGeodetic(IPoint mercatorPoint, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint MercatorToGeodetic<TPoint>(TPoint mercatorPoint, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
 
             double longitude = mercatorPoint.X / ellipsoid.SemiMajorAxis.Value * 180 / Math.PI;
@@ -302,7 +304,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             double latitude = IsometricLatitudeToGeodeticLatitude(q, ellipsoid.FirstEccentricity);
 
-            return new Point(longitude, latitude);
+            return new TPoint() { X = longitude, Y = latitude };
         }
 
         /// <summary>
@@ -310,16 +312,16 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// </summary>
         /// <param name="mercatorPoint"></param>
         /// <returns></returns>
-        public static Point MercatorToGeodetic(IPoint mercatorPoint)
+        public static TPoint MercatorToGeodetic<TPoint>(TPoint mercatorPoint) where TPoint : IPoint, new()
         {
             return MercatorToGeodetic(mercatorPoint, Ellipsoids.WGS84);
         }
 
-        public static Point[] MercatorToGeodetic(IPoint[] mercatorPoints, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint[] MercatorToGeodetic<TPoint>(TPoint[] mercatorPoints, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             int n = mercatorPoints.Length;
 
-            Point[] result = new Point[n];
+            TPoint[] result = new TPoint[n];
 
             for (int i = 0; i < n; i++)
             {
@@ -357,7 +359,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         #region WebMercator
 
-        public static Point GeodeticWgs84ToWebMercator(IPoint geodetic)
+        public static TPoint GeodeticWgs84ToWebMercator<TPoint>(TPoint geodetic) where TPoint : IPoint, new()
         {
             var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
             //var a = earthRadius;
@@ -375,10 +377,10 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
                 y = a * Math.Log(Math.Tan(Math.PI / 4.0 + geodetic.Y / 2.0 * Math.PI / 180.0));
             }
 
-            return new Point(x, y);
+            return new TPoint() { X = x, Y = y };
         }
 
-        public static Point WebMercatorToMercatorWgs84(IPoint webMercator)
+        public static TPoint WebMercatorToMercatorWgs84<TPoint>(TPoint webMercator) where TPoint : IPoint, new()
         {
             var earthRadius = Ellipsoids.WGS84.SemiMajorAxis.Value;
 
@@ -392,15 +394,15 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             var y = a / earthRadius * webMercator.Y - a * e * (1.0 / 2.0) * Math.Log((1 + tempY) / (1 - tempY));
 
-            return new Point(x, y);
+            return new TPoint() { X = x, Y = y };
         }
 
-        public static Point WebMercatorToGeodeticWgs84Slow(IPoint webMercator)
+        public static TPoint WebMercatorToGeodeticWgs84Slow<TPoint>(TPoint webMercator) where TPoint : IPoint, new()
         {
             return MercatorToGeodetic(WebMercatorToMercatorWgs84(webMercator));
         }
 
-        public static Point WebMercatorToGeodeticWgs84(IPoint webMercator)
+        public static TPoint WebMercatorToGeodeticWgs84<TPoint>(TPoint webMercator) where TPoint : IPoint, new()
         {
             var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
 
@@ -408,7 +410,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             double latitude = 2.0 * (Math.Atan(Math.Exp(webMercator.Y / a)) - Math.PI / 4.0) * 180 / Math.PI;
 
-            return new Point(longitude, latitude);
+            return new TPoint() { X = longitude, Y = latitude };
 
         }
 
@@ -533,7 +535,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoint">(long, lat) pair in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point GeodeticToTransverseMercator(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint GeodeticToTransverseMercator<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             //'Phi : Geodetic Latitude, in degree
             //'Lambda : Geodeti Longitude in degree
@@ -591,7 +593,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             y = y * N;
 
-            return new Point(x, y);
+            return new TPoint() { X = x, Y = y };
         }
 
         /// <summary>
@@ -599,7 +601,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// </summary>
         /// <param name="geodeticPoint"></param>
         /// <returns></returns>
-        public static Point GeodeticToTransverseMercator(IPoint geodeticPoint)
+        public static TPoint GeodeticToTransverseMercator<TPoint>(TPoint geodeticPoint) where TPoint : IPoint, new()
         {
             return GeodeticToTransverseMercator(geodeticPoint, Ellipsoids.WGS84);
         }
@@ -610,14 +612,14 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoints">Array of (long, lat) pairs in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point[] GeodeticToTransverseMercator(IPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint[] GeodeticToTransverseMercator<TPoint>(TPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             //'Phi : Geodetic Latitude, in degree
             //'Lambda : Geodeti Longitude in degree
 
             int numberOfPoints = geodeticPoints.Length;
 
-            Point[] result = new Point[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -699,7 +701,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        public static Point TransverseMercatorToGeodetic(IPoint tmPoint, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint TransverseMercatorToGeodetic<TPoint>(TPoint tmPoint, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             double a = ellipsoid.SemiMajorAxis.Value;
 
@@ -713,7 +715,8 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             if (double.IsNaN(phiExpansionPoint))
             {
-                return Point.NaN;
+                //return Point.NaN;
+                return new TPoint() { X = double.NaN, Y = double.NaN };
             }
 
             double N = ellipsoid.CalculateN(new Degree(phiExpansionPoint * 180 / Math.PI, AngleRange.MinusPiTOPi)).Value;
@@ -746,17 +749,17 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             latitude = latitude * 180 / Math.PI;
 
-            return new Point(longitude, latitude);
+            return new TPoint() { X = longitude, Y = latitude };
         }
 
-        public static Point[] TransverseMercatorToGeodetic(IPoint[] tmPoints, Ellipsoid<Meter, Degree> ellipsoid)
+        public static TPoint[] TransverseMercatorToGeodetic<TPoint>(TPoint[] tmPoints, Ellipsoid<Meter, Degree> ellipsoid) where TPoint : IPoint, new()
         {
             //'Phi : Geodetic Latitude, in degree
             //'Lambda : Geodeti Longitude in degree
 
             int numberOfPoints = tmPoints.Length;
 
-            Point[] result = new Point[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -829,12 +832,12 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         #region UTM
 
         //*******************************UTM
-        public static Point GeodeticToUTM(IPoint geodeticPoint, bool isNorthHemisphere = true)
+        public static TPoint GeodeticToUTM<TPoint>(TPoint geodeticPoint, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             return GeodeticToUTM(geodeticPoint, Ellipsoids.WGS84, isNorthHemisphere);
         }
 
-        public static Point GeodeticToUTM(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, int zone, bool isNorthHemisphere = true)
+        public static TPoint GeodeticToUTM<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, int zone, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             int centralMeredian = CalculateCentralMeridian(zone);
 
@@ -842,7 +845,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             Point result = GeodeticToTransverseMercator(new Point(tempLongitude, geodeticPoint.Y), ellipsoid);
 
-            return new Point(result.X * 0.9996 + 500000, isNorthHemisphere ? result.Y * 0.9996 : result.Y * 0.9996 + 10000000);
+            return new TPoint()
+            {
+                X = result.X * 0.9996 + 500000,
+                Y = isNorthHemisphere ? result.Y * 0.9996 : result.Y * 0.9996 + 10000000
+            };
         }
 
         /// <summary>
@@ -851,7 +858,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoint">(long, lat) pair in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point GeodeticToUTM(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, bool isNorthHemisphere = true)
+        public static TPoint GeodeticToUTM<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             int zone = FindZone(geodeticPoint.X);
 
@@ -871,11 +878,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="geodeticPoints">(long, lat) pairs in degree</param>
         /// <param name="ellipsoid"></param>
         /// <returns></returns>
-        public static Point[] GeodeticToUTM(IPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid, bool isNorthHemisphere = true)
+        public static TPoint[] GeodeticToUTM<TPoint>(TPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             int numberOfPoints = geodeticPoints.Length;
 
-            Point[] result = new Point[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -885,7 +892,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             return result;
         }
 
-        public static Point[] GeodeticToUTM(IPoint[] geodeticPoints, bool isNorthHemisphere = true)
+        public static TPoint[] GeodeticToUTM<TPoint>(TPoint[] geodeticPoints, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             return GeodeticToUTM(geodeticPoints, Ellipsoids.WGS84, isNorthHemisphere);
         }
@@ -930,7 +937,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
 
 
-        public static Point UTMToGeodetic(IPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude, bool isNorthHemisphere = true)
+        public static TPoint UTMToGeodetic<TPoint>(TPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
             double tempX = 0;
             double tempY = 0;
@@ -941,28 +948,34 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             Point result = TransverseMercatorToGeodetic(new Point(tempX, tempY), ellipsoid);
 
-            result.X = result.X + centralLongitude;
+            return new TPoint()
+            {
+                X = result.X + centralLongitude,
+                Y = result.Y
+            };
 
-            return result;
+            //result.X = result.X + centralLongitude;
+
+            //return result;
         }
 
-        public static Point UTMToGeodetic(IPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, int zone)
+        public static TPoint UTMToGeodetic<TPoint>(TPoint utmPoint, Ellipsoid<Meter, Degree> ellipsoid, int zone) where TPoint : IPoint, new()
         {
             double centralLongitude = CalculateCentralMeridian(zone);
 
             return UTMToGeodetic(utmPoint, ellipsoid, centralLongitude);
         }
 
-        public static Point UTMToGeodetic(IPoint utmPoint, int zone)
+        public static TPoint UTMToGeodetic<TPoint>(TPoint utmPoint, int zone) where TPoint : IPoint, new()
         {
             return UTMToGeodetic(utmPoint, Ellipsoids.WGS84, zone);
         }
 
-        public static IPoint[] UTMToGeodetic(IPoint[] utmPoints, Ellipsoid<Meter, Degree> ellipsoid, int zone)
+        public static TPoint[] UTMToGeodetic<TPoint>(TPoint[] utmPoints, Ellipsoid<Meter, Degree> ellipsoid, int zone) where TPoint : IPoint, new()
         {
             int numberOfPoints = utmPoints.Length;
 
-            IPoint[] result = new IPoint[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -1016,7 +1029,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="centralLongitude"></param>
         /// <param name="standardLatitude"></param>
         /// <returns></returns>
-        public static Point GeodeticToCylindricalEqualArea(IPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0)
+        public static TPoint GeodeticToCylindricalEqualArea<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0) where TPoint : IPoint, new()
         {
             //'Phi : Geodetic Latitude, in degree
             //'Lambda : Geodetic Longitude in degree
@@ -1035,12 +1048,14 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
                 Math.Sin(geodeticPoint.Y * Math.PI / 180.0) / (1.0 - eSin * eSin) -
                 Math.Log((1.0 - eSin) / (1.0 + eSin)) / (2.0 * e));
 
-            return new Point(
-                ellipsoid.SemiMajorAxis.Value * k0 * (geodeticPoint.X - centralLongitude) * Math.PI / 180.0,
-                ellipsoid.SemiMajorAxis.Value * q / (2.0 * k0));
+            return new TPoint()
+            {
+                X = ellipsoid.SemiMajorAxis.Value * k0 * (geodeticPoint.X - centralLongitude) * Math.PI / 180.0,
+                Y = ellipsoid.SemiMajorAxis.Value * q / (2.0 * k0)
+            };
         }
 
-        public static Point GeodeticToCylindricalEqualArea(IPoint geodeticPoint)
+        public static TPoint GeodeticToCylindricalEqualArea<TPoint>(TPoint geodeticPoint) where TPoint : IPoint, new()
         {
             return GeodeticToCylindricalEqualArea(geodeticPoint, Ellipsoids.WGS84);
         }
@@ -1053,11 +1068,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <param name="centralLongitude"></param>
         /// <param name="standardLatitude"></param>
         /// <returns></returns>
-        public static Point[] GeodeticToCylindricalEqualArea(IPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0)
+        public static TPoint[] GeodeticToCylindricalEqualArea<TPoint>(TPoint[] geodeticPoints, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0) where TPoint : IPoint, new()
         {
             int numberOfPoints = geodeticPoints.Length;
 
-            Point[] result = new Point[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -1108,7 +1123,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
-        public static Point CylindricalEqualAreaToGeodetic(IPoint ceaPoint, Ellipsoid<Meter, Degree> ellipsoid, double centeralLongitude = 0, double standardLatitude = 0)
+        public static TPoint CylindricalEqualAreaToGeodetic<TPoint>(TPoint ceaPoint, Ellipsoid<Meter, Degree> ellipsoid, double centeralLongitude = 0, double standardLatitude = 0) where TPoint : IPoint, new()
         {
             double e = ellipsoid.FirstEccentricity;
 
@@ -1131,15 +1146,15 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             double latitude = IterativelyComputeLatitude(qC, e) * 180.0 / Math.PI;
 
-            return new Point(longitude, latitude);
+            return new TPoint() { X = longitude, Y = latitude };
 
         }
 
-        public static Point[] CylindricalEqualAreaToGeodetic(IPoint[] ceaPoints, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0)
+        public static TPoint[] CylindricalEqualAreaToGeodetic<TPoint>(TPoint[] ceaPoints, Ellipsoid<Meter, Degree> ellipsoid, double centralLongitude = 0, double standardLatitude = 0) where TPoint : IPoint, new()
         {
             int numberOfPoints = ceaPoints.Length;
 
-            Point[] result = new Point[numberOfPoints];
+            TPoint[] result = new TPoint[numberOfPoints];
 
             for (int i = 0; i < numberOfPoints; i++)
             {
@@ -1321,7 +1336,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
             return 6371000 / (6371000 + h);
         }
 
-        public static double CalculateUTMScaleFactorByMercatorLocation(IPoint mercatorPoint)
+        public static double CalculateUTMScaleFactorByMercatorLocation<TPoint>(TPoint mercatorPoint) where TPoint : IPoint, new()
         {
             var geodeticPoint = MercatorToGeodetic(mercatorPoint);
 

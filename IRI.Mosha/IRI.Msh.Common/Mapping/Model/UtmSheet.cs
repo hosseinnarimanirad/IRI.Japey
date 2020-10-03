@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Mapping
 {
-    public class UtmSheet : IGeometryAware
+    public class UtmSheet : IGeometryAware<Point>
     {
         internal const int _2kUtmSheetRowCount = 20;
         internal const int _2kUtmSheetColumnCount = 20;
@@ -17,7 +17,7 @@ namespace IRI.Msh.Common.Mapping
         internal static readonly char[] _2kUtmBlockColumns;
         internal static readonly char[] _2kUtmSheetColumns;
 
-        public Geometry TheGeometry
+        public Geometry<Point> TheGeometry
         {
             get
             {

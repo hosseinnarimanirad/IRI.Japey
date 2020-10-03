@@ -7,7 +7,6 @@ using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 using IRI.Msh.CoordinateSystem;
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
 
 namespace IRI.Msh.CoordinateSystem
 {
@@ -264,7 +263,7 @@ namespace IRI.Msh.CoordinateSystem
             return AverageToGeodetic<TLinear, TAngular>(tempCoordinate, newDatum, oldGeodeticCoordinate.LongitudinalRange);
         }
 
-        public static Point ChangeDatum(IPoint geodeticPoint, Ellipsoid<Meter, Degree> sourceDatum, Ellipsoid<Meter, Degree> destinationDatum)
+        public static TPoint ChangeDatum<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> sourceDatum, Ellipsoid<Meter, Degree> destinationDatum) where TPoint : IPoint, new()
         {
             Geodetic<Meter, Degree> source = new Geodetic<Meter, Degree>(new LinearCollection<Meter>(new double[] { 0 }),
                                                                             new AngularCollection<Degree>(new double[] { geodeticPoint.X }, AngleRange.ZeroTo2Pi),
@@ -273,7 +272,7 @@ namespace IRI.Msh.CoordinateSystem
 
             var result = ChangeDatum<Meter, Degree>(source, destinationDatum);
 
-            return new Point(result.Longitude.GetValue(0).Value, result.Latitude.GetValue(0).Value);
+            return new TPoint() { X = result.Longitude.GetValue(0).Value, Y = result.Latitude.GetValue(0).Value };
         }
 
         public static Point3D ToCartesian(IPoint geodeticPoint, IEllipsoid ellipsoid)
@@ -303,7 +302,7 @@ namespace IRI.Msh.CoordinateSystem
             return new Point3D(x, y, z);
         }
 
-        public static IPoint ToGeodetic(Point3D cartesianPoint, IEllipsoid ellipsoid)
+        public static TPoint ToGeodetic<TPoint>(Point3D cartesianPoint, IEllipsoid ellipsoid) where TPoint : IPoint, new()
         {
             double tempSemiMajor = ellipsoid.SemiMajorAxis.Value;
 
@@ -335,7 +334,7 @@ namespace IRI.Msh.CoordinateSystem
             if (latitudeTempValue1.Equals(double.NaN))
             {
                 //return new GeodeticPoint<TLinear, TAngular>(ellipsoid, new TLinear() { Value = 0 }, tempValue.Angle, (new Radian(0, longitudinalRange)));
-                return new Point(0, 0);
+                return new TPoint();
             }
 
             double hTempValue2 = 0, latitudeTempValue2 = 0;
@@ -367,14 +366,14 @@ namespace IRI.Msh.CoordinateSystem
             //TLinear height = new TLinear() { Value = hTempValue2 };
 
             //return new GeodeticPoint<TLinear, TAngular>(ellipsoid, height, tempValue.Angle, (new Radian(latitudeTempValue2, longitudinalRange)));
-            return new Point(Math.Atan2(tempY, tempX) * 180.0 / Math.PI, latitudeTempValue2 * 180.0 / Math.PI);
+            return new TPoint() { X = Math.Atan2(tempY, tempX) * 180.0 / Math.PI, Y = latitudeTempValue2 * 180.0 / Math.PI };
         }
 
-        public static IPoint ChangeDatumSimple(IPoint geodeticPoint, Ellipsoid<Meter, Degree> sourceDatum, Ellipsoid<Meter, Degree> destinationDatum)
+        public static TPoint ChangeDatumSimple<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> sourceDatum, Ellipsoid<Meter, Degree> destinationDatum) where TPoint : IPoint, new()
         {
             var cartesian = ToCartesian(geodeticPoint, sourceDatum);
 
-            return ToGeodetic(cartesian, destinationDatum);
+            return ToGeodetic<TPoint>(cartesian, destinationDatum);
         }
 
         //public static Point3D GeodeticToCartesian(Point3D geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid)

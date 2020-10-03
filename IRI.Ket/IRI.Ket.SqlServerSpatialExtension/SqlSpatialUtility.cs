@@ -53,7 +53,7 @@ namespace IRI.Ket.SqlServerSpatialExtension
         /// <param name="points"></param>
         /// <param name="isClosed"></param>
         /// <returns></returns>
-        public static SqlGeography MakeGeography(List<Point> points, bool isClosed, int srid = SridHelper.GeodeticWGS84)
+        public static SqlGeography MakeGeography<T>(List<T> points, bool isClosed, int srid = SridHelper.GeodeticWGS84) where T:IPoint,new()
         {
             if (points == null || points.Count < 1)
             {

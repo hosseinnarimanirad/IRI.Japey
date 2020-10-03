@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace IRI.Msh.Common.Primitives
@@ -142,6 +143,19 @@ namespace IRI.Msh.Common.Primitives
             {
                 return new Point(values[1], values[0]);
             }
+        }
+
+        public static T Parse<T>(double[] values, bool isLongitudeFirst) where T : IPoint, new()
+        {
+            var point = Parse(values, isLongitudeFirst);
+
+            T result = new T()
+            {
+                X = point.X,
+                Y = point.Y
+            };
+
+            return result;
         }
 
         //public static bool operator ==(Point first, Point second)

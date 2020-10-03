@@ -25,9 +25,9 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Coordinates == null || Coordinates.Length < 1;
         }
 
-        public Geometry Parse(bool isLongitudeFirst = false, int srid = 0)
+        public Geometry<Point> Parse(bool isLongitudeFirst = false, int srid = 0)
         {
-            return Geometry.ParsePointToGeometry(Coordinates, isLongitudeFirst, srid);
+            return Geometry<Point>.ParsePointToGeometry(Coordinates, isLongitudeFirst, srid);
         }
 
         public string Serialize(bool indented)

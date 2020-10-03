@@ -200,12 +200,12 @@ namespace IRI.Ket.ShapefileFormat
         //    return result;
         //}
 
-        public static List<Feature> ReadAsFeature(string shpFileName, int? defaultSrid = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
+        public static List<Feature<Point>> ReadAsFeature(string shpFileName, int? defaultSrid = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
         {
             //return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
 
-            return Read<Feature>(shpFileName,
-                (d, ies) => new Feature()
+            return Read<Feature<Point>>(shpFileName,
+                (d, ies) => new Feature<Point>()
                 {
                     Attributes = d,
                     TheGeometry = ies.AsGeometry()
@@ -539,7 +539,7 @@ namespace IRI.Ket.ShapefileFormat
             //return result;
         }
 
-        public static List<IEsriShape> Project(List<IEsriShape> values, string sourceEsriWktPrj, string targetEsriWktPrj)
+        public static List<IEsriShape> Project(List<IEsriShape> values, string sourceEsriWktPrj, string targetEsriWktPrj) /*where TEsriPoint : IPoint, new()*/
         {
             var sourceSrs = Prj.EsriPrjFile.Parse(sourceEsriWktPrj).AsMapProjection();
 
@@ -548,7 +548,7 @@ namespace IRI.Ket.ShapefileFormat
             return Project(values, sourceSrs, targetSrs);
         }
 
-        public static List<IEsriShape> Project(List<IEsriShape> values, SrsBase sourceSrs, SrsBase targetSrs)
+        public static List<IEsriShape> Project(List<IEsriShape> values, SrsBase sourceSrs, SrsBase targetSrs) /*where TEsriPoint : IPoint, new()*/
         {
             List<IEsriShape> result = new List<IEsriShape>(values.Count);
 
@@ -556,18 +556,18 @@ namespace IRI.Ket.ShapefileFormat
             {
                 for (int i = 0; i < values.Count; i++)
                 {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), targetSrs.Srid);
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic<EsriPoint>(new EsriPoint() { X = p.X, Y = p.Y }), targetSrs.Srid);
 
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p), targetSrs.Srid));
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic<EsriPoint>(new EsriPoint() { X = p.X, Y = p.Y }), targetSrs.Srid));
                 }
             }
             else
             {
                 for (int i = 0; i < values.Count; i++)
                 {
-                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic(p), targetSrs.Srid);
+                    var c1 = values[i].Transform(p => sourceSrs.ToGeodetic<EsriPoint>(new EsriPoint() { X = p.X, Y = p.Y }), targetSrs.Srid);
 
-                    result.Add(c1.Transform(p => targetSrs.FromGeodetic(p, sourceSrs.Ellipsoid), targetSrs.Srid));
+                    result.Add(c1.Transform(p => targetSrs.FromGeodetic<EsriPoint>(new EsriPoint() { X = p.X, Y = p.Y }, sourceSrs.Ellipsoid), targetSrs.Srid));
                 }
             }
 

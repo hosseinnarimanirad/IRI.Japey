@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model.CoordinateEditor
 {
@@ -25,9 +26,9 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
             }
         }
 
-        private ObservableCollection<IPoint> _points;
+        private ObservableCollection<Point> _points;
 
-        public ObservableCollection<IPoint> Points
+        public ObservableCollection<Point> Points
         {
             get { return _points; }
             set
@@ -41,7 +42,7 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
 
         public LineStringEditorModel()
         {
-            this.Points = new ObservableCollection<IPoint>();
+            this.Points = new ObservableCollection<Point>();
         }
 
         public LineStringEditorModel(Geometry lineString)
@@ -51,14 +52,14 @@ namespace IRI.Jab.Controls.Model.CoordinateEditor
                 throw new NotImplementedException();
             }
 
-            this.Points = new ObservableCollection<IPoint>(lineString.Points);
+            this.Points = new ObservableCollection<Point>(lineString.Points);
 
             this.Srid = lineString.Srid;
         }
 
         public override Geometry GetGeometry()
         {
-            return Geometry.Create(_points.ToArray(), GeometryType.LineString, Srid);
+            return Geometry.Create(_points.ToList(), GeometryType.LineString, Srid);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Msh.Common.Primitives; 
+using IRI.Msh.Common.Primitives;
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
@@ -30,12 +30,12 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         }
 
-        public override IPoint FromGeodetic(IPoint point)
+        public override TPoint FromGeodetic<TPoint>(TPoint point)
         {
             return MapProjects.GeodeticToCylindricalEqualArea(point, this._ellipsoid);
         }
 
-        public override IPoint ToGeodetic(IPoint point)
+        public override TPoint ToGeodetic<TPoint>(TPoint point) 
         {
             return MapProjects.CylindricalEqualAreaToGeodetic(point, this._ellipsoid);
         }

@@ -5,18 +5,18 @@ using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
-    public class LineSegment
+    public class LineSegment<T> where T : IPoint, new()
     {
-        public IPoint Start { get; set; }
+        public T Start { get; set; }
 
-        public IPoint End { get; set; }
+        public T End { get; set; }
 
-        public IPoint Middle
+        public T Middle
         {
-            get => new Point((Start.X + End.X) / 2.0, (Start.Y + End.Y) / 2.0);
+            get => new T() { X = (Start.X + End.X) / 2.0, Y = (Start.Y + End.Y) / 2.0 };
         }
 
-        public LineSegment(IPoint start, IPoint end)
+        public LineSegment(T start, T end)
         {
             this.Start = start;
 

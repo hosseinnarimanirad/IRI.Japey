@@ -22,7 +22,7 @@ namespace IRI.Jab.Common.Convertor
 
         //int intFillColor;
 
-        public WriteableBitmap ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, sb.Primitives.Geometry symbol = null)
+        public WriteableBitmap ParseSqlGeometry(List<SqlGeometry> geometries, Func<Point, Point> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, sb.Primitives.Geometry<sb.Primitives.Point> symbol = null)
         {
             //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
 
@@ -48,7 +48,7 @@ namespace IRI.Jab.Common.Convertor
             return result;
         }
 
-        private int AddGeometry(WriteableBitmap context, SqlGeometry geometry, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry geometrySymbol)
+        private int AddGeometry(WriteableBitmap context, SqlGeometry geometry, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry<sb.Primitives.Point> geometrySymbol)
         {
             if (geometry.IsNotValidOrEmpty())
             {
@@ -94,7 +94,7 @@ namespace IRI.Jab.Common.Convertor
             return 0;
         }
 
-        private void AddPoint(WriteableBitmap context, SqlGeometry point, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry geometrySymbol)
+        private void AddPoint(WriteableBitmap context, SqlGeometry point, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry<sb.Primitives.Point> geometrySymbol)
         {
             var center = transform(point.AsWpfPoint()).AsPoint();
 
@@ -112,7 +112,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private void AddMultiPoint(WriteableBitmap context, SqlGeometry multiPoint, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry geometrySymbol)
+        private void AddMultiPoint(WriteableBitmap context, SqlGeometry multiPoint, Func<Point, Point> transform, int border, int fill, ImageSource imageSymbol, sb.Primitives.Geometry<sb.Primitives.Point> geometrySymbol)
         {
             int numberOfPoints = multiPoint.STNumGeometries().Value;
 

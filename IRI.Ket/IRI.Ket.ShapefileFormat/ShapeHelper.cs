@@ -9,7 +9,7 @@ namespace IRI.Ket.ShapefileFormat
 {
     static class ShapeHelper
     {
-        internal static Point[] GetPoints(IEsriSimplePoints shape, int startIndex)
+        internal static List<Point> GetPoints(IEsriSimplePoints shape, int startIndex)
         {
             int partNumber = Array.IndexOf(shape.Parts, startIndex);
 
@@ -21,11 +21,13 @@ namespace IRI.Ket.ShapefileFormat
                 lastIndex = lastIndex - 1;
             }
 
-            Point[] result = new Point[lastIndex - startIndex + 1];
+            //Point[] result = new Point[lastIndex - startIndex + 1];
+            List<Point> result = new List<Point>(lastIndex - startIndex + 1);
 
-            for (int i = 0; i < result.Length; i++)
+            for (int i = 0; i < result.Count; i++)
             {
-                result[i] = new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y);
+                //result[i] = new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y);
+                result.Add(new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y));
             }
 
             return result;

@@ -46,6 +46,11 @@ namespace IRI.Jab.Common.Model
             }
         }
 
+        public NotifiablePoint()
+        {
+
+        }
+
         public NotifiablePoint(double x, double y, Action<NotifiablePoint> changeAction)
         {
             this.X = x;

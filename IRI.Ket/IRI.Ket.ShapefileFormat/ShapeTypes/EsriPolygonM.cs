@@ -88,8 +88,8 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points.Cast<IRI.Msh.Common.Primitives.IPoint>());
-             
+            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points);
+
             this.parts = parts;
 
             this.points = points;
@@ -128,7 +128,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             this.boundingBox = boundingBox;
-             
+
             this.parts = parts;
 
             this.points = points;
@@ -250,26 +250,28 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
         //always returns polygon not multi polygon
-        public Geometry AsGeometry()
+        public Geometry<Point> AsGeometry()
         {
             if (this.NumberOfParts > 1)
             {
-                Geometry[] parts = new Geometry[this.NumberOfParts];
+                //Geometry[] parts = new Geometry[this.NumberOfParts];
+                List<Geometry<Point>> parts = new List<Geometry<Point>>(this.NumberOfParts);
 
                 for (int i = 0; i < NumberOfParts; i++)
                 {
-                    parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
+                    //parts[i] = new Geometry(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
+                    parts.Add(new Geometry<Point>(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid));
                 }
 
-                return new Geometry(parts, GeometryType.Polygon, Srid);
+                return new Geometry<Point>(parts, GeometryType.Polygon, Srid);
             }
             else if (this.NumberOfParts == 1)
             {
-                return new Geometry(new Geometry[] { new Geometry(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid) }, GeometryType.Polygon, Srid);
+                return new Geometry<Point>(new List<Geometry<Point>> { new Geometry<Point>(ShapeHelper.GetPoints(this, Parts[0]), GeometryType.LineString, Srid) }, GeometryType.Polygon, Srid);
             }
             else
             {
-                return Geometry.CreateEmpty(GeometryType.Polygon, Srid);
+                return Geometry<Point>.CreateEmpty(GeometryType.Polygon, Srid);
             }
         }
 

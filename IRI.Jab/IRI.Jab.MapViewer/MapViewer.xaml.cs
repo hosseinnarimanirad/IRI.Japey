@@ -37,6 +37,8 @@ using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Ket.Common.Service;
 
+//using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+
 namespace IRI.Jab.MapViewer
 {
     public partial class MapViewer : UserControl, INotifyPropertyChanged
@@ -3569,7 +3571,7 @@ namespace IRI.Jab.MapViewer
         };
 
         public void FullExtent()
-        {    
+        {
             ZoomToExtent(this._layerManager.CalculateMapExtent(), false);
         }
 
@@ -4090,7 +4092,7 @@ namespace IRI.Jab.MapViewer
 
         CancellationTokenSource drawingCancellationToken;
 
-        TaskCompletionSource<Response<sb.Geometry>> drawingTcs;
+        TaskCompletionSource<Response<sb.Geometry<sb.Point>>> drawingTcs;
 
         private void MapView_MouseDownForStartDrawing(object sender, MouseButtonEventArgs e)
         {
@@ -4384,9 +4386,9 @@ namespace IRI.Jab.MapViewer
             return view;
         }
 
-        private Task<Response<sb.Geometry>> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
+        private Task<Response<sb.Geometry<sb.Point>>> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
         {
-            drawingTcs = new TaskCompletionSource<Response<sb.Geometry>>();
+            drawingTcs = new TaskCompletionSource<Response<sb.Geometry<sb.Point>>>();
 
             drawingCancellationToken = new CancellationTokenSource();
 
@@ -4440,7 +4442,7 @@ namespace IRI.Jab.MapViewer
 
         }
 
-        public async Task<Response<sb.Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
+        public async Task<Response<sb.Geometry<sb.Point>>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
         {
             try
             {
@@ -4466,7 +4468,7 @@ namespace IRI.Jab.MapViewer
                 }
                 else
                 {
-                    return new Response<sb.Geometry>();
+                    return new Response<sb.Geometry<sb.Point>>();
                 }
 
 
@@ -4480,7 +4482,7 @@ namespace IRI.Jab.MapViewer
                     this.Pan();
                 }
 
-                return new Response<sb.Geometry>() { IsCanceled = true };
+                return new Response<sb.Geometry<sb.Point>>() { IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4577,11 +4579,11 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private Task<Response<sb.Geometry>> EditGeometry(sb.Geometry geometry, EditableFeatureLayerOptions options)
+        private Task<Response<sb.Geometry<sb.Point>>> EditGeometry(sb.Geometry<sb.Point> geometry, EditableFeatureLayerOptions options)
         {
             editingCancellationToken = new CancellationTokenSource();
 
-            var tcs = new TaskCompletionSource<Response<sb.Geometry>>();
+            var tcs = new TaskCompletionSource<Response<sb.Geometry<sb.Point>>>();
 
             if (CurrentEditingLayer != null)
             {
@@ -4677,9 +4679,9 @@ namespace IRI.Jab.MapViewer
             return tcs.Task;
         }
 
-        public async Task<Response<sb.Geometry>> EditGeometryAsync(sb.Geometry originalGeometry, EditableFeatureLayerOptions options)
+        public async Task<Response<sb.Geometry<sb.Point>>> EditGeometryAsync(sb.Geometry<sb.Point> originalGeometry, EditableFeatureLayerOptions options)
         {
-            sb.Geometry originalClone = null;
+            sb.Geometry<sb.Point> originalClone = null;
 
             try
             {
@@ -4708,7 +4710,7 @@ namespace IRI.Jab.MapViewer
 
                 //97 04 27
                 //return originalGeometry;
-                return new Response<sb.Geometry>() { Result = originalGeometry, IsCanceled = true };
+                return new Response<sb.Geometry<sb.Point>>() { Result = originalGeometry, IsCanceled = true };
             }
             catch (Exception ex)
             {
@@ -4917,7 +4919,7 @@ namespace IRI.Jab.MapViewer
         Guid _measureId;
 
         //private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
-        private async Task<Response<sb.Geometry>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
+        private async Task<Response<sb.Geometry<sb.Point>>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
         {
             this._measureCancellationToken = new CancellationTokenSource();
 
@@ -4999,7 +5001,7 @@ namespace IRI.Jab.MapViewer
         }
 
         //public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
-        public async Task<Response<sb.Geometry>> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
+        public async Task<Response<sb.Geometry<sb.Point>>> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
         {
             _measureId = Guid.NewGuid();
 
@@ -5015,7 +5017,7 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
-                return new Response<sb.Geometry>() { Result = null, IsCanceled = true };
+                return new Response<sb.Geometry<sb.Point>>() { Result = null, IsCanceled = true };
             }
             catch (Exception ex)
             {
