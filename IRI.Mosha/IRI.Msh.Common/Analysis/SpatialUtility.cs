@@ -150,6 +150,12 @@ namespace IRI.Msh.Common.Analysis
             return geometries.SelectMany(g => GetPrimitiveAreas(g)).ToList();
         }
 
+        //In radian
+        public static double GetAngle(IPoint p1, IPoint p2, IPoint p3)
+        {
+            return Math.Acos(GetCosineOfAngle(p1, p2, p3));
+        }
+
         public static double GetCosineOfAngle(IPoint p1, IPoint p2, IPoint p3)
         {
             if (p1.Equals(p2) || p2.Equals(p3))
@@ -161,12 +167,12 @@ namespace IRI.Msh.Common.Analysis
             var ax = p3.X - p2.X;
             var ay = p3.Y - p2.Y;
 
-            var bx = p2.X - p1.X;
-            var by = p2.Y - p1.Y;
+            var bx = p1.X - p2.X;
+            var by = p1.Y - p2.Y;
 
             var dotProduct = ax * bx + ay * by;
 
-            var result = dotProduct * dotProduct / ((ax * ax + ay * ay) * (bx * bx + by * by));
+            var result = dotProduct / (Math.Sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
 
             if (double.IsNaN(result))
             {
@@ -221,8 +227,8 @@ namespace IRI.Msh.Common.Analysis
             var ax = lastPoint.X - middlePoint.X;
             var ay = lastPoint.Y - middlePoint.Y;
 
-            var bx = middlePoint.X - firstPoint.X;
-            var by = middlePoint.Y - firstPoint.Y;
+            var bx = firstPoint.X - middlePoint.X;
+            var by = firstPoint.Y - middlePoint.Y;
 
             var dotProduct = ax * bx + ay * by;
 
@@ -413,5 +419,45 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
+        //
+        public static bool IsPointInPolygon<T>(Geometry<T> ring, T point) where T : IPoint, new()
+        {
+            if (ring == null || point == null)
+            {
+                return false;
+            }
+
+            var numberOfPoints = ring.Points.Count;
+
+            if (ring.Type != GeometryType.LineString || numberOfPoints < 3)
+            {
+                throw new NotImplementedException("SpatialUtility.cs > IsPointInPolygon");
+            }
+
+            var boundingBox = ring.GetBoundingBox();
+
+            var encomapss = boundingBox.Encomapss(point);
+
+            if (!encomapss)
+            {
+                return false;
+            }
+
+            double totalAngle = 0.0;
+
+            for (int i = 0; i < numberOfPoints - 1; i++)
+            {
+                var angle = GetAngle(ring.Points[i], point, ring.Points[i + 1]);
+
+                totalAngle += angle;
+            }
+
+            totalAngle += GetAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
+             
+            if (Math.Abs(totalAngle - 2 * Math.PI) < 0.1)
+                return true;
+
+            return false;
+        }
     }
 }

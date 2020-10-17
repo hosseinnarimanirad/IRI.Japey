@@ -21,10 +21,12 @@ namespace IRI.Ket.ShapefileFormat
                 lastIndex = lastIndex - 1;
             }
 
-            //Point[] result = new Point[lastIndex - startIndex + 1];
-            List<Point> result = new List<Point>(lastIndex - startIndex + 1);
+            var count = lastIndex - startIndex + 1;
 
-            for (int i = 0; i < result.Count; i++)
+            //Point[] result = new Point[lastIndex - startIndex + 1];
+            List<Point> result = new List<Point>(count);
+
+            for (int i = 0; i < count; i++)
             {
                 //result[i] = new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y);
                 result.Add(new Point(shape.Points[startIndex + i].X, shape.Points[startIndex + i].Y));

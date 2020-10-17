@@ -360,7 +360,18 @@ namespace IRI.Msh.Common.Primitives
 
         public Geometry<Point> AsGeometry(int srid)
         {
-            return Geometry<Point>.Create<Point>(GetClockWiseOrderOfEsriPoints()/*.ToArray()*/, GeometryType.Polygon, srid);
+            return Geometry<Point>.Create(GetClockWiseOrderOfEsriPoints()/*.ToArray()*/, GeometryType.Polygon, srid);
+        }
+
+        public bool Encomapss<T>(T point) where T : IPoint, new()
+        {
+            if (point == null)
+            {
+                return false;
+            }
+
+            return (point.X >= this.XMin && point.X <= this.XMax) &&
+                    (point.Y >= this.YMin && point.Y <= this.YMax);
         }
     }
 }
