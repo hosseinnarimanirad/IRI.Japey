@@ -318,7 +318,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             if (geometry.IsNotValidOrEmpty())
             {
-                throw new NotImplementedException();
+                return null;
             }
 
             OpenGisGeometryType geometryType = geometry.GetOpenGisType();

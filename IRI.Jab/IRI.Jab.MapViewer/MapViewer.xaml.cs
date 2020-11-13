@@ -644,7 +644,9 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestSetLayer = (l) => { this.SetLayer(l); };
 
-            presenter.RequestUnSetLayer = (l) => { this.RemoveLayer(l); };
+            presenter.RequestRemoveLayer = (l) => { this.RemoveLayer(l); };
+
+            presenter.RequestRemoveLayerByName = (l) => { this.RemoveLayer(l); };
 
             presenter.RequestAddLayer = (l) =>
             {
@@ -653,6 +655,8 @@ namespace IRI.Jab.MapViewer
                 //return this.AddNonTiledLayer(l);
                 this.AddLayer(l);
             };
+
+            //presenter.RequestRemoveLayer = layerName => { this.RemoveLayer};
 
             //presenter.RequestRemoveLayer = (layer, forceRemove) =>
             //{
@@ -956,7 +960,7 @@ namespace IRI.Jab.MapViewer
             this._layerManager.Add(layer);
         }
 
-        public void UnSetLayer(string layerName)
+        public void RemoveLayer(string layerName)
         {
             this._layerManager.Remove(layerName, true);
         }
@@ -1559,7 +1563,7 @@ namespace IRI.Jab.MapViewer
             }
             catch (Exception ex)
             {
-                throw;
+
             }
         }
 
@@ -2450,18 +2454,25 @@ namespace IRI.Jab.MapViewer
             this.mapView.MouseDown -= mapView_MouseDownForZoom;
             this.mapView.MouseUp -= mapView_MouseUpForZoom;
 
-            //this.mapView.MouseDown -= mapView_MouseDownForStartDrawing;
-            //this.mapView.MouseDown -= MapView_MouseDownForPanWhileDraw;
-            //this.mapView.MouseMove -= mapView_MouseMoveForDraw;
-            //this.mapView.MouseUp -= mapView_MouseUpForDraw;
 
-            //this.mapView.MouseDown -= mapView_MouseUpForSelectPoint;
-            //this.mapView.MouseUp -= mapView_MouseUpForSelectPoint;
+            //this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+            this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+            this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
 
-            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+
+            this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartNewPart;
+            this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
+
+
             this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
-            this.mapView.MouseMove -= MapView_MouseMoveDrawing;
-            this.mapView.MouseUp -= MapView_MouseUpForDrawing;
+            this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
+            this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+
+            this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+
 
         }
 
@@ -3120,6 +3131,10 @@ namespace IRI.Jab.MapViewer
         //    this.OnPointSelected.SafeInvoke(null, new PointEventArgs(ScreenToGeodetic(point)));
         //}
 
+        public bool itWasPanningWhileSelectThePoint { get; set; }
+
+        CancellationTokenSource selectPointCancelationToken;
+
         private Task<sb.Point> SelectThePoint()
         {
             selectPointCancelationToken = new CancellationTokenSource();
@@ -3134,23 +3149,61 @@ namespace IRI.Jab.MapViewer
 
             action = (sender, e) =>
               {
-                  this.mapView.MouseUp -= action;
+                  //this.mapView.MouseUp -= action;
 
-                  //this.SetCursor(Cursors.Arrow);
-                  this.SetCursor(CursorSettings[_currentMouseAction]);
+                  //this.SetCursor(CursorSettings[_currentMouseAction]);
 
-                  tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
+                  //tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
+
+                  if (e.ChangedButton != MouseButton.Left)
+                      return;
+
+                  this.prevMouseLocation = e.GetPosition(this.mapView);
+
+                  if (itWasPanningWhileSelectThePoint)
+                  {
+                      this.ResetMapViewEvents();
+
+                      this.Refresh();
+
+                      this.SetCursor(Cursors.Cross);
+
+                      this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+                      this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
+
+                      this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+                      this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
+
+                      this.mapView.MouseUp -= action;
+                      this.mapView.MouseUp += action;
+
+                      itWasPanningWhileSelectThePoint = false;
+
+                      return;
+                  }
+                  else
+                  {
+                      this.mapView.MouseUp -= action;
+
+                      this.SetCursor(CursorSettings[_currentMouseAction]);
+
+                      tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
+                  }
               };
 
-            this.mapView.MouseUp -= action;
+            this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+            this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
 
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+            this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
+
+            this.mapView.MouseUp -= action;
             this.mapView.MouseUp += action;
 
             selectPointCancelationToken.Token.Register(() =>
             {
                 tcs.TrySetCanceled();
 
-                //this.SetCursor(Cursors.Arrow);
                 this.SetCursor(CursorSettings[_currentMouseAction]);
 
                 tcs = null;
@@ -3184,7 +3237,57 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        CancellationTokenSource selectPointCancelationToken;
+        private void MapView_MouseMoveSelectThePoint(object sender, MouseEventArgs e)
+        {
+            Point currentMouseLocation = e.GetPosition(this.mapView);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                double xOffset = currentMouseLocation.X - this.prevMouseLocation.X;
+
+                double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
+
+                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                {
+                    this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
+
+                    this.panTransform.Y += yOffset * 1.0 / this.zoomTransform.ScaleY;
+
+                    this.prevMouseLocation = currentMouseLocation;
+
+                    this.panTransformForPoints.X += xOffset;
+
+                    this.panTransformForPoints.Y += yOffset;
+
+                    UpdateTileInfos();
+
+                    this.itWasPanningWhileSelectThePoint = true;
+                }
+                else { }
+            }
+            else
+            {
+                //var mapLocation = ScreenToMap(currentMouseLocation);
+                //this.drawingLayer.UpdateLastVertexLocation(mapLocation.AsPoint());
+                //onMoveForDrawAction?.Invoke(mapLocation);
+            }
+        }
+
+        private void MapView_MouseDownForPanWhileSelectThePoint(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != MouseButton.Left)
+                return;
+
+            e.Handled = true;
+
+            itWasPanningWhileSelectThePoint = false;
+
+            this.prevMouseLocation = e.GetPosition(this.mapView);
+        }
+
+
+
+
 
         #endregion
 
@@ -4080,8 +4183,6 @@ namespace IRI.Jab.MapViewer
 
         DrawingLayer drawingLayer;
 
-        //bool isEdgeLengthVisible = false;
-
         EditableFeatureLayerOptions drawingOptions = new EditableFeatureLayerOptions();
 
         DrawMode drawMode;
@@ -4090,27 +4191,114 @@ namespace IRI.Jab.MapViewer
 
         bool itWasPanningWhileDrawing { get; set; }
 
+        bool itWasPanningWhileStartDrawing { get; set; }
+
+        bool itWasPanningWhileStartNewPart { get; set; }
+
         CancellationTokenSource drawingCancellationToken;
 
         TaskCompletionSource<Response<sb.Geometry<sb.Point>>> drawingTcs;
 
-        private void MapView_MouseDownForStartDrawing(object sender, MouseButtonEventArgs e)
+        private void MapView_MouseDownForPanWhileStartDrawing(object sender, MouseButtonEventArgs e)
         {
-            //Debug.WriteLine("START");
-
             if (e.ChangedButton != MouseButton.Left)
                 return;
 
-            this.prevMouseLocation = (e.GetPosition(this.mapView));
+            e.Handled = true;
 
-            var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+            itWasPanningWhileStartDrawing = false;
 
-            AddFirstPointForNewDrawing(webMercatorPoint);
+            this.prevMouseLocation = e.GetPosition(this.mapView);
+
+            //if (e.ChangedButton != MouseButton.Left)
+            //    return;
+
+            //this.prevMouseLocation = e.GetPosition(this.mapView);
+
+            //var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+
+            //AddFirstPointForNewDrawing(webMercatorPoint);
         }
+
+        private void MapView_MouseMoveForPanWhileStartDrawing(object sender, MouseEventArgs e)
+        {
+            Point currentMouseLocation = e.GetPosition(this.mapView);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                double xOffset = currentMouseLocation.X - this.prevMouseLocation.X;
+
+                double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
+
+                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                {
+                    this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
+
+                    this.panTransform.Y += yOffset * 1.0 / this.zoomTransform.ScaleY;
+
+                    this.prevMouseLocation = currentMouseLocation;
+
+                    this.panTransformForPoints.X += xOffset;
+
+                    this.panTransformForPoints.Y += yOffset;
+
+                    UpdateTileInfos();
+
+                    this.itWasPanningWhileStartDrawing = true;
+                }
+                else { }
+            }
+            else
+            {
+
+            }
+        }
+
+        private void MapView_MouseUpForPanWhileStartDrawing(object sender, MouseButtonEventArgs e)
+        {
+            if (itWasPanningWhileStartDrawing)
+            {
+                this.ResetMapViewEvents();
+
+                this.Refresh();
+
+                //this.mapView.CaptureMouse();
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
+                this.mapView.MouseMove += MapView_MouseMoveForPanWhileStartDrawing;
+
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+                this.mapView.MouseDown += MapView_MouseDownForPanWhileStartDrawing;
+
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+                this.mapView.MouseUp += MapView_MouseUpForPanWhileStartDrawing;
+
+                itWasPanningWhileStartDrawing = false;
+
+                this.SetCursor(Cursors.Cross);
+
+                return;
+            }
+            else
+            {
+                if (e.ChangedButton != MouseButton.Left)
+                    return;
+
+                this.prevMouseLocation = e.GetPosition(this.mapView);
+
+                var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+
+                AddFirstPointForNewDrawing(webMercatorPoint);
+            }
+        }
+
+
 
         private void AddFirstPointForNewDrawing(sb.Point webMercatorPoint)
         {
-            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+            this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+            this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
 
             this.ClearLayer(drawingLayer, remove: true, forceRemove: true);
 
@@ -4135,48 +4323,151 @@ namespace IRI.Jab.MapViewer
             {
                 //this.mapView.CaptureMouse();
 
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
-                this.mapView.MouseMove += MapView_MouseMoveDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
+                this.mapView.MouseMove += MapView_MouseMoveForPanWhileDrawing;
 
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
                 this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
 
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseUp += MapView_MouseUpForDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+                this.mapView.MouseUp += MapView_MouseUpForForPanWhileDrawing;
             }
         }
 
-        private void MapView_MouseDownForStartNewPart(object sender, MouseButtonEventArgs e)
-        {
-            //Debug.WriteLine("MapView_MouseDownForStartNewPart");
+        //private void MapView_MouseDownForStartNewPart(object sender, MouseButtonEventArgs e)
+        //{
+        //    //Debug.WriteLine("MapView_MouseDownForStartNewPart");
 
+        //    if (e.ChangedButton != MouseButton.Left)
+        //        return;
+
+        //    this.prevMouseLocation = (e.GetPosition(this.mapView));
+
+        //    var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+
+        //    this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+
+        //    if (this.drawMode == DrawMode.Point)
+        //    {
+        //        FinishDrawing();
+        //    }
+        //    else
+        //    {
+        //        //this.mapView.CaptureMouse();
+
+        //        this.drawingLayer.StartNewPart(webMercatorPoint);
+
+        //        this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
+        //        this.mapView.MouseMove += MapView_MouseMoveForPanWhileDrawing;
+
+        //        this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+        //        this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
+
+        //        this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+        //        this.mapView.MouseUp += MapView_MouseUpForForPanWhileDrawing;
+        //    }
+        //}
+
+        private void MapView_MouseDownForPanWhileStartNewPart(object sender, MouseButtonEventArgs e)
+        {
             if (e.ChangedButton != MouseButton.Left)
                 return;
 
-            this.prevMouseLocation = (e.GetPosition(this.mapView));
+            e.Handled = true;
 
-            var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
+            itWasPanningWhileStartNewPart = false;
 
-            this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+            this.prevMouseLocation = e.GetPosition(this.mapView);
 
-            if (this.drawMode == DrawMode.Point)
+        }
+
+        private void MapView_MouseUpForPanWhileStartNewPart(object sender, MouseButtonEventArgs e)
+        {
+            if (itWasPanningWhileStartNewPart)
             {
-                FinishDrawing();
+                this.ResetMapViewEvents();
+
+                this.Refresh();
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
+                this.mapView.MouseMove += MapView_MouseMoveForPanWhileStartNewPart;
+
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartNewPart;
+                this.mapView.MouseDown += MapView_MouseDownForPanWhileStartNewPart;
+
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
+                this.mapView.MouseUp += MapView_MouseUpForPanWhileStartNewPart;
+
+                itWasPanningWhileStartNewPart = false;
+
+                this.SetCursor(Cursors.Cross);
+
+                return;
             }
             else
             {
-                //this.mapView.CaptureMouse();
+                if (e.ChangedButton != MouseButton.Left)
+                    return;
 
-                this.drawingLayer.StartNewPart(webMercatorPoint);
+                this.prevMouseLocation = (e.GetPosition(this.mapView));
 
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
-                this.mapView.MouseMove += MapView_MouseMoveDrawing;
+                var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
 
-                this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
-                this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartNewPart;
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
 
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseUp += MapView_MouseUpForDrawing;
+                if (this.drawMode == DrawMode.Point)
+                {
+                    FinishDrawing();
+                }
+                else
+                {
+                    this.drawingLayer.StartNewPart(webMercatorPoint);
+
+                    this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
+                    this.mapView.MouseMove += MapView_MouseMoveForPanWhileDrawing;
+
+                    this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
+                    this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
+
+                    this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+                    this.mapView.MouseUp += MapView_MouseUpForForPanWhileDrawing;
+                }
+            }
+        }
+
+        private void MapView_MouseMoveForPanWhileStartNewPart(object sender, MouseEventArgs e)
+        {
+            Point currentMouseLocation = e.GetPosition(this.mapView);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                double xOffset = currentMouseLocation.X - this.prevMouseLocation.X;
+
+                double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
+
+                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                {
+                    this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
+
+                    this.panTransform.Y += yOffset * 1.0 / this.zoomTransform.ScaleY;
+
+                    this.prevMouseLocation = currentMouseLocation;
+
+                    this.panTransformForPoints.X += xOffset;
+
+                    this.panTransformForPoints.Y += yOffset;
+
+                    UpdateTileInfos();
+
+                    this.itWasPanningWhileStartNewPart = true;
+                }
+                else { }
+            }
+            else
+            {
+
             }
         }
 
@@ -4198,15 +4489,29 @@ namespace IRI.Jab.MapViewer
         {
             if (drawingLayer != null && drawingLayer.TryFinishDrawingPart())
             {
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+                //this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
 
-                this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
-                this.mapView.MouseDown += MapView_MouseDownForStartNewPart;
 
-                //drawingLayer.TryFinishDrawingPart();
+                //1399.08.22
+                //this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+                //this.mapView.MouseDown += MapView_MouseDownForStartNewPart;
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
+                this.mapView.MouseMove += MapView_MouseMoveForPanWhileStartNewPart;
+
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartNewPart;
+                this.mapView.MouseDown += MapView_MouseDownForPanWhileStartNewPart;
+
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
+                this.mapView.MouseUp += MapView_MouseUpForPanWhileStartNewPart;
+
             }
         }
 
@@ -4215,12 +4520,21 @@ namespace IRI.Jab.MapViewer
             if (drawingLayer?.GetFinalGeometry()?.IsValid() == true)
             {
 
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+
+                //this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
 
-                this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+                //1399.08.22
+                //this.mapView.MouseDown -= MapView_MouseDownForStartNewPart;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartNewPart;
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
 
                 ResetMapViewEvents();
 
@@ -4236,9 +4550,9 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private void MapView_MouseMoveDrawing(object sender, MouseEventArgs e)
+        private void MapView_MouseMoveForPanWhileDrawing(object sender, MouseEventArgs e)
         {
-            Point currentMouseLocation = (e.GetPosition(this.mapView));
+            Point currentMouseLocation = e.GetPosition(this.mapView);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -4262,11 +4576,7 @@ namespace IRI.Jab.MapViewer
 
                     this.itWasPanningWhileDrawing = true;
                 }
-                else
-                {
-
-                }
-
+                else { }
             }
             else
             {
@@ -4278,13 +4588,6 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private void DoMoveForStartDrawing(sb.Point webMercatorPoint)
-        {
-            this.drawingLayer.UpdateLastVertexLocation(webMercatorPoint);
-
-            onMoveForDrawAction?.Invoke(webMercatorPoint.AsWpfPoint());
-        }
-
         private void MapView_MouseDownForPanWhileDrawing(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton != MouseButton.Left)
@@ -4294,11 +4597,10 @@ namespace IRI.Jab.MapViewer
 
             itWasPanningWhileDrawing = false;
 
-            this.prevMouseLocation = (e.GetPosition(this.mapView));
-
+            this.prevMouseLocation = e.GetPosition(this.mapView);
         }
 
-        private void MapView_MouseUpForDrawing(object sender, MouseButtonEventArgs e)
+        private void MapView_MouseUpForForPanWhileDrawing(object sender, MouseButtonEventArgs e)
         {
             //if (e.RightButton == MouseButtonState.Pressed || e.ChangedButton == MouseButton.Right)
             //{
@@ -4310,11 +4612,18 @@ namespace IRI.Jab.MapViewer
 
             //e.Handled = true;
 
-            this.prevMouseLocation = (e.GetPosition(this.mapView));
+            this.prevMouseLocation = e.GetPosition(this.mapView);
 
             var webMercatorPoint = ScreenToMap(this.prevMouseLocation).AsPoint();
 
             AddPointForNewDrawing(webMercatorPoint);
+        }
+
+        private void DoMoveForStartDrawing(sb.Point webMercatorPoint)
+        {
+            this.drawingLayer.UpdateLastVertexLocation(webMercatorPoint);
+
+            onMoveForDrawAction?.Invoke(webMercatorPoint.AsWpfPoint());
         }
 
         private void AddPointForNewDrawing(sb.Point webMercatorPoint)
@@ -4331,23 +4640,23 @@ namespace IRI.Jab.MapViewer
 
                 //this.mapView.CaptureMouse();
 
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
-                this.mapView.MouseMove += MapView_MouseMoveDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
+                this.mapView.MouseMove += MapView_MouseMoveForPanWhileDrawing;
 
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
                 this.mapView.MouseDown += MapView_MouseDownForPanWhileDrawing;
 
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseUp += MapView_MouseUpForDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+                this.mapView.MouseUp += MapView_MouseUpForForPanWhileDrawing;
 
                 itWasPanningWhileDrawing = false;
 
                 return;
             }
+
             this.drawingLayer.AddVertex(webMercatorPoint);
 
             this.drawingLayer.AddSemiVertex(webMercatorPoint);
-
         }
 
         private FrameworkElement GetRightClickOptionsForDraw()
@@ -4417,9 +4726,14 @@ namespace IRI.Jab.MapViewer
                 //this.SetCursor(Cursors.Arrow);
                 this.SetCursor(CursorSettings[_currentMouseAction]);
 
-                this.mapView.MouseUp -= MapView_MouseUpForDrawing;
-                this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-                this.mapView.MouseMove -= MapView_MouseMoveDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForForPanWhileDrawing;
+
+                //this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+                this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
+
+                this.mapView.MouseMove -= MapView_MouseMoveForPanWhileDrawing;
                 this.mapView.MouseDown -= MapView_MouseDownForPanWhileDrawing;
 
                 this.ClearLayer(drawingLayer, remove: true, forceRemove: true);
@@ -4435,8 +4749,18 @@ namespace IRI.Jab.MapViewer
 
             }, useSynchronizationContext: false);
 
-            this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
-            this.mapView.MouseDown += MapView_MouseDownForStartDrawing;
+
+            this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
+            this.mapView.MouseMove += MapView_MouseMoveForPanWhileStartDrawing;
+
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
+            this.mapView.MouseDown += MapView_MouseDownForPanWhileStartDrawing;
+
+            this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
+            this.mapView.MouseUp += MapView_MouseUpForPanWhileStartDrawing;
+
+            //this.mapView.MouseDown -= MapView_MouseDownForStartDrawing;
+            //this.mapView.MouseDown += MapView_MouseDownForStartDrawing;
 
             return drawingTcs.Task;
 

@@ -101,6 +101,7 @@
     <Compile Include="ShapeConstants.cs" />
     <Compile Include="Shapefile.cs" />
     <Compile Include="ShapeHelper.cs" />
+    <Compile Include="ShapeTypes\EsriNullShape.cs" />
     <Compile Include="ShapeTypes\IEsriSimplePoints.cs" />
     <Compile Include="ShapeTypes\IEsriPointsWithMeasure.cs" />
     <Compile Include="ShapeTypes\IEsriPointsWithZ.cs" />

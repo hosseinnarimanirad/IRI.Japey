@@ -34,9 +34,11 @@ namespace IRI.Msh.Common.Model.GeoJson
         public const string Polygon = "Polygon";
         public const string MultiPolygon = "MultiPolygon";
 
-        internal static string Serialize(IGeoJsonGeometry geoJson, bool indented)
+        internal static string Serialize(IGeoJsonGeometry geoJson, bool indented, bool removeSpaces = false)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(geoJson, indented ? Formatting.Indented : Formatting.None);
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(geoJson, indented ? Formatting.Indented : Formatting.None);
+
+            return removeSpaces ? result.Replace(" ", string.Empty) : result;
         }
     }
 }

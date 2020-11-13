@@ -32,9 +32,9 @@ namespace IRI.Msh.Common.Model.GeoJson
             return new Geometry<Point>(Coordinates?.Select(c => Geometry<Point>.ParseLineStringToGeometry(c, GeometryType.LineString, isLongitudeFirst, srid)).ToList(), this.GeometryType, srid);
         }
 
-        public string Serialize(bool indented)
+        public string Serialize(bool indented, bool removeSpaces = false)
         {
-            return GeoJson.Serialize(this, indented);
+            return GeoJson.Serialize(this, indented, removeSpaces);
         }
     }
 }

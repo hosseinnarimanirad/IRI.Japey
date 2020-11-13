@@ -736,10 +736,14 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<ILayer> RequestSetLayer;
 
-        public Action<ILayer> RequestUnSetLayer;
+        public Action<ILayer> RequestRemoveLayer;
+
+        public Action<string> RequestRemoveLayerByName;
 
         //public Func<ILayer, Task> RequestAddLayer;
         public Action<ILayer> RequestAddLayer;
+
+        //public Action<string> RequestRemoveLayer;
 
         public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
@@ -1417,7 +1421,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //this.MapPanel.Options = options;
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
-            
+
             Geometry geometry = new Geometry(points/*.ToArray()*/, type, srid);
 
             return EditAsync(geometry, options);
@@ -1466,7 +1470,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void UnSetLayer(ILayer layer)
         {
-            this.RequestUnSetLayer?.Invoke(layer);
+            this.RequestRemoveLayer?.Invoke(layer);
         }
 
         public void RegisterLayerWidthMap(VectorLayer layer)
@@ -1655,6 +1659,11 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestAddLayer?.Invoke(layer);
         }
 
+
+        public void RemoveLayer(string layerName)
+        {
+            this.RequestRemoveLayerByName?.Invoke(layerName);
+        }
 
         #endregion
 

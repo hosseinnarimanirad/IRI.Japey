@@ -20,6 +20,6 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         bool IsNullOrEmpty();
 
-        string Serialize(bool indented);
+        string Serialize(bool indented, bool removeSpaces = false);
     }
 }

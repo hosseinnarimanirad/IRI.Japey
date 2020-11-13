@@ -315,8 +315,10 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                     //parts[i] = new Geometry<Point>(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid);
                     parts.Add(new Geometry<Point>(ShapeHelper.GetPoints(this, Parts[i]), GeometryType.LineString, Srid));
                 }
-
-                return new Geometry<Point>(parts, GeometryType.Polygon, Srid);
+                 
+                //1399.07.26
+                //return new Geometry<Point>(parts, GeometryType.Polygon, Srid);
+                return Geometry<Point>.CreatePolygonOrMultiPolygon(parts, Srid);
             }
             else if (this.NumberOfParts == 1)
             {

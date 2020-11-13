@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Media;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.SpatialExtensions;
+using System.Windows.Input;
 
 namespace IRI.Jab.Common
 {
@@ -38,7 +39,22 @@ namespace IRI.Jab.Common
 
         public static VisualParameters GetDefaultForSelection()
         {
-            return new VisualParameters(DefaultSelectionFill, DefaultSelectionStroke, 2, .9);
+            return new VisualParameters(DefaultSelectionFill, DefaultSelectionStroke, 2, 0.9);
+        }
+
+        public static VisualParameters GetDefaultForRoutingPoints()
+        {
+            return new VisualParameters(DefaultRoutingPointFill, DefaultRoutingPointStroke, 2, 0.9);
+        }
+
+        public static VisualParameters GetDefaultForRoutingPolylineThin()
+        {
+            return new VisualParameters(DefaultRoutingLineStrokeThin, DefaultRoutingLineStrokeThin, 4, 1);
+        }
+
+        public static VisualParameters GetDefaultForRoutingPolylineThick()
+        {
+            return new VisualParameters(DefaultRoutingLineThick, DefaultRoutingLineThick, 6, 1);
         }
 
         public static VisualParameters GetDefaultForHighlight()
@@ -47,7 +63,7 @@ namespace IRI.Jab.Common
         }
 
 
-        internal static VisualParameters GetDefaultForHighlight(ISqlGeometryAware sqlGeometryAware)
+        public static VisualParameters GetDefaultForHighlight(ISqlGeometryAware sqlGeometryAware)
         {
             VisualParameters result;
 
@@ -69,6 +85,7 @@ namespace IRI.Jab.Common
 
         public static SolidColorBrush DefaultHighlightFill = new SolidColorBrush(new Color() { B = 0, G = 255, R = 255, A = 50 });
 
+
         public static SolidColorBrush DefaultSelectionStroke = new SolidColorBrush(Colors.Cyan);
 
         public static SolidColorBrush DefaultSelectionFill = new SolidColorBrush(new Color() { B = 255, G = 255, R = 0, A = 160 });
@@ -78,6 +95,15 @@ namespace IRI.Jab.Common
 
         public static SolidColorBrush DefaultDrawingFill = new SolidColorBrush(new Color() { R = 255, G = 200, B = 0, A = 160 });
 
+
+        public static SolidColorBrush DefaultRoutingPointFill = new SolidColorBrush(new Color() { R = 255, G = 228, B = 225, A = 255 });
+
+        public static SolidColorBrush DefaultRoutingPointStroke = new SolidColorBrush(new Color() { R = 220, G = 20, B = 60, A = 255 });
+
+
+        public static SolidColorBrush DefaultRoutingLineStrokeThin = new SolidColorBrush(new Color() { R = 32, G = 108, B = 213, A = 255 });//#256FD7
+        
+        public static SolidColorBrush DefaultRoutingLineThick = new SolidColorBrush(new Color() { R = 102, G = 157, B = 246, A = 255 });//#256FD7
 
         public static DashStyle GetDefaultDashStyleForMeasurements()
         {

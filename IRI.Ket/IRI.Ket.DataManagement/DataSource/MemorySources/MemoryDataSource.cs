@@ -187,6 +187,11 @@ namespace IRI.Ket.DataManagement.DataSource
         //GetAttributes
         public override List<T> GetFeatures(SqlGeometry geometry)
         {
+            if (this._features == null || this._features.Count == 0)
+            {
+                return new List<T>();
+            }
+
             if (geometry == null)
             {
                 return this._features.ToList();
@@ -220,7 +225,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return GetEntireFeatures(geometry);
         //}
 
-     
+
 
         //GetGeometryLabelPairs
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()

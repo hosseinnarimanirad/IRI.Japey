@@ -1015,6 +1015,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supportig Z and M Values
+        //todo: 1399.08.19; this method is not OK, look at SqlGeometry To Geometry
         private static EsriJsonGeometry SqlPolygonToEsriJsonPolygon(this SqlGeometry geometry)
         {
             //This check is required
@@ -1174,6 +1175,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supportig Z and M Values
+        //todo: 1399.08.19; this method is not OK, look at SqlGeometry To Geometry
         private static string SqlPolygonToPathMarkup(this SqlGeometry geometry, double decimals)
         {
             //This check is required
@@ -1380,11 +1382,33 @@ namespace IRI.Ket.SpatialExtensions
                     Coordinates = new double[0][][],
                 };
 
-            double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
+            //********************************************************************************
+            var numberOfInteriorRings = geometry.STNumInteriorRing().Value;
+
+            double[][] exteriorRing = GetGeoJsonLineStringOrRing(geometry.STExteriorRing());
+
+            double[][][] result = new double[numberOfInteriorRings + 1][][];
+
+            result[0] = exteriorRing;
+
+            for (int i = 1; i <= numberOfInteriorRings; i++)
+            {
+                //The first result contains the exterior ring so start at i 
+                result[i] = GetGeoJsonLineStringOrRing(geometry.STInteriorRingN(i));
+            } 
+
+            //***********************************************************************************
+
+            //int numberOfParts = geometry.STNumGeometries().Value;
+            //double[][][] result = new double[numberOfParts][][];
+            //for (int i = 1; i <= numberOfParts; i++)
+            //{
+            //    result[i - 1] = GetGeoJsonLineStringOrRing(geometry.STGeometryN(i));
+            //}
 
             return new GeoJsonPolygon()
             {
-                Coordinates = rings,
+                Coordinates = result,
                 Type = GeoJson.Polygon,
             };
         }
@@ -1571,6 +1595,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         //Not supportig Z and M Values
+        //todo: 1399.08.19; this method must be checked
         private static GeoJsonPolygon SqlPolygonToGeoJsonPolygon(this SqlGeography geometry)
         {
             //This check is required
@@ -1581,11 +1606,19 @@ namespace IRI.Ket.SpatialExtensions
                     Coordinates = new double[0][][],
                 };
 
-            double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
+            //double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
+            var numberOfRings = geometry.NumRings().Value;
+             
+            double[][][] result = new double[numberOfRings + 1][][];
+             
+            for (int i = 1; i <= numberOfRings; i++)
+            {
+                result[i] = GetGeoJsonLineStringOrRing(geometry.RingN(i));
+            }
 
             return new GeoJsonPolygon()
             {
-                Coordinates = rings,
+                Coordinates = result,
                 Type = GeoJson.Polygon,
             };
         }

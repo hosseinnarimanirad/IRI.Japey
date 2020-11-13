@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
@@ -249,11 +250,6 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        //public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
-        //{
-        //    return HttpGet<T>(address, Encoding.UTF8, contentType, null);
-        //}
-
         public static Response<T> HttpGet<T>(string address, Encoding encoding = null, WebProxy proxy = null, string bearer = null, string contentType = contentTypeJson) where T : class
         {
             try
@@ -335,6 +331,11 @@ namespace IRI.Ket.Common.Helpers
 
         #region old
 
+        //public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
+        //{
+        //    return HttpGet<T>(address, Encoding.UTF8, contentType, null);
+        //}
+
         //public async static Task<Response<TResponse>> EncryptedHttpGetAsync<TResponse>(string url, string decPriKey) where TResponse : class
         //{
         //    try
@@ -355,8 +356,6 @@ namespace IRI.Ket.Common.Helpers
         //        return ResponseFactory.CreateError<TResponse>(ex.Message);
         //    }
         //}
-        #endregion
-
 
         //Http Post
         //public static async Task<Response<T>> HttpPostAsync<T>(string address, object data, WebProxy proxy, string contentType = contentTypeJson)
@@ -364,25 +363,109 @@ namespace IRI.Ket.Common.Helpers
         //    return await HttpPostAsync<T>(address, data, Encoding.UTF8, proxy, contentType);
         //}
 
-        public static async Task<Response<T>> HttpPostAsync<T>(
-            string address,
-            object data,
-            Encoding encoding = null,
-            WebProxy proxy = null,
-            string bearer = null,
-            string contentType = contentTypeJson,
-            Dictionary<string, string> headers = null)
+        //public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
+        //{
+        //    return HttpPost<T>(address, data, Encoding.UTF8, null, contentType, null);
+        //}
+
+        #endregion
+
+
+        public static async Task<Response<T>> HttpPostAsync<T>(HttpParameters parameters)
+        //string address,
+        //object data,
+        //Encoding encoding = null,
+        //WebProxy proxy = null,
+        //string bearer = null,
+        //string contentType = contentTypeJson,
+        //Dictionary<string, string> headers = null)
+        {
+            return await UploadStringTaskAsync<T>(parameters, WebRequestMethods.Http.Post);
+
+            //try
+            //{
+            //    var client = CreateWebClient(contentType, encoding, proxy, bearer, headers);
+
+            //    var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+            //    {
+            //        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            //    });
+
+            //    var stringResult = await client.UploadStringTaskAsync(address, stringData);
+
+            //    var result = ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+
+            //    return result;
+            //}
+            //catch (Exception ex)
+            //{
+            //    return ResponseFactory.CreateError<T>(ex.Message);
+            //}
+        }
+
+        public static Response<T> HttpPost<T>(HttpParameters parameters) where T : class
         {
             try
             {
-                var client = CreateWebClient(contentType, encoding, proxy, bearer, headers);
+                var result = HttpPostString(parameters);
 
-                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+                return ResponseFactory.Create<T>(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result.Result));
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<T>(ex.GetFullMessage());
+            }
+        }
+
+        public static Response<string> HttpPostString(HttpParameters parameters)
+        {
+            return HttpUploadString(parameters, WebRequestMethods.Http.Post);
+            //try
+            //{
+            //    var client = CreateWebClient(contentType, encoding, proxy, bearer, headers);
+
+            //    var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+            //    {
+            //        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            //    });
+
+            //    var stringResult = client.UploadString(address, stringData);
+
+            //    return ResponseFactory.Create(stringResult);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return ResponseFactory.CreateError<string>(ex.Message);
+            //}
+        }
+
+
+
+        //Put
+        public static Task<Response<T>> HttpPutAsync<T>(HttpParameters parameters)
+        {
+            return UploadStringTaskAsync<T>(parameters, WebRequestMethods.Http.Put);
+        }
+
+        public static Response<string> HttpPutString(HttpParameters parameters)
+        {
+            return HttpUploadString(parameters, WebRequestMethods.Http.Put);
+        }
+
+
+        //General
+        private static async Task<Response<T>> UploadStringTaskAsync<T>(HttpParameters parameters, string httpMethod)
+        {
+            try
+            {
+                var client = CreateWebClient(parameters.ContentType, parameters.Encoding, parameters.Proxy, parameters.Bearer, parameters.Headers);
+
+                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
                     NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
                 });
 
-                var stringResult = await client.UploadStringTaskAsync(address, stringData);
+                var stringResult = await client.UploadStringTaskAsync(parameters.Address, httpMethod, stringData);
 
                 var result = ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
 
@@ -394,30 +477,18 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        //public static Response<T> HttpPost<T>(string address, object data, string contentType = contentTypeJson) where T : class
-        //{
-        //    return HttpPost<T>(address, data, Encoding.UTF8, null, contentType, null);
-        //}
-
-        public static Response<string> HttpPostString(
-            string address,
-            object data,
-            Encoding encoding,
-            WebProxy proxy,
-            string bearer = null,
-            string contentType = contentTypeJson,
-            Dictionary<string, string> headers = null)
+        private static Response<string> HttpUploadString(HttpParameters parameters, string httpMethod)
         {
             try
             {
-                var client = CreateWebClient(contentType, encoding, proxy, bearer, headers);
+                var client = CreateWebClient(parameters.ContentType, parameters.Encoding, parameters.Proxy, parameters.Bearer, parameters.Headers);
 
-                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+                var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
                 {
                     NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
                 });
 
-                var stringResult = client.UploadString(address, stringData);
+                var stringResult = client.UploadString(parameters.Address, httpMethod, stringData);
 
                 return ResponseFactory.Create(stringResult);
             }
@@ -427,26 +498,6 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
-        public static Response<T> HttpPost<T>(
-            string address,
-            object data,
-            Encoding encoding,
-            WebProxy proxy,
-             string bearer = null,
-            string contentType = contentTypeJson,
-            Dictionary<string, string> headers = null) where T : class
-        {
-            try
-            {
-                var result = HttpPostString(address, data, encoding, proxy, bearer, contentType, headers);
-
-                return ResponseFactory.Create<T>(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result.Result));
-            }
-            catch (Exception ex)
-            {
-                return ResponseFactory.CreateError<T>(ex.GetFullMessage());
-            }
-        }
 
         // ***** XML ***** 
         public static Response<string> HttpPostXml(string address, string xmlData, Encoding encoding, WebProxy proxy = null)
@@ -527,7 +578,8 @@ namespace IRI.Ket.Common.Helpers
             {
                 var message = EncryptedMessage.Create(parameter, encPubKey);
 
-                var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
+                //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
+                var response = await NetHelper.HttpPostAsync<EncryptedMessage>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
 
                 if (response.HasNotNullResult())
                 {
@@ -561,6 +613,24 @@ namespace IRI.Ket.Common.Helpers
             }
         }
 
+
+    }
+
+    public class HttpParameters
+    {
+        public string Address { get; set; }
+
+        public object Data { get; set; }
+
+        public Encoding Encoding { get; set; }
+
+        public WebProxy Proxy { get; set; }
+
+        public string Bearer { get; set; }
+
+        public string ContentType { get; set; }
+
+        public Dictionary<string, string> Headers { get; set; }
     }
 
 }

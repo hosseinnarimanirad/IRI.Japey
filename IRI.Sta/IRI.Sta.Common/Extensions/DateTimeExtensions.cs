@@ -132,6 +132,21 @@ namespace IRI.Ket.Common.Extensions
             return new DateTime(year, month, 1, _calendar);
         }
 
+        public static DateTime GetEndOfThePersianMonth(this DateTime dateTime)
+        {
+            //to avoid ArgumentOutOfRangeException
+            if (dateTime < _midValidPersianDateTime)
+                return GetBeginningOfThePersianMonth(_midValidPersianDateTime);
+
+            var year = _calendar.GetYear(dateTime);
+
+            var month = _calendar.GetMonth(dateTime);
+
+            var daysInMonth = _calendar.GetDaysInMonth(year, month);
+
+            return new DateTime(year, month, 1, _calendar).AddDays(daysInMonth);
+        }
+
         public static DateTime GetBeginningOfThePersianWeek(this DateTime dateTime)
         {
             //to avoid ArgumentOutOfRangeException

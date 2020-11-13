@@ -50,6 +50,8 @@ namespace IRI.Msh.Common.Primitives
 
         public int NumberOfPoints { get { return Points?.Count ?? 0; } }
 
+        public int NumberOfGeometries { get { return Geometries?.Count ?? 0; } }
+
         public int TotalNumberOfPoints
         {
             get
@@ -1461,7 +1463,7 @@ namespace IRI.Msh.Common.Primitives
             {
                 for (int i = this.Points.Count - 1; i >= 1; i--)
                 {
-                    if (!this.Points[i].Equals(this.Points[i - 1]))
+                    if (this.Points[i].Equals(this.Points[i - 1]))
                     {
                         this.Points.RemoveAt(i);
                     }

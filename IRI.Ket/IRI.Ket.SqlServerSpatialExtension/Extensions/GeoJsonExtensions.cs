@@ -232,10 +232,12 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
                 builder.AddLine(point.X, point.Y);
             }
 
-            if (isRing)
-            {
-                builder.AddLine(firstPoint.X, firstPoint.Y);
-            }
+            //1399.08.19
+            //should not manually repeat the last point
+            //if (isRing)
+            //{
+            //    builder.AddLine(firstPoint.X, firstPoint.Y);
+            //}
 
             builder.EndFigure();
         }

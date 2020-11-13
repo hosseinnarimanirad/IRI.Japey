@@ -30,9 +30,9 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Geometry<Point>.ParseLineStringToGeometry(Coordinates, this.GeometryType, isLongitudeFirst, srid);
         }
 
-        public string Serialize(bool indented)
+        public string Serialize(bool indented, bool removeSpaces = false)
         {
-            return GeoJson.Serialize(this, indented);
+            return GeoJson.Serialize(this, indented, removeSpaces);
         }
 
     }
