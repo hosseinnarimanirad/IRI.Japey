@@ -24,7 +24,6 @@ namespace IRI.Jab.Common.Model.Map
         public bool ShowSelectedOnMap { get; set; } = false;
 
         private ObservableCollection<T> _features;
-
         public ObservableCollection<T> Features
         {
             get { return _features; }
@@ -35,20 +34,8 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        //private DataTable _features;
-
-        //public DataTable Features
-        //{
-        //    get { return _features; }
-        //    set
-        //    {
-        //        _features = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
+       
         private ObservableCollection<T> _highlightedFeatures = new ObservableCollection<T>();
-
         public ObservableCollection<T> HighlightedFeatures
         {
             get { return _highlightedFeatures; }
@@ -59,21 +46,17 @@ namespace IRI.Jab.Common.Model.Map
 
                 _highlightedFeatures.CollectionChanged += (sender, e) =>
                 {
-                    //this.UpdateHighlightedFeaturesOnMap(e.NewItems.Cast<ISqlGeometryAware>());
+                    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
 
-                    //RaisePropertyChanged(nameof(IsSingleValueHighlighted));
-                    Update();
+                    RaisePropertyChanged(nameof(IsSingleValueHighlighted));
+                    //Update();
                 };
 
-                Update();
+                //Update();
+                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+
+                RaisePropertyChanged(nameof(IsSingleValueHighlighted));
             }
-        }
-
-        private void Update()
-        {
-            this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
-
-            RaisePropertyChanged(nameof(IsSingleValueHighlighted));
         }
 
         public bool IsSingleValueHighlighted
@@ -83,6 +66,12 @@ namespace IRI.Jab.Common.Model.Map
                 return HighlightedFeatures?.Count() == 1;
             }
         }
+
+        //private void Update()
+        //{
+        //    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+        //    RaisePropertyChanged(nameof(IsSingleValueHighlighted));
+        //}
 
 
         public SelectedLayer(ILayer layer)
@@ -102,6 +91,16 @@ namespace IRI.Jab.Common.Model.Map
             HighlightedFeatures = new ObservableCollection<T>(items.Cast<T>());
         }
 
+        public void UpdateSelectedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+            FeaturesChangedAction?.Invoke(enumerable);
+        }
+
+        public void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
+        {
+            HighlightFeaturesChangedAction?.Invoke(enumerable);
+        }
+
         public IEnumerable<ISqlGeometryAware> GetSelectedFeatures()
         {
             return Features?.Cast<ISqlGeometryAware>().ToList();
@@ -117,16 +116,6 @@ namespace IRI.Jab.Common.Model.Map
         public IEnumerable<ISqlGeometryAware> GetHighlightedFeatures()
         {
             return HighlightedFeatures?.Cast<ISqlGeometryAware>().ToList();
-        }
-
-        public void UpdateSelectedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
-        {
-            FeaturesChangedAction?.Invoke(enumerable);
-        }
-
-        public void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
-        {
-            HighlightFeaturesChangedAction?.Invoke(enumerable);
         }
 
         private void TryFlashPoint(IEnumerable<ISqlGeometryAware> point)
@@ -170,15 +159,18 @@ namespace IRI.Jab.Common.Model.Map
 
         public Action<ISqlGeometryAware> RequestEdit { get; set; }
 
-        public void Save()
+
+        public void SaveChanges()
         {
             (this.AssociatedLayer as VectorLayer).DataSource.SaveChanges();
         }
 
+
+
         public Action RequestRemove { get; set; }
 
-        private RelayCommand _zoomToCommand;
 
+        private RelayCommand _zoomToCommand;
         public RelayCommand ZoomToCommand
         {
             get
@@ -196,8 +188,8 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        private RelayCommand _editCommand;
 
+        private RelayCommand _editCommand;
         public RelayCommand EditCommand
         {
             get
@@ -219,8 +211,8 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-        private RelayCommand _saveCommand;
 
+        private RelayCommand _saveCommand;
         public RelayCommand SaveCommand
         {
             get
@@ -229,7 +221,7 @@ namespace IRI.Jab.Common.Model.Map
                 {
                     _saveCommand = new RelayCommand(param =>
                     {
-                        this.Save();
+                        this.SaveChanges();
                     });
                 }
 
@@ -239,7 +231,6 @@ namespace IRI.Jab.Common.Model.Map
 
 
         private RelayCommand _removeCommand;
-
         public RelayCommand RemoveCommand
         {
             get

@@ -226,6 +226,18 @@ namespace IRI.Jab.Common.Presenter.Map
         //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
         //                LegendCommand.CreateRemoveLayer(this, layer),
 
+        private List<Func<MapPresenter, IFeatureTableCommand>> _defaultVectorLayerFeatureTableCommands = FeatureTableCommands.GetDefaultVectorLayerCommands<SqlFeature>();
+        public List<Func<MapPresenter, IFeatureTableCommand>> DefaultVectorLayerFeatureTableCommands
+        {
+            get { return _defaultVectorLayerFeatureTableCommands; }
+            set
+            {
+                _defaultVectorLayerFeatureTableCommands = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<SqlFeature>();
 
         public List<Func<MapPresenter, ILayer, ILegendCommand>> DefaultVectorLayerCommands
@@ -1025,7 +1037,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private void FlashHighlightedFeatures(ISqlGeometryAware geometry)
+        public void FlashHighlightedFeatures(ISqlGeometryAware geometry)
         {
             var point = geometry?.TheSqlGeometry?.AsPoint();
 
@@ -1033,8 +1045,8 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 FlashPoint(new Msh.Common.Primitives.Point(point.X, point.Y));
             }
-
         }
+
 
         public async Task SelectDrawingItem(DrawingItemLayer layer)
         {
@@ -1502,6 +1514,18 @@ namespace IRI.Jab.Common.Presenter.Map
                     //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
                     //    LegendCommand.CreateRemoveLayer(this, layer),
                     //};
+                }
+
+                if (!(layer?.FeatureTableCommands?.Count > 0))
+                {
+                    var commands = new List<IFeatureTableCommand>();
+
+                    foreach (var item in DefaultVectorLayerFeatureTableCommands)
+                    {
+                        commands.Add(item(this));
+                    }
+
+                    layer.FeatureTableCommands = commands;
                 }
 
                 if ((layer as VectorLayer).RequestChangeSymbology == null)

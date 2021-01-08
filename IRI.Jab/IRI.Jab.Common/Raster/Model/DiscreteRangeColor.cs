@@ -25,6 +25,10 @@ namespace IRI.Jab.Common.Raster.Model
                 throw new NotImplementedException();
             }
 
+            this.MinValue = values.Min();
+
+            this.MaxValue = values.Max();
+
             MidValues = values;
 
             this.Colors = colors;
@@ -32,6 +36,15 @@ namespace IRI.Jab.Common.Raster.Model
 
         public Color Interpolate(double value)
         {
+            if (value < MinValue)
+            {
+                return Colors.First();
+            }
+            else if (value > MaxValue)
+            {
+                return Colors.Last();
+            }
+
             var index = MidValues.IndexOf(MidValues.First(v => v >= value));
 
             return Colors[index == 0 ? 0 : index - 1];

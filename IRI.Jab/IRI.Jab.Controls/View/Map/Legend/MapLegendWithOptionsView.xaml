@@ -44,8 +44,8 @@
                              HorizontalAlignment="Stretch" DataContext="{Binding }" IsEnabled="{Binding VisualParameters.IsInScaleRange}" IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
                     <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName}" Symbology="{Binding VisualParameters}"  
                                                                  HorizontalAlignment="Stretch"
-                                                                     Commands="{Binding Commands}"
-                                                                     IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                                                 Commands="{Binding Commands}"
+                                                                 IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
                 </RadioButton>
             </HierarchicalDataTemplate>
         </Grid.Resources>

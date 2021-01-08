@@ -84,7 +84,7 @@ namespace IRI.Ket.OfficeFormat
             //    worksheetPart.Worksheet.Save();
             //}
         }
-         
+
         public static void Write<T>(List<T> rows, List<string> headers, List<CellValues> types, List<Func<T, string>> mapFuncs, string outputFileName, string sheetName)
         {
             if (headers.Count != mapFuncs.Count || headers.Count != types.Count)
@@ -152,6 +152,82 @@ namespace IRI.Ket.OfficeFormat
 
                 worksheetPart.Worksheet.Save();
             }
+        }
+
+        public static void WriteDictionary(List<Dictionary<string, object>> rows, string outputFileName, string sheetName, List<CellValues> types = null, List<string> headers = null)
+        {
+            var numberOfColumns = rows.First().Keys.Count;
+
+            types = types == null ? Enumerable.Range(0, numberOfColumns).Select(k => CellValues.String).ToList() : types;
+
+            headers = headers == null ? rows.First().Select(r => r.Key).ToList() : headers;
+
+            //if (  headers.Count != types.Count)
+            //    throw new NotImplementedException();
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Create(outputFileName, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
+            {
+                WorkbookPart workbookPart = document.AddWorkbookPart();
+                workbookPart.Workbook = new Workbook();
+
+                WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                worksheetPart.Worksheet = new Worksheet();
+
+                Sheets sheets = workbookPart.Workbook.AppendChild(new Sheets());
+
+                Sheet sheet = new Sheet() { Id = workbookPart.GetIdOfPart(worksheetPart), SheetId = 1, Name = sheetName };
+
+                sheets.Append(sheet);
+
+                workbookPart.Workbook.Save();
+
+                SheetData sheetData = worksheetPart.Worksheet.AppendChild(new SheetData());
+
+                // Constructing header
+                Row row = new Row();
+
+                List<Cell> headerCells = new List<Cell>();
+
+                for (int i = 0; i < headers.Count; i++)
+                {
+                    headerCells.Add(ConstructCell(headers[i], types[i]));
+                }
+
+                row.Append(headerCells);
+
+                // Insert the header row to the Sheet Data
+                sheetData.AppendChild(row);
+
+                try
+                {
+                    //var karevan = karevanha.Single(i => i.Id == item.KarevanId);
+                    foreach (var item in rows)
+                    {
+
+                        List<Cell> cells = new List<Cell>();
+
+                        for (int i = 0; i < headers.Count; i++)
+                        {
+                            cells.Add(ConstructCell(item.ElementAt(i).Value?.ToString(), types[i]));
+                        }
+
+                        //Header
+                        //Row temporaryRow = new Row(cells);
+
+                        //temporaryRow.Append(cells);
+
+                        //sheetData.AppendChild(temp);
+                        sheetData.AppendChild(new Row(cells));
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                worksheetPart.Worksheet.Save();
+            }
+
         }
 
 

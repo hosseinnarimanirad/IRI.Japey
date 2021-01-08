@@ -52,6 +52,8 @@ namespace IRI.Jab.Common
 
         ObservableCollection<ILayer> SubLayers { get; set; }
 
+        List<IFeatureTableCommand> FeatureTableCommands { get; set; }
+
         RelayCommand ChangeSymbologyCommand { get;   }
 
         event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged;

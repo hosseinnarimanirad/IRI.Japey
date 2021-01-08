@@ -145,7 +145,6 @@ namespace IRI.Jab.Common
         }
 
         private List<ILegendCommand> _commands;
-
         public List<ILegendCommand> Commands
         {
             get { return _commands; }
@@ -156,9 +155,22 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged(nameof(ShowOptions));
             }
         }
+         
+
+        private List<IFeatureTableCommand> _featureTableCommands;
+        public List<IFeatureTableCommand> FeatureTableCommands
+        {
+            get { return _featureTableCommands; }
+            set
+            {
+                _featureTableCommands = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         private RelayCommand _changeSymbologyCommand;
-
         public RelayCommand ChangeSymbologyCommand
         {
             get

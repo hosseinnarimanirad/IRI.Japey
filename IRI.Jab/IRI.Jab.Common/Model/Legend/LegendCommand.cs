@@ -85,7 +85,6 @@ namespace IRI.Jab.Common.Model.Legend
         public ILayer Layer { get; set; }
 
 
-
         #region Defaults for ILayer
 
         public static LegendCommand Create(ILayer layer, Action action, string markup, string tooltip)
@@ -94,7 +93,8 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 PathMarkup = markup,
                 Command = new RelayCommand(param => action()),
-                ToolTip = tooltip
+                ToolTip = tooltip,
+                Layer = layer
             };
 
             result.Command = new RelayCommand(param => action());
@@ -142,7 +142,7 @@ namespace IRI.Jab.Common.Model.Legend
 
             return result;
         }
-         
+
         public static ILegendCommand CreateShowSymbologyView(ILayer layer, Action showSymbologyViewAction)
         {
             return Create(layer, showSymbologyViewAction, Assets.ShapeStrings.Appbar.appbarCart, "سمبل‌گذاری");
@@ -304,12 +304,12 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.SaveFile("*.png|*.png");
+                    var fileName = map.SaveFile("*.png|*.png");
 
-                    if (string.IsNullOrWhiteSpace(file))
+                    if (string.IsNullOrWhiteSpace(fileName))
                         return;
 
-                    layer.SaveAsPng(file, map.CurrentExtent, map.ActualWidth, map.ActualHeight, map.MapScale);
+                    layer.SaveAsPng(fileName, map.CurrentExtent, map.ActualWidth, map.ActualHeight, map.MapScale);
                 }
                 catch (Exception ex)
                 {

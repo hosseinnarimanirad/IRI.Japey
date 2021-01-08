@@ -69,19 +69,23 @@ namespace IRI.Jab.Common.Raster
 
                     Color color;
 
-                    if (value < midValue)
+                    if (value.HasValue)
                     {
-                        color = step1.Interpolate(value, minValue, maxValue);
+
+                        if (value < midValue)
+                        {
+                            color = step1.Interpolate(value.Value, minValue, maxValue);
+                        }
+                        else
+                        {
+                            color = step2.Interpolate(value.Value, minValue, maxValue);
+                        }
+
+                        //var color = Color.FromArgb(r, g, b);
+
+                        result.SetPixel(j, i + 0, color); //result.SetPixel(j + 1, i + 0, color);
                     }
-                    else
-                    {
-                        color = step2.Interpolate(value, minValue, maxValue);
-                    }
 
-                    //var color = Color.FromArgb(r, g, b);
-
-
-                    result.SetPixel(j, i + 0, color); //result.SetPixel(j + 1, i + 0, color);
                     //result.SetPixel(j, i + 1, color); result.SetPixel(j + 1, i + 1, color);
                     //result.SetPixel(j, i + 2, color); result.SetPixel(j + 1, i + 2, color);
                     //result.SetPixel(j, i + 3, color); result.SetPixel(j + 1, i + 3, color);
@@ -107,52 +111,70 @@ namespace IRI.Jab.Common.Raster
             //return result;
         }
 
-        public static GeoReferencedImage Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges, double? maxDistance)
+        public static async Task<GeoReferencedImage> Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges, double? maxDistance)
         {
-            var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
-
-            //scale
-            var scaleX = width / boundingBox.Width;
-            var scaleY = height / boundingBox.Height;
-            var scale = Math.Min(scaleX, scaleY);
-
-            width = (int)(scale * boundingBox.Width);
-            height = (int)(scale * boundingBox.Height);
-
-            //create empty raster
-
-            Bitmap result = new Bitmap(width, height);
-
-
-            List<Point3D> pointSet = points.Select(p => new Point3D(p.TheSqlGeometry.STX.Value, p.TheSqlGeometry.STY.Value, valueFunc(p))).ToList();
-
-            var maxValue = pointSet.Max(p => p.Z);
-            var minValue = pointSet.Min(p => p.Z);
-            var rangeValue = maxValue - minValue;
-            var midValue = rangeValue / 2.0 + minValue;
-
-            //ContinousRangeColor ranges = new ContinousRangeColor(values, colors);
-            //DiscreteRangeColor ranges = new DiscreteRangeColor(values, colors);
-
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-
-            for (int i = 0; i < height; i++)
+            return await Task.Run<GeoReferencedImage>(() =>
             {
-                for (int j = 0; j < width; j++)
+                var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+
+                //scale
+                var scaleX = width / boundingBox.Width;
+                var scaleY = height / boundingBox.Height;
+                var scale = Math.Min(scaleX, scaleY);
+
+                width = (int)(scale * boundingBox.Width);
+                height = (int)(scale * boundingBox.Height);
+
+                //create empty raster
+
+                Bitmap result = new Bitmap(width, height);
+
+
+                List<Point3D> pointSet = points.Select(p => new Point3D(p.TheSqlGeometry.STX.Value, p.TheSqlGeometry.STY.Value, valueFunc(p))).ToList();
+
+                var maxValue = pointSet.Max(p => p.Z);
+                var minValue = pointSet.Min(p => p.Z);
+                var rangeValue = maxValue - minValue;
+                var midValue = rangeValue / 2.0 + minValue;
+
+                //ContinousRangeColor ranges = new ContinousRangeColor(values, colors);
+                //DiscreteRangeColor ranges = new DiscreteRangeColor(values, colors);
+
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+                for (int i = 0; i < height; i++)
                 {
-                    var x = boundingBox.XMin + j / scale;
-                    var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
+                    for (int j = 0; j < width; j++)
+                    {
+                        var x = boundingBox.XMin + j / scale;
+                        var y = boundingBox.YMax - i / scale;
+                        var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
-                    result.SetPixel(j, i + 0, ranges.Interpolate(value));
+                        if (value.HasValue)
+                        {
+                            try
+                            {
+                                result.SetPixel(j, i + 0, ranges.Interpolate(value.Value));
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            //result.SetPixel(j, i, Color.Transparent);
+                        }
+
+                    }
                 }
-            }
 
-            stopwatch.Stop();
-            var ellapsedtime = stopwatch.ElapsedMilliseconds;
-            stopwatch.Restart();
+                stopwatch.Stop();
+                var ellapsedtime = stopwatch.ElapsedMilliseconds;
+                stopwatch.Restart();
 
-            return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
+                return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
+            });
         }
 
         public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
@@ -196,13 +218,16 @@ namespace IRI.Jab.Common.Raster
                     var y = boundingBox.YMax - i / scale;
                     var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
-                    var color = ranges.Interpolate(value);
+                    //حالت transparent چی؟
+                    if (value.HasValue)
+                    {
+                        var color = ranges.Interpolate(value.Value);
 
-                    red[i, j] = color.R;
-                    green[i, j] = color.G;
-                    blue[i, j] = color.B;
-
-                    //result.SetPixel(j, i + 0, ranges.Interpolate(value));
+                        red[i, j] = color.R;
+                        green[i, j] = color.G;
+                        blue[i, j] = color.B;
+                        //result.SetPixel(j, i + 0, ranges.Interpolate(value));
+                    }
                 }
             }
             stopwatch.Stop();
