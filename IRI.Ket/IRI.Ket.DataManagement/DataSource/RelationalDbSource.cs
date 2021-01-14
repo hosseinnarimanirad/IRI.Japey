@@ -23,6 +23,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
     public abstract class RelationalDbSource<T> : FeatureDataSource<T> where T : class, ISqlGeometryAware
     {
+       
+
         protected string MakeWhereClause(string whereClause)
         {
             return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");

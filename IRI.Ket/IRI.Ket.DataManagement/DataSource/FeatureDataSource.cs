@@ -190,6 +190,15 @@ namespace IRI.Ket.DataManagement.DataSource
 
     public abstract class FeatureDataSource<T> : FeatureDataSource where T : class, ISqlGeometryAware
     {
+        public Func<List<T>, DataTable> ToDataTableMappingFunc;
+
+        public FeatureDataSource()
+        {
+
+        }
+
+
+
         public virtual List<T> GetFeatures()
         {
             SqlGeometry geometry = null;
@@ -198,8 +207,6 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         public abstract List<T> GetFeatures(SqlGeometry geometry);
-         
-        public Func<List<T>, DataTable> ToDataTableMappingFunc;
 
         public override DataTable GetEntireFeatures(SqlGeometry geometry)
         {
@@ -243,6 +250,81 @@ namespace IRI.Ket.DataManagement.DataSource
         //    //Update(newValue as T, valueId);
         //    throw new NotImplementedException();
         //}
+
+    }
+
+    public static class ToDataTableDefaultMappings
+    {
+        public static Func<List<T>, DataTable> GenericTypeMapping<T>()
+        {
+            return list =>
+            {
+                var properties = typeof(T).GetProperties(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+                var dataTable = new DataTable();
+
+                if (list.Count == 0)
+                    return dataTable;
+
+                foreach (var property in properties)
+                {
+                    var type = (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) ?
+                                    Nullable.GetUnderlyingType(property.PropertyType) : property.PropertyType);
+
+                    dataTable.Columns.Add(property.Name, type);
+                }
+
+                for (int row = 0; row < list.Count; row++)
+                {
+                    var dataRow = dataTable.NewRow();
+
+                    for (int i = 0; i < properties.Length; i++)
+                    {
+                        var value = properties[i].GetValue(list[row]);
+
+                        if (value == null)
+                            continue;
+
+                        dataRow[i] = value;
+                    }
+
+                    dataTable.Rows.Add(dataRow);
+                }
+
+                return dataTable;
+            };
+        }
+
+        public static DataTable SqlFeatureTypeMapping(List<SqlFeature> list)
+        {
+            var dataTable = new DataTable();
+
+            if (list.Count == 0)
+                return dataTable;
+
+            var columnNames = list.First().Attributes.Select(dict => dict.Key.ToString()).Distinct().ToList();
+
+            dataTable.Columns.AddRange(columnNames.Select(c => new DataColumn(c)).ToArray());
+
+            for (int row = 0; row < list.Count; row++)
+            {
+                var dataRow = dataTable.NewRow();
+
+                for (int col = 0; col < columnNames.Count; col++)
+                {
+                    var value = list[row].Attributes[columnNames[col]];
+
+                    if (value == null)
+                        continue;
+
+                    dataRow[col] = value;
+                }
+
+                dataTable.Rows.Add(dataRow);
+            }
+
+            return dataTable;
+        }
 
     }
 }

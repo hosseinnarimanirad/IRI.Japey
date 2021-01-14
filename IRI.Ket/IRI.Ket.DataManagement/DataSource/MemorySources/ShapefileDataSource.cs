@@ -230,7 +230,11 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
 
-            return ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+            var result = ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+
+            result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
+
+            return result;
         }
 
 
@@ -238,7 +242,11 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
 
-            return await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+            var result = await ShapefileDataSource<SqlFeature>.CreateAsync(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+
+            result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
+
+            return result;
         }
 
     }

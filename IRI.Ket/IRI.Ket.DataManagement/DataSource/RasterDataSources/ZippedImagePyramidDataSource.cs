@@ -38,7 +38,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             try
             {
-                var fileParts = fileName.Split('/')[1].Split(new string[] { ",", ".jpg" }, StringSplitOptions.RemoveEmptyEntries);
+                var fileParts = fileName.Split('\\')[1].Split(new string[] { ",", ".jpg" }, StringSplitOptions.RemoveEmptyEntries);
 
                 var zoom = int.Parse(fileParts[0]?.Trim());
 
@@ -79,7 +79,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var extentString = ZipFileHelper.ReadAsString(_archive, _extentFileName);
 
-            if (extentString == null)
+            if (extentString == null || extentString.Contains("NaN"))
             {
                 _archive.Dispose();
 
@@ -87,7 +87,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var lastPyramid = _archive.Entries.Max(e =>
                     {
-                        var folder = e.FullName.Replace($"/{e.Name}", string.Empty);
+                        var folder = e.FullName.Replace($"\\{e.Name}", string.Empty);
                         int zoom = -1;
                         int.TryParse(folder, out zoom);
                         return zoom;
@@ -96,7 +96,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 this.Extent = BoundingBox.GetMergedBoundingBox(
                                 _archive.Entries.Where(e => e.FullName.StartsWith(lastPyramid.ToString()))
-                                                .Select(e => _inverseFunction(e.FullName).WebMercatorExtent), true);                
+                                                .Select(e => _inverseFunction(e.FullName).WebMercatorExtent), true);
 
                 ZipFileHelper.WriteString(_archive, Newtonsoft.Json.JsonConvert.SerializeObject(Extent), _extentFileName);
 
@@ -140,9 +140,9 @@ namespace IRI.Ket.DataManagement.DataSource
                 for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
                 {
 
-                    if (_archive.Entries.Any(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i).Replace("\\", "/"), StringComparison.OrdinalIgnoreCase)))
+                    if (_archive.Entries.Any(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i)/*.Replace("\\", "/")*/, StringComparison.OrdinalIgnoreCase)))
                     {
-                        var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i).Replace("\\", "/"), StringComparison.OrdinalIgnoreCase)).Open();
+                        var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i)/*.Replace("\\", "/")*/, StringComparison.OrdinalIgnoreCase)).Open();
 
                         byte[] bytes = IRI.Msh.Common.Helpers.StreamHelper.ToByteArray(stream);
 
