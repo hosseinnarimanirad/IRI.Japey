@@ -167,6 +167,19 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             return new BoundingBox(xValues.Min(), yValues.Min(), xValues.Max(), yValues.Max());
         }
 
+        public static SqlGeometry CreateLineStringFromPoints(List<SqlGeometry> geometries)
+        {
+            if (geometries?.Any() != true)
+            {
+                return null;
+            }
+
+            var points = geometries.Select(g => g.AsPoint()).ToList();
+
+            //Geometry<Point> result = new Geometry<Point>()
+            return Geometry<Point>.CreatePointOrLineString(points, geometries.SkipWhile(g => g.STSrid.IsNull)?.FirstOrDefault()?.STSrid.Value ?? 0).AsSqlGeometry();
+        }
+
         #endregion
 
 

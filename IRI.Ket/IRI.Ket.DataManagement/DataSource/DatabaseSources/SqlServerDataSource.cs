@@ -307,76 +307,78 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<Dictionary<string, object>> SelectFeatures(string selectQuery, bool returnWkt = false)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
+            return Infrastructure.SqlServerInfrastructure.SelectFeatures(_connectionString, selectQuery, returnWkt);
 
-            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+            //SqlConnection connection = new SqlConnection(_connectionString);
 
-            try
-            {
+            //List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
 
-                var command = new SqlCommand(selectQuery, connection);
+            //try
+            //{
 
-                connection.Open();
+            //    var command = new SqlCommand(selectQuery, connection);
 
-                SqlDataReader reader = command.ExecuteReader();
+            //    connection.Open();
 
-                if (!reader.HasRows)
-                {
-                    return new List<Dictionary<string, object>>();
-                }
+            //    SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    var dict = new Dictionary<string, object>();
+            //    if (!reader.HasRows)
+            //    {
+            //        return new List<Dictionary<string, object>>();
+            //    }
 
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        var fieldName = reader.GetName(i);
+            //    while (reader.Read())
+            //    {
+            //        var dict = new Dictionary<string, object>();
 
-                        //var columnOrdinal = reader.GetOrdinal(fields[i]);
+            //        for (int i = 0; i < reader.FieldCount; i++)
+            //        {
+            //            var fieldName = reader.GetName(i);
 
-                        //if (returnWkt && fieldName == _spatialColumnName)
-                        //{
-                        //    dict.Add(_outputSpatialAttribute, reader.IsDBNull(i) ? null : ((SqlGeometry)reader[i]).AsWkt());
-                        //}
-                        //else
-                        //{
-                        //    dict.Add(fieldName, reader.IsDBNull(i) ? null : reader[i]);
-                        //}
+            //            //var columnOrdinal = reader.GetOrdinal(fields[i]);
 
-                        while (dict.Keys.Contains(fieldName))
-                        {
-                            fieldName = $"{fieldName}_";
-                        }
+            //            //if (returnWkt && fieldName == _spatialColumnName)
+            //            //{
+            //            //    dict.Add(_outputSpatialAttribute, reader.IsDBNull(i) ? null : ((SqlGeometry)reader[i]).AsWkt());
+            //            //}
+            //            //else
+            //            //{
+            //            //    dict.Add(fieldName, reader.IsDBNull(i) ? null : reader[i]);
+            //            //}
 
-                        if (reader.IsDBNull(i))
-                        {
-                            dict.Add(fieldName, null);
-                        }
-                        else
-                        {
-                            if (returnWkt && reader[i] is SqlGeometry)
-                            {
-                                dict.Add(fieldName, ((SqlGeometry)reader[i]).AsWkt());
-                            }
-                            else
-                            {
-                                dict.Add(fieldName, reader[i]);
-                            }
-                        }
-                    }
+            //            while (dict.Keys.Contains(fieldName))
+            //            {
+            //                fieldName = $"{fieldName}_";
+            //            }
 
-                    result.Add(dict);
-                }
+            //            if (reader.IsDBNull(i))
+            //            {
+            //                dict.Add(fieldName, null);
+            //            }
+            //            else
+            //            {
+            //                if (returnWkt && reader[i] is SqlGeometry)
+            //                {
+            //                    dict.Add(fieldName, ((SqlGeometry)reader[i]).AsWkt());
+            //                }
+            //                else
+            //                {
+            //                    dict.Add(fieldName, reader[i]);
+            //                }
+            //            }
+            //        }
 
-                connection.Close();
-            }
-            catch (Exception ex)
-            {
-                connection.Close();
-            }
+            //        result.Add(dict);
+            //    }
 
-            return result;
+            //    connection.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    connection.Close();
+            //}
+
+            //return result;
         }
 
         public List<Dictionary<string, object>> GetFeaturesWhereIntersects(string wktGeometryFilter, bool returnGeometryAsWktForm = false)

@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using Microsoft.SqlServer.Types;
+using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.DataManagement.Infrastructure
 {
@@ -281,6 +283,142 @@ namespace IRI.Ket.DataManagement.Infrastructure
             }
 
             return "Connected Successfully";
+        }
+
+        public static List<Dictionary<string, object>> SelectFeatures(string connectionString, string selectQuery, bool returnWkt = false)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+
+            try
+            {
+
+                var command = new SqlCommand(selectQuery, connection);
+
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    return new List<Dictionary<string, object>>();
+                }
+
+                while (reader.Read())
+                {
+                    var dict = new Dictionary<string, object>();
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        var fieldName = reader.GetName(i);
+
+                        //var columnOrdinal = reader.GetOrdinal(fields[i]);
+
+                        //if (returnWkt && fieldName == _spatialColumnName)
+                        //{
+                        //    dict.Add(_outputSpatialAttribute, reader.IsDBNull(i) ? null : ((SqlGeometry)reader[i]).AsWkt());
+                        //}
+                        //else
+                        //{
+                        //    dict.Add(fieldName, reader.IsDBNull(i) ? null : reader[i]);
+                        //}
+
+                        while (dict.Keys.Contains(fieldName))
+                        {
+                            fieldName = $"{fieldName}_";
+                        }
+
+                        if (reader.IsDBNull(i))
+                        {
+                            dict.Add(fieldName, null);
+                        }
+                        else
+                        {
+                            if (returnWkt && reader[i] is SqlGeometry)
+                            {
+                                dict.Add(fieldName, ((SqlGeometry)reader[i]).AsWkt());
+                            }
+                            else
+                            {
+                                dict.Add(fieldName, reader[i]);
+                            }
+                        }
+                    }
+
+                    result.Add(dict);
+                }
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+            }
+
+            return result;
+        }
+
+        public static List<T> SelectFeatures<T>(string connectionString, string selectQuery, List<Action<T, object>> updateFieldFuncs, bool returnWkt = false) where T : new()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            List<T> result = new List<T>();
+
+            try
+            {
+                var command = new SqlCommand(selectQuery, connection);
+
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.FieldCount!=updateFieldFuncs.Count)
+                {
+                    throw new NotImplementedException("fieldCount must be equal to update functions");
+                }
+
+                if (!reader.HasRows)
+                {
+                    return new List<T>();
+                }
+
+                while (reader.Read())
+                {
+                    T newRecord = new T();
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        if (reader.IsDBNull(i))
+                        {
+                            updateFieldFuncs[i](newRecord, null);
+                        }
+                        else
+                        {
+                            updateFieldFuncs[i](newRecord, reader[i]);
+
+                            //if (returnWkt && reader[i] is SqlGeometry)
+                            //{
+                            //    dict.Add(fieldName, ((SqlGeometry)reader[i]).AsWkt());
+                            //}
+                            //else
+                            //{
+                            //    dict.Add(fieldName, reader[i]);
+                            //}
+                        }
+                    }
+
+                    result.Add(newRecord);
+                }
+
+                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                connection.Close();
+            }
+
+            return result;
         }
 
     }

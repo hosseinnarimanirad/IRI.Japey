@@ -41,14 +41,29 @@ namespace IRI.Jab.MapViewer
 
             layer.OnVisibilityChanged += RefreshLayerVisibility;
 
-            this.CurrentLayers.Add(layer);
+            try
+            {
+                if (layer.ZIndex > CurrentLayers.Count || layer.ZIndex < 1)
+                {
+                    this.CurrentLayers.Add(layer);
+                }
+                else
+                {
+                    this.CurrentLayers.Insert(layer.ZIndex, layer);
+                }                
+            }
+            catch (Exception ex)
+            {
+                this.CurrentLayers.Add(layer);
+            }
+
 
             //98.01.20
             //layer.ZIndex = this.allLayers.Count(i => !i.Type.HasFlag(LayerType.Complex) && !i.Type.HasFlag(LayerType.Drawing));
 
             this.allLayers.Add(layer);
 
-            this.allLayers = this.allLayers.OrderBy(i => i.Type == LayerType.Complex).ToList();
+            this.allLayers = this.allLayers.OrderBy(i => i.Type == LayerType.Complex).ThenBy(i => i.ZIndex).ToList();
 
             if (layer.IsGroupLayer)
             {
@@ -155,7 +170,7 @@ namespace IRI.Jab.MapViewer
 
             this.allLayers.RemoveAll(layer => (forceRemove || layer?.CanUserDelete == true) && rule(layer));
         }
-         
+
 
         public void Clear()
         {
