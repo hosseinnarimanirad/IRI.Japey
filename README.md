@@ -1,6 +1,6 @@
 # IRI.Japey
 
 By Hossein Narimani Rad
-M.Sc. in GIS
+Ph.D. student in GIS
 
 hosseinnarimanirad.ir
