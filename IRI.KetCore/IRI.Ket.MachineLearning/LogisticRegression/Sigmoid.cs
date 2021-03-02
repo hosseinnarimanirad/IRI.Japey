@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Extensions;
+﻿using IRI.Msh.Algebra;
+using IRI.Msh.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -80,6 +81,54 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
             }
 
             return 1.0 / length * sum;
+        }
+
+
+        public static Matrix NormalizeUsingZScore(Matrix values)
+        {
+            if (values == null)
+                return null;
+
+            int numberOfColumns = values.NumberOfColumns;
+
+            Matrix result = new Matrix(values.NumberOfRows, values.NumberOfColumns);
+
+            for (int i = 0; i < numberOfColumns; i++)
+            {
+                var columnValues = values.GetColumn(i);
+
+                result.SetColumn(i, NormalizeUsingZScore(columnValues));
+            }
+
+            return result;
+        }
+
+        public static double[] NormalizeUsingZScore(double[] values)
+        {
+            if (values.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            double[] result = new double[values.Length];
+
+            values.CopyTo(result, 0);
+
+            var mean = IRI.Msh.Statistics.Statistics.CalculateMean(values);
+
+            var std = IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(values);
+
+            // 1399.12.12
+            // to prevent divide by zero
+            if (std > 0)
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    result[i] = (values[i] - mean) / std;
+                }
+            }
+
+            return result;
         }
 
         //// nabla

@@ -21,6 +21,8 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
         }
 
+
+
         public void Learn(Matrix xValues, double[] yValues)
         {
             // x: n*p
@@ -36,24 +38,42 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
             // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
-
             xValues.InsertColumn(0, ones);
+
+            // نرمال کردن داده‌ها
+            xValues = Sigmoid.NormalizeUsingZScore(xValues);
 
             while (iteration < _maxIteration)
             {
                 double[] yPredicted = new double[numberOfRow];
 
+                double[] grad = new double[beta.Length];
+
                 for (int i = 0; i < numberOfRow; i++)
                 {
-                    yPredicted[i] = Sigmoid.CalculateLogisticFunction(xValues.GetRow(i), beta);
+                    var row = xValues.GetRow(i);
 
-                    //var error = 
+                    yPredicted[i] = Sigmoid.CalculateLogisticFunction(row, beta);
+
+                    var error = yPredicted[i] - yValues[i];
+
+                    for (int xi = 0; xi < row.Length; xi++)
+                    {
+                        grad[xi] += error * row[xi];
+                    }
                 }
 
-                var loss = Sigmoid.CalculateLossByGradientDescent(yValues, yPredicted);
+                for (int i = 0; i < grad.Length; i++)
+                {
+                    grad[i] = 1.0 / beta.Length * grad[i];
+                }
 
-                // Calculate the gradient
+                //var loss = Sigmoid.CalculateLossByGradientDescent(yValues, yPredicted);
 
+                for (int i = 0; i < beta.Length; i++)
+                {
+                    beta[i] = beta[i] - _learningRate * grad[i];
+                }
             }
 
         }
