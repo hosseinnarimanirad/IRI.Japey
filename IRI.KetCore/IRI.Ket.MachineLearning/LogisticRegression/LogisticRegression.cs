@@ -16,6 +16,10 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
         private readonly int _maxIteration = 5000;
 
+        private double[] beta;
+
+        public double[] Beta { get { return beta; } }
+
         public LogisticRegression()
         {
 
@@ -29,52 +33,64 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
             // y: n*1
 
             var numberOfRow = xValues.NumberOfRows;
-            var numberOfParameters = xValues.NumberOfColumns;
+            var numberOfParameters = xValues.NumberOfColumns + 1;
 
             int iteration = 0;
 
+            // *******************************************************
             // تخمین اولیه از ضرایب چند جمله‌ای
-            double[] beta = Enumerable.Range(1, numberOfParameters + 1).Select(i => (double)i).ToArray();
+            // *******************************************************
+            beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)i).ToArray();
 
+
+            // *******************************************************
+            // پیش پردازش داده
             // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
+            // *******************************************************
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
             xValues.InsertColumn(0, ones);
 
+
+            // *******************************************************
+            // پیش پردازش داده
             // نرمال کردن داده‌ها
+            // *******************************************************
             xValues = Sigmoid.NormalizeUsingZScore(xValues);
 
             while (iteration < _maxIteration)
             {
                 double[] yPredicted = new double[numberOfRow];
 
-                double[] grad = new double[beta.Length];
+                double[] grad = new double[numberOfParameters];
 
                 for (int i = 0; i < numberOfRow; i++)
                 {
-                    var row = xValues.GetRow(i);
+                    var xs = xValues.GetRow(i);
 
-                    yPredicted[i] = Sigmoid.CalculateLogisticFunction(row, beta);
+                    yPredicted[i] = Sigmoid.CalculateLogisticFunction(xs, beta);
 
+                    // sigma [(yPredicate-y)*x]
                     var error = yPredicted[i] - yValues[i];
 
-                    for (int xi = 0; xi < row.Length; xi++)
+                    for (int xi = 0; xi < xs.Length; xi++)
                     {
-                        grad[xi] += error * row[xi];
+                        grad[xi] += error * xs[xi];
                     }
                 }
 
-                for (int i = 0; i < grad.Length; i++)
+                for (int i = 0; i < numberOfParameters; i++)
                 {
                     grad[i] = 1.0 / beta.Length * grad[i];
+
+                    beta[i] = beta[i] - _learningRate * grad[i];
                 }
 
                 //var loss = Sigmoid.CalculateLossByGradientDescent(yValues, yPredicted);
-
-                for (int i = 0; i < beta.Length; i++)
-                {
-                    beta[i] = beta[i] - _learningRate * grad[i];
-                }
+                  
+                iteration++;
             }
+
+            System.Diagnostics.Debug.WriteLine(string.Join(",", beta));
 
         }
     }
