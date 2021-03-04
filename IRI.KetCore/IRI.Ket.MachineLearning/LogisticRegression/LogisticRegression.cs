@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Ket.MachineLearning.Common;
+using IRI.Msh.Algebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,17 +46,17 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
             // *******************************************************
             // پیش پردازش داده
+            // نرمال کردن داده‌ها
+            // *******************************************************
+            xValues = Normalization.NormalizeColumnsUsingZScore(xValues);
+
+            // *******************************************************
+            // پیش پردازش داده
             // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
             // *******************************************************
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
             xValues.InsertColumn(0, ones);
 
-
-            // *******************************************************
-            // پیش پردازش داده
-            // نرمال کردن داده‌ها
-            // *******************************************************
-            xValues = Sigmoid.NormalizeUsingZScore(xValues);
 
             while (iteration < _maxIteration)
             {
