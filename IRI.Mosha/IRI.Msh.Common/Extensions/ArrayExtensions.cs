@@ -18,5 +18,23 @@ namespace IRI.Msh.Common.Extensions
 
             return dest;
         }
+
+        public static double? DotProduct(this double[] first, double[] second)
+        {
+            if (first == null || second == null)
+                return null;
+
+            if (first.Length != second.Length)
+                throw new NotImplementedException("ArrayExtensions > Multiply");
+
+            double? result = 0;
+
+            for (int i = 0; i < first.Length; i++)
+            {
+                result += first[i] * second[i];
+            }
+
+            return result;
+        }
     }
 }

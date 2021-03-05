@@ -1541,6 +1541,13 @@ namespace IRI.Msh.Algebra
 
         public static bool operator ==(Matrix matrix1, Matrix matrix2)
         {
+            if (object.ReferenceEquals(matrix1, null) && object.ReferenceEquals(matrix2, null))
+                return true;
+
+            if (object.ReferenceEquals(matrix1, null) || object.ReferenceEquals(matrix2, null))
+                return false;
+
+
             int row1 = matrix1.NumberOfRows;
 
             int column1 = matrix1.NumberOfColumns;

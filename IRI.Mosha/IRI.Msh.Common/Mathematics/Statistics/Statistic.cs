@@ -139,7 +139,7 @@ namespace IRI.Msh.Statistics
             return resultVlaue;
 
         }
-         
+
         public static double GetMin(List<double> values)
         {
             if (values.Count <= 0)
@@ -346,7 +346,7 @@ namespace IRI.Msh.Statistics
                 result += (item - mean) * (item - mean);
             }
 
-            return result / values.Length;
+            return result / (values.Length - 1);
         }
 
         public static double CalculateVariance(List<double> values)
