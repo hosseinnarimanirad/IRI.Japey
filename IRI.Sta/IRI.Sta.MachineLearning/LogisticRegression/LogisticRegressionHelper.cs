@@ -1,23 +1,17 @@
-﻿using IRI.Msh.Algebra;
-using IRI.Msh.Common.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Ket.MachineLearning.LogisticRegression
 {
-    public class Sigmoid
+    public static class LogisticRegressionHelper
     {
         // logit function
         // f(x) = b_0 + b_1 * x_1 + b_2 * x_2 + … + b_n * x_n
         public static double? CalculateLogit(double[] x, double[] weights)
         {
             return x.DotProduct(weights);
-        }
-
-        public static double CalculateSigmoid(double zValue)
-        {
-            return 1.0 / (1.0 + Math.Exp(-zValue));
         }
 
         // باید دقت داشت که اولین مقدار ایکس
@@ -31,10 +25,10 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
             if (zValue == null)
             {
-                throw new NotImplementedException("Sigmoid > CalculateLogisticFunction");
+                throw new NotImplementedException("LogisticRegressionHelper > CalculateLogisticFunction");
             }
 
-            return CalculateSigmoid(zValue.Value);
+            return Sigmoid.CalculateSigmoid(zValue.Value);
         }
 
         public static double CalculateNegLogLikelihood(double y, double yPredicted)
@@ -68,7 +62,7 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
         {
             if (y.Length != yPredicted.Length)
             {
-                throw new NotImplementedException("Sigmoid > ErrorFunctionByGradientDescent");
+                throw new NotImplementedException("LogisticRegressionHelper > CalculateLossByGradientDescent");
             }
 
             var length = y.Length;
@@ -82,37 +76,5 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
             return 1.0 / length * sum;
         }
-
-
-        //// nabla
-        //// nabla or gradient for log-likelihood
-        //public static double CalculateGradient(double[][] x, double[] y)
-        //{
-        //    double result = 0;
-
-        //    for (int i = 0; i < y.Length; i++)
-        //    {
-
-        //    }
-        //}
-
-
-        //public static double Cal(double[][] x, double[] y, double[] beta)
-        //{
-        //    double[] beta = new double[x[0].Length + 1];
-
-        //    double[] result = new double[y.Length];
-
-        //    for (int i = 0; i < y.Length; i++)
-        //    {
-
-        //        for (int j = 0; j < x[0].Length; j++)
-        //        {
-
-        //        }
-        //        x[i] * (1 / (1 + CalculateSigmoid(x[i], beta)))
-        //    }
-        //}
-
     }
 }

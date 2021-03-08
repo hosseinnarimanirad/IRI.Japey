@@ -17,7 +17,7 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
         private readonly int _maxIteration = 5000;
 
-        private double[] beta;
+        private double[] beta = null;
 
         public double[] Beta { get { return beta; } }
 
@@ -26,9 +26,7 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
         }
 
-
-
-        public void Learn(Matrix xValues, double[] yValues)
+        public void Fit(Matrix xValues, double[] yValues)
         {
             // x: n*p
             // y: n*1
@@ -68,7 +66,7 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
                 {
                     var xs = xValues.GetRow(i);
 
-                    yPredicted[i] = Sigmoid.CalculateLogisticFunction(xs, beta);
+                    yPredicted[i] = LogisticRegressionHelper.CalculateLogisticFunction(xs, beta);
 
                     // sigma [(yPredicate-y)*x]
                     var error = yPredicted[i] - yValues[i];
@@ -87,12 +85,20 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
                 }
 
                 //var loss = Sigmoid.CalculateLossByGradientDescent(yValues, yPredicted);
-                  
+
                 iteration++;
             }
 
             System.Diagnostics.Debug.WriteLine(string.Join(",", beta));
 
+        }
+
+        public double? Predict(double[] xValues)
+        {
+            if (beta == null)
+                return null;
+
+            return LogisticRegressionHelper.CalculateLogisticFunction(xValues, Beta);
         }
     }
 }

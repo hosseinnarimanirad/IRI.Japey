@@ -17,7 +17,7 @@ namespace IRI.Ket.MachineLearning
         {
             this.SortedTuple = tuple.OrderBy(i => i).ToList();
 
-            this.Signature = string.Join(',', SortedTuple);
+            this.Signature = string.Join(",", SortedTuple);
 
             this.Frequency = frequency;
         }
