@@ -63,47 +63,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\HardwareHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Model\GeoTaggedImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\Google\GoogleMapsGeolocation.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AuthenticationMethod.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\AvailableNetworkPack.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssNetworkPack.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\BssType.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Common\DisposableContainer.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\EncryptionType.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceInfo.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceRadio.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\InterfaceState.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NativeWifi.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NativeWifiPlayer.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\NetworkIdentifier.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\PhyType.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfileDocument.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfilePack.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\ProfileType.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\RadioSet.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\BaseMethod.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\NativeMethod.cs" />
-    <Compile Include="ThirdPartyLibraries\ManagedNativeWifi\Win32\SafeClientHandle.cs" />
     <Compile Include="Worldfile\WorldfileManager.cs" />
     <Compile Include="Worldfile\WorldfilePyramid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="ThirdPartyLibraries\ManagedNativeWifi\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
       <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
       <Name>IRI.Sta.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ThirdPartyLibraries\ManagedNativeWifi\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

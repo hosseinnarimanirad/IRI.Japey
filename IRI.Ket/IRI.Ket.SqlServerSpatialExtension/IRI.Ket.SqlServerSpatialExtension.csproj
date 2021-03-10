@@ -112,9 +112,9 @@
       <Project>{a9c79ad2-04b7-4c06-a8fa-8681d4cd2b73}</Project>
       <Name>IRI.Sta.DataStructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
-      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
-      <Name>IRI.Ket.ShapefileFormat</Name>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj">
+      <Project>{6f59ffd4-c888-4b6f-9d2c-94396693d84e}</Project>
+      <Name>IRI.Sta.ShapefileFormat</Name>
     </ProjectReference>
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
       <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>

@@ -1,12 +1,7 @@
-﻿using IRI.Msh.CoordinateSystem;
-using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Model
 {

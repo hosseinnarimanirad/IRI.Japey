@@ -124,13 +124,13 @@
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
-      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
-      <Name>IRI.Ket.ShapefileFormat</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
       <Project>{1ED088E6-1806-4D77-9143-2221DCBCF8F1}</Project>
       <Name>IRI.Sta.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj">
+      <Project>{6f59ffd4-c888-4b6f-9d2c-94396693d84e}</Project>
+      <Name>IRI.Sta.ShapefileFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -105,13 +105,9 @@
       <Project>{a9c79ad2-04b7-4c06-a8fa-8681d4cd2b73}</Project>
       <Name>IRI.Sta.DataStructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
-      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
-      <Name>IRI.Ket.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket.Geometry\IRI.Ket.Geometry.csproj">
-      <Project>{1c455c56-2478-40c0-b505-153ce88ff68a}</Project>
-      <Name>IRI.Ket.Geometry</Name>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Geometry\IRI.Sta.Geometry.csproj">
+      <Project>{4ecd0ac7-7b8d-4b31-b162-d30e53bb5292}</Project>
+      <Name>IRI.Sta.Geometry</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

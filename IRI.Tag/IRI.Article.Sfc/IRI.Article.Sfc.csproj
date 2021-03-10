@@ -148,14 +148,6 @@
       <Project>{98988731-ea12-40d8-9071-208b975cddfc}</Project>
       <Name>IRI.Ket.DataManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Geometry\IRI.Ket.Geometry.csproj">
-      <Project>{1C455C56-2478-40C0-B505-153CE88FF68A}</Project>
-      <Name>IRI.Ket.Geometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Spatial\IRI.Ket.Spatial.csproj">
-      <Project>{33a18f35-0320-4fa9-b3c2-69f9ce337688}</Project>
-      <Name>IRI.Ket.Spatial</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj">
       <Project>{1ed088e6-1806-4d77-9143-2221dcbcf8f1}</Project>
       <Name>IRI.Sta.Common</Name>
@@ -163,6 +155,14 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj">
       <Project>{a9c79ad2-04b7-4c06-a8fa-8681d4cd2b73}</Project>
       <Name>IRI.Sta.DataStructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Geometry\IRI.Sta.Geometry.csproj">
+      <Project>{4ecd0ac7-7b8d-4b31-b162-d30e53bb5292}</Project>
+      <Name>IRI.Sta.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj">
+      <Project>{7464cdbd-aff9-4924-abb8-b4b8d4485925}</Project>
+      <Name>IRI.Sta.Spatial</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

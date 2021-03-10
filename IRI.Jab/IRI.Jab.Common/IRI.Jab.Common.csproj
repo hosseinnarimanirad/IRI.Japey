@@ -565,10 +565,6 @@
       <Project>{0662A1B4-12DE-4E31-8BD3-DB61BAAF7D8D}</Project>
       <Name>IRI.Ket.DigitalImageProcessing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.ShapefileFormat\IRI.Ket.ShapefileFormat.csproj">
-      <Project>{bda8cb8c-3871-4565-a766-8c3f641074eb}</Project>
-      <Name>IRI.Ket.ShapefileFormat</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj">
       <Project>{032a00ae-a479-4b2d-8133-5094e323f5f4}</Project>
       <Name>IRI.Ket.SqlServerSpatialExtension</Name>
@@ -580,6 +576,10 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.OfficeFormat\IRI.Sta.OfficeFormat.csproj">
       <Project>{cacf5d21-e377-4eed-985a-34dfa34e7bc0}</Project>
       <Name>IRI.Sta.OfficeFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj">
+      <Project>{6f59ffd4-c888-4b6f-9d2c-94396693d84e}</Project>
+      <Name>IRI.Sta.ShapefileFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,6 @@
 ﻿using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Model;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Text;
 
 namespace IRI.Ket.WorldfileFormat
