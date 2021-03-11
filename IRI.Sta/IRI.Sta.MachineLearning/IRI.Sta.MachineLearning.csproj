@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Db\" />
+    <Folder Include="Spatial\" />
   </ItemGroup>
 
 </Project>

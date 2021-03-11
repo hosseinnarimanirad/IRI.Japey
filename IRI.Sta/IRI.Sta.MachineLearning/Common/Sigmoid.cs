@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.MachineLearning.LogisticRegression
+namespace IRI.Ket.MachineLearning
 {
     public class Sigmoid
     {

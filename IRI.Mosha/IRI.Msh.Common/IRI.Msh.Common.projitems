@@ -113,10 +113,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ChiSquare.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Discretization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\AttributeGroup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\BasicStatisticsInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\ClassFrequency.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\IntervalInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistic.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ZeroSizeArrayException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\StatisticsSummary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exception\ZeroSizeArrayException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Bing\BingIsolineResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Enum\EnumInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Esri\EsriFeature.cs" />
@@ -202,5 +203,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
   </ItemGroup>
 </Project>

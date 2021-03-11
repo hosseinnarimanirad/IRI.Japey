@@ -106,24 +106,24 @@ namespace IRI.Jab.Common.Presenter
 
         public async Task<bool?> RequestYesNoDialog<T>(string message, string title)
         {
-            return await DialogService?.ShowYesNoDialog<T>(message, title);
+            return await DialogService?.ShowYesNoDialogAsync<T>(message, title);
         }
 
         public async Task<bool?> RequestYesNoDialog(object owner, string message, string title)
         {
-            return await DialogService?.ShowYesNoDialog(message, title, owner);
+            return await DialogService?.ShowYesNoDialogAsync(message, title, owner);
         }
 
         //public Action<string> RequestShowMessage;
 
         public async Task ShowMessage<T>(string message, string title = null)
         {
-            await DialogService?.ShowMessage<T>(message, null, title);
+            await DialogService?.ShowMessageAsync<T>(message, null, title);
         }
 
         public async Task ShowMessageAsync(object owner, string message, string title = null)
         {
-            await DialogService?.ShowMessage(null, message, title, owner);
+            await DialogService?.ShowMessageAsync(null, message, title, owner);
             //this.RequestShowMessage?.Invoke(message);
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using IRI.Msh.Common.Extensions;
 
-namespace IRI.Ket.MachineLearning.LogisticRegression
+namespace IRI.Ket.MachineLearning.Regressions
 {
     public static class LogisticRegressionHelper
     {

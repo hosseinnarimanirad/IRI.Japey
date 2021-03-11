@@ -18,6 +18,8 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
+        #region Area
+
         //1399.06.11
         //در این جا فرض شده که نقطه اخر چند حلقه تکرار 
         //نشده
@@ -49,7 +51,6 @@ namespace IRI.Msh.Common.Analysis
             return Math.Abs(area / 2.0);
         }
 
-
         /// <summary>
         /// Calculate unsigned Euclidean area for triangle
         /// </summary>
@@ -62,7 +63,6 @@ namespace IRI.Msh.Common.Analysis
             return Math.Abs(CalculateSignedTriangleArea(firstPoint, middlePoint, lastPoint));
         }
 
-
         /// <summary>
         /// Calculate signed Euclidean area for triangle
         /// </summary>
@@ -74,6 +74,11 @@ namespace IRI.Msh.Common.Analysis
         {
             return (firstPoint.X * (middlePoint.Y - lastPoint.Y) + middlePoint.X * (lastPoint.Y - firstPoint.Y) + lastPoint.X * (firstPoint.Y - middlePoint.Y)) / 2.0;
         }
+
+        #endregion
+
+
+        #region Primitive Area
 
         //1399.06.11
         //مساحت مثلت‌های تشکیل دهنده یک خط یا 
@@ -150,25 +155,30 @@ namespace IRI.Msh.Common.Analysis
             return geometries.SelectMany(g => GetPrimitiveAreas(g)).ToList();
         }
 
+        #endregion
+
+
+        #region Angle
+
         //In radian
-        public static double GetAngle(IPoint p1, IPoint p2, IPoint p3)
+        public static double GetAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
-            return Math.Acos(GetCosineOfAngle(p1, p2, p3));
+            return Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
         }
 
-        public static double GetCosineOfAngle(IPoint p1, IPoint p2, IPoint p3)
+        public static double GetCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
-            if (p1.Equals(p2) || p2.Equals(p3))
+            if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
             {
                 return 1;
             }
 
             //cos(theta) = (A.B)/(|A|*|B|)
-            var ax = p3.X - p2.X;
-            var ay = p3.Y - p2.Y;
+            var ax = lastPoint.X - middlePoint.X;
+            var ay = lastPoint.Y - middlePoint.Y;
 
-            var bx = p1.X - p2.X;
-            var by = p1.Y - p2.Y;
+            var bx = firstPoint.X - middlePoint.X;
+            var by = firstPoint.Y - middlePoint.Y;
 
             var dotProduct = ax * bx + ay * by;
 
@@ -197,25 +207,6 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        private static double CalculateDotProduct(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
-        {
-            if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
-            {
-                return 1;
-            }
-
-            //cos(theta) = (A.B)/(|A|*|B|)
-            var ax = lastPoint.X - middlePoint.X;
-            var ay = lastPoint.Y - middlePoint.Y;
-
-            var bx = middlePoint.X - firstPoint.X;
-            var by = middlePoint.Y - firstPoint.Y;
-
-            var dotProduct = ax * bx + ay * by;
-
-            return dotProduct;
-        }
-
         public static double CalculateSemiCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
@@ -232,6 +223,7 @@ namespace IRI.Msh.Common.Analysis
 
             var dotProduct = ax * bx + ay * by;
 
+
             //result: cos(theta)^2
             var result = dotProduct * dotProduct / ((ax * ax + ay * ay) * (bx * bx + by * by));
 
@@ -242,8 +234,30 @@ namespace IRI.Msh.Common.Analysis
 
             return dotProduct < 0 ? -1 * result : result;
         }
+         
+        #endregion
+
+        //private static double CalculateDotProduct(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        //{
+        //    if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
+        //    {
+        //        return 1;
+        //    }
+
+        //    //cos(theta) = (A.B)/(|A|*|B|)
+        //    var ax = lastPoint.X - middlePoint.X;
+        //    var ay = lastPoint.Y - middlePoint.Y;
+
+        //    var bx = middlePoint.X - firstPoint.X;
+        //    var by = middlePoint.Y - firstPoint.Y;
+
+        //    var dotProduct = ax * bx + ay * by;
+
+        //    return dotProduct;
+        //}
 
 
+        #region Rotation
 
         /// <summary>
         /// Checks if sequence of points are clockwise or not
@@ -283,7 +297,10 @@ namespace IRI.Msh.Common.Analysis
             return values.Sum() > 0;
         }
 
+        #endregion
 
+
+        #region Circle-Rectangle Topology
 
         public static bool CircleRectangleIntersects(IPoint circleCenter, double circleRadius, BoundingBox axisAlignedRectangle)
         {
@@ -376,7 +393,10 @@ namespace IRI.Msh.Common.Analysis
             }
         }
 
+        #endregion
 
+
+        #region Point-Line 
 
         public static double PointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
@@ -417,6 +437,8 @@ namespace IRI.Msh.Common.Analysis
                     /
                     (dySegment * dySegment + dxSegment * dxSegment);
         }
+
+        #endregion
 
 
         //

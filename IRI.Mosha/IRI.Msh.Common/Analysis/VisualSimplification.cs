@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace IRI.Msh.Common.Analysis
 {
-    public class VisualSimplification
+    public static class VisualSimplification
     {
         public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
         {

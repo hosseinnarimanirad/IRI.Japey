@@ -22,6 +22,13 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #region Open File Dialog
 
+        public string ShowOpenFileDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowOpenFileDialog(filter, owner);
+        }
+
         public string ShowOpenFileDialog(string filter, object ownerWindow)
         {
             OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
@@ -50,14 +57,63 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
-        public string ShowOpenFileDialog<T>(string filter)
+
+        // Async
+        public Task<string> ShowOpenFileDialogAsync<T>(string filter)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowOpenFileDialog(filter, owner);
+            return ShowOpenFileDialogAsync(filter, owner);
         }
-          
 
+        public Task<string> ShowOpenFileDialogAsync(string filter, object ownerWindow)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
+
+            Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                defaultEffect = owner.Effect;
+
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
+            }
+
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                var dialogResult = dialog.ShowDialog(owner);
+
+                if (owner != null)
+                {
+                    owner.Effect = defaultEffect;
+                }
+
+                if (dialogResult == true)
+                    tcs.SetResult(dialog.FileName);
+                else
+                {
+                    tcs.SetResult(null);
+                }
+            }));
+
+            return tcs.Task;
+        }
+
+        #endregion
+
+
+        #region Open Files Dialog
+
+        public string[] ShowOpenFilesDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowOpenFilesDialog(filter, owner);
+        }
 
         public string[] ShowOpenFilesDialog(string filter, object ownerWindow)
         {
@@ -87,17 +143,62 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
-        public string[] ShowOpenFilesDialog<T>(string filter)
+        // Async
+        public Task<string[]> ShowOpenFilesDialogAsync<T>(string filter)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowOpenFilesDialog(filter, owner);
+            return ShowOpenFilesDialogAsync(filter, owner);
         }
-         
+
+        public Task<string[]> ShowOpenFilesDialogAsync(string filter, object ownerWindow)
+        {
+            var tcs = new TaskCompletionSource<string[]>();
+
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
+
+            Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                defaultEffect = owner.Effect;
+
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
+            }
+
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                var dialogResult = dialog.ShowDialog(owner);
+
+                if (owner != null)
+                {
+                    owner.Effect = defaultEffect;
+                }
+
+                if (dialogResult == true)
+                    tcs.SetResult(dialog.FileNames);
+                else
+                {
+                    tcs.SetResult(null);
+                }
+            }));
+
+            return tcs.Task;
+        }
+
         #endregion
 
 
         #region Save File Dialog
+
+        public string ShowSaveFileDialog<T>(string filter)
+        {
+            var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
+
+            return ShowSaveFileDialog(filter, owner);
+        }
 
         public string ShowSaveFileDialog(string filter, object ownerWindow)
         {
@@ -127,26 +228,69 @@ namespace IRI.Jab.Controls.Services.Dialog
             return result;
         }
 
-        public string ShowSaveFileDialog<T>(string filter)
+        // Async version
+        public Task<string> ShowSaveFileDialogAsync<T>(string filter)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowSaveFileDialog(filter, owner);
+            return ShowSaveFileDialogAsync(filter, owner);
         }
-         
+
+        // 1399.12.20
+        // making an async saveFileDialg
+        // good article: https://sriramsakthivel.wordpress.com/2015/04/19/asynchronous-showdialog/
+        public Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
+             
+            Effect defaultEffect = null;
+
+            var owner = ownerWindow as Window;
+
+            if (owner != null)
+            {
+                defaultEffect = owner.Effect;
+
+                owner.Effect = new BlurEffect() { Radius = BlurRadius };
+            }
+
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                var dialogResult = dialog.ShowDialog(owner);
+
+                if (owner != null)
+                {
+                    owner.Effect = defaultEffect;
+                }
+
+                if (dialogResult == true)
+                    tcs.SetResult(dialog.FileName);
+                else
+                {
+                    tcs.SetResult(null);
+                }
+            }));
+
+            return tcs.Task;
+        }
 
         #endregion
 
-        public Task<bool?> ShowYesNoDialog<T>(string message, string title)
+
+        #region Yes No Dialog
+         
+        public Task<bool?> ShowYesNoDialogAsync<T>(string message, string title)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowYesNoDialog(message, title, owner);
+            return ShowYesNoDialogAsync(message, title, owner);
         }
 
-        public Task<bool?> ShowYesNoDialog(string message, string title, object ownerWindow)
+        public Task<bool?> ShowYesNoDialogAsync(string message, string title, object ownerWindow)
         {
-            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
+            var tcs = new TaskCompletionSource<bool?>();
 
             IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
             {
@@ -189,16 +333,21 @@ namespace IRI.Jab.Controls.Services.Dialog
             return tcs.Task;
         }
 
-        public Task ShowMessage<T>(string message, string pathMarkup, string title = null)
+        #endregion
+
+
+        #region Show Message
+         
+        public Task ShowMessageAsync<T>(string message, string pathMarkup, string title = null)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowMessage(pathMarkup, message, title, owner);
+            return ShowMessageAsync(pathMarkup, message, title, owner);
         }
 
-        public Task ShowMessage(string pathMarkup, string message, string title, object ownerWindow)
+        public Task ShowMessageAsync(string pathMarkup, string message, string title, object ownerWindow)
         {
-            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
+            var tcs = new TaskCompletionSource<bool?>();
 
             IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
             {
@@ -245,17 +394,21 @@ namespace IRI.Jab.Controls.Services.Dialog
             return tcs.Task;
         }
 
+        #endregion
 
-        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>()
+
+        #region Show UserName SignUp Dialog
+         
+        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialogAsync<T>()
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowUserNameSignUpDialog(owner);
+            return ShowUserNameSignUpDialogAsync(owner);
         }
 
-        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow)
+        public Task<SignUpDialogViewModel> ShowUserNameSignUpDialogAsync(object ownerWindow)
         {
-            TaskCompletionSource<SignUpDialogViewModel> tcs = new TaskCompletionSource<SignUpDialogViewModel>();
+            var tcs = new TaskCompletionSource<SignUpDialogViewModel>();
 
             View.Dialogs.UserNameSignUpDialogView dialog = new View.Dialogs.UserNameSignUpDialogView();
 
@@ -310,6 +463,8 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             return tcs.Task;
         }
+
+        #endregion
 
 
         #region Change Password Dialog
@@ -405,7 +560,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public Task<ChangePasswordDialogViewModel> ShowChangePasswordDialog(object ownerWindow, ChangePasswordDialogViewModel viewModel)
         {
-            TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
+            var tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
             View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
 
@@ -456,16 +611,16 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #endregion
 
-        public Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel)
+        public Task<bool?> ShowDialgAsync<TParent>(Window view, DialogViewModelBase viewModel)
         {
             var owner = Application.Current.Windows.OfType<TParent>().FirstOrDefault() as Window;
 
-            return ShowDialog<TParent>(owner, view, viewModel);
+            return ShowDialogAsync<TParent>(owner, view, viewModel);
         }
 
-        public Task<bool?> ShowDialog<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel)
+        public Task<bool?> ShowDialogAsync<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel)
         {
-            TaskCompletionSource<bool?> tcs = new TaskCompletionSource<bool?>();
+            var tcs = new TaskCompletionSource<bool?>();
 
             var owner = ownerWindow as Window;
 

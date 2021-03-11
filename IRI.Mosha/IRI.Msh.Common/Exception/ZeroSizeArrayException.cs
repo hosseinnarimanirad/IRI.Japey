@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace IRI.Msh.Statistics
+namespace IRI.Msh.Exceptions
 {
     [DataContract]
     public class ZeroSizeArrayException : Exception
@@ -13,6 +13,6 @@ namespace IRI.Msh.Statistics
         public ZeroSizeArrayException() : base("Array size is zero") { }
         public ZeroSizeArrayException(string message) : base(message) { }
         public ZeroSizeArrayException(string message, Exception inner) : base(message, inner) { }
-    
+
     }
 }

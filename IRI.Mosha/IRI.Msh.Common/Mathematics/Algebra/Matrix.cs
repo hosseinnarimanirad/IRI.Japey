@@ -5,6 +5,8 @@ using System;
 using System.Text;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
+using IRI.Msh.Statistics.Model;
 
 namespace IRI.Msh.Algebra
 {
@@ -1578,6 +1580,22 @@ namespace IRI.Msh.Algebra
         public static bool operator !=(Matrix matrix1, Matrix matrix2)
         {
             return !(matrix1 == matrix2);
+        }
+
+        #endregion
+
+        #region Statistics
+
+        public List<BasicStatisticsInfo> GetStatisticsByColumns()
+        {
+            List<BasicStatisticsInfo> result = new List<BasicStatisticsInfo>();
+
+            for (int i = 0; i < NumberOfColumns; i++)
+            {
+                result.Add(new BasicStatisticsInfo(this.GetColumn(i)));
+            }
+
+            return result;
         }
 
         #endregion

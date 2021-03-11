@@ -63,6 +63,15 @@ namespace IRI.Ket.MachineLearning.Common
             return result;
         }
 
+        public static double NormalizeUsingZScore(double value, double mean, double standardDeviation)
+        {
+            // 1399.12.12
+            // to prevent divide by zero
+            if (standardDeviation == 0)
+                standardDeviation = 1;
+
+            return (value - mean) / standardDeviation;
+        }
 
         // **********************************************************************
         // It is also called 0-1 scaling because the standardized 

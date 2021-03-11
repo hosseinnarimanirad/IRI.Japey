@@ -11,34 +11,57 @@ namespace IRI.Jab.Common.Service.Dialog
 {
     public interface IDialogService
     {
-        string[] ShowOpenFilesDialog<T>(string filter);
-
-        string[] ShowOpenFilesDialog(string filter, object owner);
-
-
+        // ********************************************************************
+        //                          Open File Dialog
+        // ********************************************************************
         string ShowOpenFileDialog<T>(string filter);
-
         string ShowOpenFileDialog(string filter, object owner);
 
+        Task<string> ShowOpenFileDialogAsync<T>(string filter);
+        Task<string> ShowOpenFileDialogAsync(string filter, object ownerWindow);
 
+
+        // ********************************************************************
+        //                          Open Files Dialog
+        // ********************************************************************
+        string[] ShowOpenFilesDialog<T>(string filter);
+        string[] ShowOpenFilesDialog(string filter, object owner);
+
+        Task<string[]> ShowOpenFilesDialogAsync<T>(string filter);
+        Task<string[]> ShowOpenFilesDialogAsync(string filter, object ownerWindow);
+
+
+        // ********************************************************************
+        //                          Save File Dialog
+        // ********************************************************************
         string ShowSaveFileDialog<T>(string filter);
-
         string ShowSaveFileDialog(string filter, object owner);
 
-
-        Task<bool?> ShowYesNoDialog<T>(string message, string title = null);
-
-        Task<bool?> ShowYesNoDialog(string message, string title, object owner);
+        Task<string> ShowSaveFileDialogAsync<T>(string filter);
+        Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow);
 
 
-        Task ShowMessage<T>(string message, string pathMarkup, string title);
+        // ********************************************************************
+        //                          Yes/No Dialog
+        // ********************************************************************
+        Task<bool?> ShowYesNoDialogAsync<T>(string message, string title = null);
+        Task<bool?> ShowYesNoDialogAsync(string message, string title, object owner);
 
-        Task ShowMessage(string pathMarkup, string message, string title, object ownerWindow);
+
+        // ********************************************************************
+        //                          Message Dialog
+        // ********************************************************************
+        Task ShowMessageAsync<T>(string message, string pathMarkup, string title);
+
+        Task ShowMessageAsync(string pathMarkup, string message, string title, object ownerWindow);
 
 
-        Task<SignUpDialogViewModel> ShowUserNameSignUpDialog<T>();
+        // ********************************************************************
+        //                          SignUp Dialog
+        // ********************************************************************
+        Task<SignUpDialogViewModel> ShowUserNameSignUpDialogAsync<T>();
 
-        Task<SignUpDialogViewModel> ShowUserNameSignUpDialog(object ownerWindow);
+        Task<SignUpDialogViewModel> ShowUserNameSignUpDialogAsync(object ownerWindow);
 
 
         #region Change Password Dialog
@@ -55,9 +78,13 @@ namespace IRI.Jab.Common.Service.Dialog
 
         #endregion
 
-        Task<bool?> ShowDialg<TParent>(Window view, DialogViewModelBase viewModel);
 
-        Task<bool?> ShowDialog<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel);
+        // ********************************************************************
+        //                          Show Dialog
+        // ********************************************************************
+        Task<bool?> ShowDialgAsync<TParent>(Window view, DialogViewModelBase viewModel);
+
+        Task<bool?> ShowDialogAsync<TParent>(object ownerWindow, Window view, DialogViewModelBase viewModel);
 
     }
 }

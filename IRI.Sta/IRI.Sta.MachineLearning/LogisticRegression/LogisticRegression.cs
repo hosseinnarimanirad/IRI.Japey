@@ -1,11 +1,12 @@
 ﻿using IRI.Ket.MachineLearning.Common;
 using IRI.Msh.Algebra;
+using IRI.Msh.Statistics.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.MachineLearning.LogisticRegression
+namespace IRI.Ket.MachineLearning.Regressions
 {
 
     // David Cox in 1958
@@ -19,11 +20,23 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
 
         private double[] beta = null;
 
+        // پارامترهای ضرایب
         public double[] Beta { get { return beta; } }
+
+
+        // Mean and standard deviation of xs
+        public List<BasicStatisticsInfo> xStatistics { get; set; }
 
         public LogisticRegression()
         {
 
+        }
+
+        public LogisticRegression(double[] beta, List<BasicStatisticsInfo> xStatistics)
+        {
+            this.beta = beta;
+
+            this.xStatistics = xStatistics;
         }
 
         public void Fit(Matrix xValues, double[] yValues)
@@ -41,6 +54,13 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
             // *******************************************************
             beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)i).ToArray();
 
+
+            // 1399.12.20
+            // *******************************************************
+            // ذخیره‌سازی پارامترها برای استفاده 
+            // هنگام تخمین
+            // *******************************************************
+            xStatistics = xValues.GetStatisticsByColumns();
 
             // *******************************************************
             // پیش پردازش داده
@@ -98,7 +118,30 @@ namespace IRI.Ket.MachineLearning.LogisticRegression
             if (beta == null)
                 return null;
 
+            // *******************************************************
+            // پیش پردازش داده
+            // نرمال کردن داده‌ها
+            // *******************************************************
+            for (int i = 0; i < xValues.Length; i++)
+            {
+                xValues[i] = Normalization.NormalizeUsingZScore(xValues[i], xStatistics[i].Mean, xStatistics[i].StandardDeviation);
+            }
+
             return LogisticRegressionHelper.CalculateLogisticFunction(xValues, Beta);
+        }
+
+        public void Serialize(string fileName)
+        {
+            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+
+            System.IO.File.WriteAllText(fileName, jsonString);
+        }
+
+        public static LogisticRegression Deserialize(string fileName)
+        {
+            var jsonString = System.IO.File.ReadAllText(fileName);
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticRegression>(jsonString);
         }
     }
 }

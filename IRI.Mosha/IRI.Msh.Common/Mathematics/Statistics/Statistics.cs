@@ -4,6 +4,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using IRI.Msh.Algebra;
 using System.Linq;
+using IRI.Msh.Exceptions;
 
 namespace IRI.Msh.Statistics
 {
