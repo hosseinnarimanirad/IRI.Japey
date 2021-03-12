@@ -7,7 +7,7 @@
                     xmlns:viewModel="clr-namespace:IRI.Jab.Controls.ViewModel.Dialogs"
              mc:Ignorable="d" WindowStyle="ToolWindow" d:DataContext="{d:DesignInstance Type=viewModel:DialogViewModel, IsDesignTimeCreatable=True}"
         xmlns:mahApp="http://metro.mahapps.com/winfx/xaml/controls" Title="{Binding Title}" FlowDirection="RightToLeft" ShowInTaskbar="False"
-                    GlowBrush="{Binding Source={StaticResource HighlightBrush}, TargetNullValue=Red}" ShowMaxRestoreButton="False" ShowCloseButton="False" 
+                    GlowBrush="{Binding Source={StaticResource MahApps.Brushes.Highlight}, TargetNullValue=Red}" ShowMaxRestoreButton="False" ShowCloseButton="False" 
                     ShowMinButton="False" ShowTitleBar="True"  
                     SizeToContent="WidthAndHeight" MinWidth="400" FontFamily="{StaticResource iranSans}" WindowStartupLocation="CenterOwner">
     <Grid>
@@ -37,8 +37,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Margin="4">
-            <Border BorderBrush="{DynamicResource AccentColorBrush}" Margin="10" Height="40" Width="40" BorderThickness="4" CornerRadius="20">
-                <Path Data="{Binding IconPathMarkup, TargetNullValue={StaticResource appbarInformation}}" Fill="{DynamicResource AccentColorBrush}" Width="18" Height="18"/>
+            <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent}" Margin="10" Height="40" Width="40" BorderThickness="4" CornerRadius="20">
+                <Path Data="{Binding IconPathMarkup, TargetNullValue={StaticResource appbarInformation}}" Fill="{DynamicResource MahApps.Brushes.Accent}" Width="18" Height="18"/>
             </Border>
             <TextBlock Text="{Binding Message}" Margin="4,4" VerticalAlignment="Center" MaxWidth="500" TextWrapping="Wrap"/>
         </StackPanel>

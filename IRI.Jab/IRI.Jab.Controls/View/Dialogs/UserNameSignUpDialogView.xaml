@@ -9,7 +9,7 @@
                 xmlns:iriSecurity="clr-namespace:IRI.Jab.Controls.View.Security"
                      
              Title="{Binding Title}" FlowDirection="RightToLeft" ShowInTaskbar="False"
-                    GlowBrush="{Binding Source={StaticResource HighlightBrush}, TargetNullValue=Red}" ShowMaxRestoreButton="False" ShowCloseButton="False" 
+                    GlowBrush="{Binding Source={StaticResource MahApps.Brushes.Highlight}, TargetNullValue=Red}" ShowMaxRestoreButton="False" ShowCloseButton="False" 
                     ShowMinButton="False" ShowTitleBar="True"
                     SizeToContent="WidthAndHeight" MinWidth="300" FontFamily="{StaticResource iranSans}" WindowStartupLocation="CenterOwner">
     <Grid>
@@ -55,8 +55,8 @@
             </StackPanel>
         </Border>
 
-        <Border Grid.Row="3" MinHeight="50" Background="{DynamicResource AccentColorBrush4}" BorderThickness="0,2,0,0" Opacity=".5"
-                BorderBrush="{DynamicResource AccentColorBrush3}">
+        <Border Grid.Row="3" MinHeight="50" Background="{DynamicResource MahApps.Brushes.Accent4}" BorderThickness="0,2,0,0" Opacity=".5"
+                BorderBrush="{DynamicResource MahApps.Brushes.Accent3}">
 
         </Border>
 

@@ -15,7 +15,7 @@
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                         <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
                         <Setter Property="Width" Value="30"/>
                         <Setter Property="Height" Value="30"/>
                         <Setter Property="Cursor" Value="Hand"/>
@@ -31,10 +31,10 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource AccentColorBrush}" />
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                             </Trigger>
 
                             <Trigger Property="IsEnabled" Value="False">
@@ -66,7 +66,7 @@
                     CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor} }" 
                     BorderThickness="0" Focusable="False" ToolTip="{Binding ToolTip}" Height="28" 
                     Visibility="{Binding IsCommandVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                    <Path Data="{Binding PathMarkup}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"  FlowDirection="LeftToRight"/>
+                    <Path Data="{Binding PathMarkup}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform"  FlowDirection="LeftToRight"/>
             </Button>
             <!--<Button VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding Command}" IsEnabled="{Binding IsEnabled}" 
                     BorderThickness="0" Focusable="False"  ToolTip="{Binding ToolTip}"
@@ -74,7 +74,7 @@
                 <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
             </Button>-->
             <!--<Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
-                <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>-->
         </DataTemplate>
     </UserControl.Resources>
@@ -109,15 +109,15 @@
                 </TextBlock.Text>
             </TextBlock>
             <Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
-                <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
             <Button Command="{Binding EditCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4" IsEnabled="{Binding IsSingleValueHighlighted}"
                     Visibility="{Binding ElementName=root, Path=CanUserEditGeometry, Converter={StaticResource boolToVisibilityConverter}}">
-                <Path Data="{StaticResource appbarEdit}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource appbarEdit}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
             <Button Command="{Binding SaveCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4"
                     Visibility="{Binding ElementName=root, Path=CanUserEditGeometry, Converter={StaticResource boolToVisibilityConverter}}">
-                <Path Data="{StaticResource appbarSave}" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource appbarSave}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
             </Button>
 
             <ItemsControl ItemsSource="{Binding AssociatedLayer.FeatureTableCommands}">

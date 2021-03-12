@@ -8,7 +8,7 @@
              
              xmlns:map="clr-namespace:IRI.Jab.Controls.View.Input" 
              WindowStyle="ToolWindow" Width="550" Height="250" ShowIconOnTitleBar="False" ShowInTaskbar="False"
-        Title="بروبه مختصات"  GlowBrush="{DynamicResource AccentColorBrush}" ShowMaxRestoreButton="False" ShowMinButton="False">
+        Title="بروبه مختصات"  GlowBrush="{DynamicResource MahApps.Brushes.Accent}" ShowMaxRestoreButton="False" ShowMinButton="False">
     <Grid>
         <map:GoToView />
     </Grid>

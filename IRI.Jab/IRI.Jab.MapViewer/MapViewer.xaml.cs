@@ -182,6 +182,10 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+         
+
+        public UIElementCollection Elements { get { return mapView.Children; } }
+ 
 
         //public bool UseDefaultCursorForMapAction { get; set; } = true;
 
@@ -4919,7 +4923,8 @@ namespace IRI.Jab.MapViewer
             CurrentEditingLayer = new EditableFeatureLayer(
                             "edit", geometry.Clone(),
                             this.viewTransform, ScreenToMap,
-                            options);
+                            options)
+            { ZIndex = int.MaxValue };
             //{
             //    MassEdit = true
             //};

@@ -26,12 +26,12 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="BorderBrush" Value="{DynamicResource HighlightBrush}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}"/>
                                 <Setter Property="Cursor" Value="Arrow"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
-                                <Setter Property="BorderBrush" Value="{DynamicResource HighlightBrush}"/>
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="LightGray"/>
@@ -169,7 +169,7 @@
                                         <Setter TargetName="Expander" Property="UIElement.Visibility" Value="Hidden" />
                                     </Trigger>
                                     <Trigger Property="TreeViewItem.IsSelected" Value="True">
-                                        <!--<Setter TargetName="Bd" Property="Panel.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />-->
+                                        <!--<Setter TargetName="Bd" Property="Panel.Background" Value="{DynamicResource {x:Static SystemColors.MahApps.Brushes.HighlightKey}}" />-->
                                         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
                                     </Trigger>
                                     <MultiTrigger>
@@ -227,12 +227,12 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource HighlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}"/>
                             <Setter Property="Cursor" Value="Arrow"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource HighlightBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="LightGray"/>

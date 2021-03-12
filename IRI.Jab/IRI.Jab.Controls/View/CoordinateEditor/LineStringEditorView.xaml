@@ -16,7 +16,7 @@
                     <!--<Setter Property="Background" Value="LightGray" />-->
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -25,7 +25,7 @@
             <!--<Style TargetType="Path">
                 <Setter Property="Width" Value="16"/>
                 <Setter Property="Height" Value="16"/>
-                <Setter Property="Fill" Value="{DynamicResource AccentColorBrush}"/>
+                <Setter Property="Fill" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                 <Setter Property="Stretch" Value="Uniform"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -37,7 +37,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Command="{Binding RemovePointCommand}" Width="Auto" Height="Auto" Padding="2" Margin="4">
-                                <Path Data="{StaticResource appbarDelete}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform" FlowDirection="LeftToRight"/>
+                                <Path Data="{StaticResource appbarDelete}" Width="16" Height="16" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -17,7 +17,7 @@
         
         <Border.Style>
             <Style TargetType="Border">
-                <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
             </Style>
         </Border.Style>
         <Grid >
@@ -29,7 +29,7 @@
             </Grid.RowDefinitions>
             <Grid.Resources>
                 <Style TargetType="Label" x:Key="staticText">
-                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}">
                         <!--<Setter.Value>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                 <GradientStop Color="Black" Offset="0.748" />
@@ -57,16 +57,16 @@
                 <Label Name="system" Margin="0,0,1,0" Style="{StaticResource staticText}" Content="ژئودتیک"/>
                 <Label Name="first" Content="طول جغرافیایی:" Height="auto" Style="{StaticResource staticText}" />
                 <Label Width="100" Content="{Binding ElementName=root, Path=XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x1" 
-                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"/>
+                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}"/>
                 <Label Name="second" Content="عرض جغرافیایی:" Height="auto" Style="{StaticResource staticText}"/>
-                <Label Width="100" Content="{Binding ElementName=root, Path=YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
+                <Label Width="100" Content="{Binding ElementName=root, Path=YValue}" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}" 
                        Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto" Name="x2" HorizontalContentAlignment="Right" />
                 <Label Visibility="Collapsed" Name="region" Content="ناحیه :" Height="auto" Style="{StaticResource staticText}"/>
                 <Label Visibility="Collapsed" Name="zone" Width="100" Content="35 34' 12''" Margin="00 0 10 0" Background="White" 
-                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"/>
+                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource MahApps.Brushes.Highlight}"/>
             </StackPanel>
          
-            <StackPanel Grid.Row="1" Margin="0 10 0 0" Background="{DynamicResource AccentColorBrush2}">
+            <StackPanel Grid.Row="1" Margin="0 10 0 0" Background="{DynamicResource MahApps.Brushes.Accent2}">
                 <StackPanel.Resources>
                     <Style TargetType="RadioButton">
                         <Setter Property="Margin" Value="6 2"/>
@@ -106,19 +106,19 @@
 
                 <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisibilityConverter}}"   
                        Width="100" Content="{Binding SelectedItem.ZoneNumber}" Margin="00 0 10 0" Background="White" 
-                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource HighlightBrush}"
+                       FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource MahApps.Brushes.Highlight}"
                        DockPanel.Dock="Right"/>
                 <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisibilityConverter}}"   
                        Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"
                        DockPanel.Dock="Right"/>
-                <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource HighlightBrush}" 
+                <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}" 
                        Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"   HorizontalContentAlignment="Right" 
                        DockPanel.Dock="Right"/>
                 <Label Content="{Binding SelectedItem.YLabelItem.Title}" Height="auto" Style="{StaticResource staticText}"
                        DockPanel.Dock="Right"/>
 
                 <Label Width="100" Content="{Binding SelectedItem.XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"  
-                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource HighlightBrush}"
+                       HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}"
                        DockPanel.Dock="Right"/>
 
                 <Label Content="{Binding SelectedItem.XLabelItem.Title}" Height="auto" Style="{StaticResource staticText}" 
@@ -132,20 +132,21 @@
                 <ItemsControl.Template>
                     <ControlTemplate>
                         <StackPanel IsItemsHost="True">
-                            <StackPanel.Resources>
+                            <!--<StackPanel.Resources>
                                 <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type RadioButton}}">
                                     <Setter Property="Margin" Value="6 2"/>
                                     <Setter Property="Foreground" Value="White"/>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                                 </Style>
-                            </StackPanel.Resources>
+                            </StackPanel.Resources>-->
                         </StackPanel>
                     </ControlTemplate>
                 </ItemsControl.Template>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <RadioButton GroupName="A" IsChecked="{Binding IsSelected, Mode=TwoWay}">
+                        <RadioButton GroupName="A" IsChecked="{Binding IsSelected, Mode=TwoWay}" Background="{DynamicResource MahApps.Brushes.Accent}"
+                                     Margin="6 2" Foreground="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
                             <Label Content="{Binding TitleItem.Title}" Foreground="White"/>
                         </RadioButton>
                     </DataTemplate>

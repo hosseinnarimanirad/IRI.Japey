@@ -88,7 +88,7 @@
         </Grid.RowDefinitions>
         <!--<Ellipse Width="22" Height="22" Fill="White"  />-->
         
-        <Border CornerRadius="5"  BorderBrush="White" BorderThickness="1" Grid.ColumnSpan="2" Background="{DynamicResource HighlightBrush}">
+        <Border CornerRadius="5"  BorderBrush="White" BorderThickness="1" Grid.ColumnSpan="2" Background="{DynamicResource MahApps.Brushes.Highlight}">
             <Border.Effect>
                 <DropShadowEffect x:Name="shadow" BlurRadius="4" ShadowDepth="0"  RenderingBias="Performance" Opacity="0" />
             </Border.Effect>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Security"
             xmlns:validation="clr-namespace:IRI.Jab.Common.Assets.ValidationRules;assembly=IRI.Jab.Common"
                                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                                xmlns:i1="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" x:Name="root">
     <local:SecurityInputUserControl.Resources>
         <Style x:Key="myErrorTemplate" TargetType="Control">
@@ -82,11 +83,11 @@
                 <TextBox Grid.Column="1" mahApp:TextBoxHelper.Watermark="پست الکترونیکی" FontFamily="{StaticResource iranSans}" BorderThickness="0"
                                     MinHeight="35"  FontSize="15" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" Margin="2"
                                     TextAlignment="Center" HorizontalContentAlignment="Center" FlowDirection="LeftToRight">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="LostFocus">
-                            <i:InvokeCommandAction  Command="{Binding ValidateUserNameOrEmailCommand}" CommandParameter="{Binding ElementName=root}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <i1:Interaction.Triggers>
+                        <i1:EventTrigger EventName="LostFocus">
+                            <i1:InvokeCommandAction  Command="{Binding ValidateUserNameOrEmailCommand}" CommandParameter="{Binding ElementName=root}"/>
+                        </i1:EventTrigger>
+                    </i1:Interaction.Triggers>
                     <TextBox.Text>
                         <Binding ElementName="root" Path="UserNameOrEmail" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                             <Binding.ValidationRules>

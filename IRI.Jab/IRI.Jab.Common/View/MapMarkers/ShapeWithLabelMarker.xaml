@@ -73,7 +73,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <!--<Ellipse Width="22" Height="22" Fill="White"  />-->
-        <Border   BorderBrush="{DynamicResource HighlightBrush}" BorderThickness="1" Grid.ColumnSpan="2" Background="{DynamicResource HighlightBrush}">
+        <Border   BorderBrush="{DynamicResource MahApps.Brushes.Highlight}" BorderThickness="1" Grid.ColumnSpan="2" Background="{DynamicResource MahApps.Brushes.Highlight}">
             <Border.Effect>
                 <DropShadowEffect x:Name="shadow" BlurRadius="4" ShadowDepth="0"  RenderingBias="Performance" Opacity="0" />
             </Border.Effect>
@@ -83,9 +83,9 @@
 
         <Ellipse x:Name="border" Grid.Column="1" Margin="2" Fill="White" Opacity="1" Width="24" Height="24"/>
 
-        <Path x:Name="shape" Width="16" Height="16"  Fill="{DynamicResource HighlightBrush}" Stretch="Uniform" Grid.Column="1" Margin="6"/>
+        <Path x:Name="shape" Width="16" Height="16"  Fill="{DynamicResource MahApps.Brushes.Highlight}" Stretch="Uniform" Grid.Column="1" Margin="6"/>
         <!--<StackPanel Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center">-->
-        <Path Data="F1 M 14,0L0,0L7,10 Z" Fill="{DynamicResource HighlightBrush}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+        <Path Data="F1 M 14,0L0,0L7,10 Z" Fill="{DynamicResource MahApps.Brushes.Highlight}" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
         <!--</StackPanel>-->
 
 

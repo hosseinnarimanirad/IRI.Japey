@@ -25,7 +25,7 @@ namespace IRI.Jab.Common.Model
         {
             try
             {
-                var brush = (SolidColorBrush)Application.Current.Resources["AccentColorBrush"];
+                var brush = (SolidColorBrush)Application.Current.Resources["MahApps.Brushes.Accent"];
 
                 if (brush == null)
                 {

@@ -10,7 +10,7 @@
             xmlns:controlzex="urn:controlzex" x:Class="IRI.Jab.Controls.View.Symbology.SymbologyView"
             WindowStyle="ToolWindow" ShowIconOnTitleBar="False" ShowInTaskbar="False"
             FlowDirection="RightToLeft" FontFamily="{StaticResource iranSans}"
-            Title="سمبل لایه"  GlowBrush="{DynamicResource AccentColorBrush}" ShowMaxRestoreButton="False" ShowMinButton="False"
+            Title="سمبل لایه"  GlowBrush="{DynamicResource MahApps.Brushes.Accent}" ShowMaxRestoreButton="False" ShowMinButton="False"
             WindowTransitionsEnabled="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid.Resources>
@@ -88,11 +88,11 @@
 
         <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Height="32" Width="32" Margin="4" Cursor="Hand" HorizontalAlignment="Right" Command="{Binding CloseCommand}">
-                <Path Data="{StaticResource appbarClose}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+                <Path Data="{StaticResource appbarClose}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource MahApps.Brushes.Accent}"
                       Height="24" />
             </Button>
             <Button Height="32" Width="32" Margin="4" Cursor="Hand" HorizontalAlignment="Right" Command="{Binding ApplyCommand}">
-                <Path Data="{StaticResource appbarCheck}" FlowDirection="LeftToRight" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource AccentColorBrush}"
+                <Path Data="{StaticResource appbarCheck}" FlowDirection="LeftToRight" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Fill="{DynamicResource MahApps.Brushes.Accent}"
                       Height="24" />
             </Button>
         </StackPanel>

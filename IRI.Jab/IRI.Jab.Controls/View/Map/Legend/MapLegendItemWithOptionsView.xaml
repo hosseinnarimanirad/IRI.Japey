@@ -13,7 +13,7 @@
         <Grid.Resources>
             <Style  TargetType="{x:Type Button}" x:Key="circleButton">
                 <Setter Property="Margin" Value="4"/>
-                <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
                 <Setter Property="Width" Value="30"/>
                 <Setter Property="Height" Value="30"/>
                 <Setter Property="Cursor" Value="Hand"/>
@@ -29,7 +29,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -40,7 +40,7 @@
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                             <Setter Property="Foreground" Value="White"/>
-                            <Setter Property="Background" Value="{DynamicResource AccentColorBrush3}"/>
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
                             <Setter Property="Width" Value="30"/>
                             <Setter Property="Height" Value="30"/>
                             <Setter Property="Cursor" Value="Hand"/>
@@ -56,10 +56,10 @@
                             </Setter>
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                                 </Trigger>
 
                                 <Trigger Property="IsEnabled" Value="False">
@@ -118,7 +118,7 @@
         <!--
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
                         <Setter Property="Foreground" Value="Black" />
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
@@ -154,7 +154,8 @@
                             StrokeThickness="{Binding ElementName=root, Path=Symbology.StrokeThickness}"
                             HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="{Binding ElementName=root, Path=Symbology.Opacity}"/>
                 </Border>
-                <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2" TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
+                <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2"                         
+                        TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
                 <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
                            Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}"/>
                 <TextBlock Text="{Binding NumberOfSelectedFeatures, Converter={StaticResource latinDigitsToFarsiDigitsConverter}, StringFormat={}({0})}" VerticalAlignment="Center"

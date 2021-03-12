@@ -74,7 +74,7 @@
         </Grid.RowDefinitions>
         <!--<Ellipse Width="22" Height="22" Fill="White"  />-->
 
-        <Border Grid.RowSpan="2" CornerRadius="0" Width="5"  Height="Auto" Background="{DynamicResource HighlightBrush}">
+        <Border Grid.RowSpan="2" CornerRadius="0" Width="5"  Height="Auto" Background="{DynamicResource MahApps.Brushes.Highlight}">
             <Border.Effect>
                 <DropShadowEffect x:Name="shadow" BlurRadius="4" ShadowDepth="0"  RenderingBias="Performance" Opacity="0" />
             </Border.Effect>
@@ -84,7 +84,7 @@
                        HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding ElementName=root, Path=XLabel}" Foreground="{DynamicResource HighlightBrush}" TextWrapping="Wrap"/>
 
         <TextBlock Grid.Column="1" Grid.Row="1"  TextAlignment="Right" FontSize="11" Margin="1" Height="Auto"                       
-                       HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding ElementName=root, Path=YLabel}" Foreground="{DynamicResource HighlightBrush}" TextWrapping="Wrap"/>
+                       HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding ElementName=root, Path=YLabel}" Foreground="{DynamicResource MahApps.Brushes.Highlight}" TextWrapping="Wrap"/>
 
 
         <!--<Border Width="10" Height="10" Margin="2" Opacity=".8" Canvas.Top="15" Canvas.Right="0">-->

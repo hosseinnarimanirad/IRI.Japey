@@ -43,7 +43,8 @@
                                                     Opacity="{Binding VisualParameters.Opacity}"/>
                                         </Border>
                                         <Viewbox Height="20" DockPanel.Dock="Left" Margin="2">
-                                            <Slider Width="75" Maximum="1" Value="{Binding VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2" />
+                                            <Slider Width="75" Maximum="1" Value="{Binding VisualParameters.Opacity}" Style="{StaticResource MetroSlider}"
+                                                    TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2" />
                                         </Viewbox>
                                         <CheckBox VerticalAlignment="Center" Name="visibility" Margin="2"
                                                     
@@ -52,13 +53,13 @@
                                     </DockPanel>
                                     <StackPanel Orientation="Horizontal" Visibility="{Binding IsSelectedInToc, Converter={StaticResource boolToVisibilityConverter}}">
                                         <Button Cursor="Hand" Margin="2" ToolTip="انتخاب عارضه" VerticalAlignment="Center">
-                                            <Path Data="{StaticResource appbarVectorPenConvert}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                            <Path Data="{StaticResource appbarVectorPenConvert}" Width="16" Height="16" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform"/>
                                         </Button>
                                         <Button Cursor="Hand" Margin="2">
-                                            <Path Data="{StaticResource appbarPageText}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                            <Path Data="{StaticResource appbarPageText}" Width="16" Height="16" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform"/>
                                         </Button>
                                         <Button Cursor="Hand" Margin="2">
-                                            <Path Data="{StaticResource appbarDelete}" Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Stretch="Uniform"/>
+                                            <Path Data="{StaticResource appbarDelete}" Width="16" Height="16" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform"/>
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>

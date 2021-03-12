@@ -50,7 +50,7 @@ namespace IRI.Jab.MapViewer
                 else
                 {
                     this.CurrentLayers.Insert(layer.ZIndex, layer);
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -182,6 +182,22 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        private void ArrangeZIndex()
+        {
+            var orderedLayers = allLayers.OrderBy(i => i.Type == LayerType.RightClickOption)
+                                        .ThenBy(i => i.Type == LayerType.MoveableItem)
+                                        .ThenBy(i => i.Type == LayerType.EditableItem)
+                                        .ThenBy(i => i.Type == LayerType.Complex)
+                                        .ThenBy(i => i.Type == LayerType.Drawing)
+                                        .ThenByDescending(i => i.Type == LayerType.BaseMap)
+                                        .ThenBy(i => i.ZIndex);
+
+            for (int i = 0; i < orderedLayers.Count(); i++)
+            {
+                orderedLayers.ElementAt(i).ZIndex = i;
+            }
+        }
+
         public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale, RenderingApproach rendering)
         {
             //var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
@@ -191,8 +207,21 @@ namespace IRI.Jab.MapViewer
                 System.Diagnostics.Debug.WriteLine($"map count:{allLayers.Count}");
             }
 
+            ArrangeZIndex();
 
-            var newLayers = allLayers.Where(l => l.VisibleRange.IsInRange(inverseMapScale) && l.Rendering == rendering).OrderBy(i => i.Type != LayerType.BaseMap).ThenBy(i => i.ZIndex);
+            var newLayers = allLayers.Where(l => l.VisibleRange.IsInRange(inverseMapScale) && l.Rendering == rendering)
+                                        .OrderByDescending(i => i.Type == LayerType.BaseMap)
+                                        //.ThenByDescending(i => i.Type == LayerType.Raster)
+                                        //.ThenByDescending(i => i.Type == LayerType.ImagePyramid)
+                                        //.ThenByDescending(i => i.Type == LayerType.VectorLayer)
+                                        //.ThenByDescending(i => i.Type == LayerType.FeatureLayer)
+                                        //.ThenByDescending(i => i.Type == LayerType.Selection)
+                                        .ThenBy(i => i.Type == LayerType.RightClickOption)
+                                        .ThenBy(i => i.Type == LayerType.MoveableItem)
+                                        .ThenBy(i => i.Type == LayerType.EditableItem)
+                                        .ThenBy(i => i.Type == LayerType.Complex)
+                                        .ThenBy(i => i.Type == LayerType.Drawing)
+                                        .ThenBy(i => i.ZIndex);
 
             if (rendering == RenderingApproach.Default)
             {
@@ -214,6 +243,17 @@ namespace IRI.Jab.MapViewer
             }
 
             return newLayers;
+            //.OrderByDescending(i => i.Type == LayerType.BaseMap)
+            //            .ThenByDescending(i => i.Type == LayerType.Raster)
+            //            .ThenByDescending(i => i.Type == LayerType.ImagePyramid)
+            //            .ThenByDescending(i => i.Type == LayerType.VectorLayer)
+            //            .ThenByDescending(i => i.Type == LayerType.FeatureLayer)
+            //            .ThenByDescending(i => i.Type == LayerType.Selection)
+            //            .ThenByDescending(i => i.Type == LayerType.Complex)
+            //            .ThenByDescending(i => i.Type == LayerType.Drawing)
+            //            .ThenByDescending(i => i.Type == LayerType.EditableItem)
+            //            .ThenByDescending(i => i.Type == LayerType.MoveableItem)
+            //            .ThenByDescending(i => i.Type == LayerType.RightClickOption).ToList();
         }
 
         internal void UpdateIsInRange(double inverseMapScale)
