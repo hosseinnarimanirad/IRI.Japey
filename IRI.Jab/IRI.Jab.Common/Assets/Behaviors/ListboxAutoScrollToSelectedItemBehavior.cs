@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Interactivity;
+﻿using Microsoft.Xaml.Behaviors;
+using System;
+using System.Windows.Controls; 
 
 namespace IRI.Jab.Common.Assets.Behaviors
 {

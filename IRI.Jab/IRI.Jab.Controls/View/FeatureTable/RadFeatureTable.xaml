@@ -108,9 +108,9 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
+            <!--<Button Command="{Binding ZoomToCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4">
                 <Path Data="{StaticResource appbarMagnify}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>
-            </Button>
+            </Button>-->
             <Button Command="{Binding EditCommand}" Cursor="Hand" BorderThickness="0" Height="28" Margin="4" IsEnabled="{Binding IsSingleValueHighlighted}"
                     Visibility="{Binding ElementName=root, Path=CanUserEditGeometry, Converter={StaticResource boolToVisibilityConverter}}">
                 <Path Data="{StaticResource appbarEdit}" Fill="{DynamicResource MahApps.Brushes.Accent}" Stretch="Uniform" FlowDirection="LeftToRight"/>

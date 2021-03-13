@@ -96,6 +96,12 @@ namespace SqlServerTypes
             LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial140.dll");
         }
 
+        public static void LoadNativeAssembliesv14()
+        {
+            LoadNativeAssembliesv14(AppDomain.CurrentDomain.BaseDirectory);
+        }
+
+
         public static void UnloadNativeAssemblies()
         {
             lock (loadedAssemblies)

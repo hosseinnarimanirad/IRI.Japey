@@ -62,6 +62,7 @@
     <Content Include="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
     <Content Include="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
     <Content Include="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />
+    <Content Include="Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll" />
     <Content Include="readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr100.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
