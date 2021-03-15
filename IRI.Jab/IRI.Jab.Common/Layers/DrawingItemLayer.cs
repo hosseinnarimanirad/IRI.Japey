@@ -89,7 +89,7 @@ namespace IRI.Jab.Common
 
         public Action<DrawingItemLayer> RequestHighlightGeometry;
 
-        public DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
+        internal DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
         {
             this.Extent = geometry.GetBoundingBox();
 

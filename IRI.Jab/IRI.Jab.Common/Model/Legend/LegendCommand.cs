@@ -455,6 +455,34 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+        public static ILegendCommand CreateGetExteriorRingCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                Layer = layer,
+                ToolTip = "حلقه خارجی",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();
+
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+
+
         #endregion
     }
 }

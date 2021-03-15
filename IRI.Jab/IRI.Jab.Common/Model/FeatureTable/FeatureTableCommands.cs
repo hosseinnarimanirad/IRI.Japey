@@ -7,6 +7,7 @@ using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IRI.Msh.Common.Extensions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,7 +71,7 @@ namespace IRI.Jab.Common.Model
 
         #region Export Excel
 
-        public static FeatureTableCommand CreateExportToExcel(MapPresenter map)
+        public static FeatureTableCommand CreateExportToExcelCommand(MapPresenter map)
         {
             var result = new FeatureTableCommand()
             {
@@ -104,7 +105,7 @@ namespace IRI.Jab.Common.Model
 
                 if (string.IsNullOrWhiteSpace(fileName))
                     return;
-                 
+
                 Ket.OfficeFormat.ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
 
             });
@@ -114,13 +115,71 @@ namespace IRI.Jab.Common.Model
 
         #endregion
 
+        #region Export As Drawing Item
+
+        public static FeatureTableCommand CreateExportAsDrawingLayersCommand(MapPresenter map)
+        {
+            var result = new FeatureTableCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenAdd,
+                //Layer = layer.AssociatedLayer,
+                ToolTip = "انتقال به ترسیم‌ها"
+            };
+
+            result.Command = new RelayCommand((param) =>
+            {
+                var layer = param as ISelectedLayer;
+
+                if (layer == null || map == null)
+                    return;
+
+                var features = layer.GetHighlightedFeatures();
+
+                if (features.IsNullOrEmpty())
+                {
+                    return;
+                }
+
+                foreach (var feature in features)
+                {
+                    map.AddDrawingItem(feature.TheSqlGeometry.AsGeometry());
+                }
+
+                //
+                //List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+
+                //foreach (var item in features)
+                //{
+                //    if (item is SqlFeature feature)
+                //    {
+                //        rows.Add(feature.Attributes);
+                //    }
+                //}
+
+                ////گرفتن مسیر فایل
+                //var fileName = map.SaveFile("*.xlsx|*.xlsx");
+
+                //if (string.IsNullOrWhiteSpace(fileName))
+                //    return;
+
+                //Ket.OfficeFormat.ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
+
+            });
+
+            return result;
+        }
+
+        #endregion
+
+       
 
         internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
         {
             return new List<Func<MapPresenter, IFeatureTableCommand>>()
             {
                 CreateZoomToExtentCommand,
-                CreateExportToExcel
+                CreateExportToExcelCommand,
+                CreateExportAsDrawingLayersCommand
             };
         }
     }

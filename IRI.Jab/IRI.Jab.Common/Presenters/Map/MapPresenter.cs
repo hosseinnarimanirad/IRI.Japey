@@ -1199,6 +1199,18 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public void AddDrawingItem(Geometry<Msh.Common.Primitives.Point> drawing, string name = null, int id = int.MinValue, FeatureDataSource source = null)
+        {
+            var shapeItem = MakeShapeItem(drawing, name ?? $"DRAWING {DrawingItems?.Count}", id, source);
+
+            if (shapeItem != null)
+            {
+                //this.SetLayer(shapeItem.AssociatedLayer);
+                AddDrawingItem(shapeItem);
+                //this.Refresh();
+            }
+        }
+
         public void AddDrawingItem(DrawingItemLayer item)
         {
             this.DrawingItems.Add(item);
