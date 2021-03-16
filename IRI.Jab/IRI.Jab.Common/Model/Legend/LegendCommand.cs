@@ -481,7 +481,114 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+        public static ILegendCommand CreateGetEnvelopeCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                Layer = layer,
+                ToolTip = "مستطیل دربرگیرنده",
+            };
 
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var geometry = layer.Geometry.AsSqlGeometry().STEnvelope();
+
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Envelope");
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateGetConvexHullCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                Layer = layer,
+                ToolTip = "پوش محدب",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var geometry = layer.Geometry.AsSqlGeometry().STConvexHull();
+
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ConvexHull");
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateGetBoundaryCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                Layer = layer,
+                ToolTip = "مرز",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var geometry = layer.Geometry.AsSqlGeometry().STBoundary();
+
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Boundary");
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateGetBreakIntoGeometriesCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                Layer = layer,
+                ToolTip = "تفکیک به هندسه",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var geometries = layer.Geometry.AsSqlGeometry().GetGeometries();
+
+                    var counter = 0;
+
+                    foreach (var geo in geometries)
+                    {
+                        map.AddDrawingItem(geo.AsGeometry(), $"{layer.LayerName} Geometry #{counter++}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
 
         #endregion
     }
