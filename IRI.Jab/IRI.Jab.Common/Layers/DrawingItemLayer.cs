@@ -75,6 +75,7 @@ namespace IRI.Jab.Common
         //}
 
 
+
         private string _title;
 
         public string Title
@@ -87,13 +88,24 @@ namespace IRI.Jab.Common
             }
         }
 
+        public bool CanShowHighlightGeometry()
+        {
+            return this.IsSelectedInToc && VisualParameters?.Visibility == System.Windows.Visibility.Visible;
+        }
+
         public Action<DrawingItemLayer> RequestHighlightGeometry;
+
+        public Action<DrawingItemLayer> RequestChangeVisibilityForHighlightGeometry;
+
+        public Guid HighlightGeometryKey { get; private set; }
 
         internal DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
         {
             this.Extent = geometry.GetBoundingBox();
 
             this.VisualParameters = VisualParameters.GetRandomVisualParameters();
+
+            HighlightGeometryKey = Guid.NewGuid();
 
             //this.OriginalSymbology = VisualParameters.Clone();
 
@@ -126,9 +138,14 @@ namespace IRI.Jab.Common
             {
                 this.RequestHighlightGeometry?.Invoke(this);
             };
+
+            this.OnVisibilityChanged += (sender, e) =>
+            {
+                this.RequestChangeVisibilityForHighlightGeometry?.Invoke(this);
+            };
         }
 
-        
+
 
     }
 }

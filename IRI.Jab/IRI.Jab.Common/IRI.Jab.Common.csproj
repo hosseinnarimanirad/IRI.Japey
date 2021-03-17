@@ -152,6 +152,7 @@
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
     <Compile Include="Assets\ShapeStrings\MaterialDesign.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
+    <Compile Include="Assets\ShapeStrings\SegoePrint.cs" />
     <Compile Include="Assets\ShapeStrings\TheNounProject.cs" />
     <Compile Include="Assets\ValidationRules\BaseValidationRule.cs" />
     <Compile Include="Assets\ValidationRules\EmailValidation.cs" />

@@ -365,6 +365,9 @@ namespace IRI.Jab.Common.Model.Legend
 
         #region DrawingItemLayer Default Commands
 
+        // *******************************************
+        //                  Remove 
+        // *******************************************
         public static ILegendCommand CreateRemoveDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -384,6 +387,10 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        // *******************************************
+        //                  Edit
+        // *******************************************
         public static ILegendCommand CreateEditDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -424,6 +431,10 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        // *******************************************
+        //                  Export As Shapefile
+        // *******************************************
         public static ILegendCommand CreateExportDrawingItemLayerAsShapefile(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -433,7 +444,7 @@ namespace IRI.Jab.Common.Model.Legend
                 ToolTip = _saveToolTip,
             };
 
-            result.Command = new RelayCommand(param =>
+            result.Command = new RelayCommand(async param =>
             {
                 try
                 {
@@ -448,18 +459,22 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    map.ShowMessageAsync(null, ex.Message);
+                    await map.ShowMessageAsync(null, ex.Message);
                 }
             });
 
             return result;
         }
 
+
+        // *******************************************
+        //                  Exterior Ring
+        // *******************************************
         public static ILegendCommand CreateGetExteriorRingCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.exteriorRing,
                 Layer = layer,
                 ToolTip = "حلقه خارجی",
             };
@@ -469,7 +484,7 @@ namespace IRI.Jab.Common.Model.Legend
                 try
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();
-
+                     
                     map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
                 }
                 catch (Exception ex)
@@ -481,11 +496,15 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        // *******************************************
+        //                  Envelope
+        // *******************************************
         public static ILegendCommand CreateGetEnvelopeCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.envelope,
                 Layer = layer,
                 ToolTip = "مستطیل دربرگیرنده",
             };
@@ -507,11 +526,15 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        // *******************************************
+        //                  Convex Hull
+        // *******************************************
         public static ILegendCommand CreateGetConvexHullCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.convexHull,
                 Layer = layer,
                 ToolTip = "پوش محدب",
             };
@@ -533,11 +556,15 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        // *******************************************
+        //                  Boundary
+        // *******************************************
         public static ILegendCommand CreateGetBoundaryCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.boundary,
                 Layer = layer,
                 ToolTip = "مرز",
             };
@@ -559,11 +586,15 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        public static ILegendCommand CreateGetBreakIntoGeometriesCommand(MapPresenter map, DrawingItemLayer layer)
+
+        // *******************************************
+        //                  Break into geometries
+        // *******************************************
+        public static ILegendCommand CreateBreakIntoGeometriesCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenConvert,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.extractGeometries,
                 Layer = layer,
                 ToolTip = "تفکیک به هندسه",
             };
@@ -580,6 +611,37 @@ namespace IRI.Jab.Common.Model.Legend
                     {
                         map.AddDrawingItem(geo.AsGeometry(), $"{layer.LayerName} Geometry #{counter++}");
                     }
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+
+        // *******************************************
+        //                  Extract points
+        // *******************************************
+        public static ILegendCommand CreateBreakIntoPointsCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.SegoePrint.extractPoints,
+                Layer = layer,
+                ToolTip = "تفکیک به نقاط",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var pointCollection = IRI.Ket.SqlServerSpatialExtension.SqlSpatialUtility.MakePointCollection(layer.Geometry.GetAllPoints());
+
+                    map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.LayerName} Points");
+
                 }
                 catch (Exception ex)
                 {

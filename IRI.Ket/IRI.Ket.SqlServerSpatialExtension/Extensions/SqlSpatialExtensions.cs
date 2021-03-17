@@ -652,12 +652,21 @@ namespace IRI.Ket.SpatialExtensions
 
         public static Geometry<Point> AsGeometry(this SqlGeometry geometry)
         {
+            // old
             //This check is not required bacause it is already checked at evey ExtractXXXX function
             //this is specially for MultiXXX types. What is multipolygon was not Empty but first GeometryN of it was empty
-            //if (geometry.IsNullOrEmpty())
-            //{
-            //    return Geometry.CreateEmpty(geometry.GetOpenGisType().ToGeometryType(), geometry.GetSrid());
-            //}
+
+            // 1399.12.27
+            // This check is required!
+            if (geometry.IsNull)
+            {
+                return Geometry<Point>.Null;
+            }
+            if (geometry.STIsEmpty().IsTrue)
+            {
+                return Geometry<Point>.CreateEmpty(geometry.GetOpenGisType().ToGeometryType(), geometry.GetSrid());
+            }
+             
 
             Geometry<Point> result;
 

@@ -738,7 +738,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action<IRI.Msh.Common.Primitives.Point> RequestFlashPoint;
 
 
-        public Func<List<SqlGeometry>, VisualParameters, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
+        public Func<List<SqlGeometry>, VisualParameters, string, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
 
         public Func<List<SqlGeometry>, string, VisualParameters, Task> RequestAddGeometries;
 
@@ -1054,7 +1054,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var visualParameters = VisualParameters.GetDefaultForSelection();
 
-            await SelectGeometryAsync(highlightGeo, visualParameters);
+            //visualParameters.Visibility = layer.VisualParameters.Visibility;
+
+            await SelectGeometryAsync(highlightGeo, visualParameters, layer.HighlightGeometryKey.ToString());
         }
 
         public async Task SelectGeometryAsync(SqlGeometry geometry)
@@ -1062,20 +1064,20 @@ namespace IRI.Jab.Common.Presenter.Map
             await SelectGeometriesAsync(new List<SqlGeometry>() { geometry });
         }
 
-        public async Task SelectGeometryAsync(SqlGeometry geometry, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometryAsync(SqlGeometry geometry, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
         {
-            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry }, visualParameters, pointSymbol);
+            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry }, visualParameters, layerName, pointSymbol);
         }
 
         public async Task SelectGeometriesAsync(List<SqlGeometry> geometries)
         {
             //await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
-            await this.SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection());
+            await this.SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection(), null);
         }
 
-        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
         {
-            await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, pointSymbol);
+            await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, layerName, pointSymbol);
         }
 
 
@@ -1201,6 +1203,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddDrawingItem(Geometry<Msh.Common.Primitives.Point> drawing, string name = null, int id = int.MinValue, FeatureDataSource source = null)
         {
+            if (drawing.IsNullOrEmpty())
+                return;
+
             var shapeItem = MakeShapeItem(drawing, name ?? $"DRAWING {DrawingItems?.Count}", id, source);
 
             if (shapeItem != null)
@@ -1225,6 +1230,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
             //this.RemoveLayer(item.AssociatedLayer);
             this.ClearLayer(item, true);
+
+            this.ClearLayer(item.HighlightGeometryKey.ToString(), true, true);
         }
 
         public void RemoveAllDrawingItems()
@@ -1577,13 +1584,16 @@ namespace IRI.Jab.Common.Presenter.Map
 
                  //this.AddLayer(layer);
 
-                 if (di.IsSelectedInToc)
+                 if (di.CanShowHighlightGeometry())
                  {
                      await SelectDrawingItem(di);
                  }
                  else
                  {
-                     ClearLayer(LayerType.Selection, true, true);
+                     // 1399.12.27
+                     //ClearLayer(LayerType.Selection, true, true);
+
+                     ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
                  }
 
                  //var defaultFill = layer.OriginalSymbology.Fill.AsSolidColor();
@@ -1625,6 +1635,18 @@ namespace IRI.Jab.Common.Presenter.Map
                  //}
 
              };
+
+            layer.RequestChangeVisibilityForHighlightGeometry = async di =>
+            {
+                if (di.CanShowHighlightGeometry())
+                {
+                    await SelectDrawingItem(di);
+                }
+                else
+                { 
+                    ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
+                }
+            };
 
             if (layer.RequestChangeSymbology == null)
             {

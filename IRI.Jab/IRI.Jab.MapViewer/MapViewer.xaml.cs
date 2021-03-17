@@ -182,10 +182,10 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-         
+
 
         public UIElementCollection Elements { get { return mapView.Children; } }
- 
+
 
         //public bool UseDefaultCursorForMapAction { get; set; } = true;
 
@@ -704,9 +704,9 @@ namespace IRI.Jab.MapViewer
                 return DrawGeometryLablePairsAsync(gl, n, p, lp);
             };
 
-            presenter.RequestSelectGeometries = (geometries, visualParameters, symbol) =>
+            presenter.RequestSelectGeometries = (geometries, visualParameters, layerName, symbol) =>
             {
-                return SelectGeometriesAsync(geometries, visualParameters, symbol);
+                return SelectGeometriesAsync(geometries, visualParameters, layerName, symbol);
             };
 
             //presenter.RequestClearLayerByType = (type, remove) => { this.ClearLayer(type, remove); };
@@ -3072,7 +3072,7 @@ namespace IRI.Jab.MapViewer
             await AddNonTiledLayer(layer);
         }
 
-        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
         {
             ClearLayer(LayerType.Selection, true);
 
@@ -3080,7 +3080,7 @@ namespace IRI.Jab.MapViewer
                 return;
 
             var layer = new VectorLayer(
-                Guid.NewGuid().ToString(),
+                string.IsNullOrWhiteSpace(layerName) ? Guid.NewGuid().ToString() : layerName,
                 new MemoryDataSource(geometries),
                 visualParameters,
                 LayerType.Selection,
