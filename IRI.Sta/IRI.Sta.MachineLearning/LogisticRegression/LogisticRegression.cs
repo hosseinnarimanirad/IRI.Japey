@@ -55,6 +55,19 @@ namespace IRI.Ket.MachineLearning.Regressions
             beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)i).ToArray();
 
 
+            // 1399.12.27
+            // *******************************************************
+            // پیش پردازش داده
+            // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
+            // این گام باید قبل از نرمال‌سازی باشه چون به 
+            // استتیستیک ستون یک هم نیاز هست بعدا برای 
+            // پردیکت. در غیر این صورت بردارها هم‌ساز 
+            // نخواهند شد.
+            // *******************************************************
+            var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
+            xValues.InsertColumn(0, ones);
+
+
             // 1399.12.20
             // *******************************************************
             // ذخیره‌سازی پارامترها برای استفاده 
@@ -67,13 +80,6 @@ namespace IRI.Ket.MachineLearning.Regressions
             // نرمال کردن داده‌ها
             // *******************************************************
             xValues = Normalization.NormalizeColumnsUsingZScore(xValues);
-
-            // *******************************************************
-            // پیش پردازش داده
-            // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
-            // *******************************************************
-            var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
-            xValues.InsertColumn(0, ones);
 
 
             while (iteration < _maxIteration)

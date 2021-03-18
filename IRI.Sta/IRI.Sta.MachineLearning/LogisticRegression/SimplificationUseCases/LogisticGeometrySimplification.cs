@@ -24,7 +24,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 return null;
             }
-             
+
             Matrix xValues = new Matrix(trainingData.Records.Count, 6);
 
             double[] yValues = new double[trainingData.Records.Count];
@@ -70,9 +70,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             // ایجاد رکوردهای مثبت برای فایل ساده شده
             for (int i = 0; i < simplifiedPoints.Count - 2; i++)
             {
-                parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2])
+                parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2], zoomLevel)
                 {
-                    ZoomLevel = zoomLevel,
                     IsRetained = true
                 });
             }
@@ -110,9 +109,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 parameters.Add(new LogisticGeometrySimplificationParameters(
                     originalPoints[prevRetainedPoint.Value],
                     originalPoints[i],
-                    originalPoints[nextRetainedPoint.Value])
+                    originalPoints[nextRetainedPoint.Value],
+                    zoomLevel)
                 {
-                    ZoomLevel = zoomLevel,
                     IsRetained = false
                 });
             }
@@ -120,15 +119,17 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             return new LogisticGeometrySimplificationTrainingData() { Records = parameters };
         }
 
-        public bool? IsRetained(LogisticGeometrySimplificationParameters parameters)
+        private bool? IsRetained(LogisticGeometrySimplificationParameters parameters)
         {
             double[] xValues = new double[]
             {
+                1,
+                parameters.ZoomLevel,
                 parameters.SemiDistanceToNext,
                 parameters.SemiDistanceToPrevious,
                 parameters.SemiArea,
                 parameters.SemiCosineOfAngle,
-                parameters.SemiVerticalDistance
+                parameters.SemiVerticalDistance,
             };
 
             var result = _regression.Predict(xValues);
@@ -143,7 +144,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             }
         }
 
-        public List<T> SimplifyByLogisticRegression<T>(List<T> points, bool retain3Points = false) where T : IPoint
+        public List<T> SimplifyByLogisticRegression<T>(List<T> points, int zoomLevel, bool retain3Points = false) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -158,13 +159,26 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             result.Add(points.First());
 
-            int firstIndex, middleIndex, lastIndex;
+            int firstIndex = 0, middleIndex = 1, lastIndex = 2;
 
-            for (int i = 0; i < points.Count - 2; i++)
+            for (int i = 2; i < points.Count; i++)
             {
-                // محاسبه طول و ...
+                lastIndex = i;
 
-                //model.Predict()
+                var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], zoomLevel);
+
+                if (IsRetained(parameters) == true)
+                {
+                    result.Add(points[middleIndex]);
+
+                    firstIndex = middleIndex;
+
+                    middleIndex = lastIndex;
+                }
+                else
+                {
+                    middleIndex = lastIndex;
+                }
             }
 
             if (retain3Points && result.Count == 1)

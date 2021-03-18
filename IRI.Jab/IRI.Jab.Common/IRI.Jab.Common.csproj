@@ -228,6 +228,7 @@
     <Compile Include="Model\Globalization\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
+    <Compile Include="Model\Legend\DrawingItemLegendCommand.cs" />
     <Compile Include="Model\Legend\ILegendCommand.cs" />
     <Compile Include="Model\Legend\LegendCommand.cs" />
     <Compile Include="Model\Legend\LegendItem.cs" />

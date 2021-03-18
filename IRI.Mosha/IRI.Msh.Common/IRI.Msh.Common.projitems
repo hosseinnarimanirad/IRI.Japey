@@ -12,9 +12,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Common\General.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\AreaStatistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\SimplificationType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\VisualSimplification.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\VisualSimplification.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\AxisType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2DPoint.cs" />

@@ -22,7 +22,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public bool IsRetained { get; set; }
 
-        public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last)
+        public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last, int zoomLevel)
         {             
             this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middle, last);
             
@@ -33,6 +33,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(first, middle, last);
 
             this.SemiVerticalDistance = SpatialUtility.SemiPointToLineSegmentDistance(first, middle, last);
+
+            this.ZoomLevel = zoomLevel;
         }        
     }
 }

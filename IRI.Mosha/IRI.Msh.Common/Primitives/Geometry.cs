@@ -417,6 +417,7 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+
         /// <summary>
         /// 
         /// </summary>
@@ -424,54 +425,56 @@ namespace IRI.Msh.Common.Primitives
         /// <param name="type"></param>
         /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
         /// <returns></returns>
-        public Geometry<T> Simplify(double threshold, SimplificationType type, bool retain3Poins, double secondaryParameter = double.NaN)
+        public Geometry<T> Simplify(/*double threshold,*/ SimplificationType type, SimplificationParamters paramters/*, bool retain3Poins, double secondaryParameter = double.NaN*/)
         {
             Func<List<T>, List<T>> filter;
 
             switch (type)
             {
                 case SimplificationType.ByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, paramters/* threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.AdditiveByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, paramters/*threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.AdditiveByAreaPlus:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, paramters/* threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.ByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, paramters/* threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.AdditiveByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, paramters/*threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.AdditiveByDistance:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, paramters/*threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, threshold, secondaryParameter, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, paramters/*threshold, secondaryParameter, retain3Poins*/);
                     break;
 
                 case SimplificationType.Visvalingam:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, threshold, this.IsRingBase(), retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, paramters, this.IsRingBase()/*threshold, this.IsRingBase(), retain3Poins*/);
                     break;
 
                 case SimplificationType.DouglasPeucker:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, threshold, retain3Poins);
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, paramters /*threshold, retain3Poins*/);
                     break;
 
                 case SimplificationType.Lang:
                     filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByLang(
                                         pList,
-                                        threshold,
-                                        double.IsNaN(secondaryParameter) ? (int?)null : (int)secondaryParameter,
-                                        retain3Poins);
+                                        paramters
+                                        //threshold,
+                                        //double.IsNaN(secondaryParameter) ? (int?)null : (int)secondaryParameter,
+                                        //retain3Poins
+                                        );
                     break;
 
                 default:
@@ -479,6 +482,17 @@ namespace IRI.Msh.Common.Primitives
             }
 
             return this.FilterPoints(filter);
+        }
+
+        public Geometry<T> Simplify(SimplificationType type, int zoomLevel, SimplificationParamters paramters)
+        {
+            var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, paramters.AverageLatitude ?? 0); //0 seconds!
+
+            paramters.AreaThreshold = threshold * threshold;
+            
+            paramters.DistanceThreshold = threshold;
+
+            return Simplify(type, paramters);
         }
 
         public Geometry<T> Transform(Func<T, T> transform, int newSrid = 0)
@@ -1182,7 +1196,7 @@ namespace IRI.Msh.Common.Primitives
                     masterPolygons.Add(new Geometry<T>(currentRing, GeometryType.Polygon, srid));
                 }
             }
-             
+
             return masterPolygons.Count == 1 ?
                 masterPolygons.First() :
                 new Geometry<T>(masterPolygons, GeometryType.MultiPolygon, srid);

@@ -1162,9 +1162,9 @@ namespace IRI.Jab.Common.Presenter.Map
                     drawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>()
                     {
                        layer=> LegendCommand.CreateZoomToExtentCommand(this, layer),
-                       layer=> LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
-                       layer=> LegendCommand.CreateEditDrawingItemLayer(this, layer),
-                       layer=> LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                       layer=> DrawingItemLegendCommands.CreateRemoveDrawingItemLayer(this, layer),
+                       layer=> DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
+                       layer=> DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
                     };
                 }
 

@@ -10,7 +10,7 @@ namespace IRI.Msh.Common.Analysis
 {
     public static class VisualSimplification
     {
-        public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, SimplificationParamters paramters/*double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -39,7 +39,7 @@ namespace IRI.Msh.Common.Analysis
 
                 tempArea += area;
 
-                if (Math.Abs(tempArea) > threshold || areaCheck2 > threshold || (area * totalAreaCoef > 0))
+                if (Math.Abs(tempArea) > paramters.AreaThreshold || areaCheck2 > paramters.AreaThreshold || (area * totalAreaCoef > 0))
                 {
                     tempArea = 0;
 
@@ -71,7 +71,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> SimplifyByAngle<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters /*double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -92,7 +92,7 @@ namespace IRI.Msh.Common.Analysis
             }
 
             //When i.Item2 ~ 1 it means points are on a line
-            var filter1 = angles.Where(i => i.Item2 < threshold).Select(i => i.Item1).ToList();
+            var filter1 = angles.Where(i => i.Item2 < paramters.AngleThreshold).Select(i => i.Item1).ToList();
 
             filter1.Insert(0, 0);
 
@@ -109,7 +109,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, SimplificationParamters paramters/*double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -130,7 +130,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
-                if (angle < 0 || angle < threshold)
+                if (angle < 0 || angle < paramters.AngleThreshold)
                 {
                     filtered.Add(secondIndex);
 
@@ -142,7 +142,7 @@ namespace IRI.Msh.Common.Analysis
                 thirdIndex = thirdIndex + 1;
             }
 
-            if (retain3Points && filtered.Count == 1)
+            if (paramters.Retain3Points && filtered.Count == 1)
             {
                 filtered.Add(points.Count() / 2);
             }
@@ -160,7 +160,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="anglethreshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, double angleThreshold, double areaThreshold, bool retain3Points = false) where T : IPoint
+        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters /*double angleThreshold, double areaThreshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -190,7 +190,7 @@ namespace IRI.Msh.Common.Analysis
 
                 //if (Math.Abs(angle) < threshold)
                 //{
-                if ((angle < 0 || angle < angleThreshold) || tempArea > areaThreshold)
+                if ((angle < 0 || angle < paramters.AngleThreshold.Value) || tempArea > paramters.AreaThreshold.Value)
                 {
                     filtered.Add(secondIndex);
 
@@ -205,7 +205,7 @@ namespace IRI.Msh.Common.Analysis
                 thirdIndex = thirdIndex + 1;
             }
 
-            if (retain3Points && filtered.Count == 1)
+            if (paramters.Retain3Points && filtered.Count == 1)
             {
                 filtered.Add(points.Count() / 2);
             }
@@ -217,7 +217,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters /*double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -242,7 +242,7 @@ namespace IRI.Msh.Common.Analysis
 
                 temp += semiDistance;
 
-                if (temp > threshold)
+                if (temp > parameters.DistanceThreshold.Value)
                 {
                     temp = 0;
 
@@ -254,7 +254,7 @@ namespace IRI.Msh.Common.Analysis
                 secondIndex++;
             }
 
-            if (retain3Points && filtered.Count == 1)
+            if (parameters.Retain3Points && filtered.Count == 1)
             {
                 filtered.Add(points.Count() / 2);
             }
@@ -266,7 +266,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> SimplifyByArea<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByArea<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -277,7 +277,6 @@ namespace IRI.Msh.Common.Analysis
                 return points;
             }
 
-            //List<(int index, double area)> areas = new List<(int index, double area)>();
             List<T> result = new List<T>();
 
             result.Add(points.First());
@@ -286,36 +285,23 @@ namespace IRI.Msh.Common.Analysis
             {
                 var area = SpatialUtility.CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
 
-                if (area > threshold)
+                if (area > parameters.AreaThreshold/* threshold*/)
                 {
                     result.Add(points[i + 1]);
                 }
-
-                //areas.Add((i + 1, area));
             }
 
-            if (retain3Points && result.Count == 1)
+            if (parameters.Retain3Points && result.Count == 1)
             {
                 result.Add(points[points.Count() / 2]);
             }
 
             result.Add(points.Last());
 
-            //var filteredIndexes = areas.Where(i => i.area > threshold).Select(i => i.index).ToList();
-
-            //filteredIndexes.Insert(0, 0);
-
-            //if (!points[0].Equals(points[points.Count - 1]))
-            //{
-            //    filteredIndexes.Add(points.Count - 1);
-            //}
-
-            //var result = filteredIndexes.Select(i => points[i]).ToList();            
-
             return result;
         }
 
-        public static List<T> AdditiveSimplifyByArea<T>(List<T> points, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> AdditiveSimplifyByArea<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -345,7 +331,7 @@ namespace IRI.Msh.Common.Analysis
 
                 tempArea += area;
 
-                if (tempArea > threshold)
+                if (tempArea > parameters.AreaThreshold /*threshold*/)
                 {
                     tempArea = 0;
 
@@ -359,7 +345,7 @@ namespace IRI.Msh.Common.Analysis
                 thirdIndex = thirdIndex + 1;
             }
 
-            if (retain3Points && result.Count == 1)
+            if (parameters.Retain3Points && result.Count == 1)
             {
                 result.Add(points[points.Count() / 2]);
             }
@@ -367,12 +353,12 @@ namespace IRI.Msh.Common.Analysis
             result.Add(points.Last());
 
             //var result = filtered.Select(i => points[i]).ToList();
-             
+
             return result;
         }
 
         // ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
-        public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, double threshold, bool isRing, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, SimplificationParamters parameters, bool isRing/*, double threshold, bool isRing, bool retain3Points = false*/) where T : IPoint
         {
             if (pointList == null || pointList.Count < 3)
             {
@@ -387,7 +373,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 var minArea = Statistics.Statistics.GetMin(areas);
 
-                if (minArea > threshold)
+                if (minArea > parameters.AreaThreshold)
                 {
                     break;
                 }
@@ -416,7 +402,7 @@ namespace IRI.Msh.Common.Analysis
                 }
             }
 
-            if (retain3Points && pList.Count == 2)
+            if (parameters.Retain3Points && pList.Count == 2)
             {
                 pList.Insert(1, pointList[pointList.Count() / 2]);
             }
@@ -426,7 +412,7 @@ namespace IRI.Msh.Common.Analysis
 
 
         // ref: https://doi.org/10.3138/FM57-6770-U75U-7727
-        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, double threshold, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
             var result = new List<T>();
 
@@ -443,7 +429,8 @@ namespace IRI.Msh.Common.Analysis
             //to handle lines with the same start and end
             if (pointList.First().Equals(pointList.Last()))
             {
-                return DivideForDouglasPeucker(pointList, threshold, pointList.Count / 2);
+                //return DivideForDouglasPeucker(pointList, threshold, pointList.Count / 2);
+                return DivideForDouglasPeucker(pointList, parameters, pointList.Count / 2);
             }
 
             var numberOfPoints = pointList.Count;
@@ -457,7 +444,8 @@ namespace IRI.Msh.Common.Analysis
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
-            double effectiveThreshold = threshold * threshold;
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
 
             for (int i = 1; i < numberOfPoints - 1; i++)
             {
@@ -472,18 +460,7 @@ namespace IRI.Msh.Common.Analysis
 
             if (maxSemiPerpendicularDistance > effectiveThreshold)
             {
-                return DivideForDouglasPeucker(pointList, threshold, maxIndex);
-                //var leftList = pointList.Take(maxIndex + 1).ToList();
-
-                //result = SimplifyByDouglasPeucker(leftList, threshold);
-
-                //var rightList = pointList.Skip(maxIndex).ToList();
-
-                //var rightResult = SimplifyByDouglasPeucker(rightList, threshold);
-
-                //result.AddRange(rightResult.Skip(1));
-
-                //return result;
+                return DivideForDouglasPeucker(pointList, parameters, maxIndex);
             }
             else
             {
@@ -494,7 +471,8 @@ namespace IRI.Msh.Common.Analysis
 
         // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
         // link: 
-        public static List<T> SimplifyByLang<T>(List<T> pointList, double threshold, int? lookAhead, bool retain3Points = false) where T : IPoint
+        // AreaThreshold is used
+        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, int? lookAhead, bool retain3Points = false*/) where T : IPoint
         {
             var result = new List<T>();
 
@@ -508,9 +486,9 @@ namespace IRI.Msh.Common.Analysis
                 return pointList;
             }
 
-            if (lookAhead == null)
+            if (parameters.LookAhead == null)
             {
-                lookAhead = Math.Max(3, pointList.Count / 10);
+                parameters.LookAhead = Math.Max(3, pointList.Count / 10);
             }
 
             var numberOfPoints = pointList.Count;
@@ -520,15 +498,16 @@ namespace IRI.Msh.Common.Analysis
             //1399.07.09
             //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
-            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //روش باعث می‌شود در محاسبات از تابع جذر استفاده
             //نشود
-            double effectiveThreshold = threshold * threshold;
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.AreaThreshold.Value * parameters.AreaThreshold.Value;
 
             int startIndex = 0;
 
             result.Add(pointList[0]);
 
-            int endIndex = Math.Min(numberOfPoints - 1, lookAhead.Value);
+            int endIndex = Math.Min(numberOfPoints - 1, parameters.LookAhead.Value);
 
             while (true)
             {
@@ -540,7 +519,7 @@ namespace IRI.Msh.Common.Analysis
                 {
                     result.Add(pointList[endIndex]);
                     startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead.Value);
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
 
                     continue;
                 }
@@ -553,11 +532,11 @@ namespace IRI.Msh.Common.Analysis
                 {
                     result.Add(pointList[endIndex]);
                     startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + lookAhead.Value);
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
                 }
             }
 
-            if (retain3Points && result.Count == 2)
+            if (parameters.Retain3Points && result.Count == 2)
             {
                 result.Insert(1, pointList[pointList.Count / 2]);
             }
@@ -568,22 +547,40 @@ namespace IRI.Msh.Common.Analysis
 
         #region Private Methods
 
-        private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, double threshold, int divideIndex) where T : IPoint
+        private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, SimplificationParamters paramters, int divideIndex) where T : IPoint
         {
             var result = new List<T>();
 
             var leftList = pointList.Take(divideIndex + 1).ToList();
 
-            result = SimplifyByDouglasPeucker(leftList, threshold);
+            result = SimplifyByDouglasPeucker(leftList, paramters);
 
             var rightList = pointList.Skip(divideIndex).ToList();
 
-            var rightResult = SimplifyByDouglasPeucker(rightList, threshold);
+            var rightResult = SimplifyByDouglasPeucker(rightList, paramters);
 
             result.AddRange(rightResult.Skip(1));
 
             return result;
         }
+
+
+        //private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, double threshold, int divideIndex) where T : IPoint
+        //{
+        //    var result = new List<T>();
+
+        //    var leftList = pointList.Take(divideIndex + 1).ToList();
+
+        //    result = SimplifyByDouglasPeucker(leftList, threshold);
+
+        //    var rightList = pointList.Skip(divideIndex).ToList();
+
+        //    var rightResult = SimplifyByDouglasPeucker(rightList, threshold);
+
+        //    result.AddRange(rightResult.Skip(1));
+
+        //    return result;
+        //}
 
         private static bool AnySemiPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint
         {
