@@ -22,7 +22,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public static LogisticGeometrySimplificationTrainingData Load(string fileName)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticGeometrySimplificationTrainingData>(fileName);
+            var jsonString = System.IO.File.ReadAllText(fileName);
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticGeometrySimplificationTrainingData>(jsonString);
         }
     }
 }

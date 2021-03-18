@@ -22,6 +22,11 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public bool IsRetained { get; set; }
 
+        public LogisticGeometrySimplificationParameters()
+        {
+
+        }
+
         public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last, int zoomLevel)
         {             
             this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middle, last);

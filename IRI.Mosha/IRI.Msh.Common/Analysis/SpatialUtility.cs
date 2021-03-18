@@ -232,7 +232,8 @@ namespace IRI.Msh.Common.Analysis
 
             }
 
-            return dotProduct < 0 ? -1 * result : result;
+            //return dotProduct < 0 ? -1 * result : result;
+            return result;
         }
          
         #endregion
