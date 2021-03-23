@@ -362,6 +362,34 @@ namespace IRI.Jab.Common.Model.Legend
 
             return result;
         }
+         
+        // Duplicate
+        public static ILegendCommand CreateCloneDrawingItemCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCopy,
+                Layer = layer,
+                ToolTip = "ایجاد کپی از عارضه",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var cloned = layer.Geometry.Clone();
+                     
+                    map.AddDrawingItem(cloned, $"{layer.Title} cloned-{map.CurrentZoomLevel}");
+
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
 
     }
 }

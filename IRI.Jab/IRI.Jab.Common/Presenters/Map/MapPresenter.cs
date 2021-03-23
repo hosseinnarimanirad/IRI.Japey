@@ -1246,7 +1246,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             var shapeItem = new DrawingItemLayer(name, drawing, id, source);
 
-            shapeItem.Title = name;
+            //shapeItem.Title = name;
 
             TrySetCommandsForDrawingItemLayer(shapeItem);
 
