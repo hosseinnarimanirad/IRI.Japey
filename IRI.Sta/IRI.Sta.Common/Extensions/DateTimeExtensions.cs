@@ -96,6 +96,11 @@ namespace IRI.Ket.Common.Extensions
         {
             return _calendar.GetMonth(dateTime);
         }
+		
+		  public static int GetPersianYear(this DateTime dateTime)
+        {
+            return _calendar.GetYear(dateTime);
+        }
 
         public static string ToPersianYearMonth(this DateTime dateTime, bool useFarsiNumbers = true)
         {
