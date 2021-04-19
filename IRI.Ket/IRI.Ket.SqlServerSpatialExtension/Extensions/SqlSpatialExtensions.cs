@@ -666,7 +666,7 @@ namespace IRI.Ket.SpatialExtensions
             {
                 return Geometry<Point>.CreateEmpty(geometry.GetOpenGisType().ToGeometryType(), geometry.GetSrid());
             }
-             
+
 
             Geometry<Point> result;
 
@@ -1404,7 +1404,7 @@ namespace IRI.Ket.SpatialExtensions
             {
                 //The first result contains the exterior ring so start at i 
                 result[i] = GetGeoJsonLineStringOrRing(geometry.STInteriorRingN(i));
-            } 
+            }
 
             //***********************************************************************************
 
@@ -1617,12 +1617,18 @@ namespace IRI.Ket.SpatialExtensions
 
             //double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
             var numberOfRings = geometry.NumRings().Value;
-             
-            double[][][] result = new double[numberOfRings + 1][][];
-             
+
+            // 1400.01.30
+            // در ژئوگرافی بر خلاف ژئومتری تعداد رینگ‌ها کل موارد رو شامل
+            // می‌شه. در واقع حلقه داخلی و خارجی از هم جدا نشده پس این‌جا
+            // نیازی نیست که به علاوه یک کنیم.
+            //double[][][] result = new double[numberOfRings + 1][][];
+
+            double[][][] result = new double[numberOfRings][][];
+
             for (int i = 1; i <= numberOfRings; i++)
             {
-                result[i] = GetGeoJsonLineStringOrRing(geometry.RingN(i));
+                result[i - 1] = GetGeoJsonLineStringOrRing(geometry.RingN(i));
             }
 
             return new GeoJsonPolygon()
@@ -1697,7 +1703,8 @@ namespace IRI.Ket.SpatialExtensions
             {
                 geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).ParseToGeoJson(),
                 id = feature.Id.ToString(),
-                properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value.ToString())
+                properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value.ToString()),
+
             };
         }
 
