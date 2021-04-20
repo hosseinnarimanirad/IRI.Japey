@@ -9,7 +9,7 @@ namespace IRI.Msh.Common.Model.GeoJson
     {
         public string type { get; set; }
         public int totalFeatures { get; set; }
-        public GeoJsonFeature[] features { get; set; }
+        public List<GeoJsonFeature>  features { get; set; }
         public GeoJsonCrs crs { get; set; }
     }
 
