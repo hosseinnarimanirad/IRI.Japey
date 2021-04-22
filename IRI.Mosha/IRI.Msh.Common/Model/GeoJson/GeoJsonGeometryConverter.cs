@@ -22,6 +22,12 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            // 1400.02.02
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
+
             JObject jObject = JObject.Load(reader);
 
             var type = jObject[typeKey]?.ToString();
@@ -106,10 +112,10 @@ namespace IRI.Msh.Common.Model.GeoJson
                 default:
                     break;
             }
-             
+
             writer.WriteEndObject();
             //var type = (value as IGeoJsonGeometry).Type;
-             
+
         }
     }
 }

@@ -76,6 +76,5 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
                         headerEncoding);
             }
         }
-
     }
 }

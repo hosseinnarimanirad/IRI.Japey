@@ -115,10 +115,6 @@
       <Project>{6f59ffd4-c888-4b6f-9d2c-94396693d84e}</Project>
       <Name>IRI.Sta.ShapefileFormat</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj">
-      <Project>{4d856916-aa68-45c0-8118-bcc85fc5399b}</Project>
-      <Name>IRI.Ket.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\Analysis\" />

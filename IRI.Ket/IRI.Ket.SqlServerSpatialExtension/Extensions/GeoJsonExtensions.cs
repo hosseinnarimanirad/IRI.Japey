@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 {
@@ -247,16 +248,16 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
         #region Shapefile
 
-        public static IEsriShape AsToShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
+        public static IEsriShape AsShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
         {
             return geometry.AsSqlGeometry(isLongitudeFirst, srid).AsEsriShape();
         }
 
-        public static void WriteAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = false)
+        public static void WriteAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = false, SrsBase srs = null)
         {
-            var shapes = features.Select(f => f.geometry.AsToShapefileShape(isLongitudeFirst));
+            var shapes = features.Select(f => f.geometry.AsShapefileShape(isLongitudeFirst));
 
-            IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true);
+            IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true, srs);
 
             var fields = new List<ShapefileFormat.Model.ObjectToDbfTypeMap<GeoJsonFeature>>();
 
@@ -266,7 +267,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
                 fields.Add(
                     new ShapefileFormat.Model.ObjectToDbfTypeMap<GeoJsonFeature>(
-                            ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField(propertyName, 255), 
+                            ShapefileFormat.Dbf.DbfFieldDescriptors.GetStringField(propertyName, 255),
                             new Func<GeoJsonFeature, string>(g => g.properties[propertyName])));
             }
 

@@ -864,7 +864,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region To Esri Json Geometry
 
-        public static EsriJsonGeometry ParseToEsriJsonGeometry(this SqlGeometry geometry)
+        public static EsriJsonGeometry AsEsriJsonGeometry(this SqlGeometry geometry)
         {
             //if (geometry.IsNotValidOrEmpty())
             //{
@@ -1078,7 +1078,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region To Path Markup
 
-        public static string ParseToPathMarkup(this SqlGeometry geometry, double decimals = double.NaN)
+        public static string AsPathMarkup(this SqlGeometry geometry, double decimals = double.NaN)
         {
             //if (geometry.IsNotValidOrEmpty())
             //{
@@ -1228,7 +1228,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region SqlGeometry To GeoJson
 
-        public static IGeoJsonGeometry ParseToGeoJson(this SqlGeometry geometry)
+        public static IGeoJsonGeometry AsGeoJson(this SqlGeometry geometry)
         {
             //if (geometry.IsNotValidOrEmpty())
             //{
@@ -1454,7 +1454,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region SqlGeography To GeoJson
 
-        public static IGeoJsonGeometry ParseToGeoJson(this SqlGeography geography)
+        public static IGeoJsonGeometry AsGeoJson(this SqlGeography geography)
         {
 
             OpenGisGeographyType geometryType = geography.GetOpenGisType();
@@ -1485,6 +1485,7 @@ namespace IRI.Ket.SpatialExtensions
                 case OpenGisGeographyType.CurvePolygon:
                 case OpenGisGeographyType.FullGlobe:
                 default:
+                    //return null;
                     throw new NotImplementedException();
             }
         }
@@ -1701,7 +1702,7 @@ namespace IRI.Ket.SpatialExtensions
         {
             return new GeoJsonFeature()
             {
-                geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).ParseToGeoJson(),
+                geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(),
                 id = feature.Id.ToString(),
                 properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value.ToString()),
 

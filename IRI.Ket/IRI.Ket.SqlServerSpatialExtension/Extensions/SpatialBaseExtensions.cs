@@ -148,7 +148,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Geometry To GeoJson
 
-        public static IGeoJsonGeometry ParseToGeoJson<T>(this T point) where T : IPoint, new()
+        public static IGeoJsonGeometry AsGeoJson<T>(this T point) where T : IPoint, new()
         {
             if (point == null)
                 return new GeoJsonPoint()
@@ -163,7 +163,7 @@ namespace IRI.Ket.SpatialExtensions
             };
         }
 
-        public static IGeoJsonGeometry ParseToGeoJson<T>(this Geometry<T> geometry) where T : IPoint, new()
+        public static IGeoJsonGeometry AsGeoJson<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
             //if (geometry.IsNullOrEmpty())
             //{

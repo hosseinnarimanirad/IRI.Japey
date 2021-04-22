@@ -11,7 +11,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 {
     public static class EsriExtensions
     {
-        public static EsriFeatureSet Parse(this SqlFeatureSet featureSet)
+        public static EsriFeatureSet AsEsriFeatureSet(this SqlFeatureSet featureSet)
         {
             var result = new EsriFeatureSet();
 
@@ -20,7 +20,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
             result.Features = featureSet.Features.Select(f => new EsriFeature()
             {
                 Attributes = f.Attributes.ToDictionary(i => i.Key, i => i.Value == null ? string.Empty : i.Value.ToString()),
-                Geometry = f.TheSqlGeometry.ParseToEsriJsonGeometry()
+                Geometry = f.TheSqlGeometry.AsEsriJsonGeometry()
             }).ToArray();
 
             return result;
