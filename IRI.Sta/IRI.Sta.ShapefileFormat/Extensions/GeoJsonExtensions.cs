@@ -1,0 +1,361 @@
+﻿using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Model.GeoJson;
+using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace IRI.Sta.ShapefileFormat.Extensions
+{
+    public static class GeoJsonExtensions
+    {
+        #region SqlGeometry > Esri Shape
+
+        public static IEsriShape AsEsriShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0, Func<IPoint, IPoint> mapFunction = null)
+        {
+            //var type = geometry.GeometryType;
+            //if (geometry.IsNullOrEmpty())
+            //{
+            //    return SqlSpatialHelper.CreateEmptySqlGeometry(type, srid);
+            //}
+
+            if (geometry.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            var type = geometry.GeometryType;
+
+            switch (type)
+            {
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+
+                case GeometryType.Point:
+                    return ToEsriPoint((GeoJsonPoint)geometry, isLongitudeFirst, srid, mapFunction);
+
+                case GeometryType.MultiPoint:
+                    return ToEsriMultiPoint((GeoJsonMultiPoint)geometry, isLongitudeFirst, srid, mapFunction);
+
+                case GeometryType.LineString:
+                    return ToEsriPolyline((GeoJsonLineString)geometry, isLongitudeFirst, srid, mapFunction);
+
+                case GeometryType.MultiLineString:
+                    return ToEsriPolyline((GeoJsonMultiLineString)geometry, isLongitudeFirst, srid, mapFunction);
+
+                case GeometryType.Polygon:
+                    return ToEsriPolygon((GeoJsonPolygon)geometry, isLongitudeFirst, srid, mapFunction);
+
+                case GeometryType.MultiPolygon:
+                    return ToEsriPolygon((GeoJsonMultiPolygon)geometry, isLongitudeFirst, srid, mapFunction);
+            }
+        }
+
+        public static EsriPoint AsEsriPoint(this GeoJsonPoint point, bool isLongitudeFirst, int srid)
+        {
+            if (point.IsNullOrEmpty())
+            {
+                return new EsriPoint(double.NaN, double.NaN, 0);
+            }
+            else
+            {
+                var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+
+                return new EsriPoint(temporaryPoint.X, temporaryPoint.Y, srid);
+            }
+        }
+
+        //Not supportig Z and M Values
+        private static EsriPoint ToEsriPoint(GeoJsonPoint geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            var point = geometry.AsEsriPoint(isLongitudeFirst, srid);
+
+            return mapFunction == null ? point : (EsriPoint)mapFunction(point);
+        }
+
+        //Not supportig Z and M Values
+        private static EsriMultiPoint ToEsriMultiPoint(GeoJsonMultiPoint geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriMultiPoint();
+            }
+
+            // 1400.02.03
+            // number of points equals to number of geometries in multipoint
+            //List<EsriPoint> points = new List<EsriPoint>(geometry.Coordinates.Length);
+
+            //foreach (var item in geometry.Coordinates)
+            //{
+            //    IPoint temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+
+            //    if (mapFunction != null)
+            //    {
+            //        temporaryPoint = mapFunction(temporaryPoint);
+            //    }
+
+            //    points.Add(new EsriPoint(temporaryPoint.X, temporaryPoint.Y, srid));
+            //}
+
+            //return new EsriMultiPoint(points.ToArray());
+
+            return new EsriMultiPoint(GetPoints(geometry.Coordinates, isLongitudeFirst, srid, mapFunction).ToArray());
+        }
+
+        //Not supporting Z and M values
+        private static EsriPolyline ToEsriPolyline(GeoJsonLineString geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolyline();
+            }
+
+            //int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            //List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            //List<int> parts = new List<int>(numberOfGeometries);
+
+            //for (int i = 0; i < numberOfGeometries; i++)
+            //{
+            //    int index = i + 1;
+
+            //    parts.Add(points.Count);
+
+            //    points.AddRange(GetPoints(geometry.STGeometryN(index), mapFunction));
+            //}
+
+            //return new EsriPolyline(points.ToArray(), parts.ToArray());
+
+            return new EsriPolyline(GetPoints(geometry.Coordinates, isLongitudeFirst, srid, mapFunction).ToArray());
+        }
+
+        //Not supporting Z and M values
+        private static EsriPolyline ToEsriPolyline(GeoJsonMultiLineString geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolyline();
+            }
+
+            int numberOfGeometries = geometry.NumberOfGeometries();
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.NumberOfPoints());
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(geometry.Coordinates[i], isLongitudeFirst, srid, mapFunction));
+            }
+
+            return new EsriPolyline(points.ToArray(), parts.ToArray());
+        }
+
+        //Not supporting Z and M values
+        //check for cw and cww criteria
+        private static EsriPolygon ToEsriPolygon(GeoJsonPolygon geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolygon();
+            }
+
+            int numberOfRings = geometry.NumberOfGeometries();
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.NumberOfPoints());
+
+            List<int> parts = new List<int>(numberOfRings);
+
+            for (int i = 0; i < numberOfRings; i++)
+            {
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(geometry.Coordinates[i], isLongitudeFirst, srid, mapFunction));
+            }
+
+            return new EsriPolygon(points.ToArray(), parts.ToArray());
+        }
+
+        //Not supporting Z and M values
+        //check for cw and cww criteria
+        private static EsriPolygon ToEsriPolygon(GeoJsonMultiPolygon geometry, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolygon();
+            }
+
+            int numberOfGeometries = geometry.NumberOfGeometries();
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.NumberOfPoints());
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                parts.Add(points.Count);
+
+                var tempPolygon = geometry.Coordinates[i];
+
+                var numberOfRings = tempPolygon == null ? 0 : tempPolygon.Length;
+
+                for (int j = 0; j < numberOfRings; j++)
+                {
+                    parts.Add(points.Count);
+
+                    points.AddRange(GetPoints(tempPolygon[j], isLongitudeFirst, srid, mapFunction));
+                }
+            }
+
+            return new EsriPolygon(points.ToArray(), parts.ToArray());
+
+            //for (int i = 0; i < numberOfGeometries; i++)
+            //{
+            //    int index = i + 1;
+
+            //    SqlGeometry tempPolygon = geometry.STGeometryN(index);
+
+            //    var exterior = tempPolygon.STExteriorRing();
+
+            //    if (tempPolygon.IsNullOrEmpty() || exterior.IsNullOrEmpty())
+            //        continue;
+
+            //    parts.Add(points.Count);
+
+            //    points.AddRange(GetPoints(exterior, mapFunction));
+
+            //    for (int j = 0; j < tempPolygon.STNumInteriorRing(); j++)
+            //    {
+            //        var interior = tempPolygon.STInteriorRingN(j + 1);
+
+            //        if (interior.IsNullOrEmpty())
+            //            continue;
+
+            //        parts.Add(points.Count);
+
+            //        points.AddRange(GetPoints(interior, mapFunction));
+            //    }
+            //}
+
+            //return new EsriPolygon(points.ToArray(), parts.ToArray());
+        }
+
+        private static IEnumerable<EsriPoint> GetPoints(double[][] coordinates, bool isLongitudeFirst, int srid, Func<IPoint, IPoint> mapFunction)
+        {
+            if (coordinates.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            List<EsriPoint> points = new List<EsriPoint>(coordinates.Length);
+
+            foreach (var item in coordinates)
+            {
+                IPoint temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+
+                if (mapFunction != null)
+                {
+                    temporaryPoint = mapFunction(temporaryPoint);
+                }
+
+                points.Add(new EsriPoint(temporaryPoint.X, temporaryPoint.Y, srid));
+            }
+
+            //int numberOfPoints = geometry.Length;
+
+            //EsriPoint[] points = new EsriPoint[numberOfPoints];
+
+            //for (int i = 0; i < numberOfPoints; i++)
+            //{
+            //    int index = i + 1;
+
+            //    //EsriPoint point = new EsriPoint(geometry.STPointN(index).STX.Value, geometry.STPointN(index).STY.Value);
+            //    var point = geometry.STPointN(index).AsEsriPoint();
+
+            //    if (mapFunction == null)
+            //    {
+            //        points[i] = point;
+            //    }
+            //    else
+            //    {
+            //        points[i] = (EsriPoint)mapFunction(point);
+            //    }
+
+            //}
+
+            return points;
+        }
+
+        #endregion
+         
+
+        public static void WriteAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = false, SrsBase srs = null)
+        {
+            var shapes = features.Select(f => f.Geometry.AsEsriShape(isLongitudeFirst, srs.Srid));
+
+            IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true, srs);
+
+            #region comment 
+
+            //var fields = new List<ObjectToDbfTypeMap<GeoJsonFeature>>();
+
+            //foreach (var item in features.First().Properties)
+            //{
+            //    var propertyName = item.Key;
+
+            //    ObjectToDbfTypeMap<GeoJsonFeature> typeMap = null;
+
+            //    var mapFunc = new Func<GeoJsonFeature, object>(f => f.Properties[propertyName]);
+
+            //    // 1400.02.03
+            //    switch (features.First().Properties[propertyName])
+            //    {
+            //        case bool property:
+            //            typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
+            //            break;
+
+            //        case string property:
+            //            // 1400.02.03
+            //            // گرفتن بیش‌ترین طول
+            //            var maxLength = features.Select(f => f.Properties[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
+
+            //            typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetStringField(propertyName, (byte)Math.Max(255, maxLength)), mapFunc);
+            //            break;
+
+            //        case int property:
+            //            typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
+            //            break;
+
+            //        case double property:
+            //            typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
+            //            break;
+
+            //        default:
+            //            throw new NotImplementedException();
+            //    }
+
+            //    fields.Add(typeMap);
+            //}
+
+            //IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<GeoJsonFeature>(dbfFile, features, fields, Encoding.GetEncoding(1256), true);
+
+            #endregion
+
+            var dbfFile = IRI.Ket.ShapefileFormat.Shapefile.GetDbfFileName(shpFileName);
+
+            var attributes = features.Select(f => f.Properties).ToList();
+
+            IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write(dbfFile, attributes, Encoding.GetEncoding(1256), true);
+        }
+    }
+}

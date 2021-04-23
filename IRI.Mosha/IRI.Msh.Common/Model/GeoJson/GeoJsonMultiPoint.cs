@@ -34,5 +34,17 @@ namespace IRI.Msh.Common.Model.GeoJson
         {
             return GeoJson.Serialize(this, indented, removeSpaces);
         }
+
+        public int NumberOfGeometries()
+        {
+            return Coordinates == null ? 0 : Coordinates.Length;
+        }
+
+        public int NumberOfPoints()
+        {
+            // 1400.02.03
+            // number of parts equals number of points
+            return NumberOfGeometries();
+        }
     }
 }

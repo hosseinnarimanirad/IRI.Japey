@@ -19,9 +19,33 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         private const byte maxStringLength = 255;
 
-        public static DbfFieldDescriptor GetDoubleField(string fieldName)
+
+        // ******************************
+        // 1400.02.03        
+        // default mappings in ArcMap
+        // ******************************
+        //
+        // short integer:   'N' (5,0)
+        // long integer:    'N' (10,0)  ; ~ less than 2B
+        // double:          'F' (19,11)
+        // float:           'F' (13,11)
+        // text:            'C' (<255,0)
+        // Date:            'D' (8,0) 
+
+
+        /// <summary>
+        /// 1400.02.03 Double field is not supported in Shapefile
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static DbfFieldDescriptor GetFloatField(string fieldName)
         {
             return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.FloatingPoint, doubleLength, doubleDecimalCount);
+        }
+
+        public static DbfFieldDescriptor GetFloatFieldForLong(string fieldName)
+        {
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.FloatingPoint, doubleLength, 0);
         }
 
         public static DbfFieldDescriptor GetIntegerField(string fieldName)
@@ -36,9 +60,18 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         public static DbfFieldDescriptor GetStringField(string fieldName, byte length)
         {
+            // 1400.02.03
+            // not need to check max value: (byte)Math.Max(maxStringLength, length) 
+            // because byte cannot exceed 255
+            //
             return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.Character, length, 0);
         }
 
+        /// <summary>
+        /// 1400.02.03 Boolean field is not supported in Shapefile
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
         public static DbfFieldDescriptor GetBooleanField(string fieldName)
         {
             return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.Logical, booleanLength, 0);

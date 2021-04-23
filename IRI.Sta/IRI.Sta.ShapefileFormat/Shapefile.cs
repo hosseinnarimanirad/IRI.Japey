@@ -348,7 +348,7 @@ namespace IRI.Ket.ShapefileFormat
 
             if (createDbf)
             {
-                Dbf.DbfFile.Write(Shapefile.GetDbfFileName(shpFileName), collection.Count, overwrite);
+                Dbf.DbfFile.WriteDefault(Shapefile.GetDbfFileName(shpFileName), collection.Count, overwrite);
             }
 
             //try to automatically find srs

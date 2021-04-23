@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Msh.Common.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,34 @@ namespace IRI.Ket.ShapefileFormat.Dbf
     {
         private static Func<string, string> _defaultCorrection = (i) => { return i.ArabicToFarsi(); };
 
+        private static string _dbfTrueValue1 = "T";
+        private static string _dbfFalseValue1 = "F";
+
+        private static string _dbfTrueValue2 = "Y";
+        private static string _dbfFalseValue2 = "N";
 
         internal static bool? ConvertDbfLogicalValueToBoolean(byte[] buffer)
         {
-            string tempValue = Encoding.ASCII.GetString(buffer);
+            if (buffer.IsNullOrEmpty())
+                return null;
 
-            if (tempValue.ToUpper().Equals("T") || tempValue.ToUpper().Equals("Y"))
+            string tempValue = Encoding.ASCII.GetString(buffer)?.ToUpper();
+
+            // 1400.02.03-refactor
+            //if (tempValue.ToUpper().Equals(_dbfTrueValue1) || tempValue.ToUpper().Equals(_dbfTrueValue2))
+            //{
+            //    return true;
+            //}
+            //else if (tempValue.ToUpper().Equals("F") || tempValue.ToUpper().Equals("N"))
+            //{
+            //    return false;
+            //}
+
+            if (_dbfTrueValue1.Equals(tempValue) || _dbfTrueValue2.Equals(tempValue))
             {
                 return true;
             }
-            else if (tempValue.ToUpper().Equals("F") || tempValue.ToUpper().Equals("N"))
+            else if (_dbfFalseValue1.Equals(tempValue) || _dbfFalseValue2.Equals(tempValue))
             {
                 return false;
             }
@@ -44,26 +63,43 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         internal static readonly Func<byte[], object> ToDouble =
             (input) =>
             {
+                // old code; this may throw exception
                 //string value = Encoding.ASCII.GetString(input).Trim();
                 //return string.IsNullOrEmpty(value) ? DBNull.Value : (object)double.Parse(value);
-                double value;
-                return double.TryParse(Encoding.ASCII.GetString(input), out value) ? (object)value : DBNull.Value;
+
+                string value = Encoding.ASCII.GetString(input);
+
+                double doubleValue;
+
+                return double.TryParse(value, out doubleValue) ? (object)doubleValue : DBNull.Value;
             };
 
         internal static readonly Func<byte[], object> ToInt =
             (input) =>
             {
                 string value = Encoding.ASCII.GetString(input);
-                return string.IsNullOrEmpty(value) ? DBNull.Value : (object)int.Parse(value);
+
+                int intValue;
+
+                // 1400.02.03-comment
+                //return string.IsNullOrEmpty(value) ? DBNull.Value : (object)int.Parse(value);
+
+                return int.TryParse(value, out intValue) ? (object)intValue : DBNull.Value;
             };
 
         internal static readonly Func<byte[], object> ToDecimal =
             (input) =>
             {
                 string value = Encoding.ASCII.GetString(input);
-                return string.IsNullOrEmpty(value) ? DBNull.Value : (object)decimal.Parse(value);
+
+                decimal decimalValue;
+
+                // 1400.02.03-comment
+                //return string.IsNullOrEmpty(value) ? DBNull.Value : (object)decimal.Parse(value);
+
+                return decimal.TryParse(value, out decimalValue) ? (object)decimalValue : DBNull.Value;
             };
-         
+
         internal static Dictionary<char, Func<byte[], object>> GetMappingFunctions(Encoding currentEncoding, bool correctFarsiCharacters)
         {
             var _mapFunctions = new Dictionary<char, Func<byte[], object>>();
@@ -131,15 +167,18 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
             switch (value)
             {
-                case DateTime dt:
-                    result = GetBytes(dt.ToString("yyyyMMdd"), result, Encoding.ASCII);
+                case string stringValue:
+                    result = GetBytes(stringValue, result, encoding);
                     break;
 
-                case bool b:
-                    result = GetBytes((b ? "T" : "F"), result, Encoding.ASCII);
+                case DateTime dateTimeValue:
+                    result = GetBytes(dateTimeValue.ToString("yyyyMMdd"), result, Encoding.ASCII);
                     break;
 
-                case string s:
+                case bool booleanValue:
+                    result = GetBytes(booleanValue ? "T" : "F", result, Encoding.ASCII);
+                    break;
+
                 default:
                     result = GetBytes(value.ToString(), result, encoding);
                     break;

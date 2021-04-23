@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 using IRI.Ket.ShapefileFormat.Model;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Ket.ShapefileFormat.Dbf
 {
@@ -291,7 +292,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
-            
+
             var _mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
@@ -346,7 +347,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         //}
 
-        public static void Write(string dbfFileName, int numberOfRecords, bool overwrite = false)
+        public static void WriteDefault(string dbfFileName, int numberOfRecords, bool overwrite = false)
         {
             List<int> attributes = Enumerable.Range(0, numberOfRecords).ToList();
 
@@ -528,10 +529,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         //}
 
 
-        public static void Write(string dbfFileName,
-                                    List<Dictionary<string, object>> attributes,
-                                    Encoding encoding,
-                                    bool overwirte = false)
+        public static void Write(string dbfFileName, List<Dictionary<string, object>> attributes, Encoding encoding, bool overwirte = false)
         {
             if (attributes == null || attributes.Count < 1)
             {
@@ -539,75 +537,170 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
 
             //make schema
-            var columns = MakeDbfFields(attributes.First());
+            //var columns = MakeDbfFields(attributes.First());
 
-            List<ObjectToDbfTypeMap<Dictionary<string, object>>> mapping = new List<ObjectToDbfTypeMap<Dictionary<string, object>>>();
+            //List<ObjectToDbfTypeMap<Dictionary<string, object>>> mapping = new List<ObjectToDbfTypeMap<Dictionary<string, object>>>();
 
-            var counter = 0;
+            //var counter = 0;
 
-            foreach (var item in attributes.First())
-            {
-                mapping.Add(new ObjectToDbfTypeMap<Dictionary<string, object>>(columns[counter], d => d[item.Key]));
-            }
+            //foreach (var item in attributes.First())
+            //{
+            //    mapping.Add(new ObjectToDbfTypeMap<Dictionary<string, object>>(columns[counter], d => d[item.Key]));
+            //}
+
+            // 1400.02.03
+            //make schema and mappings
+            var mapping = MakeDbfFieldsAndMaps(attributes);
 
             Write(dbfFileName, attributes, mapping, encoding, overwirte);
         }
 
-        public static List<DbfFieldDescriptor> MakeDbfFields(Dictionary<string, object> dictionary)
-        {
-            List<DbfFieldDescriptor> result = new List<DbfFieldDescriptor>();
+        // 1400.02.03-comment
+        //public static List<DbfFieldDescriptor> MakeDbfFields(Dictionary<string, object> dictionary)
+        //{
+        //    List<DbfFieldDescriptor> result = new List<DbfFieldDescriptor>();
 
-            foreach (var item in dictionary)
+        //    foreach (var item in dictionary)
+        //    {
+        //        result.Add(new DbfFieldDescriptor(item.Key, 'C', 255, 0));
+        //    }
+
+        //    return result;
+        //}
+
+        // 1400.02.03-comment
+        //public static List<ObjectToDbfTypeMap<T>> MakeDbfFieldsAndMaps<T>(IEnumerable<T> values, Func<T, Dictionary<string, object>> extractAttributeFunc)
+        //{
+        //    var fields = new List<ObjectToDbfTypeMap<T>>();
+
+        //    if (values.IsNullOrEmpty())
+        //        return fields;
+
+        //    return MakeDbfFieldsAndMaps
+
+        //    //var firstProperties = extractAttributeFunc(values.First());
+
+        //    //foreach (var item in firstProperties)
+        //    //{
+        //    //    var propertyName = item.Key;
+
+        //    //    ObjectToDbfTypeMap<T> typeMap = null;
+
+        //    //    var mapFunc = new Func<T, object>(f => extractAttributeFunc(f)[propertyName]);
+
+        //    //    switch (firstProperties[propertyName])
+        //    //    {
+        //    //        case string property:
+        //    //            // گرفتن بیش‌ترین طول
+        //    //            var maxLength = (byte)values.Select(f => extractAttributeFunc(f)[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
+
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetStringField(propertyName, maxLength), mapFunc);
+        //    //            break;
+
+        //    //        case char charProperty:
+        //    //        case bool boolProperty:
+        //    //            // 1400.02.03: Shapefile does not support boolean field
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetStringField(propertyName, 1), mapFunc);
+        //    //            break;
+
+        //    //        case int intProperty:
+        //    //        case short shortProperty:
+        //    //        case byte byteProperty:
+        //    //        case uint uintProperty:
+        //    //        case ushort ushortProperty:
+        //    //        case sbyte sbyteProperty:
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
+        //    //            break;
+
+        //    //        case double doubleProperty:
+        //    //        case decimal decimalProperty:
+        //    //        case float floatProperty:
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetFloatField(propertyName), mapFunc);
+        //    //            break;
+
+        //    //        case long longProperty:
+        //    //        case ulong ulongProperty:
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetFloatFieldForLong(propertyName), mapFunc);
+        //    //            break;
+
+        //    //        case DateTime dateTimeProperty:
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetDateField(propertyName), mapFunc);
+        //    //            break;
+
+        //    //        default:
+        //    //            typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetStringField(propertyName), mapFunc);
+        //    //            break;
+        //    //            //throw new NotImplementedException();
+        //    //    }
+
+        //    //    fields.Add(typeMap);
+        //    //}
+
+        //    //return fields;
+        //}
+
+        public static List<ObjectToDbfTypeMap<Dictionary<string, object>>> MakeDbfFieldsAndMaps(List<Dictionary<string, object>> dictionaries)
+        {
+            var fields = new List<ObjectToDbfTypeMap<Dictionary<string, object>>>();
+
+            if (dictionaries.IsNullOrEmpty())
             {
-                result.Add(new DbfFieldDescriptor(item.Key, 'C', 255, 0));
+                return fields;
             }
 
-            return result;
-        }
-
-        // 1400.02.03
-        public static List<ObjectToDbfTypeMap<T>> MakeDbfFieldsAndMaps<T>(IEnumerable<T> values, Func<T, Dictionary<string, object>> extractAttributeFunc)
-        {
-            var fields = new List<ObjectToDbfTypeMap<T>>();
-
-            var firstProperties = extractAttributeFunc(values.First());
+            var firstProperties = dictionaries.First();
 
             foreach (var item in firstProperties)
             {
                 var propertyName = item.Key;
 
-                ObjectToDbfTypeMap<T> typeMap = null;
+                ObjectToDbfTypeMap<Dictionary<string, object>> typeMap = null;
 
-                var mapFunc = new Func<T, object>(f => extractAttributeFunc(f)[propertyName]);
+                var mapFunc = new Func<Dictionary<string, object>, object>(f => f[propertyName]);
 
                 switch (firstProperties[propertyName])
                 {
-                    case bool property:
-                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
-                        break;
-
                     case string property:
-
                         // گرفتن بیش‌ترین طول
-                        var maxLength = values.Select(f => extractAttributeFunc(f)[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
+                        var maxLength = (byte)dictionaries.Select(f => f[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
 
-                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetStringField(propertyName, (byte)Math.Max(255, maxLength)), mapFunc);
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetStringField(propertyName, maxLength), mapFunc);
                         break;
 
-                    case int property:
-                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
+                    case char charProperty:
+                    case bool boolProperty:
+                        // 1400.02.03: Shapefile does not support boolean field
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetStringField(propertyName, 1), mapFunc);
                         break;
 
-                    case double property:
-                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
+                    case int intProperty:
+                    case short shortProperty:
+                    case byte byteProperty:
+                    case uint uintProperty:
+                    case ushort ushortProperty:
+                    case sbyte sbyteProperty:
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
                         break;
 
-                    case DateTime property:
-                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetDateField(propertyName), mapFunc);
+                    case double doubleProperty:
+                    case decimal decimalProperty:
+                    case float floatProperty:
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetFloatField(propertyName), mapFunc);
+                        break;
+
+                    case long longProperty:
+                    case ulong ulongProperty:
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetFloatFieldForLong(propertyName), mapFunc);
+                        break;
+
+                    case DateTime dateTimeProperty:
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetDateField(propertyName), mapFunc);
                         break;
 
                     default:
-                        throw new NotImplementedException();
+                        typeMap = new ObjectToDbfTypeMap<Dictionary<string, object>>(DbfFieldDescriptors.GetStringField(propertyName), mapFunc);
+                        break;
+                        //throw new NotImplementedException();
                 }
 
                 fields.Add(typeMap);

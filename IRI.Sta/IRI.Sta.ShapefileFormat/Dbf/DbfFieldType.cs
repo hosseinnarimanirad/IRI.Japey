@@ -7,9 +7,9 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 {
     public enum DbfFieldType
     {
-        Character = 'C',
+        Character = 'C',            // in ArcMap; Text(length)
         Number = 'N',
-        Logical = 'L',
+        Logical = 'L',              //
         Date = 'D',
         Memo = 'M',
         FloatingPoint = 'F',

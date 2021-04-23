@@ -35,5 +35,15 @@ namespace IRI.Msh.Common.Model.GeoJson
         {
             return GeoJson.Serialize(this, indented, removeSpaces);
         }
+
+        public int NumberOfGeometries()
+        {
+            return 1;
+        }
+
+        public int NumberOfPoints()
+        {
+            return Coordinates == null ? 0 : Coordinates.Sum(ring => ring == null ? 0 : ring.Length);
+        }
     }
 }

@@ -250,63 +250,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Extensions
 
         #region Shapefile
 
-        public static IEsriShape AsShapefileShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0)
-        {
-            return geometry.AsSqlGeometry(isLongitudeFirst, srid).AsEsriShape();
-        }
-
-        public static void WriteAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = false, SrsBase srs = null)
-        {
-            var shapes = features.Select(f => f.Geometry.AsShapefileShape(isLongitudeFirst));
-
-            IRI.Ket.ShapefileFormat.Shapefile.Save(shpFileName, shapes, false, true, srs);
-
-            var fields = new List<ObjectToDbfTypeMap<GeoJsonFeature>>();
-
-            foreach (var item in features.First().Properties)
-            {
-                var propertyName = item.Key;
-
-                ObjectToDbfTypeMap<GeoJsonFeature> typeMap = null;
-
-                var mapFunc = new Func<GeoJsonFeature, object>(f => f.Properties[propertyName]);
-
-                // 1400.02.03
-                switch (features.First().Properties[propertyName])
-                {
-                    case bool property:
-                        typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
-                        break;
-
-                    case string property:
-                        // 1400.02.03
-                        // گرفتن بیش‌ترین طول
-                        var maxLength = features.Select(f => f.Properties[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
-
-                        typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetStringField(propertyName, (byte)Math.Max(255, maxLength)), mapFunc);
-                        break;
-
-                    case int property:
-                        typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
-                        break;
-
-                    case double property:
-                        typeMap = new ObjectToDbfTypeMap<GeoJsonFeature>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
-                        break;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-
-                fields.Add(typeMap);
-
-
-            }
-
-            var dbfFile = IRI.Ket.ShapefileFormat.Shapefile.GetDbfFileName(shpFileName);
-
-            IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<GeoJsonFeature>(dbfFile, features, fields, Encoding.GetEncoding(1256), true);
-        }
+      
 
         #endregion
     }
