@@ -18,11 +18,19 @@ namespace IRI.Ket.ShapefileFormat.Model
 
         }
 
-        public EsriAttributeDictionary(List<Dictionary<string,object>> attributes, List<DbfFieldDescriptor> fields)
+        public EsriAttributeDictionary(List<Dictionary<string, object>> attributes, List<DbfFieldDescriptor> fields)
         {
+            if (attributes.Count != fields.Count)
+            {
+                throw new NotImplementedException("EsriAttributeDictionary > constructor");
+            }
+
             this.Attributes = attributes;
 
             this.Fields = fields;
         }
+
+        //public List<ObjectToDbfTypeMap<T>>
+
     }
 }

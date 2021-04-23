@@ -1702,9 +1702,9 @@ namespace IRI.Ket.SpatialExtensions
         {
             return new GeoJsonFeature()
             {
-                geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(),
-                id = feature.Id.ToString(),
-                properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value.ToString()),
+                Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(),
+                Id = feature.Id.ToString(),
+                Properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value/*.ToString()*/),
 
             };
         }
@@ -1713,9 +1713,9 @@ namespace IRI.Ket.SpatialExtensions
         {
             return new SqlFeature()
             {
-                Attributes = feature.properties.ToDictionary(f => f.Key, f => (object)f.Value),
+                Attributes = feature.Properties.ToDictionary(f => f.Key, f => (object)f.Value),
                 //Id = feature.id,
-                TheSqlGeometry = feature.geometry.AsSqlGeometry(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                TheSqlGeometry = feature.Geometry.AsSqlGeometry(isLongitudeFirst, SridHelper.GeodeticWGS84)
             };
         }
 

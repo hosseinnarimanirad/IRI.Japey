@@ -10,165 +10,59 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 {
     public static class DbfFile
     {
-        private static Func<string, string> _defaultCorrection = (i) => { return i.ArabicToFarsi(); };
 
-        private static bool _correctFarsiCharacters = true;
+        //private static Dictionary<char, Func<byte[], object>> _mapFunctions;
 
-        private static Dictionary<char, Func<byte[], object>> _mapFunctions;
+        internal const int _arabicWindowsEncoding = 1256;
 
-        private const int _arabicWindowsEncoding = 1256;
+        internal static Encoding _arabicEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
 
-        public static Encoding _arabicEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
+        internal static Encoding _currentEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
 
-        private static Encoding _currentEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
+        internal static Encoding _fieldsEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
 
-        private static Encoding _fieldsEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
+        internal static bool _correctFarsiCharacters = true;
 
         static DbfFile()
         {
-            InitializeMapFunctions();
-        }
-
-        private static void InitializeMapFunctions()
-        {
-            _mapFunctions = new Dictionary<char, Func<byte[], object>>();
-
-            _mapFunctions.Add('F', ToDouble);
-
-            _mapFunctions.Add('O', ToDouble);
-            _mapFunctions.Add('+', ToDouble);
-            _mapFunctions.Add('I', ToInt);
-            _mapFunctions.Add('Y', ToDecimal);
-
-            _mapFunctions.Add('L', (input) => ConvertDbfLogicalValueToBoolean(input));
-
-            //MapFunction.Add('D', (input) => new DateTime(int.Parse(new string(Encoding.ASCII.GetChars(input, 0, 4))),
-            //                                                int.Parse(new string(Encoding.ASCII.GetChars(input, 4, 2))),
-            //                                                int.Parse(new string(Encoding.ASCII.GetChars(input, 6, 2)))));
-
-            _mapFunctions.Add('D', (input) =>
-            {
-                var first = new string(Encoding.ASCII.GetChars(input, 0, 4));
-                var second = new string(Encoding.ASCII.GetChars(input, 4, 2));
-                var third = new string(Encoding.ASCII.GetChars(input, 6, 2));
-
-                if (string.IsNullOrEmpty(first + second + third) || string.IsNullOrWhiteSpace(first + second + third))
-                {
-                    return null;
-                }
-                else
-                {
-                    var year = int.Parse(first);
-                    var month = int.Parse(second);
-                    var day = int.Parse(third);
-
-                    if (year + month + day == 0) //in the case; first : 0000, second : 00, third : 00
-                    {
-                        return null;
-                    }
-
-                    return new DateTime(year, month, day);
-                }
-            });
-
-
-            _mapFunctions.Add('M', (input) => input);
-
-            _mapFunctions.Add('B', (input) => input);
-
-            _mapFunctions.Add('P', (input) => input);
-
-            _mapFunctions.Add('N', ToDouble);
-
-            _mapFunctions.Add('C', (input) => ConvertDbfGeneralToString(input, _currentEncoding));
-
-            _mapFunctions.Add('G', (input) => ConvertDbfGeneralToString(input, _currentEncoding));
-
-            _mapFunctions.Add('V', (input) => ConvertDbfGeneralToString(input, _currentEncoding));
-        }
-
-        private static byte[] GetBytes(string value, byte[] array, Encoding encoding)
-        {
-            var truncatedString = value;
-
-            var length = array.Length;
-
-            if (encoding.GetByteCount(value) > length)
-            {
-                //Truncate Scenario
-                truncatedString = new string(value.TakeWhile((c, i) => encoding.GetByteCount(value.Substring(0, i + 1)) < length).ToArray());
-
-                System.Diagnostics.Trace.WriteLine("Truncation occured in writing the dbf file");
-                System.Diagnostics.Trace.WriteLine($"Original String: {value}");
-                System.Diagnostics.Trace.WriteLine($"Truncated String: {truncatedString}");
-                System.Diagnostics.Trace.WriteLine($"Lost String: {value.Replace(truncatedString, string.Empty)}");
-                System.Diagnostics.Trace.WriteLine(string.Empty);
-            }
-
-            encoding.GetBytes(truncatedString, 0, truncatedString.Length, array, 0);
-
-            //Encoder en = encoding.GetEncoder().Convert(, 0, 0, null, 0, 0,, 0);
-            //Consider using the Encoder.Convert method instead of GetByteCount.
-            //The conversion method converts as much data as possible, and does 
-            //throw an exception if the output buffer is too small.For continuous 
-            //encoding of a stream, this method is often the best choice.
-
-            return array;
-        }
-
-        private static bool? ConvertDbfLogicalValueToBoolean(byte[] buffer)
-        {
-            string tempValue = Encoding.ASCII.GetString(buffer);
-
-            if (tempValue.ToUpper().Equals("T") || tempValue.ToUpper().Equals("Y"))
-            {
-                return true;
-            }
-            else if (tempValue.ToUpper().Equals("F") || tempValue.ToUpper().Equals("N"))
-            {
-                return false;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        private static string ConvertDbfGeneralToString(byte[] buffer, Encoding encoding)
-        {
-            if (_correctFarsiCharacters)
-            {
-                return _defaultCorrection(encoding.GetString(buffer).Replace('\0', ' ').Trim());
-            }
-            else
-            {
-                return encoding.GetString(buffer).Replace('\0', ' ').Trim();
-            }
+            //InitializeMapFunctions();
 
         }
 
-        private static readonly Func<byte[], object> ToDouble =
-            (input) =>
-            {
-                //string value = Encoding.ASCII.GetString(input).Trim();
-                //return string.IsNullOrEmpty(value) ? DBNull.Value : (object)double.Parse(value);
-                double value;
-                return double.TryParse(Encoding.ASCII.GetString(input), out value) ? (object)value : DBNull.Value;
-            };
+        //private static void InitializeMapFunctions()
+        //{
+        //    _mapFunctions = DbfFieldMappings.GetMappingFunctions();
+        //}
 
-        private static readonly Func<byte[], object> ToInt =
-            (input) =>
-            {
-                string value = Encoding.ASCII.GetString(input);
-                return string.IsNullOrEmpty(value) ? DBNull.Value : (object)int.Parse(value);
-            };
+        //private static byte[] GetBytes(string value, byte[] array, Encoding encoding)
+        //{
+        //    var truncatedString = value;
 
-        private static readonly Func<byte[], object> ToDecimal =
-            (input) =>
-            {
-                string value = Encoding.ASCII.GetString(input);
-                return string.IsNullOrEmpty(value) ? DBNull.Value : (object)decimal.Parse(value);
-            };
+        //    var length = array.Length;
+
+        //    if (encoding.GetByteCount(value) > length)
+        //    {
+        //        //Truncate Scenario
+        //        truncatedString = new string(value.TakeWhile((c, i) => encoding.GetByteCount(value.Substring(0, i + 1)) < length).ToArray());
+
+        //        System.Diagnostics.Trace.WriteLine("Truncation occured in writing the dbf file");
+        //        System.Diagnostics.Trace.WriteLine($"Original String: {value}");
+        //        System.Diagnostics.Trace.WriteLine($"Truncated String: {truncatedString}");
+        //        System.Diagnostics.Trace.WriteLine($"Lost String: {value.Replace(truncatedString, string.Empty)}");
+        //        System.Diagnostics.Trace.WriteLine(string.Empty);
+        //    }
+
+        //    encoding.GetBytes(truncatedString, 0, truncatedString.Length, array, 0);
+
+        //    //Encoder en = encoding.GetEncoder().Convert(, 0, 0, null, 0, 0,, 0);
+        //    //Consider using the Encoder.Convert method instead of GetByteCount.
+        //    //The conversion method converts as much data as possible, and does 
+        //    //throw an exception if the output buffer is too small.For continuous 
+        //    //encoding of a stream, this method is often the best choice.
+
+        //    return array;
+        //}
+
 
         private static short GetRecordLength(List<DbfFieldDescriptor> columns)
         {
@@ -188,7 +82,9 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         {
             _currentEncoding = newEncoding;
 
-            InitializeMapFunctions();
+            //DbfFieldMappings.ChangeEncoding(newEncoding);
+
+            //InitializeMapFunctions();
         }
 
         public static List<DbfFieldDescriptor> GetDbfSchema(string dbfFileName)
@@ -269,7 +165,8 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
             else if (encodingText?.Contains("1256") == true)
             {
-                return Dbf.DbfFile._arabicEncoding;
+                //return Dbf.DbfFile._arabicEncoding;
+                return DbfFile._arabicEncoding;
             }
             else
             {
@@ -295,7 +192,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             //    ChangeEncoding(dataEncoding);
             //}
 
-            DbfFile._fieldsEncoding = fieldHeaderEncoding ?? _arabicEncoding;
+            DbfFile._fieldsEncoding = fieldHeaderEncoding ?? DbfFile._arabicEncoding;
 
             DbfFile._correctFarsiCharacters = correctFarsiCharacters;
 
@@ -320,6 +217,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 fields.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
 
+            var _mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
 
@@ -393,6 +291,8 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
+            
+            var _mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 
             //System.Data.DataTable result = MakeTableSchema(tableName, columns);
             var result = new object[header.NumberOfRecords][];
@@ -446,36 +346,18 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         //}
 
-        public static void Write(string fileName, int numberOfRecords, bool overwrite = false)
+        public static void Write(string dbfFileName, int numberOfRecords, bool overwrite = false)
         {
             List<int> attributes = Enumerable.Range(0, numberOfRecords).ToList();
 
             List<ObjectToDbfTypeMap<int>> mapping = new List<ObjectToDbfTypeMap<int>>() { new ObjectToDbfTypeMap<int>(DbfFieldDescriptors.GetIntegerField("Id"), i => i) };
 
-            Write(fileName,
+            Write(dbfFileName,
                 attributes,
                 mapping,
                 Encoding.ASCII,
                 overwrite);
-
-            //Write(fileName,
-            //    attributes,
-            //    new List<Func<int, object>>() { i => i },
-            //    new List<DbfFieldDescriptor>() { DbfFieldDescriptors.GetIntegerField("Id") },
-            //    Encoding.ASCII,
-            //    overwrite);
-
         }
-
-        //public static void Write<T>(string dbfFileName,
-        //                                IEnumerable<T> values,
-        //                                List<Func<T, object>> mapping,
-        //                                List<DbfFieldDescriptor> columns,
-        //                                Encoding encoding,
-        //                                bool overwrite = false)
-        //{
-
-        //}
 
         public static void Write<T>(string dbfFileName,
                                         IEnumerable<T> values,
@@ -483,8 +365,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                                         Encoding encoding,
                                         bool overwrite = false)
         {
-            //Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
-
             var columns = mapping.Select(m => m.FieldType).ToList();
 
             int control = 0;
@@ -495,7 +375,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 //    throw new NotImplementedException();
                 //}
 
-                //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
                 var mode = Shapefile.GetMode(dbfFileName, overwrite);
 
                 System.IO.Stream stream = new System.IO.FileStream(dbfFileName, mode);
@@ -522,23 +401,27 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                     for (int j = 0; j < mapping.Count; j++)
                     {
-                        byte[] temp = new byte[columns[j].Length];
+                        // 1400.02.03-comment
+                        //byte[] temp = new byte[columns[j].Length];
 
                         object value = mapping[j].MapFunction(values.ElementAt(i));
 
-                        if (value is DateTime dt)
-                        {
-                            value = dt.ToString("yyyyMMdd");
-                        }
+                        var temp = DbfFieldMappings.Encode(value, columns[j].Length, encoding);
 
-                        if (value != null)
-                        {
-                            //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);
-                            temp = GetBytes(value.ToString(), temp, encoding);
-                        }
+                        // 1400.02.03-comment
+                        //if (value is DateTime dt)
+                        //{
+                        //    value = dt.ToString("yyyyMMdd");
+                        //}
 
-                        //string tt = encoding.GetString(temp);
-                        //var le = tt.Length;
+                        //if (value != null)
+                        //{
+                        //    //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);
+                        //    temp = GetBytes(value.ToString(), temp, encoding);
+                        //}
+
+                        ////string tt = encoding.GetString(temp);
+                        ////var le = tt.Length;
                         writer.Write(temp);
                     }
                 }
@@ -562,86 +445,87 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
         }
 
-        public static void Write<T>(string dbfFileName,
-                                       IEnumerable<T> values,
-                                       ObjectToDfbFields<T> mapping,
-                                       Encoding encoding,
-                                       bool overwrite = false)
-        {
-            //Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
+        // 1400.02.03 - remove similar method
+        //public static void Write<T>(string dbfFileName,
+        //                               IEnumerable<T> values,
+        //                               ObjectToDfbFields<T> mapping,
+        //                               Encoding encoding,
+        //                               bool overwrite = false)
+        //{
+        //    //Write(dbfFileName, values, mapping.Select(m => m.MapFunction).ToList(), mapping.Select(m => m.FieldType).ToList(), encoding, overwrite);
 
-            var columns = mapping.Fields;
+        //    var columns = mapping.Fields;
 
-            int control = 0;
+        //    int control = 0;
 
-            try
-            {
-                //if (columns.Count != mapping.Count)
-                //{
-                //    throw new NotImplementedException();
-                //}
+        //    try
+        //    {
+        //        //if (columns.Count != mapping.Count)
+        //        //{
+        //        //    throw new NotImplementedException();
+        //        //}
 
-                //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
-                var mode = Shapefile.GetMode(dbfFileName, overwrite);
+        //        //var mode = overwrite ? System.IO.FileMode.Create : System.IO.FileMode.CreateNew;
+        //        var mode = Shapefile.GetMode(dbfFileName, overwrite);
 
-                System.IO.Stream stream = new System.IO.FileStream(dbfFileName, mode);
+        //        System.IO.Stream stream = new System.IO.FileStream(dbfFileName, mode);
 
-                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
+        //        System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-                DbfHeader header = new DbfHeader(values.Count(), columns.Count, GetRecordLength(columns), encoding);
+        //        DbfHeader header = new DbfHeader(values.Count(), columns.Count, GetRecordLength(columns), encoding);
 
-                writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
+        //        writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
 
-                foreach (var item in columns)
-                {
-                    writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
-                }
+        //        foreach (var item in columns)
+        //        {
+        //            writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
+        //        }
 
-                //Terminator
-                writer.Write(byte.Parse("0D", System.Globalization.NumberStyles.HexNumber));
+        //        //Terminator
+        //        writer.Write(byte.Parse("0D", System.Globalization.NumberStyles.HexNumber));
 
-                for (int i = 0; i < values.Count(); i++)
-                {
-                    control = i;
-                    // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
-                    writer.Write(byte.Parse("20", System.Globalization.NumberStyles.HexNumber));
+        //        for (int i = 0; i < values.Count(); i++)
+        //        {
+        //            control = i;
+        //            // All dbf field records begin with a deleted flag field. Deleted - 0x2A (asterisk) else 0x20 (space)
+        //            writer.Write(byte.Parse("20", System.Globalization.NumberStyles.HexNumber));
 
-                    var fieldValues = mapping.ExtractAttributesFunc(values.ElementAt(i));
+        //            var fieldValues = mapping.ExtractAttributesFunc(values.ElementAt(i));
 
-                    for (int j = 0; j < columns.Count; j++)
-                    {
-                        byte[] temp = new byte[columns[j].Length];
+        //            for (int j = 0; j < columns.Count; j++)
+        //            {
+        //                byte[] temp = new byte[columns[j].Length];
 
-                        if (fieldValues[j] != null)
-                        {
-                            //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);
-                            temp = GetBytes(fieldValues[j]?.ToString(), temp, encoding);
-                        }
+        //                if (fieldValues[j] != null)
+        //                {
+        //                    //encoding.GetBytes(value.ToString(), 0, value.ToString().Length, temp, 0);
+        //                    temp = GetBytes(fieldValues[j]?.ToString(), temp, encoding);
+        //                }
 
-                        //string tt = encoding.GetString(temp);
-                        //var le = tt.Length;
-                        writer.Write(temp);
-                    }
-                }
+        //                //string tt = encoding.GetString(temp);
+        //                //var le = tt.Length;
+        //                writer.Write(temp);
+        //            }
+        //        }
 
-                //End of file
-                writer.Write(byte.Parse("1A", System.Globalization.NumberStyles.HexNumber));
+        //        //End of file
+        //        writer.Write(byte.Parse("1A", System.Globalization.NumberStyles.HexNumber));
 
-                writer.Close();
+        //        writer.Close();
 
-                stream.Close();
+        //        stream.Close();
 
-                System.IO.File.WriteAllText(Shapefile.GetCpgFileName(dbfFileName), encoding.BodyName);
+        //        System.IO.File.WriteAllText(Shapefile.GetCpgFileName(dbfFileName), encoding.BodyName);
 
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string message = ex.Message;
 
-                string m2 = message + " " + control.ToString();
+        //        string m2 = message + " " + control.ToString();
 
-            }
-        }
+        //    }
+        //}
 
 
         public static void Write(string dbfFileName,
@@ -657,7 +541,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             //make schema
             var columns = MakeDbfFields(attributes.First());
 
-
             List<ObjectToDbfTypeMap<Dictionary<string, object>>> mapping = new List<ObjectToDbfTypeMap<Dictionary<string, object>>>();
 
             var counter = 0;
@@ -668,15 +551,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
 
             Write(dbfFileName, attributes, mapping, encoding, overwirte);
-
-
-            //1397.08.27
-            //List<Func<Dictionary<string, object>, object>> mappings = new List<Func<Dictionary<string, object>, object>>();
-            //foreach (var item in attributes.First())
-            //{
-            //    mappings.Add(d => d[item.Key]);
-            //}
-            //Write(dbfFileName, attributes, mappings, columns, encoding, overwirte);
         }
 
         public static List<DbfFieldDescriptor> MakeDbfFields(Dictionary<string, object> dictionary)
@@ -689,6 +563,57 @@ namespace IRI.Ket.ShapefileFormat.Dbf
             }
 
             return result;
+        }
+
+        // 1400.02.03
+        public static List<ObjectToDbfTypeMap<T>> MakeDbfFieldsAndMaps<T>(IEnumerable<T> values, Func<T, Dictionary<string, object>> extractAttributeFunc)
+        {
+            var fields = new List<ObjectToDbfTypeMap<T>>();
+
+            var firstProperties = extractAttributeFunc(values.First());
+
+            foreach (var item in firstProperties)
+            {
+                var propertyName = item.Key;
+
+                ObjectToDbfTypeMap<T> typeMap = null;
+
+                var mapFunc = new Func<T, object>(f => extractAttributeFunc(f)[propertyName]);
+
+                switch (firstProperties[propertyName])
+                {
+                    case bool property:
+                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
+                        break;
+
+                    case string property:
+
+                        // گرفتن بیش‌ترین طول
+                        var maxLength = values.Select(f => extractAttributeFunc(f)[propertyName]?.ToString()).Max(val => val == null ? 0 : val.Length);
+
+                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetStringField(propertyName, (byte)Math.Max(255, maxLength)), mapFunc);
+                        break;
+
+                    case int property:
+                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetIntegerField(propertyName), mapFunc);
+                        break;
+
+                    case double property:
+                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetBooleanField(propertyName), mapFunc);
+                        break;
+
+                    case DateTime property:
+                        typeMap = new ObjectToDbfTypeMap<T>(DbfFieldDescriptors.GetDateField(propertyName), mapFunc);
+                        break;
+
+                    default:
+                        throw new NotImplementedException();
+                }
+
+                fields.Add(typeMap);
+            }
+
+            return fields;
         }
 
         #region DataTable
@@ -798,6 +723,8 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
 
+            var mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
+
             System.Data.DataTable result = MakeTableSchema(tableName, columns);
 
             ((FileStream)reader.BaseStream).Seek(header.LengthOfHeader, SeekOrigin.Begin);
@@ -822,7 +749,7 @@ namespace IRI.Ket.ShapefileFormat.Dbf
                 {
                     int fieldLenth = columns[j].Length;
 
-                    values[j] = _mapFunctions[columns[j].Type](recordReader.ReadBytes(fieldLenth));
+                    values[j] = mapFunctions[columns[j].Type](recordReader.ReadBytes(fieldLenth));
                 }
 
                 recordReader.Close();
@@ -867,14 +794,18 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
                 for (int j = 0; j < table.Columns.Count; j++)
                 {
-                    byte[] temp = new byte[columns[j].Length];
+                    // 1400.02.03-comment
+                    //byte[] temp = new byte[columns[j].Length];
 
                     string value = table.Rows[i][j].ToString().Trim();
 
-                    //encoding.GetBytes(value, 0, value.Length, temp, 0);
-                    //writer.Write(temp);
+                    ////encoding.GetBytes(value, 0, value.Length, temp, 0);
+                    ////writer.Write(temp);
 
-                    writer.Write(GetBytes(value, temp, encoding));
+                    // 1400.02.03-comment
+                    //writer.Write(GetBytes(value, temp, encoding));
+
+                    writer.Write(DbfFieldMappings.Encode(value, columns[j].Length, encoding));
                 }
             }
 

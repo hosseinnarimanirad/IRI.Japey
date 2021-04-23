@@ -21,12 +21,12 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         public static DbfFieldDescriptor GetDoubleField(string fieldName)
         {
-            return new DbfFieldDescriptor(fieldName, (char)DbfColumnType.FloatingPoint, doubleLength, doubleDecimalCount);
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.FloatingPoint, doubleLength, doubleDecimalCount);
         }
 
         public static DbfFieldDescriptor GetIntegerField(string fieldName)
         {
-            return new DbfFieldDescriptor(fieldName, (char)DbfColumnType.Number, integerLength, 0);
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.Number, integerLength, 0);
         }
 
         public static DbfFieldDescriptor GetStringField(string fieldName)
@@ -36,12 +36,17 @@ namespace IRI.Ket.ShapefileFormat.Dbf
 
         public static DbfFieldDescriptor GetStringField(string fieldName, byte length)
         {
-            return new DbfFieldDescriptor(fieldName, (char)DbfColumnType.Character, length, 0);
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.Character, length, 0);
         }
 
         public static DbfFieldDescriptor GetBooleanField(string fieldName)
         {
-            return new DbfFieldDescriptor(fieldName, (char)DbfColumnType.Logical, booleanLength, 0);
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.Logical, booleanLength, 0);
+        }
+
+        public static DbfFieldDescriptor GetDateField(string fieldName)
+        {
+            return new DbfFieldDescriptor(fieldName, (char)DbfFieldType.DateTime, dateLength, 0);
         }
     }
 }

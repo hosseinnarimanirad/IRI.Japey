@@ -403,21 +403,22 @@ namespace IRI.Ket.ShapefileFormat
             DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
         }
 
-        public static void Save<T>(string shpFileName,
-                                      IEnumerable<T> values,
-                                      Func<T, IEsriShape> geometryMap,
-                                      ObjectToDfbFields<T> attributeMappings,
-                                      Encoding encoding,
-                                      SrsBase srs,
-                                      bool overwrite = false)
-        {
-            SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
+        // 1400.03.02- remove method
+        //public static void Save<T>(string shpFileName,
+        //                              IEnumerable<T> values,
+        //                              Func<T, IEsriShape> geometryMap,
+        //                              ObjectToDfbFields<T> attributeMappings,
+        //                              Encoding encoding,
+        //                              SrsBase srs,
+        //                              bool overwrite = false)
+        //{
+        //    SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
 
-            DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
-        }
+        //    DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
+        //}
 
 
-
+        // old
         //public static void Save<T>(string shpFileName,
         //                             IEnumerable<T> values,
         //                             Func<T, IEsriShape> geometryMap,

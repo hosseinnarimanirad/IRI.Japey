@@ -33,7 +33,9 @@ namespace IRI.Ket.DataManagement.DataSource
 
         //public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
 
-        ObjectToDfbFields<T> _fields;
+        // 1400.02.03
+        //ObjectToDfbFields<T> _fields;
+        List<ObjectToDbfTypeMap<T>> _fields;
 
         protected ShapefileDataSource()
         {
@@ -43,7 +45,7 @@ namespace IRI.Ket.DataManagement.DataSource
                                     IEsriShapeCollection geometries,
                                     EsriAttributeDictionary attributes,
                                     Func<SqlGeometry, Dictionary<string, object>, T> map,
-                                    Func<T, List<Object>> inverseAttributeMap,
+                                    Func<T, List<object>> inverseAttributeMap,
                                     SrsBase targetSrs)
         {
             if (attributes == null)
@@ -73,7 +75,12 @@ namespace IRI.Ket.DataManagement.DataSource
                 this.Extent = this.Extent.Transform(p => transformFunc(p));
             }
 
-            this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
+            // 1400.02.03
+            //this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
+            for (int i = 0; i < attributes.Fields.Count; i++)
+            {
+                this._fields.Add(new ObjectToDbfTypeMap<T>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
+            }
 
 
             if (geometries?.Count != attributes.Attributes?.Count)
@@ -164,7 +171,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //    }
         //}
 
-        public static ShapefileDataSource<T> Create(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, Func<T, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
+        public static ShapefileDataSource<T> Create(string shapefileName, Func<SqlGeometry, Dictionary<string, object>, T> map, Func<T, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
             var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
@@ -184,20 +191,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override void SaveChanges()
         {
-            //save to shapefile
-            Func<Point, Point> inverseTransformFunc = null;
-
-            if (_targetSrs != null)
-            {
-                inverseTransformFunc = p => p.Project(_targetSrs, _sourceSrs);
-            }
+            Func<T, IEsriShape> geometryMap = null;
 
             //save shp, shx, dbf, prj, cpg
 
-            Func<T, IEsriShape> geometryMap = null;
-
-            if (_targetSrs == null)
+            if (_targetSrs != null)
             {
+                Func<Point, Point> inverseTransformFunc = p => p.Project(_targetSrs, _sourceSrs);
+
                 geometryMap = t => t.TheSqlGeometry.AsEsriShape(inverseTransformFunc as Func<IPoint, IPoint>);
             }
             else
@@ -228,9 +229,9 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static ShapefileDataSource<SqlFeature> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
         {
-            Func<SqlFeature, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
+            Func<SqlFeature, List<object>> inverseAttributeMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
 
-            var result = ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseMap, targetCrs, encoding);
+            var result = ShapefileDataSource<SqlFeature>.Create(shapefileName, mapShapeToSqlFeature, inverseAttributeMap, targetCrs, encoding);
 
             result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
 

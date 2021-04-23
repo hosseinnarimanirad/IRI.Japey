@@ -101,5 +101,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         {
             return $"Name: {Name}; Type: {Type}; Length: {Length}";
         }
+
     }
 }

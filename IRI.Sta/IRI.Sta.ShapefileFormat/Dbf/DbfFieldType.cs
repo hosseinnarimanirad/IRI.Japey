@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.Dbf
 {
-    public enum DbfColumnType
+    public enum DbfFieldType
     {
         Character = 'C',
         Number = 'N',

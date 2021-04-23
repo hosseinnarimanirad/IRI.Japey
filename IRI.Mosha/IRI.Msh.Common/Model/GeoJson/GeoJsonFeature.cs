@@ -1,14 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace IRI.Msh.Common.Model.GeoJson
 {
     public class GeoJsonFeature
     {
-        public string type { get; set; }
-        public string id { get; set; }
-        public IGeoJsonGeometry geometry { get; set; }
-        public string geometry_name { get; set; }
-        public Dictionary<string, string> properties { get; set; }
+        [JsonProperty("type")]
+        public string Type { get; set; } = "Feature";
+
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("geometry")]
+        public IGeoJsonGeometry Geometry { get; set; }
+
+        [JsonProperty("geometry_name")]
+        public string Geometry_name { get; set; }
+
+        [JsonProperty("properties")]
+        public Dictionary<string, object> Properties { get; set; }
     }
 
 }
