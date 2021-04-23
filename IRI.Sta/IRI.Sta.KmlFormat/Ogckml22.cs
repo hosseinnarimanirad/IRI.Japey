@@ -6178,6 +6178,10 @@ namespace IRI.Ket.KmlFormat.Primitives
     [System.Xml.Serialization.XmlRootAttribute("Placemark", Namespace = "http://www.opengis.net/kml/2.2", IsNullable = false)]
     public partial class PlacemarkType : AbstractFeatureType
     {
+        public PlacemarkType()
+        {
+
+        }
 
         private AbstractGeometryType abstractGeometryField;
 

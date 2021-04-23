@@ -38,7 +38,7 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         public int NumberOfGeometries()
         {
-            return 1;
+            return Coordinates == null ? 0 : Coordinates.Length;
         }
 
         public int NumberOfPoints()

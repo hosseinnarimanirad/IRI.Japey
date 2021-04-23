@@ -20,7 +20,7 @@ namespace IRI.Ket.ShapefileFormat.Model
 
         public EsriAttributeDictionary(List<Dictionary<string, object>> attributes, List<DbfFieldDescriptor> fields)
         {
-            if (attributes.Count != fields.Count)
+            if (attributes.First().Count != fields.Count)
             {
                 throw new NotImplementedException("EsriAttributeDictionary > constructor");
             }

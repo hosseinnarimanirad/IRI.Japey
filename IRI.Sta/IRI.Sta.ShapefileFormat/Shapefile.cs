@@ -13,6 +13,7 @@ using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
 using IRI.Msh.Common.Primitives;
 using IRI.Ket.ShapefileFormat.Prj;
+using IRI.Sta.ShapefileFormat.Extensions;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -447,6 +448,19 @@ namespace IRI.Ket.ShapefileFormat
             Save(shpFileName, data.Select(t => map(t)), createEmptyDbf, overwrite, srs);
 
             //SaveAsPrj(shpFileName, crs, overwrite);
+        }
+
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<Msh.Common.Model.GeoJson.GeoJsonFeature> features, bool isLongitudeFirst = false, SrsBase srs = null)
+        {
+            var shapes = features.Select(f => f.Geometry.AsEsriShape(isLongitudeFirst, srs.Srid));
+
+            Save(shpFileName, shapes, false, true, srs);
+  
+            var dbfFile = GetDbfFileName(shpFileName);
+
+            var attributes = features.Select(f => f.Properties).ToList();
+
+            DbfFile.Write(dbfFile, attributes, Encoding.GetEncoding(1256), true);
         }
 
         public static void SaveAsPrj(string shpFileName, SrsBase srs, bool overwrite)

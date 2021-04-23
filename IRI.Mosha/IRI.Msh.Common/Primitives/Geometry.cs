@@ -1,13 +1,8 @@
 ﻿using IRI.Msh.Common.Analysis;
-using IRI.Msh.Common.Extensions;
-using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
@@ -1581,5 +1576,9 @@ namespace IRI.Msh.Common.Primitives
         }
 
         #endregion
+
+
+
+
     }
 }
