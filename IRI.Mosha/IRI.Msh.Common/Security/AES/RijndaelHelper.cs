@@ -1,17 +1,64 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using IRI.Ket.Common.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace IRI.Ket.Common.Security
 {
-    public class AES
+    public static class RijndaelHelper
     {
-
-        public AES()
+        public static string AesEncrypt(string value, byte[] key, byte[] iv)
         {
+            using (RijndaelManaged rm = new RijndaelManaged())
+            {
+                using (var encryptor = rm.CreateEncryptor(key, iv))
+                {
+                    var original = System.Text.Encoding.UTF8.GetBytes(value);
+
+                    return Convert.ToBase64String(Transform(original, encryptor));
+                }
+            }
         }
 
-        private byte[] Encrypt(byte[] clearData, byte[] Key, byte[] IV)
+        public static string AesDecrypt(string base64String, byte[] key, byte[] iv)
+        {
+            using (RijndaelManaged rm = new RijndaelManaged())
+            {
+                using (var decryptor = rm.CreateDecryptor(key, iv))
+                {
+                    var original = Convert.FromBase64String(base64String);
+
+                    return System.Text.Encoding.UTF8.GetString(Transform(original, decryptor));
+                }
+            }
+        }
+
+
+        #region Private Methods
+
+        private static byte[] Transform(byte[] buffer, ICryptoTransform transform)
+        {
+            MemoryStream stream = new MemoryStream();
+
+            using (CryptoStream cs = new CryptoStream(stream, transform, CryptoStreamMode.Write))
+            {
+                cs.Write(buffer, 0, buffer.Length);
+            }
+
+            return stream.ToArray();
+        }
+
+        #endregion
+
+
+        #region Another Sample
+        private static byte[] Encrypt(byte[] clearData, byte[] Key, byte[] IV)
         {
 
             MemoryStream ms = new MemoryStream();
@@ -29,9 +76,8 @@ namespace IRI.Ket.Common.Security
         }
 
 
-        public string Encrypt(string Data, string Password, int Bits)
+        public static string Encrypt(string Data, string Password, int Bits)
         {
-
             byte[] clearBytes = System.Text.Encoding.Unicode.GetBytes(Data);
 
             PasswordDeriveBytes pdb = new PasswordDeriveBytes(Password,
@@ -60,7 +106,7 @@ namespace IRI.Ket.Common.Security
         }
 
 
-        private byte[] Decrypt(byte[] cipherData, byte[] Key, byte[] IV)
+        private static byte[] Decrypt(byte[] cipherData, byte[] Key, byte[] IV)
         {
 
             MemoryStream ms = new MemoryStream();
@@ -75,7 +121,7 @@ namespace IRI.Ket.Common.Security
         }
 
 
-        public string Decrypt(string Data, string Password, int Bits)
+        public static string Decrypt(string Data, string Password, int Bits)
         {
 
             byte[] cipherBytes = Convert.FromBase64String(Data);
@@ -105,6 +151,8 @@ namespace IRI.Ket.Common.Security
             }
 
         }
+
+        #endregion
 
     }
 }

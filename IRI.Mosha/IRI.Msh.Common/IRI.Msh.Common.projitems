@@ -173,10 +173,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\LineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Point.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Point3D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Security\AES.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\AES\AES.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\AES\RijndaelHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\EncryptedMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Security\RsaExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Security\RsaMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\Hashing\HashAlgorithmHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\RSACryptoServiceProviderExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\CryptoRSAHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\RsaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Units\Angular\AngleAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Units\Angular\AngleMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Units\Angular\AngleRange.cs" />
@@ -205,5 +208,6 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
     <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Security\RSA\" />
   </ItemGroup>
 </Project>

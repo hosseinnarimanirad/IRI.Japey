@@ -28,7 +28,7 @@ namespace IRI.Ket.Common.Security
 
                 var message = JsonConvert.SerializeObject(value);
 
-                result.Message = CryptographyHelper.RsaEncrypt(message, base64PubKey);
+                result.Message = CryptoRSAHelper.RsaEncrypt(message, base64PubKey);
 
                 return result;
             }
@@ -43,7 +43,7 @@ namespace IRI.Ket.Common.Security
         {
             try
             {
-                var decryptedMessage = CryptographyHelper.RsaDecrypt(Message, base64PriKey);
+                var decryptedMessage = CryptoRSAHelper.RsaDecrypt(Message, base64PriKey);
                   
                 return JsonConvert.DeserializeObject<T>(decryptedMessage);
             }

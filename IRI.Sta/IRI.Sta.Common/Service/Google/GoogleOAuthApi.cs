@@ -1,4 +1,5 @@
 ﻿using IRI.Ket.Common.Helpers;
+using IRI.Ket.Common.Security;
 using IRI.Msh.Common.Model.Google;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace IRI.Ket.Common.Service.Google
 
             string code_verifier = CryptographyHelper.GetRandomDataBase64url(32);
 
-            string code_challenge = CryptographyHelper.GetBase64urlEncodeNoPadding(CryptographyHelper.GetSha256(code_verifier));
+            string code_challenge = CryptographyHelper.GetBase64urlEncodeNoPadding(HashAlgorithmHelper.GetSha256(code_verifier));
 
             const string code_challenge_method = "S256";
 
