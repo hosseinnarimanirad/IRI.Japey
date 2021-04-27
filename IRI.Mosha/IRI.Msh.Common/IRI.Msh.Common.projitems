@@ -84,7 +84,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\BaseConversionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConversionHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\CryptographyHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\CryptographyHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EncodingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnumHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HttpHelper.cs" />
@@ -173,7 +173,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\LineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Point.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Point3D.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Security\AES\AES.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\AES\RijndaelHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\EncryptedMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\Hashing\HashAlgorithmHelper.cs" />
