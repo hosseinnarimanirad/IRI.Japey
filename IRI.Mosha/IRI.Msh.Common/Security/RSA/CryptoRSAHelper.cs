@@ -4,13 +4,13 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Common.Security
+namespace IRI.Msh.Common.Security
 {
 
     /// <summary>
     /// AsymmetricCryptography > RSA
     /// </summary>
-    internal static class CryptoRSAHelper
+    public static class CryptoRSAHelper
     {
         private static byte[] RSA_OID = { 0x30, 0xD, 0x6, 0x9, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0xD, 0x1, 0x1, 0x1, 0x5, 0x0 }; // Object ID for RSA
 
@@ -96,27 +96,6 @@ namespace IRI.Ket.Common.Security
             var originalByte = Encoding.UTF8.GetBytes(value);
 
             return RsaEncrypt(originalByte, base46PublicKey);
-
-            //using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
-            //{
-            //    try
-            //    {
-            //        var originalByte = Encoding.UTF8.GetBytes(value);
-
-            //        rsa.FromXmlString(base46PublicKey.Base64ToNormalString());
-
-            //        return Convert.ToBase64String(rsa.Encrypt(originalByte, true));
-            //    }
-            //    catch (Exception)
-            //    {
-
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        rsa.PersistKeyInCsp = false;
-            //    }
-            //}
         }
 
 
@@ -147,26 +126,6 @@ namespace IRI.Ket.Common.Security
             var encodedBytes = Convert.FromBase64String(base64EncodedString);
 
             return RsaDecrypt(encodedBytes, base64PrivateKey);
-
-            //using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
-            //{
-            //    try
-            //    {
-            //        var encodedBytes = Convert.FromBase64String(base64EncodedString);
-
-            //        rsa.FromXmlString(base64PrivateKey.Base64ToNormalString());
-
-            //        return Encoding.UTF8.GetString(rsa.Decrypt(encodedBytes, true));
-            //    }
-            //    catch (Exception)
-            //    {
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        rsa.PersistKeyInCsp = false;
-            //    }
-            //}
         }
 
 
@@ -394,6 +353,26 @@ namespace IRI.Ket.Common.Security
                   parameters.DQ != null ? Convert.ToBase64String(parameters.DQ) : null,
                   parameters.InverseQ != null ? Convert.ToBase64String(parameters.InverseQ) : null,
                   parameters.D != null ? Convert.ToBase64String(parameters.D) : null);
+        }
+
+
+        public static RsaKeys GenerateKeys()
+        {
+            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
+            {
+                try
+                {
+                    return new RsaKeys(ToXmlString(rsa, true), ToXmlString(rsa, false));
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    rsa.PersistKeyInCsp = false;
+                }
+            }
         }
 
         #endregion

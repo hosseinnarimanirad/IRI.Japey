@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Security
+namespace IRI.Msh.Common.Security
 {
     public class RsaMessage
     {

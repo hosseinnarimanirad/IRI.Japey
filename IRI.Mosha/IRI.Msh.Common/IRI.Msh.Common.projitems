@@ -178,6 +178,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Security\Hashing\HashAlgorithmHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\RSACryptoServiceProviderExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\CryptoRSAHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\RsaKeys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Security\RSA\RsaMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Units\Angular\AngleAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Units\Angular\AngleMode.cs" />
@@ -207,6 +208,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
     <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Security\RSA\" />
   </ItemGroup>
 </Project>
