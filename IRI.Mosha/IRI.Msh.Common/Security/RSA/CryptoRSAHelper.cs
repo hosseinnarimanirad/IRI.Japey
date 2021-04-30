@@ -68,6 +68,12 @@ namespace IRI.Msh.Common.Security
 
         #region Encrypt / Decrypt
 
+        /// <summary>
+        /// Returns encrypted value in base64string
+        /// </summary>
+        /// <param name="original"></param>
+        /// <param name="base46PublicKey"></param>
+        /// <returns>encrypted value in base64string</returns>
         public static string RsaEncrypt(byte[] original, string base46PublicKey)
         {
             using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
@@ -91,9 +97,15 @@ namespace IRI.Msh.Common.Security
             }
         }
 
-        public static string RsaEncrypt(string value, string base46PublicKey)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="simpleString"></param>
+        /// <param name="base46PublicKey"></param>
+        /// <returns>encrypted value in base64string</returns>
+        public static string RsaEncrypt(string simpleString, string base46PublicKey)
         {
-            var originalByte = Encoding.UTF8.GetBytes(value);
+            var originalByte = Encoding.UTF8.GetBytes(simpleString);
 
             return RsaEncrypt(originalByte, base46PublicKey);
         }

@@ -21,6 +21,11 @@ namespace IRI.Ket.Common.Service
             return !FailedOrCanceled() && Result != null;
         }
 
+        public bool IsNullOrEmpty()
+        {
+            return FailedOrCanceled() || Result == null;
+        }
+
         public string ErrorMessage { get; set; }
 
         public T Result { get; set; }
