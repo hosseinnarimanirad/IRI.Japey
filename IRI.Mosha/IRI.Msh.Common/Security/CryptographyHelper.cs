@@ -18,7 +18,7 @@ namespace IRI.Msh.Common.Security
         /// </summary>
         /// <param name="simpleString"></param>
         /// <returns></returns>
-        public static string ToBinaryAsBase64String(string simpleString, Encoding encoding = null)
+        public static string ToBase64String(string simpleString, Encoding encoding = null)
         {
             if (string.IsNullOrWhiteSpace(simpleString))
             {
@@ -36,7 +36,7 @@ namespace IRI.Msh.Common.Security
         /// </summary>
         /// <param name="base64BinaryString"></param>
         /// <returns></returns>
-        public static string FromBinaryAsBase64String(string base64BinaryString, Encoding encoding = null)
+        public static string FromBase64String(string base64BinaryString, Encoding encoding = null)
         {
             if (string.IsNullOrWhiteSpace(base64BinaryString))
             {

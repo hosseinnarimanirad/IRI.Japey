@@ -12,6 +12,8 @@ namespace IRI.Jab.Common.Presenters.General
         private const string _githubUrl = "https://github.com/hosseinnarimanirad";
         private const string _stackoverflowUrl = "https://stackoverflow.com/users/1468295/hossein-narimani-rad?tab=profile";
         private const string _linkedinUrl = "https://www.linkedin.com/in/hosseinnarimanirad/";
+        private const string _makanNegarUrl = "https://hosseinnarimanirad.ir/makanNegar";
+
 
         public Action RequestGoToGithub = () => { System.Diagnostics.Process.Start(_githubUrl); };
 
@@ -19,13 +21,14 @@ namespace IRI.Jab.Common.Presenters.General
 
         public Action RequestGoToLinkedin = () => { System.Diagnostics.Process.Start(_linkedinUrl); };
 
-         private void GoToWebsite(string url)
+        public Action RequestGoToMakanNegar = () => { System.Diagnostics.Process.Start(_makanNegarUrl); };
+
+        private void GoToWebsite(string url)
         {
             System.Diagnostics.Process.Start(url);
         }
 
         private RelayCommand _gotoGithubCommand;
-
         public RelayCommand GotoGithubCommand
         {
             get
@@ -38,8 +41,8 @@ namespace IRI.Jab.Common.Presenters.General
             }
         }
 
-        private RelayCommand _gotoStackoverflowCommand;
 
+        private RelayCommand _gotoStackoverflowCommand;
         public RelayCommand GotoStackoverflowCommand
         {
             get
@@ -52,8 +55,8 @@ namespace IRI.Jab.Common.Presenters.General
             }
         }
 
-        private RelayCommand _gotoLinkedinCommand;
 
+        private RelayCommand _gotoLinkedinCommand;
         public RelayCommand GotoLinkedinCommand
         {
             get
@@ -63,6 +66,22 @@ namespace IRI.Jab.Common.Presenters.General
                     _gotoLinkedinCommand = new RelayCommand(param => this.RequestGoToLinkedin?.Invoke());
                 }
                 return _gotoLinkedinCommand;
+            }
+        }
+
+
+        private RelayCommand _gotoMakanNegarCommand;
+
+        public RelayCommand GotoMakanNegarCommand
+        {
+            get
+            {
+                if (_gotoMakanNegarCommand == null)
+                {
+                    _gotoMakanNegarCommand = new RelayCommand(param => this.RequestGoToMakanNegar?.Invoke());
+                }
+
+                return _gotoMakanNegarCommand;
             }
         }
 

@@ -96,8 +96,8 @@ namespace IRI.Ket.Common.Extensions
         {
             return _calendar.GetMonth(dateTime);
         }
-		
-		  public static int GetPersianYear(this DateTime dateTime)
+
+        public static int GetPersianYear(this DateTime dateTime)
         {
             return _calendar.GetYear(dateTime);
         }
@@ -225,31 +225,45 @@ namespace IRI.Ket.Common.Extensions
 
             var result = string.Empty;
 
-            if (interval.Days == 0)
+            if (interval.TotalSeconds > 0)
             {
-                return "امروز";
-            }
-            else if (interval.Days == 1)
-            {
-                return "دیروز";
-            }
-            if (interval.Days < 7)
-            {
-                result = $"۷ روز گذشته";
-            }
-            else if (interval.Days < 30)
-            {
-                result = $"یک ماه گذشته";
-            }
-            else if (interval.Days < 366)
-            {
-                result = $"یک سال گذشته";
+                if (interval.Days == 0)
+                {
+                    return "امروز";
+                }
+                else if (interval.Days == 1)
+                {
+                    return "دیروز";
+                }
+                if (interval.Days < 7)
+                {
+                    result = $"۷ روز گذشته";
+                }
+                else if (interval.Days < 30)
+                {
+                    result = $"یک ماه گذشته";
+                }
+                else if (interval.Days < 366)
+                {
+                    result = $"یک سال گذشته";
+                }
+                else
+                {
+                    result = $"مدت‌ها پیش";
+                }
             }
             else
             {
-                result = $"مدت‌ها پیش";
-            }
+                // 1400.02.14
+                interval = interval.Negate();
 
+                if (interval.Days == 0) { result = "امروز"; }
+                else if (interval.Days == 1) { result = "فردا"; }
+                else if (interval.Days == 2) { result = "پس فردا"; }
+                else if (interval.Days < 7) { result = "۷ روز آتی"; }
+                else if (interval.Days < 30) { result = "ماه آینده"; }
+                else { result = "آینده"; }
+            }
             return result.LatinNumbersToFarsiNumbers();
         }
 
@@ -258,6 +272,10 @@ namespace IRI.Ket.Common.Extensions
             var interval = (DateTime.Now - dateTime);
 
             var result = string.Empty;
+
+            // 1400.02.14
+            if (interval.TotalSeconds < 0)
+                return "آینده";
 
             if (interval.Days == 0)
             {
@@ -290,6 +308,10 @@ namespace IRI.Ket.Common.Extensions
         public static string GetPersianEllapsedTimeFine(this DateTime dateTime)
         {
             var duration = DateTime.Now - dateTime;
+
+            // 1400.02.14
+            if (duration.TotalSeconds < 0)
+                return "آینده";
 
             var result = string.Empty;
 

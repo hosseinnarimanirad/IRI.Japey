@@ -32,4 +32,9 @@
     <SolidColorBrush x:Key="taupe">#FFA09575</SolidColorBrush>
     <SolidColorBrush x:Key="sienna">#FFB27759</SolidColorBrush>
 
+    <SolidColorBrush x:Key="linkedInBrush">#0077B5</SolidColorBrush>
+    <SolidColorBrush x:Key="stackoverflowBrush">#F48024</SolidColorBrush>
+    <SolidColorBrush x:Key="githubBrush">#24292E</SolidColorBrush>
+    <SolidColorBrush x:Key="makanNegarBrush">#B8D135</SolidColorBrush>
+    
 </ResourceDictionary>

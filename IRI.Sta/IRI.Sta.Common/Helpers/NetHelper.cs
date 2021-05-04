@@ -569,7 +569,8 @@ namespace IRI.Ket.Common.Helpers
 
         }
 
-
+        // 1400.02.14
+        // send encrypted message and get encrypted message
         public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey, string decPriKey) where TResponse : class
         {
             try
@@ -587,6 +588,26 @@ namespace IRI.Ket.Common.Helpers
                 {
                     return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
                 }
+            }
+            catch (Exception ex)
+            {
+                return ResponseFactory.CreateError<TResponse>(ex.Message);
+            }
+        }
+
+
+        // 1400.02.14
+        // send encrypted message and get simple message
+        public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey) where TResponse : class
+        {
+            try
+            {
+                var message = EncryptedMessage.Create(parameter, encPubKey);
+
+                //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
+                var response = await NetHelper.HttpPostAsync<TResponse>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
+
+                return response;
             }
             catch (Exception ex)
             {
