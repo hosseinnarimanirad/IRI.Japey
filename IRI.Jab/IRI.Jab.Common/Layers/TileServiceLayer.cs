@@ -252,7 +252,7 @@ namespace IRI.Jab.Common
 
             if (IsCacheEnabled && _mapProvider.AllowCache)
             {
-                result = await _cache.GetTileAsync(tile);
+                result =  _cache.GetTile(tile);
 
                 if (!result.IsValid)
                 {

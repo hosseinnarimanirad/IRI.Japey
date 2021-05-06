@@ -2018,6 +2018,22 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        public virtual void AddWebMercatorWorldfile()
+        {
+            this.IsBusy = true;
+
+            var fileName = this.OpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
+
+            if (!File.Exists(fileName))
+            {
+                this.IsBusy = false;
+
+                return;
+            }
+
+            AddWorldfile(fileName, Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator);
+        }
+
         public virtual void AddWorldfile()
         {
             this.IsBusy = true;
@@ -2237,17 +2253,31 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
 
-        private RelayCommand _addWorldfileCommand;
+        private RelayCommand _addWgs84WorldfileCommand;
 
-        public RelayCommand AddWorldfileCommand
+        public RelayCommand AddWgs84WorldfileCommand
         {
             get
             {
-                if (_addWorldfileCommand == null)
+                if (_addWgs84WorldfileCommand == null)
                 {
-                    _addWorldfileCommand = new RelayCommand(param => { AddWorldfile(); });
+                    _addWgs84WorldfileCommand = new RelayCommand(param => { AddWorldfile(); });
                 }
-                return _addWorldfileCommand;
+                return _addWgs84WorldfileCommand;
+            }
+        }
+
+        private RelayCommand _addWebMercatorWorldfileCommand;
+
+        public RelayCommand AddWebMercatorWorldfileCommand
+        {
+            get
+            {
+                if (_addWebMercatorWorldfileCommand == null)
+                {
+                    _addWebMercatorWorldfileCommand = new RelayCommand(param => { AddWebMercatorWorldfile(); });
+                }
+                return _addWebMercatorWorldfileCommand;
             }
         }
 
