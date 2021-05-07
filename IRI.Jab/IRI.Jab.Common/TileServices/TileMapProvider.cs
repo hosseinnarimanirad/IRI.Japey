@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.TileServices
 {
-    public class TileMapProvider : Notifier
+    public class TileMapProvider : ValueObjectNotifier
     {
         public bool RequireInternetConnection { get; set; } = true;
 
@@ -41,28 +41,28 @@ namespace IRI.Jab.Common.TileServices
         //    }
         //}
 
-        private PersianEnglishItem _mapType;
+        private readonly PersianEnglishItem _mapType;
 
         public PersianEnglishItem MapType
         {
             get { return _mapType; }
-            set
-            {
-                _mapType = value;
-                RaisePropertyChanged();
-            }
+            //private set
+            //{
+            //    _mapType = value;
+            //    RaisePropertyChanged();
+            //}
         }
 
-        private PersianEnglishItem _provider;
+        private readonly PersianEnglishItem _provider;
 
         public PersianEnglishItem Provider
         {
             get { return _provider; }
-            set
-            {
-                _provider = value;
-                RaisePropertyChanged();
-            }
+            //private set
+            //{
+            //    _provider = value;
+            //    RaisePropertyChanged();
+            //}
         }
 
         private byte[] _thumbnail;
@@ -70,7 +70,7 @@ namespace IRI.Jab.Common.TileServices
         public byte[] Thumbnail
         {
             get { return _thumbnail; }
-            set
+            protected set
             {
                 _thumbnail = value;
                 RaisePropertyChanged();
@@ -92,7 +92,7 @@ namespace IRI.Jab.Common.TileServices
 
         //public string FullTitle { get { return $"{ProviderName} - {MapName}"; } }
 
-        public string Name { get { return $"{Provider?.EnglishTitle}{MapType?.EnglishTitle}"; } }
+        public string FullName { get { return $"{Provider?.EnglishTitle}{MapType?.EnglishTitle}"; } }
 
         public string Title { get { return $"{Provider} {MapType}"; } }
 
@@ -103,10 +103,10 @@ namespace IRI.Jab.Common.TileServices
 
         }
 
-        public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction)
-            : this(new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English),
-                    new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English),
-                    urlFunction)
+        public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[] thumbnail)
+            : this(PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, provider),
+                    PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, mapType),
+                    urlFunction, thumbnail)
         {
             //this.MakeUrl = urlFunction;
 
@@ -115,13 +115,15 @@ namespace IRI.Jab.Common.TileServices
             //this.MapType = new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English);
         }
 
-        public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction)
+        public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction, byte[] thumbnail)
         {
             this.MakeUrl = urlFunction;
 
-            this.Provider = provider;
+            this._provider = provider;
 
-            this.MapType = mapType;
+            this._mapType = mapType;
+
+            this._thumbnail = thumbnail;
         }
 
         public virtual string GetUrl(TileInfo tile)
@@ -134,32 +136,38 @@ namespace IRI.Jab.Common.TileServices
             return Title;
         }
 
-        public override bool Equals(object obj)
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            if (object.Equals(obj, null))
-            {
-                return false;
-            }
-
-            return (obj as TileMapProvider)?.Name?.EqualsIgnoreCase(this.Name) == true;
+            yield return Provider;
+            yield return MapType;
         }
 
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    if (object.Equals(obj, null))
+        //    {
+        //        return false;
+        //    }
 
-        public static bool operator ==(TileMapProvider first, TileMapProvider second)
-        {
-            //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case 
-            return object.Equals(first, second);
-        }
+        //    return (obj as TileMapProvider)?.Name?.EqualsIgnoreCase(this.Name) == true;
+        //}
 
-        public static bool operator !=(TileMapProvider first, TileMapProvider second)
-        {
-            //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case
-            return !object.Equals(first, second);
-        }
+        //public override int GetHashCode()
+        //{
+        //    return this.ToString().GetHashCode();
+        //}
+
+        //public static bool operator ==(TileMapProvider first, TileMapProvider second)
+        //{
+        //    //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case 
+        //    return object.Equals(first, second);
+        //}
+
+        //public static bool operator !=(TileMapProvider first, TileMapProvider second)
+        //{
+        //    //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case
+        //    return !object.Equals(first, second);
+        //}
 
     }
 }

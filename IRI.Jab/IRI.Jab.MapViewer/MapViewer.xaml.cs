@@ -1988,7 +1988,9 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType ||*/ !layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
+                if (tile.ZoomLevel != CurrentZoomLevel ||
+                    //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType ||*/ !layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
+                    (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
                 {
                     //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
@@ -2000,7 +2002,9 @@ namespace IRI.Jab.MapViewer
 
                 //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
-                if (tile.ZoomLevel != CurrentZoomLevel || (this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType || */!layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
+                if (tile.ZoomLevel != CurrentZoomLevel ||
+                     //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType || */!layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
+                     (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
                 {
                     //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
@@ -3241,6 +3245,8 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        double _knownAsPanThreshold = 2;
+
         private void MapView_MouseMoveSelectThePoint(object sender, MouseEventArgs e)
         {
             Point currentMouseLocation = e.GetPosition(this.mapView);
@@ -3251,7 +3257,7 @@ namespace IRI.Jab.MapViewer
 
                 double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
 
-                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
                 {
                     this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
 
@@ -4234,7 +4240,7 @@ namespace IRI.Jab.MapViewer
 
                 double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
 
-                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
                 {
                     this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
 
@@ -4451,7 +4457,7 @@ namespace IRI.Jab.MapViewer
 
                 double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
 
-                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
                 {
                     this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
 
@@ -4564,7 +4570,7 @@ namespace IRI.Jab.MapViewer
 
                 double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
 
-                if (Math.Abs(xOffset) > 0.01 || Math.Abs(yOffset) > 0.01)
+                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
                 {
                     this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
 

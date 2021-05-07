@@ -2,10 +2,11 @@
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Diagnostics;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Jab.Common
 {
-    public class Notifier : INotifyPropertyChanged
+    public abstract class ValueObjectNotifier : ValueObject, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -37,7 +38,5 @@ namespace IRI.Jab.Common
                 Debug.Fail(msg);
             }
         }
-
-
     }
 }

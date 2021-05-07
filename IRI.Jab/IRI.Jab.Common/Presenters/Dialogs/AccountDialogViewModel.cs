@@ -54,6 +54,10 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
 
         #endregion
 
+        public delegate void SignInChangeHandler(CustomEventArgs<bool> args);
+        
+        public event SignInChangeHandler SignInChanged;
+
         #region Properties
 
         private bool _isBusy;
@@ -97,6 +101,8 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 _isSignedIn = value;
                 RaisePropertyChanged();
+
+                this.SignInChanged?.Invoke(new CustomEventArgs<bool>(value));
             }
         }
 

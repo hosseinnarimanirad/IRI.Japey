@@ -84,7 +84,7 @@ namespace IRI.Jab.Controls.Presenter
             this.MapSettings.MaxGoogleZoomLevel = 18;
             this.MapSettings.MinGoogleZoomLevel = 4;
 
-            await this.SetTileBaseMap("GOOGLESATELLITE");
+            //await this.SetTileBaseMap("GOOGLESATELLITE");
             //this.SelectedMapProvider = this.MapProviders?.FirstOrDefault();
 
             //this.BaseMapType = IRI.Jab.Common.TileServices.TileType.Hybrid;

@@ -224,7 +224,7 @@
     <Compile Include="Model\FeatureTable\FeatureTableCommands.cs" />
     <Compile Include="Model\FeatureTable\FeatureTableToggleCommand.cs" />
     <Compile Include="Model\FeatureTable\IFeatureTableCommand.cs" />
-    <Compile Include="Model\Globalization\EnglishPersianItem.cs" />
+    <Compile Include="Model\Globalization\PersianEnglishItem.cs" />
     <Compile Include="Model\Globalization\Language.cs" />
     <Compile Include="Model\LayerType.cs" />
     <Compile Include="Model\GoogleScale.cs" />
@@ -321,6 +321,7 @@
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToOpenTKBitmap.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToStreamGeometry.cs" />
     <Compile Include="Utility\SpatialHelpers\SqlSpatialToWriteableBitmap.cs" />
+    <Compile Include="ValueObjectNotifier.cs" />
     <Compile Include="View\Controls\InlineInput.xaml.cs">
       <DependentUpon>InlineInput.xaml</DependentUpon>
     </Compile>

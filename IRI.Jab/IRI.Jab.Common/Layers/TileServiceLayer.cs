@@ -16,6 +16,7 @@ using IRI.Ket.Common.Model;
 using IRI.Jab.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Model;
+using IRI.Jab.Common.TileServices;
 
 namespace IRI.Jab.Common
 {
@@ -49,7 +50,7 @@ namespace IRI.Jab.Common
 
         public string ProviderFullName
         {
-            get { return _mapProvider.Name; }
+            get { return _mapProvider.FullName; }
         }
 
         //public TileServices.TileType TileType
@@ -70,7 +71,6 @@ namespace IRI.Jab.Common
 
             this._mapProvider = mapProvider;
         }
-
 
         public override BoundingBox Extent
         {
@@ -252,7 +252,7 @@ namespace IRI.Jab.Common
 
             if (IsCacheEnabled && _mapProvider.AllowCache)
             {
-                result =  _cache.GetTile(tile);
+                result = _cache.GetTile(tile);
 
                 if (!result.IsValid)
                 {
@@ -298,6 +298,12 @@ namespace IRI.Jab.Common
             }
 
             return result;
+        }
+
+
+        public bool HasTheSameMapProvider(TileMapProvider provider)
+        { 
+            return _mapProvider == provider;
         }
     }
 }

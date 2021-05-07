@@ -1,50 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Text;
 
-namespace IRI.Sta.Common.Data
-{
-    //link: https://enterprisecraftsmanship.com/posts/value-object-better-implementation/
-    public abstract class ValueObject<T> where T : ValueObject<T>
-    {
-        public override bool Equals(object obj)
-        {
-            var valueObject = obj as T;
+//namespace IRI.Sta.Common.Data
+//{
+//    //link: https://enterprisecraftsmanship.com/posts/value-object-better-implementation/
+//    public abstract class ValueObject<T> where T : ValueObject<T>
+//    {
+//        public override bool Equals(object obj)
+//        {
+//            var valueObject = obj as T;
 
-            if (ReferenceEquals(valueObject, null))
-                return false;
+//            if (ReferenceEquals(valueObject, null))
+//                return false;
 
-            if (GetType() != obj.GetType())
-                return false;
+//            if (GetType() != obj.GetType())
+//                return false;
 
-            return EqualsCore(valueObject);
-        }
+//            return EqualsCore(valueObject);
+//        }
 
-        protected abstract bool EqualsCore(T other);
+//        protected abstract bool EqualsCore(T other);
 
-        public override int GetHashCode()
-        {
-            return GetHashCodeCore();
-        }
+//        public override int GetHashCode()
+//        {
+//            return GetHashCodeCore();
+//        }
 
-        protected abstract int GetHashCodeCore();
+//        protected abstract int GetHashCodeCore();
 
-        public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
-        {
-            if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
-                return true;
+//        public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
+//        {
+//            if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
+//                return true;
 
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
-                return false;
+//            if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+//                return false;
 
-            return a.Equals(b);
-        }
+//            return a.Equals(b);
+//        }
 
-        public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
-        {
-            return !(a == b);
-        }
-    }
+//        public static bool operator !=(ValueObject<T> a, ValueObject<T> b)
+//        {
+//            return !(a == b);
+//        }
+//    }
 
 
-}
+//}

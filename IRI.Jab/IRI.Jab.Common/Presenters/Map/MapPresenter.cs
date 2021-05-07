@@ -310,62 +310,57 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        //private TileType _baseMapType = TileType.None;
-        //public TileType BaseMapType
+        //private string _providerTypeFullName = string.Empty;
+        //public string ProviderTypeFullName
         //{
-        //    get { return _baseMapType; }
-        //    set
-        //    {
-        //        if (_baseMapType == value)
-        //            return;
-
-        //        _baseMapType = value;
-        //        RaisePropertyChanged();
-
-        //        //SetTileService(ProviderType, value, MapSettings.GetFileName);
-        //        UpdateBaseMap();
-        //    }
+        //    get { return _providerTypeFullName; }
         //}
 
+        //public async Task SetTileBaseMap(string tileMapFullName)
+        //{
+        //    if (string.IsNullOrEmpty(tileMapFullName))
+        //    {
+        //        RemoveAllTileServices();
 
-        private string _providerTypeFullName = string.Empty;
-        public string ProviderTypeFullName
+        //        return;
+        //    }
+
+        //    var tileMapFullNameToUpper = tileMapFullName?.ToUpper();
+
+        //    //if (_providerTypeFullName == tileMapFullNameToUpper)
+        //    //{
+        //    //    return;
+        //    //}
+
+        //    //_providerTypeFullName = tileMapFullNameToUpper;
+
+        //    //RaisePropertyChanged(nameof(ProviderTypeFullName));
+
+        //    var provider = this.MapProviders.SingleOrDefault(m => m.FullName?.EqualsIgnoreCase(tileMapFullNameToUpper) == true);
+
+        //    if (provider == null)
+        //    {
+        //        return;
+        //    }
+
+        //    this.SelectedMapProvider = provider;
+
+        //    await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
+        //}
+
+        public async Task SetTileBaseMap(TileMapProvider provider)
         {
-            get { return _providerTypeFullName; }
-        }
-
-        public async Task SetTileBaseMap(string tileMapFullName)
-        {
-            if (string.IsNullOrEmpty(tileMapFullName))
-            {
-                RemoveAllTileServices();
-
-                return;
-            }
-
-            var tileMapFullNameToUpper = tileMapFullName?.ToUpper();
-
-            if (_providerTypeFullName == tileMapFullNameToUpper)
-            {
-                return;
-            }
-
-            _providerTypeFullName = tileMapFullNameToUpper;
-
-            RaisePropertyChanged(nameof(ProviderTypeFullName));
-
-            var provider = this.MapProviders.SingleOrDefault(m => m.Name?.EqualsIgnoreCase(ProviderTypeFullName) == true);
-
             if (provider == null)
-            {
                 return;
-            }
+
+            if (!this.MapProviders.Contains(provider))
+                throw new NotImplementedException("MapPresenter > SetTileBaseMap");
+            //this.MapProviders.Add(provider);
 
             this.SelectedMapProvider = provider;
 
-            await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
+            await SetTileService(provider, MapSettings.GetLocalFileName);
         }
-
 
         private bool _doNotCheckInternet = false;
         public bool DoNotCheckInternet
@@ -1643,7 +1638,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     await SelectDrawingItem(di);
                 }
                 else
-                { 
+                {
                     ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
                 }
             };
@@ -2405,8 +2400,9 @@ namespace IRI.Jab.Common.Presenter.Map
                             //TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 
                             //this.ProviderTypeFullName = provider;
+                            var provider = this.MapProviders.FirstOrDefault(m => m.FullName.EqualsIgnoreCase(param?.ToString()));
 
-                            await this.SetTileBaseMap(param?.ToString());
+                            await this.SetTileBaseMap(provider);
 
                         }
                         catch (Exception ex)

@@ -30,7 +30,7 @@ namespace IRI.Jab.Common.TileServices
         // this.AddProvider(TileMapProviderFactory.CreateInteranetProvider("localGoogle", "hybridMap", t => $@"http://v-gisserver2/Google/Satellite/{t.ZoomLevel}/gs_{t.ColumnNumber}_{t.RowNumber}_{t.ZoomLevel}.jpg"));
         public static TileMapProvider CreateInteranetProvider(string providerName, string subTitle, Func<TileInfo, string> interanetUrlFunc)
         {
-            TileMapProvider result = new TileMapProvider(providerName, subTitle, interanetUrlFunc)
+            TileMapProvider result = new TileMapProvider(providerName, subTitle, interanetUrlFunc, null)
             {
                 RequireInternetConnection = false
             };
@@ -76,9 +76,9 @@ namespace IRI.Jab.Common.TileServices
                     _bingSatellite = new TileMapProvider(
                         new PersianEnglishItem("بینگ", BingProvider),
                         new PersianEnglishItem("ماهواره", "Satellite"),
-                        tile => MakeBingSatelliteUrl(tile, GetServer()))
+                        tile => MakeBingSatelliteUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingSatellite.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingSatellite.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/bingSatellite72.jpg")
                     };
                 }
@@ -97,9 +97,9 @@ namespace IRI.Jab.Common.TileServices
                     _bingStreet = new TileMapProvider(
                         new PersianEnglishItem("بینگ", BingProvider),
                         new PersianEnglishItem("راه", "Street"),
-                        tile => MakeBingStreetUrl(tile, GetServer()))
+                        tile => MakeBingStreetUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingStreet.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingStreet.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/bingStreet72.jpg")
                     };
                 }
@@ -119,9 +119,9 @@ namespace IRI.Jab.Common.TileServices
                     _bingHybrid = new TileMapProvider(
                         new PersianEnglishItem("بینگ", BingProvider),
                         new PersianEnglishItem("ترکیبی", "Hybrid"),
-                        tile => MakeBingHybridUrl(tile, GetServer()))
+                        tile => MakeBingHybridUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingHybrid.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/bingHybrid.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/bingHybrid72.jpg")
                     };
                 }
@@ -170,9 +170,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleCleanGrey = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("خاکستری", "CleanGrey"),
-                        tile => MakeGoogleCleanGreyUrl(tile))
+                        tile => MakeGoogleCleanGreyUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleGrey72.jpg")
                     };
                 }
@@ -192,9 +192,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleBlackWhite = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("سیاه‌سفید", "BlackWhite"),
-                        tile => MakeGoogleBlackWhiteUrl(tile))
+                        tile => MakeGoogleBlackWhiteUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleBlackWhite72.jpg")
                     };
                 }
@@ -214,9 +214,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleTraffic = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("ترافیک", "Traffic"),
-                        tile => MakeGoogleTerafficUrl(tile, GetServer()))
+                        tile => MakeGoogleTerafficUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleTraffic72.jpg"),
                         AllowCache = false
                     };
@@ -237,9 +237,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleSatellite = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("ماهواره", "Satellite"),
-                        tile => MakeGoogleSatelliteUrl(tile, GetServer()))
+                        tile => MakeGoogleSatelliteUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleSatellite.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleSatellite.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleSatellite72.jpg")
                     };
                 }
@@ -259,9 +259,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleHybrid = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("ترکیبی", "Hybrid"),
-                        tile => MakeGoogleHybridUrl(tile, GetServer()))
+                        tile => MakeGoogleHybridUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleHybrid.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleHybrid.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleHybrid72.jpg")
                     };
                 }
@@ -281,9 +281,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleRoadMap = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("راه", "RoadMap"),
-                        tile => MakeGoogleRoadMapUrl(tile, GetServer()))
+                        tile => MakeGoogleRoadMapUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleRoadmap.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleRoadmap.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleRoadMap72.jpg")
                     };
                 }
@@ -303,9 +303,9 @@ namespace IRI.Jab.Common.TileServices
                     _googleTerrain = new TileMapProvider(
                         new PersianEnglishItem("گوگل", GoogleProvider),
                         new PersianEnglishItem("توپو", "Terrain"),
-                        tile => MakeGoogleTerrainUrl(tile, GetServer()))
+                        tile => MakeGoogleTerrainUrl(tile, GetServer()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/googleTerrain.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/googleTerrain72.jpg")
                     };
                 }
@@ -464,9 +464,9 @@ namespace IRI.Jab.Common.TileServices
                     _openStreetMap = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
                         new PersianEnglishItem("راه", "Street"),
-                        tile => MakeOpenStreetMapUrl(tile, GetServerCharacter()))
+                        tile => MakeOpenStreetMapUrl(tile, GetServerCharacter()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/openStreetMap.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/openStreetMap.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/osmOpenStreetMap72.jpg")
 
                     };
@@ -487,9 +487,9 @@ namespace IRI.Jab.Common.TileServices
                     _openTopoMap = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
                         new PersianEnglishItem("توپو", "Topo"),
-                        tile => MakeOpenTopoMapUrl(tile, GetServerCharacter()))
+                        tile => MakeOpenTopoMapUrl(tile, GetServerCharacter()),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/openTopoMap.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/openTopoMap.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/osmOpenTopoMap72.jpg")
                     };
                 }
@@ -508,10 +508,10 @@ namespace IRI.Jab.Common.TileServices
                 {
                     _mapyWinter = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
-                        new PersianEnglishItem("MapyWinter", "MapyWinter"),
-                        tile => MakeMapyWinterUrl(tile))
+                        new PersianEnglishItem("زمستان", "MapyWinter"),
+                        tile => MakeMapyWinterUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/mapyWinter.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/mapyWinter.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/osmMapyWinter72.jpg")
                     };
                 }
@@ -530,10 +530,10 @@ namespace IRI.Jab.Common.TileServices
                 {
                     _mapyTourist = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
-                        new PersianEnglishItem("MapyTourist", "MapyTourist"),
-                        tile => MakeMapyTouristUrl(tile))
+                        new PersianEnglishItem("توریست", "MapyTourist"),
+                        tile => MakeMapyTouristUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/mapyTourism.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/mapyTourism.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/osmMapyTourist72.jpg")
                     };
                 }
@@ -553,9 +553,9 @@ namespace IRI.Jab.Common.TileServices
                     _osmHikeBike = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
                         new PersianEnglishItem("طبیعت‌گردی", "HikeBike"),
-                        tile => MakeOsmHikeBikeUrl(tile))
+                        tile => MakeOsmHikeBikeUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/osmHikeBike.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/osmHikeBike.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/osmHikeBike72.jpg")
                     };
                 }
@@ -575,9 +575,9 @@ namespace IRI.Jab.Common.TileServices
                     _stamentWatercolor = new TileMapProvider(
                         new PersianEnglishItem("OSM", OsmProvider),
                         new PersianEnglishItem("آبرنگ", "Watercolor"),
-                        tile => MakeStamenWatercolorUrl(tile))
+                        tile => MakeStamenWatercolorUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/stamenWatercolor.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/stamenWatercolor.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/stamenWatercolor.jpg")
                     };
                 }
@@ -607,9 +607,9 @@ namespace IRI.Jab.Common.TileServices
                     _wazeStreet = new TileMapProvider(
                         new PersianEnglishItem(WazeProvider, WazeProvider),
                         new PersianEnglishItem("راه", "Street"),
-                        tile => MakeWazeRoadMapUrl(tile))
+                        tile => MakeWazeRoadMapUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/waze.png"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/waze.png"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/wazeStreet72.jpg")
                     };
                 }
@@ -641,9 +641,9 @@ namespace IRI.Jab.Common.TileServices
                     _cartoDark = new TileMapProvider(
                         new PersianEnglishItem("کارتو", CartoProvider),
                         new PersianEnglishItem("تیره", "Dark"),
-                        tile => MakeCartoDarkUrl(tile))
+                        tile => MakeCartoDarkUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/cartoDark.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/cartoDark.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/cartoDark72.jpg")
                     };
                 }
@@ -662,9 +662,9 @@ namespace IRI.Jab.Common.TileServices
                     _cartoLight = new TileMapProvider(
                         new PersianEnglishItem("کارتو", CartoProvider),
                         new PersianEnglishItem("روشن", "Light"),
-                        tile => MakeCartoLightUrl(tile))
+                        tile => MakeCartoLightUrl(tile),
+                        ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/cartoLight.jpg"))
                     {
-                        Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/cartoLight.jpg"),
                         Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(@"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/cartoLight72.jpg")
                     };
                 }
@@ -708,7 +708,7 @@ namespace IRI.Jab.Common.TileServices
                         new PersianEnglishItem("مپ‌باکس", Mapbox),
                         new PersianEnglishItem("ماهواره", "Satellite"),
                         "https://{@server}.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoibW9ob2tvZW1haWxob3N0aW5mbyIsImEiOiJjanU5bmFlbDcxYjNkNDRuenB1cHF6YXo0In0.sdTlXpsCH35pTyzOGK3K8w",
-                        @"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/mapboxComic72.jpg", 
+                        @"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/mapboxComic72.jpg",
                         @"IRI.Jab.Common;component/Assets/Images/BaseMaps/72/mapboxComic72.jpg");
                 }
 
@@ -755,8 +755,13 @@ namespace IRI.Jab.Common.TileServices
             {
                 BingHybrid, BingSatellite, BingStreet,
                 GoogleHybrid, GoogleRoadMap, GoogleSatellite, GoogleTerrain,
+                GoogleCleanGrey, GoogleBlackWhite, GoogleTraffic, GoogleLight, GoogleNature, GoogleNeutralBlue,
                 OpenStreetMap, OpenTopoMap,
-                WazeStreet
+                WazeStreet,
+                OpenStreetMap, OpenTopoMap, OsmHikeBike, MapyTourist, MapyWinter, StamenWatercolor,
+                WazeStreet,
+                CartoDark, CartoLight,
+                MapboxComic, MapboxSatellite
             };
         }
 
@@ -790,28 +795,32 @@ namespace IRI.Jab.Common.TileServices
         {
             var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}");
 
-            return new TileMapProvider(provider, mapType, tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            return new TileMapProvider(
+                        provider,
+                        mapType,
+                        tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
                                                                                 mapUrl,
                                                                                 tile.ColumnNumber,
                                                                                 tile.RowNumber,
-                                                                                tile.ZoomLevel))
-            {
-                Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress)
-            };
+                                                                                tile.ZoomLevel),
+                        ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress));
         }
 
         public static TileMapProvider CreateFromXyzUrlIntServer(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnail72Address, int minServer = 0, int maxServer = 3)
         {
             var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
 
-            return new TileMapProvider(provider, mapType, tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            return new TileMapProvider(
+                        provider, 
+                        mapType, 
+                        tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
                                                                                 mapUrl,
                                                                                 tile.ColumnNumber,
                                                                                 tile.RowNumber,
                                                                                 tile.ZoomLevel,
-                                                                                GetServer(minServer, maxServer)))
+                                                                                GetServer(minServer, maxServer)),
+                        ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress))
             {
-                Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress),
                 Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address)
             };
         }
@@ -820,14 +829,17 @@ namespace IRI.Jab.Common.TileServices
         {
             var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
 
-            return new TileMapProvider(provider, mapType, tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            return new TileMapProvider(
+                        provider, 
+                        mapType, 
+                        tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
                                                                                 mapUrl,
                                                                                 tile.ColumnNumber,
                                                                                 tile.RowNumber,
                                                                                 tile.ZoomLevel,
-                                                                                GetServerCharacter(minServer, maxServer)))
+                                                                                GetServerCharacter(minServer, maxServer)),
+                        ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress))
             {
-                Thumbnail = ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress),
                 Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address)
             };
         }
