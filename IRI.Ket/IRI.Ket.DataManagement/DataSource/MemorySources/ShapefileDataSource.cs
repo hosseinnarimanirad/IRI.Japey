@@ -75,8 +75,12 @@ namespace IRI.Ket.DataManagement.DataSource
                 this.Extent = this.Extent.Transform(p => transformFunc(p));
             }
 
-            // 1400.02.03
+            // 1400.02.03-comment
             //this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
+            
+            // 1400.02.19
+            this._fields = new List<ObjectToDbfTypeMap<T>>();
+
             for (int i = 0; i < attributes.Fields.Count; i++)
             {
                 this._fields.Add(new ObjectToDbfTypeMap<T>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
