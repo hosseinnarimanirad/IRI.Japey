@@ -322,7 +322,7 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDownload,
                 Layer = layer,
                 ToolTip = _exportAsShapefileToolTip,
             };
@@ -352,7 +352,7 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarDownload,
                 Layer = layer,
                 ToolTip = _exportAsGeoJsonToolTip,
             };
