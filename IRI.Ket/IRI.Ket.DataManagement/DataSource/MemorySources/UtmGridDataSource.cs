@@ -157,5 +157,38 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
         {
             throw new NotImplementedException();
         }
+
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        {
+            var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
+
+            var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+                                .Select(s => new SqlUtmSheet(s))
+                                .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+                                .Select(s => new SqlFeature()
+                                {
+                                    TheSqlGeometry = s.TheSqlGeometry,
+                                    LabelAttribute = nameof(s.SheetName),
+                                    Id = s.Id,
+                                    Attributes = new Dictionary<string, object>()
+                                    {
+                                        {nameof(s.Column), s.Column},
+                                        {nameof(s.Id), s.Id},
+                                        {nameof(s.Row), s.Row},
+                                        {nameof(s.SheetName), s.SheetName},
+                                        {nameof(s.UtmZone), s.UtmZone},
+                                        {nameof(s.Type), s.Type},
+                                        {nameof(s.Row), s.Row},
+                                    }
+                                })
+                                .ToList();
+
+            return new SqlFeatureSet(GetSrid()) { Features = features };
+        }
     }
 }

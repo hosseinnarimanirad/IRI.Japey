@@ -176,6 +176,22 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #endregion
 
+        public abstract SqlFeatureSet GetSqlFeatures();
+
+        public virtual SqlFeatureSet GetSqlFeatures(BoundingBox boundingBox)
+        {
+            SqlGeometry boundary = boundingBox.AsSqlGeometry(this.GetSrid()).MakeValid();
+
+            var features = GetSqlFeatures().Features.Where(i => !i.TheSqlGeometry.IsNotValidOrEmpty() && i.TheSqlGeometry.STIntersects(boundary).IsTrue).ToList();
+
+            return new SqlFeatureSet(this.GetSrid()) { Features = features };
+        }
+        public virtual SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        { 
+            var features = GetSqlFeatures().Features.Where(i => !i.TheSqlGeometry.IsNotValidOrEmpty() && i.TheSqlGeometry.STIntersects(geometry).IsTrue).ToList();
+
+            return new SqlFeatureSet(this.GetSrid()) { Features = features };
+        }
 
         public abstract void Add(ISqlGeometryAware newValue);
 
@@ -190,6 +206,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
     public abstract class FeatureDataSource<T> : FeatureDataSource where T : class, ISqlGeometryAware
     {
+        const SqlGeometry NullGeometry = null;
+
         public Func<List<T>, DataTable> ToDataTableMappingFunc;
 
         public FeatureDataSource()
@@ -201,9 +219,9 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public virtual List<T> GetFeatures()
         {
-            SqlGeometry geometry = null;
+            //SqlGeometry geometry = null;
 
-            return GetFeatures(geometry);
+            return GetFeatures(NullGeometry);
         }
 
         public abstract List<T> GetFeatures(SqlGeometry geometry);
@@ -219,6 +237,16 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return ToDataTableMappingFunc(GetFeatures());
         }
+
+        //public List<Feature<Point>> GetFeatures(Func<T, Feature<Point>> map)
+        //{
+        //    return GetFeatures(map, NullGeometry);
+        //}
+
+        //public List<Feature<Point>> GetFeatures(Func<T, Feature<Point>> map, SqlGeometry geometry)
+        //{
+        //    return GetFeatures(geometry).Select(f => map(f)).ToList();
+        //}
 
         //public abstract void Add(ISqlGeometryAware newGeometry);
 

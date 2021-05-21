@@ -134,6 +134,16 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
                                     .ToList();
         }
 
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);

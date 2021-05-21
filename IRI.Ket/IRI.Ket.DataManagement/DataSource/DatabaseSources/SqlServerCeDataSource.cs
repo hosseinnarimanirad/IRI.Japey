@@ -131,7 +131,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return GetGeometries(boundary);
         }
-         
+
         /// <summary>
         /// 
         /// </summary>
@@ -221,7 +221,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return ExecuteSql(string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT * FROM {0} {1}", this._tableName, MakeWhereClause(whereClause)));
         }
-         
+
         public override List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
         {
             SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
@@ -285,6 +285,14 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            throw new NotImplementedException();
+        }
 
+        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

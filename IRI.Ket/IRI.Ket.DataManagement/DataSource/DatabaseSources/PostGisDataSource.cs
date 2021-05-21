@@ -279,5 +279,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #endregion
 
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

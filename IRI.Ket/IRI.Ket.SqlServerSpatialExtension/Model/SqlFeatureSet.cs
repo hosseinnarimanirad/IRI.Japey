@@ -1,4 +1,6 @@
-﻿using IRI.Msh.Common.Model;
+﻿using IRI.Ket.SpatialExtensions;
+using IRI.Msh.Common.Model;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
@@ -18,16 +20,43 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
         public List<SqlFeature> Features { get; set; }
 
-        public SqlFeatureSet(IEnumerable<SqlGeometry> features)
+        public SqlFeatureSet(IEnumerable<SqlGeometry> features) : this(features?.FirstOrDefault().GetSrid() ?? 0)
         {
             this.Features = features.Select(i => new SqlFeature(i)).ToList();
+
+        }
+
+        public SqlFeatureSet(int srid)
+        {
+            this.Srid = srid;
 
             this.Fields = new List<Field>();
         }
 
-        public SqlFeatureSet()
+        public void SaveAsShapefile(string shpFileName, Encoding encoding, SrsBase srs, bool overwrite = false)
         {
+            //SaveAsShapefile(shpFileName, values.Select(v => geometryMap(v)), false, srs, overwrite);
 
+            //DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
+
+            ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, Features, f => f.TheSqlGeometry.AsEsriShape(), false, srs, overwrite);
+
+            ShapefileFormat.Dbf.DbfFile.Write(ShapefileFormat.Shapefile.GetDbfFileName(shpFileName), Features.Select(f => f.Attributes).ToList(), encoding, overwrite);
+        }
+
+        public void SaveAsGeoJson(string geoJsonFileName)
+        {
+            var srsBase = SridHelper.AsSrsBase(this.Srid);
+
+            var features = Features.Select(f => f.AsGeoJsonFeature(p => srsBase.ToWgs84Geodetic(p))).ToList();
+
+            Msh.Common.Model.GeoJson.GeoJsonFeatureSet featureSet = new Msh.Common.Model.GeoJson.GeoJsonFeatureSet()
+            {
+                Features = features,
+                TotalFeatures = features.Count,
+            };
+
+            featureSet.Save(geoJsonFileName, false, true);
         }
     }
 

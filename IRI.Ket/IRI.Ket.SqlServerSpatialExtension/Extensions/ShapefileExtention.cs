@@ -497,6 +497,6 @@ namespace IRI.Ket.SpatialExtensions
         }
 
         #endregion
-
+          
     }
 }

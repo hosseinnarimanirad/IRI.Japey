@@ -133,6 +133,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
 
+        public static SrsBase Create(int srid)
+        {
+            return SridHelper.AsSrsBase(srid);
+        }
+
         //private int GetSrid()
         //{
         //    switch (this.Type)

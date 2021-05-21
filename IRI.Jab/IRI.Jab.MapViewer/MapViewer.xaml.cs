@@ -3008,7 +3008,7 @@ namespace IRI.Jab.MapViewer
             }
             else
             {
-                source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+                source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label, null, f => f);
             }
 
 
@@ -3035,7 +3035,7 @@ namespace IRI.Jab.MapViewer
             if (geometries == null)
                 return;
 
-            var source = new MemoryDataSource<SqlFeature>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label);
+            var source = new MemoryDataSource<SqlFeature>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label, null, f => f);
 
             var layer = new VectorLayer(
                 layerName,
@@ -3245,7 +3245,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        double _knownAsPanThreshold = 2;
+        double _knownAsPanThreshold = 3;
 
         private void MapView_MouseMoveSelectThePoint(object sender, MouseEventArgs e)
         {

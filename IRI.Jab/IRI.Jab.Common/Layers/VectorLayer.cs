@@ -23,7 +23,7 @@ using IRI.Msh.Common.Model;
 using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
-using IRI.Ket.SqlServerSpatialExtension.Model; 
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Jab.Common
 {
@@ -783,7 +783,7 @@ namespace IRI.Jab.Common
             }
         }
 
-        #region Save And Export Methods
+        #region Raster Save And Export Methods
 
         public void SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
         {
@@ -894,7 +894,7 @@ namespace IRI.Jab.Common
         private async void SaveAsPngGdiPlus(string fileName, sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
         {
             var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
-             
+
             image.Save(fileName);
 
             image.Dispose();
@@ -940,6 +940,35 @@ namespace IRI.Jab.Common
             }
 
         }
+
+        #endregion
+
+        #region Vector Export Methods
+
+        public void ExportAsShapefile(string shpFileName)
+        {
+            //var features = GetFeatures<T>();
+            var features = this.DataSource.GetSqlFeatures();
+
+            features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
+        }
+
+        public void ExportAsGeoJson(string geoJsonFileName)
+        {
+            var features = this.DataSource.GetSqlFeatures();
+
+            features.SaveAsGeoJson(geoJsonFileName);
+        }
+
+        //public List<sb.Feature<sb.Point>> GetFeatures<T>(Func<T, sb.Feature<sb.Point>> map, SqlGeometry geometry) where T : class, ISqlGeometryAware
+        //{
+        //    if (DataSource as FeatureDataSource<T> != null)
+        //    {
+        //        return (DataSource as FeatureDataSource<T>).GetFeatures(map, geometry);
+        //    }
+
+        //    return null;
+        //}
 
         #endregion
 

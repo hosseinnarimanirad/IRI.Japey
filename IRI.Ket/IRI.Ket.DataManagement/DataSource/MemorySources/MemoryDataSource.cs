@@ -105,6 +105,13 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             throw new NotImplementedException();
         }
+
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            var features = GetGeometries().Select(g => new SqlFeature(g, string.Empty) { Attributes = new Dictionary<string, object>() }).ToList();
+
+            return new SqlFeatureSet(this.GetSrid()) { Features = features };
+        }
     }
 
     public class MemoryDataSource<T> : FeatureDataSource<T> where T : class, ISqlGeometryAware
@@ -119,12 +126,14 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<int, T> _idFunc;
 
+        protected Func<T, SqlFeature> _mapToFeatureFunc;
+
         public override int GetSrid()
         {
             return this._features?.SkipWhile(g => g == null || g.TheSqlGeometry == null || g.TheSqlGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheSqlGeometry.GetSrid() ?? 0;
         }
 
-        public MemoryDataSource() : this(new List<SqlFeature>().Cast<T>().ToList(), null)
+        public MemoryDataSource() : this(new List<SqlFeature>().Cast<T>().ToList(), null, null, null)
         {
 
         }
@@ -140,7 +149,7 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = GetGeometries().GetBoundingBox();
         }
 
-        public MemoryDataSource(List<T> features, Func<T, string> labelFunc, Func<int, T> idFunc = null)
+        public MemoryDataSource(List<T> features, Func<T, string> labelFunc, Func<int, T> idFunc, Func<T, SqlFeature> mapToFeatureFunc)
         {
             this._features = features;
 
@@ -155,7 +164,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             this.Extent = GetGeometries().GetBoundingBox();
 
-
+            _mapToFeatureFunc = mapToFeatureFunc;
         }
 
         protected int GetNewId()
@@ -303,6 +312,13 @@ namespace IRI.Ket.DataManagement.DataSource
         public override void SaveChanges()
         {
 
+        }
+
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            var features = GetFeatures().Select(f => _mapToFeatureFunc(f)).ToList();
+
+            return new SqlFeatureSet(this.GetSrid()) { Features = features };
         }
     }
 }

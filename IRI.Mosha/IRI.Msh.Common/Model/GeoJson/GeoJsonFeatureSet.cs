@@ -15,10 +15,17 @@ namespace IRI.Msh.Common.Model.GeoJson
         public int TotalFeatures { get; set; }
 
         [JsonProperty("features")]
-        public List<GeoJsonFeature>  Features { get; set; }
+        public List<GeoJsonFeature> Features { get; set; }
 
         [JsonProperty("crs")]
         public GeoJsonCrs Crs { get; set; }
+
+        public void Save(string fileName, bool indented, bool removeSpaces = false)
+        {
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(this, indented ? Formatting.Indented : Formatting.None);
+
+            System.IO.File.WriteAllText(fileName, removeSpaces ? result.Replace(" ", string.Empty) : result);
+        }
     }
 
     public class GeoJsonCrs
@@ -35,6 +42,6 @@ namespace IRI.Msh.Common.Model.GeoJson
         [JsonProperty("name")]
         public string Name { get; set; }
     }
-     
+
 
 }

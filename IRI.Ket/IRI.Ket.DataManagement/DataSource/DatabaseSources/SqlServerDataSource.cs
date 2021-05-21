@@ -683,7 +683,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
-            SqlFeatureSet result = new SqlFeatureSet() { Fields = new List<Field>(), Features = new List<SqlFeature>() };
+            SqlFeatureSet result = new SqlFeatureSet(this.GetSrid()) { Fields = new List<Field>(), Features = new List<SqlFeature>() };
 
             try
             {
@@ -808,6 +808,25 @@ namespace IRI.Ket.DataManagement.DataSource
         public override void SaveChanges()
         {
             throw new NotImplementedException();
+        }
+
+        public override SqlFeatureSet GetSqlFeatures()
+        {
+            return QueryFeatures();
+        }
+
+        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        {
+            var boundingBox = geometry.GetBoundingBox();
+
+            var featureSet = QueryFeaturesWhereIntersects(boundingBox);
+            //.Features
+            //.Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+            //.ToList();
+
+            featureSet.Features = featureSet.Features.Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true).ToList();
+
+            return featureSet;
         }
     }
 }

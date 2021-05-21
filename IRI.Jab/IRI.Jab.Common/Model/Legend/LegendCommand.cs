@@ -13,6 +13,10 @@ namespace IRI.Jab.Common.Model.Legend
     {
         private const string _exportAsBitmapToolTip = "خروجی عکسی";
 
+        private const string _exportAsShapefileToolTip = "خروجی در قالب شیپ‌فایل";
+
+        private const string _exportAsGeoJsonToolTip = "خروجی در قالب GeoJson";
+
         private RelayCommand _command;
 
         public RelayCommand Command
@@ -312,6 +316,67 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateExportAsShapefileFunc = (presenter, layer) => CreateExportAsShapefile(presenter, layer as VectorLayer);
+        public static ILegendCommand CreateExportAsShapefile(MapPresenter map, VectorLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
+                Layer = layer,
+                ToolTip = _exportAsShapefileToolTip,
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var fileName = map.SaveFile("*.shp|*.shp");
+
+                    if (string.IsNullOrWhiteSpace(fileName))
+                        return;
+
+                    layer.ExportAsShapefile(fileName);
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateExportAsGeoJsonFunc = (presenter, layer) => CreateExportAsGeoJson(presenter, layer as VectorLayer);
+        public static ILegendCommand CreateExportAsGeoJson(MapPresenter map, VectorLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
+                Layer = layer,
+                ToolTip = _exportAsGeoJsonToolTip,
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var fileName = map.SaveFile("*.json|*.json");
+
+                    if (string.IsNullOrWhiteSpace(fileName))
+                        return;
+
+                    layer.ExportAsGeoJson(fileName);
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
         internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
         {
             //LegendCommand.CreateZoomToExtentCommand(this, layer),
@@ -355,6 +420,6 @@ namespace IRI.Jab.Common.Model.Legend
         //}
 
 
-       
+
     }
 }
