@@ -165,6 +165,11 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         {
             byte[] result = new byte[length];
 
+            if (value == null)
+            {
+                return result;
+            }
+
             switch (value)
             {
                 case string stringValue:

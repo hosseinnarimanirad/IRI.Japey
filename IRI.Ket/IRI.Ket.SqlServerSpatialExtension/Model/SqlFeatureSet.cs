@@ -44,11 +44,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
             ShapefileFormat.Dbf.DbfFile.Write(ShapefileFormat.Shapefile.GetDbfFileName(shpFileName), Features.Select(f => f.Attributes).ToList(), encoding, overwrite);
         }
 
-        public void SaveAsGeoJson(string geoJsonFileName)
+        public void SaveAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
         {
             var srsBase = SridHelper.AsSrsBase(this.Srid);
 
-            var features = Features.Select(f => f.AsGeoJsonFeature(p => srsBase.ToWgs84Geodetic(p))).ToList();
+            var features = Features.Select(f => f.AsGeoJsonFeature(p => srsBase.ToWgs84Geodetic(p), isLongitudeFirst)).ToList();
 
             Msh.Common.Model.GeoJson.GeoJsonFeatureSet featureSet = new Msh.Common.Model.GeoJson.GeoJsonFeatureSet()
             {

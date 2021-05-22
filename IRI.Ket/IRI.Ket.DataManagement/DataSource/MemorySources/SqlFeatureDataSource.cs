@@ -59,6 +59,8 @@ namespace IRI.Ket.DataManagement.DataSource
             this._features = features;
 
             this._labelFunc = labelFunc;
+
+            this._mapToFeatureFunc = f => f;
         }
 
         public static SqlFeatureDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)

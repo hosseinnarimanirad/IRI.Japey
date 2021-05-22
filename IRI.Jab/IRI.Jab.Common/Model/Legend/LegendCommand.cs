@@ -366,7 +366,11 @@ namespace IRI.Jab.Common.Model.Legend
                     if (string.IsNullOrWhiteSpace(fileName))
                         return;
 
-                    layer.ExportAsGeoJson(fileName);
+                    // 1400.02.31
+                    // به خاطر خروجی برنامه البرز نگار
+                    // چون در سایت ژئوجی‌سان دات آی‌او
+                    // بارگذاری می شه خروجی‌ها
+                    layer.ExportAsGeoJson(fileName, true);
                 }
                 catch (Exception ex)
                 {

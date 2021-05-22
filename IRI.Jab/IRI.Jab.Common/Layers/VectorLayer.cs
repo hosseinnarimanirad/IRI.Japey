@@ -953,11 +953,11 @@ namespace IRI.Jab.Common
             features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
         }
 
-        public void ExportAsGeoJson(string geoJsonFileName)
+        public void ExportAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
         {
             var features = this.DataSource.GetSqlFeatures();
 
-            features.SaveAsGeoJson(geoJsonFileName);
+            features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
         }
 
         //public List<sb.Feature<sb.Point>> GetFeatures<T>(Func<T, sb.Feature<sb.Point>> map, SqlGeometry geometry) where T : class, ISqlGeometryAware

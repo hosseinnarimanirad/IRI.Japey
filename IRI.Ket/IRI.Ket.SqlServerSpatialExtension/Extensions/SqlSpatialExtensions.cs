@@ -1715,11 +1715,11 @@ namespace IRI.Ket.SpatialExtensions
             };
         }
 
-        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<Point, Point> toWgs84Func)
+        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<Point, Point> toWgs84Func, bool isLongitudeFirst)
         {
             return new GeoJsonFeature()
             {
-                Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(),
+                Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(isLongitudeFirst),
                 Id = feature.Id.ToString(),
                 Properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value/*.ToString()*/),
 
