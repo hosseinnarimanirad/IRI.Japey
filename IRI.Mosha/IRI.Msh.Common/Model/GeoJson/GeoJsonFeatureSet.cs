@@ -26,6 +26,11 @@ namespace IRI.Msh.Common.Model.GeoJson
 
             System.IO.File.WriteAllText(fileName, removeSpaces ? result.Replace(" ", string.Empty) : result);
         }
+
+        public static GeoJsonFeatureSet Load(string fileName)
+        {
+            return GeoJson.ParseToGeoJsonFeatureCollection(fileName);
+        }
     }
 
     public class GeoJsonCrs

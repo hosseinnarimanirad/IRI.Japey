@@ -1962,13 +1962,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
         //*****************************************General**************************************************************
-        #region Shapefile/Worldfile
+        #region Shapefile/Worldfile/GeoJson
 
-        public virtual void AddShapefile()
+        public virtual async Task AddShapefile()
         {
             this.IsBusy = true;
 
-            var fileName = this.OpenFile("shapefile|*.shp");
+            var fileName = await this.DialogService.ShowOpenFileDialogAsync("shapefile|*.shp", null);
 
             if (!File.Exists(fileName))
             {
@@ -1986,7 +1986,7 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
-            AddShapefile(fileName);
+            await AddShapefile(fileName);
         }
 
         public async Task AddShapefile(string fileName)
@@ -2110,6 +2110,37 @@ namespace IRI.Jab.Common.Presenter.Map
                 IsBusy = false;
             }
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="geoJsonFeatureSetFileName">path to GeoJsonFeatureSet file</param>
+        /// <returns></returns>
+        public async Task AddGeoJson(string geoJsonFeatureSetFileName)
+        {
+            try
+            {
+                Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
+
+                var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
+
+                var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(geoJsonFeatureSetFileName), dataSource,
+                    new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
+                    LayerType.VectorLayer,
+                    RenderingApproach.Default,
+                    RasterizationApproach.GdiPlus, ScaleInterval.All);
+
+                this.AddLayer<SqlFeature>(vectorLayer);
+            }
+            catch (Exception ex)
+            {
+                await ShowMessageAsync(null, ex.Message);
+            }
+            finally
+            {
+                this.IsBusy = false;
+            }
         }
 
         #endregion

@@ -53,5 +53,9 @@ namespace IRI.Ket.DataManagement.DataSource
             return CreateFromJsonString(jsonString, mapToFeatureFunc, labelFunc);
         }
 
+        //public static GeoJsonSource<SqlFeature> Create(List<SqlFeature> features)
+        //{
+        //    return new GeoJsonSource<SqlFeature>(features, f => f);
+        //}
     }
 }
