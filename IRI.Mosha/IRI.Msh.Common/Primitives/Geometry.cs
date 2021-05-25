@@ -420,7 +420,11 @@ namespace IRI.Msh.Common.Primitives
         /// <param name="type"></param>
         /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
         /// <returns></returns>
-        public Geometry<T> Simplify(/*double threshold,*/ SimplificationType type, SimplificationParamters paramters/*, bool retain3Poins, double secondaryParameter = double.NaN*/)
+        public Geometry<T> Simplify(
+            /*double threshold,*/ 
+            SimplificationType type, 
+            SimplificationParamters paramters
+            /*, bool retain3Poins, double secondaryParameter = double.NaN*/)
         {
             Func<List<T>, List<T>> filter;
 

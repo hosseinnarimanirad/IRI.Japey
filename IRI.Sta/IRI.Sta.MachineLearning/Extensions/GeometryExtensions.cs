@@ -12,20 +12,30 @@ namespace IRI.Sta.MachineLearning.Extensions
 {
     public static class GeometryExtensions
     {
-        public static Geometry<T> Simplify<T>(this Geometry<T> geometry, LogisticGeometrySimplification model, int zoomLevel, bool retain3Poins)
+        public static Geometry<T> Simplify<T>(
+            this Geometry<T> geometry,
+            LogisticGeometrySimplification model,
+            int zoomLevel,
+            Func<IPoint, IPoint> toScreenMap,
+            bool retain3Poins)
             where T : IPoint, new()
         {
-            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, zoomLevel, retain3Poins);
+            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, zoomLevel, toScreenMap, retain3Poins);
 
             return geometry.FilterPoints(filter);
         }
 
-        public static List<T> SimplifyByLogisticRegression<T>(this List<T> points, LogisticGeometrySimplification model, int zoomLevel, bool retain3Points = false) where T : IPoint
+        public static List<T> SimplifyByLogisticRegression<T>(
+            this List<T> points,
+            LogisticGeometrySimplification model,
+            int zoomLevel,
+            Func<IPoint, IPoint> toScreenMap,
+            bool retain3Points = false) where T : IPoint
         {
             if (points.IsNullOrEmpty())
                 return points;
 
-            return model.SimplifyByLogisticRegression(points, zoomLevel, retain3Points);
+            return model.SimplifyByLogisticRegression(points, zoomLevel, toScreenMap, retain3Points);
         }
 
     }

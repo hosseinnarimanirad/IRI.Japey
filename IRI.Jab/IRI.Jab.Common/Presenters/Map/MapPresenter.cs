@@ -792,6 +792,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<Task<Response<IRI.Msh.Common.Primitives.Point>>> RequestGetPoint;
 
+        public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
+
         #endregion
 
 
@@ -2013,11 +2015,11 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public virtual void AddWebMercatorWorldfile()
+        public virtual async Task AddWebMercatorWorldfile()
         {
             this.IsBusy = true;
 
-            var fileName = this.OpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
+            var fileName = await this.DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
 
             if (!File.Exists(fileName))
             {
@@ -2029,11 +2031,11 @@ namespace IRI.Jab.Common.Presenter.Map
             AddWorldfile(fileName, Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator);
         }
 
-        public virtual void AddWorldfile()
+        public virtual async Task AddWorldfile()
         {
             this.IsBusy = true;
 
-            var fileName = this.OpenFile("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff");
+            var fileName = await this.DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
 
             if (!File.Exists(fileName))
             {
@@ -2082,7 +2084,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 this.IsBusy = true;
 
-                var fileName = this.OpenFile("Image Pyramid file|*.pyrmd", owner);
+                var fileName = await this.DialogService.ShowOpenFileDialogAsync("Image Pyramid file|*.pyrmd", owner);
 
                 if (!File.Exists(fileName))
                 {
@@ -2121,7 +2123,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             try
             {
-                Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
+                //Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
 
                 var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
 
@@ -2287,7 +2289,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_addWgs84WorldfileCommand == null)
                 {
-                    _addWgs84WorldfileCommand = new RelayCommand(param => { AddWorldfile(); });
+                    _addWgs84WorldfileCommand = new RelayCommand(async param => { await AddWorldfile(); });
                 }
                 return _addWgs84WorldfileCommand;
             }
@@ -2301,7 +2303,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_addWebMercatorWorldfileCommand == null)
                 {
-                    _addWebMercatorWorldfileCommand = new RelayCommand(param => { AddWebMercatorWorldfile(); });
+                    _addWebMercatorWorldfileCommand = new RelayCommand(async param => { await AddWebMercatorWorldfile(); });
                 }
                 return _addWebMercatorWorldfileCommand;
             }
@@ -2590,6 +2592,65 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _printCommand;
             }
         }
+
+        #endregion
+
+        #region Drawing Items Commands
+
+        private RelayCommand _addGeoJsonToDrawingItemsCommand;
+        public RelayCommand AddGeoJsonToDrawingItemsCommand
+        {
+            get
+            {
+                if (_addGeoJsonToDrawingItemsCommand == null)
+                {
+                    _addGeoJsonToDrawingItemsCommand = new RelayCommand(async param =>
+                    {
+                        var fileName = await DialogService.ShowOpenFileDialogAsync("*.json|*.json", null);
+
+                        if (string.IsNullOrWhiteSpace(fileName))
+                            return;
+
+                        var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
+
+                        var geometry = dataSource.GetGeometries().First().AsGeometry();
+                         
+                        AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                    });
+                }
+
+                return _addGeoJsonToDrawingItemsCommand;
+            }
+        }
+
+
+        private RelayCommand _addShapefileToDrawingItemsCommand;
+
+        public RelayCommand AddShapefileToDrawingItemsCommand
+        {
+            get
+            {
+                if (_addShapefileToDrawingItemsCommand == null)
+                {
+                    _addShapefileToDrawingItemsCommand = new RelayCommand(async param =>
+                    {
+                        var fileName = await DialogService.ShowOpenFileDialogAsync("*.shp|*.shp", null);
+
+                        if (string.IsNullOrWhiteSpace(fileName))
+                            return;
+
+                        var dataSource = ShapefileDataSourceFactory.Create(fileName, new WebMercator());
+
+                        var geometry = dataSource.GetGeometries().First().AsGeometry();
+                         
+                        AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                    });
+                }
+
+                return _addShapefileToDrawingItemsCommand;
+            }
+        }
+
 
         #endregion
 

@@ -18,7 +18,12 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public int BlurRadius { get; set; } = 5;
 
+        public object _defaultOwnerWindow;
 
+        public DefaultDialogService(object defaultOwnerWindow)
+        {
+            _defaultOwnerWindow = defaultOwnerWindow;
+        }
 
         #region Open File Dialog
 
@@ -36,6 +41,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             string result = null;
 
             Effect defaultEffect = null;
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -73,6 +81,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
 
             Effect defaultEffect = null;
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -123,6 +134,9 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             Effect defaultEffect = null;
 
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
+
             var owner = ownerWindow as Window;
 
             if (owner != null)
@@ -158,6 +172,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
 
             Effect defaultEffect = null;
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -208,6 +225,9 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             Effect defaultEffect = null;
 
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
+
             var owner = ownerWindow as Window;
 
             if (owner != null)
@@ -244,8 +264,11 @@ namespace IRI.Jab.Controls.Services.Dialog
             var tcs = new TaskCompletionSource<string>();
 
             SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
-             
+
             Effect defaultEffect = null;
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -280,7 +303,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
 
         #region Yes No Dialog
-         
+
         public Task<bool?> ShowYesNoDialogAsync<T>(string message, string title)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
@@ -300,6 +323,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             };
 
             View.Dialogs.DialogView dialog = new View.Dialogs.DialogView();
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -337,7 +363,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
 
         #region Show Message
-         
+
         public Task ShowMessageAsync<T>(string message, string pathMarkup, string title = null)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
@@ -358,6 +384,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             };
 
             View.Dialogs.MessageBoxView dialog = new View.Dialogs.MessageBoxView();
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -398,7 +427,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
 
         #region Show UserName SignUp Dialog
-         
+
         public Task<SignUpDialogViewModel> ShowUserNameSignUpDialogAsync<T>()
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
@@ -411,6 +440,9 @@ namespace IRI.Jab.Controls.Services.Dialog
             var tcs = new TaskCompletionSource<SignUpDialogViewModel>();
 
             View.Dialogs.UserNameSignUpDialogView dialog = new View.Dialogs.UserNameSignUpDialogView();
+
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
 
             var owner = ownerWindow as Window;
 
@@ -505,6 +537,9 @@ namespace IRI.Jab.Controls.Services.Dialog
         //    TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
         //    View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
+        
+            //if (ownerWindow == null)
+            //    ownerWindow = _defaultOwnerWindow;
 
         //    var owner = ownerWindow as Window;
 
@@ -564,6 +599,9 @@ namespace IRI.Jab.Controls.Services.Dialog
 
             View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
 
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
+
             var owner = ownerWindow as Window;
 
             if (owner != null)
@@ -622,6 +660,9 @@ namespace IRI.Jab.Controls.Services.Dialog
         {
             var tcs = new TaskCompletionSource<bool?>();
 
+            if (ownerWindow == null)
+                ownerWindow = _defaultOwnerWindow;
+
             var owner = ownerWindow as Window;
 
             if (owner != null)
@@ -671,6 +712,6 @@ namespace IRI.Jab.Controls.Services.Dialog
             return tcs.Task;
         }
 
-       
+
     }
 }

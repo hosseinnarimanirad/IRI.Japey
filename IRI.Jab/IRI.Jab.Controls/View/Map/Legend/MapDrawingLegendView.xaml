@@ -7,7 +7,49 @@
              xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View.Map"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" >
     <Grid>
-        <ListBox ItemsSource="{Binding DrawingItems}" SelectionMode="Extended">
+        <Grid.Resources>
+            <Style  TargetType="{x:Type Button}" x:Key="menuCircleButton">
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                <Setter Property="Width" Value="32"/>
+                <Setter Property="Height" Value="32"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Margin="1" Fill="{TemplateBinding Property=Background}"/>
+                                <ContentPresenter/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+            <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddGeoJsonToDrawingItemsCommand}"  
+                        BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه ژئوجی‌سان">
+                <Path Data="{StaticResource appbarPageCode}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
+            </Button>
+            <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddShapefileToDrawingItemsCommand}"  
+                        BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه شیپ‌فایل">
+                <Path Data="{StaticResource appbarPageNew}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
+            </Button>
+        </StackPanel>
+        <Line Grid.Row="1" X1="0" X2="100" StrokeThickness="2" Stroke="{DynamicResource MahApps.Brushes.Accent}" 
+              Opacity="1" Margin="0,4"
+              Stretch="Fill"/>
+        <ListBox Grid.Row="2" ItemsSource="{Binding DrawingItems}" SelectionMode="Extended">
             <ListBox.Resources>
                 <Style TargetType="ToggleButton">
                     <Setter Property="BorderThickness" Value="4,0,0,0"/>

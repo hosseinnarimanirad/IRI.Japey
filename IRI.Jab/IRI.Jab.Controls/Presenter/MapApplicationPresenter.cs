@@ -41,7 +41,8 @@ namespace IRI.Jab.Controls.Presenter
 
         public void Initialize(System.Windows.Window ownerWindow)
         {
-
+            this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService(this);
+ 
             this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
             this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer, this);
@@ -54,7 +55,8 @@ namespace IRI.Jab.Controls.Presenter
                 this.ClearAll();// (new Predicate<ILayer>(l => l.CanUserDelete == true), true);
             };
 
-            this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService();
+            // 1400.03.04
+            //this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService();
 
             //13971106
             //this.RequestOpenFile = (filter) =>

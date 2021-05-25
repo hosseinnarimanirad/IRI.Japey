@@ -727,7 +727,15 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestGetPoint = () => SelectPointAsync();
 
+            presenter.RequestGetToScreenMap = () =>
+            {
+                return p =>
+                {
+                    var temp = MapToScreen(new Point() { X = p.X, Y = p.Y });
 
+                    return (sb.IPoint)new sb.Point(temp.X, temp.Y);
+                };
+            };
 
             presenter.Ostanha = Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
             {

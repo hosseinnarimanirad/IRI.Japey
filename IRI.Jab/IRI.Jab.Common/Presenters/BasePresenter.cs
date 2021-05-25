@@ -60,23 +60,26 @@ namespace IRI.Jab.Common.Presenter
             //return this.RequestOpenFile?.Invoke(filter);
         }
 
-        public string[] OpenFiles<T>(string filter)
-        {
-            return DialogService.ShowOpenFilesDialog<T>(filter);
-            //return this.RequestOpenFile?.Invoke(filter);
-        }
+        //public string[] OpenFiles<T>(string filter)
+        //{
+        //    return DialogService.ShowOpenFilesDialog<T>(filter);
+        //    //return this.RequestOpenFile?.Invoke(filter);
+        //}
 
-        public string OpenFile(string filter, object owner = null)
-        {
-            return DialogService.ShowOpenFileDialog(filter, owner);
-            //return this.RequestOpenFile?.Invoke(filter);
-        }
+        //public string OpenFile(string filter, object owner = null)
+        //{
+        //    return DialogService.ShowOpenFileDialog(filter, owner);
+        //    //return this.RequestOpenFile?.Invoke(filter);
+        //}
 
         public string OpenFile<T>(string filter)
         {
             return DialogService.ShowOpenFileDialog<T>(filter);
             //return this.RequestOpenFile?.Invoke(filter);
         }
+
+
+
 
         public string SaveFile(string filter, object owner = null)
         {
