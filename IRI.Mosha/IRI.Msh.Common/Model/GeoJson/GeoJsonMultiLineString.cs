@@ -29,7 +29,7 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         public Geometry<Point> Parse(bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry<Point>(Coordinates?.Select(c => Geometry<Point>.ParseLineStringToGeometry(c, GeometryType.LineString, isLongitudeFirst, srid)).ToList(), this.GeometryType, srid);
+            return new Geometry<Point>(Coordinates?.Select(c => Geometry<Point>.ParseLineStringToGeometry(c, GeometryType.LineString, false, isLongitudeFirst, srid)).ToList(), this.GeometryType, srid);
         }
 
         public string Serialize(bool indented, bool removeSpaces = false)

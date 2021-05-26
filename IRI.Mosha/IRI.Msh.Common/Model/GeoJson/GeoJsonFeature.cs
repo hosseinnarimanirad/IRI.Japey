@@ -19,6 +19,17 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         [JsonProperty("properties")]
         public Dictionary<string, object> Properties { get; set; }
+
+        public static GeoJsonFeature Create(IGeoJsonGeometry geometry, Dictionary<string, object> attributes = null)
+        {
+            return new GeoJsonFeature()
+            {
+                Geometry = geometry,
+                Geometry_name = string.Empty,
+                Id = "0",
+                Properties = attributes ?? new Dictionary<string, object>(),
+            };
+        }
     }
 
 }

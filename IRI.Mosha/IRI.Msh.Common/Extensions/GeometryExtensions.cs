@@ -55,7 +55,7 @@ namespace IRI.Msh.Common.Extensions
             };
         }
 
-        public static IGeoJsonGeometry AsGeoJson<T>(this Geometry<T> geometry, bool isLongitudeFirst = false) where T : IPoint, new()
+        public static IGeoJsonGeometry AsGeoJson<T>(this Geometry<T> geometry, bool isLongitudeFirst = true) where T : IPoint, new()
         {
             //if (geometry.IsNullOrEmpty())
             //{

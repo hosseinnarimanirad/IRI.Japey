@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Model.GeoJson;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -19,10 +21,11 @@ namespace IRI.Jab.Common.Model.Legend
 
         private const string _zoomToolTip = "بزرگ‌نمایی";
 
-        private const string _saveToolTip = "ذخیره‌سازی";
+        private const string _saveAsShapefileToolTip = "ذخیره‌سازی در قالب شیپ‌فایل";
+        private const string _saveAsGeoJsonToolTip = "ذخیره‌سازی در قالب ژئوجی‌سان";
 
-        // *******************************************
-        //                  Remove 
+
+        // ***************** Remove ******************
         // *******************************************
         public static ILegendCommand CreateRemoveDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
         {
@@ -43,9 +46,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Edit
+        // ***************** Edit ********************
         // *******************************************
         public static ILegendCommand CreateEditDrawingItemLayer(MapPresenter map, DrawingItemLayer layer)
         {
@@ -87,16 +88,15 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        // *******************************************
-        //                  Export As Shapefile
+        // ***************** Export As Shapefile *****
         // *******************************************
         public static ILegendCommand CreateExportDrawingItemLayerAsShapefile(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarSave,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageNew,
                 Layer = layer,
-                ToolTip = _saveToolTip,
+                ToolTip = _saveAsShapefileToolTip,
             };
 
             result.Command = new RelayCommand(async param =>
@@ -121,9 +121,43 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
+        // ***************** Export As GeoJson *******
         // *******************************************
-        //                  Exterior Ring
+        public static ILegendCommand CreateExportDrawingItemLayerAsGeoJson(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCode,
+                Layer = layer,
+                ToolTip = _saveAsGeoJsonToolTip,
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var file = map.SaveFile("*.json|*.json");
+
+                    if (string.IsNullOrWhiteSpace(file))
+                        return;
+
+                    var feature = GeoJsonFeature.Create(layer.Geometry.AsGeoJson());
+
+                    GeoJsonFeatureSet featureSet = new GeoJsonFeatureSet() { Features = new List<GeoJsonFeature>() { feature }, TotalFeatures = 1 };
+
+                    featureSet.Save(file, false, false);
+                }
+                catch (Exception ex)
+                {
+                    await map.ShowMessageAsync(null, ex.Message);
+                }
+            });
+
+            return result;
+        }
+
+
+        // ***************** Exterior Ring ***********
         // *******************************************
         public static ILegendCommand CreateGetExteriorRingCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -151,9 +185,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Envelope
+        // ***************** Envelope ****************
         // *******************************************
         public static ILegendCommand CreateGetEnvelopeCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -181,9 +213,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Convex Hull
+        // ***************** Convex Hull *************
         // *******************************************
         public static ILegendCommand CreateGetConvexHullCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -211,9 +241,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Boundary
+        // ***************** Boundary ****************
         // *******************************************
         public static ILegendCommand CreateGetBoundaryCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -241,9 +269,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Break into geometries
+        // ***************** Break into geometries ***
         // *******************************************
         public static ILegendCommand CreateBreakIntoGeometriesCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -276,9 +302,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // *******************************************
-        //                  Extract points
+        // ***************** Extract points **********
         // *******************************************
         public static ILegendCommand CreateBreakIntoPointsCommand(MapPresenter map, DrawingItemLayer layer)
         {
@@ -307,8 +331,8 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-
-        // Simplify
+        // ***************** Simplify by Angle *******
+        // *******************************************
         public static ILegendCommand CreateSimplifyByAngleCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -336,6 +360,8 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
+        // ***************** Simplify by Area ********
+        // *******************************************
         public static ILegendCommand CreateSimplifyByAreaCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -362,8 +388,9 @@ namespace IRI.Jab.Common.Model.Legend
 
             return result;
         }
-         
-        // Duplicate
+
+        // ***************** Duplicate ***************
+        // *******************************************
         public static ILegendCommand CreateCloneDrawingItemCommand(MapPresenter map, DrawingItemLayer layer)
         {
             var result = new LegendCommand()
@@ -378,7 +405,7 @@ namespace IRI.Jab.Common.Model.Legend
                 try
                 {
                     var cloned = layer.Geometry.Clone();
-                     
+
                     map.AddDrawingItem(cloned, $"{layer.Title} cloned-{map.CurrentZoomLevel}");
 
                 }

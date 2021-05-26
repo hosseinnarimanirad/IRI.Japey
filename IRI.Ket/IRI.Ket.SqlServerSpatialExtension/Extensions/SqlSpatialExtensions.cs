@@ -1227,7 +1227,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region SqlGeometry To GeoJson
 
-        public static IGeoJsonGeometry AsGeoJson(this SqlGeometry geometry, bool isXFirst = false)
+        public static IGeoJsonGeometry AsGeoJson(this SqlGeometry geometry, bool isXFirst = true)
         {
             //if (geometry.IsNotValidOrEmpty())
             //{

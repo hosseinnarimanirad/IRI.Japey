@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class GeoJsonSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
+    public class OrdinaryJsonListSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
     {
-
-        private GeoJsonSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc) : this(features, mapToFeatureFunc, null)
+        private OrdinaryJsonListSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc) : this(features, mapToFeatureFunc, null)
         {
 
         }
 
-        private GeoJsonSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc)
+        private OrdinaryJsonListSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc)
         {
             this._labelFunc = labelFunc;
 
@@ -39,14 +38,14 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return CreateFromFile(fileName, null);
         //}
 
-        public static GeoJsonSource<T> CreateFromJsonString(string jsonString, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
+        public static OrdinaryJsonListSource<T> CreateFromJsonString(string jsonString, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
         {
             var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<T>>(jsonString);
 
-            return new GeoJsonSource<T>(values, mapToFeatureFunc, labelFunc);
+            return new OrdinaryJsonListSource<T>(values, mapToFeatureFunc, labelFunc);
         }
 
-        public static GeoJsonSource<T> CreateFromFile(string fileName, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
+        public static OrdinaryJsonListSource<T> CreateFromFile(string fileName, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
         {
             var jsonString = System.IO.File.ReadAllText(fileName);
 

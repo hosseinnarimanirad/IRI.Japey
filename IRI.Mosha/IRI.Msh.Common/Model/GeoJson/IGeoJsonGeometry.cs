@@ -25,5 +25,6 @@ namespace IRI.Msh.Common.Model.GeoJson
         int NumberOfGeometries();
 
         int NumberOfPoints();
+         
     }
 }

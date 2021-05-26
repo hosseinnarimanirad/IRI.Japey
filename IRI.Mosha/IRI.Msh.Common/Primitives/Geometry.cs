@@ -421,8 +421,8 @@ namespace IRI.Msh.Common.Primitives
         /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
         /// <returns></returns>
         public Geometry<T> Simplify(
-            /*double threshold,*/ 
-            SimplificationType type, 
+            /*double threshold,*/
+            SimplificationType type,
             SimplificationParamters paramters
             /*, bool retain3Poins, double secondaryParameter = double.NaN*/)
         {
@@ -488,7 +488,7 @@ namespace IRI.Msh.Common.Primitives
             var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, paramters.AverageLatitude ?? 0); //0 seconds!
 
             paramters.AreaThreshold = threshold * threshold;
-            
+
             paramters.DistanceThreshold = threshold;
 
             return Simplify(type, paramters);
@@ -1265,14 +1265,29 @@ namespace IRI.Msh.Common.Primitives
             return new Geometry<T>(new List<T>() { Point.Parse<T>(xy, isLongitudeFirst) }, GeometryType.Point, srid);
         }
 
-        public static Geometry<T> ParseLineStringToGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)
+        public static Geometry<T> ParseLineStringToGeometry(
+            double[][] geoCoordinates,
+            GeometryType geometryType,
+            bool isRing,
+            bool isLongitudeFirst = true,
+            int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry<T>(geoCoordinates.Select(p => Point.Parse<T>(p, isLongitudeFirst)).ToList(), geometryType, srid);
+            if (isRing)
+            {
+                var numberOfPoints = geoCoordinates.Length;
+
+                // skip last point
+                return new Geometry<T>(geoCoordinates.Take(numberOfPoints - 1).Select(p => Point.Parse<T>(p, isLongitudeFirst)).ToList(), geometryType, srid);
+            }
+            else
+            {
+                return new Geometry<T>(geoCoordinates.Select(p => Point.Parse<T>(p, isLongitudeFirst)).ToList(), geometryType, srid);
+            }
         }
 
         public static Geometry<T> ParsePolygonToGeometry(double[][][] rings, GeometryType geometryType, bool isLongFirst, int srid = SridHelper.GeodeticWGS84)
         {
-            return new Geometry<T>(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, isLongFirst)).ToList(), geometryType, srid);
+            return new Geometry<T>(rings.Select(p => ParseLineStringToGeometry(p, GeometryType.LineString, true, isLongFirst, srid)).ToList(), geometryType, srid);
         }
 
 

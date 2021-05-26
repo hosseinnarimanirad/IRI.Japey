@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="DataSource\MemorySources\UtmGridDataSource.cs" />
     <Compile Include="DataSource\RelationalDbSource.cs" />
-    <Compile Include="DataSource\MemorySources\GeoJsonSource.cs" />
+    <Compile Include="DataSource\MemorySources\OrdinaryJsonListSource.cs" />
     <Compile Include="DataSource\MemorySources\GridDataSource.cs" />
     <Compile Include="DataSource\MemorySources\SqlFeatureDataSource.cs" />
     <Compile Include="DataSource\MemorySources\SqlGeometryDataSource.cs" />

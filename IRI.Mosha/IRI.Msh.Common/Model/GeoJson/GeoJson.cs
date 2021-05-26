@@ -41,6 +41,6 @@ namespace IRI.Msh.Common.Model.GeoJson
             return removeSpaces ? result.Replace(" ", string.Empty) : result;
         }
 
-        
+      
     }
 }

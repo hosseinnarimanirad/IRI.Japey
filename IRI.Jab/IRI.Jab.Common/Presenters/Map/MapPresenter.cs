@@ -31,6 +31,8 @@ using IRI.Ket.Common.Service;
 using IRI.Msh.Common.Helpers;
 using System.Windows.Threading;
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Model.GeoJson;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -2125,7 +2127,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 //Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
 
-                var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
+                var dataSource = OrdinaryJsonListSource<SqlFeature>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
 
                 var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(geoJsonFeatureSetFileName), dataSource,
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
@@ -2611,11 +2613,28 @@ namespace IRI.Jab.Common.Presenter.Map
                         if (string.IsNullOrWhiteSpace(fileName))
                             return;
 
-                        var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
+                        var featureSet = GeoJsonFeatureSet.Load(fileName);
 
-                        var geometry = dataSource.GetGeometries().First().AsGeometry();
-                         
-                        AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                        //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
+                        var dataSource = new MemoryDataSource<SqlFeature>(
+                            featureSet.Features.Select(g => g.AsSqlFeature(isLongitudeFirst: false)).ToList(), 
+                            f => f.Label, 
+                            null, 
+                            f => f);
+
+                        var geometries = dataSource.GetGeometries();
+
+                        if (geometries.IsNullOrEmpty())
+                            return;
+
+                        if (geometries.Count != 1)
+                        {
+                            await ShowMessageAsync(null, "فایل جی‌سان حاوی تک عارضه باید باشد", "Invalid input");
+
+                            return;
+                        }
+
+                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
                     });
                 }
 
@@ -2641,9 +2660,19 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         var dataSource = ShapefileDataSourceFactory.Create(fileName, new WebMercator());
 
-                        var geometry = dataSource.GetGeometries().First().AsGeometry();
-                         
-                        AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                        var geometries = dataSource.GetGeometries();
+
+                        if (geometries.IsNullOrEmpty())
+                            return;
+
+                        if (geometries.Count != 1)
+                        {
+                            await ShowMessageAsync(null, "شیپ فایل حاوی تک عارضه باید باشد", "Invalid input");
+
+                            return;
+                        }
+
+                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
                     });
                 }
 
