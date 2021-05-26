@@ -1208,7 +1208,7 @@ namespace IRI.Msh.Common.Primitives
 
 
         // To do: provide sample input and expected output for this method  
-        public static Geometry<T> ParseToGeodeticGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = false)
+        public static Geometry<T> ParseToGeodeticGeometry(double[][] geoCoordinates, GeometryType geometryType, bool isLongitudeFirst = true)
         {
             return new Geometry<T>(geoCoordinates.Select(p => ParseLineStringToGeodeticGeometry(p.ToList(), isLongitudeFirst)).ToList(), geometryType, SridHelper.GeodeticWGS84);
         }

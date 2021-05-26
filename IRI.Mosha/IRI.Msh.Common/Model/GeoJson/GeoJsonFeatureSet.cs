@@ -29,7 +29,12 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         public static GeoJsonFeatureSet Load(string fileName)
         {
-            return GeoJson.ParseToGeoJsonFeatureCollection(System.IO.File.ReadAllText(fileName));
+            return Parse(System.IO.File.ReadAllText(fileName));
+        }
+
+        public static GeoJsonFeatureSet Parse(string geoJsonFeaturesSetString)
+        {
+            return JsonConvert.DeserializeObject<GeoJsonFeatureSet>(geoJsonFeaturesSetString);
         }
     }
 

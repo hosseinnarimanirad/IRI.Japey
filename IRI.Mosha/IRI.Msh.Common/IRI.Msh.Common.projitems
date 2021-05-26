@@ -56,7 +56,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\LambertConformalConic1P.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\LambertConformalConic2P.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\DefaultMapProjections.cs" />
+    <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\CoordinateSystems\MapProjection\SrsBases.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjects.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\Mercator.cs" />

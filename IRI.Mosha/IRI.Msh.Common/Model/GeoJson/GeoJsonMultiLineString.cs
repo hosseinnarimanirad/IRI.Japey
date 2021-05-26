@@ -27,7 +27,7 @@ namespace IRI.Msh.Common.Model.GeoJson
             return Coordinates == null || Coordinates.Length < 1;
         }
 
-        public Geometry<Point> Parse(bool isLongitudeFirst = false, int srid = SridHelper.GeodeticWGS84)
+        public Geometry<Point> Parse(bool isLongitudeFirst = true, int srid = SridHelper.GeodeticWGS84)
         {
             return new Geometry<Point>(Coordinates?.Select(c => Geometry<Point>.ParseLineStringToGeometry(c, GeometryType.LineString, false, isLongitudeFirst, srid)).ToList(), this.GeometryType, srid);
         }

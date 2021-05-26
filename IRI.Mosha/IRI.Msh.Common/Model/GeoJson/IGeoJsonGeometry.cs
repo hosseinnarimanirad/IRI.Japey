@@ -16,7 +16,7 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         GeometryType GeometryType { get; }
 
-        Geometry<Point> Parse(bool isLongitudeFirst = false, int srid = 0);
+        Geometry<Point> Parse(bool isLongitudeFirst = true, int srid = 0);
 
         bool IsNullOrEmpty();
 

@@ -1464,7 +1464,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region SqlGeography To GeoJson
 
-        public static IGeoJsonGeometry AsGeoJson(this SqlGeography geography, bool isLongitudeFirst = false)
+        public static IGeoJsonGeometry AsGeoJson(this SqlGeography geography, bool isLongitudeFirst = true)
         {
             OpenGisGeographyType geometryType = geography.GetOpenGisType();
 
@@ -1721,19 +1721,24 @@ namespace IRI.Ket.SpatialExtensions
             {
                 Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(isLongitudeFirst),
                 Id = feature.Id.ToString(),
-                Properties = feature.Attributes.ToDictionary(k => k.Key, k => k.Value/*.ToString()*/),
+                Properties = feature.Attributes/*.ToDictionary(k => k.Key, k => k.Value)*/,
 
             };
         }
 
-        public static SqlFeature AsSqlFeature(this GeoJsonFeature feature, bool isLongitudeFirst)
+        public static SqlFeature AsSqlFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
         {
+            targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
+
             return new SqlFeature()
             {
-                Attributes = feature.Properties.ToDictionary(f => f.Key, f => (object)f.Value),
+                Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
                 //Id = feature.id,
-                TheSqlGeometry = feature.Geometry.AsSqlGeometry(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                TheSqlGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                                                    .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator)
             };
+
+            
         }
 
         #endregion

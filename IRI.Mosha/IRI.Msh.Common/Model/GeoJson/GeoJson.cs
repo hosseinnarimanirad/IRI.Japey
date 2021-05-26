@@ -17,14 +17,14 @@ namespace IRI.Msh.Common.Model.GeoJson
             return parsedObject["features"].Select(f => JsonConvert.DeserializeObject<GeoJsonFeature>(f.ToString()));
         }
 
-        public static GeoJsonFeatureSet ParseToGeoJsonFeatureCollection(string geoJsonFeaturesSet)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<GeoJsonFeatureSet>(geoJsonFeaturesSet);
-        }
+        //public static GeoJsonFeatureSet ParseToGeoJsonFeatureCollection(string geoJsonFeaturesSet)
+        //{
+           
+        //}
 
         public static IEnumerable<GeoJsonFeature> ParseToGeoJsonFeatures(string geoJsonFeatureSet)
         {
-            return ParseToGeoJsonFeatureCollection(geoJsonFeatureSet).Features;
+            return GeoJsonFeatureSet.Parse(geoJsonFeatureSet).Features;
         }
 
         public const string Point = "Point";
@@ -36,7 +36,7 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         internal static string Serialize(IGeoJsonGeometry geoJson, bool indented, bool removeSpaces = false)
         {
-            var result = Newtonsoft.Json.JsonConvert.SerializeObject(geoJson, indented ? Formatting.Indented : Formatting.None);
+            var result = JsonConvert.SerializeObject(geoJson, indented ? Formatting.Indented : Formatting.None);
 
             return removeSpaces ? result.Replace(" ", string.Empty) : result;
         }

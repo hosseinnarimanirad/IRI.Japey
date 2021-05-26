@@ -7,9 +7,9 @@ using System.Text;
 
 namespace IRI.Msh.CoordinateSystem.MapProjection
 {
-    public static class DefaultMapProjections
+    public static class SrsBases
     {
-        static DefaultMapProjections()
+        static SrsBases()
         {
             GeodeticWgs84 = new NoProjection();
 

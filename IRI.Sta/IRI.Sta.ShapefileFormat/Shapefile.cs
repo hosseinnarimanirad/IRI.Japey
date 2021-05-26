@@ -450,7 +450,7 @@ namespace IRI.Ket.ShapefileFormat
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<Msh.Common.Model.GeoJson.GeoJsonFeature> features, bool isLongitudeFirst = false, SrsBase srs = null)
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<Msh.Common.Model.GeoJson.GeoJsonFeature> features, bool isLongitudeFirst = true, SrsBase srs = null)
         {
             var shapes = features.Select(f => f.Geometry.AsEsriShape(isLongitudeFirst, srs.Srid));
 

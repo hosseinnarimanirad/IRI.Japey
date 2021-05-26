@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Model.GeoJson;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -141,7 +142,7 @@ namespace IRI.Jab.Common.Model.Legend
                     if (string.IsNullOrWhiteSpace(file))
                         return;
 
-                    var feature = GeoJsonFeature.Create(layer.Geometry.AsGeoJson());
+                    var feature = GeoJsonFeature.Create(layer.Geometry.Project(SrsBases.GeodeticWgs84).AsGeoJson());
 
                     GeoJsonFeatureSet featureSet = new GeoJsonFeatureSet() { Features = new List<GeoJsonFeature>() { feature }, TotalFeatures = 1 };
 
