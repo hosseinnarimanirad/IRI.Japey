@@ -1160,10 +1160,11 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     drawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>()
                     {
-                       layer=> LegendCommand.CreateZoomToExtentCommand(this, layer),
-                       layer=> DrawingItemLegendCommands.CreateRemoveDrawingItemLayer(this, layer),
-                       layer=> DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
-                       layer=> DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                       layer => LegendCommand.CreateZoomToExtentCommand(this, layer),
+                       layer => DrawingItemLegendCommands.CreateRemoveDrawingItemLayer(this, layer),
+                       layer => DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
+                       layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                       layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsGeoJson(this,layer),
                     };
                 }
 
@@ -2617,9 +2618,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
                         var dataSource = new MemoryDataSource<SqlFeature>(
-                            featureSet.Features.Select(g => g.AsSqlFeature(isLongitudeFirst: false)).ToList(), 
-                            f => f.Label, 
-                            null, 
+                            featureSet.Features.Select(g => g.AsSqlFeature(isLongitudeFirst: true)).ToList(),
+                            f => f.Label,
+                            null,
                             f => f);
 
                         var geometries = dataSource.GetGeometries();

@@ -14,7 +14,7 @@ namespace IRI.Sta.ShapefileFormat.Extensions
     {
         #region SqlGeometry > Esri Shape
 
-        public static IEsriShape AsEsriShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = false, int srid = 0, Func<IPoint, IPoint> mapFunction = null)
+        public static IEsriShape AsEsriShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = true, int srid = 0, Func<IPoint, IPoint> mapFunction = null)
         {
             //var type = geometry.GeometryType;
             //if (geometry.IsNullOrEmpty())

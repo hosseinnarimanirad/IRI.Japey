@@ -60,7 +60,7 @@ namespace IRI.Msh.Common.Extensions
             //if (geometry.IsNullOrEmpty())
             //{
             //    throw new NotImplementedException();
-            //}
+            //}            
 
             switch (geometry.Type)
             {
