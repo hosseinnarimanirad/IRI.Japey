@@ -63,7 +63,9 @@ namespace IRI.Jab.MapViewer
 
             this.allLayers.Add(layer);
 
-            this.allLayers = this.allLayers.OrderBy(i => i.Type == LayerType.Complex).ThenBy(i => i.ZIndex).ToList();
+            this.allLayers = GetOrderedLayers();
+
+            ArrangeZIndex();
 
             if (layer.IsGroupLayer)
             {
@@ -182,22 +184,28 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+        private List<ILayer> GetOrderedLayers()
+        {
+            return allLayers.OrderBy(i => i.Type == LayerType.RightClickOption)
+                                         .ThenBy(i => i.Type == LayerType.MoveableItem)
+                                         .ThenBy(i => i.Type == LayerType.EditableItem)
+                                         .ThenBy(i => i.Type == LayerType.Complex)
+                                         .ThenBy(i => i.Type == LayerType.Drawing)
+                                         .ThenByDescending(i => i.Type == LayerType.BaseMap)
+                                         .ThenBy(i => i.ZIndex)
+                                         .ToList();
+        }
+
         private void ArrangeZIndex()
         {
-            var orderedLayers = allLayers.OrderBy(i => i.Type == LayerType.RightClickOption)
-                                        .ThenBy(i => i.Type == LayerType.MoveableItem)
-                                        .ThenBy(i => i.Type == LayerType.EditableItem)
-                                        .ThenBy(i => i.Type == LayerType.Complex)
-                                        .ThenBy(i => i.Type == LayerType.Drawing)
-                                        .ThenByDescending(i => i.Type == LayerType.BaseMap)
-                                        .ThenBy(i => i.ZIndex);
+            var orderedLayers = GetOrderedLayers();
 
             for (int i = 0; i < orderedLayers.Count(); i++)
             {
                 orderedLayers.ElementAt(i).ZIndex = i;
             }
         }
-
+         
         public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale, RenderingApproach rendering)
         {
             //var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
