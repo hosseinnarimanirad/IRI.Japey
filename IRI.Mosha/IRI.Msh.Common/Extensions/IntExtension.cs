@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.Primitives
+namespace IRI.Msh.Common.Extensions
 {
     public static class IntExtension
     {

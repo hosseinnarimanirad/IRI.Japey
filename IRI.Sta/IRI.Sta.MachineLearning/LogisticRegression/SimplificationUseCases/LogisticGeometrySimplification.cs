@@ -57,22 +57,24 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         }
 
         public static LogisticGeometrySimplification Create<T>(
-            List<T> originalPoints, 
-            List<T> simplifiedPoints, 
-            int zoomLevel, 
-            Func<IPoint, IPoint> toScreenMap) where T : IPoint
+            List<T> originalPoints,
+            List<T> simplifiedPoints,
+            int zoomLevel,
+            Func<IPoint, IPoint> toScreenMap,
+            bool isRingMode) where T : IPoint
         {
-            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, zoomLevel, toScreenMap);
+            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, zoomLevel, toScreenMap, isRingMode);
 
             return Create(parameters);
         }
 
         // ورودی این متد بایستی نقاط تمیز شده باشد
         public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
-            List<T> originalPoints, 
-            List<T> simplifiedPoints, 
-            int zoomLevel, 
-            Func<IPoint, IPoint> toScreenMap) where T : IPoint
+            List<T> originalPoints,
+            List<T> simplifiedPoints,
+            int zoomLevel,
+            Func<IPoint, IPoint> toScreenMap,
+            bool isRingMode) where T : IPoint
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
             {
@@ -115,10 +117,40 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 if (indexMap.ContainsValue(i))
                     continue;
+              
+                // 1400.03.05
+                // در حال چند رینگ ممکنه نقاط ابتدایی هم حذف
+                // شوند این برخلاف حالت خط هست که همیشه
+                // نقطه اول و اخر رو نگه می داریم
+                var prevPoints = indexMap.Where(index => index.Value < i);
+                 
+                KeyValuePair<int, int> prevRetainedPoint;
 
-                var prevRetainedPoint = indexMap.Where(index => index.Value < i).Last();
+                if (isRingMode && prevPoints.IsNullOrEmpty())
+                {
+                    prevRetainedPoint = indexMap.Last();
+                }
+                else
+                {
+                    //prevRetainedPoint = indexMap.Where(index => index.Value < i).Last();
+                    prevRetainedPoint = prevPoints.Last();
+                }
+                //var prevRetainedPoint = indexMap.Where(index => index.Value < i).Last();
 
-                var nextRetainedPoint = indexMap.First(index => index.Value > i);
+                //var nextRetainedPoint = indexMap.First(index => index.Value > i);
+                var nextPoints = indexMap.Where(index => index.Value > i);
+
+                KeyValuePair<int, int> nextRetainedPoint;
+
+                if (isRingMode && nextPoints.IsNullOrEmpty())
+                {
+                    nextRetainedPoint = indexMap.First();
+                }
+                else
+                {
+                    //nextRetainedPoint = indexMap.First(index => index.Value > i);
+                    nextRetainedPoint = indexMap.First(index => index.Value > i);
+                }
 
                 parameters.Add(new LogisticGeometrySimplificationParameters(
                     originalPoints[prevRetainedPoint.Value],

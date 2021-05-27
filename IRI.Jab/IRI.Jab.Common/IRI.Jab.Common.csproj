@@ -151,6 +151,7 @@
     <Compile Include="Assets\ShapeStrings\IriShapes.cs" />
     <Compile Include="Assets\ShapeStrings\IriProvinces93.cs" />
     <Compile Include="Assets\ShapeStrings\MaterialDesign.cs" />
+    <Compile Include="Assets\ShapeStrings\Others.cs" />
     <Compile Include="Assets\ShapeStrings\PointedIcons.cs" />
     <Compile Include="Assets\ShapeStrings\SegoePrint.cs" />
     <Compile Include="Assets\ShapeStrings\TheNounProject.cs" />

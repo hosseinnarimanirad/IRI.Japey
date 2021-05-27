@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Jab.Common.Assets.Converters
 {

@@ -71,7 +71,7 @@
                         .Replace("٦", "6")
                         .Replace("٧", "7")
                         .Replace("٨", "8")
-                        .Replace("٩", "9"); 
+                        .Replace("٩", "9");
         }
 
         public static bool ContainsIgnoreCase(this string value, string term)
@@ -94,6 +94,12 @@
             return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(base64String));
         }
 
-        
+        public static string[] SplitIgnoreEmptyEntries(this string value, char separator)
+        {
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            return value.Split(new Char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+        }
     }
 }

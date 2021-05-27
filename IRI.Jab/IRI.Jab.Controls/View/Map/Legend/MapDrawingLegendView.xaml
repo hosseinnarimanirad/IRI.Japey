@@ -39,11 +39,11 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddGeoJsonToDrawingItemsCommand}"  
                         BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه ژئوجی‌سان">
-                <Path Data="{StaticResource appbarPageCode}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource json}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
             </Button>
-            <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddShapefileToDrawingItemsCommand}"  
+            <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="01" Cursor="Hand" Command="{Binding AddShapefileToDrawingItemsCommand}"  
                         BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه شیپ‌فایل">
-                <Path Data="{StaticResource appbarPageNew}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
+                <Path Data="{StaticResource shapefile}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
             </Button>
         </StackPanel>
         <Line Grid.Row="1" X1="0" X2="100" StrokeThickness="2" Stroke="{DynamicResource MahApps.Brushes.Accent}" 

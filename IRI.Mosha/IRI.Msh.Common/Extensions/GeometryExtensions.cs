@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.Extensions
+namespace IRI.Msh.Common.Primitives
 {
     public static class GeometryExtensions
     {
@@ -40,6 +40,7 @@ namespace IRI.Msh.Common.Extensions
 
         #region Geometry To GeoJson
 
+        // public methods
         public static IGeoJsonGeometry AsGeoJson<T>(this T point) where T : IPoint, new()
         {
             if (point == null)
@@ -91,6 +92,7 @@ namespace IRI.Msh.Common.Extensions
             }
         }
 
+        // private methods
         private static double[] GetGeoJsonObjectPoint<T>(T point, bool isLongitudeFirst) where T : IPoint, new()
         {
             if (point == null)

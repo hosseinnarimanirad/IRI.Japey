@@ -95,7 +95,7 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageNew,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Others.shapefile,
                 Layer = layer,
                 ToolTip = _saveAsShapefileToolTip,
             };
@@ -128,7 +128,7 @@ namespace IRI.Jab.Common.Model.Legend
         {
             var result = new LegendCommand()
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCode,
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Others.json,
                 Layer = layer,
                 ToolTip = _saveAsGeoJsonToolTip,
             };

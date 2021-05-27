@@ -186,12 +186,12 @@ namespace IRI.Jab.MapViewer
 
         private List<ILayer> GetOrderedLayers()
         {
-            return allLayers.OrderBy(i => i.Type == LayerType.RightClickOption)
-                                         .ThenBy(i => i.Type == LayerType.MoveableItem)
-                                         .ThenBy(i => i.Type == LayerType.EditableItem)
-                                         .ThenBy(i => i.Type == LayerType.Complex)
-                                         .ThenBy(i => i.Type == LayerType.Drawing)
-                                         .ThenByDescending(i => i.Type == LayerType.BaseMap)
+            return allLayers.OrderBy(i => i.Type.HasFlag(LayerType.RightClickOption))
+                                         .ThenBy(i => i.Type.HasFlag(LayerType.MoveableItem))
+                                         .ThenBy(i => i.Type.HasFlag(LayerType.EditableItem))
+                                         .ThenBy(i => i.Type.HasFlag(LayerType.Complex))
+                                         .ThenBy(i => i.Type.HasFlag(LayerType.Drawing))
+                                         .ThenByDescending(i => i.Type.HasFlag(LayerType.BaseMap))
                                          .ThenBy(i => i.ZIndex)
                                          .ToList();
         }
@@ -205,7 +205,7 @@ namespace IRI.Jab.MapViewer
                 orderedLayers.ElementAt(i).ZIndex = i;
             }
         }
-         
+
         public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale, RenderingApproach rendering)
         {
             //var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
