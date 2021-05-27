@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Msh.Common.Model.Esri
+namespace IRI.Msh.Common.Primitives.Esri
 {
     public enum EsriJsonGeometryType
     {

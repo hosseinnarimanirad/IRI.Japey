@@ -1,6 +1,6 @@
 ﻿using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Model.Esri;
+using IRI.Msh.Common.Primitives.Esri;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;

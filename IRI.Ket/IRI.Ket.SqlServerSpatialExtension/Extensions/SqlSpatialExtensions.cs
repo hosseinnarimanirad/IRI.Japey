@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Model.Esri;
+using IRI.Msh.Common.Primitives.Esri;
 using IRI.Msh.Common.Model.GeoJson;
 using System.Diagnostics;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Ket.SqlServerSpatialExtension.Extensions;
+using IRI.Ket.SqlServerSpatialExtension.Model; 
 
 namespace IRI.Ket.SpatialExtensions
 {

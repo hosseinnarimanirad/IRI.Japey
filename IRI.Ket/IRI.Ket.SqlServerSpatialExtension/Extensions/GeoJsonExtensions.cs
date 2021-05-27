@@ -15,7 +15,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
 
-namespace IRI.Ket.SqlServerSpatialExtension.Extensions
+namespace IRI.Ket.SpatialExtensions
 {
     public static class GeoJsonExtensions
     {

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using IRI.Msh.Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Common.Model.Esri
+namespace IRI.Msh.Common.Primitives.Esri
 {
     public class EsriFeatureSet
     {
