@@ -34,11 +34,11 @@ namespace IRI.Jab.Common.Service.Dialog
         // ********************************************************************
         //                          Save File Dialog
         // ********************************************************************
-        string ShowSaveFileDialog<T>(string filter);
-        string ShowSaveFileDialog(string filter, object owner);
+        string ShowSaveFileDialog<T>(string filter, string fileName = null);
+        string ShowSaveFileDialog(string filter, object owner, string fileName = null);
 
-        Task<string> ShowSaveFileDialogAsync<T>(string filter);
-        Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow);
+        Task<string> ShowSaveFileDialogAsync<T>(string filter, string fileName = null);
+        Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow, string fileName = null);
 
 
         // ********************************************************************

@@ -105,7 +105,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.SaveFile("*.shp|*.shp");
+                    var file = map.DialogService.ShowSaveFileDialog("*.shp|*.shp", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -116,7 +116,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -138,7 +138,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.SaveFile("*.json|*.json");
+                    var file = map.DialogService.ShowSaveFileDialog("*.json|*.json", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -151,7 +151,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -180,7 +180,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -208,7 +208,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -236,7 +236,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -264,7 +264,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -297,7 +297,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -326,7 +326,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -348,14 +348,14 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters() { AngleThreshold = 0.98, Retain3Points = true });
+                    var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters() { AngleThreshold = 0.99, Retain3Points = true });
                     //VisualSimplification.sim layer.Geometry.Simplify()
                     map.AddDrawingItem(simplified, $"{layer.Title} simplified-{map.CurrentZoomLevel}");
 
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -384,7 +384,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -413,7 +413,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 

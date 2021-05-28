@@ -1969,6 +1969,8 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************General**************************************************************
         #region Shapefile/Worldfile/GeoJson
 
+        const string _error = "خطا";
+
         public virtual async Task AddShapefile()
         {
             this.IsBusy = true;
@@ -2010,7 +2012,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await ShowMessageAsync(null, ex.Message);
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
             }
             finally
             {
@@ -2031,7 +2033,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            AddWorldfile(fileName, Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator);
+            await AddWorldfile(fileName, SridHelper.WebMercator);
         }
 
         public virtual async Task AddWorldfile()
@@ -2047,10 +2049,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            AddWorldfile(fileName, Msh.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84);
+            await AddWorldfile(fileName, SridHelper.GeodeticWGS84);
         }
 
-        public virtual void AddWorldfile(string fileName, int srid)
+        public virtual async Task AddWorldfile(string fileName, int srid)
         {
             try
             {
@@ -2072,7 +2074,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                ShowMessageAsync(null, ex.Message);
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
             }
             finally
             {
@@ -2108,7 +2110,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await this.ShowMessageAsync(owner, ex.Message, "خطا");
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
             }
             finally
             {
@@ -2140,7 +2142,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await ShowMessageAsync(null, ex.Message);
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
             }
             finally
             {
@@ -2273,9 +2275,9 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_addShapefileCommand == null)
                 {
-                    _addShapefileCommand = new RelayCommand(param =>
+                    _addShapefileCommand = new RelayCommand(async param =>
                     {
-                        AddShapefile();
+                        await AddShapefile();
                     });
                 }
                 return _addShapefileCommand;
@@ -2632,7 +2634,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         if (geometries.Count != 1)
                         {
-                            await ShowMessageAsync(null, "فایل جی‌سان حاوی تک عارضه باید باشد", "Invalid input");
+                            await DialogService.ShowMessageAsync(null, "فایل جی‌سان حاوی تک عارضه باید باشد", _error, null);
 
                             return;
                         }
@@ -2670,7 +2672,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         if (geometries.Count != 1)
                         {
-                            await ShowMessageAsync(null, "شیپ فایل حاوی تک عارضه باید باشد", "Invalid input");
+                            await DialogService.ShowMessageAsync(null, "شیپ فایل حاوی تک عارضه باید باشد", _error, null);
 
                             return;
                         }

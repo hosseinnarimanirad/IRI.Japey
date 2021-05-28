@@ -20,6 +20,12 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public object _defaultOwnerWindow;
 
+        const string _defaultShowMessageTitle = "پیام";
+
+        const string _defaultSaveTitle = "ذخیره‌سازی";
+
+        const string _defaultOpenTitle = "انتخاب فایل";
+
         public DefaultDialogService(object defaultOwnerWindow)
         {
             _defaultOwnerWindow = defaultOwnerWindow;
@@ -36,7 +42,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public string ShowOpenFileDialog(string filter, object ownerWindow)
         {
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false, Title = _defaultOpenTitle };
 
             string result = null;
 
@@ -78,7 +84,7 @@ namespace IRI.Jab.Controls.Services.Dialog
         {
             var tcs = new TaskCompletionSource<string>();
 
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = false, Title = _defaultOpenTitle };
 
             Effect defaultEffect = null;
 
@@ -128,7 +134,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         public string[] ShowOpenFilesDialog(string filter, object ownerWindow)
         {
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true, Title = _defaultOpenTitle };
 
             string[] result = null;
 
@@ -169,7 +175,7 @@ namespace IRI.Jab.Controls.Services.Dialog
         {
             var tcs = new TaskCompletionSource<string[]>();
 
-            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true };
+            OpenFileDialog dialog = new OpenFileDialog() { Filter = filter, Multiselect = true, Title = _defaultOpenTitle };
 
             Effect defaultEffect = null;
 
@@ -210,16 +216,16 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #region Save File Dialog
 
-        public string ShowSaveFileDialog<T>(string filter)
+        public string ShowSaveFileDialog<T>(string filter, string fileName = null)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowSaveFileDialog(filter, owner);
+            return ShowSaveFileDialog(filter, owner, fileName);
         }
 
-        public string ShowSaveFileDialog(string filter, object ownerWindow)
+        public string ShowSaveFileDialog(string filter, object ownerWindow, string fileName = null)
         {
-            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
+            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter, FileName = fileName ?? string.Empty, Title = _defaultSaveTitle };
 
             string result = null;
 
@@ -249,21 +255,21 @@ namespace IRI.Jab.Controls.Services.Dialog
         }
 
         // Async version
-        public Task<string> ShowSaveFileDialogAsync<T>(string filter)
+        public Task<string> ShowSaveFileDialogAsync<T>(string filter, string fileName = null)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowSaveFileDialogAsync(filter, owner);
+            return ShowSaveFileDialogAsync(filter, owner, fileName);
         }
 
         // 1399.12.20
         // making an async saveFileDialg
         // good article: https://sriramsakthivel.wordpress.com/2015/04/19/asynchronous-showdialog/
-        public Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow)
+        public Task<string> ShowSaveFileDialogAsync(string filter, object ownerWindow, string fileName = null)
         {
             var tcs = new TaskCompletionSource<string>();
 
-            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter };
+            SaveFileDialog dialog = new SaveFileDialog() { Filter = filter, FileName = fileName ?? string.Empty, Title = _defaultSaveTitle };
 
             Effect defaultEffect = null;
 
@@ -364,7 +370,7 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #region Show Message
 
-        public Task ShowMessageAsync<T>(string message, string pathMarkup, string title = null)
+        public Task ShowMessageAsync<T>(string message, string pathMarkup, string title = _defaultShowMessageTitle)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
@@ -378,7 +384,7 @@ namespace IRI.Jab.Controls.Services.Dialog
             IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
             {
                 Message = message,
-                Title = title,
+                Title = title ?? _defaultShowMessageTitle,
                 IsTwoOptionsMode = false,
                 IconPathMarkup = pathMarkup
             };
@@ -537,9 +543,9 @@ namespace IRI.Jab.Controls.Services.Dialog
         //    TaskCompletionSource<ChangePasswordDialogViewModel> tcs = new TaskCompletionSource<ChangePasswordDialogViewModel>();
 
         //    View.Dialogs.ChangePasswordDialogView dialog = new View.Dialogs.ChangePasswordDialogView();
-        
-            //if (ownerWindow == null)
-            //    ownerWindow = _defaultOwnerWindow;
+
+        //if (ownerWindow == null)
+        //    ownerWindow = _defaultOwnerWindow;
 
         //    var owner = ownerWindow as Window;
 

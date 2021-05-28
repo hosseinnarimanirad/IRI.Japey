@@ -300,7 +300,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var fileName = map.SaveFile("*.png|*.png");
+                    var fileName = await map.DialogService.ShowSaveFileDialogAsync("*.png|*.png", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(fileName))
                         return;
@@ -309,7 +309,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -331,7 +331,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var fileName = map.SaveFile("*.shp|*.shp");
+                    var fileName = await map.DialogService.ShowSaveFileDialogAsync("*.shp|*.shp", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(fileName))
                         return;
@@ -340,7 +340,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 
@@ -361,7 +361,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var fileName = map.SaveFile("*.json|*.json");
+                    var fileName = await map.DialogService.ShowSaveFileDialogAsync("*.json|*.json", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(fileName))
                         return;
@@ -374,7 +374,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.ShowMessageAsync(null, ex.Message);
+                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
                 }
             });
 

@@ -101,7 +101,7 @@ namespace IRI.Jab.Common.Model
                 }
 
                 //گرفتن مسیر فایل
-                var fileName = map.SaveFile("*.xlsx|*.xlsx");
+                var fileName = map.DialogService.ShowSaveFileDialog("*.xlsx|*.xlsx", null, layer.LayerName);
 
                 if (string.IsNullOrWhiteSpace(fileName))
                     return;
@@ -171,7 +171,7 @@ namespace IRI.Jab.Common.Model
 
         #endregion
 
-       
+
 
         internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
         {
