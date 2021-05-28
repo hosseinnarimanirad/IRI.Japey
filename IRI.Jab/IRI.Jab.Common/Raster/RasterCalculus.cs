@@ -20,7 +20,7 @@ namespace IRI.Jab.Common.Raster
     {
         public static void Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor, double? maxDistance)
         {
-            var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
             //scale
             var scaleX = width / boundingBox.Width;
@@ -115,7 +115,7 @@ namespace IRI.Jab.Common.Raster
         {
             return await Task.Run<GeoReferencedImage>(() =>
             {
-                var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+                var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
                 //scale
                 var scaleX = width / boundingBox.Width;
@@ -179,7 +179,7 @@ namespace IRI.Jab.Common.Raster
 
         public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
-            var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
             //scale
             var scaleX = width / boundingBox.Width;
@@ -244,7 +244,7 @@ namespace IRI.Jab.Common.Raster
 
         public static void CreateForPolygon(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
-            var boundingBox = SqlSpatialExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
 
             //scale
             var scaleX = width / boundingBox.Width;

@@ -10,8 +10,6 @@ using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-
-
     public struct EsriPolyline : IEsriSimplePoints
     {
 

@@ -1598,6 +1598,18 @@ namespace IRI.Msh.Common.Primitives
 
 
 
+        #region Conversions
 
+        public Feature<T> AsFeature()
+        {
+            return new Feature<T>()
+            {
+                Attributes = new Dictionary<string, object>(),
+                Id = 0,
+                TheGeometry = this
+            };
+        }
+
+        #endregion
     }
 }

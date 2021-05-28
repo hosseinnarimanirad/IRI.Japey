@@ -1,32 +1,20 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Model.GeoJson;
+using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Primitives.Esri;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Ket.SpatialExtensions;
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Primitives.Esri;
-using IRI.Msh.Common.Model.GeoJson;
-using System.Diagnostics;
-using IRI.Ket.SqlServerSpatialExtension.Model; 
 
 namespace IRI.Ket.SpatialExtensions
 {
-    public static class SqlSpatialExtensions
+    public static class SqlGeometryExtensions
     {
-        public static bool IsNullOrEmpty(this SqlGeography geography)
-        {
-            return geography == null || geography.IsNull || geography.STIsEmpty().IsTrue;
-        }
-
-        public static bool IsNotValidOrEmpty(this SqlGeography geography)
-        {
-            return geography.IsNullOrEmpty() || geography.STIsValid().IsFalse;
-        }
-
         public static bool IsNullOrEmpty(this SqlGeometry geometry)
         {
             return geometry == null || geometry.IsNull || geometry.STIsEmpty().IsTrue;
@@ -73,6 +61,22 @@ namespace IRI.Ket.SpatialExtensions
                 return 0;
             }
 
+        }
+
+
+        public static BoundingBox GetBoundingBox(this List<SqlGeometry> spatialFeatures)
+        {
+            if (spatialFeatures == null || spatialFeatures.Count < 1)
+            {
+                return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
+            }
+
+            var envelopes = spatialFeatures.AsParallel().Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
+
+            return SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
+
+            //Method 0
+            //return BoundingBox.GetMergedBoundingBox(spatialFeatures.Select(i => i.GetBoundingBox()).Where(i => !i.IsNaN()));
         }
 
 
@@ -151,43 +155,6 @@ namespace IRI.Ket.SpatialExtensions
             return new BoundingBox(xArray.Min(), yArray.Min(), xArray.Max(), yArray.Max());
         }
 
-        public static BoundingBox GetBoundingBox(this List<SqlGeometry> spatialFeatures)
-        {
-            if (spatialFeatures == null || spatialFeatures.Count < 1)
-            {
-                return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
-            }
-
-            var envelopes = spatialFeatures.AsParallel().Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
-
-            return SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
-
-            //Method 0
-            //return BoundingBox.GetMergedBoundingBox(spatialFeatures.Select(i => i.GetBoundingBox()).Where(i => !i.IsNaN()));
-        }
-
-
-        public static OpenGisGeographyType GetOpenGisType(this SqlGeography geography)
-        {
-            if (geography == null)
-            {
-                return OpenGisGeographyType.GeometryCollection;
-            }
-            else
-            {
-                return (OpenGisGeographyType)Enum.Parse(typeof(OpenGisGeographyType), geography.STGeometryType().Value, true);
-            }
-
-            //if (geometry.IsNullOrEmpty())
-            //{
-            //    return OpenGisGeometryType.GeometryCollection;
-            //}
-            //else
-            //{
-            //    return (OpenGisGeometryType)Enum.Parse(typeof(OpenGisGeometryType), geometry.STGeometryType().Value, true);
-            //}
-        }
-
         public static OpenGisGeometryType GetOpenGisType(this SqlGeometry geometry)
         {
             if (geometry == null)
@@ -245,18 +212,6 @@ namespace IRI.Ket.SpatialExtensions
             return false;
         }
 
-        public static Point AsPoint(this SqlGeography point)
-        {
-            if (point.IsNullOrEmpty() || point.Long.IsNull || point.Lat.IsNull)
-            {
-                return new Point(double.NaN, double.NaN);
-            }
-            else
-            {
-                return new Point(point.Long.Value, point.Lat.Value);
-            }
-        }
-
         public static Point AsPoint(this SqlGeometry point)
         {
             if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
@@ -286,183 +241,7 @@ namespace IRI.Ket.SpatialExtensions
         }
 
 
-
-
-        #region Projection (SqlGeography)
-
-        public static SqlGeometry Project(this SqlGeography geography, Func<Point, Point> mapFunction, int newSrid = 0)
-        {
-
-            SqlGeometryBuilder builder = new SqlGeometryBuilder();
-
-            builder.SetSrid(newSrid);
-
-            geography = geography.MakeValid();
-
-            OpenGisGeometryType geometryType = (OpenGisGeometryType)Enum.Parse(typeof(OpenGisGeometryType), geography.STGeometryType().Value, true);
-
-            builder.BeginGeometry(geometryType);
-
-            switch (geometryType)
-            {
-                case OpenGisGeometryType.CircularString:
-                case OpenGisGeometryType.CompoundCurve:
-                case OpenGisGeometryType.CurvePolygon:
-                case OpenGisGeometryType.GeometryCollection:
-                    throw new NotImplementedException();
-
-                case OpenGisGeometryType.LineString:
-                    ProjectLineString(builder, geography, mapFunction);
-                    break;
-
-                case OpenGisGeometryType.MultiLineString:
-                    ProjectMultiLineSring(builder, geography, mapFunction);
-                    break;
-
-                case OpenGisGeometryType.MultiPoint:
-                    ProjectMultiPoint(builder, geography, mapFunction);
-                    break;
-
-                case OpenGisGeometryType.MultiPolygon:
-                    ProjectMultiPolygon(builder, geography, mapFunction);
-                    break;
-
-                case OpenGisGeometryType.Point:
-                    ProjectPoint(builder, geography, mapFunction);
-                    break;
-
-                case OpenGisGeometryType.Polygon:
-                    ProjectPolygon(builder, geography, mapFunction);
-                    break;
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            builder.EndGeometry();
-
-            return builder.ConstructedGeometry.STIsValid().IsTrue ? builder.ConstructedGeometry : builder.ConstructedGeometry.MakeValid();
-        }
-
-        //Not supporting Z and M values
-        private static void ProjectMultiPolygon(SqlGeometryBuilder builder, SqlGeography multiPolygon, Func<Point, Point> mapFunction)
-        {
-            int numberOfGeometries = multiPolygon.STNumGeometries().Value;
-
-            for (int i = 1; i <= numberOfGeometries; i++)
-            {
-                builder.BeginGeometry(OpenGisGeometryType.Polygon);
-
-                ProjectPolygon(builder, multiPolygon.STGeometryN(i), mapFunction);
-
-                builder.EndGeometry();
-            }
-        }
-
-        //Not supporting Z and M values
-        private static void ProjectPolygon(SqlGeometryBuilder builder, SqlGeography geometry, Func<Point, Point> mapFunction)
-        {
-            //ProjectRing(builder, geometry.STExteriorRing(), mapFunction);
-
-            //int numberOfInteriorRings = geometry.STNumInteriorRing().Value;
-            int numberOfRings = geometry.NumRings().Value;
-
-            for (int i = 1; i <= numberOfRings; i++)
-            {
-                //ProjectRing(builder, geometry.STInteriorRingN(i), mapFunction);
-                ProjectLineString(builder, geometry.RingN(i), mapFunction);
-            }
-        }
-
-        //Not supporting Z and M values
-        private static void ProjectMultiLineSring(SqlGeometryBuilder builder, SqlGeography multiLineString, Func<Point, Point> mapFunction)
-        {
-            int numberOfGeometries = multiLineString.STNumGeometries().Value;
-
-            for (int i = 1; i <= numberOfGeometries; i++)
-            {
-                builder.BeginGeometry(OpenGisGeometryType.LineString);
-
-                ProjectLineString(builder, multiLineString.STGeometryN(i), mapFunction);
-
-                builder.EndGeometry();
-            }
-        }
-
-        //Not supporting Z and M values
-        private static void ProjectLineString(SqlGeometryBuilder builder, SqlGeography lineString, Func<Point, Point> mapFunction)
-        {
-            int numberOfPoints = lineString.STNumPoints().Value;
-
-            //Point startPoint = mapFunction(new Point(lineString.STStartPoint().Long.Value, lineString.STStartPoint().Lat.Value));
-            var startPoint = mapFunction(lineString.STStartPoint().AsPoint());
-
-            builder.BeginFigure(startPoint.X, startPoint.Y);
-
-            for (int i = 2; i <= numberOfPoints; i++)
-            {
-                var point = mapFunction(GetPoint(lineString, i));
-
-                builder.AddLine(point.X, point.Y);
-            }
-
-            builder.EndFigure();
-        }
-
-        //Not supporting Z and M values
-        //?? possible bug: start value for i
-        private static void ProjectMultiPoint(SqlGeometryBuilder builder, SqlGeography multiPoint, Func<Point, Point> mapFunction)
-        {
-            int numberOfGeometries = multiPoint.STNumGeometries().Value;
-
-            for (int i = 1; i <= numberOfGeometries; i++)
-            {
-                builder.BeginGeometry(OpenGisGeometryType.Point);
-
-                ProjectPoint(builder, multiPoint.STGeometryN(i), mapFunction);
-
-                builder.EndGeometry();
-            }
-        }
-
-        //Not supporting Z and M values
-        public static void ProjectPoint(SqlGeometryBuilder builder, SqlGeography point, Func<Point, Point> mapFunction)
-        {
-            //Point thePoint = mapFunction(new Point(point.Long.Value, point.Lat.Value));
-            var thePoint = mapFunction(point.AsPoint());
-
-            builder.BeginFigure(thePoint.X, thePoint.Y);
-
-            builder.EndFigure();
-        }
-
-        private static Point GetPoint(SqlGeography geography, int index)
-        {
-            return geography.STPointN(index).AsPoint();
-
-            //return new IRI.Msh.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
-        }
-
-
-        public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
-        {
-            return Project(geometry, point => MapProjects.GeodeticToMercator(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
-        }
-
-        public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
-        {
-            return Project(geometry, point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
-        }
-
-        public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
-        {
-            return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84));
-        }
-
-        #endregion
-
-
-        #region Projection (SqlGeometry)
+        #region Projection
 
         public static SqlGeometry Transform(this SqlGeometry geometry, Func<Point, Point> mapFunction, int newSrid = 0)
         {
@@ -855,6 +634,205 @@ namespace IRI.Ket.SpatialExtensions
             }
 
             return new Geometry<Point>(result, GeometryType.GeometryCollection, srid);
+        }
+
+        #endregion
+
+
+        #region To Esri Shape
+
+        public static EsriPoint AsEsriPoint(this SqlGeometry point)
+        {
+            if (point.IsNullOrEmpty() || point.STX.IsNull || point.STY.IsNull)
+            {
+                return new EsriPoint(double.NaN, double.NaN, 0);
+            }
+            else
+            {
+                return new EsriPoint(point.STX.Value, point.STY.Value, point.STSrid.Value);
+            }
+        }
+
+        public static IEsriShape AsEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
+        {
+            if (geometry.IsNotValidOrEmpty())
+            {
+                return null;
+            }
+
+            OpenGisGeometryType geometryType = geometry.GetOpenGisType();
+
+            switch (geometryType)
+            {
+                case OpenGisGeometryType.CircularString:
+                case OpenGisGeometryType.CompoundCurve:
+                case OpenGisGeometryType.CurvePolygon:
+                case OpenGisGeometryType.GeometryCollection:
+                default:
+                    throw new NotImplementedException();
+
+                case OpenGisGeometryType.LineString:
+                    return SqlLineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiLineString:
+                    return SqlLineStringOrMultiLineStringToEsriPolyline(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiPoint:
+                    return SqlMultiPointToEsriMultiPoint(geometry, mapFunction);
+
+                case OpenGisGeometryType.MultiPolygon:
+                    return SqlPolygonToEsriPolygon(geometry, mapFunction);
+
+
+                case OpenGisGeometryType.Point:
+                    return SqlPointToEsriPoint(geometry, mapFunction);
+
+                case OpenGisGeometryType.Polygon:
+                    return SqlPolygonToEsriPolygon(geometry, mapFunction);
+            }
+        }
+
+        //Not supportig Z and M Values
+        private static EsriPoint SqlPointToEsriPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            var point = geometry.AsEsriPoint();
+
+            return mapFunction == null ? point : (EsriPoint)mapFunction(point);
+        }
+
+        //Not supportig Z and M Values
+        private static EsriMultiPoint SqlMultiPointToEsriMultiPoint(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty() || geometry.STNumGeometries().IsNull)
+            {
+                return new EsriMultiPoint();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                //EsriPoint point = new EsriPoint(geometry.STGeometryN(index).STX.Value, geometry.STGeometryN(index).STY.Value);
+                var point = geometry.STGeometryN(index).AsEsriPoint();
+
+                if (mapFunction != null)
+                {
+                    point = (EsriPoint)mapFunction(point);
+                }
+
+                points.Add(point);
+            }
+
+            return new EsriMultiPoint(points.ToArray());
+        }
+
+        //Not supporting Z and M values
+        private static EsriPolyline SqlLineStringOrMultiLineStringToEsriPolyline(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolyline();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(geometry.STGeometryN(index), mapFunction));
+            }
+
+            return new EsriPolyline(points.ToArray(), parts.ToArray());
+        }
+
+
+        //Not supporting Z and M values
+        //check for cw and cww criteria
+        private static EsriPolygon SqlPolygonToEsriPolygon(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return new EsriPolygon();
+            }
+
+            int numberOfGeometries = geometry.STNumGeometries().Value;
+
+            List<EsriPoint> points = new List<EsriPoint>(geometry.STNumPoints().Value);
+
+            List<int> parts = new List<int>(numberOfGeometries);
+
+            for (int i = 0; i < numberOfGeometries; i++)
+            {
+                int index = i + 1;
+
+                SqlGeometry tempPolygon = geometry.STGeometryN(index);
+
+                var exterior = tempPolygon.STExteriorRing();
+
+                if (tempPolygon.IsNullOrEmpty() || exterior.IsNullOrEmpty())
+                    continue;
+
+                parts.Add(points.Count);
+
+                points.AddRange(GetPoints(exterior, mapFunction));
+
+                for (int j = 0; j < tempPolygon.STNumInteriorRing(); j++)
+                {
+                    var interior = tempPolygon.STInteriorRingN(j + 1);
+
+                    if (interior.IsNullOrEmpty())
+                        continue;
+
+                    parts.Add(points.Count);
+
+                    points.AddRange(GetPoints(interior, mapFunction));
+                }
+            }
+
+            return new EsriPolygon(points.ToArray(), parts.ToArray());
+        }
+
+        private static EsriPoint[] GetPoints(SqlGeometry geometry, Func<IPoint, IPoint> mapFunction)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            int numberOfPoints = geometry.STNumPoints().Value;
+
+            EsriPoint[] points = new EsriPoint[numberOfPoints];
+
+            for (int i = 0; i < numberOfPoints; i++)
+            {
+                int index = i + 1;
+
+                //EsriPoint point = new EsriPoint(geometry.STPointN(index).STX.Value, geometry.STPointN(index).STY.Value);
+                var point = geometry.STPointN(index).AsEsriPoint();
+
+                if (mapFunction == null)
+                {
+                    points[i] = point;
+                }
+                else
+                {
+                    points[i] = (EsriPoint)mapFunction(point);
+                }
+
+            }
+
+            return points;
         }
 
         #endregion
@@ -1461,232 +1439,6 @@ namespace IRI.Ket.SpatialExtensions
         #endregion
 
 
-        #region SqlGeography To GeoJson
-
-        public static IGeoJsonGeometry AsGeoJson(this SqlGeography geography, bool isLongitudeFirst = true)
-        {
-            OpenGisGeographyType geometryType = geography.GetOpenGisType();
-
-            switch (geometryType)
-            {
-                case OpenGisGeographyType.Point:
-                    return geography.SqlPointToGeoJsonPoint(isLongitudeFirst);
-
-                case OpenGisGeographyType.MultiPoint:
-                    return SqlMultiPointToGeoJsonMultiPoint(geography, isLongitudeFirst);
-
-                case OpenGisGeographyType.LineString:
-                    return SqlLineStringToGeoJsonPolyline(geography, isLongitudeFirst);
-
-                case OpenGisGeographyType.MultiLineString:
-                    return SqlMultiLineStringToGeoJsonPolyline(geography, isLongitudeFirst);
-
-                case OpenGisGeographyType.Polygon:
-                    return SqlPolygonToGeoJsonPolygon(geography, isLongitudeFirst);
-
-                case OpenGisGeographyType.MultiPolygon:
-                    return SqlMultiPolygonToGeoJsonMultiPolygon(geography, isLongitudeFirst);
-
-                case OpenGisGeographyType.GeometryCollection:
-                case OpenGisGeographyType.CircularString:
-                case OpenGisGeographyType.CompoundCurve:
-                case OpenGisGeographyType.CurvePolygon:
-                case OpenGisGeographyType.FullGlobe:
-                default:
-                    //return null;
-                    throw new NotImplementedException();
-            }
-        }
-
-        private static double[] GetGeoJsonObjectPoint(SqlGeography point, bool isLongitudeFirst)
-        {
-            if (point.IsNullOrEmpty())
-                return new double[0];
-
-            return isLongitudeFirst ?
-                    new double[] { point.Long.Value, point.Lat.Value } :
-                    new double[] { point.Lat.Value, point.Long.Value };
-
-            //return new double[] { point.Long.Value, point.Lat.Value };
-        }
-
-        private static double[][] GetGeoJsonLineStringOrRing(SqlGeography lineStringOrRing, bool isLongitudeFirst)
-        {
-            if (lineStringOrRing.IsNullOrEmpty())
-                return new double[0][];
-
-            int numberOfPoints = lineStringOrRing.STNumPoints().Value;
-
-            double[][] result = new double[numberOfPoints][];
-
-            for (int i = 1; i <= numberOfPoints; i++)
-            {
-                result[i - 1] = GetGeoJsonObjectPoint(lineStringOrRing.STPointN(i), isLongitudeFirst);
-            }
-
-            return result;
-        }
-
-        private static GeoJsonPoint SqlPointToGeoJsonPoint(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonPoint()
-                {
-                    Type = GeoJson.Point,
-                };
-
-            var coordinates = isLongitudeFirst ?
-                    new double[] { geometry.Long.Value, geometry.Lat.Value } :
-                    new double[] { geometry.Lat.Value, geometry.Long.Value };
-
-            return new GeoJsonPoint()
-            {
-                Type = GeoJson.Point,
-                Coordinates = coordinates /*new double[] { geometry.Long.Value, geometry.Lat.Value }*/
-            };
-        }
-
-        private static GeoJsonMultiPoint SqlMultiPointToGeoJsonMultiPoint(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonMultiPoint()
-                {
-                    Type = GeoJson.MultiPoint,
-                    Coordinates = new double[0][],
-                };
-
-            var numberOfGeometries = geometry.STNumGeometries().Value;
-
-            double[][] points = new double[numberOfGeometries][];
-
-            for (int i = 1; i <= numberOfGeometries; i++)
-            {
-                points[i - 1] = GetGeoJsonObjectPoint(geometry.STGeometryN(i), isLongitudeFirst);
-            }
-
-            return new GeoJsonMultiPoint()
-            {
-                Coordinates = points,
-                Type = GeoJson.MultiPoint,
-            };
-        }
-
-        //Not supportig Z and M Values
-        private static GeoJsonLineString SqlLineStringToGeoJsonPolyline(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonLineString()
-                {
-                    Type = GeoJson.LineString,
-                    Coordinates = new double[0][],
-                };
-
-            double[][] paths = GetGeoJsonLineStringOrRing(geometry, isLongitudeFirst);
-
-            return new GeoJsonLineString()
-            {
-                Coordinates = paths,
-                Type = GeoJson.LineString,
-            };
-        }
-
-        //Not supportig Z and M Values
-        private static GeoJsonMultiLineString SqlMultiLineStringToGeoJsonPolyline(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonMultiLineString()
-                {
-                    Type = GeoJson.MultiLineString,
-                    Coordinates = new double[0][][],
-                };
-
-            int numberOfParts = geometry.STNumGeometries().Value;
-
-            double[][][] result = new double[numberOfParts][][];
-
-            for (int i = 1; i <= numberOfParts; i++)
-            {
-                result[i - 1] = GetGeoJsonLineStringOrRing(geometry.STGeometryN(i), isLongitudeFirst);
-            }
-
-            return new GeoJsonMultiLineString()
-            {
-                Coordinates = result,
-                Type = GeoJson.MultiLineString,
-            };
-        }
-
-        //Not supportig Z and M Values
-        //todo: 1399.08.19; this method must be checked
-        private static GeoJsonPolygon SqlPolygonToGeoJsonPolygon(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonPolygon()
-                {
-                    Type = GeoJson.Polygon,
-                    Coordinates = new double[0][][],
-                };
-
-            //double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
-            var numberOfRings = geometry.NumRings().Value;
-
-            // 1400.01.30
-            // در ژئوگرافی بر خلاف ژئومتری تعداد رینگ‌ها کل موارد رو شامل
-            // می‌شه. در واقع حلقه داخلی و خارجی از هم جدا نشده پس این‌جا
-            // نیازی نیست که به علاوه یک کنیم.
-            //double[][][] result = new double[numberOfRings + 1][][];
-
-            double[][][] result = new double[numberOfRings][][];
-
-            for (int i = 1; i <= numberOfRings; i++)
-            {
-                result[i - 1] = GetGeoJsonLineStringOrRing(geometry.RingN(i), isLongitudeFirst);
-            }
-
-            return new GeoJsonPolygon()
-            {
-                Coordinates = result,
-                Type = GeoJson.Polygon,
-            };
-        }
-
-        //Not supportig Z and M Values
-        private static GeoJsonMultiPolygon SqlMultiPolygonToGeoJsonMultiPolygon(this SqlGeography geometry, bool isLongitudeFirst)
-        {
-            //This check is required
-            if (geometry.IsNullOrEmpty())
-                return new GeoJsonMultiPolygon()
-                {
-                    Type = GeoJson.MultiPolygon,
-                    Coordinates = new double[0][][][],
-                };
-
-            int numberOfParts = geometry.STNumGeometries().Value;
-
-            double[][][][] rings = new double[numberOfParts][][][];
-
-            for (int i = 1; i <= numberOfParts; i++)
-            {
-                rings[i - 1] = geometry.STGeometryN(i).SqlPolygonToGeoJsonPolygon(isLongitudeFirst).Coordinates;
-            }
-
-            return new GeoJsonMultiPolygon()
-            {
-                Coordinates = rings,
-                Type = GeoJson.MultiPolygon,
-            };
-        }
-
-
-
-        #endregion
-
-
         #region Model
 
         public static SqlGeometry AsSqlGeometry(this IRI.Msh.Common.Model.TileInfo tile)
@@ -1737,7 +1489,7 @@ namespace IRI.Ket.SpatialExtensions
                                                     .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator)
             };
 
-            
+
         }
 
         #endregion

@@ -4,6 +4,7 @@ using Microsoft.SqlServer.Types;
 using System;
 using System.Diagnostics;
 using IRI.Msh.Common.Model.GeoJson;
+using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -148,6 +149,15 @@ namespace IRI.Ket.SpatialExtensions
 
 
         #region SqlGeometry
+
+        public static SqlFeature AsSqlFeature<T>(this Geometry<T> geometry) where T : IPoint, new()
+        {
+            return new SqlFeature()
+            {
+                TheSqlGeometry = geometry.AsSqlGeometry(),
+                Attributes = new System.Collections.Generic.Dictionary<string, object>()
+            };
+        }
 
         //ERROR PRONE: NaN and Infinity points are not supported
         public static SqlGeometry AsSqlGeometry<T>(this T point, int srid = 0) where T : IPoint, new()

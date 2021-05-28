@@ -473,7 +473,7 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Shapefile
 
-
+        // implemented in IRI.Ket.Shapefileformat
 
         #endregion
     }

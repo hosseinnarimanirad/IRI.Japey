@@ -13,7 +13,7 @@ using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
 using IRI.Msh.Common.Primitives;
 using IRI.Ket.ShapefileFormat.Prj;
-using IRI.Sta.ShapefileFormat.Extensions;
+using IRI.Ket.SpatialExtensions;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -455,10 +455,23 @@ namespace IRI.Ket.ShapefileFormat
             var shapes = features.Select(f => f.Geometry.AsEsriShape(isLongitudeFirst, srs.Srid));
 
             Save(shpFileName, shapes, false, true, srs);
-  
+
             var dbfFile = GetDbfFileName(shpFileName);
 
             var attributes = features.Select(f => f.Properties).ToList();
+
+            DbfFile.Write(dbfFile, attributes, Encoding.GetEncoding(1256), true);
+        }
+
+        public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<Feature<T>> features, SrsBase srs = null) where T : IPoint, new()
+        {
+            var shapes = features.Select(f => f.TheGeometry.AsEsriShape());
+
+            Save(shpFileName, shapes, false, true, srs);
+
+            var dbfFile = GetDbfFileName(shpFileName);
+
+            var attributes = features.Select(f => f.Attributes).ToList();
 
             DbfFile.Write(dbfFile, attributes, Encoding.GetEncoding(1256), true);
         }

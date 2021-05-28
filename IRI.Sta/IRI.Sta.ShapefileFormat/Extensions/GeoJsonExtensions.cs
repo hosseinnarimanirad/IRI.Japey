@@ -8,11 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.ShapefileFormat.Extensions
+namespace IRI.Ket.SpatialExtensions
 {
     public static class GeoJsonExtensions
     {
-        #region SqlGeometry > Esri Shape
+        #region IGeoJsonGeometry > Esri Shape
 
         public static IEsriShape AsEsriShape(this IGeoJsonGeometry geometry, bool isLongitudeFirst = true, int srid = 0, Func<IPoint, IPoint> mapFunction = null)
         {
@@ -202,7 +202,7 @@ namespace IRI.Sta.ShapefileFormat.Extensions
             List<int> parts = new List<int>(numberOfGeometries);
 
             for (int i = 0; i < numberOfGeometries; i++)
-            { 
+            {
                 var tempPolygon = geometry.Coordinates[i];
 
                 var numberOfRings = tempPolygon == null ? 0 : tempPolygon.Length;
@@ -295,8 +295,21 @@ namespace IRI.Sta.ShapefileFormat.Extensions
         }
 
         #endregion
-         
 
-      
+        public static void SaveAsShapefile(this GeoJsonFeatureSet featureSet, string shpFileName, bool isLongitudeFirst = true, SrsBase srs = null)
+        {
+            if (featureSet == null || featureSet.Features.IsNullOrEmpty())
+                return;
+
+            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, featureSet.Features, isLongitudeFirst, srs);
+        }
+
+        public static void SaveAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = true, SrsBase srs = null)
+        {
+            if (features.IsNullOrEmpty())
+                return;
+
+            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, features, isLongitudeFirst, srs);
+        }
     }
 }
