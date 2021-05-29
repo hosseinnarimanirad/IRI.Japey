@@ -1636,17 +1636,38 @@ namespace IRI.Jab.Common.Presenter.Map
 
              };
 
-            layer.RequestChangeVisibilityForHighlightGeometry = async di =>
-            {
-                if (di.CanShowHighlightGeometry())
-                {
-                    await SelectDrawingItem(di);
-                }
-                else
-                {
-                    ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
-                }
-            };
+            layer.RequestChangeVisibility = async di =>
+             {
+                 //var alreadyExists = this.DrawingItems.SingleOrDefault(l => l == di);
+
+                 //if (di.VisualParameters.Visibility == Visibility.Visible)
+                 //{
+                 //    AddLayer(di);
+                 //}
+
+                 RefreshLayerVisibility(di);
+
+                 if (di.CanShowHighlightGeometry())
+                 {
+                     await SelectDrawingItem(di);
+                 }
+                 else
+                 {
+                     ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
+                 }
+             };
+
+            //layer.RequestChangeVisibilityForHighlightGeometry = async di =>
+            //{
+            //    if (di.CanShowHighlightGeometry())
+            //    {
+            //        await SelectDrawingItem(di);
+            //    }
+            //    else
+            //    {
+            //        ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
+            //    }
+            //};
 
             if (layer.RequestChangeSymbology == null)
             {

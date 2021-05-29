@@ -37,6 +37,9 @@ namespace IRI.Jab.MapViewer
 
         public void Add(ILayer layer)
         {
+            if (allLayers.Any(l => l == layer))
+                return;
+
             layer.OnVisibilityChanged -= RefreshLayerVisibility;
 
             layer.OnVisibilityChanged += RefreshLayerVisibility;

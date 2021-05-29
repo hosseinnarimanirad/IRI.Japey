@@ -95,7 +95,9 @@ namespace IRI.Jab.Common
 
         public Action<DrawingItemLayer> RequestHighlightGeometry;
 
-        public Action<DrawingItemLayer> RequestChangeVisibilityForHighlightGeometry;
+        //public Action<DrawingItemLayer> RequestChangeVisibilityForHighlightGeometry;
+
+        public Action<DrawingItemLayer> RequestChangeVisibility;
 
         public Guid HighlightGeometryKey { get; private set; }
 
@@ -104,6 +106,8 @@ namespace IRI.Jab.Common
             this.Extent = geometry.GetBoundingBox();
 
             this.VisualParameters = VisualParameters.GetRandomVisualParameters();
+
+            //this.VisualParameters.OnVisibilityChanged += (sender, e) => { this.RequestChangeVisibility?.Invoke(this); };
 
             HighlightGeometryKey = Guid.NewGuid();
 
@@ -118,7 +122,7 @@ namespace IRI.Jab.Common
 
             this.Rendering = RenderingApproach.Default;
 
-            this.ToRasterTechnique = RasterizationApproach.DrawingVisual;
+            this.ToRasterTechnique = RasterizationApproach.GdiPlus;
 
             this.Id = id;
 
@@ -141,7 +145,7 @@ namespace IRI.Jab.Common
 
             this.OnVisibilityChanged += (sender, e) =>
             {
-                this.RequestChangeVisibilityForHighlightGeometry?.Invoke(this);
+                this.RequestChangeVisibility?.Invoke(this);
             };
         }
 

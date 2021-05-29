@@ -105,7 +105,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.DialogService.ShowSaveFileDialog("*.shp|*.shp", null, layer.LayerName);
+                    var file = map.DialogService.ShowSaveFileDialog("*.shp|*.shp", null, layer.Title);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -138,7 +138,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.DialogService.ShowSaveFileDialog("*.json|*.json", null, layer.LayerName);
+                    var file = map.DialogService.ShowSaveFileDialog("*.json|*.json", null, layer.Title);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -176,7 +176,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-ExteriorRing");
                 }
                 catch (Exception ex)
                 {
@@ -204,7 +204,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STEnvelope();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Envelope");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-Envelope");
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +232,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STConvexHull();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ConvexHull");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-ConvexHull");
                 }
                 catch (Exception ex)
                 {
@@ -260,7 +260,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STBoundary();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Boundary");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-Boundary");
                 }
                 catch (Exception ex)
                 {
@@ -292,7 +292,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     foreach (var geo in geometries)
                     {
-                        map.AddDrawingItem(geo.AsGeometry(), $"{layer.LayerName} Geometry #{counter++}");
+                        map.AddDrawingItem(geo.AsGeometry(), $"{layer.Title} Geometry #{counter++}");
                     }
                 }
                 catch (Exception ex)
@@ -321,7 +321,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var pointCollection = IRI.Ket.SqlServerSpatialExtension.SqlSpatialUtility.MakePointCollection(layer.Geometry.GetAllPoints());
 
-                    map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.LayerName} Points");
+                    map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.Title} Points");
 
                 }
                 catch (Exception ex)

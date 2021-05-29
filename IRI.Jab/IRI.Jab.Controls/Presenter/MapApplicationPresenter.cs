@@ -41,7 +41,7 @@ namespace IRI.Jab.Controls.Presenter
 
         public void Initialize(System.Windows.Window ownerWindow)
         {
-            this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService(this);
+            this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService(ownerWindow);
  
             this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
