@@ -11,6 +11,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
     public class LogisticGeometrySimplification
     {
+        private const int _numberOfFeatures = 3;
+
         private LogisticRegression _regression;
 
         private LogisticGeometrySimplification()
@@ -25,7 +27,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 return null;
             }
 
-            Matrix xValues = new Matrix(trainingData.Records.Count, 5);
+            Matrix xValues = new Matrix(trainingData.Records.Count, _numberOfFeatures);
 
             double[] yValues = new double[trainingData.Records.Count];
 
@@ -40,9 +42,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
                 xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
                 xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
-                xValues[i, 2] = trainingData.Records[i].SemiArea;
-                xValues[i, 3] = trainingData.Records[i].SemiCosineOfAngle;
-                xValues[i, 4] = trainingData.Records[i].SemiVerticalDistance;
+                xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
+                //xValues[i, 3] = trainingData.Records[i].SemiArea;
+                //xValues[i, 4] = trainingData.Records[i].SemiCosineOfAngle;
 
                 yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
             }
@@ -59,11 +61,11 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         public static LogisticGeometrySimplification Create<T>(
             List<T> originalPoints,
             List<T> simplifiedPoints,
-            int zoomLevel,
+            //int zoomLevel,
             Func<IPoint, IPoint> toScreenMap,
             bool isRingMode) where T : IPoint
         {
-            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, zoomLevel, toScreenMap, isRingMode);
+            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ toScreenMap, isRingMode);
 
             return Create(parameters);
         }
@@ -72,7 +74,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
             List<T> originalPoints,
             List<T> simplifiedPoints,
-            int zoomLevel,
+            //int zoomLevel,
             Func<IPoint, IPoint> toScreenMap,
             bool isRingMode) where T : IPoint
         {
@@ -86,7 +88,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             // ایجاد رکوردهای مثبت برای فایل ساده شده
             for (int i = 0; i < simplifiedPoints.Count - 2; i++)
             {
-                parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2], zoomLevel, toScreenMap)
+                parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2], /*zoomLevel,*/ toScreenMap)
                 {
                     IsRetained = true
                 });
@@ -117,13 +119,13 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 if (indexMap.ContainsValue(i))
                     continue;
-              
+
                 // 1400.03.05
                 // در حال چند رینگ ممکنه نقاط ابتدایی هم حذف
                 // شوند این برخلاف حالت خط هست که همیشه
                 // نقطه اول و اخر رو نگه می داریم
                 var prevPoints = indexMap.Where(index => index.Value < i);
-                 
+
                 KeyValuePair<int, int> prevRetainedPoint;
 
                 if (isRingMode && prevPoints.IsNullOrEmpty())
@@ -156,7 +158,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     originalPoints[prevRetainedPoint.Value],
                     originalPoints[i],
                     originalPoints[nextRetainedPoint.Value],
-                    zoomLevel,
+                    //zoomLevel,
                     toScreenMap)
                 {
                     IsRetained = false
@@ -174,9 +176,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 //parameters.ZoomLevel,
                 parameters.SemiDistanceToNext,
                 parameters.SemiDistanceToPrevious,
-                parameters.SemiArea,
-                parameters.SemiCosineOfAngle,
                 parameters.SemiVerticalDistance,
+                //parameters.SemiArea,
+                //parameters.SemiCosineOfAngle,
             };
 
             var result = _regression.Predict(xValues);
@@ -191,7 +193,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             }
         }
 
-        public List<T> SimplifyByLogisticRegression<T>(List<T> points, int zoomLevel, Func<IPoint, IPoint> toScreenMap, bool retain3Points = false) where T : IPoint
+        public List<T> SimplifyByLogisticRegression<T>(List<T> points, /*int zoomLevel, */Func<IPoint, IPoint> toScreenMap, bool retain3Points = false) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -212,7 +214,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 lastIndex = i;
 
-                var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], zoomLevel, toScreenMap);
+                var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], /*zoomLevel,*/ toScreenMap);
 
                 if (IsRetained(parameters) == true)
                 {
