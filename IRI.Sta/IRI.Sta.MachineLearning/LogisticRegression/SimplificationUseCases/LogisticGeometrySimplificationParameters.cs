@@ -8,15 +8,17 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
     public class LogisticGeometrySimplificationParameters
     {
-        public double SemiDistanceToNext { get; set; }
+        public const int NumberOfFeatures = 2;
 
-        public double SemiDistanceToPrevious { get; set; }
+        //public double SemiDistanceToNext { get; set; }
 
-        //public double SemiArea { get; set; }
+        //public double SemiDistanceToPrevious { get; set; }
 
-        //public double SemiCosineOfAngle { get; set; }
+        public double SemiArea { get; set; }
 
-        public double SemiVerticalDistance { get; set; }
+        public double SemiCosineOfAngle { get; set; }
+
+        //public double SemiVerticalDistance { get; set; }
 
         //public int ZoomLevel { get; set; }
 
@@ -46,15 +48,15 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //this.ZoomLevel = zoomLevel;
 
 
-            this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middleScreenPoint, lastScreenPoint);
+            //this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middleScreenPoint, lastScreenPoint);
 
-            this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middleScreenPoint, firstScreenPoint);
+            //this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middleScreenPoint, firstScreenPoint);
 
-            //this.SemiArea = SpatialUtility.CalculateUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.SemiArea = SpatialUtility.CalculateUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            //this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            this.SemiVerticalDistance = SpatialUtility.SemiPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
+            //this.SemiVerticalDistance = SpatialUtility.SemiPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }
     }
 }

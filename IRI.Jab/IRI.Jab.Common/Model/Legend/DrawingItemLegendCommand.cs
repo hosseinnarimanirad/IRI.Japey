@@ -78,6 +78,10 @@ namespace IRI.Jab.Common.Model.Legend
                     map.AddLayer(layer);
                     //map.SetLayer(layer);
 
+                    // 1400.03.08- remove highlighted geometry
+                    layer.IsSelectedInToc = false;
+                    //map.ClearLayer(layer.HighlightGeometryKey.ToString(), true, true);
+
                     //map.Refresh();
 
                     if (layer.OriginalSource != null)
