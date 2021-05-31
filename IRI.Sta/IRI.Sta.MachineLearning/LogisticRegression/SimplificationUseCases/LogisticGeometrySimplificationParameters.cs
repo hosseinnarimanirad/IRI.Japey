@@ -8,15 +8,17 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
     public class LogisticGeometrySimplificationParameters
     {
-        public const int NumberOfFeatures = 2;
+        public const int NumberOfFeatures = 4;
 
-        //public double SemiDistanceToNext { get; set; }
+        public double SemiDistanceToNext { get; set; }
 
-        //public double SemiDistanceToPrevious { get; set; }
+        public double SemiDistanceToPrevious { get; set; }
 
         public double SemiArea { get; set; }
 
         public double SemiCosineOfAngle { get; set; }
+
+        //public double CosineOfAngle { get; set; }
 
         //public double SemiVerticalDistance { get; set; }
 
@@ -48,13 +50,14 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //this.ZoomLevel = zoomLevel;
 
 
-            //this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middleScreenPoint, lastScreenPoint);
+            this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middleScreenPoint, lastScreenPoint);
 
-            //this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middleScreenPoint, firstScreenPoint);
+            this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middleScreenPoint, firstScreenPoint);
 
             this.SemiArea = SpatialUtility.CalculateUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            //this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             //this.SemiVerticalDistance = SpatialUtility.SemiPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }

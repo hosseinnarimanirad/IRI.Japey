@@ -55,6 +55,39 @@ namespace IRI.Ket.MachineLearning.Regressions
             beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)i).ToArray();
 
 
+            // 1399.12.20
+            // *******************************************************
+            // ذخیره‌سازی پارامترها برای استفاده 
+            // هنگام تخمین
+            // *******************************************************
+            xStatistics = xValues.GetStatisticsByColumns();
+
+            //// 1399.12.27
+            //// *******************************************************
+            //// پیش پردازش داده
+            //// به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
+            //// این گام باید قبل از نرمال‌سازی باشه چون به 
+            //// استتیستیک ستون یک هم نیاز هست بعدا برای 
+            //// پردیکت. در غیر این صورت بردارها هم‌ساز 
+            //// نخواهند شد.
+            //// *******************************************************
+            //var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
+            //xValues.InsertColumn(0, ones);
+
+            // 1399.12.20
+            // *******************************************************
+            // ذخیره‌سازی پارامترها برای استفاده 
+            // هنگام تخمین
+            // *******************************************************
+            //xStatistics = xValues.GetStatisticsByColumns();
+
+            // *******************************************************
+            // پیش پردازش داده
+            // نرمال کردن داده‌ها
+            // *******************************************************
+            xValues = Normalization.NormalizeColumnsUsingZScore(xValues);
+
+
             // 1399.12.27
             // *******************************************************
             // پیش پردازش داده
@@ -67,19 +100,7 @@ namespace IRI.Ket.MachineLearning.Regressions
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
             xValues.InsertColumn(0, ones);
 
-
-            // 1399.12.20
-            // *******************************************************
-            // ذخیره‌سازی پارامترها برای استفاده 
-            // هنگام تخمین
-            // *******************************************************
-            xStatistics = xValues.GetStatisticsByColumns();
-
-            // *******************************************************
-            // پیش پردازش داده
-            // نرمال کردن داده‌ها
-            // *******************************************************
-            xValues = Normalization.NormalizeColumnsUsingZScore(xValues);
+            xStatistics.Insert(0, new BasicStatisticsInfo() { Mean = 1, StandardDeviation = 0 });
 
 
             while (iteration < _maxIteration)
@@ -127,8 +148,12 @@ namespace IRI.Ket.MachineLearning.Regressions
             // *******************************************************
             // پیش پردازش داده
             // نرمال کردن داده‌ها
+            //
+            // 1400.03.10
+            // ستون اول چون مقادیر ۱ هستند
+            // نیازی به نرمال کردن ندارند
             // *******************************************************
-            for (int i = 0; i < xValues.Length; i++)
+            for (int i = 1; i < xValues.Length; i++)
             {
                 xValues[i] = Normalization.NormalizeUsingZScore(xValues[i], xStatistics[i].Mean, xStatistics[i].StandardDeviation);
             }

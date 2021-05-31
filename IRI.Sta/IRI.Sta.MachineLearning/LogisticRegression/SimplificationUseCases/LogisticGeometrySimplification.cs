@@ -40,11 +40,12 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 //xValues[i, 4] = trainingData.Records[i].SemiCosineOfAngle;
                 //xValues[i, 5] = trainingData.Records[i].SemiVerticalDistance;
 
-                //xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
-                //xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
+                xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
+                xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
                 //xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
-                xValues[i, 0] = trainingData.Records[i].SemiArea;
-                xValues[i, 1] = trainingData.Records[i].SemiCosineOfAngle;
+                xValues[i, 2] = trainingData.Records[i].SemiArea;
+                xValues[i, 3] = trainingData.Records[i].SemiCosineOfAngle;
+                //xValues[i, 3] = trainingData.Records[i].CosineOfAngle;
 
                 yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
             }
@@ -87,13 +88,13 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<LogisticGeometrySimplificationParameters> parameters = new List<LogisticGeometrySimplificationParameters>();
 
             // ایجاد رکوردهای مثبت برای فایل ساده شده
-            for (int i = 0; i < simplifiedPoints.Count - 2; i++)
-            {
-                parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2], /*zoomLevel,*/ toScreenMap)
-                {
-                    IsRetained = true
-                });
-            }
+            //for (int i = 0; i < simplifiedPoints.Count - 2; i++)
+            //{
+            //    parameters.Add(new LogisticGeometrySimplificationParameters(simplifiedPoints[i], simplifiedPoints[i + 1], simplifiedPoints[i + 2], /*zoomLevel,*/ toScreenMap)
+            //    {
+            //        IsRetained = true
+            //    });
+            //}
 
             // تعیین ارتباط بین اندکس نقطه در لیست 
             // اصلی و اندکس نقطه در لیست ساده شده
@@ -142,9 +143,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     });
 
                     startIndex = middleIndex;
-                    middleIndex = lastIndex;
                 }
-                // نقطه حذف شده
+                // نقطه حذف نشده
                 else
                 {
                     parameters.Add(new LogisticGeometrySimplificationParameters(
@@ -156,10 +156,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     {
                         IsRetained = false
                     });
-
-                    middleIndex = lastIndex;
                 }
 
+                middleIndex = lastIndex;
                 lastIndex = originalPoints.Count <= middleIndex + 1 ? 0 : middleIndex + 1;
 
             } while (middleIndex != indexMap.First().Value);
@@ -329,11 +328,12 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 1,
                 //parameters.ZoomLevel,
-                //parameters.SemiDistanceToNext,
-                //parameters.SemiDistanceToPrevious,
+                parameters.SemiDistanceToNext,
+                parameters.SemiDistanceToPrevious,
                 //parameters.SemiVerticalDistance,
                 parameters.SemiArea,
                 parameters.SemiCosineOfAngle,
+                //parameters.CosineOfAngle
             };
 
             var result = _regression.Predict(xValues);
@@ -365,11 +365,17 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             int firstIndex = 0, middleIndex = 1, lastIndex = 2;
 
+            // 1400.03.10
+            var tempArea = 0.0;
+
             for (int i = 2; i < points.Count; i++)
             {
                 lastIndex = i;
 
                 var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], /*zoomLevel,*/ toScreenMap);
+
+                // 1400.03.10
+                parameters.SemiArea += tempArea;
 
                 if (IsRetained(parameters) == true)
                 {
@@ -378,10 +384,16 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     firstIndex = middleIndex;
 
                     middleIndex = lastIndex;
+
+                    // 1400.03.10
+                    tempArea = 0;
                 }
                 else
                 {
                     middleIndex = lastIndex;
+
+                    // 1400.03.10
+                    tempArea = parameters.SemiArea;
                 }
             }
 
