@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Statistics.Model
+namespace IRI.Msh.Statistics
 {
     public class StatisticsSummary
     {

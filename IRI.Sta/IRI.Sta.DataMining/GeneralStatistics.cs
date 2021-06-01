@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.DataStructure;
-using IRI.Msh.Statistics.Model;
+using IRI.Msh.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

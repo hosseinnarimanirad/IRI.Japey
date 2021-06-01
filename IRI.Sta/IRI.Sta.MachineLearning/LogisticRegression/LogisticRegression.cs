@@ -1,6 +1,6 @@
 ﻿using IRI.Ket.MachineLearning.Common;
 using IRI.Msh.Algebra;
-using IRI.Msh.Statistics.Model;
+using IRI.Msh.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

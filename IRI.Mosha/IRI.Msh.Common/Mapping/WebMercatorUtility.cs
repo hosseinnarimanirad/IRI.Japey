@@ -5,8 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Helpers; 
 
 
 namespace IRI.Msh.Common.Mapping

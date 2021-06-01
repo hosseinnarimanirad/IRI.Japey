@@ -6,7 +6,7 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
-using IRI.Msh.Statistics.Model;
+using IRI.Msh.Statistics;
 
 namespace IRI.Msh.Algebra
 {
