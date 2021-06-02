@@ -122,6 +122,15 @@ namespace IRI.Ket.MachineLearning.Regressions
                     {
                         grad[xi] += error * xs[xi];
                     }
+
+
+                    // 1400.03.12
+                    // regularization
+                    //var lambda = 1.0;
+                    //for (int j = 0; j < numberOfParameters; j++)
+                    //{
+                    //    grad[i] += lambda * 2 * beta[i];
+                    //}
                 }
 
                 for (int i = 0; i < numberOfParameters; i++)
