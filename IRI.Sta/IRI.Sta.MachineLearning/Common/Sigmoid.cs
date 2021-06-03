@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.MachineLearning
+namespace IRI.Sta.MachineLearning
 {
     public class Sigmoid
     {

@@ -1,12 +1,11 @@
-﻿using IRI.Ket.MachineLearning.Common;
-using IRI.Msh.Algebra;
+﻿using IRI.Msh.Algebra;
 using IRI.Msh.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.MachineLearning.Regressions
+namespace IRI.Sta.MachineLearning
 {
 
     // David Cox in 1958
@@ -24,12 +23,14 @@ namespace IRI.Ket.MachineLearning.Regressions
         public double[] Beta { get { return beta; } }
 
 
+        LogisticRegressionOptions _options;
+
         // Mean and standard deviation of xs
         public List<BasicStatisticsInfo> xStatistics { get; set; }
 
-        public LogisticRegression()
+        public LogisticRegression(LogisticRegressionOptions options)
         {
-
+            _options = options;
         }
 
         public LogisticRegression(double[] beta, List<BasicStatisticsInfo> xStatistics)
@@ -52,7 +53,7 @@ namespace IRI.Ket.MachineLearning.Regressions
             // *******************************************************
             // تخمین اولیه از ضرایب چند جمله‌ای
             // *******************************************************
-            beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)i).ToArray();
+            beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)1.0).ToArray();
 
 
             // 1399.12.20
@@ -124,18 +125,30 @@ namespace IRI.Ket.MachineLearning.Regressions
                     }
 
 
-                    // 1400.03.12
-                    // regularization
-                    //var lambda = 1.0;
-                    //for (int j = 0; j < numberOfParameters; j++)
+                    // 1400.03.13
+                    //if (this._options.RegularizationMethod == RegularizationMethods.L2)
                     //{
-                    //    grad[i] += lambda * 2 * beta[i];
+                    //    //1400.03.12
+                    //    // regularization
+                    //    var lambda = 1.0;
+                    //    double sigmaBeta = 0;
+                    //    for (int j = 0; j < numberOfParameters; j++)
+                    //    {
+                    //        sigmaBeta += beta[j];
+                    //    }
+
+                    //    grad[j] += lambda
                     //}
+
                 }
+
+                // 1400.03.13
+                var lambda = 1.0;
+                var sigmaBeta = this._options.RegularizationMethod == RegularizationMethods.None ? 0 : beta.Sum();
 
                 for (int i = 0; i < numberOfParameters; i++)
                 {
-                    grad[i] = 1.0 / beta.Length * grad[i];
+                    grad[i] = 1.0 / beta.Length * (grad[i] + sigmaBeta);
 
                     beta[i] = beta[i] - _learningRate * grad[i];
                 }

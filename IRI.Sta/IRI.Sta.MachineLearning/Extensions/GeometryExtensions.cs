@@ -1,5 +1,4 @@
-﻿using IRI.Ket.MachineLearning.Regressions;
-using IRI.Msh.Common.Analysis;
+﻿using IRI.Msh.Common.Analysis;
 using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Primitives;
 using IRI.Sta.MachineLearning.LogisticRegressionUseCases;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.MachineLearning.Extensions
+namespace IRI.Ket.Common.Extensions
 {
     public static class GeometryExtensions
     {

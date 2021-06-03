@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.MachineLearning.Common
+namespace IRI.Sta.MachineLearning
 {    
     public static class Normalization
     {

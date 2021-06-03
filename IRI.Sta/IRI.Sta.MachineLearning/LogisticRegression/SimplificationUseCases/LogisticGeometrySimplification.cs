@@ -1,5 +1,4 @@
-﻿using IRI.Ket.MachineLearning.Regressions;
-using IRI.Msh.Algebra;
+﻿using IRI.Msh.Algebra;
 using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Primitives;
 using System;
@@ -52,7 +51,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             var result = new LogisticGeometrySimplification();
 
-            result._regression = new LogisticRegression();
+            result._regression = new LogisticRegression(new LogisticRegressionOptions() { RegularizationMethod = RegularizationMethods.L2 });
 
             result._regression.Fit(xValues, yValues);
 
