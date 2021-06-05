@@ -87,7 +87,7 @@ namespace IRI.Sta.MachineLearning
             // پیش پردازش داده
             // نرمال کردن داده‌ها
             // *******************************************************
-            xValues = Normalization.NormalizeColumnsUsingZScore(xValues, this._options.SampleModeVarianceCalculation);
+            xValues = Normalization.NormalizeColumnsUsingZScore(xValues, this._options.VarianceCalculationMode);
 
             //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(0)));
             //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(1)));

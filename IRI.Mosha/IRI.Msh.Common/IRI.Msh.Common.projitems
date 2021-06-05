@@ -57,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\LambertConformalConic2P.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\GeoJsonExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\VarianceCalculationMode.cs" />
     <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\CoordinateSystems\MapProjection\SrsBases.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjects.cs" />

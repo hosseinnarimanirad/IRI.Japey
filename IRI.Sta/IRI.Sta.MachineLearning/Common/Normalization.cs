@@ -9,7 +9,7 @@ namespace IRI.Sta.MachineLearning
 {
     public static class Normalization
     {
-        public static Matrix NormalizeColumnsUsingZScore(Matrix values, bool isSampleMode)
+        public static Matrix NormalizeColumnsUsingZScore(Matrix values, VarianceCalculationMode mode)
         {
             if (values == null)
                 return null;
@@ -22,7 +22,7 @@ namespace IRI.Sta.MachineLearning
             {
                 var columnValues = values.GetColumn(i);
 
-                result.SetColumn(i, NormalizeUsingZScore(columnValues, isSampleMode));
+                result.SetColumn(i, NormalizeUsingZScore(columnValues, mode));
             }
 
             return result;
@@ -35,7 +35,7 @@ namespace IRI.Sta.MachineLearning
         // an original variable to have a mean of zero and 
         // standard deviation of one.
         // **********************************************************************
-        public static double[] NormalizeUsingZScore(double[] values, bool isSampleMode)
+        public static double[] NormalizeUsingZScore(double[] values, VarianceCalculationMode mode)
         {
             if (values.IsNullOrEmpty())
             {
@@ -48,7 +48,7 @@ namespace IRI.Sta.MachineLearning
 
             var mean = IRI.Msh.Statistics.Statistics.CalculateMean(values);
 
-            var std = IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(values, isSampleMode: isSampleMode);
+            var std = IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(values, mode);
 
             // 1399.12.12
             // to prevent divide by zero
@@ -109,7 +109,7 @@ namespace IRI.Sta.MachineLearning
         // In this method, we divide each value by the standard deviation. 
         // The idea is to have equal variance, but different means and ranges.
         // **********************************************************************
-        public static double[] NormalizeUsingStandardDeviation(double[] values, bool isSampleMode)
+        public static double[] NormalizeUsingStandardDeviation(double[] values, VarianceCalculationMode mode)
         {
             if (values.IsNullOrEmpty())
             {
@@ -118,7 +118,7 @@ namespace IRI.Sta.MachineLearning
 
             double[] result = new double[values.Length];
 
-            var std = Statistics.CalculateStandardDeviation(values, isSampleMode: isSampleMode);
+            var std = Statistics.CalculateStandardDeviation(values, mode);
 
             // to prevent divide by zero
             if (std == 0)

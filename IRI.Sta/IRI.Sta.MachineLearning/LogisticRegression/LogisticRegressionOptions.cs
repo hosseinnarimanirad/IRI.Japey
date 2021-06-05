@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Msh.Statistics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace IRI.Sta.MachineLearning
     {
         public RegularizationMethods RegularizationMethod { get; set; }
 
-        public bool SampleModeVarianceCalculation { get; set; } = false;
+        public VarianceCalculationMode VarianceCalculationMode { get; set; } = VarianceCalculationMode.Population;
 
         public LogisticRegressionOptions()
         {
