@@ -301,24 +301,24 @@ namespace IRI.Msh.Statistics
 
         #region StandardDeviation & Variance
 
-        public static double CalculateStandardDeviation(double[] values)
+        public static double CalculateStandardDeviation(double[] values, bool isSampleMode = true)
         {
             if (values.Length < 0)
             {
                 throw new ZeroSizeArrayException();
             }
 
-            return Math.Sqrt(Statistics.CalculateVariance(values));
+            return Math.Sqrt(Statistics.CalculateVariance(values, isSampleMode));
         }
 
-        public static double CalculateStandardDeviation(List<double> values)
+        public static double CalculateStandardDeviation(List<double> values, bool isSampleMode = true)
         {
             if (values.Count < 0)
             {
                 throw new ZeroSizeArrayException();
             }
 
-            return Math.Sqrt(Statistics.CalculateVariance(values));
+            return Math.Sqrt(Statistics.CalculateVariance(values, isSampleMode));
         }
 
         public static double CalculateStandardDeviation(Matrix values)
@@ -331,7 +331,8 @@ namespace IRI.Msh.Statistics
             return Math.Sqrt(Statistics.CalculateVariance(values));
         }
 
-        public static double CalculateVariance(double[] values)
+        // ref for sample mode: https://stats.stackexchange.com/a/3934/289542
+        public static double CalculateVariance(double[] values, bool isSampleMode = true)
         {
             if (values.Length < 0)
             {
@@ -347,10 +348,19 @@ namespace IRI.Msh.Statistics
                 result += (item - mean) * (item - mean);
             }
 
-            return result / (values.Length - 1);
+            if (isSampleMode)
+            {
+                return result / (values.Length - 1);
+            }
+            else
+            {
+                return result / values.Length;
+            }
+
         }
 
-        public static double CalculateVariance(List<double> values)
+        // ref for sample mode: https://stats.stackexchange.com/a/3934/289542
+        public static double CalculateVariance(List<double> values, bool isSampleMode = true)
         {
             if (values.Count < 0)
             {
@@ -366,9 +376,18 @@ namespace IRI.Msh.Statistics
                 result += (item - mean) * (item - mean);
             }
 
-            return result / values.Count;
+
+            if (isSampleMode)
+            {
+                return result / (values.Count - 1);
+            }
+            else
+            {
+                return result / values.Count;
+            }
         }
 
+        // do not consider sample mode
         public static double CalculateVariance(Matrix values)
         {
             if (((object)values) == null)
@@ -387,7 +406,7 @@ namespace IRI.Msh.Statistics
                     result += (values[i, j] - mean) * (values[i, j] - mean);
                 }
             }
-
+             
             return result / (values.NumberOfColumns * values.NumberOfRows);
         }
 

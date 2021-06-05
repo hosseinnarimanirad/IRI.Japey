@@ -8,6 +8,8 @@ namespace IRI.Sta.MachineLearning
     {
         public RegularizationMethods RegularizationMethod { get; set; }
 
+        public bool SampleModeVarianceCalculation { get; set; } = false;
+
         public LogisticRegressionOptions()
         {
             this.RegularizationMethod = RegularizationMethods.None;

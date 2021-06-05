@@ -323,9 +323,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         private bool? IsRetained(LogisticGeometrySimplificationParameters parameters)
         {
-            double[] xValues = new double[]
+            List<double> xValues = new List<double>
             {
-                1,
+                //1,
                 //parameters.ZoomLevel,
                 parameters.SemiDistanceToNext,
                 parameters.SemiDistanceToPrevious,

@@ -53,7 +53,8 @@ namespace IRI.Sta.MachineLearning
             // *******************************************************
             // تخمین اولیه از ضرایب چند جمله‌ای
             // *******************************************************
-            beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)1.0).ToArray();
+            //beta = Enumerable.Range(1, numberOfParameters).Select(i => (double)1.0).ToArray();
+            beta = Enumerable.Repeat(1.0, numberOfParameters).ToArray();
 
 
             // 1399.12.20
@@ -86,8 +87,11 @@ namespace IRI.Sta.MachineLearning
             // پیش پردازش داده
             // نرمال کردن داده‌ها
             // *******************************************************
-            xValues = Normalization.NormalizeColumnsUsingZScore(xValues);
+            xValues = Normalization.NormalizeColumnsUsingZScore(xValues, this._options.SampleModeVarianceCalculation);
 
+            //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(0)));
+            //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(1)));
+            //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(2)));
 
             // 1399.12.27
             // *******************************************************
@@ -143,12 +147,16 @@ namespace IRI.Sta.MachineLearning
                 }
 
                 // 1400.03.13
+                // 1400.03.15
+                // regularization strength
                 var lambda = 1.0;
-                var sigmaBeta = this._options.RegularizationMethod == RegularizationMethods.None ? 0 : beta.Sum();
+                //var sigmaBeta = this._options.RegularizationMethod == RegularizationMethods.None ? 0 : beta.Sum();
 
                 for (int i = 0; i < numberOfParameters; i++)
                 {
-                    grad[i] = 1.0 / beta.Length * (grad[i] + sigmaBeta);
+                    var regularizationComponent = (this._options.RegularizationMethod == RegularizationMethods.None || i == 0) ? 0 : lambda / beta.Length * beta[i];
+
+                    grad[i] = 1.0 / beta.Length * grad[i] + regularizationComponent;
 
                     beta[i] = beta[i] - _learningRate * grad[i];
                 }
@@ -162,10 +170,13 @@ namespace IRI.Sta.MachineLearning
 
         }
 
-        public double? Predict(double[] xValues)
+        public double? Predict(List<double> xValues)
         {
-            if (beta == null)
+            if (beta == null || xValues == null)
                 return null;
+
+            // 1400.03.14
+            xValues.Insert(0, 1);
 
             // *******************************************************
             // پیش پردازش داده
@@ -175,12 +186,12 @@ namespace IRI.Sta.MachineLearning
             // ستون اول چون مقادیر ۱ هستند
             // نیازی به نرمال کردن ندارند
             // *******************************************************
-            for (int i = 1; i < xValues.Length; i++)
+            for (int i = 1; i < xValues.Count; i++)
             {
                 xValues[i] = Normalization.NormalizeUsingZScore(xValues[i], xStatistics[i].Mean, xStatistics[i].StandardDeviation);
             }
 
-            return LogisticRegressionHelper.CalculateLogisticFunction(xValues, Beta);
+            return LogisticRegressionHelper.CalculateLogisticFunction(xValues.ToArray(), Beta);
         }
 
         public void Serialize(string fileName)
