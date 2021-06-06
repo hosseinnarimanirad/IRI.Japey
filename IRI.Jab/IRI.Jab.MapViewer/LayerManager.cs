@@ -9,6 +9,7 @@ using IRI.Msh.Common.Primitives;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;
+using System.Diagnostics;
 
 namespace IRI.Jab.MapViewer
 {
@@ -205,18 +206,13 @@ namespace IRI.Jab.MapViewer
 
             for (int i = 0; i < orderedLayers.Count(); i++)
             {
-                orderedLayers.ElementAt(i).ZIndex = i;
+                orderedLayers[i].ZIndex = i;
             }
         }
 
         public IEnumerable<ILayer> UpdateAndGetLayers(double inverseMapScale, RenderingApproach rendering)
         {
-            //var newLayers = map.Where((var) => (var.VisibleRange.Upper >= inverseMapScale && var.VisibleRange.Lower < inverseMapScale)).OrderBy(i => i.Type != LayerType.BaseMap);
-            if (rendering == RenderingApproach.Default)
-            {
-                System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers:{  inverseMapScale}");
-                System.Diagnostics.Debug.WriteLine($"map count:{allLayers.Count}");
-            }
+            Debug.WriteLine($"LayerManager; {DateTime.Now.ToLongTimeString()}; UpdateAndGetLayers called");
 
             ArrangeZIndex();
 
@@ -234,10 +230,10 @@ namespace IRI.Jab.MapViewer
                                         .ThenBy(i => i.Type == LayerType.Drawing)
                                         .ThenBy(i => i.ZIndex);
 
-            if (rendering == RenderingApproach.Default)
-            {
-                System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers layercounts:{  newLayers.Count()}");
-            }
+            //if (rendering == RenderingApproach.Default)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"UpdateAndGetLayers layercounts:{  newLayers.Count()}");
+            //}
 
             var toBeRemovedLayers = this.CurrentLayers.Where(i => i.Rendering == rendering && newLayers.All(l => l.LayerId != i.LayerId)).ToList();
 
@@ -253,37 +249,22 @@ namespace IRI.Jab.MapViewer
                 this.CurrentLayers.Add(toBeAdded[i]);
             }
 
+            Debug.WriteLine($"LayerManager; {DateTime.Now.ToLongTimeString()}; UpdateAndGetLayers finished");
+
             return newLayers;
-            //.OrderByDescending(i => i.Type == LayerType.BaseMap)
-            //            .ThenByDescending(i => i.Type == LayerType.Raster)
-            //            .ThenByDescending(i => i.Type == LayerType.ImagePyramid)
-            //            .ThenByDescending(i => i.Type == LayerType.VectorLayer)
-            //            .ThenByDescending(i => i.Type == LayerType.FeatureLayer)
-            //            .ThenByDescending(i => i.Type == LayerType.Selection)
-            //            .ThenByDescending(i => i.Type == LayerType.Complex)
-            //            .ThenByDescending(i => i.Type == LayerType.Drawing)
-            //            .ThenByDescending(i => i.Type == LayerType.EditableItem)
-            //            .ThenByDescending(i => i.Type == LayerType.MoveableItem)
-            //            .ThenByDescending(i => i.Type == LayerType.RightClickOption).ToList();
         }
 
         internal void UpdateIsInRange(double inverseMapScale)
-        {
-            System.Diagnostics.Debug.WriteLine($"UpdateIsInRange:{  inverseMapScale}");
-
+        {            
             foreach (var layer in allLayers)
             {
                 layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
 
                 if (layer.Labels != null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"scale:{  inverseMapScale}");
-
                     layer.Labels.IsInScaleRange = layer.Labels.VisibleRange.IsInRange(inverseMapScale);
                 }
-
             }
-
         }
 
         public BoundingBox CalculateCurrentMapExtent()

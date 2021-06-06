@@ -109,7 +109,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.DialogService.ShowSaveFileDialog("*.shp|*.shp", null, layer.Title);
+                    var file = map.DialogService.ShowSaveFileDialog("*.shp|*.shp", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -142,7 +142,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var file = map.DialogService.ShowSaveFileDialog("*.json|*.json", null, layer.Title);
+                    var file = map.DialogService.ShowSaveFileDialog("*.json|*.json", null, layer.LayerName);
 
                     if (string.IsNullOrWhiteSpace(file))
                         return;
@@ -180,7 +180,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-ExteriorRing");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
                 }
                 catch (Exception ex)
                 {
@@ -208,7 +208,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STEnvelope();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-Envelope");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Envelope");
                 }
                 catch (Exception ex)
                 {
@@ -236,7 +236,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STConvexHull();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-ConvexHull");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ConvexHull");
                 }
                 catch (Exception ex)
                 {
@@ -264,7 +264,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var geometry = layer.Geometry.AsSqlGeometry().STBoundary();
 
-                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.Title}-Boundary");
+                    map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Boundary");
                 }
                 catch (Exception ex)
                 {
@@ -296,7 +296,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     foreach (var geo in geometries)
                     {
-                        map.AddDrawingItem(geo.AsGeometry(), $"{layer.Title} Geometry #{counter++}");
+                        map.AddDrawingItem(geo.AsGeometry(), $"{layer.LayerName} Geometry #{counter++}");
                     }
                 }
                 catch (Exception ex)
@@ -325,7 +325,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var pointCollection = IRI.Ket.SqlServerSpatialExtension.SqlSpatialUtility.MakePointCollection(layer.Geometry.GetAllPoints());
 
-                    map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.Title} Points");
+                    map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.LayerName} Points");
 
                 }
                 catch (Exception ex)
@@ -354,7 +354,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters() { AngleThreshold = 0.99, Retain3Points = true });
                     //VisualSimplification.sim layer.Geometry.Simplify()
-                    map.AddDrawingItem(simplified, $"{layer.Title} simplified-{map.CurrentZoomLevel}");
+                    map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-{map.CurrentZoomLevel}");
 
                 }
                 catch (Exception ex)
@@ -383,7 +383,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByArea, map.CurrentZoomLevel, new SimplificationParamters() { Retain3Points = true });
                     //VisualSimplification.sim layer.Geometry.Simplify()
-                    map.AddDrawingItem(simplified, $"{layer.Title} simplified-{map.CurrentZoomLevel}");
+                    map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-{map.CurrentZoomLevel}");
 
                 }
                 catch (Exception ex)
@@ -412,7 +412,7 @@ namespace IRI.Jab.Common.Model.Legend
                 {
                     var cloned = layer.Geometry.Clone();
 
-                    map.AddDrawingItem(cloned, $"{layer.Title} cloned-{map.CurrentZoomLevel}");
+                    map.AddDrawingItem(cloned, $"{layer.LayerName} cloned-{map.CurrentZoomLevel}");
 
                 }
                 catch (Exception ex)

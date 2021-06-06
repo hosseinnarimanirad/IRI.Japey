@@ -124,9 +124,9 @@ namespace IRI.Jab.Common
             };
         }
 
-        public static VisualParameters GetRandomVisualParameters()
+        public static VisualParameters GetDefaultForDrawingItems()
         {
-            return new VisualParameters(null, BrushHelper.PickGoodBrush(), 4, 1);
+            return new VisualParameters(null, BrushHelper.PickGoodBrush(), 2, 1);
         }
 
     }

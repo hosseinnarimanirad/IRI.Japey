@@ -76,17 +76,17 @@ namespace IRI.Jab.Common
 
 
 
-        private string _title;
+        //private string _title;
 
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public string Title
+        //{
+        //    get { return _title; }
+        //    set
+        //    {
+        //        _title = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         public bool CanShowHighlightGeometry()
         {
@@ -105,7 +105,7 @@ namespace IRI.Jab.Common
         {
             this.Extent = geometry.GetBoundingBox();
 
-            this.VisualParameters = VisualParameters.GetRandomVisualParameters();
+            this.VisualParameters = VisualParameters.GetDefaultForDrawingItems();
 
             //this.VisualParameters.OnVisibilityChanged += (sender, e) => { this.RequestChangeVisibility?.Invoke(this); };
 
@@ -132,7 +132,9 @@ namespace IRI.Jab.Common
 
             //this.DataSource = new MemoryDataSource(new List<SqlGeometry>() { geometry.AsSqlGeometry() });
 
-            this.Title = title;
+            //this.Title = title;
+
+            this.LayerName = title;
 
             this.Geometry = geometry;
 

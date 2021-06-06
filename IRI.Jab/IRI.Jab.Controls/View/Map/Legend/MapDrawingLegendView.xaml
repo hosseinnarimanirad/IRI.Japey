@@ -106,7 +106,7 @@
                                 <i:InvokeCommandAction Command="{Binding ToggleSelectedCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>-->
-                        <iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title, Mode=TwoWay}" Symbology="{Binding VisualParameters}"  
+                        <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName, Mode=TwoWay}" Symbology="{Binding VisualParameters}"  
                                                                      IsEditable="True" Commands="{Binding Commands}" 
                                                                      IsChecked="{Binding IsSelectedInToc}"/>
                         <!--<iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding VisualParameters}"  

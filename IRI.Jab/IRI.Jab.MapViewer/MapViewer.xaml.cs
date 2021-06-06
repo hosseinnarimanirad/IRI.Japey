@@ -64,11 +64,16 @@ namespace IRI.Jab.MapViewer
         const string _eventLeaved = "(MapViewer) - EVENT LEAVED";
         const string _eventEscaped = "(MapViewer) - EVENT ESCAPE";
         const string _methodBegins = "(MapViewer) - METHOD BEGINS";
-        const string _methodFinishes = "(MapViewer) - METHOD FINISHES";
+        const string _methodFinished = "(MapViewer) - METHOD FINISHED";
         const string _methodEscaped = "(MapViewer) - METHOD ESCAPE";
         const string _refreshCalled = "(MapViewer) - REFRESH CALLED";
         const string _benchmarking = "(MapViewer) - BENCHMARKING";
         const string _info = "(MapViewer) - info";
+
+        private void DebugWriteLine(string message)
+        {
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; {message}");
+        }
 
         #endregion
 
@@ -421,7 +426,7 @@ namespace IRI.Jab.MapViewer
             {
                 this._mapScale = this.ToMapScale(this.ScreenScale);
 
-                Debug.WriteLine($"OnZoomChanged {1.0 / _mapScale}");
+                //Debug.WriteLine($"OnZoomChanged {1.0 / _mapScale}");
 
                 RaisePropertyChanged(nameof(MapScale));
 
@@ -1082,7 +1087,12 @@ namespace IRI.Jab.MapViewer
             }
             else if (layer is DrawingLayer)
             {
+                //Action action = () =>
+                //{
                 AddEditableFeatureLayer((layer as DrawingLayer).GetLayer());
+                //};
+                //Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Drawing, Tile = null },
+                //    Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
             }
             else if (layer is EditableFeatureLayer)
             {
@@ -1113,9 +1123,9 @@ namespace IRI.Jab.MapViewer
             }
             else if (layer is FeatureLayer)
             {
-                Action action = async () =>
+                Action action = () =>
                 {
-                    await AddFeatureLayer(layer as FeatureLayer);
+                    AddFeatureLayer(layer as FeatureLayer);
                 };
 
                 var extent = this.CurrentExtent;
@@ -1226,7 +1236,7 @@ namespace IRI.Jab.MapViewer
             await this.AddNonTiledLayer(layer);
         }
 
-        private async Task AddFeatureLayer(FeatureLayer featureLayer)
+        private void AddFeatureLayer(FeatureLayer featureLayer)
         {
             try
             {
@@ -1292,6 +1302,14 @@ namespace IRI.Jab.MapViewer
 
         private void AddTiledLayer(VectorLayer layer)
         {
+            Debug.WriteLine($"AddTiledLayer; {DateTime.Now.ToLongTimeString()}; AddTiledLayer called LayerName: {layer.LayerName}");
+
+            if (layer == null)
+                return;
+
+            if (layer.VisualParameters.Visibility != Visibility.Visible)
+                return;
+
             Action action = async () =>
             {
                 if (this.CurrentTileInfos == null)
@@ -1302,7 +1320,7 @@ namespace IRI.Jab.MapViewer
 
                 foreach (var region in CurrentTileInfos)
                 {
-                    await AddTiledLayerAsync(layer, region);
+                    await AddVectorLayerAsTiledAsync(layer, region);
                 }
             };
 
@@ -1410,7 +1428,7 @@ namespace IRI.Jab.MapViewer
 
 
         //This method should be improved. it is not working well
-        private async Task AddTiledLayerAsync(VectorLayer layer, TileInfo tile)
+        private async Task AddVectorLayerAsTiledAsync(VectorLayer layer, TileInfo tile)
         {
             var mapScale = MapScale;
 
@@ -1443,6 +1461,8 @@ namespace IRI.Jab.MapViewer
                 layerTile.IsProcessing = false;
                 return;
             }
+
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync called LayerName: {layer.LayerName} tile:{tile.ToShortString()}");
 
             double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
@@ -1481,7 +1501,7 @@ namespace IRI.Jab.MapViewer
 
             if (tile.ZoomLevel != this.CurrentZoomLevel)//|| MapScale != mapScale)
             {
-                Debug.Print($"Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
+                Debug.Print($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 return;
             }
 
@@ -1492,15 +1512,18 @@ namespace IRI.Jab.MapViewer
                 Canvas.SetZIndex(pathImage, layer.ZIndex);
             }
 
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync finished LayerName: {layer.LayerName} tile:{tile.ToShortString()}");
+
             layerTile.IsProcessing = false;
         }
 
 
         private async Task AddNonTiledLayer(VectorLayer layer)
         {
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer called LayerName: {layer.LayerName ?? layer.LayerId.ToString()}");
+
             try
             {
-
                 if (this.CurrentTileInfos == null)
                     return;
 
@@ -1572,6 +1595,8 @@ namespace IRI.Jab.MapViewer
 
                     Canvas.SetZIndex(path, layer.ZIndex);
                 }
+
+                Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer finished LayerName: {layer.LayerName}");
             }
             catch (Exception ex)
             {
@@ -1616,6 +1641,8 @@ namespace IRI.Jab.MapViewer
 
         private void AddEditableFeatureLayer(EditableFeatureLayer layer)
         {
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToShortTimeString()}; AddEditableFeatureLayer {layer.LayerName} called");
+
             var path = layer.GetPath(this.viewTransform);
 
             //path.RenderTransform = this.viewTransform;
@@ -1637,6 +1664,8 @@ namespace IRI.Jab.MapViewer
             }
 
             AddComplexLayer(layer.GetPrimaryVerticesLabels(), true);
+
+            Debug.WriteLine($"MapViewer; {DateTime.Now.ToShortTimeString()}; AddEditableFeatureLayer {layer.LayerName} finished");
         }
 
         //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
@@ -2042,7 +2071,7 @@ namespace IRI.Jab.MapViewer
                 catch (Exception ex)
                 {
                     fill = new ImageBrush();
-                    Trace.WriteLine($"MapViewer; AddLayerAsync(TileServiceLayer) {ex.Message}");
+                    Debug.WriteLine($"MapViewer; AddLayerAsync(TileServiceLayer) {ex.Message}");
                 }
 
                 Path path = new Path()
@@ -2082,7 +2111,7 @@ namespace IRI.Jab.MapViewer
 
         #region Refresh
 
-        public void RefreshBaseMaps()
+        private void RefreshBaseMaps()
         {
             this.Clear(tag => (tag.IsTiled || tag.LayerType == LayerType.BaseMap), false);
 
@@ -2101,11 +2130,9 @@ namespace IRI.Jab.MapViewer
             //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
         }
 
-
-        //1397.04.02 Manage Clear & Remove
-        //public void RefreshTilesButNotBaseMaps()
+        //private void RefreshTiles()
         //{
-        //    this.ClearTiledButNotBaseMaps();
+        //    this.ClearTiled();
 
         //    var tiles = this.CurrentTileInfos;
 
@@ -2114,25 +2141,9 @@ namespace IRI.Jab.MapViewer
 
         //    foreach (var tile in tiles)
         //    {
-        //        //RefreshTiles(tile, false);
-        //        RefreshTiles(tile, l => l.Type != LayerType.BaseMap);
+        //        RefreshTiles(tile, l => true);
         //    }
         //}
-
-        public void RefreshTiles()
-        {
-            this.ClearTiled();
-
-            var tiles = this.CurrentTileInfos;
-
-            if (tiles == null)
-                return;
-
-            foreach (var tile in tiles)
-            {
-                RefreshTiles(tile, l => true);
-            }
-        }
 
         //public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
         //{
@@ -2226,17 +2237,17 @@ namespace IRI.Jab.MapViewer
                     //Do not draw if criteria not satisfied
                     if (criteria(item))
                     {
-                        if (item is VectorLayer)
+                        if (item is VectorLayer vectorLayer)
                         {
-                            VectorLayer vectorLayer = (VectorLayer)item;
+                            //VectorLayer vectorLayer = (VectorLayer)item;
 
                             vectorLayer.TileManager.TryAdd(tile);
 
-                            await AddTiledLayerAsync(vectorLayer, tile);
+                            await AddVectorLayerAsTiledAsync(vectorLayer, tile);
                         }
-                        else if (item is TileServiceLayer)
+                        else if (item is TileServiceLayer tileServiceLayer)
                         {
-                            await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
+                            await AddTileServiceLayerAsync(/*item as TileServiceLayer*/ tileServiceLayer, tile);
                         }
                         else if (item is FeatureLayer)
                         {
@@ -2272,25 +2283,28 @@ namespace IRI.Jab.MapViewer
         }
 
         private void RefreshLayerVisibility(ILayer layer)
-        {   //clear current layer
+        {
+            if (layer == null)
+                return;
+
+            //Clear current layer
             this.ClearLayer(layer, remove: false, forceRemove: false);
 
-            if (layer.VisualParameters.Visibility == Visibility.Visible)
+            if (layer.Rendering == RenderingApproach.Tiled)
             {
-                if (layer.Rendering == RenderingApproach.Tiled)
-                {
-                    if (!(layer is VectorLayer))
-                    {
-                        throw new NotImplementedException();
-                    }
+                AddTiledLayer(layer as VectorLayer);
 
-                    AddTiledLayer(layer as VectorLayer);
-                }
-                else
-                {
-                    AddLayer(layer);
+                // 1400.03.15-comment
+                //if (!(layer is VectorLayer))
+                //{
+                //    throw new NotImplementedException();
+                //}
 
-                }
+                //AddTiledLayer(layer as VectorLayer);
+            }
+            else
+            {
+                AddLayer(layer);
             }
         }
 
@@ -2300,22 +2314,31 @@ namespace IRI.Jab.MapViewer
         public void Refresh()
         {
             //UpdateTileInfos();
+            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh Called");
 
             if (this.CurrentTileInfos == null)
                 return;
 
             StopUnnecessaryJobs();
 
+            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-StopUnnecessaryJobs finished");
+
             ClearNonTiled();
+
+            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-ClearNonTiled finished");
 
             var mapScale = this.MapScale;
 
             IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Default);
 
+            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-UpdateAndGetLayers finished");
+
             if (infos == null) return;
 
             foreach (ILayer item in infos)
             {
+                Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-Proccessing {item.LayerName}");
+
                 if (item.VisualParameters.Visibility != Visibility.Visible)
                     continue;
 
@@ -2330,113 +2353,6 @@ namespace IRI.Jab.MapViewer
                     continue;
 
                 AddLayer(item);
-
-                //if (item is ClusteredPointLayer)
-                //{
-                //    Action action = () =>
-                //    {
-                //        AddComplexLayer((item as ClusteredPointLayer).GetLayer(mapScale));
-                //    };
-
-                //    Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
-                //        Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
-                //}
-                //else if (item is DrawingLayer)
-                //{
-                //    var layer = (item as DrawingLayer).GetLayer();
-
-                //    AddEditableFeatureLayer(layer);
-                //}
-                //else if (item is EditableFeatureLayer)
-                //{
-                //    var layer = item as EditableFeatureLayer;
-
-                //    AddEditableFeatureLayer(layer);
-                //}
-                //else if (item is PolyBezierLayer)
-                //{
-                //    var layer = item as PolyBezierLayer;
-
-                //    AddPolyBezierLayer(layer);
-                //}
-                //else if (item is SpecialLineLayer)
-                //{
-                //    var layer = item as SpecialLineLayer;
-
-                //    AddSpecialLineLayer(layer, null);
-                //}
-                //else if (item.Type.HasFlag(LayerType.Complex) || item.Type.HasFlag(LayerType.MoveableItem))
-                //{
-                //    Action action = () =>
-                //    {
-                //        AddComplexLayer((SpecialPointLayer)item);
-                //    };
-
-                //    Task.Run(() =>
-                //      this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
-                //          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                //      );
-
-                //    //this.tasks.Add(task);
-                //}
-                //else if (item is TileServiceLayer)
-                //{
-                //    //their Rendering property must be Tiled and catched by the first `if`
-                //    throw new NotImplementedException();
-
-                //    //They are handled when UpdateTileInfos is fired
-                //    //continue;
-                //}
-                //else if (!item.Type.HasFlag(LayerType.Raster) && !item.Type.HasFlag(LayerType.BaseMap) && !item.Type.HasFlag(LayerType.ImagePyramid))
-                //{
-                //    VectorLayer vectorLayer = (VectorLayer)item;
-
-                //    Action action = async () =>
-                //     {
-                //         //AddTiledLayer(vectorLayer);
-                //         await AddNonTiledLayer(vectorLayer);
-                //         //ClearBasemap();
-                //     };
-
-                //    var extent = this.CurrentExtent;
-
-                //    Task.Run(() =>
-                //       this.jobs.Add(new Job(
-                //          new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
-                //          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                //      );
-
-                //    //this.tasks.Add(task);
-                //}
-                //else if (!item.Type.HasFlag(LayerType.Label))
-                //{
-                //    ////this.jobs.Add(
-                //    ////Dispatcher.BeginInvoke(new Action(() =>
-                //    ////{
-                //    ////AddLayer((RasterLayer)item, item.Type == LayerType.Tile ? this.CurrentExtent : this.GetExactCurrentExtent());
-                //    //AddLayer((RasterLayer)item, this.CurrentExtent);
-                //    ////})));
-
-                //    if (item.Rendering == RenderingApproach.Default)
-                //    {
-                //        AddLayer((RasterLayer)item, this.CurrentExtent);
-
-                //        //Remove Old base maps
-                //        ClearOutOfExtent(false);
-
-                //        //Task.Run(() =>
-                //        //{
-                //        //    this.jobs.Add(new Job(
-                //        //       new LayerTag() { LayerType = item.Type, Extent = null },
-                //        //       Dispatcher.BeginInvoke(new Action(async () => { await AddLayer((RasterLayer)item, this.CurrentExtent); ClearBasemap(); }), DispatcherPriority.Background, null)));
-                //        //});
-                //    }
-                //}
-                //else
-                //{
-                //    throw new NotImplementedException();
-                //}
-
             }
             //****************************
 

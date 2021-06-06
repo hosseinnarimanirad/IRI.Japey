@@ -154,14 +154,30 @@ namespace IRI.Sta.MachineLearning
 
                 for (int i = 0; i < numberOfParameters; i++)
                 {
-                    var regularizationComponent = (this._options.RegularizationMethod == RegularizationMethods.None || i == 0) ? 0 : lambda / beta.Length * beta[i];
+                    double regularizationComponent = 0;
+
+                    if (i != 0)
+                    {
+                        switch (this._options.RegularizationMethod)
+                        {
+                            case RegularizationMethods.L1:
+                                regularizationComponent = lambda / (beta.Length);
+                                break;
+
+                            case RegularizationMethods.L2:
+                                regularizationComponent = lambda / beta.Length * beta[i];
+                                break;
+
+                            case RegularizationMethods.None:
+                            default:
+                                break;
+                        }
+                    }
 
                     grad[i] = 1.0 / beta.Length * grad[i] + regularizationComponent;
 
                     beta[i] = beta[i] - _learningRate * grad[i];
                 }
-
-                //var loss = Sigmoid.CalculateLossByGradientDescent(yValues, yPredicted);
 
                 iteration++;
             }
