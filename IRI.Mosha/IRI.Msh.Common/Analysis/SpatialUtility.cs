@@ -21,12 +21,13 @@ namespace IRI.Msh.Common.Analysis
         #region Area
 
         /// <summary>
-        /// Calculate unsigned Euclidean area for ring. 
+        /// Calculate Signed Euclidean area for ring. 
+        /// Clockwise rings have negative area and CounterClockwise rings have positive area
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double CalculateSignedRingArea<T>(List<T> points) where T : IPoint, new()
+        public static double GetSignedRingArea<T>(List<T> points) where T : IPoint, new()
         {
             if (points == null || points.Count < 3)
                 return 0;
@@ -51,7 +52,7 @@ namespace IRI.Msh.Common.Analysis
             // این نقطه تکرار نشده باشه
             area += points[points.Count - 1].X * points[0].Y - points[points.Count - 1].Y * points[0].X;
 
-            return area;
+            return area / 2.0;
         }
 
         //1399.06.11
@@ -62,9 +63,9 @@ namespace IRI.Msh.Common.Analysis
         /// </summary>
         /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double CalculateUnsignedRingArea<T>(List<T> points) where T : IPoint, new()
+        public static double GetUnsignedRingArea<T>(List<T> points) where T : IPoint, new()
         {
-            return Math.Abs(CalculateSignedRingArea(points));
+            return Math.Abs(GetSignedRingArea(points));
         }
 
         /// <summary>
@@ -74,19 +75,20 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double CalculateUnsignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetUnsignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
-            return Math.Abs(CalculateSignedTriangleArea(firstPoint, middlePoint, lastPoint));
+            return Math.Abs(GetSignedTriangleArea(firstPoint, middlePoint, lastPoint));
         }
 
         /// <summary>
         /// Calculate signed Euclidean area for triangle
+        /// Clockwise triangles have negative area and CounterClockwise triangles have positive area
         /// </summary>
         /// <param name="firstPoint"></param>
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double CalculateSignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetSignedTriangleArea(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             return (firstPoint.X * (middlePoint.Y - lastPoint.Y) + middlePoint.X * (lastPoint.Y - firstPoint.Y) + lastPoint.X * (firstPoint.Y - middlePoint.Y)) / 2.0;
         }
@@ -113,13 +115,13 @@ namespace IRI.Msh.Common.Analysis
             for (int i = 0; i < n - 2; i++)
             {
                 //result[i] = CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
-                result.Add(CalculateUnsignedTriangleArea(points.ElementAt(i), points.ElementAt(i + 1), points.ElementAt(i + 2)));
+                result.Add(GetUnsignedTriangleArea(points.ElementAt(i), points.ElementAt(i + 1), points.ElementAt(i + 2)));
             }
 
             if (isClosed && n > 3)
             {
                 //result[n - 2] = CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]);
-                result.Add(CalculateUnsignedTriangleArea(points.ElementAt(n - 2), points.ElementAt(n - 1), points.ElementAt(0)));
+                result.Add(GetUnsignedTriangleArea(points.ElementAt(n - 2), points.ElementAt(n - 1), points.ElementAt(0)));
             }
 
             return result;
@@ -253,7 +255,7 @@ namespace IRI.Msh.Common.Analysis
         }
 
         #endregion
-         
+
 
         #region Rotation
 

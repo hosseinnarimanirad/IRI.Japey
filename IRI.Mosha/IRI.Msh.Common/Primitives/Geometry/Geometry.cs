@@ -1351,7 +1351,7 @@ namespace IRI.Msh.Common.Primitives
 
             for (int i = 0; i < geometry.Geometries.Count; i++)
             {
-                var area = SpatialUtility.CalculateUnsignedRingArea(geometry.Geometries[i].GetAllPoints());
+                var area = SpatialUtility.GetUnsignedRingArea(geometry.Geometries[i].GetAllPoints());
 
                 if (area > maxArea)
                 {

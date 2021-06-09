@@ -158,6 +158,11 @@ namespace IRI.Msh.Common.Primitives
             return result;
         }
 
+        public static Point Create(double x, double y)
+        {
+            return new Point(x, y);
+        }
+
         //public static bool operator ==(Point first, Point second)
         //{
         //    return first.Equals(second);

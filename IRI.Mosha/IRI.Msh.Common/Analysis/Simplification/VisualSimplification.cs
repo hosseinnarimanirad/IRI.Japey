@@ -33,9 +33,9 @@ namespace IRI.Msh.Common.Analysis
 
             while (thirdIndex < points.Count)
             {
-                var area = SpatialUtility.CalculateSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.GetSignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
-                var areaCheck2 = SpatialUtility.CalculateUnsignedTriangleArea(points[firstIndex], points[(int)((firstIndex + thirdIndex) / 2.0)], points[thirdIndex]);
+                var areaCheck2 = SpatialUtility.GetUnsignedTriangleArea(points[firstIndex], points[(int)((firstIndex + thirdIndex) / 2.0)], points[thirdIndex]);
 
                 tempArea += area;
 
@@ -183,7 +183,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
-                var area = SpatialUtility.CalculateUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.GetUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 tempArea += area;
 
@@ -283,7 +283,7 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < points.Count - 2; i++)
             {
-                var area = SpatialUtility.CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
+                var area = SpatialUtility.GetUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
 
                 if (area > parameters.AreaThreshold/* threshold*/)
                 {
@@ -327,7 +327,7 @@ namespace IRI.Msh.Common.Analysis
                 //tempArea += area;
                 //if (Math.Abs(tempArea) > threshold)
 
-                var area = SpatialUtility.CalculateUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var area = SpatialUtility.GetUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 tempArea += area;
 
@@ -389,12 +389,12 @@ namespace IRI.Msh.Common.Analysis
                         //recalculate adjacent areas
                         if (i > 0)
                         {
-                            areas[i - 1] = SpatialUtility.CalculateUnsignedTriangleArea(pList[i - 1], pList[i], pList[i + 1]);
+                            areas[i - 1] = SpatialUtility.GetUnsignedTriangleArea(pList[i - 1], pList[i], pList[i + 1]);
                         }
 
                         if (i < areas.Count - 1)
                         {
-                            areas[i] = SpatialUtility.CalculateUnsignedTriangleArea(pList[i], pList[i + 1], pList[i + 2]);
+                            areas[i] = SpatialUtility.GetUnsignedTriangleArea(pList[i], pList[i + 1], pList[i + 2]);
                         }
 
                         break;

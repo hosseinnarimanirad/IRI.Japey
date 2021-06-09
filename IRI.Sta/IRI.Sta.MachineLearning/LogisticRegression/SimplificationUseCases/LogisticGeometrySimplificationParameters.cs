@@ -54,7 +54,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middleScreenPoint, firstScreenPoint);
 
-            this.SemiArea = SpatialUtility.CalculateUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.SemiArea = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
             //this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
