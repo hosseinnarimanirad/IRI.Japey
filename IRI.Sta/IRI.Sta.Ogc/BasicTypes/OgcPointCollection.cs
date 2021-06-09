@@ -5,23 +5,23 @@ using System.Text;
 
 namespace IRI.Standards.OGC.SFA
 {
-    public class PointCollection<T> : List<T>, IPointCollection where T : IPoint
+    public class OgcPointCollection<T> : List<T>, IOgcPointCollection where T : IOgcPoint
     {
 
-        public new IPoint this[int index]
+        public new IOgcPoint this[int index]
         {
             get { return base[index]; }
 
             set { base[index] = (T)value; }
         }
         
-        public PointCollection(int capacity)
+        public OgcPointCollection(int capacity)
             : base(capacity)
         {
 
         }
 
-        public new IEnumerator<IPoint> GetEnumerator()
+        public new IEnumerator<IOgcPoint> GetEnumerator()
         {
             for (int i = 0; i < this.Count; i++)
             {

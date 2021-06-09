@@ -9,7 +9,7 @@ namespace IRI.Standards.OGC.SFA
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct Point : IPoint
+    public struct OgcPoint : IOgcPoint
     {
         double x;
 
@@ -19,7 +19,7 @@ namespace IRI.Standards.OGC.SFA
 
         public double Y { get { return this.y; } }
 
-        public Point(double x, double y)
+        public OgcPoint(double x, double y)
         {
             this.x = x;
 

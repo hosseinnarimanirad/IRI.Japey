@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace IRI.Standards.OGC.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcMultiPoint<T> : IOgcGeometry where T : IPoint, new()
+    public struct OgcMultiPoint<T> : IOgcGeometry where T : IOgcPoint, new()
     {
         byte byteOrder;
 
@@ -16,9 +16,9 @@ namespace IRI.Standards.OGC.SFA
 
         UInt32 numPoints;
 
-        OgcPoint<T>[] points;
+        OgcGenericPoint<T>[] points;
 
-        public OgcPoint<T>[] Points { get { return this.points; } }
+        public OgcGenericPoint<T>[] Points { get { return this.points; } }
 
         public WkbByteOrder ByteOrder
         {
@@ -42,7 +42,7 @@ namespace IRI.Standards.OGC.SFA
 
                 writer.Write(numPoints);
 
-                foreach (OgcPoint<T> item in Points)
+                foreach (OgcGenericPoint<T> item in Points)
                 {
                     writer.Write(item.ToWkb());
                 }
@@ -71,11 +71,11 @@ namespace IRI.Standards.OGC.SFA
 
             this.numPoints = reader.ReadUInt32();
 
-            this.points = new OgcPoint<T>[this.numPoints];
+            this.points = new OgcGenericPoint<T>[this.numPoints];
 
             for (int i = 0; i < this.numPoints; i++)
             {
-                this.points[i] = new OgcPoint<T>(reader);
+                this.points[i] = new OgcGenericPoint<T>(reader);
             }
         }
     }

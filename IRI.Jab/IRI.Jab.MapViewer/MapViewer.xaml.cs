@@ -1052,7 +1052,6 @@ namespace IRI.Jab.MapViewer
                     AddComplexLayer(layer.GetControlPointLayer(), false);
                 }
             }
-
         }
 
         public void AddLayer(ILayer layer)

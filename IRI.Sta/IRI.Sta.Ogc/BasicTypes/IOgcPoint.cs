@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace IRI.Standards.OGC.SFA
 {
-    public interface IPointCollection : IEnumerable<IPoint>
+    public interface IOgcPoint
     {
-        IPoint this[int index] { get; set; }
+        double X { get; }
 
-        int Count { get; }
+        double Y { get; }
+
+
     }
 }

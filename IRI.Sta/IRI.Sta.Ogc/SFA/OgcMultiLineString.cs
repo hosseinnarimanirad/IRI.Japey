@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace IRI.Standards.OGC.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcMultiLineString<T> : IOgcGeometry where T : IPoint
+    public struct OgcMultiLineString<T> : IOgcGeometry where T : IOgcPoint
     {
         byte byteOrder;
 

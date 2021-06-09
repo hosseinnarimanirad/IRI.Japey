@@ -7,10 +7,10 @@ using System.Runtime.InteropServices;
 
 namespace IRI.Standards.OGC.SFA
 {
-    public interface ILinearRing : IEnumerable<IPoint>
+    public interface IOgcLinearRing : IEnumerable<IOgcPoint>
     {
         byte[] ToBinary();
 
-        IPointCollection Points { get; }
+        IOgcPointCollection Points { get; }
     }
 }

@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace IRI.Standards.OGC.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcLineString<T> : IOgcGeometry, IRI.Standards.OGC.SFA.IOgcLineString where T : IPoint
+    public struct OgcLineString<T> : IOgcGeometry, IRI.Standards.OGC.SFA.IOgcLineString where T : IOgcPoint
     {
         byte byteOrder;
 
@@ -16,9 +16,9 @@ namespace IRI.Standards.OGC.SFA
 
         UInt32 numPoints;
 
-        PointCollection<T> points;
+        OgcPointCollection<T> points;
 
-        public IPointCollection Points
+        public IOgcPointCollection Points
         {
             get { return this.points; }
         }
@@ -71,7 +71,7 @@ namespace IRI.Standards.OGC.SFA
 
             this.numPoints = reader.ReadUInt32();
 
-            this.points = new PointCollection<T>((int)this.numPoints);
+            this.points = new OgcPointCollection<T>((int)this.numPoints);
 
             int length = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
 

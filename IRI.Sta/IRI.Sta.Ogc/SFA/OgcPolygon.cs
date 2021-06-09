@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace IRI.Standards.OGC.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcPolygon<T> : IOgcGeometry where T : IPoint
+    public struct OgcPolygon<T> : IOgcGeometry where T : IOgcPoint
     {
         byte byteOrder;
 
@@ -16,9 +16,9 @@ namespace IRI.Standards.OGC.SFA
 
         UInt32 numRings;
 
-        LinearRing<T>[] rings;
+        OgcLinearRing<T>[] rings;
 
-        public LinearRing<T>[] Rings { get { return this.rings; } }
+        public OgcLinearRing<T>[] Rings { get { return this.rings; } }
 
         public WkbByteOrder ByteOrder
         {
@@ -42,7 +42,7 @@ namespace IRI.Standards.OGC.SFA
 
                 writer.Write(numRings);
 
-                foreach (LinearRing<T> item in Rings)
+                foreach (OgcLinearRing<T> item in Rings)
                 {
                     writer.Write(item.ToBinary());
                 }
@@ -71,11 +71,11 @@ namespace IRI.Standards.OGC.SFA
 
             this.numRings = reader.ReadUInt32();
 
-            this.rings = new LinearRing<T>[this.numRings];
+            this.rings = new OgcLinearRing<T>[this.numRings];
 
             for (int i = 0; i < this.numRings; i++)
             {
-                this.rings[i] = new LinearRing<T>(reader);
+                this.rings[i] = new OgcLinearRing<T>(reader);
             }
         }
     }

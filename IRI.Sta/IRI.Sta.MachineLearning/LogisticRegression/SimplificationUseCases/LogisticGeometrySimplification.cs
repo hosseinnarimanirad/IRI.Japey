@@ -19,58 +19,6 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         }
 
-        public static LogisticGeometrySimplification Create(LogisticGeometrySimplificationTrainingData trainingData)
-        {
-            if (trainingData == null || trainingData.Records.IsNullOrEmpty())
-            {
-                return null;
-            }
-
-            Matrix xValues = new Matrix(trainingData.Records.Count, LogisticGeometrySimplificationParameters.NumberOfFeatures);
-
-            double[] yValues = new double[trainingData.Records.Count];
-
-            for (int i = 0; i < trainingData.Records.Count; i++)
-            {
-                //xValues[i, 0] = trainingData.Records[i].ZoomLevel;
-                //xValues[i, 1] = trainingData.Records[i].SemiDistanceToNext;
-                //xValues[i, 2] = trainingData.Records[i].SemiDistanceToPrevious;
-                //xValues[i, 3] = trainingData.Records[i].SemiArea;
-                //xValues[i, 4] = trainingData.Records[i].SemiCosineOfAngle;
-                //xValues[i, 5] = trainingData.Records[i].SemiVerticalDistance;
-
-                xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
-                xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
-                //xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
-                xValues[i, 2] = trainingData.Records[i].SemiArea;
-                xValues[i, 3] = trainingData.Records[i].SemiCosineOfAngle;
-                //xValues[i, 3] = trainingData.Records[i].CosineOfAngle;
-
-                yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
-            }
-
-            var result = new LogisticGeometrySimplification();
-
-            result._regression = new LogisticRegression(new LogisticRegressionOptions() { RegularizationMethod = RegularizationMethods.L2 });
-
-            result._regression.Fit(xValues, yValues);
-
-            return result;
-        }
-
-        public static LogisticGeometrySimplification Create<T>(
-            List<T> originalPoints,
-            List<T> simplifiedPoints,
-            //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap,
-            bool isRingMode) where T : IPoint
-        {
-            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ toScreenMap, isRingMode);
-
-            return Create(parameters);
-        }
-
-
         // ورودی این متد بایستی نقاط تمیز شده باشد
         public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
             List<T> originalPoints,
@@ -162,62 +110,61 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             } while (middleIndex != indexMap.First().Value);
 
-            //for (int i = 1; i < originalPoints.Count - 1; i++)
-            //{
-            //    if (indexMap.ContainsValue(i))
-            //        continue;
-
-            //    // 1400.03.05
-            //    // در حال چند رینگ ممکنه نقاط ابتدایی هم حذف
-            //    // شوند این برخلاف حالت خط هست که همیشه
-            //    // نقطه اول و اخر رو نگه می داریم
-            //    var prevPoints = indexMap.Where(index => index.Value < i);
-
-            //    KeyValuePair<int, int> prevRetainedPoint;
-
-            //    if (isRingMode && prevPoints.IsNullOrEmpty())
-            //    {
-            //        prevRetainedPoint = indexMap.Last();
-            //    }
-            //    else
-            //    {
-            //        //prevRetainedPoint = indexMap.Where(index => index.Value < i).Last();
-            //        prevRetainedPoint = prevPoints.Last();
-            //    }
-            //    //var prevRetainedPoint = indexMap.Where(index => index.Value < i).Last();
-
-            //    //var nextRetainedPoint = indexMap.First(index => index.Value > i);
-            //    var nextPoints = indexMap.Where(index => index.Value > i);
-
-            //    KeyValuePair<int, int> nextRetainedPoint;
-
-            //    if (isRingMode && nextPoints.IsNullOrEmpty())
-            //    {
-            //        nextRetainedPoint = indexMap.First();
-            //    }
-            //    else
-            //    {
-            //        //nextRetainedPoint = indexMap.First(index => index.Value > i);
-            //        nextRetainedPoint = indexMap.First(index => index.Value > i);
-
-            //    }
-
-            //    parameters.Add(new LogisticGeometrySimplificationParameters(
-            //        originalPoints[prevRetainedPoint.Value],
-            //        originalPoints[i],
-            //        originalPoints[nextRetainedPoint.Value],
-            //        //zoomLevel,
-            //        toScreenMap)
-            //    {
-            //        IsRetained = false
-            //    });
-            //}
-
             return new LogisticGeometrySimplificationTrainingData() { Records = parameters };
         }
 
+        public static LogisticGeometrySimplification Create(LogisticGeometrySimplificationTrainingData trainingData)
+        {
+            if (trainingData == null || trainingData.Records.IsNullOrEmpty())
+            {
+                return null;
+            }
 
+            Matrix xValues = new Matrix(trainingData.Records.Count, LogisticGeometrySimplificationParameters.NumberOfFeatures);
 
+            double[] yValues = new double[trainingData.Records.Count];
+
+            for (int i = 0; i < trainingData.Records.Count; i++)
+            {
+                //xValues[i, 0] = trainingData.Records[i].ZoomLevel;
+                //xValues[i, 1] = trainingData.Records[i].SemiDistanceToNext;
+                //xValues[i, 2] = trainingData.Records[i].SemiDistanceToPrevious;
+                //xValues[i, 3] = trainingData.Records[i].SemiArea;
+                //xValues[i, 4] = trainingData.Records[i].SemiCosineOfAngle;
+                //xValues[i, 5] = trainingData.Records[i].SemiVerticalDistance;
+
+                xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
+                xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
+                //xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
+                xValues[i, 2] = trainingData.Records[i].SemiArea;
+                xValues[i, 3] = trainingData.Records[i].SemiCosineOfAngle;
+                //xValues[i, 3] = trainingData.Records[i].CosineOfAngle;
+
+                yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
+            }
+
+            var result = new LogisticGeometrySimplification();
+
+            result._regression = new LogisticRegression(new LogisticRegressionOptions() { RegularizationMethod = RegularizationMethods.L2 });
+
+            result._regression.Fit(xValues, yValues);
+
+            return result;
+        }
+
+        public static LogisticGeometrySimplification Create<T>(
+            List<T> originalPoints,
+            List<T> simplifiedPoints,
+            //int zoomLevel,
+            Func<IPoint, IPoint> toScreenMap,
+            bool isRingMode) where T : IPoint
+        {
+            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ toScreenMap, isRingMode);
+
+            return Create(parameters);
+        }
+
+          
         //// ورودی این متد بایستی نقاط تمیز شده باشد
         //public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
         //    List<T> originalPoints,

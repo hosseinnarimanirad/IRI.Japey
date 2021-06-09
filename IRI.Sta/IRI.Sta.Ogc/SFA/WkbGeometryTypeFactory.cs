@@ -14,12 +14,12 @@ namespace IRI.Standards.OGC.SFA
             WkbTypeMap = new Dictionary<Type, WkbGeometryType>();
 
             //WkbTypeMap.Add(typeof(WkbGeometry<Point>), WkbGeometryType.Geometry);
-            WkbTypeMap.Add(typeof(OgcPoint<Point>), WkbGeometryType.Point);
-            WkbTypeMap.Add(typeof(OgcLineString<Point>), WkbGeometryType.LineString);
-            WkbTypeMap.Add(typeof(OgcPolygon<Point>), WkbGeometryType.Polygon);
-            WkbTypeMap.Add(typeof(OgcMultiPoint<Point>), WkbGeometryType.MultiPoint);
-            WkbTypeMap.Add(typeof(OgcMultiLineString<Point>), WkbGeometryType.MultiLineString);
-            WkbTypeMap.Add(typeof(OgcMultiPolygon<Point>), WkbGeometryType.MultiPolygon);
+            WkbTypeMap.Add(typeof(OgcGenericPoint<OgcPoint>), WkbGeometryType.Point);
+            WkbTypeMap.Add(typeof(OgcLineString<OgcPoint>), WkbGeometryType.LineString);
+            WkbTypeMap.Add(typeof(OgcPolygon<OgcPoint>), WkbGeometryType.Polygon);
+            WkbTypeMap.Add(typeof(OgcMultiPoint<OgcPoint>), WkbGeometryType.MultiPoint);
+            WkbTypeMap.Add(typeof(OgcMultiLineString<OgcPoint>), WkbGeometryType.MultiLineString);
+            WkbTypeMap.Add(typeof(OgcMultiPolygon<OgcPoint>), WkbGeometryType.MultiPolygon);
             //WkbTypeMap.Add(typeof(WkbGeometryCollection<Point>), WkbGeometryType.GeometryCollection);
             //WkbTypeMap.Add(typeof(WkbCircularString<Point>), WkbGeometryType.CircularString);
             //WkbTypeMap.Add(typeof(WkbCompoundCurve<Point>), WkbGeometryType.CompoundCurve);
@@ -32,12 +32,12 @@ namespace IRI.Standards.OGC.SFA
             //WkbTypeMap.Add(typeof(WkbTIN<Point>), WkbGeometryType.TIN);
 
             //WkbTypeMap.Add(typeof(WkbGeometry<PointZ>), WkbGeometryType.GeometryZ);
-            WkbTypeMap.Add(typeof(OgcPoint<PointZ>), WkbGeometryType.PointZ);
-            WkbTypeMap.Add(typeof(OgcLineString<PointZ>), WkbGeometryType.LineStringZ);
-            WkbTypeMap.Add(typeof(OgcPolygon<PointZ>), WkbGeometryType.PolygonZ);
-            WkbTypeMap.Add(typeof(OgcMultiPoint<PointZ>), WkbGeometryType.MultiPointZ);
-            WkbTypeMap.Add(typeof(OgcMultiLineString<PointZ>), WkbGeometryType.MultiLineStringZ);
-            WkbTypeMap.Add(typeof(OgcMultiPolygon<PointZ>), WkbGeometryType.MultiPolygonZ);
+            WkbTypeMap.Add(typeof(OgcGenericPoint<OgcPointZ>), WkbGeometryType.PointZ);
+            WkbTypeMap.Add(typeof(OgcLineString<OgcPointZ>), WkbGeometryType.LineStringZ);
+            WkbTypeMap.Add(typeof(OgcPolygon<OgcPointZ>), WkbGeometryType.PolygonZ);
+            WkbTypeMap.Add(typeof(OgcMultiPoint<OgcPointZ>), WkbGeometryType.MultiPointZ);
+            WkbTypeMap.Add(typeof(OgcMultiLineString<OgcPointZ>), WkbGeometryType.MultiLineStringZ);
+            WkbTypeMap.Add(typeof(OgcMultiPolygon<OgcPointZ>), WkbGeometryType.MultiPolygonZ);
             //WkbTypeMap.Add(typeof(WkbGeometryCollection<PointZ>), WkbGeometryType.GeometryCollectionZ);
             //WkbTypeMap.Add(typeof(WkbCircularString<PointZ>), WkbGeometryType.CircularStringZ);
             //WkbTypeMap.Add(typeof(WkbCompoundCurve<PointZ>), WkbGeometryType.CompoundCurveZ);
@@ -50,12 +50,12 @@ namespace IRI.Standards.OGC.SFA
             //WkbTypeMap.Add(typeof(WkbTIN<PointZ>), WkbGeometryType.TINZ);
 
             //WkbTypeMap.Add(typeof(WkbGeometry<PointM>), WkbGeometryType.GeometryM);
-            WkbTypeMap.Add(typeof(OgcPoint<PointM>), WkbGeometryType.PointM);
-            WkbTypeMap.Add(typeof(OgcLineString<PointM>), WkbGeometryType.LineStringM);
-            WkbTypeMap.Add(typeof(OgcPolygon<PointM>), WkbGeometryType.PolygonM);
-            WkbTypeMap.Add(typeof(OgcMultiPoint<PointM>), WkbGeometryType.MultiPointM);
-            WkbTypeMap.Add(typeof(OgcMultiLineString<PointM>), WkbGeometryType.MultiLineStringM);
-            WkbTypeMap.Add(typeof(OgcMultiPolygon<PointM>), WkbGeometryType.MultiPolygonM);
+            WkbTypeMap.Add(typeof(OgcGenericPoint<OgcPointM>), WkbGeometryType.PointM);
+            WkbTypeMap.Add(typeof(OgcLineString<OgcPointM>), WkbGeometryType.LineStringM);
+            WkbTypeMap.Add(typeof(OgcPolygon<OgcPointM>), WkbGeometryType.PolygonM);
+            WkbTypeMap.Add(typeof(OgcMultiPoint<OgcPointM>), WkbGeometryType.MultiPointM);
+            WkbTypeMap.Add(typeof(OgcMultiLineString<OgcPointM>), WkbGeometryType.MultiLineStringM);
+            WkbTypeMap.Add(typeof(OgcMultiPolygon<OgcPointM>), WkbGeometryType.MultiPolygonM);
             //WkbTypeMap.Add(typeof(WkbGeometryCollection<PointM>), WkbGeometryType.GeometryCollectionM);
             //WkbTypeMap.Add(typeof(WkbCircularString<PointM>), WkbGeometryType.CircularStringM);
             //WkbTypeMap.Add(typeof(WkbCompoundCurve<PointM>), WkbGeometryType.CompoundCurveM);
@@ -68,12 +68,12 @@ namespace IRI.Standards.OGC.SFA
             //WkbTypeMap.Add(typeof(WkbTIN<PointM>), WkbGeometryType.TIN);
 
             //WkbTypeMap.Add(typeof(WkbGeometry<PointZM>), WkbGeometryType.GeometryZM);
-            WkbTypeMap.Add(typeof(OgcPoint<PointZM>), WkbGeometryType.PointZM);
-            WkbTypeMap.Add(typeof(OgcLineString<PointZM>), WkbGeometryType.LineStringZM);
-            WkbTypeMap.Add(typeof(OgcPolygon<PointZM>), WkbGeometryType.PolygonZM);
-            WkbTypeMap.Add(typeof(OgcMultiPoint<PointZM>), WkbGeometryType.MultiPointZM);
-            WkbTypeMap.Add(typeof(OgcMultiLineString<PointZM>), WkbGeometryType.MultiLineStringZM);
-            WkbTypeMap.Add(typeof(OgcMultiPolygon<PointZM>), WkbGeometryType.MultiPolygonZM);
+            WkbTypeMap.Add(typeof(OgcGenericPoint<OgcPointZM>), WkbGeometryType.PointZM);
+            WkbTypeMap.Add(typeof(OgcLineString<OgcPointZM>), WkbGeometryType.LineStringZM);
+            WkbTypeMap.Add(typeof(OgcPolygon<OgcPointZM>), WkbGeometryType.PolygonZM);
+            WkbTypeMap.Add(typeof(OgcMultiPoint<OgcPointZM>), WkbGeometryType.MultiPointZM);
+            WkbTypeMap.Add(typeof(OgcMultiLineString<OgcPointZM>), WkbGeometryType.MultiLineStringZM);
+            WkbTypeMap.Add(typeof(OgcMultiPolygon<OgcPointZM>), WkbGeometryType.MultiPolygonZM);
             //WkbTypeMap.Add(typeof(WkbGeometryCollection<PointZM>), WkbGeometryType.GeometryCollectionZM);
             //WkbTypeMap.Add(typeof(WkbCircularString<PointZM>), WkbGeometryType.CircularStringZM);
             //WkbTypeMap.Add(typeof(WkbCompoundCurve<PointZM>), WkbGeometryType.CompoundCurveZM);

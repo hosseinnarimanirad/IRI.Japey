@@ -8,7 +8,7 @@ namespace IRI.Standards.OGC.SFA
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcPoint<T> : IOgcGeometry where T : IPoint, new()
+    public struct OgcGenericPoint<T> : IOgcGeometry where T : IOgcPoint, new()
     {
         byte byteOrder;
 
@@ -16,7 +16,7 @@ namespace IRI.Standards.OGC.SFA
 
         T point;
 
-        public OgcPoint(double x, double y)
+        public OgcGenericPoint(double x, double y)
         {
             byteOrder = (byte)WkbByteOrder.WkbNdr;
 
@@ -39,18 +39,18 @@ namespace IRI.Standards.OGC.SFA
             get { return (WkbGeometryType)this.type; }
         }
 
-        public OgcPoint(byte[] buffer)
+        public OgcGenericPoint(byte[] buffer)
             : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
         {
         }
 
-        public OgcPoint(System.IO.BinaryReader reader)
+        public OgcGenericPoint(System.IO.BinaryReader reader)
         {
             this.byteOrder = reader.ReadByte();
 
             this.type = reader.ReadUInt32();
 
-            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcPoint<T>)] != (WkbGeometryType)this.type)
+            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcGenericPoint<T>)] != (WkbGeometryType)this.type)
             {
                 throw new NotImplementedException();
             }

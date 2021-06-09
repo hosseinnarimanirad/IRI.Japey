@@ -9,13 +9,13 @@ namespace IRI.Standards.OGC.SFA
 {
     //[Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct LinearRing<T> : ILinearRing where T : IPoint
+    public struct OgcLinearRing<T> : IOgcLinearRing where T : IOgcPoint
     {
         UInt32 numPoints;
 
-        PointCollection<T> points;
+        OgcPointCollection<T> points;
 
-        public IPointCollection Points
+        public IOgcPointCollection Points
         {
             get { return this.points; }
         }
@@ -39,16 +39,16 @@ namespace IRI.Standards.OGC.SFA
             }
         }
 
-        public LinearRing(byte[] buffer)
+        public OgcLinearRing(byte[] buffer)
             : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
         {
         }
 
-        public LinearRing(System.IO.BinaryReader reader)
+        public OgcLinearRing(System.IO.BinaryReader reader)
         {
             this.numPoints = reader.ReadUInt32();
 
-            this.points = new PointCollection<T>((int)this.numPoints);
+            this.points = new OgcPointCollection<T>((int)this.numPoints);
 
             int length = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
 
@@ -59,7 +59,7 @@ namespace IRI.Standards.OGC.SFA
             }
         }
 
-        public IEnumerator<IPoint> GetEnumerator()
+        public IEnumerator<IOgcPoint> GetEnumerator()
         {
             return points.GetEnumerator();
         }

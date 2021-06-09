@@ -20,18 +20,21 @@ namespace IRI.Msh.Common.Analysis
 
         #region Area
 
-        //1399.06.11
-        //در این جا فرض شده که نقطه اخر چند حلقه تکرار 
-        //نشده
         /// <summary>
         /// Calculate unsigned Euclidean area for ring. 
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double CalculateUnsignedAreaForRing<T>(List<T> points) where T : IPoint, new()
+        public static double CalculateSignedRingArea<T>(List<T> points) where T : IPoint, new()
         {
             if (points == null || points.Count < 3)
                 return 0;
+
+            if (points[0].DistanceTo(points[points.Count - 1]) == 0)
+            {
+                throw new NotImplementedException("SpatialUtility > CalculateSignedTriangleAreaForRing");
+            }
 
             double area = 0;
 
@@ -42,13 +45,26 @@ namespace IRI.Msh.Common.Analysis
                 area += temp;
             }
 
-            //1399.06.11
-            //تکرار نقطه اخر چند ضلعی
-            //فرض بر این هست که داخل لیست نقطه‌ها
-            //این نقطه تکرار نشده باشه
+            // 1399.06.11
+            // تکرار نقطه اخر چند ضلعی
+            // فرض بر این هست که داخل لیست نقطه‌ها
+            // این نقطه تکرار نشده باشه
             area += points[points.Count - 1].X * points[0].Y - points[points.Count - 1].Y * points[0].X;
 
-            return Math.Abs(area / 2.0);
+            return area;
+        }
+
+        //1399.06.11
+        //در این جا فرض شده که نقطه اخر چند حلقه تکرار 
+        //نشده
+        /// <summary>
+        /// Calculate unsigned Euclidean area for ring. 
+        /// </summary>
+        /// <param name="points">last point should not be repeated for ring</param>
+        /// <returns></returns>
+        public static double CalculateUnsignedRingArea<T>(List<T> points) where T : IPoint, new()
+        {
+            return Math.Abs(CalculateSignedRingArea(points));
         }
 
         /// <summary>
@@ -235,28 +251,9 @@ namespace IRI.Msh.Common.Analysis
             //return dotProduct < 0 ? -1 * result : result;
             return result;
         }
-         
+
         #endregion
-
-        //private static double CalculateDotProduct(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
-        //{
-        //    if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
-        //    {
-        //        return 1;
-        //    }
-
-        //    //cos(theta) = (A.B)/(|A|*|B|)
-        //    var ax = lastPoint.X - middlePoint.X;
-        //    var ay = lastPoint.Y - middlePoint.Y;
-
-        //    var bx = middlePoint.X - firstPoint.X;
-        //    var by = middlePoint.Y - firstPoint.Y;
-
-        //    var dotProduct = ax * bx + ay * by;
-
-        //    return dotProduct;
-        //}
-
+         
 
         #region Rotation
 
@@ -476,7 +473,7 @@ namespace IRI.Msh.Common.Analysis
             }
 
             totalAngle += GetAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
-             
+
             if (Math.Abs(totalAngle - 2 * Math.PI) < 0.1)
                 return true;
 
