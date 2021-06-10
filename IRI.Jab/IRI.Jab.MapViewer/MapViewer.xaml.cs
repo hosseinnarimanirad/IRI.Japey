@@ -1084,6 +1084,9 @@ namespace IRI.Jab.MapViewer
                 Task.Run(() => this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
                     Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
             }
+            // لایه‌ای که عارضه زمان
+            // انجام عملیات ترسیم 
+            // نمایش می ده و مدیریت می‌کنه
             else if (layer is DrawingLayer)
             {
                 //Action action = () =>

@@ -3,12 +3,19 @@ using IRI.Msh.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IRI.Msh.MeasurementUnit;
 
 namespace IRI.Msh.Common.Analysis
 {
     public class SpatialUtility
     {
-        public static double GetSemiDistance(IPoint first, IPoint second)
+        /// <summary>
+        /// return square (^2) of the distance between two
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static double GetSquareDistance(IPoint first, IPoint second)
         {
             var dx = first.X - second.X;
 
@@ -178,17 +185,32 @@ namespace IRI.Msh.Common.Analysis
 
         #region Angle
 
-        //In radian
+        
         /// <summary>
-        /// returns the angle in radian between 0 and 180
+        /// returns the angle in desired mode between 0 and 180
         /// </summary>
         /// <param name="firstPoint"></param>
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint, AngleMode mode = AngleMode.Radian)
         {
-            return Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
+            var radianAngle = Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
+
+            if (mode == AngleMode.Radian)
+            {
+                return radianAngle;
+            }
+            else if (mode == AngleMode.Degree)
+            {
+                return UnitConversion.RadianToDegree(radianAngle);
+            }
+            else if (mode == AngleMode.Grade)
+            {
+                return UnitConversion.RadianToGrade(radianAngle);
+            }
+
+            throw new NotImplementedException("SpatialUtility > GetAngle");
         }
 
         /// <summary>
@@ -246,7 +268,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double CalculateSemiCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetSquareCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
             {
@@ -419,7 +441,7 @@ namespace IRI.Msh.Common.Analysis
 
         #region Point-Line 
 
-        public static double PointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
+        public static double GetPointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
             var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 
@@ -438,7 +460,7 @@ namespace IRI.Msh.Common.Analysis
                     Math.Sqrt(dySegment * dySegment + dxSegment * dxSegment);
         }
 
-        public static double SemiPointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
+        public static double GetPointToLineSegmentSquareDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
             var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 

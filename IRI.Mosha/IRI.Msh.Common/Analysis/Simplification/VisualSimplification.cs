@@ -86,7 +86,7 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < points.Count - 2; i++)
             {
-                var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[i], points[i + 1], points[i + 2]);
+                var angle = SpatialUtility.GetSquareCosineOfAngle(points[i], points[i + 1], points[i + 2]);
 
                 angles.Add(new Tuple<int, double>(i + 1, angle));
             }
@@ -128,7 +128,7 @@ namespace IRI.Msh.Common.Analysis
 
             while (thirdIndex < points.Count)
             {
-                var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var angle = SpatialUtility.GetSquareCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 if (angle < 0 || angle < paramters.AngleThreshold)
                 {
@@ -181,7 +181,7 @@ namespace IRI.Msh.Common.Analysis
 
             while (thirdIndex < points.Count)
             {
-                var angle = SpatialUtility.CalculateSemiCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
+                var angle = SpatialUtility.GetSquareCosineOfAngle(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
                 var area = SpatialUtility.GetUnsignedTriangleArea(points[firstIndex], points[secondIndex], points[thirdIndex]);
 
@@ -238,7 +238,7 @@ namespace IRI.Msh.Common.Analysis
 
             while (secondIndex < points.Count)
             {
-                var semiDistance = SpatialUtility.GetSemiDistance(points[firstIndex], points[secondIndex]);
+                var semiDistance = SpatialUtility.GetSquareDistance(points[firstIndex], points[secondIndex]);
 
                 temp += semiDistance;
 
@@ -449,7 +449,7 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 1; i < numberOfPoints - 1; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.SemiPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
 
                 if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
                 {
@@ -586,7 +586,7 @@ namespace IRI.Msh.Common.Analysis
         {
             for (int i = 1; i < pointList.Count - 1; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.SemiPointToLineSegmentDistance(pointList[0], pointList[pointList.Count - 1], pointList[i]);
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[0], pointList[pointList.Count - 1], pointList[i]);
 
                 if (semiPerpendicularDistance >= threshold)
                 {

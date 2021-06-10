@@ -120,25 +120,30 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 return null;
             }
 
-            Matrix xValues = new Matrix(trainingData.Records.Count, LogisticGeometrySimplificationParameters.NumberOfFeatures);
+            // 1400.03.20
+            //Matrix xValues = new Matrix(trainingData.Records.Count, LogisticGeometrySimplificationParameters.NumberOfFeatures);
+            var numberOfFeatures = trainingData.GetNumberOfFeatures();
+
+            Matrix xValues = new Matrix(trainingData.Records.Count, numberOfFeatures);
 
             double[] yValues = new double[trainingData.Records.Count];
 
             for (int i = 0; i < trainingData.Records.Count; i++)
             {
-                //xValues[i, 0] = trainingData.Records[i].ZoomLevel;
-                //xValues[i, 1] = trainingData.Records[i].SemiDistanceToNext;
-                //xValues[i, 2] = trainingData.Records[i].SemiDistanceToPrevious;
-                //xValues[i, 3] = trainingData.Records[i].SemiArea;
-                //xValues[i, 4] = trainingData.Records[i].SemiCosineOfAngle;
-                //xValues[i, 5] = trainingData.Records[i].SemiVerticalDistance;
-
-                xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
-                xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
-                //xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
-                xValues[i, 2] = trainingData.Records[i].SemiArea;
-                xValues[i, 3] = trainingData.Records[i].SemiCosineOfAngle;
-                //xValues[i, 3] = trainingData.Records[i].CosineOfAngle;
+                // 1400.03.20
+                var features = trainingData.Records[i].GetSelectedFeatures();
+                //
+                for (int j = 0; j < numberOfFeatures; j++)
+                {
+                    xValues[i, j] = features[j];
+                }
+                //
+                //xValues[i, 0] = trainingData.Records[i].SemiDistanceToNext;
+                //xValues[i, 1] = trainingData.Records[i].SemiDistanceToPrevious;
+                ////xValues[i, 2] = trainingData.Records[i].SemiVerticalDistance;
+                //xValues[i, 2] = trainingData.Records[i].SemiArea;
+                //xValues[i, 3] = trainingData.Records[i].SquareCosineOfAngle;
+                ////xValues[i, 3] = trainingData.Records[i].CosineOfAngle;
 
                 yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
             }
@@ -164,7 +169,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             return Create(parameters);
         }
 
-          
+
         //// ورودی این متد بایستی نقاط تمیز شده باشد
         //public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
         //    List<T> originalPoints,
@@ -270,23 +275,32 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         private bool? IsRetained(LogisticGeometrySimplificationParameters parameters)
         {
-            List<double> xValues = new List<double>
-            {
-                //1,
-                //parameters.ZoomLevel,
-                parameters.SemiDistanceToNext,
-                parameters.SemiDistanceToPrevious,
-                //parameters.SemiVerticalDistance,
-                parameters.SemiArea,
-                parameters.SemiCosineOfAngle,
-                //parameters.CosineOfAngle
-            };
+            // 1400.03.20
+            //List<double> xValues = new List<double>
+            //{
+            //    //1,
+            //    //parameters.ZoomLevel,
+            //    parameters.SemiDistanceToNext,
+            //    parameters.SemiDistanceToPrevious,
+            //    //parameters.SemiVerticalDistance,
+            //    parameters.SemiArea,
+            //    parameters.SquareCosineOfAngle,
+            //    //parameters.CosineOfAngle
+            //};
+
+            List<double> xValues = parameters.GetSelectedFeatures();
 
             var result = _regression.Predict(xValues);
 
             if (result.HasValue)
             {
-                return Math.Round(result.Value) == 1;
+                if (result.Value > 1 || result.Value < 0)
+                {
+
+                }
+
+                //return Math.Round(result.Value) == 1;
+                return result.Value > 0.45;
             }
             else
             {

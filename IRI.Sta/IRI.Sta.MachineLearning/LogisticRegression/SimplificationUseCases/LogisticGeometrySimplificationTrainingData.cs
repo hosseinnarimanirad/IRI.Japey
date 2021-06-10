@@ -1,11 +1,23 @@
-﻿using System;
+﻿using IRI.Msh.Common.Extensions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
     public class LogisticGeometrySimplificationTrainingData
     {
+        public int GetNumberOfFeatures()
+        {
+            if (Records.IsNullOrEmpty())
+            {
+                return 0;
+            }
+
+            return Records.First().GetSelectedFeatures().Count;
+        }
+
         public List<LogisticGeometrySimplificationParameters> Records { get; set; }
 
         public LogisticGeometrySimplificationTrainingData()

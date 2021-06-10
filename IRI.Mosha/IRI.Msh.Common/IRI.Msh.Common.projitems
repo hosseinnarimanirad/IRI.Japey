@@ -9,7 +9,6 @@
     <Import_RootNamespace>IRI.Msh.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Common\General.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\AreaStatistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
