@@ -36,7 +36,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                    Visibility="{Binding ElementName=root, Path=ShowTools, Converter={StaticResource boolToVisibilityConverter}}">
             <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddGeoJsonToDrawingItemsCommand}"  
                         BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه ژئوجی‌سان">
                 <Path Data="{StaticResource json}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
@@ -47,6 +48,7 @@
             </Button>
         </StackPanel>
         <Line Grid.Row="1" X1="0" X2="100" StrokeThickness="2" Stroke="{DynamicResource MahApps.Brushes.Accent}" 
+              Visibility="{Binding ElementName=root, Path=ShowTools, Converter={StaticResource boolToVisibilityConverter}}"
               Opacity="1" Margin="0,4"
               Stretch="Fill"/>
         <ListBox Grid.Row="2" ItemsSource="{Binding DrawingItems}" SelectionMode="Extended">

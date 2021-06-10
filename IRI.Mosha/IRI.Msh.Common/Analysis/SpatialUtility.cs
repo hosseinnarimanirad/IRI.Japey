@@ -179,11 +179,25 @@ namespace IRI.Msh.Common.Analysis
         #region Angle
 
         //In radian
+        /// <summary>
+        /// returns the angle in radian between 0 and 180
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
         public static double GetAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             return Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
         }
 
+        /// <summary>
+        /// returns cos(theta)
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
         public static double GetCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
@@ -195,8 +209,8 @@ namespace IRI.Msh.Common.Analysis
             var ax = lastPoint.X - middlePoint.X;
             var ay = lastPoint.Y - middlePoint.Y;
 
-            var bx = firstPoint.X - middlePoint.X;
-            var by = firstPoint.Y - middlePoint.Y;
+            var bx = middlePoint.X - firstPoint.X;
+            var by = middlePoint.Y - firstPoint.Y;
 
             var dotProduct = ax * bx + ay * by;
 
@@ -225,6 +239,13 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
+        /// <summary>
+        /// return cos(theta)^2
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
         public static double CalculateSemiCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
@@ -236,8 +257,8 @@ namespace IRI.Msh.Common.Analysis
             var ax = lastPoint.X - middlePoint.X;
             var ay = lastPoint.Y - middlePoint.Y;
 
-            var bx = firstPoint.X - middlePoint.X;
-            var by = firstPoint.Y - middlePoint.Y;
+            var bx = middlePoint.X - firstPoint.X;
+            var by = middlePoint.Y - firstPoint.Y;
 
             var dotProduct = ax * bx + ay * by;
 

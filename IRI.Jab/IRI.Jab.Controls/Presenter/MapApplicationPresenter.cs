@@ -39,7 +39,7 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        public void Initialize(System.Windows.Window ownerWindow)
+        public virtual void Initialize(System.Windows.Window ownerWindow)
         {
             this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService(ownerWindow);
  

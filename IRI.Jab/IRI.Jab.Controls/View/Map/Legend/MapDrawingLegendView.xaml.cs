@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +20,7 @@ namespace IRI.Jab.Controls.View.Map
     /// <summary>
     /// Interaction logic for MapDrawingLegendView.xaml
     /// </summary>
-    public partial class MapDrawingLegendView : UserControl
+    public partial class MapDrawingLegendView : UserControl, INotifyPropertyChanged
     {
         public MapDrawingLegendView()
         {
@@ -29,12 +31,38 @@ namespace IRI.Jab.Controls.View.Map
         public string GroupName
         {
             get { return (string)GetValue(GroupNameProperty); }
-            set { SetValue(GroupNameProperty, value); }
+            set
+            {
+                SetValue(GroupNameProperty, value);
+                RaisePropertyChanged(nameof(ShowTools));
+            }
         }
 
         // Using a DependencyProperty as the backing store for GroupName.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty GroupNameProperty =
             DependencyProperty.Register(nameof(GroupName), typeof(string), typeof(MapDrawingLegendView), new PropertyMetadata("D"));
 
+
+
+        public bool ShowTools
+        {
+            get { return (bool)GetValue(ShowToolsProperty); }
+            set
+            {
+                SetValue(ShowToolsProperty, value);
+                RaisePropertyChanged(nameof(ShowTools));
+            }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowTools.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowToolsProperty =
+            DependencyProperty.Register(nameof(ShowTools), typeof(bool), typeof(MapDrawingLegendView), new PropertyMetadata(true));
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
