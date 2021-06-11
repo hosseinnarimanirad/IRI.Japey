@@ -14,13 +14,13 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 new LogisticGeometrySimplificationParameters()
                 {
-                    CosineOfAngle=0,
-                    SemiArea=100,
-                    SemiDistanceToNext=100,
-                    SemiDistanceToPrevious=100,
-                    SemiVerticalDistance=10 ,
-                    SquareCosineOfAngle=0,
-                    IsRetained=false
+                    CosineOfAngle = 0,
+                    SemiArea = 100,
+                    SemiDistanceToNext = 100,
+                    SemiDistanceToPrevious = 100,
+                    SemiVerticalDistance = 10,
+                    SquareCosineOfAngle = 0,
+                    IsRetained = false
                 }};
         }
     }

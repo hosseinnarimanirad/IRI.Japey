@@ -3,6 +3,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
@@ -1039,6 +1040,106 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
+        #region Wkt
+
+        public static Geometry<Point> Parse(string wktString, int srid)
+        {
+            return Wkt.WktParser.Parse(wktString, srid);
+        }
+
+        public string AsWkt()
+        {
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                    return FormattableString.Invariant($"POINT{this.ToWktPointArrayString()}");
+
+                case GeometryType.LineString:
+                    return FormattableString.Invariant($"LINESTRING{this.ToWktPointArrayString()}");
+
+                case GeometryType.Polygon:
+                    return FormattableString.Invariant($"POLYGON{this.ToWktPointArrayString()}");
+
+                case GeometryType.MultiPoint:
+                    return FormattableString.Invariant($"MULTIPOINT{this.ToWktPointArrayString()}");
+
+                case GeometryType.MultiLineString:
+                    return FormattableString.Invariant($"MULTILINESTRING{this.ToWktPointArrayString()}");
+
+                case GeometryType.MultiPolygon:
+                    return FormattableString.Invariant($"MULTIPOLYGON{this.ToWktPointArrayString()}");
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > ToWktPointArrayString");
+            }
+        }
+
+
+        private string ToWktPointArrayString()
+        {
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                    return FormattableString.Invariant($"({Points[0].X.ToInvariantString()} {Points[0].Y.ToInvariantString()})");
+
+                case GeometryType.LineString:
+                    return GetWktLineString(this.Points);
+
+                case GeometryType.Polygon:
+                case GeometryType.MultiPoint:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return GetWktLineStringForGeometry(this);
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > ToWktPointArrayString");
+            }
+        }
+
+        // polygon, multi point, multi linestring, multipolygon
+        private static string GetWktLineStringForGeometry(Geometry<T> geometry)
+        {
+            var items = geometry.Geometries.Select(g => g.ToWktPointArrayString());
+
+            StringBuilder result = new StringBuilder("(");
+
+            foreach (var ring in items)
+            {
+                result.Append(FormattableString.Invariant($"{ring},"));
+            }
+
+            result.Remove(result.Length - 1, 1);
+
+            result.Append(")");
+
+            return result.ToString();
+        }
+
+        private static string GetWktLineString(List<T> points)
+        {
+            StringBuilder builder = new StringBuilder("(");
+
+            foreach (var point in points)
+            {
+                builder.Append(FormattableString.Invariant($"{point.X} {point.Y},"));
+            }
+
+            builder.Remove(builder.Length - 1, 1);
+
+            builder.Append(")");
+
+            return builder.ToString();
+        }
+
+        #endregion
 
 
         #region Static Create
