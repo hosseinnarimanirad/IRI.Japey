@@ -752,6 +752,8 @@ namespace IRI.Jab.Common.Presenter.Map
         //public Func<ILayer, Task> RequestAddLayer;
         public Action<ILayer> RequestAddLayer;
 
+        public Func<Geometry<IRI.Msh.Common.Primitives.Point>, Geometry<IRI.Msh.Common.Primitives.Point>> RequestTransformScreenGeometryToWebMercatorGeometry;
+
         //public Action<string> RequestRemoveLayer;
 
         public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
@@ -1744,6 +1746,18 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestRemoveLayerByName?.Invoke(layerName);
         }
 
+
+        // 1400.03.23
+        /// <summary>
+        /// Add Screen Geometry as drawing item and returns map geometry
+        /// </summary>
+        /// <param name="screenGeometry"></param>
+        /// <returns></returns>
+        public Geometry<IRI.Msh.Common.Primitives.Point> TransformScreenGeometryToWebMercatorGeometry(Geometry<IRI.Msh.Common.Primitives.Point> screenGeometry)
+        {
+            return this.RequestTransformScreenGeometryToWebMercatorGeometry?.Invoke(screenGeometry);
+        }
+
         #endregion
 
 
@@ -2705,7 +2719,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _addShapefileToDrawingItemsCommand;
             }
         }
-
+         
 
         #endregion
 

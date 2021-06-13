@@ -75,5 +75,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             this.SemiVerticalDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }
+
+        public override string ToString()
+        {
+            return $"SemiDistanceToNext: {SemiDistanceToNext} \n SemiDistanceToPrevious: {SemiDistanceToPrevious} \n SemiArea: {SemiArea} \n SquareCosineOfAngle: {SquareCosineOfAngle} \n CosineOfAngle: {CosineOfAngle} \n SemiVerticalDistance: {SemiVerticalDistance}";
+        }
     }
 }

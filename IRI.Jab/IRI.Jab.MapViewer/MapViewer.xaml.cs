@@ -665,6 +665,13 @@ namespace IRI.Jab.MapViewer
                 this.AddLayer(l);
             };
 
+            presenter.RequestTransformScreenGeometryToWebMercatorGeometry = (screenGeo) =>
+            {
+                var mapGeo = screenGeo.Transform(p => ScreenToMap(p.AsWpfPoint()).AsPoint(), SridHelper.WebMercator);
+
+                return mapGeo;
+            };
+
             //presenter.RequestRemoveLayer = layerName => { this.RemoveLayer};
 
             //presenter.RequestRemoveLayer = (layer, forceRemove) =>

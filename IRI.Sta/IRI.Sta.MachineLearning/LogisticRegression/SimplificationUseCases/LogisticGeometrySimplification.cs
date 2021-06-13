@@ -73,7 +73,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             do
             {
-                if (isRingMode && lastIndex < startIndex)
+                if (!isRingMode && lastIndex <= startIndex)
                     break;
 
                 // نقطه حفظ شده
