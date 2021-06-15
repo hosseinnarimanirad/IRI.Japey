@@ -18,9 +18,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
+//using System.Windows;
 using System.Windows.Input;
-using static System.Windows.Media.Colors;
 using WpfPoint = System.Windows.Point;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
@@ -28,11 +27,12 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Service;
-using IRI.Msh.Common.Helpers;
-using System.Windows.Threading;
-using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+//using Geometry = IRI.Geometry<IRI.Point>;
 using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Model.GeoJson;
+
+using static System.Windows.Media.Colors;
+using static System.Windows.FrameworkElement;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -114,7 +114,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
                     {
-                        this.UpdateCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(l.X, l.Y));
+                        this.UpdateCurrentEditingPoint(new Point(l.X, l.Y));
                     };
 
                     _currentEditingLayer.RequestZoomToPoint = (p) =>
@@ -265,8 +265,8 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private IRI.Msh.Common.Primitives.Point _currentPoint;
-        public IRI.Msh.Common.Primitives.Point CurrentPoint
+        private Point _currentPoint;
+        public Point CurrentPoint
         {
             get { return _currentPoint; }
             set
@@ -494,7 +494,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox CurrentExtent
+        public BoundingBox CurrentExtent
         {
             get
             {
@@ -619,7 +619,7 @@ namespace IRI.Jab.Common.Presenter.Map
                       Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
                       return;
                   }
-                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new IRI.Msh.Common.Primitives.Point(param.X, param.Y));
+                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new Point(param.X, param.Y));
                   this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
 
               });
@@ -662,7 +662,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<int> RequestCurrentZoomLevel;
 
-        public Func<IRI.Msh.Common.Primitives.BoundingBox> RequestCurrentExtent;
+        public Func<BoundingBox> RequestCurrentExtent;
 
         public Action RequestRefresh;
 
@@ -674,11 +674,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<double> RequestZoomToScale;
 
-        public Action<IRI.Msh.Common.Primitives.Point, double> RequestZoomToPoint;
+        public Action<Point, double> RequestZoomToPoint;
 
-        public Action<IRI.Msh.Common.Primitives.Point, int, Action> RequestZoomToGoogleScale;
+        public Action<Point, int, Action> RequestZoomToGoogleScale;
 
-        public Action<IRI.Msh.Common.Primitives.BoundingBox, bool, Action> RequestZoomToExtent;
+        public Action<BoundingBox, bool, Action> RequestZoomToExtent;
 
         public Action<SqlGeometry> RequestZoomToFeature;
 
@@ -688,11 +688,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestPan;
 
-        public Action<IRI.Msh.Common.Primitives.Point, Action> RequestPanTo;
+        public Action<Point, Action> RequestPanTo;
 
-        public Action<int, IRI.Msh.Common.Primitives.Point, Action, bool> RequestZoomToLevelAndCenter;
+        public Action<int, Point, Action, bool> RequestZoomToLevelAndCenter;
 
-        public Action<MapOptionsEventArgs<FrameworkElement>> RequestRegisterMapOptions;
+        public Action<MapOptionsEventArgs<System.Windows.FrameworkElement>> RequestRegisterMapOptions;
 
         public Action RequestUnregisterMapOptions;
 
@@ -730,9 +730,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
 
-        public Action<List<IRI.Msh.Common.Primitives.Point>> RequestFlashPoints;
+        public Action<List<Point>> RequestFlashPoints;
 
-        public Action<IRI.Msh.Common.Primitives.Point> RequestFlashPoint;
+        public Action<Point> RequestFlashPoint;
 
 
         public Func<List<SqlGeometry>, VisualParameters, string, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
@@ -752,13 +752,13 @@ namespace IRI.Jab.Common.Presenter.Map
         //public Func<ILayer, Task> RequestAddLayer;
         public Action<ILayer> RequestAddLayer;
 
-        public Func<Geometry<IRI.Msh.Common.Primitives.Point>, Geometry<IRI.Msh.Common.Primitives.Point>> RequestTransformScreenGeometryToWebMercatorGeometry;
+        public Func<Geometry<Point>, Geometry<Point>> RequestTransformScreenGeometryToWebMercatorGeometry;
 
         //public Action<string> RequestRemoveLayer;
 
-        public Action<string, List<IRI.Msh.Common.Primitives.Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
+        public Action<string, List<Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
-        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry>>> RequestGetDrawingAsync;
+        public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry<Point>>>> RequestGetDrawingAsync;
 
         public Action RequestClearAll;
 
@@ -775,7 +775,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action OnRequestShowAboutMe;
 
         //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
-        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry>>> RequestMeasure;
+        public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry<Point>>>> RequestMeasure;
 
         //public Action RequestMeasureLength;
 
@@ -787,14 +787,14 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<IPoint> RequestAddPointToNewDrawing;
 
-        public Func<Geometry, EditableFeatureLayerOptions, Task<Response<Geometry>>> RequestEdit;
+        public Func<Geometry<Point>, EditableFeatureLayerOptions, Task<Response<Geometry<Point>>>> RequestEdit;
 
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
         public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
 
-        public Func<Task<Response<IRI.Msh.Common.Primitives.Point>>> RequestGetPoint;
+        public Func<Task<Response<Point>>> RequestGetPoint;
 
         public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
 
@@ -1029,7 +1029,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             if (enumerable?.Count() < 10 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
             {
-                FlashPoints(enumerable.Select(e => (IRI.Msh.Common.Primitives.Point)e.TheSqlGeometry.AsPoint()).ToList());
+                FlashPoints(enumerable.Select(e => (Point)e.TheSqlGeometry.AsPoint()).ToList());
                 //FlashSinglePoint?.Invoke(enumerable.First());
             }
             else
@@ -1044,7 +1044,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             if (point != null)
             {
-                FlashPoint(new Msh.Common.Primitives.Point(point.X, point.Y));
+                FlashPoint(new Point(point.X, point.Y));
             }
         }
 
@@ -1098,18 +1098,18 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        public void FlashPoints(List<IRI.Msh.Common.Primitives.Point> points)
+        public void FlashPoints(List<Point> points)
         {
             this.RequestFlashPoints?.Invoke(points);
         }
 
-        public void FlashPoint(IRI.Msh.Common.Primitives.Point point)
+        public void FlashPoint(Point point)
         {
             this.RequestFlashPoint?.Invoke(point);
         }
 
 
-        public ObservableCollection<System.Data.DataTable> Identify(IRI.Msh.Common.Primitives.Point arg)
+        public ObservableCollection<System.Data.DataTable> Identify(Point arg)
         {
             if (RequestIdentify != null)
             {
@@ -1134,7 +1134,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        public Task<Response<IRI.Msh.Common.Primitives.Point>> GetPoint()
+        public Task<Response<Point>> GetPoint()
         {
             if (RequestGetPoint != null)
             {
@@ -1142,7 +1142,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             else
             {
-                return new Task<Response<IRI.Msh.Common.Primitives.Point>>(() => new Response<Msh.Common.Primitives.Point>() { Result = IRI.Msh.Common.Primitives.Point.NaN, IsFailed = true });
+                return new Task<Response<Point>>(() => new Response<Point>() { Result = Point.NaN, IsFailed = true });
             }
         }
 
@@ -1203,12 +1203,17 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public void AddDrawingItem(Geometry<Msh.Common.Primitives.Point> drawing, string name = null, int id = int.MinValue, FeatureDataSource source = null)
+        public void AddDrawingItem(
+            Geometry<Point> drawing,
+            string name = null,
+            VisualParameters visualParameters = null,
+            int id = int.MinValue,
+            FeatureDataSource source = null)
         {
             if (drawing.IsNullOrEmpty())
                 return;
 
-            var shapeItem = MakeShapeItem(drawing, name ?? $"DRAWING {DrawingItems?.Count}", id, source);
+            var shapeItem = MakeShapeItem(drawing, name ?? $"DRAWING {DrawingItems?.Count}", visualParameters, id, source);
 
             if (shapeItem != null)
             {
@@ -1244,9 +1249,14 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        protected DrawingItemLayer MakeShapeItem(Geometry<Msh.Common.Primitives.Point> drawing, string name, int id = int.MinValue, FeatureDataSource source = null)
+        protected DrawingItemLayer MakeShapeItem(
+            Geometry<Point> drawing,
+            string name,
+            VisualParameters visualParameters = null,
+            int id = int.MinValue,
+            FeatureDataSource source = null)
         {
-            var shapeItem = new DrawingItemLayer(name, drawing, id, source);
+            var shapeItem = new DrawingItemLayer(name, drawing, visualParameters, id, source);
 
             //shapeItem.Title = name;
 
@@ -1288,11 +1298,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void SetMapCursorSet1()
         {
-            var zoomInCursor = new System.Windows.Input.Cursor(Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyPlusRightHanded.cur", UriKind.Relative)).Stream, false);
+            var zoomInCursor = new System.Windows.Input.Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyPlusRightHanded.cur", UriKind.Relative)).Stream, false);
             this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomInRectangle, zoomInCursor);
             this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomIn, zoomInCursor);
 
-            var zoomOutCursor = new System.Windows.Input.Cursor(Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyMinusRightHanded.cur", UriKind.Relative)).Stream, false);
+            var zoomOutCursor = new System.Windows.Input.Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyMinusRightHanded.cur", UriKind.Relative)).Stream, false);
             this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomOutRectangle, zoomOutCursor);
             this.SetDefaultCursor(IRI.Jab.Common.Model.MapAction.ZoomOut, zoomOutCursor);
         }
@@ -1381,7 +1391,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.MapAction = action;
         }
 
-        public void FireExtentChanged(IRI.Msh.Common.Primitives.BoundingBox currentExtent)
+        public void FireExtentChanged(BoundingBox currentExtent)
         {
             this.RaisePropertyChanged(nameof(CurrentExtent));
 
@@ -1390,7 +1400,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void FireMouseMove(WpfPoint currentPoint)
         {
-            this.CurrentPoint = new IRI.Msh.Common.Primitives.Point(currentPoint.X, currentPoint.Y);
+            this.CurrentPoint = new Point(currentPoint.X, currentPoint.Y);
 
             RaisePropertyChanged(nameof(CurrentPointInverseMapScale));
             RaisePropertyChanged(nameof(CurrentPointGroundResolution));
@@ -1418,11 +1428,11 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Editing***************************************************************
         #region Editing
 
-        public async Task<Response<Geometry>> EditAsync(Geometry geometry, EditableFeatureLayerOptions options)
+        public async Task<Response<Geometry<Point>>> EditAsync(Geometry<Point> geometry, EditableFeatureLayerOptions options)
         {
             //this.IsEditMode = true;
 
-            Response<Geometry> result = null;
+            Response<Geometry<Point>> result = null;
 
             options = options ?? this.MapSettings.EditingOptions;
 
@@ -1434,7 +1444,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             else
             {
-                result = await new Task<Response<Geometry>>(() => ResponseFactory.Create<Geometry>(null));
+                result = await new Task<Response<Geometry<Point>>>(() => ResponseFactory.Create<Geometry<Point>>(null));
             }
 
             //this.IsEditMode = false;
@@ -1442,11 +1452,11 @@ namespace IRI.Jab.Common.Presenter.Map
             return result;
         }
 
-        public Task<Response<Geometry>> EditAsync(List<IRI.Msh.Common.Primitives.Point> points, bool isClosed, int srid, EditableFeatureLayerOptions options = null)
+        public Task<Response<Geometry<Point>>> EditAsync(List<Point> points, bool isClosed, int srid, EditableFeatureLayerOptions options = null)
         {
             if (points == null || points.Count < 1)
             {
-                return new Task<Response<Geometry>>(null);
+                return new Task<Response<Geometry<Point>>>(null);
             }
 
             //1397.08.15.this is already done in EditAsync(geometry,options)
@@ -1455,7 +1465,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
 
-            Geometry geometry = new Geometry(points/*.ToArray()*/, type, srid);
+            Geometry<Point> geometry = new Geometry<Point>(points/*.ToArray()*/, type, srid);
 
             return EditAsync(geometry, options);
         }
@@ -1753,7 +1763,7 @@ namespace IRI.Jab.Common.Presenter.Map
         /// </summary>
         /// <param name="screenGeometry"></param>
         /// <returns></returns>
-        public Geometry<IRI.Msh.Common.Primitives.Point> TransformScreenGeometryToWebMercatorGeometry(Geometry<IRI.Msh.Common.Primitives.Point> screenGeometry)
+        public Geometry<Point> TransformScreenGeometryToWebMercatorGeometry(Geometry<Point> screenGeometry)
         {
             return this.RequestTransformScreenGeometryToWebMercatorGeometry?.Invoke(screenGeometry);
         }
@@ -1764,7 +1774,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************PolyBezier************************************************************
         #region PolyBezier
 
-        public void AddPolyBezierLayer(string name, List<IRI.Msh.Common.Primitives.Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
+        public void AddPolyBezierLayer(string name, List<Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
         {
             this.RequestAddPolyBezier?.Invoke(name, bezierPoints, symbol, showSymbolOnly, decorationVisuals);
         }
@@ -1792,7 +1802,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Zoom******************************************************************
         #region Zoom
 
-        public void ZoomToLevelAndCenter(int zoomLevel, IRI.Msh.Common.Primitives.Point centerMapPoint, Action callback = null, bool withAnimation = true)
+        public void ZoomToLevelAndCenter(int zoomLevel, Point centerMapPoint, Action callback = null, bool withAnimation = true)
         {
             this.RequestZoomToLevelAndCenter?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
         }
@@ -1822,17 +1832,17 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToScale?.Invoke(mapScale);
         }
 
-        public void Zoom(double mapScale, IRI.Msh.Common.Primitives.Point center)
+        public void Zoom(double mapScale, Point center)
         {
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleScale(int googleScale, IRI.Msh.Common.Primitives.Point mapCenter, Action callback)
+        public void ZoomToGoogleScale(int googleScale, Point mapCenter, Action callback)
         {
             this.RequestZoomToGoogleScale?.Invoke(mapCenter, googleScale, callback);
         }
 
-        public void ZoomToExtent(IRI.Msh.Common.Primitives.BoundingBox boundingBox, bool isExactExtent, Action callback = null)
+        public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, Action callback = null)
         {
             this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, callback);
         }
@@ -1853,12 +1863,12 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestPan?.Invoke();
         }
 
-        public void PanTo(IRI.Msh.Common.Primitives.Point point, Action callback)
+        public void PanTo(Point point, Action callback)
         {
             this.RequestPanTo?.Invoke(point, callback);
         }
 
-        public void PanToGeographicPoint(IRI.Msh.Common.Primitives.Point point, Action callback = null)
+        public void PanToGeographicPoint(Point point, Action callback = null)
         {
             var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 
@@ -1871,7 +1881,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Drawing***************************************************************
         #region Drawing
 
-        public async Task<Response<Geometry>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
+        public async Task<Response<Geometry<Point>>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = true)
         {
             //this.IsDrawMode = true;
 
@@ -1930,9 +1940,9 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************RightClickOptions*****************************************************
         #region RightClickOptions
 
-        protected void RegisterRightClickMapOptions(FrameworkElement view, ILocateable dataContext)
+        protected void RegisterRightClickMapOptions(System.Windows.FrameworkElement view, ILocateable dataContext)
         {
-            this.RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<FrameworkElement>(view, dataContext));
+            this.RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<System.Windows.FrameworkElement>(view, dataContext));
         }
 
         protected void UnregisterRightClickMapOptions()
@@ -1953,7 +1963,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Measure***************************************************************
         #region Measure
 
-        protected async Task<Response<Geometry>> Measure(DrawMode mode, Action action = null)
+        protected async Task<Response<Geometry<Point>>> Measure(DrawMode mode, Action action = null)
         {
             //this.IsMeasureMode = true;
             try
@@ -1984,7 +1994,7 @@ namespace IRI.Jab.Common.Presenter.Map
         #endregion
 
 
-        public void UpdateCurrentEditingPoint(IRI.Msh.Common.Primitives.Point webMercatorPoint)
+        public void UpdateCurrentEditingPoint(Point webMercatorPoint)
         {
             MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
         }
@@ -2098,7 +2108,14 @@ namespace IRI.Jab.Common.Presenter.Map
                     return;
                 }
 
-                var rasterLayer = new RasterLayer(dataSource, System.IO.Path.GetFileNameWithoutExtension(fileName), ScaleInterval.All, false, false, Visibility.Visible, .9);
+                var rasterLayer = new RasterLayer(
+                    dataSource,
+                    Path.GetFileNameWithoutExtension(fileName),
+                    ScaleInterval.All,
+                    false,
+                    false,
+                    System.Windows.Visibility.Visible,
+                    .9);
 
                 //this.SetLayer(rasterLayer);
 
@@ -2674,7 +2691,7 @@ namespace IRI.Jab.Common.Presenter.Map
                             return;
                         }
 
-                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                     });
                 }
 
@@ -2712,14 +2729,14 @@ namespace IRI.Jab.Common.Presenter.Map
                             return;
                         }
 
-                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), int.MinValue, dataSource);
+                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                     });
                 }
 
                 return _addShapefileToDrawingItemsCommand;
             }
         }
-         
+
 
         #endregion
 

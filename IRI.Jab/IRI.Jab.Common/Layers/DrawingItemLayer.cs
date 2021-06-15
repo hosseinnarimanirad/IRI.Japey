@@ -101,11 +101,16 @@ namespace IRI.Jab.Common
 
         public Guid HighlightGeometryKey { get; private set; }
 
-        internal DrawingItemLayer(string title, Geometry geometry, int id = int.MinValue, FeatureDataSource source = null)
+        internal DrawingItemLayer(
+            string title,
+            Geometry geometry,
+            VisualParameters visualParameters = null,
+            int id = int.MinValue,
+            FeatureDataSource source = null)
         {
             this.Extent = geometry.GetBoundingBox();
 
-            this.VisualParameters = VisualParameters.GetDefaultForDrawingItems();
+            this.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
 
             //this.VisualParameters.OnVisibilityChanged += (sender, e) => { this.RequestChangeVisibility?.Invoke(this); };
 
