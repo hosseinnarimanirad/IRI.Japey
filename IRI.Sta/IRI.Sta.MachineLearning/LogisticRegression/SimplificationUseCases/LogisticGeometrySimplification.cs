@@ -335,7 +335,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], /*zoomLevel,*/ toScreenMap);
 
                 // 1400.03.10
-                parameters.SemiArea += tempArea;
+                parameters.Area += tempArea;
 
                 if (IsRetained(parameters) == true)
                 {
@@ -353,7 +353,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     middleIndex = lastIndex;
 
                     // 1400.03.10
-                    tempArea = parameters.SemiArea;
+                    tempArea = parameters.Area;
                 }
             }
 

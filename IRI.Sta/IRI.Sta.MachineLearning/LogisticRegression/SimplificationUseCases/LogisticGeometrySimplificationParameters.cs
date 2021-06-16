@@ -10,17 +10,17 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
     {
         //public const int NumberOfFeatures = 4;
 
-        public double SemiDistanceToNext { get; set; }
+        public double SquareDistanceToNext { get; set; }
 
-        public double SemiDistanceToPrevious { get; set; }
+        public double SquareDistanceToPrevious { get; set; }
 
-        public double SemiArea { get; set; }
+        public double Area { get; set; }
 
         public double SquareCosineOfAngle { get; set; }
 
         public double CosineOfAngle { get; set; }
 
-        public double SemiVerticalDistance { get; set; }
+        public double VerticalSquareDistance { get; set; }
 
         //public int ZoomLevel { get; set; }
 
@@ -28,12 +28,12 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         {
             return new List<double>()
             {
-                SemiDistanceToNext,
-                SemiDistanceToPrevious,
-                SemiArea,
+                SquareDistanceToNext,
+                SquareDistanceToPrevious,
+                Area,
                 SquareCosineOfAngle,
                 CosineOfAngle,
-                SemiVerticalDistance
+                VerticalSquareDistance
             };
         }
 
@@ -63,22 +63,22 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //this.ZoomLevel = zoomLevel;
 
 
-            this.SemiDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
+            this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
 
-            this.SemiDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
+            this.SquareDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
 
-            this.SemiArea = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            this.SemiVerticalDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
+            this.VerticalSquareDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }
 
         public override string ToString()
         {
-            return $"SemiDistanceToNext: {SemiDistanceToNext} \n SemiDistanceToPrevious: {SemiDistanceToPrevious} \n SemiArea: {SemiArea} \n SquareCosineOfAngle: {SquareCosineOfAngle} \n CosineOfAngle: {CosineOfAngle} \n SemiVerticalDistance: {SemiVerticalDistance}";
+            return $"SemiDistanceToNext: {SquareDistanceToNext} \n SemiDistanceToPrevious: {SquareDistanceToPrevious} \n SemiArea: {Area} \n SquareCosineOfAngle: {SquareCosineOfAngle} \n CosineOfAngle: {CosineOfAngle} \n SemiVerticalDistance: {VerticalSquareDistance}";
         }
     }
 }

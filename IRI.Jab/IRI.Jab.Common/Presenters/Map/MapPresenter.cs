@@ -2670,6 +2670,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         var featureSet = GeoJsonFeatureSet.Load(fileName);
 
+                        if (featureSet.Features.IsNullOrEmpty())
+                            return;
+
                         var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
 
                         //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
