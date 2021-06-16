@@ -2700,6 +2700,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
+
         private RelayCommand _addShapefileToDrawingItemsCommand;
 
         public RelayCommand AddShapefileToDrawingItemsCommand
@@ -2737,6 +2738,24 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
+
+        private RelayCommand _removeAllDrawingItemsCommand;
+        public RelayCommand RemoveAllDrawingItemsCommand
+        {
+            get
+            {
+                if (_removeAllDrawingItemsCommand == null)
+                {
+                    _removeAllDrawingItemsCommand = new RelayCommand(param =>
+                    {
+                        RemoveAllDrawingItems();
+                    });
+                }
+
+                return _removeAllDrawingItemsCommand;
+            }
+        }
 
         #endregion
 

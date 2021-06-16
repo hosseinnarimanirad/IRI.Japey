@@ -44,11 +44,11 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         }
 
-        public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last, /*int zoomLevel, */Func<IPoint, IPoint> toScreenMap)
+        public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last, /*int zoomLevel, */Func<IPoint, IPoint> toScreenMap = null)
         {
-            var firstScreenPoint = toScreenMap(first);
-            var middleScreenPoint = toScreenMap(middle);
-            var lastScreenPoint = toScreenMap(last);
+            var firstScreenPoint = toScreenMap == null ? first : toScreenMap(first);
+            var middleScreenPoint = toScreenMap == null ? middle : toScreenMap(middle);
+            var lastScreenPoint = toScreenMap == null ? last : toScreenMap(last);
 
             //this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middle, last);
 

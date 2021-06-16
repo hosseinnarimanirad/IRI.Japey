@@ -23,9 +23,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
             List<T> originalPoints,
             List<T> simplifiedPoints,
+            bool isRingMode,
             //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap,
-            bool isRingMode) where T : IPoint
+            Func<IPoint, IPoint> toScreenMap = null) where T : IPoint
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
             {
@@ -164,7 +164,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             Func<IPoint, IPoint> toScreenMap,
             bool isRingMode) where T : IPoint
         {
-            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ toScreenMap, isRingMode);
+            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, toScreenMap);
 
             return Create(parameters);
         }
