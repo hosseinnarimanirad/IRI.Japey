@@ -672,6 +672,12 @@ namespace IRI.Jab.MapViewer
                 return mapGeo;
             };
 
+            //presenter.RequestChangeLayerZIndex = (layer, newZIndex) =>
+            //{
+            //    layer.ZIndex = newZIndex;
+            //    _layerManager.ChangeLayerZIndex(layer, newZIndex);
+            //};
+
             //presenter.RequestRemoveLayer = layerName => { this.RemoveLayer};
 
             //presenter.RequestRemoveLayer = (layer, forceRemove) =>

@@ -265,6 +265,21 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
+        private DrawingItemLayer _SelectedDrawingItem;
+        public DrawingItemLayer SelectedDrawingItem
+        {
+            get { return _SelectedDrawingItem; }
+            set
+            {
+                _SelectedDrawingItem = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(CanMoveDrawingItemDown));
+                RaisePropertyChanged(nameof(CanMoveDrawingItemUp));
+            }
+        }
+
+
+
         private Point _currentPoint;
         public Point CurrentPoint
         {
@@ -608,6 +623,13 @@ namespace IRI.Jab.Common.Presenter.Map
             //    {"OPENSTREETMAP", tileType => new OsmMapProvider(tileType) },
             //    {"WAZE", tileType => new WazeMapProvider(tileType) },
             //};
+
+            _drawingItems.CollectionChanged += (sender, e) =>
+            {
+                RaisePropertyChanged(nameof(CanMoveDrawingItemDown));
+                RaisePropertyChanged(nameof(CanMoveDrawingItemUp));
+            };
+
             this.MapProviders = TileMapProviderFactory.GetDefault();
 
             this.MapPanel = new MapPanelPresenter();
@@ -700,6 +722,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
 
         public Action RequestCopyCurrentLocationToClipboard;
+
+        //public Action<ILayer, int> RequestChangeLayerZIndex;
 
 
         //presenter.RequestRemoveLayer = (layer, forceRemove) =>
@@ -1152,6 +1176,41 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Drawing Items*********************************************************
         #region Drawing Items
 
+        //private (DrawingItemLayer layer, int index) TryGetSingleSelectedDrawingItem()
+        //{
+        //    var items = this.DrawingItems?.Select((d, index) => (item: d, index: index))?.Where(d => d.item.IsSelectedInToc)?.ToList();
+
+        //    if (items.Count != 1)
+        //    {
+        //        return (null, 0);
+        //    }
+
+        //    return items.First();
+        //}
+
+        public bool CanMoveDrawingItemUp
+        {
+            get
+            {
+                if (SelectedDrawingItem == null)
+                    return false;
+
+                return SelectedDrawingItem.IsSelectedInToc && this.DrawingItems.IndexOf(SelectedDrawingItem) > 0;
+            }
+        }
+
+        public bool CanMoveDrawingItemDown
+        {
+            get
+            {
+                if (SelectedDrawingItem == null)
+                    return false;
+
+                return SelectedDrawingItem.IsSelectedInToc && this.DrawingItems.IndexOf(SelectedDrawingItem) < this.DrawingItems.Count - 1;
+            }
+        }
+
+
         List<Func<DrawingItemLayer, ILegendCommand>> drawingItemCommands = null;
 
         public List<Func<DrawingItemLayer, ILegendCommand>> DrawingItemCommands
@@ -1231,6 +1290,21 @@ namespace IRI.Jab.Common.Presenter.Map
             this.AddLayer(item);
         }
 
+        public void InsertDrawingItem(int index, DrawingItemLayer item)
+        {
+            if (DrawingItems.Count < index)
+            {
+                this.DrawingItems.Add(item);
+            }
+            else
+            {
+                this.DrawingItems.Insert(index, item);
+            }
+
+            //this.AddLayer(item.AssociatedLayer);
+            this.AddLayer(item);
+        }
+
         public void RemoveDrawingItem(DrawingItemLayer item)
         {
             this.DrawingItems.Remove(item);
@@ -1258,8 +1332,19 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             var shapeItem = new DrawingItemLayer(name, drawing, visualParameters, id, source);
 
-            //shapeItem.Title = name;
 
+            shapeItem.OnIsSelectedInTocChanged += (sender, e) =>
+            {
+                if (shapeItem.IsSelectedInToc)
+                {
+                    this.SelectedDrawingItem = shapeItem;
+                }
+                else if (SelectedDrawingItem == shapeItem)
+                {
+                    this.SelectedDrawingItem = null;
+                }
+            };
+             
             TrySetCommandsForDrawingItemLayer(shapeItem);
 
             this.IsPanMode = true;
@@ -1267,8 +1352,92 @@ namespace IRI.Jab.Common.Presenter.Map
             return shapeItem;
         }
 
+        public void MoveDrawingItemDown()
+        {
+            //var item = TryGetSingleSelectedDrawingItem();
+
+            if (SelectedDrawingItem == null)
+            {
+                return;
+            }
+
+            var index = DrawingItems.IndexOf(SelectedDrawingItem);
+
+            var otherLayer = this.DrawingItems[index + 1];
+
+            ReorderDrawingItems(SelectedDrawingItem, otherLayer);
+        }
+
+        public void MoveDrawingItemUp()
+        {
+            //var item = TryGetSingleSelectedDrawingItem();
+
+            //if (item.layer == null)
+            //    return;
+
+            if (SelectedDrawingItem == null)
+            {
+                return;
+            }
+
+            var index = DrawingItems.IndexOf(SelectedDrawingItem);
+
+            var otherLayer = this.DrawingItems[index - 1];
+
+            ReorderDrawingItems(SelectedDrawingItem, otherLayer);
+        }
+
+        public void ReorderDrawingItems(DrawingItemLayer first, DrawingItemLayer second)
+        {
+            
+            var newFirstIndex = this.DrawingItems.IndexOf(second);
+
+            var newSecondIndex = this.DrawingItems.IndexOf(first);
+            
+            var tempZIndex = first.ZIndex;
+
+            first.ZIndex = second.ZIndex;
+
+            second.ZIndex = tempZIndex;
+
+            this.RemoveDrawingItem(first);
+
+            this.RemoveDrawingItem(second);
+
+            var newFirstLayer = MakeShapeItem(first.Geometry, first.LayerName, first.VisualParameters, first.Id, first.OriginalSource);
+
+            var newSecondLayer = MakeShapeItem(second.Geometry, second.LayerName, second.VisualParameters, second.Id, second.OriginalSource);
+
+            if (first.ZIndex < second.ZIndex)
+            {
+                this.InsertDrawingItem(newFirstIndex, newFirstLayer);
+
+                this.InsertDrawingItem(newSecondIndex, newSecondLayer);
+                //this.InsertDrawingItem(first.ZIndex, first);
+
+                //this.InsertDrawingItem(second.ZIndex, second);
+            }
+            else
+            {
+                this.InsertDrawingItem(newSecondIndex, newSecondLayer);
+
+                this.InsertDrawingItem(newFirstIndex, newFirstLayer);
+
+                //this.InsertDrawingItem(second.ZIndex, second);
+
+                //this.InsertDrawingItem(first.ZIndex, first);
+            }
+
+            //RaisePropertyChanged(nameof(CanMoveDrawingItemDown));
+            //RaisePropertyChanged(nameof(CanMoveDrawingItemUp));
+        }
+
         #endregion
 
+        //private void ChangeLayerZIndex(ILayer layer, int newZIndex)
+        //{
+        //    this.RequestChangeLayerZIndex?.Invoke(layer, newZIndex);
+        //}
 
         //*****************************************General***************************************************************
         #region General
@@ -1680,6 +1849,8 @@ namespace IRI.Jab.Common.Presenter.Map
             //        ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
             //    }
             //};
+
+
 
             if (layer.RequestChangeSymbology == null)
             {
@@ -2652,6 +2823,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         #endregion
 
+
         #region Drawing Items Commands
 
         private RelayCommand _addGeoJsonToDrawingItemsCommand;
@@ -2703,7 +2875,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-
         private RelayCommand _addShapefileToDrawingItemsCommand;
 
         public RelayCommand AddShapefileToDrawingItemsCommand
@@ -2742,7 +2913,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-
         private RelayCommand _removeAllDrawingItemsCommand;
         public RelayCommand RemoveAllDrawingItemsCommand
         {
@@ -2759,6 +2929,43 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _removeAllDrawingItemsCommand;
             }
         }
+
+
+        private RelayCommand _moveDrawingItemUpCommand;
+        public RelayCommand MoveDrawingItemUpCommand
+        {
+            get
+            {
+                if (_moveDrawingItemUpCommand == null)
+                {
+                    _moveDrawingItemUpCommand = new RelayCommand(param =>
+                    {
+                        MoveDrawingItemUp();
+                    });
+                }
+
+                return _moveDrawingItemUpCommand;
+            }
+        }
+
+
+        private RelayCommand _moveDrawingItemDownCommand;
+        public RelayCommand MoveDrawingItemDownCommand
+        {
+            get
+            {
+                if (_moveDrawingItemDownCommand == null)
+                {
+                    _moveDrawingItemDownCommand = new RelayCommand(param =>
+                    {
+                        MoveDrawingItemDown();
+                    });
+                }
+
+                return _moveDrawingItemDownCommand;
+            }
+        }
+
 
         #endregion
 

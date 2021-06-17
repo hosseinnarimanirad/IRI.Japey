@@ -194,6 +194,7 @@ namespace IRI.Jab.MapViewer
                                          .ThenBy(i => i.Type.HasFlag(LayerType.MoveableItem))
                                          .ThenBy(i => i.Type.HasFlag(LayerType.EditableItem))
                                          .ThenBy(i => i.Type.HasFlag(LayerType.Complex))
+                                         .ThenBy(e => e.Type.HasFlag(LayerType.Selection))
                                          .ThenBy(i => i.Type.HasFlag(LayerType.Drawing))
                                          .ThenByDescending(i => i.Type.HasFlag(LayerType.BaseMap))
                                          .ThenBy(i => i.ZIndex)
@@ -255,7 +256,7 @@ namespace IRI.Jab.MapViewer
         }
 
         internal void UpdateIsInRange(double inverseMapScale)
-        {            
+        {
             foreach (var layer in allLayers)
             {
                 layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
@@ -298,6 +299,10 @@ namespace IRI.Jab.MapViewer
 
         public Action<BaseLayer> RequestRefreshVisibility;
 
+        //internal void ChangeLayerZIndex(ILayer layer, int newZIndex)
+        //{
+
+        //}
     }
 
 
