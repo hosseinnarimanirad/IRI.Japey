@@ -321,40 +321,72 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             List<T> result = new List<T>();
 
+            // add first point automatically
             result.Add(points.First());
 
             int firstIndex = 0, middleIndex = 1, lastIndex = 2;
 
             // 1400.03.10
-            var tempArea = 0.0;
+            //var tempArea = 0.0;
 
-            for (int i = 2; i < points.Count; i++)
+            //for (int i = 2; i < points.Count; i++)
+            //{
+            //    lastIndex = i;
+
+            //    var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], /*zoomLevel,*/ toScreenMap);
+
+            //    // 1400.03.10
+            //    parameters.Area += tempArea;
+
+            //    if (IsRetained(parameters) == true)
+            //    {
+            //        result.Add(points[middleIndex]);
+
+            //        firstIndex = middleIndex;
+
+            //        middleIndex = lastIndex;
+
+            //        // 1400.03.10
+            //        tempArea = 0;
+            //    }
+            //    else
+            //    {
+            //        middleIndex = lastIndex;
+
+            //        // 1400.03.10
+            //        tempArea = parameters.Area;
+            //    }
+            //}
+
+            while (lastIndex < points.Count)
             {
-                lastIndex = i;
+                //middleIndex = firstIndex + 1;
+                middleIndex = lastIndex - 1;
 
-                var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], /*zoomLevel,*/ toScreenMap);
-
-                // 1400.03.10
-                parameters.Area += tempArea;
-
-                if (IsRetained(parameters) == true)
+                //while (middleIndex < lastIndex)
+                while (middleIndex > firstIndex)
                 {
-                    result.Add(points[middleIndex]);
+                    var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
 
-                    firstIndex = middleIndex;
+                    if (IsRetained(parameters) == true)
+                    {
+                        result.Add(points[middleIndex]);
+                        result.Add(points[lastIndex]);
 
-                    middleIndex = lastIndex;
+                        firstIndex = lastIndex;
+                        //middleIndex = lastIndex + 1;
+                        //lastIndex = lastIndex + 2;
 
-                    // 1400.03.10
-                    tempArea = 0;
+                        break;
+                    }
+                    else
+                    {
+                        //middleIndex++;
+                        middleIndex--;
+                    }
                 }
-                else
-                {
-                    middleIndex = lastIndex;
 
-                    // 1400.03.10
-                    tempArea = parameters.Area;
-                }
+                lastIndex++;
             }
 
             if (retain3Points && result.Count == 1)
