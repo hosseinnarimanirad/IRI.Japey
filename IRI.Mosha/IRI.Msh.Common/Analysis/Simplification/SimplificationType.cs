@@ -21,6 +21,14 @@ namespace IRI.Msh.Common.Analysis
 
         Visvalingam,
         DouglasPeucker,
-        Lang
+        Lang,
+
+        // 1400.05.11
+        // http://psimpl.sourceforge.net/reumann-witkam.html
+        Reumann_Witkam,
+
+        // 1400.05.11
+        // http://psimpl.sourceforge.net/perpendicular-distance.html
+        PerpendicularDistance,
     }
 }

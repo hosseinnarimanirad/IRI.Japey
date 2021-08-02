@@ -477,6 +477,15 @@ namespace IRI.Msh.Common.Primitives
                                         );
                     break;
 
+                case SimplificationType.Reumann_Witkam:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByReumannWitkam(pList, paramters);
+                    break;
+
+                case SimplificationType.PerpendicularDistance:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByPerpendicularDistance(pList, paramters);
+                    break;
+
+
                 default:
                     throw new NotImplementedException();
             }

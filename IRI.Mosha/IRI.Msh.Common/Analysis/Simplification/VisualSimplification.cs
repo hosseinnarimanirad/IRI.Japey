@@ -544,6 +544,101 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
+        // http://psimpl.sourceforge.net/reumann-witkam.html
+        public static List<T> SimplifyByReumannWitkam<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
+             
+            //1399.06.23
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+
+            result.Add(pointList[0]);
+
+            int startIndex = 0;
+
+            for (int i = 1; i < numberOfPoints - 1; i++)
+            {
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[startIndex], pointList[i], pointList[i + 1]);
+
+                if (semiPerpendicularDistance > effectiveThreshold)
+                {
+                    result.Add(pointList[i]);
+                    startIndex = i;
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(pointList[pointList.Count() / 2]);
+            }
+
+            result.Add(pointList.Last());
+
+            return result;
+        }
+
+
+        // 1400.05.11
+        // http://psimpl.sourceforge.net/perpendicular-distance.html
+        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            result.Add(points.First());
+
+            //1399.05.11
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+
+            for (int i = 0; i < points.Count - 2; i++)
+            {
+                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[i], points[i + 2], points[i + 1]);
+
+                if (perpendicularDistance > effectiveThreshold )
+                {
+                    result.Add(points[i + 1]);
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            result.Add(points.Last());
+
+            return result;
+        }
 
         #region Private Methods
 
