@@ -560,7 +560,7 @@ namespace IRI.Msh.Common.Analysis
             }
 
             var numberOfPoints = pointList.Count;
-             
+
             //1399.06.23
             //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
@@ -612,7 +612,7 @@ namespace IRI.Msh.Common.Analysis
 
             result.Add(points.First());
 
-            //1399.05.11
+            // 1400.05.11
             //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
@@ -624,7 +624,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 var perpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[i], points[i + 2], points[i + 1]);
 
-                if (perpendicularDistance > effectiveThreshold )
+                if (perpendicularDistance > effectiveThreshold)
                 {
                     result.Add(points[i + 1]);
                 }
@@ -639,6 +639,126 @@ namespace IRI.Msh.Common.Analysis
 
             return result;
         }
+
+
+        // 1400.05.20
+        public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            result.Add(points.First());
+
+            // 1400.05.20
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+
+            int startIndex = 0, middleIndex = 1, endIndex = 2;
+
+            while (endIndex < points.Count)
+            {
+                while (middleIndex < endIndex)
+                {
+                    var semiDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[startIndex], points[endIndex], points[middleIndex]);
+
+                    if (semiDistance > effectiveThreshold)
+                    {
+                        result.Add(points[middleIndex]);
+
+                        startIndex = middleIndex;
+                        middleIndex = startIndex + 1;
+                        // after breaking it will increment by 1 6 lines below
+                        endIndex = middleIndex;
+
+                        break;
+                    }
+
+                    middleIndex++;
+                }
+
+                endIndex++;
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            result.Add(points.Last());
+
+            return result;
+        }
+
+        // 1400.05.20
+        public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            result.Add(points.First());
+
+            // 1400.05.20
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+
+            int startIndex = 0, middleIndex = 1, endIndex = 2;
+
+            while (endIndex < points.Count)
+            {
+                while (middleIndex < endIndex)
+                {
+                    var semiDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[startIndex], points[endIndex], points[middleIndex]);
+
+                    if (semiDistance > effectiveThreshold)
+                    {
+                        result.Add(points[endIndex - 1]);
+
+                        startIndex = endIndex - 1;
+                        middleIndex = startIndex + 1;
+                        // after breaking it will increment by 1 6 lines below
+                        endIndex = middleIndex;
+
+                        break;
+                    }
+
+                    middleIndex++;
+                }
+
+                endIndex++;
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            result.Add(points.Last());
+
+            return result;
+        }
+
 
         #region Private Methods
 

@@ -485,6 +485,13 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByPerpendicularDistance(pList, paramters);
                     break;
 
+                case SimplificationType.NormalOpeningWindow:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByNormalOpeningWindow(pList, paramters);
+                    break;
+
+                case SimplificationType.BeforeOpeningWindow:
+                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByBeforeOpeningWindow(pList, paramters);
+                    break;
 
                 default:
                     throw new NotImplementedException();

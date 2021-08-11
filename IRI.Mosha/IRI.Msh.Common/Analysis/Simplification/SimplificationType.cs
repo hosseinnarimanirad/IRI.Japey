@@ -30,5 +30,11 @@ namespace IRI.Msh.Common.Analysis
         // 1400.05.11
         // http://psimpl.sourceforge.net/perpendicular-distance.html
         PerpendicularDistance,
+
+        // 1400.05.20
+        NormalOpeningWindow,
+
+        // 1400.05.20
+        BeforeOpeningWindow
     }
 }

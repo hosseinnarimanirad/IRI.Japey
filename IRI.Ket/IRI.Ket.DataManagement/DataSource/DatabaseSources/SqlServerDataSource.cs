@@ -205,7 +205,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 connection.Open();
 
-                List<SqlGeometry> geometries = new List<SqlGeometry>();
+                List<SqlGeometry> geometries = new List<SqlGeometry>();                
 
                 srid = (int)command.ExecuteScalar();
 
