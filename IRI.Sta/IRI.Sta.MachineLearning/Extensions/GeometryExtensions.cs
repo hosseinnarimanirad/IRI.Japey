@@ -19,9 +19,13 @@ namespace IRI.Ket.Common.Extensions
             bool retain3Poins)
             where T : IPoint, new()
         {
-            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, /*zoomLevel, */toScreenMap, retain3Poins);
+
+            //var newGeometry = geometry.Transform(t => (T)toScreenMap(t));
+
+            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, /*zoomLevel, *//*toScreenMap*/null, retain3Poins);
 
             return geometry.FilterPoints(filter);
+            //return newGeometry.FilterPoints(filter);
         }
 
         public static List<T> SimplifyByLogisticRegression<T>(

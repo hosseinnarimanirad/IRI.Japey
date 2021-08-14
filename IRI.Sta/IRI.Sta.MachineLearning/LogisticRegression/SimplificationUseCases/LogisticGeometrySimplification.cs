@@ -368,7 +368,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 {
                     var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
 
-                    if (IsRetained(parameters) == true)
+                    if (parameters.Area > LogisticGeometrySimplificationParameters.MinScreenAreaThreshold && 
+                        IsRetained(parameters) == true)
                     {
                         result.Add(points[middleIndex]);
                         result.Add(points[lastIndex]);
