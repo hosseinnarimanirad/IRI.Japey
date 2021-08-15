@@ -33,6 +33,7 @@ using IRI.Msh.Common.Model.GeoJson;
 
 using static System.Windows.Media.Colors;
 using static System.Windows.FrameworkElement;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -1344,7 +1345,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     this.SelectedDrawingItem = null;
                 }
             };
-             
+
             TrySetCommandsForDrawingItemLayer(shapeItem);
 
             this.IsPanMode = true;
@@ -1389,11 +1390,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void ReorderDrawingItems(DrawingItemLayer first, DrawingItemLayer second)
         {
-            
+
             var newFirstIndex = this.DrawingItems.IndexOf(second);
 
             var newSecondIndex = this.DrawingItems.IndexOf(first);
-            
+
             var tempZIndex = first.ZIndex;
 
             first.ZIndex = second.ZIndex;
@@ -2339,8 +2340,105 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 IsBusy = false;
             }
-
         }
+
+        /// <summary>
+        /// ستون اول و دوم طول و عرض جغرافیایی
+        /// باقی ستون‌ها هم اطلاعات توصیفی
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <returns></returns>
+        public virtual async Task AddCsvFile(object owner, bool isLongitudeFirst)
+        {
+            try
+            {
+                this.IsBusy = true;
+
+                var fileName = await this.DialogService.ShowOpenFileDialogAsync("CSV file (*.csv)|*.csv|Text file (*.txt)|*.txt", owner);
+
+                if (!File.Exists(fileName))
+                {
+                    this.IsBusy = false;
+
+                    return;
+                }
+
+                GeoJsonFeatureSet featureSet = IOHelper.CsvToPointGeoJson(fileName, false);
+
+                if (featureSet.Features.IsNullOrEmpty())
+                    return;
+
+                var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
+
+                //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
+                var dataSource = new MemoryDataSource<SqlFeature>(
+                    features,
+                    f => f.Label,
+                    null,
+                    f => f);
+
+                AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
+
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        /// <summary>
+        /// ستون اول و دوم طول و عرض جغرافیایی
+        /// باقی ستون‌ها هم اطلاعات توصیفی
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <param name="isLongitudeFirst"></param>
+        /// <returns></returns>
+        public virtual async Task AddTsvFile(object owner, bool isLongitudeFirst)
+        {
+            try
+            {
+                this.IsBusy = true;
+
+                var fileName = await this.DialogService.ShowOpenFileDialogAsync("TSV file (*.tsv)|*.tsv|Text file (*.txt)|*.txt", owner);
+
+                if (!File.Exists(fileName))
+                {
+                    this.IsBusy = false;
+
+                    return;
+                }
+
+                GeoJsonFeatureSet featureSet = IOHelper.TsvToPointGeoJson(fileName, false);
+
+                if (featureSet.Features.IsNullOrEmpty())
+                    return;
+
+                var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
+
+                //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
+                var dataSource = new MemoryDataSource<SqlFeature>(
+                    features,
+                    f => f.Label,
+                    null,
+                    f => f);
+
+                AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
+
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
 
         /// <summary>
         /// 
@@ -2550,6 +2648,38 @@ namespace IRI.Jab.Common.Presenter.Map
                 }
 
                 return _addZippedImagePyramidCommand;
+            }
+        }
+
+
+        private RelayCommand _addTsvCommand;
+
+        public RelayCommand AddTsvCommand
+        {
+            get
+            {
+                if (_addTsvCommand == null)
+                {
+                    _addTsvCommand = new RelayCommand(async param => { await AddTsvFile(param, true); });
+                }
+
+                return _addTsvCommand;
+            }
+        }
+
+
+        private RelayCommand _addCsvCommand;
+
+        public RelayCommand AddCsvCommand
+        {
+            get
+            {
+                if (_addCsvCommand == null)
+                {
+                    _addCsvCommand = new RelayCommand(async param => { await AddCsvFile(param, true); });
+                }
+
+                return _addCsvCommand;
             }
         }
 

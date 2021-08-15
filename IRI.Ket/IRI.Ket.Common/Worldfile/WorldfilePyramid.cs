@@ -59,7 +59,7 @@ namespace IRI.Ket.WorldfileFormat
 
                 ZipFile.CreateFromDirectory(outputDirectory, System.IO.Path.ChangeExtension(imageFileName, "pyrmd"));
 
-                Common.Helpers.IOHelper.DeleteDirectory(outputDirectory);
+                Sta.Common.Helpers.IOHelper.DeleteDirectory(outputDirectory);
             }
         }
 

@@ -41,8 +41,13 @@ namespace IRI.Msh.Common.Model.GeoJson
         }
 
         public int NumberOfPoints()
-        { 
+        {
             return 1;
+        }
+
+        public static GeoJsonPoint Create(double longitude, double latitude)
+        {
+            return new GeoJsonPoint() { Coordinates = new double[] { longitude, latitude }, Type = GeoJson.Point };
         }
     }
 

@@ -189,7 +189,7 @@ namespace IRI.Ket.WorldfileFormat
 
         public static string MakeAssociatedWorldfileName(string imageFileName)
         {
-            var extension = Common.Helpers.IOHelper.GetExtensionWithoutDot(imageFileName);
+            var extension = Sta.Common.Helpers.IOHelper.GetExtensionWithoutDot(imageFileName);
 
             return System.IO.Path.ChangeExtension(imageFileName, $"{extension}w");
         }

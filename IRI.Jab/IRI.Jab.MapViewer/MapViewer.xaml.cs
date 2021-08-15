@@ -926,7 +926,7 @@ namespace IRI.Jab.MapViewer
         {
             var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = ScaleInterval.All };
 
-            if (isCachEnabled && IOHelper.TryCreateDirectory(cacheDirectory))
+            if (isCachEnabled && Sta.Common.Helpers.IOHelper.TryCreateDirectory(cacheDirectory))
             {
                 layer.EnableCaching(cacheDirectory);
             }
