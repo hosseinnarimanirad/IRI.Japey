@@ -10,7 +10,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
     {
         //public const int NumberOfFeatures = 4;
 
-        public const double MinScreenAreaThreshold = 0.001;
+        public const double MinScreenAreaThreshold = 0.1;
 
         public double SquareDistanceToNext { get; set; }
 
@@ -66,10 +66,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            // 1400.05.23
-            // save performance
-            if (Area < MinScreenAreaThreshold)
-                return;
+            //// 1400.05.23
+            //// save performance
+            //if (Area < MinScreenAreaThreshold)
+            //    return;
 
             this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
 

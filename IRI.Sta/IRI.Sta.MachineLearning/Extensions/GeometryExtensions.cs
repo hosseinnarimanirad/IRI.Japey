@@ -22,7 +22,7 @@ namespace IRI.Ket.Common.Extensions
 
             //var newGeometry = geometry.Transform(t => (T)toScreenMap(t));
 
-            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, /*zoomLevel, *//*toScreenMap*/null, retain3Poins);
+            Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, /*zoomLevel, */toScreenMap, retain3Poins);
 
             return geometry.FilterPoints(filter);
             //return newGeometry.FilterPoints(filter);
