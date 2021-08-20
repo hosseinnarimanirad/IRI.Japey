@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Msh.Common.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,13 +7,13 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
     public class SampleTrainingData
     {
-        List<LogisticGeometrySimplificationParameters> zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters>();
+        List<LogisticGeometrySimplificationParameters<Point>> zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters<Point>>();
 
         public SampleTrainingData()
         {
-            zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters>()
+            zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters<Point>>()
             {
-                new LogisticGeometrySimplificationParameters()
+                new LogisticGeometrySimplificationParameters<Point>()
                 {
                     CosineOfAngle = 0,
                     Area = 100,

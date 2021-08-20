@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplificationTrainingData
+    public class LogisticGeometrySimplificationTrainingData<T> where T : IPoint
     {
         public int GetNumberOfFeatures()
         {
@@ -18,11 +19,11 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             return Records.First().GetSelectedFeatures().Count;
         }
 
-        public List<LogisticGeometrySimplificationParameters> Records { get; set; }
+        public List<LogisticGeometrySimplificationParameters<T>> Records { get; set; }
 
         public LogisticGeometrySimplificationTrainingData()
         {
-            Records = new List<LogisticGeometrySimplificationParameters>();
+            Records = new List<LogisticGeometrySimplificationParameters<T>>();
         }
 
         public void Save(string fileName)
@@ -32,11 +33,11 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             System.IO.File.WriteAllText(fileName, jsonString);
         }
 
-        public static LogisticGeometrySimplificationTrainingData Load(string fileName)
+        public static LogisticGeometrySimplificationTrainingData<Point> Load(string fileName)
         {
             var jsonString = System.IO.File.ReadAllText(fileName);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticGeometrySimplificationTrainingData>(jsonString);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticGeometrySimplificationTrainingData<Point>>(jsonString);
         }
     }
 }

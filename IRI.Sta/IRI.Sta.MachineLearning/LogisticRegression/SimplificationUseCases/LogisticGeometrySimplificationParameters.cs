@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplificationParameters
+    public class LogisticGeometrySimplificationParameters<T> where T : IPoint
     {
         //public const int NumberOfFeatures = 4;
 
@@ -46,7 +46,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         }
 
-        public LogisticGeometrySimplificationParameters(IPoint first, IPoint middle, IPoint last, /*int zoomLevel, */Func<IPoint, IPoint> toScreenMap = null)
+        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */Func<T, T> toScreenMap = null)
         {
             var firstScreenPoint = toScreenMap == null ? first : toScreenMap(first);
             var middleScreenPoint = toScreenMap == null ? middle : toScreenMap(middle);
@@ -66,18 +66,24 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            //// 1400.05.23
-            //// save performance
-            //if (Area < MinScreenAreaThreshold)
-            //    return;
+            // 1400.05.23
+            // save performance
+            if (Area < MinScreenAreaThreshold)
+                return;
 
             this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
 
             this.SquareDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
 
-            this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-
             this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+
+            //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.SquareCosineOfAngle = CosineOfAngle * CosineOfAngle;
+
+            //if (CosineOfAngle * CosineOfAngle != SquareCosineOfAngle)
+            //{
+
+            //}
 
             this.VerticalSquareDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }

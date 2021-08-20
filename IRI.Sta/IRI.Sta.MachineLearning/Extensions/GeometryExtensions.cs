@@ -13,9 +13,9 @@ namespace IRI.Ket.Common.Extensions
     {
         public static Geometry<T> Simplify<T>(
             this Geometry<T> geometry,
-            LogisticGeometrySimplification model,
+            LogisticGeometrySimplification<T> model,
             //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap,
+            Func<T, T> toScreenMap,
             bool retain3Poins)
             where T : IPoint, new()
         {
@@ -30,9 +30,9 @@ namespace IRI.Ket.Common.Extensions
 
         public static List<T> SimplifyByLogisticRegression<T>(
             this List<T> points,
-            LogisticGeometrySimplification model,
+            LogisticGeometrySimplification<T> model,
             //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap,
+            Func<T, T> toScreenMap,
             bool retain3Points = false) where T : IPoint
         {
             if (points.IsNullOrEmpty())

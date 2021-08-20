@@ -8,7 +8,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplification
+    public class LogisticGeometrySimplification<T> where T : IPoint
     {
         //private const int _numberOfFeatures = 3;
 
@@ -20,19 +20,19 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         }
 
         // ورودی این متد بایستی نقاط تمیز شده باشد
-        public static LogisticGeometrySimplificationTrainingData GenerateTrainingData<T>(
+        public static LogisticGeometrySimplificationTrainingData<T> GenerateTrainingData(
             List<T> originalPoints,
             List<T> simplifiedPoints,
             bool isRingMode,
             //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap = null) where T : IPoint
+            Func<T, T> toScreenMap = null)  
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
             {
-                return new LogisticGeometrySimplificationTrainingData();
+                return new LogisticGeometrySimplificationTrainingData<T>();
             }
 
-            List<LogisticGeometrySimplificationParameters> parameters = new List<LogisticGeometrySimplificationParameters>();
+            List<LogisticGeometrySimplificationParameters<T>> parameters = new List<LogisticGeometrySimplificationParameters<T>>();
 
             // ایجاد رکوردهای مثبت برای فایل ساده شده
             //for (int i = 0; i < simplifiedPoints.Count - 2; i++)
@@ -79,7 +79,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 // نقطه حفظ شده
                 if (indexMap.ContainsValue(middleIndex))
                 {
-                    parameters.Add(new LogisticGeometrySimplificationParameters(
+                    parameters.Add(new LogisticGeometrySimplificationParameters<T>(
                                            originalPoints[startIndex],
                                            originalPoints[middleIndex],
                                            originalPoints[lastIndex],
@@ -94,7 +94,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 // نقطه حذف نشده
                 else
                 {
-                    parameters.Add(new LogisticGeometrySimplificationParameters(
+                    parameters.Add(new LogisticGeometrySimplificationParameters<T>(
                                           originalPoints[startIndex],
                                           originalPoints[middleIndex],
                                           originalPoints[lastIndex],
@@ -110,10 +110,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             } while (middleIndex != indexMap.First().Value);
 
-            return new LogisticGeometrySimplificationTrainingData() { Records = parameters };
+            return new LogisticGeometrySimplificationTrainingData<T>() { Records = parameters };
         }
 
-        public static LogisticGeometrySimplification Create(LogisticGeometrySimplificationTrainingData trainingData)
+        public static LogisticGeometrySimplification<T> Create(LogisticGeometrySimplificationTrainingData<T> trainingData)
         {
             if (trainingData == null || trainingData.Records.IsNullOrEmpty())
             {
@@ -148,7 +148,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 yValues[i] = trainingData.Records[i].IsRetained ? 1 : 0;
             }
 
-            var result = new LogisticGeometrySimplification();
+            var result = new LogisticGeometrySimplification<T>();
 
             result._regression = new LogisticRegression(new LogisticRegressionOptions() { RegularizationMethod = RegularizationMethods.L2 });
 
@@ -157,12 +157,12 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             return result;
         }
 
-        public static LogisticGeometrySimplification Create<T>(
+        public static LogisticGeometrySimplification<T> Create(
             List<T> originalPoints,
             List<T> simplifiedPoints,
             //int zoomLevel,
-            Func<IPoint, IPoint> toScreenMap,
-            bool isRingMode) where T : IPoint
+            Func<T, T> toScreenMap,
+            bool isRingMode) 
         {
             var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, toScreenMap);
 
@@ -273,7 +273,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
         //    return new LogisticGeometrySimplificationTrainingData() { Records = parameters };
         //}
 
-        private bool? IsRetained(LogisticGeometrySimplificationParameters parameters)
+        private bool? IsRetained(LogisticGeometrySimplificationParameters<T> parameters)
         {
             // 1400.03.20
             //List<double> xValues = new List<double>
@@ -308,7 +308,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             }
         }
 
-        public List<T> SimplifyByLogisticRegression<T>(List<T> points, /*int zoomLevel, */Func<IPoint, IPoint> toScreenMap, bool retain3Points = false) where T : IPoint
+        public List<T> SimplifyByLogisticRegression(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)  
         {
             if (points == null || points.Count == 0)
             {
@@ -366,9 +366,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 //while (middleIndex < lastIndex)
                 while (middleIndex > firstIndex)
                 {
-                    var parameters = new LogisticGeometrySimplificationParameters(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
+                    var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
 
-                    if (parameters.Area < LogisticGeometrySimplificationParameters.MinScreenAreaThreshold)
+                    if (parameters.Area < LogisticGeometrySimplificationParameters<T>.MinScreenAreaThreshold)
                         break;
 
                     if (IsRetained(parameters) == true)

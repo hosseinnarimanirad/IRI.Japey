@@ -821,10 +821,24 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<Task<Response<Point>>> RequestGetPoint;
 
-        public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
+        //public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
+
+        public Func<System.Windows.Media.Matrix> RequestGetToScreenMapMatrix;
+
 
         #endregion
 
+        public Func<Point, Point> CreateToScreenMapFunc()
+        {
+            var matrix = RequestGetToScreenMapMatrix?.Invoke();
+
+            var m11 = matrix.Value.M11;
+            var m12 = matrix.Value.M12;
+            var m21 = matrix.Value.M21;
+            var m22 = matrix.Value.M22;
+
+            return p => new Point(m11 * p.X + m12 * p.Y + matrix.Value.OffsetX, m21 * p.X + m22 * p.Y + matrix.Value.OffsetY);
+        }
 
         //*****************************************Map Providers & TileServices***********************************************
         #region Map Providers & TileServices            
