@@ -25,7 +25,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<T> simplifiedPoints,
             bool isRingMode,
             //int zoomLevel,
-            Func<T, T> toScreenMap = null)  
+            Func<T, T> toScreenMap = null)
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
             {
@@ -131,7 +131,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             for (int i = 0; i < trainingData.Records.Count; i++)
             {
                 // 1400.03.20
-                var features = trainingData.Records[i].GetSelectedFeatures();
+                var features = trainingData.Records[i].FeatureValues;
                 //
                 for (int j = 0; j < numberOfFeatures; j++)
                 {
@@ -162,7 +162,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<T> simplifiedPoints,
             //int zoomLevel,
             Func<T, T> toScreenMap,
-            bool isRingMode) 
+            bool isRingMode)
         {
             var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, toScreenMap);
 
@@ -288,7 +288,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //    //parameters.CosineOfAngle
             //};
 
-            List<double> xValues = parameters.GetSelectedFeatures();
+            List<double> xValues = parameters.FeatureValues;
 
             var result = _regression.Predict(xValues);
 
@@ -308,7 +308,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             }
         }
 
-        public List<T> SimplifyByLogisticRegression(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)  
+        public List<T> SimplifyByLogisticRegression(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)
         {
             if (points == null || points.Count == 0)
             {
@@ -320,6 +320,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             }
 
             List<T> result = new List<T>();
+
+            var screenPoints = points.Select(p => toScreenMap(p)).ToList();
 
             // add first point automatically
             result.Add(points.First());
@@ -358,6 +360,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //    }
             //}
 
+            //var steps = 1;
+
             while (lastIndex < points.Count)
             {
                 //middleIndex = firstIndex + 1;
@@ -366,9 +370,14 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 //while (middleIndex < lastIndex)
                 while (middleIndex > firstIndex)
                 {
-                    var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
+                    // 1400.06.04
+                    // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
+                    var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], null);
 
-                    if (parameters.Area < LogisticGeometrySimplificationParameters<T>.MinScreenAreaThreshold)
+                    if (parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
+                        && (lastIndex - middleIndex) > 10
+                        //&& (lastIndex - middleIndex) > (steps)
+                        )
                         break;
 
                     if (IsRetained(parameters) == true)

@@ -699,7 +699,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<Point, double> RequestZoomToPoint;
 
-        public Action<Point, int, Action> RequestZoomToGoogleScale;
+        public Action<int, Point, Action> RequestZoomAndCenterToGoogleZoomLevel;
+
+        public Action<int> RequestZoomToGoogleZoomLevel;
 
         public Action<BoundingBox, bool, Action> RequestZoomToExtent;
 
@@ -2023,9 +2025,14 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleScale(int googleScale, Point mapCenter, Action callback)
+        public void ZoomToGoogleZoomLevel(int googleZoomLevel)
         {
-            this.RequestZoomToGoogleScale?.Invoke(mapCenter, googleScale, callback);
+            this.RequestZoomToGoogleZoomLevel?.Invoke(googleZoomLevel);
+        }
+
+        public void ZoomToGoogleScale(int googleZoomLevel, Point mapCenter, Action callback)
+        {
+            this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(googleZoomLevel, mapCenter, callback);
         }
 
         public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, Action callback = null)

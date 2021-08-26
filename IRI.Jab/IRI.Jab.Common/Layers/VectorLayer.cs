@@ -854,6 +854,15 @@ namespace IRI.Jab.Common
             }
         }
 
+        public static Func<sb.Point, sb.Point> CreateMapToScreenMapFunc(sb.BoundingBox mapExtent, double screenWidth, double screenHeight) 
+        {
+            double xScale = screenWidth / mapExtent.Width;
+            double yScale = screenHeight / mapExtent.Height;
+            double scale = xScale > yScale ? yScale : xScale;
+
+            return new Func<sb.Point, sb.Point>(p => new sb.Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        }
+          
         public async Task<System.Drawing.Bitmap> ParseToBitmapImage(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
         {
             var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);

@@ -1,5 +1,7 @@
 ﻿using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Primitives;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,11 +12,14 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
     {
         //public const int NumberOfFeatures = 4;
 
-        public const double MinScreenAreaThreshold = 0.1;
-
-        public double SquareDistanceToNext { get; set; }
+        /// <summary>
+        /// in screen scale
+        /// </summary>
+        public const double MinVerticalSquareDistanceThreshold = 0.1;
 
         public double SquareDistanceToPrevious { get; set; }
+
+        public double SquareDistanceToNext { get; set; }
 
         public double Area { get; set; }
 
@@ -24,68 +29,97 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public double VerticalSquareDistance { get; set; }
 
-        //public int ZoomLevel { get; set; }
+        [JsonIgnore]
+        public LogisticGeometrySimplificationFeatures Features { get; private set; }
 
-        public List<double> GetSelectedFeatures()
+        [JsonIgnore]
+        private List<double> _featureValues;
+
+        [JsonIgnore]
+        public List<double> FeatureValues
         {
-            return new List<double>()
+            get
             {
-                SquareDistanceToNext,
-                SquareDistanceToPrevious,
-                Area,
-                SquareCosineOfAngle,
-                CosineOfAngle,
-                VerticalSquareDistance
-            };
+                if (_featureValues.IsNullOrEmpty())
+                    InitFeatureValues();
+
+                return _featureValues;
+            }
+        }
+
+        private void InitFeatureValues()
+        {
+            List<double> result = new List<double>();
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.Area))
+                result.Add(this.Area);
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToNext))
+                result.Add(this.SquareDistanceToNext);
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious))
+                result.Add(this.SquareDistanceToPrevious);
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.CosineOfAngle))
+                result.Add(this.CosineOfAngle);
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareCosineOfAngle))
+                result.Add(this.SquareCosineOfAngle);
+
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.VerticalSquareDistance))
+                result.Add(this.VerticalSquareDistance);
+
+            _featureValues = result;
         }
 
         public bool IsRetained { get; set; }
 
         public LogisticGeometrySimplificationParameters()
         {
+            Features =
+                LogisticGeometrySimplificationFeatures.VerticalSquareDistance |
+                LogisticGeometrySimplificationFeatures.SquareDistanceToNext |
+                LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious;//|
+                //LogisticGeometrySimplificationFeatures.Area;
+            //LogisticGeometrySimplificationFeatures.CosineOfAngle,
+            //LogisticGeometrySimplificationFeatures.SquareCosineOfAngle
 
+            //FeatureValues = new List<double>()
+            //{
+            //    VerticalSquareDistance,
+            //    SquareDistanceToNext,
+            //    SquareDistanceToPrevious,
+            //    //Area,
+            //    //CosineOfAngle,
+            //    //SquareCosineOfAngle,
+            //};
         }
 
-        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */Func<T, T> toScreenMap = null)
+        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */Func<T, T> toScreenMap = null) : this()
         {
             var firstScreenPoint = toScreenMap == null ? first : toScreenMap(first);
             var middleScreenPoint = toScreenMap == null ? middle : toScreenMap(middle);
             var lastScreenPoint = toScreenMap == null ? last : toScreenMap(last);
 
-            //this.SemiDistanceToNext = SpatialUtility.GetSemiDistance(middle, last);
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.Area))
+                this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            //this.SemiDistanceToPrevious = SpatialUtility.GetSemiDistance(middle, first);
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToNext))
+                this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
 
-            //this.SemiArea = SpatialUtility.CalculateUnsignedTriangleArea(first, middle, last);
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious))
+                this.SquareDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
 
-            //this.SemiCosineOfAngle = SpatialUtility.CalculateSemiCosineOfAngle(first, middle, last);
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.CosineOfAngle))
+                this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            //this.SemiVerticalDistance = SpatialUtility.SemiPointToLineSegmentDistance(first, middle, last);
 
-            //this.ZoomLevel = zoomLevel;
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareCosineOfAngle))
+                //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+                this.SquareCosineOfAngle = CosineOfAngle * CosineOfAngle;
 
-            this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-
-            // 1400.05.23
-            // save performance
-            if (Area < MinScreenAreaThreshold)
-                return;
-
-            this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
-
-            this.SquareDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
-
-            this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-
-            //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-            this.SquareCosineOfAngle = CosineOfAngle * CosineOfAngle;
-
-            //if (CosineOfAngle * CosineOfAngle != SquareCosineOfAngle)
-            //{
-
-            //}
-
-            this.VerticalSquareDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
+            if (Features.HasFlag(LogisticGeometrySimplificationFeatures.VerticalSquareDistance))
+                this.VerticalSquareDistance = SpatialUtility.GetPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
         }
 
         public override string ToString()

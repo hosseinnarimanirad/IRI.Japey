@@ -259,8 +259,8 @@ namespace IRI.Ket.Common.Helpers
 
             Bitmap result = new Bitmap(originalImage.Width, originalImage.Height);
 
-            double differentPixels = 0;
-            double equalNonWhitePixels = 0;
+            double differentPixels = 0.0;
+            double equalNonWhitePixels = 0.0;
 
             var whiteColor = Color.White.ToArgb();
 

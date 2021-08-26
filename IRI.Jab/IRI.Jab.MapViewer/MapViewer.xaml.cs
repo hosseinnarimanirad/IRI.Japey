@@ -597,7 +597,9 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
 
-            presenter.RequestZoomToGoogleScale = (mapCenter, googleScale, callback) => this.ZoomToGoogleScale(googleScale, mapCenter, callback);
+            presenter.RequestZoomAndCenterToGoogleZoomLevel = (googleZoomLevel, mapCenter, callback) => this.ZoomAndCenterToGoogleZoomLevel(googleZoomLevel, mapCenter, callback);
+
+            presenter.RequestZoomToGoogleZoomLevel = googleZoomLevel => this.ZoomToGoogleZoomLevel(googleZoomLevel);
 
             presenter.RequestRegisterMapOptions = (arg) => { this.RegisterRightClickContextOptions(arg.View, arg.DataContext); };
 
@@ -3798,7 +3800,7 @@ namespace IRI.Jab.MapViewer
 
                 var mapCenter = mapBoundingBox.GetCenter().AsPoint();
 
-                var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+                var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
 
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
 
@@ -3989,7 +3991,7 @@ namespace IRI.Jab.MapViewer
             return googleZoomLevel;
         }
 
-        public void ZoomToGoogleScale(int googleZoomLevel)
+        public void ZoomToGoogleZoomLevel(int googleZoomLevel)
         {
             //if (googleZoomLevel < 1 || googleZoomLevel > 23)
             //{
@@ -3999,14 +4001,14 @@ namespace IRI.Jab.MapViewer
             Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), CurrentExtentCenterInWgs84?.Y));
         }
 
-        public void ZoomToGoogleScale(int googleZoomLevel, sb.Point mapCenter, Action callback)
+        public void ZoomAndCenterToGoogleZoomLevel(int googleZoomLevel, sb.Point mapCenter, Action callback)
         {
             //if (googleZoomLevel < 1 || googleZoomLevel > 23)
             //{
             //    return;
             //}
 
-            var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+            var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
 
             ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), wgs84Center?.Y), mapCenter, callback);
         }

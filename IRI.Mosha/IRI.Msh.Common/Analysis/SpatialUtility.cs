@@ -10,7 +10,7 @@ namespace IRI.Msh.Common.Analysis
     public class SpatialUtility
     {
         /// <summary>
-        /// return square (^2) of the distance between two
+        /// return square (^2) of the Euclidian distance between two
         /// </summary>
         /// <param name="first"></param>
         /// <param name="second"></param>
@@ -24,6 +24,16 @@ namespace IRI.Msh.Common.Analysis
             return dx * dx + dy * dy;
         }
 
+        /// <summary>
+        /// Euclidian distance
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static double GetDistance(IPoint first, IPoint second)
+        {
+            return Math.Sqrt(GetSquareDistance(first, second));
+        }
 
         #region Area
 
@@ -185,7 +195,7 @@ namespace IRI.Msh.Common.Analysis
 
         #region Angle
 
-        
+
         /// <summary>
         /// returns the angle in desired mode between 0 and 180
         /// </summary>
