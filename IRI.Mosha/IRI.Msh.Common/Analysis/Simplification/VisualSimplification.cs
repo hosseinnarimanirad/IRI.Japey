@@ -567,20 +567,23 @@ namespace IRI.Msh.Common.Analysis
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
             //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
 
             result.Add(pointList[0]);
 
             int startIndex = 0;
 
-            for (int i = 1; i < numberOfPoints - 1; i++)
+            int middleIndex = 1;
+
+            for (int i = 2; i < numberOfPoints; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[startIndex], pointList[i], pointList[i + 1]);
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
 
                 if (semiPerpendicularDistance > effectiveThreshold)
                 {
-                    result.Add(pointList[i]);
-                    startIndex = i;
+                    result.Add(pointList[i - 1]);
+                    startIndex = i - 1;
+                    middleIndex = i;
                 }
             }
 
@@ -597,6 +600,8 @@ namespace IRI.Msh.Common.Analysis
 
         // 1400.05.11
         // http://psimpl.sourceforge.net/perpendicular-distance.html
+        // Ekdemir, S., Efficient Implementation of Polyline Simplification for Large Datasets and Usability Evaluation.
+        // Master’s thesis, Uppsala University, Department of Information Technology, 2011
         public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
             if (points == null || points.Count == 0)
@@ -612,21 +617,39 @@ namespace IRI.Msh.Common.Analysis
 
             result.Add(points.First());
 
+
+            // 1400.06.05
+            // استفاده از مقدار توان دوم در مقایسه مشکل‌ساز
+            // نخواهد بود چون در هر حال تابع توان دوم هم 
+            // اکیدا صعودی است و توان دوم هیچ مقداری از توان
+            // دوم مقدار کم‌تر از خودش، بیش‌تر نخواهد شد. اما
+            // برای این‌که مقایسه سرعت درست انجام شود
+            // استفاده از توان دوم متوقف شد.
+
             // 1400.05.11
             //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
+
             //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
 
             for (int i = 0; i < points.Count - 2; i++)
             {
-                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[i], points[i + 2], points[i + 1]);
+                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(points[i], points[i + 2], points[i + 1]);
 
                 if (perpendicularDistance > effectiveThreshold)
-                {
                     result.Add(points[i + 1]);
+
+                // 1400.06.05
+                // نقطه حذف شده به عنوان نقطه شروع استفاده نمی‌شود
+                // این روش در بهترین حالت ۵۰ درصد فشرده سازی ایجاد 
+                // می کند
+                else
+                {
+                    result.Add(points[i + 2]);
+                    i++;
                 }
             }
 
@@ -635,7 +658,10 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            result.Add(points.Last());
+            if (result.Last().DistanceTo(points.Last()) != 0)
+            {
+                result.Add(points.Last());
+            }
 
             return result;
         }
@@ -662,7 +688,7 @@ namespace IRI.Msh.Common.Analysis
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
-            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
 
             int startIndex = 0, middleIndex = 1, endIndex = 2;
 
@@ -670,7 +696,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 while (middleIndex < endIndex)
                 {
-                    var semiDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[startIndex], points[endIndex], points[middleIndex]);
+                    var semiDistance = SpatialUtility.GetPointToLineSegmentDistance(points[startIndex], points[endIndex], points[middleIndex]);
 
                     if (semiDistance > effectiveThreshold)
                     {
@@ -678,6 +704,7 @@ namespace IRI.Msh.Common.Analysis
 
                         startIndex = middleIndex;
                         middleIndex = startIndex + 1;
+
                         // after breaking it will increment by 1 6 lines below
                         endIndex = middleIndex;
 
@@ -688,6 +715,7 @@ namespace IRI.Msh.Common.Analysis
                 }
 
                 endIndex++;
+                middleIndex = startIndex + 1;
             }
 
             if (parameters.Retain3Points && result.Count == 1)
@@ -695,8 +723,11 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            result.Add(points.Last());
-
+            if (result.Last().DistanceTo(points.Last()) != 0)
+            {
+                result.Add(points.Last());
+            }
+ 
             return result;
         }
 
@@ -737,6 +768,7 @@ namespace IRI.Msh.Common.Analysis
 
                         startIndex = endIndex - 1;
                         middleIndex = startIndex + 1;
+
                         // after breaking it will increment by 1 6 lines below
                         endIndex = middleIndex;
 
@@ -747,6 +779,7 @@ namespace IRI.Msh.Common.Analysis
                 }
 
                 endIndex++;
+                middleIndex = startIndex + 1;
             }
 
             if (parameters.Retain3Points && result.Count == 1)
@@ -754,8 +787,11 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            result.Add(points.Last());
-
+            if (result.Last().DistanceTo(points.Last()) != 0)
+            {
+                result.Add(points.Last());
+            }
+ 
             return result;
         }
 
