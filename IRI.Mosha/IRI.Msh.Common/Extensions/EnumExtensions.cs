@@ -115,6 +115,15 @@ namespace IRI.Msh.Common.Extensions
         //{
         //    return Enum.GetValues(value.GetType()).Cast<Enum>().ToDictionary(p => Convert.ToInt32(p), q => ToDisplay(q));
         //}
+
+
+        public static T ConvertToFlag<T>(this IEnumerable<T> flags) where T : struct, IConvertible
+        {
+            if (!typeof(T).IsEnum)
+                throw new NotSupportedException($"{typeof(T).ToString()} must be an enumerated type");
+
+            return (T)(object)flags.Cast<int>().Aggregate(0, (c, n) => c |= n);
+        }
     }
 
 
