@@ -87,14 +87,14 @@ namespace IRI.Msh.Common.Extensions
         }
 
 
-        public static IEnumerable<T> GetEnumFlags<T>(this T input) where T : struct
+        public static IEnumerable<T> GetEnumFlags<T>(this T value) where T : struct
         {
             if (!typeof(T).IsEnum)
                 throw new NotSupportedException();
 
-            foreach (var value in Enum.GetValues(input.GetType()))
-                if ((input as Enum).HasFlag(value as Enum))
-                    yield return (T)value;
+            foreach (var enumItem in Enum.GetValues(value.GetType()))
+                if ((value as Enum).HasFlag(enumItem as Enum))
+                    yield return (T)enumItem;
         }
 
         //public static string ToDisplay(this Enum value, DisplayProperty property = DisplayProperty.Name)
@@ -124,6 +124,7 @@ namespace IRI.Msh.Common.Extensions
 
             return (T)(object)flags.Cast<int>().Aggregate(0, (c, n) => c |= n);
         }
+         
     }
 
 

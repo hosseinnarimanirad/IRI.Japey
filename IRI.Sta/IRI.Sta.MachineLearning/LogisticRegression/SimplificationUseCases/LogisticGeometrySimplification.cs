@@ -12,6 +12,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
     {
         //private const int _numberOfFeatures = 3;
 
+        private LogisticGeometrySimplificationFeatures _features;
+
         private LogisticRegression _regression;
 
         private LogisticGeometrySimplification()
@@ -25,6 +27,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<T> simplifiedPoints,
             bool isRingMode,
             //int zoomLevel,
+            LogisticGeometrySimplificationFeatures features,
             Func<T, T> toScreenMap = null)
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
@@ -84,9 +87,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                                            originalPoints[middleIndex],
                                            originalPoints[lastIndex],
                                            /*zoomLevel,*/
+                                           features,
                                            toScreenMap)
                     {
-                        IsRetained = true
+                        IsRetained = true,
                     });
 
                     startIndex = middleIndex;
@@ -99,9 +103,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                                           originalPoints[middleIndex],
                                           originalPoints[lastIndex],
                                           /*zoomLevel,*/
+                                          features,
                                           toScreenMap)
                     {
-                        IsRetained = false
+                        IsRetained = false,
                     });
                 }
 
@@ -154,6 +159,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             result._regression.Fit(xValues, yValues);
 
+            result._features = trainingData.Records.First().Features;
+
             return result;
         }
 
@@ -162,9 +169,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<T> simplifiedPoints,
             //int zoomLevel,
             Func<T, T> toScreenMap,
-            bool isRingMode)
+            bool isRingMode,
+            LogisticGeometrySimplificationFeatures features)
         {
-            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, toScreenMap);
+            var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, features, toScreenMap);
 
             return Create(parameters);
         }
@@ -372,13 +380,16 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 {
                     // 1400.06.04
                     // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
-                    var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], null);
+                    var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
 
+                    // 1400.06.06
                     if (parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
-                        && (lastIndex - middleIndex) > 10
-                        //&& (lastIndex - middleIndex) > (steps)
+                        //&& (lastIndex - middleIndex) > 10
                         )
-                        break;
+                    {
+                        middleIndex--;
+                        continue;
+                    }
 
                     if (IsRetained(parameters) == true)
                     {

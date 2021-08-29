@@ -29,8 +29,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public double VerticalSquareDistance { get; set; }
 
-        [JsonIgnore]
-        public LogisticGeometrySimplificationFeatures Features { get; private set; }
+        public LogisticGeometrySimplificationFeatures Features { get; set; }
 
         [JsonIgnore]
         private List<double> _featureValues;
@@ -76,13 +75,16 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         public LogisticGeometrySimplificationParameters()
         {
-            Features =
-                LogisticGeometrySimplificationFeatures.VerticalSquareDistance |
-                LogisticGeometrySimplificationFeatures.SquareDistanceToNext |
-                LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious;//|
-                //LogisticGeometrySimplificationFeatures.Area;
-            //LogisticGeometrySimplificationFeatures.CosineOfAngle,
-            //LogisticGeometrySimplificationFeatures.SquareCosineOfAngle
+            if (Features == 0)
+            {
+                Features =
+                   LogisticGeometrySimplificationFeatures.VerticalSquareDistance |
+                   LogisticGeometrySimplificationFeatures.SquareDistanceToNext |
+                   LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious |
+                   LogisticGeometrySimplificationFeatures.Area |
+                   LogisticGeometrySimplificationFeatures.CosineOfAngle |
+                   LogisticGeometrySimplificationFeatures.SquareCosineOfAngle;
+            }
 
             //FeatureValues = new List<double>()
             //{
@@ -95,20 +97,22 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //};
         }
 
-        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */Func<T, T> toScreenMap = null) : this()
+        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */LogisticGeometrySimplificationFeatures features, Func<T, T> toScreenMap = null) : this()
         {
             var firstScreenPoint = toScreenMap == null ? first : toScreenMap(first);
             var middleScreenPoint = toScreenMap == null ? middle : toScreenMap(middle);
             var lastScreenPoint = toScreenMap == null ? last : toScreenMap(last);
 
+            this.Features = features;
+
             if (Features.HasFlag(LogisticGeometrySimplificationFeatures.Area))
                 this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToNext))
-                this.SquareDistanceToNext = SpatialUtility.GetSquareDistance(middleScreenPoint, lastScreenPoint);
+                this.SquareDistanceToNext = SpatialUtility.GetDistance(middleScreenPoint, lastScreenPoint);
 
             if (Features.HasFlag(LogisticGeometrySimplificationFeatures.SquareDistanceToPrevious))
-                this.SquareDistanceToPrevious = SpatialUtility.GetSquareDistance(middleScreenPoint, firstScreenPoint);
+                this.SquareDistanceToPrevious = SpatialUtility.GetDistance(middleScreenPoint, firstScreenPoint);
 
             if (Features.HasFlag(LogisticGeometrySimplificationFeatures.CosineOfAngle))
                 this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
