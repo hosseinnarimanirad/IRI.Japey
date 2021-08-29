@@ -383,12 +383,16 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
 
                     // 1400.06.06
-                    if (parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
-                        //&& (lastIndex - middleIndex) > 10
+                    if (
+                        parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
+                        &&
+                        (lastIndex - middleIndex) > 5
                         )
                     {
-                        middleIndex--;
-                        continue;
+                        break;
+
+                        //middleIndex--;
+                        //continue;
                     }
 
                     if (IsRetained(parameters) == true)

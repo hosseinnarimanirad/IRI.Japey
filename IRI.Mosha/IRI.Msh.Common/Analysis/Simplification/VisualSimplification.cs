@@ -445,11 +445,11 @@ namespace IRI.Msh.Common.Analysis
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
             //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
 
             for (int i = 1; i < numberOfPoints - 1; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
 
                 if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
                 {
@@ -501,7 +501,7 @@ namespace IRI.Msh.Common.Analysis
             //روش باعث می‌شود در محاسبات از تابع جذر استفاده
             //نشود
             //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.AreaThreshold.Value * parameters.AreaThreshold.Value;
+            double effectiveThreshold = parameters.AreaThreshold.Value /** parameters.AreaThreshold.Value*/;
 
             int startIndex = 0;
 
@@ -524,7 +524,7 @@ namespace IRI.Msh.Common.Analysis
                     continue;
                 }
 
-                if (AnySemiPerpendicularDistanceExceedTolerance(pointList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(), effectiveThreshold))
+                if (AnyPerpendicularDistanceExceedTolerance(pointList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(), effectiveThreshold))
                 {
                     endIndex--;
                 }
@@ -752,7 +752,7 @@ namespace IRI.Msh.Common.Analysis
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
             //نشود
-            double effectiveThreshold = parameters.DistanceThreshold.Value * parameters.DistanceThreshold.Value;
+            double effectiveThreshold = parameters.DistanceThreshold.Value/* * parameters.DistanceThreshold.Value*/;
 
             int startIndex = 0, middleIndex = 1, endIndex = 2;
 
@@ -760,7 +760,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 while (middleIndex < endIndex)
                 {
-                    var semiDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(points[startIndex], points[endIndex], points[middleIndex]);
+                    var semiDistance = SpatialUtility.GetPointToLineSegmentDistance(points[startIndex], points[endIndex], points[middleIndex]);
 
                     if (semiDistance > effectiveThreshold)
                     {
@@ -833,11 +833,11 @@ namespace IRI.Msh.Common.Analysis
         //    return result;
         //}
 
-        private static bool AnySemiPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint
+        private static bool AnyPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint
         {
             for (int i = 1; i < pointList.Count - 1; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentSquareDistance(pointList[0], pointList[pointList.Count - 1], pointList[i]);
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[pointList.Count - 1], pointList[i]);
 
                 if (semiPerpendicularDistance >= threshold)
                 {
