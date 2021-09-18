@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.Common.Ogc;
+using IRI.Msh.CoordinateSystem;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -35,6 +36,53 @@ namespace IRI.Msh.Common.Primitives
                 Math.Sqrt((firstPoint.X - secondPoint.X) * (firstPoint.X - secondPoint.X) +
                     (firstPoint.Y - secondPoint.Y) * (firstPoint.Y - secondPoint.Y));
         }
+
+        // https://medium.com/swlh/calculating-the-distance-between-two-points-on-earth-bac5cd50c840
+        // https://www.movable-type.co.uk/scripts/latlong.html
+        // https://stormconsultancy.co.uk/blog/storm-news/the-haversine-formula-in-c-and-sql/
+        // https://social.msdn.microsoft.com/Forums/sqlserver/en-US/6a0cc084-5056-4f97-9978-a5f88cb57d0f/stdistance-vs-doing-the-math-manually?forum=sqlspatial
+        // https://stackoverflow.com/questions/42237521/sql-server-geography-stdistance-function-is-returning-big-difference-than-other
+        // https://stackoverflow.com/questions/27708490/haversine-formula-definition-for-sql
+        public static double SphericalDistance(IPoint firstPoint, IPoint secondPoint)
+        {
+            //var radius = 6371008.8; // in meters
+
+            //var radius = 6368045.28;
+            //var radius = 6367538.5803727582
+
+            var radius = (Ellipsoids.WGS84.SemiMajorAxis.Value + Ellipsoids.WGS84.SemiMinorAxis.Value) / 2.0;
+
+            //            Haversine
+            //formula: 	a = sin²(Δφ / 2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ / 2)
+            //c = 2 ⋅ atan2( √a, √(1−a) )
+            //d = R ⋅ c
+            var phi1 = firstPoint.Y * Math.PI / 180.0;
+
+            var phi2 = secondPoint.Y * Math.PI / 180.0;
+
+            var a = Ellipsoids.WGS84.SemiMajorAxis.Value;
+            var b = Ellipsoids.WGS84.SemiMinorAxis.Value;
+            var meanPhi = (phi1 + phi2) / 2.0;
+            var newR = Math.Sqrt(a * a * Math.Cos(meanPhi) * Math.Cos(meanPhi) + b * b * Math.Sin(meanPhi) * Math.Sin(meanPhi));
+
+            var deltaPhi = (secondPoint.Y - firstPoint.Y) * Math.PI / 180.0;
+
+            var deltaLambda = (secondPoint.X - firstPoint.X) * Math.PI / 180.0;
+
+            //var temp = radius * Math.Acos(Math.Cos(phi1) * Math.Cos(phi2) * Math.Cos(deltaLambda) + Math.Sin(phi1) * Math.Sin(phi2)); //72092.799646276282
+
+            var haversine = Math.Sin(deltaPhi / 2.0) * Math.Sin(deltaPhi / 2.0) +
+                            Math.Cos(phi1) * Math.Cos(phi2) * Math.Sin(deltaLambda / 2.0) * Math.Sin(deltaLambda / 2.0);
+
+            var c = 2.0 * Math.Atan2(Math.Sqrt(haversine), Math.Sqrt(1 - haversine));
+
+            //var c2 = 2.0 * Math.Asin(Math.Min(1, Math.Sqrt(haversine)));
+            //var t3 = radius * c2;
+
+            return newR * c; // in meters
+        }
+
+
 
         public static double GetDistance(Point first, Point second)
         {
