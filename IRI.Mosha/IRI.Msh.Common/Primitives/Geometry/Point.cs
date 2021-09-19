@@ -43,6 +43,7 @@ namespace IRI.Msh.Common.Primitives
         // https://social.msdn.microsoft.com/Forums/sqlserver/en-US/6a0cc084-5056-4f97-9978-a5f88cb57d0f/stdistance-vs-doing-the-math-manually?forum=sqlspatial
         // https://stackoverflow.com/questions/42237521/sql-server-geography-stdistance-function-is-returning-big-difference-than-other
         // https://stackoverflow.com/questions/27708490/haversine-formula-definition-for-sql
+        // https://medium.com/swlh/calculating-the-distance-between-two-points-on-earth-bac5cd50c840
         public static double SphericalDistance(IPoint firstPoint, IPoint secondPoint)
         {
             //var radius = 6371008.8; // in meters

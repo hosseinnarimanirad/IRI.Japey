@@ -1683,7 +1683,9 @@ namespace IRI.Msh.Common.Primitives
                             if (this.Type == GeometryType.LineString)
                                 this.Type = GeometryType.MultiLineString;
                             else if (this.Type == GeometryType.Polygon)
-                                this.Type = GeometryType.MultiPolygon;
+                                // 1400.06.28
+                                //this.Type = GeometryType.MultiPolygon;
+                                this.Type = GeometryType.Polygon;
 
                             break;
 
