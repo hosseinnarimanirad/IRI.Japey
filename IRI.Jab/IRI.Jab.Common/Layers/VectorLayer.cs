@@ -868,7 +868,7 @@ namespace IRI.Jab.Common
             var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
 
             if (geoLabledPairs.Geometries == null)
-                return null;
+                return new System.Drawing.Bitmap((int)imageWidth, (int)imageHeight); ;
 
             var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
 

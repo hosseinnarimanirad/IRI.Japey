@@ -139,8 +139,10 @@ namespace IRI.Msh.Common.Analysis
             {
                 //result[n - 2] = CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]);
                 result.Add(GetUnsignedTriangleArea(points.ElementAt(n - 2), points.ElementAt(n - 1), points.ElementAt(0)));
-            }
 
+                result.Add(GetUnsignedTriangleArea(points.ElementAt(n - 1), points.ElementAt(0), points.ElementAt(1)));
+            }
+              
             return result;
         }
 
