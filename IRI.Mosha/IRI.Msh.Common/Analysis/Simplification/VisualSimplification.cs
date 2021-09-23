@@ -360,7 +360,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
         public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, SimplificationParamters parameters, bool isRing/*, double threshold, bool isRing, bool retain3Points = false*/) where T : IPoint
         {
-            if (pointList == null || pointList.Count < 3)
+            if (pointList == null || pointList.Count <= 3)
             {
                 return pointList;
             }
@@ -369,8 +369,21 @@ namespace IRI.Msh.Common.Analysis
 
             List<T> pList = pointList.ToList();
 
+            //var areas2 = SpatialUtility.GetPrimitiveAreas(pointList, isRing);
+            //List<T> pList2 = pointList.ToList();
+
             while (areas.Count > 0)
             {
+                //if (!areas.SequenceEqual(areas2))
+                //{
+
+                //}
+
+                //if (!pList.SequenceEqual(pList2))
+                //{
+
+                //}
+
                 var minArea = Statistics.Statistics.GetMin(areas);
 
                 if (minArea > parameters.AreaThreshold)
@@ -378,6 +391,8 @@ namespace IRI.Msh.Common.Analysis
 
                 var pointCount = pList.Count;
                 var areaCount = areas.Count;
+
+                //double a1=0, a2=0;
 
                 //remove min areas
                 for (int i = areas.Count - 1; i >= 0; i--)
@@ -390,29 +405,23 @@ namespace IRI.Msh.Common.Analysis
                             var firstIndex = i - 1 < 0 ? pointCount - 1 : i - 1;
 
                             areas[firstIndex] = SpatialUtility.GetUnsignedTriangleArea(pList[firstIndex], pList[i], pList[(i + 2) % pointCount]);
+
+                            //a1 = areas[firstIndex];
                         }
 
                         if (isRing || i < areas.Count - 1)
                         {
                             // (i, i+2, i+3): i is used insted of i+1 because i+1 is going to be removed
-                            areas[(i + 1) % areaCount] = SpatialUtility.GetUnsignedTriangleArea(pList[i], pList[(i + 2) % pointCount], pointList[(i + 3) % pointCount]);
+                            areas[(i + 1) % areaCount] = SpatialUtility.GetUnsignedTriangleArea(pList[i], pList[(i + 2) % pointCount], pList[(i + 3) % pointCount]);
+
+                            //a2 = areas[(i + 1) % areaCount];
                         }
 
                         ////recalculate adjacent areas
                         //if (i > 0)
                         //{
-                        //    if (isRing && i > pList.Count - 3)
-                        //    {
-
-                        //    }
                         //    areas[i - 1] = SpatialUtility.GetUnsignedTriangleArea(pList[i - 1], pList[i], pList[i + 2]);
                         //}
-                        //else if (isRing && i == 0)
-                        //{
-                        //    // last point, first point, third point (at index 1 because of remove)
-                        //    areas[areas.Count - 1] = SpatialUtility.GetUnsignedTriangleArea(pList[areas.Count - 1], pList[0], pList[1]);
-                        //}
-
                         //if (i < areas.Count - 1)
                         //{
                         //    areas[i] = SpatialUtility.GetUnsignedTriangleArea(pList[i], pList[i + 1], pList[i + 2]);
@@ -425,6 +434,38 @@ namespace IRI.Msh.Common.Analysis
                     }
 
                 }
+
+                //for (int i = areas2.Count - 1; i >= 0; i--)
+                //{
+                //    if (areas2[i] == minArea)
+                //    {
+                //        pList2.RemoveAt((i + 1));
+                //        areas2.RemoveAt(i);
+
+                //        ////recalculate adjacent areas
+                //        if (i > 0)
+                //        {
+                //            areas2[i - 1] = SpatialUtility.GetUnsignedTriangleArea(pList2[i - 1], pList2[i], pList2[i + 1]);
+
+                //            if (areas2[i - 1] != a1)
+                //            {
+
+                //            }
+                //        }
+                //        if (i < areas2.Count - 1)
+                //        {
+                //            areas2[i] = SpatialUtility.GetUnsignedTriangleArea(pList2[i], pList2[i + 1], pList2[i + 2]);
+
+                //            if (areas2[i] != a2)
+                //            {
+
+                //            }
+                //        }
+
+                //        break;
+                //    }
+
+                //}
             }
 
             if (parameters.Retain3Points && pList.Count == 2)
