@@ -308,7 +308,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 }
 
                 //return Math.Round(result.Value) == 1;
-                return result.Value > 0.45;
+                return result.Value > 0.5;
             }
             else
             {
@@ -384,8 +384,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
                     // 1400.06.06
                     if (
-                        parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
-                        &&
+                        //parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
+                        //&&
                         (lastIndex - middleIndex) > 5
                         )
                     {
@@ -415,6 +415,57 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
                 lastIndex++;
             }
+
+            if (retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            result.Add(points.Last());
+
+            return result;
+        }
+
+
+        public List<T> SimplifyByLogisticRegression_Fast_O_n(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            var screenPoints = points.Select(p => toScreenMap(p)).ToList();
+
+            // add first point automatically
+            result.Add(points.First());
+
+            int firstIndex = 0, middleIndex = 1, lastIndex = 2;
+
+            while (lastIndex < points.Count)
+            {
+                //middleIndex = firstIndex + 1;
+                middleIndex = lastIndex - 1;
+
+                var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
+
+                if (IsRetained(parameters) == true)
+                {
+                    result.Add(points[middleIndex]);
+                    result.Add(points[lastIndex]);
+
+                    firstIndex = lastIndex;
+                    lastIndex++;
+                }
+             
+                lastIndex++;
+            }
+
 
             if (retain3Points && result.Count == 1)
             {
