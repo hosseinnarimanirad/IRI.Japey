@@ -18,7 +18,9 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             var features = Records.First().Features;
 
-            return Enum.GetValues(typeof(LogisticGeometrySimplificationFeatures)).Cast<LogisticGeometrySimplificationFeatures>().Count(e => features.HasFlag(e));
+            return features.Count;
+
+            //return Enum.GetValues(typeof(LogisticGeometrySimplificationFeatures)).Cast<LogisticGeometrySimplificationFeatures>().Count(e => features.HasFlag(e));
 
             //return Records.First().fea.Count;
         }

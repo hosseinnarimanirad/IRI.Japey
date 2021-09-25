@@ -12,7 +12,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
     {
         //private const int _numberOfFeatures = 3;
 
-        private LogisticGeometrySimplificationFeatures _features;
+        private List<LogisticGeometrySimplificationFeatures> _features;
 
         private LogisticRegression _regression;
 
@@ -27,7 +27,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             List<T> simplifiedPoints,
             bool isRingMode,
             //int zoomLevel,
-            LogisticGeometrySimplificationFeatures features,
+            List<LogisticGeometrySimplificationFeatures> features,
             Func<T, T> toScreenMap = null)
         {
             if (originalPoints.IsNullOrEmpty() || simplifiedPoints.IsNullOrEmpty())
@@ -170,7 +170,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //int zoomLevel,
             Func<T, T> toScreenMap,
             bool isRingMode,
-            LogisticGeometrySimplificationFeatures features)
+            List<LogisticGeometrySimplificationFeatures> features)
         {
             var parameters = GenerateTrainingData(originalPoints, simplifiedPoints, /*zoomLevel,*/ isRingMode, features, toScreenMap);
 

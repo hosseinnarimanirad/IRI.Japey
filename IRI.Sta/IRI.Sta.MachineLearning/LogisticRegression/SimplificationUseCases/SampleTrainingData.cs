@@ -17,12 +17,18 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 {
                     CosineOfAngle = 0,
                     Area = 100,
-                    SquareDistanceToNext = 100,
-                    SquareDistanceToPrevious = 100,
-                    VerticalSquareDistance = 10,
+                    DistanceToNext = 100,
+                    DistanceToPrevious = 100,
+                    VerticalDistance = 10,
                     SquareCosineOfAngle = 0,
                     IsRetained = false
                 }};
+        }
+
+        public IEnumerable<LogisticGeometrySimplificationParameters<Point>> Get()
+        {
+            //"100 100, 200 100.5, 300 100"
+            yield return new LogisticGeometrySimplificationParameters<Point>() {   };
         }
     }
 }
