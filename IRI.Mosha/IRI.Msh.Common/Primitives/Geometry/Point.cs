@@ -37,6 +37,13 @@ namespace IRI.Msh.Common.Primitives
                     (firstPoint.Y - secondPoint.Y) * (firstPoint.Y - secondPoint.Y));
         }
 
+        public static Point FromPolar(double radius, double angleInRadian)
+        {
+            return new Point(
+                radius * Math.Cos(angleInRadian), 
+                radius * Math.Sin(angleInRadian));
+        }
+
         // https://medium.com/swlh/calculating-the-distance-between-two-points-on-earth-bac5cd50c840
         // https://www.movable-type.co.uk/scripts/latlong.html
         // https://stormconsultancy.co.uk/blog/storm-news/the-haversine-formula-in-c-and-sql/

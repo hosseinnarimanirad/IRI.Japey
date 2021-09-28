@@ -40,7 +40,7 @@ namespace IRI.Sta.MachineLearning
             this.xStatistics = xStatistics;
         }
 
-        public void Fit(Matrix xValues, double[] yValues)
+        public void Fit(Matrix xValues, double[] yValues, bool normalizeFeatures = true)
         {
             // x: n*p
             // y: n*1
@@ -57,12 +57,19 @@ namespace IRI.Sta.MachineLearning
             beta = Enumerable.Repeat(1.0, numberOfParameters).ToArray();
 
 
-            // 1399.12.20
-            // *******************************************************
-            // ذخیره‌سازی پارامترها برای استفاده 
-            // هنگام تخمین
-            // *******************************************************
-            xStatistics = xValues.GetStatisticsByColumns();
+            if (normalizeFeatures)
+            {
+                // 1399.12.20
+                // *******************************************************
+                // ذخیره‌سازی پارامترها برای استفاده 
+                // هنگام تخمین
+                // *******************************************************
+                xStatistics = xValues.GetStatisticsByColumns();
+            }
+            else
+            {
+                xStatistics = null;
+            }
 
             //// 1399.12.27
             //// *******************************************************
@@ -83,11 +90,14 @@ namespace IRI.Sta.MachineLearning
             // *******************************************************
             //xStatistics = xValues.GetStatisticsByColumns();
 
-            // *******************************************************
-            // پیش پردازش داده
-            // نرمال کردن داده‌ها
-            // *******************************************************
-            xValues = Normalization.NormalizeColumnsUsingZScore(xValues, this._options.VarianceCalculationMode);
+            if (normalizeFeatures)
+            {
+                // *******************************************************
+                // پیش پردازش داده
+                // نرمال کردن داده‌ها
+                // *******************************************************
+                xValues = Normalization.NormalizeColumnsUsingZScore(xValues, this._options.VarianceCalculationMode);
+            }
 
             //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(0)));
             //System.Diagnostics.Debug.WriteLine(string.Join(",", xValues.GetColumn(1)));
@@ -105,8 +115,10 @@ namespace IRI.Sta.MachineLearning
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
             xValues.InsertColumn(0, ones);
 
-            xStatistics.Insert(0, new BasicStatisticsInfo() { Mean = 1, StandardDeviation = 0 });
-
+            if (normalizeFeatures)
+            {
+                xStatistics.Insert(0, new BasicStatisticsInfo() { Mean = 1, StandardDeviation = 0 });
+            }
 
             while (iteration < _maxIteration)
             {
@@ -183,7 +195,6 @@ namespace IRI.Sta.MachineLearning
             }
 
             System.Diagnostics.Debug.WriteLine(string.Join(",", beta));
-
         }
 
         public double? Predict(List<double> xValues)
@@ -194,17 +205,20 @@ namespace IRI.Sta.MachineLearning
             // 1400.03.14
             xValues.Insert(0, 1);
 
-            // *******************************************************
-            // پیش پردازش داده
-            // نرمال کردن داده‌ها
-            //
-            // 1400.03.10
-            // ستون اول چون مقادیر ۱ هستند
-            // نیازی به نرمال کردن ندارند
-            // *******************************************************
-            for (int i = 1; i < xValues.Count; i++)
+            if (xStatistics != null)
             {
-                xValues[i] = Normalization.NormalizeUsingZScore(xValues[i], xStatistics[i].Mean, xStatistics[i].StandardDeviation);
+                // *******************************************************
+                // پیش پردازش داده
+                // نرمال کردن داده‌ها
+                //
+                // 1400.03.10
+                // ستون اول چون مقادیر ۱ هستند
+                // نیازی به نرمال کردن ندارند
+                // *******************************************************
+                for (int i = 1; i < xValues.Count; i++)
+                {
+                    xValues[i] = Normalization.NormalizeUsingZScore(xValues[i], xStatistics[i].Mean, xStatistics[i].StandardDeviation);
+                }
             }
 
             return LogisticRegressionHelper.CalculateLogisticFunction(xValues.ToArray(), Beta);

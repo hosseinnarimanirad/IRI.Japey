@@ -24,9 +24,7 @@ namespace IRI.Sta.MachineLearning
             var zValue = CalculateLogit(x, weights);
 
             if (zValue == null)
-            {
                 throw new NotImplementedException("LogisticRegressionHelper > CalculateLogisticFunction");
-            }
 
             return Sigmoid.CalculateSigmoid(zValue.Value);
         }

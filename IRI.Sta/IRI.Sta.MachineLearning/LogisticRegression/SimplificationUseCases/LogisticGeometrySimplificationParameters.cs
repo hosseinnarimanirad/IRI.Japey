@@ -84,13 +84,13 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             {
                 Features = new List<LogisticGeometrySimplificationFeatures>()
                 {
-                   //LogisticGeometrySimplificationFeatures.VerticalDistance ,
-                   //LogisticGeometrySimplificationFeatures.DistanceToNext ,
-                   //LogisticGeometrySimplificationFeatures.DistanceToPrevious ,
-                   //LogisticGeometrySimplificationFeatures.Area ,
-                   //LogisticGeometrySimplificationFeatures.CosineOfAngle ,
-                   //LogisticGeometrySimplificationFeatures.SquareCosineOfAngle,
-                   //LogisticGeometrySimplificationFeatures.BaseLength
+                    //LogisticGeometrySimplificationFeatures.VerticalDistance ,
+                    //LogisticGeometrySimplificationFeatures.DistanceToNext ,
+                    //LogisticGeometrySimplificationFeatures.DistanceToPrevious ,
+                    //LogisticGeometrySimplificationFeatures.Area ,
+                    //LogisticGeometrySimplificationFeatures.CosineOfAngle ,
+                    //LogisticGeometrySimplificationFeatures.SquareCosineOfAngle,
+                    //LogisticGeometrySimplificationFeatures.BaseLength
                 };
             }
 
@@ -113,27 +113,27 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             this.Features = features;
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.Area))
-                this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.Area))
+            this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToNext))
-                this.DistanceToNext = SpatialUtility.GetDistance(middleScreenPoint, lastScreenPoint);
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToNext))
+            this.DistanceToNext = SpatialUtility.GetDistance(middleScreenPoint, lastScreenPoint);
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToPrevious))
-                this.DistanceToPrevious = SpatialUtility.GetDistance(middleScreenPoint, firstScreenPoint);
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToPrevious))
+            this.DistanceToPrevious = SpatialUtility.GetDistance(middleScreenPoint, firstScreenPoint);
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.CosineOfAngle))
-                this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-             
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.SquareCosineOfAngle))
-                //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
-                this.SquareCosineOfAngle = CosineOfAngle * CosineOfAngle;
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.CosineOfAngle))
+            this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.VerticalDistance))
-                this.VerticalDistance = SpatialUtility.GetPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.SquareCosineOfAngle))
+            //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.SquareCosineOfAngle = CosineOfAngle * CosineOfAngle;
 
-            if (Features.Contains(LogisticGeometrySimplificationFeatures.BaseLength))
-                this.BaseLength = SpatialUtility.GetDistance(firstScreenPoint, lastScreenPoint);
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.VerticalDistance))
+            this.VerticalDistance = SpatialUtility.GetPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
+
+            //if (Features.Contains(LogisticGeometrySimplificationFeatures.BaseLength))
+            this.BaseLength = SpatialUtility.GetDistance(firstScreenPoint, lastScreenPoint);
 
         }
 

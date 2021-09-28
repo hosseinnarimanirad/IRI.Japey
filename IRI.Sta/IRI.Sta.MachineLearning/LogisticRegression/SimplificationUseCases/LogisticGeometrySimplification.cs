@@ -370,6 +370,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             //var steps = 1;
 
+            //var area = 0.0;
+
             while (lastIndex < points.Count)
             {
                 //middleIndex = firstIndex + 1;
@@ -382,18 +384,27 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
                     var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
 
-                    // 1400.06.06
-                    if (
-                        //parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
-                        //&&
-                        (lastIndex - middleIndex) > 5
-                        )
-                    {
-                        break;
+                    //parameters.Area += area;
 
-                        //middleIndex--;
-                        //continue;
+                    if (parameters.DistanceToNext < 0.3 && parameters.DistanceToPrevious < 0.3 && parameters.BaseLength < 0.3)
+                    {
+                        middleIndex--;
+                        continue;
                     }
+                        
+
+                    // 1400.06.06
+                    ////if (
+                    ////    //parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
+                    ////    //&&
+                    ////    (lastIndex - middleIndex) > 5
+                    ////    )
+                    ////{
+                    ////    break;
+
+                    ////    //middleIndex--;
+                    ////    //continue;
+                    ////}
 
                     if (IsRetained(parameters) == true)
                     {
@@ -404,12 +415,14 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                         //middleIndex = lastIndex + 1;
                         //lastIndex = lastIndex + 2;
 
+                        //area = 0;
                         break;
                     }
                     else
                     {
                         //middleIndex++;
                         middleIndex--;
+                        //area = parameters.Area;
                     }
                 }
 
@@ -462,7 +475,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                     firstIndex = lastIndex;
                     lastIndex++;
                 }
-             
+
                 lastIndex++;
             }
 
