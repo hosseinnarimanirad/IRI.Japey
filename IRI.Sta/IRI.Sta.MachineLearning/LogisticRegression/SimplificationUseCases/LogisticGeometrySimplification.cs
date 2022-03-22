@@ -335,9 +335,73 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             result.Add(points.First());
 
             int firstIndex = 0, middleIndex = 1, lastIndex = 2;
+               
+            while (lastIndex < points.Count)
+            {
+                middleIndex = lastIndex - 1;
+
+                int secondFloating = 1;
+
+                while (middleIndex > firstIndex)
+                {
+                    // 1400.06.04
+                    // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
+                    var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
+                      
+                    if (IsRetained(parameters) == true)
+                    {
+                        result.Add(points[middleIndex]);
+                        result.Add(points[lastIndex]);
+
+                        firstIndex = lastIndex;
+                        //middleIndex = lastIndex + 1;
+                        //lastIndex = lastIndex + 2;
+
+                        break;
+                    }
+                    else
+                    {
+                        middleIndex = middleIndex - secondFloating ;
+                        secondFloating = secondFloating * 2;
+                    }
+                }
+
+                lastIndex++;
+            }
+
+            if (retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            result.Add(points.Last());
+
+            return result;
+        }
+
+
+        public List<T> SimplifyByLogisticRegression_Fast_O_n_CumulativeArea(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            var screenPoints = points.Select(p => toScreenMap(p)).ToList();
+
+            // add first point automatically
+            result.Add(points.First());
+
+            int firstIndex = 0, middleIndex = 1, lastIndex = 2;
 
             // 1400.03.10
-            //var tempArea = 0.0;
+            var tempArea = 0.0;
 
             //for (int i = 2; i < points.Count; i++)
             //{
@@ -377,54 +441,52 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 //middleIndex = firstIndex + 1;
                 middleIndex = lastIndex - 1;
 
-                //while (middleIndex < lastIndex)
-                while (middleIndex > firstIndex)
+                //while (middleIndex > firstIndex)
+                //{
+                // 1400.06.04
+                // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
+                var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
+
+                tempArea += parameters.Area;
+                parameters.Area = tempArea; ;
+
+                //if (parameters.DistanceToNext < 1 && parameters.DistanceToPrevious < 1 && parameters.BaseLength < 1)
+                //{
+                //    middleIndex--;
+                //    continue;
+                //}
+
+                // 1400.06.06
+                ////if (
+                ////    //parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
+                ////    //&&
+                ////    (lastIndex - middleIndex) > 5
+                ////    )
+                ////{
+                ////    break;
+
+                ////    //middleIndex--;
+                ////    //continue;
+                ////}
+
+                if (IsRetained(parameters) == true)
                 {
-                    // 1400.06.04
-                    // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
-                    var parameters = new LogisticGeometrySimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
+                    result.Add(points[middleIndex]);
+                    result.Add(points[lastIndex]);
 
-                    //parameters.Area += area;
+                    firstIndex = lastIndex;
+                    //middleIndex = lastIndex + 1;
+                    //lastIndex = lastIndex + 2;
 
-                    if (parameters.DistanceToNext < 0.3 && parameters.DistanceToPrevious < 0.3 && parameters.BaseLength < 0.3)
-                    {
-                        middleIndex--;
-                        continue;
-                    }
-                        
-
-                    // 1400.06.06
-                    ////if (
-                    ////    //parameters.VerticalSquareDistance < LogisticGeometrySimplificationParameters<T>.MinVerticalSquareDistanceThreshold
-                    ////    //&&
-                    ////    (lastIndex - middleIndex) > 5
-                    ////    )
-                    ////{
-                    ////    break;
-
-                    ////    //middleIndex--;
-                    ////    //continue;
-                    ////}
-
-                    if (IsRetained(parameters) == true)
-                    {
-                        result.Add(points[middleIndex]);
-                        result.Add(points[lastIndex]);
-
-                        firstIndex = lastIndex;
-                        //middleIndex = lastIndex + 1;
-                        //lastIndex = lastIndex + 2;
-
-                        //area = 0;
-                        break;
-                    }
-                    else
-                    {
-                        //middleIndex++;
-                        middleIndex--;
-                        //area = parameters.Area;
-                    }
+                    //break;
+                    tempArea = 0;
                 }
+                else
+                {
+                    //break; 
+                    //middleIndex--;
+                }
+                //}
 
                 lastIndex++;
             }
@@ -438,7 +500,6 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
             return result;
         }
-
 
         public List<T> SimplifyByLogisticRegression_Fast_O_n(List<T> points, /*int zoomLevel, */Func<T, T> toScreenMap, bool retain3Points = false)
         {

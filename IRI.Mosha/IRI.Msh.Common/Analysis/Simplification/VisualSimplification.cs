@@ -357,7 +357,288 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        // ref: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
+        // link: 
+        // note: AreaThreshold is used
+        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, int? lookAhead, bool retain3Points = false*/) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            if (parameters.LookAhead == null)
+            {
+                parameters.LookAhead = Math.Max(3, pointList.Count / 10);
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            //
+
+            //1399.07.09
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جذر استفاده
+            //نشود
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.AreaThreshold.Value /** parameters.AreaThreshold.Value*/;
+
+            int startIndex = 0;
+
+            result.Add(pointList[0]);
+
+            int endIndex = Math.Min(numberOfPoints - 1, parameters.LookAhead.Value);
+
+            while (true)
+            {
+                if (startIndex == endIndex)
+                {
+                    break;
+                }
+                if (endIndex - startIndex == 1)
+                {
+                    result.Add(pointList[endIndex]);
+                    startIndex = endIndex;
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
+
+                    continue;
+                }
+
+                if (AnyPerpendicularDistanceExceedTolerance(pointList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(), effectiveThreshold))
+                {
+                    endIndex--;
+                }
+                else
+                {
+                    result.Add(pointList[endIndex]);
+                    startIndex = endIndex;
+                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 2)
+            {
+                result.Insert(1, pointList[pointList.Count / 2]);
+            }
+
+            return result;
+        }
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: Ramer, U., An iterative procedure for the polygonal approximation of plane curves.
+        //      Computer graphics and image processing, 1972. 1(3): p. 244-256.
+        // ref: Douglas, D.H.and T.K.Peucker, Algorithms for the reduction of the number of points
+        //      required to represent a digitized line or its caricature. Cartographica: the international
+        //      journal for geographic information and geovisualization, 1973. 10(2): p. 112-122
+        // link: https://doi.org/10.3138/FM57-6770-U75U-7727
+        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            //to handle lines with the same start and end
+            if (pointList.First().Equals(pointList.Last()))
+            {
+                //return DivideForDouglasPeucker(pointList, threshold, pointList.Count / 2);
+                return DivideForDouglasPeucker(pointList, parameters, pointList.Count / 2);
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            //
+            double maxSemiPerpendicularDistance = 0;
+            int maxIndex = 0;
+
+            //1399.06.23
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
+
+            for (int i = 1; i < numberOfPoints - 1; i++)
+            {
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
+
+                if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
+                {
+                    maxIndex = i;
+                    maxSemiPerpendicularDistance = semiPerpendicularDistance;
+                }
+            }
+
+            if (maxSemiPerpendicularDistance > effectiveThreshold)
+            {
+                return DivideForDouglasPeucker(pointList, parameters, maxIndex);
+            }
+            else
+            {
+                return new List<T> { pointList[0], pointList[numberOfPoints - 1] };
+            }
+        }
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: K. Reumann and A.P.M. Witkam. Optimizing curve segmentation in computer graphics.
+        //      In Proceedings of the International Computing Symposium, pages 467–472, 1974
+        // link: http://psimpl.sourceforge.net/reumann-witkam.html
+        public static List<T> SimplifyByReumannWitkam<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            //1399.06.23
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
+
+            result.Add(pointList[0]);
+
+            int startIndex = 0;
+
+            int middleIndex = 1;
+
+            for (int i = 2; i < numberOfPoints; i++)
+            {
+                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
+
+                if (semiPerpendicularDistance > effectiveThreshold)
+                {
+                    result.Add(pointList[i - 1]);
+                    startIndex = i - 1;
+                    middleIndex = i;
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(pointList[pointList.Count() / 2]);
+            }
+
+            result.Add(pointList.Last());
+
+            return result;
+        }
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // 1400.05.11
+        // ref: Jenks, G. F. (1981). Lines, computers, and human frailties. Annals of the Association
+        //      of American Geographers, 71(1), 1-10.
+        // ref: Ekdemir, S., Efficient Implementation of Polyline Simplification for Large Datasets
+        //      and Usability Evaluation. Master’s thesis, Uppsala University, Department of Information
+        //      Technology, 2011
+        // link: http://psimpl.sourceforge.net/perpendicular-distance.html
+        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        {
+            if (points == null || points.Count == 0)
+            {
+                return null;
+            }
+            else if (points.Count == 2)
+            {
+                return points;
+            }
+
+            List<T> result = new List<T>();
+
+            result.Add(points.First());
+
+
+            // 1400.06.05
+            // استفاده از مقدار توان دوم در مقایسه مشکل‌ساز
+            // نخواهد بود چون در هر حال تابع توان دوم هم 
+            // اکیدا صعودی است و توان دوم هیچ مقداری از توان
+            // دوم مقدار کم‌تر از خودش، بیش‌تر نخواهد شد. اما
+            // برای این‌که مقایسه سرعت درست انجام شود
+            // استفاده از توان دوم متوقف شد.
+
+            // 1400.05.11
+            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
+            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
+            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
+            //نشود
+
+            //double effectiveThreshold = threshold * threshold;
+            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
+
+            for (int i = 0; i < points.Count - 2; i++)
+            {
+                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(points[i], points[i + 2], points[i + 1]);
+
+                if (perpendicularDistance > effectiveThreshold)
+                    result.Add(points[i + 1]);
+
+                // 1400.06.05
+                // نقطه حذف شده به عنوان نقطه شروع استفاده نمی‌شود
+                // این روش در بهترین حالت ۵۰ درصد فشرده سازی ایجاد 
+                // می کند
+                else
+                {
+                    result.Add(points[i + 2]);
+                    i++;
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(points[points.Count() / 2]);
+            }
+
+            if (result.Last().DistanceTo(points.Last()) != 0)
+            {
+                result.Add(points.Last());
+            }
+
+            return result;
+        }
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: Visvalingam, M. and Whyatt, J. D. (1993). ‘Line generalization by repeated elimination
+        //      of points’, The Cartographic Journal, 30, 46–51
+        // link: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
         public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, SimplificationParamters parameters, bool isRing/*, double threshold, bool isRing, bool retain3Points = false*/) where T : IPoint
         {
             if (pointList == null || pointList.Count <= 3)
@@ -477,141 +758,11 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
-        // ref: https://doi.org/10.3138/FM57-6770-U75U-7727
-        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
-        {
-            var result = new List<T>();
-
-            if (pointList == null || pointList.Count < 2)
-            {
-                return result;
-            }
-
-            if (pointList.Count == 2)
-            {
-                return pointList;
-            }
-
-            //to handle lines with the same start and end
-            if (pointList.First().Equals(pointList.Last()))
-            {
-                //return DivideForDouglasPeucker(pointList, threshold, pointList.Count / 2);
-                return DivideForDouglasPeucker(pointList, parameters, pointList.Count / 2);
-            }
-
-            var numberOfPoints = pointList.Count;
-
-            //
-            double maxSemiPerpendicularDistance = 0;
-            int maxIndex = 0;
-
-            //1399.06.23
-            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
-            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
-            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
-            //نشود
-            //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
-
-            for (int i = 1; i < numberOfPoints - 1; i++)
-            {
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
-
-                if (semiPerpendicularDistance > maxSemiPerpendicularDistance)
-                {
-                    maxIndex = i;
-                    maxSemiPerpendicularDistance = semiPerpendicularDistance;
-                }
-            }
-
-            if (maxSemiPerpendicularDistance > effectiveThreshold)
-            {
-                return DivideForDouglasPeucker(pointList, parameters, maxIndex);
-            }
-            else
-            {
-                return new List<T> { pointList[0], pointList[numberOfPoints - 1] };
-            }
-        }
-
-
-        // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
-        // link: 
-        // AreaThreshold is used
-        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, int? lookAhead, bool retain3Points = false*/) where T : IPoint
-        {
-            var result = new List<T>();
-
-            if (pointList == null || pointList.Count < 2)
-            {
-                return result;
-            }
-
-            if (pointList.Count == 2)
-            {
-                return pointList;
-            }
-
-            if (parameters.LookAhead == null)
-            {
-                parameters.LookAhead = Math.Max(3, pointList.Count / 10);
-            }
-
-            var numberOfPoints = pointList.Count;
-
-            //
-
-            //1399.07.09
-            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
-            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
-            //روش باعث می‌شود در محاسبات از تابع جذر استفاده
-            //نشود
-            //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.AreaThreshold.Value /** parameters.AreaThreshold.Value*/;
-
-            int startIndex = 0;
-
-            result.Add(pointList[0]);
-
-            int endIndex = Math.Min(numberOfPoints - 1, parameters.LookAhead.Value);
-
-            while (true)
-            {
-                if (startIndex == endIndex)
-                {
-                    break;
-                }
-                if (endIndex - startIndex == 1)
-                {
-                    result.Add(pointList[endIndex]);
-                    startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
-
-                    continue;
-                }
-
-                if (AnyPerpendicularDistanceExceedTolerance(pointList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(), effectiveThreshold))
-                {
-                    endIndex--;
-                }
-                else
-                {
-                    result.Add(pointList[endIndex]);
-                    startIndex = endIndex;
-                    endIndex = Math.Min(numberOfPoints - 1, endIndex + parameters.LookAhead.Value);
-                }
-            }
-
-            if (parameters.Retain3Points && result.Count == 2)
-            {
-                result.Insert(1, pointList[pointList.Count / 2]);
-            }
-
-            return result;
-        }
-
-        // http://psimpl.sourceforge.net/reumann-witkam.html
-        public static List<T> SimplifyByReumannWitkam<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: Zhao, Z. and A. Saalfeld. Linear-time sleeve-fitting polyline simplification algorithms.
+        //      In. Proceedings of AutoCarto 13. pages 214–223, 1997
+        public static List<T> SimplifyBySleeveFitting<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             var result = new List<T>();
 
@@ -627,7 +778,6 @@ namespace IRI.Msh.Common.Analysis
 
             var numberOfPoints = pointList.Count;
 
-            //1399.06.23
             //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
             //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
             //روش باعث می‌شود در محاسبات از تابع جزر استفاده
@@ -642,7 +792,7 @@ namespace IRI.Msh.Common.Analysis
             int middleIndex = 1;
 
             for (int i = 2; i < numberOfPoints; i++)
-            {
+            {?
                 var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
 
                 if (semiPerpendicularDistance > effectiveThreshold)
@@ -664,75 +814,8 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
-        // 1400.05.11
-        // http://psimpl.sourceforge.net/perpendicular-distance.html
-        // Ekdemir, S., Efficient Implementation of Polyline Simplification for Large Datasets and Usability Evaluation.
-        // Master’s thesis, Uppsala University, Department of Information Technology, 2011
-        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
-        {
-            if (points == null || points.Count == 0)
-            {
-                return null;
-            }
-            else if (points.Count == 2)
-            {
-                return points;
-            }
-
-            List<T> result = new List<T>();
-
-            result.Add(points.First());
-
-
-            // 1400.06.05
-            // استفاده از مقدار توان دوم در مقایسه مشکل‌ساز
-            // نخواهد بود چون در هر حال تابع توان دوم هم 
-            // اکیدا صعودی است و توان دوم هیچ مقداری از توان
-            // دوم مقدار کم‌تر از خودش، بیش‌تر نخواهد شد. اما
-            // برای این‌که مقایسه سرعت درست انجام شود
-            // استفاده از توان دوم متوقف شد.
-
-            // 1400.05.11
-            //در این جا برای سرعت بیش‌تر مقدار فاصله استفاه 
-            //نمی‌شود بلکه توان دوم آن استفاده می‌شود. این 
-            //روش باعث می‌شود در محاسبات از تابع جزر استفاده
-            //نشود
-
-            //double effectiveThreshold = threshold * threshold;
-            double effectiveThreshold = parameters.DistanceThreshold.Value /** parameters.DistanceThreshold.Value*/;
-
-            for (int i = 0; i < points.Count - 2; i++)
-            {
-                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(points[i], points[i + 2], points[i + 1]);
-
-                if (perpendicularDistance > effectiveThreshold)
-                    result.Add(points[i + 1]);
-
-                // 1400.06.05
-                // نقطه حذف شده به عنوان نقطه شروع استفاده نمی‌شود
-                // این روش در بهترین حالت ۵۰ درصد فشرده سازی ایجاد 
-                // می کند
-                else
-                {
-                    result.Add(points[i + 2]);
-                    i++;
-                }
-            }
-
-            if (parameters.Retain3Points && result.Count == 1)
-            {
-                result.Add(points[points.Count() / 2]);
-            }
-
-            if (result.Last().DistanceTo(points.Last()) != 0)
-            {
-                result.Add(points.Last());
-            }
-
-            return result;
-        }
-
-
+        // ***********************************************************************************************
+        // ***********************************************************************************************
         // 1400.05.20
         public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
@@ -797,6 +880,9 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
         // 1400.05.20
         public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
         {
