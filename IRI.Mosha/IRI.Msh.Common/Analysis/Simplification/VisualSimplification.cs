@@ -760,6 +760,7 @@ namespace IRI.Msh.Common.Analysis
 
         // ***********************************************************************************************
         // ***********************************************************************************************
+        // 1401.01.03
         // ref: Zhao, Z. and A. Saalfeld. Linear-time sleeve-fitting polyline simplification algorithms.
         //      In. Proceedings of AutoCarto 13. pages 214–223, 1997
         public static List<T> SimplifyBySleeveFitting<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
@@ -789,17 +790,17 @@ namespace IRI.Msh.Common.Analysis
 
             int startIndex = 0;
 
-            int middleIndex = 1;
-
             for (int i = 2; i < numberOfPoints; i++)
-            {?
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
-
-                if (semiPerpendicularDistance > effectiveThreshold)
+            {
+                for (int j = startIndex + 1; j < i; j++)
                 {
-                    result.Add(pointList[i - 1]);
-                    startIndex = i - 1;
-                    middleIndex = i;
+                    var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[i], pointList[j]);
+
+                    if (semiPerpendicularDistance > effectiveThreshold)
+                    {
+                        result.Add(pointList[j]);
+                        startIndex = j;
+                    }
                 }
             }
 
