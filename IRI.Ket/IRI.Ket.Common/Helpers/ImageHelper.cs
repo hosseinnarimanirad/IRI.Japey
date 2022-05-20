@@ -290,8 +290,12 @@ namespace IRI.Ket.Common.Helpers
 
             //1399.06.15
             //returns different percent
-            return (result, differentPixels / totalPixels * 100);
+            return (result, differentPixels / totalPixels * 100.0);
         }
+
+
+      
+
 
         //private unsafe Bitmap GetDiffBitmap(Bitmap bmp, Bitmap bmp2)
         //{

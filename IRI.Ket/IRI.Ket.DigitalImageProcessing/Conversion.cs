@@ -10,6 +10,51 @@ namespace IRI.Ket.DigitalImageProcessing
 {
     public static class Conversion
     {
+        public static (Bitmap image, double percent) CalculateDifBitmaps(Bitmap originalImage, Bitmap secondaryImage, bool ignoreWhitePixels)
+        {
+            if (originalImage.Width != secondaryImage.Width || originalImage.Height != secondaryImage.Height)
+                throw new Exception("Sizes must be equal.");
+
+            //Bitmap result = new Bitmap(originalImage.Width, originalImage.Height);
+
+            double differentPixels = 0.0;
+            double equalNonWhitePixels = 0.0;
+
+            var originalMatrix = ColorImageToByteArgb(originalImage);
+            var secondaryMatrix = ColorImageToByteArgb(secondaryImage);
+
+            Matrix result = new Matrix(originalImage.Height, originalImage.Width);
+
+            for (int i = 0; i < originalImage.Width; i++)
+            {
+                for (int j = 0; j < originalImage.Height; j++)
+                {
+                    var pixel1 = originalMatrix.Alpha[j, i];
+                    var pixel2 = secondaryMatrix.Alpha[j, i];
+
+                    if (pixel1 != pixel2)
+                    {
+                        //result.SetPixel(i, j, Color.Black);
+                        result[j, i] = 255;
+
+                        differentPixels++;
+                    }
+                    //equal pixels
+                    else if (pixel1 != 0 && pixel2 != 0)
+                    {
+                        equalNonWhitePixels++;
+                    }
+                }
+            }
+
+            double totalPixels = ignoreWhitePixels ? (differentPixels + equalNonWhitePixels) : (originalImage.Height * originalImage.Width);
+
+            //1399.06.15
+            //returns different percent
+            return (MatrixToGrayscaleImage(result), differentPixels / totalPixels * 100.0);
+        }
+
+
         public static Matrix GrayscaleImageToMatrixSlow(Bitmap image)
         {
             //if (image.PixelFormat != PixelFormat.Format24bppRgb)
@@ -91,6 +136,8 @@ namespace IRI.Ket.DigitalImageProcessing
 
             return new RgbValues(red, green, blue);
         }
+
+
 
         public static Matrix GrayscaleImageToMatrix(Bitmap image)
         {
@@ -437,7 +484,7 @@ namespace IRI.Ket.DigitalImageProcessing
 
             return new ByteArgbValues(alpha, red, green, blue);
         }
-        
+
         public static Bitmap ByteRgbToColorImage(ByteRgbValues values)
         {
 

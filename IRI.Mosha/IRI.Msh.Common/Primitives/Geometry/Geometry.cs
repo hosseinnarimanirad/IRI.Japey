@@ -431,66 +431,68 @@ namespace IRI.Msh.Common.Primitives
 
             switch (type)
             {
+                case SimplificationType.ByNthPoint:
+                    filter = pList => VisualSimplification.SimplifyByNthPoint(pList, paramters);
+                    break;
+
+                case SimplificationType.ByDistanceSelection:
+                    filter = pList => VisualSimplification.SimplifyByDistanceSelection(pList, paramters);
+                    break;
+
                 case SimplificationType.ByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByArea(pList, paramters/* threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.SimplifyByArea(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByArea:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByArea(pList, paramters/*threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.AdditiveSimplifyByArea(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAreaPlus:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAreaPlus(pList, paramters/* threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.AdditiveSimplifyByAreaPlus(pList, paramters);
                     break;
 
                 case SimplificationType.ByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByAngle(pList, paramters/* threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.SimplifyByAngle(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngle(pList, paramters/*threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.AdditiveSimplifyByAngle(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByDistance:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByDistance(pList, paramters/*threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.AdditiveSimplifyByDistance(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.AdditiveSimplifyByAngleArea(pList, paramters/*threshold, secondaryParameter, retain3Poins*/);
+                    filter = pList => VisualSimplification.AdditiveSimplifyByAngleArea(pList, paramters);
                     break;
 
                 case SimplificationType.Visvalingam:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByVisvalingam(pList, paramters, this.IsRingBase()/*threshold, this.IsRingBase(), retain3Poins*/);
+                    filter = pList => VisualSimplification.SimplifyByVisvalingam(pList, paramters, this.IsRingBase());
                     break;
 
                 case SimplificationType.DouglasPeucker:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByDouglasPeucker(pList, paramters /*threshold, retain3Poins*/);
+                    filter = pList => VisualSimplification.SimplifyByDouglasPeucker(pList, paramters);
                     break;
 
                 case SimplificationType.Lang:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByLang(
-                                        pList,
-                                        paramters
-                                        //threshold,
-                                        //double.IsNaN(secondaryParameter) ? (int?)null : (int)secondaryParameter,
-                                        //retain3Poins
-                                        );
+                    filter = pList => VisualSimplification.SimplifyByLang(pList, paramters);
                     break;
 
                 case SimplificationType.Reumann_Witkam:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByReumannWitkam(pList, paramters);
+                    filter = pList => VisualSimplification.SimplifyByReumannWitkam(pList, paramters);
                     break;
 
                 case SimplificationType.PerpendicularDistance:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByPerpendicularDistance(pList, paramters);
+                    filter = pList => VisualSimplification.SimplifyByPerpendicularDistance(pList, paramters);
                     break;
 
                 case SimplificationType.NormalOpeningWindow:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByNormalOpeningWindow(pList, paramters);
+                    filter = pList => VisualSimplification.SimplifyByNormalOpeningWindow(pList, paramters);
                     break;
 
                 case SimplificationType.BeforeOpeningWindow:
-                    filter = pList => IRI.Msh.Common.Analysis.VisualSimplification.SimplifyByBeforeOpeningWindow(pList, paramters);
+                    filter = pList => VisualSimplification.SimplifyByBeforeOpeningWindow(pList, paramters);
                     break;
 
                 default:

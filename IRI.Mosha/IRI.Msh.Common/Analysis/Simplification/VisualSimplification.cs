@@ -358,6 +358,91 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: 
+        // link: 
+        // note: 
+        public static List<T> SimplifyByDistanceSelection<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            result.Add(pointList[0]);
+
+            int firstIndex = 0;
+
+            for (int i = 1; i < numberOfPoints; i++)
+            {
+                if (pointList[i].DistanceTo(pointList[firstIndex]) > parameters.DistanceThreshold)
+                {
+                    result.Add(pointList[i]);
+                    firstIndex = i;
+                } 
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(pointList[pointList.Count() / 2]);
+            }
+
+            result.Add(pointList.Last());
+
+            return result;
+        }
+
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: 
+        // link: 
+        // note: 
+        public static List<T> SimplifyByNthPoint<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        {
+            var result = new List<T>();
+
+            if (pointList == null || pointList.Count < 2)
+            {
+                return result;
+            }
+
+            if (pointList.Count == 2)
+            {
+                return pointList;
+            }
+
+            var numberOfPoints = pointList.Count;
+
+            result.Add(pointList[0]);
+
+            for (int i = 1; i < numberOfPoints; i++)
+            {
+                if (i % parameters.N == 0)
+                {
+                    result.Add(pointList[i]);
+                }
+            }
+
+            if (parameters.Retain3Points && result.Count == 1)
+            {
+                result.Add(pointList[pointList.Count() / 2]);
+            }
+
+            result.Add(pointList.Last());
+
+            return result;
+        }
 
         // ***********************************************************************************************
         // ***********************************************************************************************
