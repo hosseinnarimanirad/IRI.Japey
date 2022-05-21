@@ -10,30 +10,30 @@ namespace IRI.Msh.Common.Analysis
     public enum SimplificationType
     {
         [Description("N")]
-        ByNthPoint,
+        NthPoint,
 
-        [Description("DS")]
-        ByDistanceSelection,
+        [Description("DST")]
+        DistanceSelection,
 
-        [Description("A")]
-        ByArea,
+        [Description("AR")]
+        Area,
 
-        [Description("AA")]
+        [Description("A-AR")]
         AdditiveByArea,
 
         [Description("AAP")]
         AdditiveByAreaPlus,
 
-        [Description("AN")]
-        ByAngle,
+        [Description("ANG")]
+        Angle,
 
-        [Description("AAN")]
+        [Description("A-ANG")]
         AdditiveByAngle,
 
-        [Description("AD")]
+        [Description("A-DST")]
         AdditiveByDistance,
 
-        [Description("AAA")]
+        [Description("A-AR-ANG")]
         AdditiveByAreaAngle,
 
         [Description("V")]

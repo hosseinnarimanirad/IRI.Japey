@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -60,15 +61,6 @@ namespace IRI.Msh.Common.Primitives
                 {
                     return Geometries?.Sum(g => g.TotalNumberOfPoints) ?? 0;
                 }
-
-                //if (Points != null)
-                //{
-                //    return Points.Count;
-                //}
-                //else
-                //{
-                //    return Geometries.Sum(g => g.TotalNumberOfPoints);
-                //}
             }
         }
 
@@ -153,8 +145,7 @@ namespace IRI.Msh.Common.Primitives
 
         public bool IsNullOrEmpty()
         {
-            return (this.Points == null || this.Points?.Count == 0) &&
-                    (this.Geometries == null || this.Geometries?.Count == 0);
+            return this.Points.IsNullOrEmpty() && this.Geometries.IsNullOrEmpty();
         }
 
         public bool HasAnyPoint()
@@ -422,77 +413,75 @@ namespace IRI.Msh.Common.Primitives
         /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
         /// <returns></returns>
         public Geometry<T> Simplify(
-            /*double threshold,*/
             SimplificationType type,
-            SimplificationParamters paramters
-            /*, bool retain3Poins, double secondaryParameter = double.NaN*/)
+            SimplificationParamters paramters)
         {
             Func<List<T>, List<T>> filter;
 
             switch (type)
             {
-                case SimplificationType.ByNthPoint:
-                    filter = pList => VisualSimplification.SimplifyByNthPoint(pList, paramters);
+                case SimplificationType.NthPoint:
+                    filter = pList => Simplifications.SimplifyByNthPoint(pList, paramters);
                     break;
 
-                case SimplificationType.ByDistanceSelection:
-                    filter = pList => VisualSimplification.SimplifyByDistanceSelection(pList, paramters);
+                case SimplificationType.DistanceSelection:
+                    filter = pList => Simplifications.SimplifyByDistanceSelection(pList, paramters);
                     break;
 
-                case SimplificationType.ByArea:
-                    filter = pList => VisualSimplification.SimplifyByArea(pList, paramters);
+                case SimplificationType.Area:
+                    filter = pList => Simplifications.SimplifyByArea(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByArea:
-                    filter = pList => VisualSimplification.AdditiveSimplifyByArea(pList, paramters);
+                    filter = pList => Simplifications.AdditiveSimplifyByArea(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAreaPlus:
-                    filter = pList => VisualSimplification.AdditiveSimplifyByAreaPlus(pList, paramters);
+                    filter = pList => Simplifications.AdditiveSimplifyByAreaPlus(pList, paramters);
                     break;
 
-                case SimplificationType.ByAngle:
-                    filter = pList => VisualSimplification.SimplifyByAngle(pList, paramters);
+                case SimplificationType.Angle:
+                    filter = pList => Simplifications.SimplifyByAngle(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAngle:
-                    filter = pList => VisualSimplification.AdditiveSimplifyByAngle(pList, paramters);
+                    filter = pList => Simplifications.AdditiveSimplifyByAngle(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByDistance:
-                    filter = pList => VisualSimplification.AdditiveSimplifyByDistance(pList, paramters);
+                    filter = pList => Simplifications.AdditiveSimplifyByDistance(pList, paramters);
                     break;
 
                 case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => VisualSimplification.AdditiveSimplifyByAngleArea(pList, paramters);
+                    filter = pList => Simplifications.AdditiveSimplifyByAngleArea(pList, paramters);
                     break;
 
                 case SimplificationType.Visvalingam:
-                    filter = pList => VisualSimplification.SimplifyByVisvalingam(pList, paramters, this.IsRingBase());
+                    filter = pList => Simplifications.SimplifyByVisvalingam(pList, paramters, this.IsRingBase());
                     break;
 
                 case SimplificationType.DouglasPeucker:
-                    filter = pList => VisualSimplification.SimplifyByDouglasPeucker(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByDouglasPeucker(pList, paramters);
                     break;
 
                 case SimplificationType.Lang:
-                    filter = pList => VisualSimplification.SimplifyByLang(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByLang(pList, paramters);
                     break;
 
                 case SimplificationType.Reumann_Witkam:
-                    filter = pList => VisualSimplification.SimplifyByReumannWitkam(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByReumannWitkam(pList, paramters);
                     break;
 
                 case SimplificationType.PerpendicularDistance:
-                    filter = pList => VisualSimplification.SimplifyByPerpendicularDistance(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByPerpendicularDistance(pList, paramters);
                     break;
 
                 case SimplificationType.NormalOpeningWindow:
-                    filter = pList => VisualSimplification.SimplifyByNormalOpeningWindow(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByNormalOpeningWindow(pList, paramters);
                     break;
 
                 case SimplificationType.BeforeOpeningWindow:
-                    filter = pList => VisualSimplification.SimplifyByBeforeOpeningWindow(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByBeforeOpeningWindow(pList, paramters);
                     break;
 
                 default:
@@ -1558,9 +1547,7 @@ namespace IRI.Msh.Common.Primitives
         private double CalculateEuclideanLengthForLineStringOrRing(bool isRing)
         {
             if (this.Points == null || this.Points.Count < 2)
-            {
                 return 0;
-            }
 
             double result = 0;
 
@@ -1579,6 +1566,82 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
+
+        #region Density
+
+        // 1401.02.31
+        public double CalculatePointDensity()
+        {
+            return this.TotalNumberOfPoints / this.CalculateEuclideanLength();
+        }
+
+        #endregion
+
+
+        #region Angularity
+
+        /// <summary>
+        /// returns cosine of weighted average of angles between triads of points in radian
+        /// </summary>
+        /// <returns></returns>
+        public double CalculateMeanAngularChange()
+        {
+            if (this.IsNullOrEmpty())
+                return 0;
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                    return 0;
+
+                case GeometryType.LineString:
+                    return CalculateMeanAngularChangeForLineStringOrRing(false);
+
+                case GeometryType.Polygon:
+                    return Geometries.Sum(g => g.TotalNumberOfPoints * g.CalculateMeanAngularChangeForLineStringOrRing(true))
+                            /
+                            Geometries.Sum(g => g.TotalNumberOfPoints);
+
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return Geometries.Sum(g => g.TotalNumberOfPoints * g.CalculateMeanAngularChange())
+                            /
+                            Geometries.Sum(g => g.TotalNumberOfPoints);
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry.cs > CalculateSumOfAngles");
+            }
+        }
+
+        private double CalculateMeanAngularChangeForLineStringOrRing(bool isRing)
+        {
+            if (this.Points == null || this.Points.Count < 3)
+                return 0;
+
+            double result = 0;
+
+            for (int i = 0; i < this.Points.Count - 2; i++)
+            {
+                result += SpatialUtility.GetAngle(Points[i], Points[i + 1], Points[i + 2]);
+            }
+
+            if (isRing)
+            {
+                result += SpatialUtility.GetAngle(this.Points[this.Points.Count - 2], this.Points[this.Points.Count - 1], this.Points[0]);
+                result += SpatialUtility.GetAngle(this.Points[this.Points.Count - 1], this.Points[0], this.Points[1]);
+            }
+
+            result = isRing ? result / Points.Count : result / (Points.Count - 2);
+
+            return result;
+        }
+
+        #endregion
 
         #region Cleansing
 
@@ -1732,5 +1795,7 @@ namespace IRI.Msh.Common.Primitives
         }
 
         #endregion
+
+
     }
 }

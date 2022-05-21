@@ -1,16 +1,13 @@
-﻿using IRI.Msh.Common.Model.Here;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Statistics;
+﻿using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 
 namespace IRI.Msh.Common.Analysis
 {
-    public static class VisualSimplification
+    public static class Simplifications
     {
-        public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, SimplificationParamters paramters/*double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -71,7 +68,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters /*double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters ) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -109,7 +106,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, SimplificationParamters paramters/*double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -160,7 +157,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="anglethreshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters /*double angleThreshold, double areaThreshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters ) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -217,7 +214,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters /*double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters ) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -266,7 +263,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> SimplifyByArea<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByArea<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -301,7 +298,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> AdditiveSimplifyByArea<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> AdditiveSimplifyByArea<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -449,7 +446,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
         // link: 
         // note: AreaThreshold is used
-        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, int? lookAhead, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             var result = new List<T>();
 
@@ -530,7 +527,7 @@ namespace IRI.Msh.Common.Analysis
         //      required to represent a digitized line or its caricature. Cartographica: the international
         //      journal for geographic information and geovisualization, 1973. 10(2): p. 112-122
         // link: https://doi.org/10.3138/FM57-6770-U75U-7727
-        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             var result = new List<T>();
 
@@ -654,7 +651,7 @@ namespace IRI.Msh.Common.Analysis
         //      and Usability Evaluation. Master’s thesis, Uppsala University, Department of Information
         //      Technology, 2011
         // link: http://psimpl.sourceforge.net/perpendicular-distance.html
-        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -724,7 +721,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: Visvalingam, M. and Whyatt, J. D. (1993). ‘Line generalization by repeated elimination
         //      of points’, The Cartographic Journal, 30, 46–51
         // link: https://www.tandfonline.com/doi/abs/10.1179/000870493786962263
-        public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, SimplificationParamters parameters, bool isRing/*, double threshold, bool isRing, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByVisvalingam<T>(List<T> pointList, SimplificationParamters parameters, bool isRing) where T : IPoint
         {
             if (pointList == null || pointList.Count <= 3)
             {
@@ -903,7 +900,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // ***********************************************************************************************
         // 1400.05.20
-        public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -970,7 +967,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // ***********************************************************************************************
         // 1400.05.20
-        public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> points, SimplificationParamters parameters/*, double threshold, bool retain3Points = false*/) where T : IPoint
+        public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {

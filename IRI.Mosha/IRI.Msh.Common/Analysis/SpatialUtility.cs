@@ -118,7 +118,7 @@ namespace IRI.Msh.Common.Analysis
         //1399.06.11
         //مساحت مثلت‌های تشکیل دهنده یک خط یا 
         //حلقه توسط نقاط ورودی
-        public static List<double> GetPrimitiveAreas<T>(IEnumerable<T> points, bool isClosed) where T : IPoint
+        public static List<double> GetPrimitiveAreas<T>(IEnumerable<T> points, bool isRing) where T : IPoint
         {
             List<double> result = new List<double>();
 
@@ -127,22 +127,18 @@ namespace IRI.Msh.Common.Analysis
             if (points == null || n < 3)
                 return result;
 
-            //double[] result = new double[n - 1];
-
             for (int i = 0; i < n - 2; i++)
             {
-                //result[i] = CalculateUnsignedTriangleArea(points[i], points[i + 1], points[i + 2]);
                 result.Add(GetUnsignedTriangleArea(points.ElementAt(i), points.ElementAt(i + 1), points.ElementAt(i + 2)));
             }
 
-            if (isClosed && n > 3)
+            if (isRing && n > 3)
             {
-                //result[n - 2] = CalculateUnsignedTriangleArea(points[n - 2], points[n - 1], points[0]);
                 result.Add(GetUnsignedTriangleArea(points.ElementAt(n - 2), points.ElementAt(n - 1), points.ElementAt(0)));
 
                 result.Add(GetUnsignedTriangleArea(points.ElementAt(n - 1), points.ElementAt(0), points.ElementAt(1)));
             }
-              
+
             return result;
         }
 
@@ -205,7 +201,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint, AngleMode mode = AngleMode.Radian)
+        public static double GetAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
         {
             var radianAngle = Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
 
@@ -232,7 +228,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetCosineOfAngle<T>(T firstPoint, T middlePoint, T lastPoint) where T : IPoint
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
             {
@@ -258,7 +254,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static double[] GetCosineOfAngles(IPoint[] points)
+        public static double[] GetCosineOfAngles<T>(T[] points) where T : IPoint
         {
             if (points == null || points.Length == 0 || points.Length == 2)
                 return null;
@@ -280,7 +276,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetSquareCosineOfAngle(IPoint firstPoint, IPoint middlePoint, IPoint lastPoint)
+        public static double GetSquareCosineOfAngle<T>(T firstPoint, T middlePoint, T lastPoint) where T : IPoint
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
             {
@@ -333,24 +329,24 @@ namespace IRI.Msh.Common.Analysis
             return values.Sum() > 0;
         }
 
-        /// <summary>
-        /// Checks if sequence of points are clockwise or not
-        /// </summary>
-        /// <param name="points"></param>
-        /// <returns></returns>
-        public static bool IsClockwise(IPoint[] points)
-        {
-            int numberOfPoints = points.Length;
+        ///// <summary>
+        ///// Checks if sequence of points are clockwise or not
+        ///// </summary>
+        ///// <param name="points"></param>
+        ///// <returns></returns>
+        //public static bool IsClockwise(IPoint[] points)
+        //{
+        //    int numberOfPoints = points.Length;
 
-            List<double> values = new List<double>(numberOfPoints);
+        //    List<double> values = new List<double>(numberOfPoints);
 
-            for (int i = 0; i < numberOfPoints - 1; i++)
-            {
-                values.Add((points[i + 1].X - points[i].X) * (points[i + 1].Y + points[i].Y));
-            }
+        //    for (int i = 0; i < numberOfPoints - 1; i++)
+        //    {
+        //        values.Add((points[i + 1].X - points[i].X) * (points[i + 1].Y + points[i].Y));
+        //    }
 
-            return values.Sum() > 0;
-        }
+        //    return values.Sum() > 0;
+        //}
 
         #endregion
 
