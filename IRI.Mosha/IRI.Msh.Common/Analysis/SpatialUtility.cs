@@ -7,8 +7,10 @@ using IRI.Msh.MeasurementUnit;
 
 namespace IRI.Msh.Common.Analysis
 {
-    public class SpatialUtility
+    public static class SpatialUtility
     {
+        public const double EpsilonDistance = 0.0000001;
+
         /// <summary>
         /// return square (^2) of the Euclidian distance between two
         /// </summary>
@@ -468,7 +470,7 @@ namespace IRI.Msh.Common.Analysis
                     Math.Sqrt(dySegment * dySegment + dxSegment * dxSegment);
         }
 
-        public static double GetPointToLineSegmentSquareDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
+        public static double GetPointToLineSegmentSquareDistance<T>(T lineSegmentStart, T lineSegmentEnd, T targetPoint) where T : IPoint, new()
         {
             var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
 
@@ -491,6 +493,52 @@ namespace IRI.Msh.Common.Analysis
 
         #endregion
 
+
+        // McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
+        #region Measurement of Displacement
+
+        // todo: consider ring mode
+        public static double CalculateTotalVectorDisplacement<T>(List<T> originalPoints, List<T> simplifiedPoints, bool isRingMode) where T : IPoint, new()
+        {
+            int currentSimplifiedIndex_Start = 0;
+            int currentSimplifiedIndex_End = 1;
+
+            double result = 0;
+
+
+            // تعیین ارتباط بین اندکس نقطه در لیست 
+            // اصلی و اندکس نقطه در لیست ساده شده
+            //Dictionary<int, (int, int)?> indexMap = new Dictionary<int, (int, int)?>();
+
+            for (int originalIndex = 0; originalIndex < originalPoints.Count; originalIndex++)
+            {
+                var currentPoint = originalPoints[originalIndex];
+
+                //if (currentPoint.DistanceTo(simplifiedPoints[currentSimplifiedIndex_Start]) < EpsilonDistance)
+                //{
+                //    //indexMap.Add(originalIndex, null);
+                //}
+                /*else */
+                if (currentPoint.DistanceTo(simplifiedPoints[currentSimplifiedIndex_End]) < EpsilonDistance)
+                {
+                    //indexMap.Add(originalIndex, null);
+                    currentSimplifiedIndex_Start = currentSimplifiedIndex_End;
+                    currentSimplifiedIndex_End++;
+                    continue;
+                }
+                //else
+                //{ 
+                var distance = GetPointToLineSegmentDistance(simplifiedPoints[currentSimplifiedIndex_Start], simplifiedPoints[currentSimplifiedIndex_End], currentPoint);
+
+                result += distance;
+                //}
+            }
+
+            return result;
+        }
+
+
+        #endregion
 
         //
         public static bool IsPointInPolygon<T>(Geometry<T> ring, T point) where T : IPoint, new()

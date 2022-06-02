@@ -536,6 +536,95 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        public bool HasTheSameSignature(Geometry<T> other)
+        {
+            if (other == null)
+                return false;
+
+            if (other.Type != this.Type)
+                return false;
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.LineString:
+                    return true;
+
+                case GeometryType.MultiPoint:
+                case GeometryType.Polygon:
+                case GeometryType.MultiLineString:
+                    return this.NumberOfGeometries == other.NumberOfGeometries;
+
+                case GeometryType.MultiPolygon:
+                    if (this.NumberOfGeometries != other.NumberOfGeometries)
+                        return false;
+                    else if (this.NumberOfGeometries == 0)
+                        return true;
+                    else
+                        return this.Geometries.Zip(other.Geometries, (g1, g2) => g1.HasTheSameSignature(g2)).Any(f => f);
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > HasTheSameSignature");
+            }
+        }
+
+
+        // 1401.03.12
+        // McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
+        public double CalculateTotalVectorDisplacement(Geometry<T> simplified)
+        {
+            return CalculateTotalVectorDisplacement(simplified, this.IsRingBase());
+        }
+
+        private double CalculateTotalVectorDisplacement(Geometry<T> simplified, bool isRingBase)
+        {
+            if (!this.HasTheSameSignature(simplified))
+                throw new NotImplementedException("Geometry > CalculateTotalVectorDisplacement");
+            // return double.PositiveInfinity;
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                    throw new NotImplementedException("Geometry > CalculateTotalVectorDisplacement");
+
+                case GeometryType.LineString:
+                    return SpatialUtility.CalculateTotalVectorDisplacement(this.GetAllPoints(), simplified.GetAllPoints(), isRingBase);
+
+                case GeometryType.Polygon:
+                    return this.Geometries.Zip(simplified.Geometries, (g1, g2) => g1.CalculateTotalVectorDisplacement(g2, isRingBase)).Sum();
+
+                case GeometryType.MultiLineString:
+                    return this.Geometries.Zip(simplified.Geometries, (g1, g2) => g1.CalculateTotalVectorDisplacement(g2, isRingBase)).Sum();
+
+                case GeometryType.MultiPolygon:
+                    return this.Geometries.Zip(simplified.Geometries, (g1, g2) => g1.CalculateTotalVectorDisplacement(g2, isRingBase)).Sum();
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > CalculateTotalVectorDisplacement");
+            }
+        }
+
+        // 1401.03.12
+        // McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
+        public double CalculateTotalVectorDisplacementPerLength(Geometry<T> simplified)
+        {
+            var length = CalculateEuclideanLength();
+
+            if (length != 0)
+                return CalculateTotalVectorDisplacement(simplified) / length;
+
+            return 0;
+        }
+
         #endregion
 
 
@@ -1637,6 +1726,85 @@ namespace IRI.Msh.Common.Primitives
             }
 
             result = isRing ? result / Points.Count : result / (Points.Count - 2);
+
+            return result;
+        }
+
+        #endregion
+
+        #region Curvilinearity
+
+        /// <summary>
+        /// part which are CW or CCW
+        /// </summary>
+        public double GetNumerOfCurvilinearityChange()
+        {
+            if (this.IsNullOrEmpty())
+                return 0;
+
+            switch (Type)
+            {
+                case GeometryType.LineString:
+                    return GetNumerOfCurvilinearityChangeForLineStringOrRing(false);
+
+                case GeometryType.Polygon:
+                    return this.Geometries.Sum(p => p.GetNumerOfCurvilinearityChangeForLineStringOrRing(true));
+
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return this.Geometries.Sum(p => p.GetNumerOfCurvilinearityChange());
+
+                case GeometryType.MultiPoint:
+                case GeometryType.Point:
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    return 0;
+            }
+        }
+
+        private double GetNumerOfCurvilinearityChangeForLineStringOrRing(bool isRing)
+        {
+            // to prevent divide by zero, default value set to one
+            if (this.Points == null || this.Points.Count < 3)
+                return 1;
+
+            double result = 1;
+
+            bool isClockWise = SpatialUtility.IsClockwise(new List<T>() { Points[0], Points[1], Points[2] });
+            bool temporaryIsClockWise = isClockWise;
+
+            for (int i = 0; i < this.Points.Count - 2; i++)
+            {
+                isClockWise = SpatialUtility.IsClockwise(new List<T>() { Points[i], Points[i + 1], Points[i + 2] });
+
+                if (temporaryIsClockWise != isClockWise)
+                {
+                    result++;
+                    temporaryIsClockWise = isClockWise;
+                }
+            }
+
+            if (isRing)
+            {
+                isClockWise = SpatialUtility.IsClockwise(new List<T>() { this.Points[this.Points.Count - 2], this.Points[this.Points.Count - 1], this.Points[0] });
+
+                if (temporaryIsClockWise != isClockWise)
+                {
+                    result++;
+                    temporaryIsClockWise = isClockWise;
+                }
+
+                isClockWise = SpatialUtility.IsClockwise(new List<T>() { this.Points[this.Points.Count - 1], this.Points[0], this.Points[1] });
+
+                if (temporaryIsClockWise != isClockWise)
+                {
+                    result++;
+                    //temporaryIsClockWise = isClockWise;
+                }
+            }
 
             return result;
         }
