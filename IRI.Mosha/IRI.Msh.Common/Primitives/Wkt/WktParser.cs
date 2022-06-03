@@ -32,13 +32,13 @@ namespace IRI.Msh.Common.Primitives.Wkt
             switch (type.Trim().ToUpper())
             {
                 case Point:
-                    return ParsePoint(coordinates, srid);
+                    return ParsePoint(coordinates, srid, isRing: false);
 
                 case MultiPoint:
-                    return ParseMultiPoint(coordinates, srid);
+                    return ParseMultiPoint(coordinates, srid, isRing: false);
 
                 case LineString:
-                    return ParseLineString(coordinates, srid);
+                    return ParseLineString(coordinates, srid, isRing: false);
 
                 case MultiLineString:
                     return ParseMultiLineString(coordinates, srid);
@@ -54,18 +54,18 @@ namespace IRI.Msh.Common.Primitives.Wkt
             }
         }
 
-        private static Geometry<Point> ParsePoint(string wktString, int srid)
+        private static Geometry<Point> ParsePoint(string wktString, int srid, bool isRing)
         {
-            var points = GetPoints(wktString);
+            var points = GetPoints(wktString, isRing);
 
             return Geometry<Point>.CreatePointOrLineString(points, srid);
         }
 
-        private static Geometry<Point> ParseMultiPoint(string wktString, int srid)
+        private static Geometry<Point> ParseMultiPoint(string wktString, int srid, bool isRing)
         {
             var cleanedString = wktString.Replace('(', ' ').Replace(')', ' ');
 
-            var points = GetPoints(cleanedString);
+            var points = GetPoints(cleanedString, isRing);
 
             if (points.IsNullOrEmpty())
                 return Geometry<Point>.Null;
@@ -73,9 +73,9 @@ namespace IRI.Msh.Common.Primitives.Wkt
             return new Geometry<Point>(points.Select(p => Geometry<Point>.Create(p.X, p.Y, srid)).ToList(), GeometryType.MultiPoint, srid);
         }
 
-        private static Geometry<Point> ParseLineString(string wktString, int srid)
+        private static Geometry<Point> ParseLineString(string wktString, int srid, bool isRing)
         {
-            var points = GetPoints(wktString);
+            var points = GetPoints(wktString, isRing);
 
             return Geometry<Point>.CreatePointOrLineString(points, srid);
         }
@@ -90,7 +90,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
             {
                 var subString = wktString.Substring(item.start, item.end - item.start);
 
-                lineStrings.Add(ParseLineString(subString, srid));
+                lineStrings.Add(ParseLineString(subString, srid, isRing: false));
             }
 
             return new Geometry<Point>(lineStrings, GeometryType.MultiLineString, srid);
@@ -106,7 +106,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
             {
                 var subString = wktString.Substring(item.start, item.end - item.start);
 
-                rings.Add(ParseLineString(subString, srid));
+                rings.Add(ParseLineString(subString, srid, isRing: true));
             }
 
             return new Geometry<Point>(rings, GeometryType.Polygon, srid);
@@ -126,7 +126,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
                 {
                     var subString = wktString.Substring(ring.start, ring.end - ring.start);
 
-                    rings.Add(ParseLineString(subString, srid));
+                    rings.Add(ParseLineString(subString, srid, isRing: true));
                 }
 
                 polygons.Add(new Geometry<Point>(rings, GeometryType.Polygon, srid));
@@ -135,7 +135,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
             return new Geometry<Point>(polygons, GeometryType.MultiPolygon, srid);
         }
 
-        public static List<Point> GetPoints(string pointArray)
+        public static List<Point> GetPoints(string pointArray, bool isRing)
         {
             var cleanedPointArray = pointArray?.Trim(' ', ')', '(');
 
@@ -148,7 +148,18 @@ namespace IRI.Msh.Common.Primitives.Wkt
                                 .Select(i => double.Parse(i))
                                 .ToList());
 
-            return points.Select(p => new Point(p[0], p[1])).ToList();
+            // 1401.03.13
+            // نقطه اخر در
+            // wkt
+            // تکراری است برای رینگ‌ها
+            if (isRing)
+            {
+                return points.Select(p => new Point(p[0], p[1])).Take(points.Count() - 1).ToList();
+            }
+            else
+            {
+                return points.Select(p => new Point(p[0], p[1])).ToList();
+            }
         }
 
         // 1400.03.21

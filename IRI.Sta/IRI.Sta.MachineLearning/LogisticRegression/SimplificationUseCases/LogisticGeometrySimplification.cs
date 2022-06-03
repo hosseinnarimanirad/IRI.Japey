@@ -56,7 +56,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
                 for (int originalIndex = simplifiedIndex; originalIndex < originalPoints.Count; originalIndex++)
                 {
-                    if (currentPoint.DistanceTo(originalPoints[originalIndex]) < Msh.Common.Analysis.SpatialUtility.EpsilonDistance)
+                    if (Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(currentPoint, originalPoints[originalIndex]) < Msh.Common.Analysis.SpatialUtility.EpsilonDistance)
                     {
                         indexMap.Add(simplifiedIndex, originalIndex);
 

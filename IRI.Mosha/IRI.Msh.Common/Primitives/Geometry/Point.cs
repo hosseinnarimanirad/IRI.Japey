@@ -30,12 +30,17 @@ namespace IRI.Msh.Common.Primitives
             this.Y = 0;
         }
 
-        public static double EuclideanDistance(IPoint firstPoint, IPoint secondPoint)
-        {
-            return
-                Math.Sqrt((firstPoint.X - secondPoint.X) * (firstPoint.X - secondPoint.X) +
-                    (firstPoint.Y - secondPoint.Y) * (firstPoint.Y - secondPoint.Y));
-        }
+        //public static double GetDistance(Point first, Point second)
+        //{
+        //    return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+        //}
+
+        //public static double EuclideanDistance(IPoint first, IPoint second)
+        //{
+        //    return
+        //        Math.Sqrt((first.X - second.X) * (first.X - second.X) +
+        //                    (first.Y - second.Y) * (first.Y - second.Y));
+        //}
 
         public static Point FromPolar(double radius, double angleInRadian)
         {
@@ -92,11 +97,6 @@ namespace IRI.Msh.Common.Primitives
 
 
 
-        public static double GetDistance(Point first, Point second)
-        {
-            return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
-        }
-
         public override string ToString()
         {
             return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1}", this.X, this.Y);
@@ -128,10 +128,10 @@ namespace IRI.Msh.Common.Primitives
                     Math.Round(this.Y, precision).Equals(Math.Round(point.Y, precision));
         }
 
-        public double DistanceTo(IPoint point)
-        {
-            return GetDistance(this, new Point(point.X, point.Y));
-        }
+        //public double DistanceTo(IPoint point)
+        //{
+        //    return GetDistance(this, new Point(point.X, point.Y));
+        //}
 
         public static Point operator -(Point p1, Point p2)
         {

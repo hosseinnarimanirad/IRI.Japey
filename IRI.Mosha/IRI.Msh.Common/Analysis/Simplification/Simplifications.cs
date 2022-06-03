@@ -68,7 +68,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="threshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters ) where T : IPoint
+        public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -157,7 +157,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="points"></param>
         /// <param name="anglethreshold">Must be between 0 and 1</param>
         /// <returns></returns>
-        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters ) where T : IPoint
+        public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -214,7 +214,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters ) where T : IPoint
+        public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
             if (points == null || points.Count == 0)
             {
@@ -235,7 +235,7 @@ namespace IRI.Msh.Common.Analysis
 
             while (secondIndex < points.Count)
             {
-                var semiDistance = SpatialUtility.GetSquareDistance(points[firstIndex], points[secondIndex]);
+                var semiDistance = SpatialUtility.GetSquareEuclideanDistance(points[firstIndex], points[secondIndex]);
 
                 temp += semiDistance;
 
@@ -382,11 +382,11 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 1; i < numberOfPoints; i++)
             {
-                if (pointList[i].DistanceTo(pointList[firstIndex]) > parameters.DistanceThreshold)
+                if (SpatialUtility.GetEuclideanDistance(pointList[i], pointList[firstIndex]) > parameters.DistanceThreshold)
                 {
                     result.Add(pointList[i]);
                     firstIndex = i;
-                } 
+                }
             }
 
             if (parameters.Retain3Points && result.Count == 1)
@@ -707,7 +707,7 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            if (result.Last().DistanceTo(points.Last()) != 0)
+            if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
             {
                 result.Add(points.Last());
             }
@@ -955,7 +955,7 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            if (result.Last().DistanceTo(points.Last()) != 0)
+            if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
             {
                 result.Add(points.Last());
             }
@@ -1022,7 +1022,7 @@ namespace IRI.Msh.Common.Analysis
                 result.Add(points[points.Count() / 2]);
             }
 
-            if (result.Last().DistanceTo(points.Last()) != 0)
+            if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
             {
                 result.Add(points.Last());
             }

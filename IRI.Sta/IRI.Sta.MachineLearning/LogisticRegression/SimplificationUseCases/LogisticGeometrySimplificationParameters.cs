@@ -117,10 +117,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             this.Area = SpatialUtility.GetUnsignedTriangleArea(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToNext))
-            this.DistanceToNext = SpatialUtility.GetDistance(middleScreenPoint, lastScreenPoint);
+            this.DistanceToNext = SpatialUtility.GetEuclideanDistance(middleScreenPoint, lastScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.DistanceToPrevious))
-            this.DistanceToPrevious = SpatialUtility.GetDistance(middleScreenPoint, firstScreenPoint);
+            this.DistanceToPrevious = SpatialUtility.GetEuclideanDistance(middleScreenPoint, firstScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.CosineOfAngle))
             this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
@@ -133,7 +133,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             this.VerticalDistance = SpatialUtility.GetPointToLineSegmentDistance(firstScreenPoint, lastScreenPoint, middleScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.BaseLength))
-            this.BaseLength = SpatialUtility.GetDistance(firstScreenPoint, lastScreenPoint);
+            this.BaseLength = SpatialUtility.GetEuclideanDistance(firstScreenPoint, lastScreenPoint);
 
         }
 

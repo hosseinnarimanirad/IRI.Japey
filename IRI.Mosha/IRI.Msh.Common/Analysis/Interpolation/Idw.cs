@@ -20,7 +20,7 @@ namespace IRI.Msh.Common.Analysis.Interpolation
 
             foreach (var item in points)
             {
-                double distance = measurePoint.DistanceTo(item);
+                double distance = Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(measurePoint, item);
 
                 if (distance < maxDistance)
                 {
@@ -35,7 +35,7 @@ namespace IRI.Msh.Common.Analysis.Interpolation
                     count++;
                 }
             }
-            if (count>0)
+            if (count > 0)
             {
 
             }

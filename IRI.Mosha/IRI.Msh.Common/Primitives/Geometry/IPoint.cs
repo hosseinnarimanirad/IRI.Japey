@@ -8,7 +8,7 @@ namespace IRI.Msh.Common.Primitives
 
         bool AreExactlyTheSame(object obj);
 
-        double DistanceTo(IPoint point);
+        //double DistanceTo(IPoint point);
 
         byte[] AsWkb();
 

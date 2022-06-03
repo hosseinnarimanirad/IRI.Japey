@@ -17,7 +17,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetSquareDistance(IPoint first, IPoint second)
+        public static double GetSquareEuclideanDistance(IPoint first, IPoint second)
         {
             var dx = first.X - second.X;
 
@@ -32,9 +32,9 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetDistance(IPoint first, IPoint second)
+        public static double GetEuclideanDistance(IPoint first, IPoint second)
         {
-            return Math.Sqrt(GetSquareDistance(first, second));
+            return Math.Sqrt(GetSquareEuclideanDistance(first, second));
         }
 
         #region Area
@@ -51,7 +51,7 @@ namespace IRI.Msh.Common.Analysis
             if (points == null || points.Count < 3)
                 return 0;
 
-            if (points[0].DistanceTo(points[points.Count - 1]) == 0)
+            if (SpatialUtility.GetEuclideanDistance(points[0], points[points.Count - 1]) == 0)
             {
                 throw new NotImplementedException("SpatialUtility > CalculateSignedTriangleAreaForRing");
             }
@@ -462,7 +462,7 @@ namespace IRI.Msh.Common.Analysis
             //نظر گرفته می‌شود.
             if (dxSegment == 0 && dySegment == 0)
             {
-                return lineSegmentStart.DistanceTo(targetPoint);
+                return SpatialUtility.GetEuclideanDistance(lineSegmentStart, targetPoint);
             }
 
             return Math.Abs(dySegment * targetPoint.X - dxSegment * targetPoint.Y + lineSegmentEnd.X * lineSegmentStart.Y - lineSegmentEnd.Y * lineSegmentStart.X)
@@ -481,7 +481,7 @@ namespace IRI.Msh.Common.Analysis
             //نظر گرفته می‌شود.
             if (dxSegment == 0 && dySegment == 0)
             {
-                return lineSegmentStart.DistanceTo(targetPoint);
+                return SpatialUtility.GetSquareEuclideanDistance(lineSegmentStart, targetPoint);
             }
 
             var numerator = (dySegment * targetPoint.X - dxSegment * targetPoint.Y + lineSegmentEnd.X * lineSegmentStart.Y - lineSegmentEnd.Y * lineSegmentStart.X);
@@ -519,11 +519,17 @@ namespace IRI.Msh.Common.Analysis
                 //    //indexMap.Add(originalIndex, null);
                 //}
                 /*else */
-                if (currentPoint.DistanceTo(simplifiedPoints[currentSimplifiedIndex_End]) < EpsilonDistance)
+                if (SpatialUtility.GetEuclideanDistance(currentPoint, simplifiedPoints[currentSimplifiedIndex_End]) < EpsilonDistance)
                 {
                     //indexMap.Add(originalIndex, null);
                     currentSimplifiedIndex_Start = currentSimplifiedIndex_End;
-                    currentSimplifiedIndex_End++;
+
+                    if (isRingMode && currentSimplifiedIndex_End == simplifiedPoints.Count - 1)
+                        currentSimplifiedIndex_End = 0;
+
+                    else
+                        currentSimplifiedIndex_End++;
+
                     continue;
                 }
                 //else

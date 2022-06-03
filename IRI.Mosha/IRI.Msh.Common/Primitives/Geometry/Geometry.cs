@@ -146,7 +146,7 @@ namespace IRI.Msh.Common.Primitives
 
         public bool IsNullOrEmpty()
         {
-            return this.Points.IsNullOrEmpty() && this.Geometries.IsNullOrEmpty();
+            return this.Points.IsNullOrEmpty() && this.Geometries.IsNullOrEmpty() || this.TotalNumberOfPoints == 0;
         }
 
         public bool HasAnyPoint()
@@ -166,6 +166,7 @@ namespace IRI.Msh.Common.Primitives
             //    return false;
             //}
         }
+
 
         public bool IsValid()
         {
@@ -341,7 +342,7 @@ namespace IRI.Msh.Common.Primitives
 
                 for (int i = 0; i < this.Points.Count; i++)
                 {
-                    var distance = this.Points[i].DistanceTo(point);
+                    var distance = SpatialUtility.GetEuclideanDistance(this.Points[i], point);
 
                     if (minDistance > distance)
                     {
@@ -574,7 +575,6 @@ namespace IRI.Msh.Common.Primitives
 
 
         #endregion
-
 
         #region Simplification Measures
         // ref: McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
@@ -1179,6 +1179,31 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        public List<Geometry<T>> Split(bool clone)
+        {
+            switch (Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.LineString:
+                    return new List<Geometry<T>> { clone ? this.Clone() : this };
+
+                case GeometryType.MultiPoint:
+                case GeometryType.Polygon:
+                case GeometryType.MultiLineString:
+                    return Geometries.Select(g => clone ? g.Clone() : g).ToList();
+
+                case GeometryType.MultiPolygon:
+                    return Geometries.SelectMany(g => g.Split(clone)).ToList();
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > Split");
+            }
+        }
+
         #endregion
 
         #region Project & Srs
@@ -1229,22 +1254,22 @@ namespace IRI.Msh.Common.Primitives
             switch (this.Type)
             {
                 case GeometryType.Point:
-                    return FormattableString.Invariant($"POINT{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"POINT{this.ToWktPointArrayString(isRingBase: false)}");
 
                 case GeometryType.LineString:
-                    return FormattableString.Invariant($"LINESTRING{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"LINESTRING{this.ToWktPointArrayString(isRingBase: false)}");
 
                 case GeometryType.Polygon:
-                    return FormattableString.Invariant($"POLYGON{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"POLYGON{this.ToWktPointArrayString(isRingBase: true)}");
 
                 case GeometryType.MultiPoint:
-                    return FormattableString.Invariant($"MULTIPOINT{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"MULTIPOINT{this.ToWktPointArrayString(isRingBase: false)}");
 
                 case GeometryType.MultiLineString:
-                    return FormattableString.Invariant($"MULTILINESTRING{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"MULTILINESTRING{this.ToWktPointArrayString(isRingBase: false)}");
 
                 case GeometryType.MultiPolygon:
-                    return FormattableString.Invariant($"MULTIPOLYGON{this.ToWktPointArrayString()}");
+                    return FormattableString.Invariant($"MULTIPOLYGON{this.ToWktPointArrayString(isRingBase: true)}");
 
                 case GeometryType.GeometryCollection:
                 case GeometryType.CircularString:
@@ -1256,7 +1281,7 @@ namespace IRI.Msh.Common.Primitives
         }
 
 
-        private string ToWktPointArrayString()
+        private string ToWktPointArrayString(bool isRingBase)
         {
             switch (this.Type)
             {
@@ -1264,13 +1289,13 @@ namespace IRI.Msh.Common.Primitives
                     return FormattableString.Invariant($"({Points[0].X.ToInvariantString()} {Points[0].Y.ToInvariantString()})");
 
                 case GeometryType.LineString:
-                    return GetWktLineString(this.Points);
+                    return GetWktLineString(this.Points, isRingBase);
 
                 case GeometryType.Polygon:
                 case GeometryType.MultiPoint:
                 case GeometryType.MultiLineString:
                 case GeometryType.MultiPolygon:
-                    return GetWktLineStringForGeometry(this);
+                    return GetWktLineStringForGeometry(this, isRingBase);
 
                 case GeometryType.GeometryCollection:
                 case GeometryType.CircularString:
@@ -1282,9 +1307,9 @@ namespace IRI.Msh.Common.Primitives
         }
 
         // polygon, multi point, multi linestring, multipolygon
-        private static string GetWktLineStringForGeometry(Geometry<T> geometry)
+        private static string GetWktLineStringForGeometry(Geometry<T> geometry, bool isRingBase)
         {
-            var items = geometry.Geometries.Select(g => g.ToWktPointArrayString());
+            var items = geometry.Geometries.Select(g => g.ToWktPointArrayString(isRingBase));
 
             StringBuilder result = new StringBuilder("(");
 
@@ -1300,13 +1325,18 @@ namespace IRI.Msh.Common.Primitives
             return result.ToString();
         }
 
-        private static string GetWktLineString(List<T> points)
+        private static string GetWktLineString(List<T> points, bool isRingBase)
         {
             StringBuilder builder = new StringBuilder("(");
 
             foreach (var point in points)
             {
                 builder.Append(FormattableString.Invariant($"{point.X} {point.Y},"));
+            }
+
+            if (isRingBase)
+            {
+                builder.Append(FormattableString.Invariant($"{points[0].X} {points[0].Y},"));
             }
 
             builder.Remove(builder.Length - 1, 1);
@@ -1422,7 +1452,7 @@ namespace IRI.Msh.Common.Primitives
 
         public static Geometry<T> CreatePolygonOrMultiPolygon<T>(List<Geometry<T>> rings, int srid) where T : IPoint, new()
         {
-            if (rings == null || rings.Count < 1)
+            if (rings.IsNullOrEmpty())
             {
                 return Geometry<T>.CreateEmpty(GeometryType.Polygon, srid);
             }
@@ -1719,12 +1749,12 @@ namespace IRI.Msh.Common.Primitives
 
             for (int i = 0; i < this.Points.Count - 1; i++)
             {
-                result += this.Points[i].DistanceTo(this.Points[i + 1]);
+                result += SpatialUtility.GetEuclideanDistance(this.Points[i], this.Points[i + 1]);
             }
 
             if (isRing)
             {
-                result += this.Points[this.Points.Count - 1].DistanceTo(this.Points[0]);
+                result += SpatialUtility.GetEuclideanDistance(this.Points[this.Points.Count - 1], this.Points[0]);
             }
 
             return result;
@@ -1750,7 +1780,7 @@ namespace IRI.Msh.Common.Primitives
         #region Angularity
 
         /// <summary>
-        /// returns cosine of weighted average of angles between triads of points in radian
+        /// returns weighted average of angles between triads of points in radian
         /// </summary>
         /// <returns></returns>
         public double CalculateMeanAngularChange()

@@ -106,7 +106,7 @@ namespace IRI.Msh.Common.Primitives
             }
             else
             {
-                return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+                return IRI.Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
             }
         }
 
