@@ -28,7 +28,6 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
-
         private List<Geometry<T>> _geometries;
 
         public List<Geometry<T>> Geometries
@@ -133,6 +132,8 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
+        #region Simple Methods
+
         public override string ToString()
         {
             return $"{Type} - #Points: {NumberOfPoints} - #Parts: {Geometries?.Count()}";
@@ -221,7 +222,7 @@ namespace IRI.Msh.Common.Primitives
             return BoundingBox.CalculateBoundingBox(GetAllPoints());
         }
 
-
+        #endregion
 
         #region Find
 
@@ -319,7 +320,6 @@ namespace IRI.Msh.Common.Primitives
         }
 
         #endregion
-
 
         #region Analysis
 
@@ -573,8 +573,14 @@ namespace IRI.Msh.Common.Primitives
         }
 
 
+        #endregion
+
+
+        #region Simplification Measures
+        // ref: McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
+
+
         // 1401.03.12
-        // McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
         public double CalculateTotalVectorDisplacement(Geometry<T> simplified)
         {
             return CalculateTotalVectorDisplacement(simplified, this.IsRingBase());
@@ -614,7 +620,6 @@ namespace IRI.Msh.Common.Primitives
         }
 
         // 1401.03.12
-        // McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
         public double CalculateTotalVectorDisplacementPerLength(Geometry<T> simplified)
         {
             var length = CalculateEuclideanLength();
@@ -625,8 +630,85 @@ namespace IRI.Msh.Common.Primitives
             return 0;
         }
 
-        #endregion
+        // 1401.03.12
+        // PCLL
+        public double PercentageChangeInLineLength(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
 
+            var length = this.CalculateEuclideanLength();
+
+            if (length == 0)
+                return 1.0;
+
+            return simplified.CalculateEuclideanLength() / length;
+        }
+
+        // 1401.03.12
+        // PCC
+        public double PercentageChangeInCoordinates(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
+
+            var totalNumberOfPoints = this.TotalNumberOfPoints;
+
+            if (totalNumberOfPoints == 0)
+                return 1.0;
+
+            return simplified.TotalNumberOfPoints / totalNumberOfPoints;
+        }
+
+        // 1401.03.12
+        // PCC
+        public double PercentageChangeInPointDensity(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
+
+            var density = this.CalculatePointDensity();
+
+            if (density == 0)
+                return 1.0;
+
+            return simplified.CalculatePointDensity() / density;
+        }
+
+        // 1401.03.12
+        // PCANGLE
+        public double PercentageChangeInAngularity(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
+
+            var meanAngularChange = this.CalculateMeanAngularChange();
+
+            if (meanAngularChange == 0)
+                return 1.0;
+
+            return simplified.CalculateMeanAngularChange() / meanAngularChange;
+        }
+
+        // 1401.03.12
+        // PCCS
+        public double PercentageChangeInCurvilinearSegments(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
+
+            var numerOfCurvilinearityChange = this.GetNumerOfCurvilinearityChange();
+
+            if (numerOfCurvilinearityChange == 0)
+                return 1.0;
+
+            return simplified.GetNumerOfCurvilinearityChange() / numerOfCurvilinearityChange;
+        }
+
+
+
+
+        #endregion
 
         #region Geometry Manipulation
 
@@ -1099,7 +1181,6 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
-
         #region Project & Srs
 
         public SrsBase GetSrs()
@@ -1236,7 +1317,6 @@ namespace IRI.Msh.Common.Primitives
         }
 
         #endregion
-
 
         #region Static Create
 
@@ -1400,7 +1480,6 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
-
         #region Static Methods
 
 
@@ -1489,7 +1568,6 @@ namespace IRI.Msh.Common.Primitives
 
 
         #endregion
-
 
         #region Area
 
@@ -1596,7 +1674,6 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
-
         #region Length
 
         public double CalculateEuclideanLength()
@@ -1655,17 +1732,20 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
-
         #region Density
 
-        // 1401.02.31
+        // 1401.02.31; 1401.03.12
         public double CalculatePointDensity()
         {
-            return this.TotalNumberOfPoints / this.CalculateEuclideanLength();
+            var length = this.CalculateEuclideanLength();
+
+            if (length == 0)
+                return double.PositiveInfinity;
+
+            return this.TotalNumberOfPoints / length;
         }
 
         #endregion
-
 
         #region Angularity
 
@@ -1948,8 +2028,6 @@ namespace IRI.Msh.Common.Primitives
 
         #endregion
 
-
-
         #region Conversions
 
         public Feature<T> AsFeature()
@@ -1963,7 +2041,5 @@ namespace IRI.Msh.Common.Primitives
         }
 
         #endregion
-
-
     }
 }
