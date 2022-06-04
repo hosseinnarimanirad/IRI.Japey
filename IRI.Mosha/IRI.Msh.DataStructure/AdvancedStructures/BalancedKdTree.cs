@@ -269,7 +269,7 @@ namespace IRI.Msh.DataStructure.AdvancedStructures
         {
             if (distanceFunc == null)
             {
-                distanceFunc = (p1, p2) => PointFunc(p1).DistanceTo(PointFunc(p2));
+                distanceFunc = (p1, p2) => SpatialUtility.GetEuclideanDistance(PointFunc(p1), PointFunc(p2));
             }
 
             var minDistance = distanceFunc(this.Root.Point, point);
@@ -319,7 +319,7 @@ namespace IRI.Msh.DataStructure.AdvancedStructures
         {
             if (distanceFunc == null)
             {
-                distanceFunc = (p1, p2) => PointFunc(p1).DistanceTo(PointFunc(p2));
+                distanceFunc = (p1, p2) => SpatialUtility.GetEuclideanDistance(PointFunc(p1), PointFunc(p2));
             }
 
             return FindNeighbours(point, distance, Root, distanceFunc);

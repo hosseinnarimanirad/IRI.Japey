@@ -268,7 +268,8 @@ namespace Microsoft.SqlServer.Types
 
 
                 var kdtreeCluster = new KdTreePointClusters<Point>(points, new Group<Point>(Point.NaN));
-                kdtreeCluster.GetClusters((p1, p2) => Point.EuclideanDistance(p1, p2) < minDistance);
+                //kdtreeCluster.GetClusters((p1, p2) => Point.EuclideanDistance(p1, p2) < minDistance);
+                kdtreeCluster.GetClusters((p1, p2) => SpatialUtility.GetEuclideanDistance(p1, p2) < minDistance);
 
 
                 //************************************************************************************************

@@ -103,7 +103,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public double DistanceTo(IPoint point)
         {
-            return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+            //return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+
+            return Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(this, point);
         }
 
 
