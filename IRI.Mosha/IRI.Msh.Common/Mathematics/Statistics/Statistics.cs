@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using IRI.Msh.Algebra;
 using System.Linq;
 using IRI.Msh.Exceptions;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Msh.Statistics
 {
@@ -37,7 +38,7 @@ namespace IRI.Msh.Statistics
         public static double GetMax(double[] values)
         {
 
-            if (values.Length < 0)
+            if (values.IsNullOrEmpty())
             {
                 throw new ZeroSizeArrayException();
             }
@@ -56,10 +57,9 @@ namespace IRI.Msh.Statistics
         public static int GetMax(int[] values)
         {
 
-            if (values.Length < 0)
-            {
+            //if (values.Length < 0)
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             int resultVlaue = values[0];
 
@@ -121,11 +121,8 @@ namespace IRI.Msh.Statistics
 
         public static double GetMin(double[] values)
         {
-
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             double resultVlaue = values[0];
 
@@ -143,10 +140,8 @@ namespace IRI.Msh.Statistics
 
         public static double GetMin(List<double> values)
         {
-            if (values.Count <= 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             double resultVlaue = values[0];
 
@@ -161,11 +156,9 @@ namespace IRI.Msh.Statistics
 
         public static int GetMin(int[] values)
         {
-
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
+
 
             int resultVlaue = values[0];
 
@@ -215,10 +208,9 @@ namespace IRI.Msh.Statistics
 
         public static double CalculateSum(double[] values)
         {
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
+
 
             double result = 0;
 
@@ -232,10 +224,8 @@ namespace IRI.Msh.Statistics
 
         private static double CalculateSum(List<double> values)
         {
-            if (values.Count < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             double result = 0;
 
@@ -269,27 +259,23 @@ namespace IRI.Msh.Statistics
 
         public static double CalculateMean(double[] values)
         {
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             return Statistics.CalculateSum(values) / values.Length;
         }
 
         public static double CalculateMean(List<double> values)
         {
-            if (values.Count < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             return Statistics.CalculateSum(values) / values.Count;
         }
 
         public static double CalculateMean(Matrix values)
         {
-            if ((object)values == null)
+            if (values is null)
             {
                 throw new NotImplementedException();
             }
@@ -303,30 +289,24 @@ namespace IRI.Msh.Statistics
 
         public static double CalculateStandardDeviation(double[] values, VarianceCalculationMode mode = VarianceCalculationMode.Sample)
         {
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             return Math.Sqrt(Statistics.CalculateVariance(values, mode));
         }
 
         public static double CalculateStandardDeviation(List<double> values, VarianceCalculationMode mode = VarianceCalculationMode.Sample)
         {
-            if (values.Count < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             return Math.Sqrt(Statistics.CalculateVariance(values, mode));
         }
 
         public static double CalculateStandardDeviation(Matrix values)
         {
-            if (((object)values) == null)
-            {
+            if (values is null)
                 throw new ZeroSizeArrayException();
-            }
 
             return Math.Sqrt(Statistics.CalculateVariance(values));
         }
@@ -334,10 +314,8 @@ namespace IRI.Msh.Statistics
         // ref for sample mode: https://stats.stackexchange.com/a/3934/289542
         public static double CalculateVariance(double[] values, VarianceCalculationMode mode = VarianceCalculationMode.Sample)
         {
-            if (values.Length < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             double result = 0;
 
@@ -366,10 +344,8 @@ namespace IRI.Msh.Statistics
         // ref for sample mode: https://stats.stackexchange.com/a/3934/289542
         public static double CalculateVariance(List<double> values, VarianceCalculationMode mode = VarianceCalculationMode.Sample)
         {
-            if (values.Count < 0)
-            {
+            if (values.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             double result = 0;
 
@@ -398,10 +374,8 @@ namespace IRI.Msh.Statistics
         // do not consider sample mode
         public static double CalculateVariance(Matrix values)
         {
-            if (((object)values) == null)
-            {
+            if (values is null)
                 throw new ZeroSizeArrayException();
-            }
 
             double result = 0;
 
@@ -425,10 +399,8 @@ namespace IRI.Msh.Statistics
 
         public static double CalculateCovariance(double[] firstValues, double[] secondValues)
         {
-            if (firstValues.Length < 0)
-            {
+            if (firstValues.IsNullOrEmpty() || secondValues.IsNullOrEmpty())
                 throw new ZeroSizeArrayException();
-            }
 
             int length = firstValues.Length;
 
@@ -453,10 +425,8 @@ namespace IRI.Msh.Statistics
 
         public static double CalculateCovariance(Matrix firstValues, Matrix secondValues)
         {
-            if (((object)firstValues) == null || ((object)secondValues) == null)
-            {
+            if (firstValues is null || secondValues is null)
                 throw new ZeroSizeArrayException();
-            }
 
             if (!Matrix.AreTheSameSize(firstValues, secondValues))
             {

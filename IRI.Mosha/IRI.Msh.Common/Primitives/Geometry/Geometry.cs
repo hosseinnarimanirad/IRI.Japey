@@ -705,8 +705,24 @@ namespace IRI.Msh.Common.Primitives
             return simplified.GetNumerOfCurvilinearityChange() / numerOfCurvilinearityChange;
         }
 
+        // 1401.03.15
+        /// <summary>
+        /// simplified SD for Segment Length / original SD for Segment Length 
+        /// </summary>
+        /// <param name="simplified"></param>
+        /// <returns></returns>
+        public double PercentageChangeInSegmentLengthVariations(Geometry<T> simplified)
+        {
+            if (simplified.IsNullOrEmpty())
+                return 1.0;
 
+            var segmentLengthSD = this.CalculateSegmentLengthVariations();
 
+            if (segmentLengthSD == 0)
+                return 1.0;
+
+            return simplified.CalculateSegmentLengthVariations() / segmentLengthSD;
+        }
 
         #endregion
 
@@ -1775,9 +1791,65 @@ namespace IRI.Msh.Common.Primitives
             return this.TotalNumberOfPoints / length;
         }
 
-        public double CalculatePointDensityStandardDeviation()
+        /// <summary>
+        /// Standard Deviation for segment lengths
+        /// </summary>
+        /// <returns></returns>
+        public double CalculateSegmentLengthVariations()
         {
+            var segments = GetSegmentLengths();
 
+            return Statistics.Statistics.CalculateStandardDeviation(segments, Statistics.VarianceCalculationMode.Population);
+        }
+
+        public List<double> GetSegmentLengths()
+        {
+            if (this.IsNullOrEmpty())
+                return new List<double>();
+
+            switch (this.Type)
+            {
+                case GeometryType.Point:
+                case GeometryType.MultiPoint:
+                    return new List<double>();
+
+                case GeometryType.LineString:
+                    return GetSegmentLengthsForLineStringOrRing(false);
+
+                case GeometryType.Polygon:
+                    return this.Geometries.SelectMany(g => g.GetSegmentLengthsForLineStringOrRing(true)).ToList();
+
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return this.Geometries.SelectMany(g => g.GetSegmentLengths()).ToList();
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private List<double> GetSegmentLengthsForLineStringOrRing(bool isRing)
+        {
+            List<double> result = new List<double>();
+
+            if (this.Points == null || this.Points.Count < 2)
+                return result;
+
+            for (int i = 0; i < this.Points.Count - 1; i++)
+            {
+                result.Add(SpatialUtility.GetEuclideanDistance(this.Points[i], this.Points[i + 1]));
+            }
+
+            if (isRing)
+            {
+                result.Add(SpatialUtility.GetEuclideanDistance(this.Points[this.Points.Count - 1], this.Points[0]));
+            }
+
+            return result;
         }
 
         #endregion
