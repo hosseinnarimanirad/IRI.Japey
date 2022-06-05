@@ -652,7 +652,7 @@ namespace IRI.Msh.Common.Primitives
             if (simplified.IsNullOrEmpty())
                 return 1.0;
 
-            var totalNumberOfPoints = this.TotalNumberOfPoints;
+            var totalNumberOfPoints = (double)this.TotalNumberOfPoints;
 
             if (totalNumberOfPoints == 0)
                 return 1.0;
@@ -672,7 +672,7 @@ namespace IRI.Msh.Common.Primitives
             if (density == 0)
                 return 1.0;
 
-            return simplified.CalculatePointDensity() / density;
+            return density - simplified.CalculatePointDensity();
         }
 
         // 1401.03.12
@@ -1773,6 +1773,11 @@ namespace IRI.Msh.Common.Primitives
                 return double.PositiveInfinity;
 
             return this.TotalNumberOfPoints / length;
+        }
+
+        public double CalculatePointDensityStandardDeviation()
+        {
+
         }
 
         #endregion

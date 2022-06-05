@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IRI.Msh.Common.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -229,10 +230,8 @@ namespace IRI.Msh.Common.Primitives
 
         public static BoundingBox CalculateBoundingBox<T>(IEnumerable<T> points) where T : IPoint, new()
         {
-            if (points == null || points.Count() == 0)
-            {
+            if (points.IsNullOrEmpty()/* == null || points.Count() == 0*/)
                 return BoundingBox.NaN;
-            }
 
             return new BoundingBox(xMin: points.Min(i => i.X),
                                                 yMin: points.Min(i => i.Y),

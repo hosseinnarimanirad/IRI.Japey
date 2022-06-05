@@ -1,15 +1,27 @@
 ﻿using IRI.Msh.Common.Analysis;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace IRI.Msh.Common.Extensions
 {
     public static class GeometryExtensions
     {
+        public static BoundingBox GetBoundingBox<T>(this List<Geometry<T>> spatialFeatures) where T : IPoint, new()
+        {
+            if (spatialFeatures.IsNullOrEmpty() /*== null || spatialFeatures.Count < 1*/)
+                return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
+
+            var envelopes = spatialFeatures.Select(i => i?.GetBoundingBox()).Where(i => i != null).Select(i => i.Value).ToList();
+
+            return BoundingBox.GetMergedBoundingBox(envelopes, true);
+        }
+
 
         public static List<Geometry<T>> Project<T>(this List<Geometry<T>> values, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
         {

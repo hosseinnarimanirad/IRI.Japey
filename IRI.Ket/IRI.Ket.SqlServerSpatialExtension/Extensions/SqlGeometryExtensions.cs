@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Ket.SpatialExtensions
 {
@@ -66,10 +67,8 @@ namespace IRI.Ket.SpatialExtensions
 
         public static BoundingBox GetBoundingBox(this List<SqlGeometry> spatialFeatures)
         {
-            if (spatialFeatures == null || spatialFeatures.Count < 1)
-            {
+            if (spatialFeatures.IsNullOrEmpty() /*== null || spatialFeatures.Count < 1*/)
                 return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
-            }
 
             var envelopes = spatialFeatures.AsParallel().Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
 
