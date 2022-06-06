@@ -473,6 +473,10 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => Simplifications.SimplifyByReumannWitkam(pList, paramters);
                     break;
 
+                case SimplificationType.SleeveFitting:
+                    filter = pList => Simplifications.SimplifyBySleeveFitting(pList, paramters);
+                    break;
+
                 case SimplificationType.PerpendicularDistance:
                     filter = pList => Simplifications.SimplifyByPerpendicularDistance(pList, paramters);
                     break;

@@ -5,13 +5,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using IRI.Msh.Common.Helpers; 
+using IRI.Msh.Common.Helpers;
 
 
 namespace IRI.Msh.Common.Mapping
 {
     public static class WebMercatorUtility
     {
+        // 1401.03.16
+        // There are 3 space
+        // GROUND; WEB MECATOR MAP; SCREEN
+        // 
+        private const int ImageSize = 256;
+
         private const double EarthRadius = 6378137;
         private const double MinLatitude = -85.05112878;
         private const double MaxLatitude = 85.05112878;
@@ -19,317 +25,24 @@ namespace IRI.Msh.Common.Mapping
         private const double MaxLongitude = 180;
         private const double EarthCircumference = 2 * Math.PI * EarthRadius;
 
-        private const double ImageSize = 256;
+        //
+        static double MaxIsometricLatitude, MinIsometricLatitude, MaxAllowableLatitude;
 
-        /// <summary>
-        /// In Pixel
-        /// </summary>
-        /// <param name="level"></param>
-        /// <returns></returns>
-        public static long CalculateScreenSize(int level)
-        {
-            if (level < 0 || level > 24)
-                throw new NotImplementedException();
-
-            return 256 * (long)Math.Pow(2, level);
-        }
-
-        /// <summary>
-        /// The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
-        ///  For example, at a ground resolution of 10 meters/pixel, each pixel represents a ground distance of 10 meters. 
-        /// </summary>
-        /// <param name="level"></param>
-        /// <param name="latitude">in degree</param>
-        /// <returns></returns>
-        public static double CalculateGroundResolution(int level, double latitude)
-        {
-            return Math.Cos(latitude * Math.PI / 180.0) * EarthCircumference / CalculateScreenSize(level);
-        }
-
-        public static double CalculateGroundResolution(double mapScale)
-        {
-            return ConversionHelper.PixelToMeterFactor / mapScale;
-        }
-
-        /// <summary>
-        /// The map scale indicates the ratio between map distance and ground distance, when measured in the same units.
-        /// </summary>
-        /// <param name="level"></param>
-        /// <param name="latitude"></param>
-        /// <returns></returns>
-        public static double CalculateMapScale(int level, double latitude)
-        {
-            //return 1.0 / (CalculateGroundResolution(level, latitude) * 96.0 / 0.0254);
-            //return 1.0 / (CalculateGroundResolution(level, latitude) * 96.0 / Conversions.InchToMeterFactor);
-            return 1.0 / (CalculateGroundResolution(level, latitude) * ConversionHelper.MeterToPixelFactor);
-        }
-
-
-
-        /// <summary>
-        /// Returns the inverse scale for the groundWidth sized into the screenWidth
-        /// </summary>
-        /// <param name="groundWidth"></param>
-        /// <param name="latitude">In Degree</param>
-        /// <param name="screenWidth"></param>
-        /// <returns></returns>
-        public static double EstimateInverseMapScale(double groundWidth, double screenWidth)
-        {
-            //1 meter on ground ~ 3779.5 pixel (96 dpi)
-            //1 pixel at 1/s scale ~ s/3779.5 meter on ground
-
-            return groundWidth * ConversionHelper.MeterToPixelFactor / screenWidth;
-        }
-
-        public static double EstimateInverseMapScale(BoundingBox groundBoundingBox, double screenWidth, double screenHeight)
-        {
-            var scale1 = EstimateInverseMapScale(groundBoundingBox.Width, screenWidth);
-
-            var scale2 = EstimateInverseMapScale(groundBoundingBox.Height, screenHeight);
-
-            return Math.Max(scale1, scale2);
-        }
-
-        //1399.06.26
-        public static System.Drawing.Size CalculateWindowSize(BoundingBox groundBoundingBox, int level, bool exactFit = false)
-        {
-            var scale = GetGoogleMapScale(level);
-
-            var marginFacot = exactFit ? 1.0 : 1.2;
-
-            var width = groundBoundingBox.Width * scale * ConversionHelper.MeterToPixelFactor * marginFacot;
-
-            var height = groundBoundingBox.Height * scale * ConversionHelper.MeterToPixelFactor * marginFacot;
-
-            return new System.Drawing.Size((int)width, (int)height);
-        }
-
-        //***************
+        //
         public static List<ZoomScale> ZoomLevels;
 
         static readonly int minZoomLevel, maxZoomLevel;
 
-        public static int GetNextZoomLevel(int currentZoomLevel)
-        {
-            if (currentZoomLevel >= maxZoomLevel)
-            {
-                return maxZoomLevel;
-            }
-
-            return currentZoomLevel + 1;
-        }
-
-        public static int GetPreviousZoomLevel(int currentZoomLevel)
-        {
-            if (currentZoomLevel <= minZoomLevel)
-            {
-                return minZoomLevel;
-            }
-
-            return currentZoomLevel - 1;
-        }
-
-        public static double GetGoogleMapScale(int zoomLevel)
-        {
-            if (zoomLevel < minZoomLevel)
-            {
-                return GetGoogleMapScale(minZoomLevel);
-            }
-            else if (zoomLevel > maxZoomLevel)
-            {
-                return GetGoogleMapScale(maxZoomLevel);
-            }
-            else
-            {
-
-                var temp1 = ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).InverseScale;
-                var temp2 = (591657550.50 * Math.Cos(35 * Math.PI / 180) / Math.Pow(2, zoomLevel));
-
-                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).Scale;
-            }
-        }
-
-        public static double GetGoogleMapScale(int zoomLevel, double? latitude)
-        {
-            if (latitude == null)
-            {
-                return GetGoogleMapScale(zoomLevel);
-            }
-
-            if (zoomLevel < minZoomLevel)
-            {
-                return GetGoogleMapScale(minZoomLevel, latitude);
-            }
-            else if (zoomLevel > maxZoomLevel)
-            {
-                return GetGoogleMapScale(maxZoomLevel, latitude);
-            }
-            else
-            {
-                //591657550.50
-                //return 1.0 / (591657550.50 * Math.Cos(latitude.Value * Math.PI / 180) / Math.Pow(2, zoomLevel));//ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).Scale;
-                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).GetScaleAt(latitude.Value);
-            }
-        }
-
-        private static ZoomScale GetGoogleZoomScale(int zoomLevel)
-        {
-            if (zoomLevel < minZoomLevel)
-            {
-                return GetGoogleZoomScale(minZoomLevel);
-            }
-            else if (zoomLevel > maxZoomLevel)
-            {
-                return GetGoogleZoomScale(maxZoomLevel);
-            }
-            else
-            {
-                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel);
-            }
-        }
-
-        /// <summary>
-        /// In which scale this distance can be represented in one tile (256 pixel wide)
-        /// </summary>
-        /// <param name="groundDistance"></param>
-        /// <param name="latitude">In Degree</param>
-        /// <param name="screenWidth"></param>
-        /// <returns></returns>
-        public static int EstimateZoomLevel(double groundDistance, double latitude, double screenWidth)
-        {
-            var inverseScale = EstimateInverseMapScale(groundDistance, screenWidth);
-
-            return GetZoomLevel(1.0 / inverseScale, latitude);
-            //return ZoomLevels.First(i => i.InverseScale > inverseScale).ZoomLevel;
-        }
-
-        public static int EstimateZoomLevel(BoundingBox groundBoundingBox, double latitude, double screenWidth, double screenHeight)
-        {
-            var inverseScale = EstimateInverseMapScale(groundBoundingBox, screenWidth, screenWidth);
-
-            return GetZoomLevel(1.0 / inverseScale, latitude);
-            //return ZoomLevels.First(i => i.InverseScale > inverseScale).ZoomLevel;
-        }
-
-        public static int GetZoomLevel(BoundingBox mapBoundingBox, double screenWidth, double screenHeight)
-        {
-            var scaleX = screenWidth / mapBoundingBox.Width;
-
-            var scaleY = screenHeight / mapBoundingBox.Height;
-
-            var screenSize = scaleX < scaleY ? screenWidth : screenHeight;
-
-            return WebMercatorUtility.EstimateZoomLevel(Math.Max(mapBoundingBox.Width, mapBoundingBox.Height), 35, screenSize);
-
-        }
-
-        public static int GetZoomLevel(double mapScale, double latitude = 0)
-        {
-            //////Approach 01
-            ////var values = ZoomLevels.Select(i => new { index = i.ZoomLevel, values = Math.Abs(i.InverseScale - 1.0 / mapScale) }).OrderBy(i => i.values).ToList();
-
-            ////var values2 = ZoomLevels.Select(i => new { index = i.ZoomLevel, values = Math.Abs(i.Scale - mapScale) }).OrderBy(i => i.values).ToList();
-
-            ////Approach 02
-            //if (ZoomLevels.Any(i => Math.Abs(i.InverseScale - 1.0 / mapScale) < 10))
-            //{
-            //    return ZoomLevels.Single(i => Math.Abs(i.InverseScale - 1.0 / mapScale) < 10).ZoomLevel;
-            //}
-            //else
-            //{
-            //    return ZoomLevels.Select(i => new { Index = i.ZoomLevel, Value = Math.Abs(i.InverseScale - 1.0 / mapScale) })
-            //                        .OrderBy(i => i.Value)
-            //                        .Select(i => i.Index)
-            //                        .First();
-            //}
-
-            //Approach 03 - 13950911
-            //var level = (int)Math.Round(Math.Log(591657550.50 * mapScale, 2));
-            //var level = (int)Math.Round(Math.Log(EarthCircumference * Math.Cos(latitude * Math.PI / 180.0) * Conversions.MeterToPixelFactor / 256 * mapScale, 2));
-            var level = (int)Math.Round(GetLevel(mapScale, latitude));
-
-            return AdjustLevel(level);
-        }
-
-        private static double GetLevel(double mapScale, double latitude)
-        {
-            return Math.Log(EarthCircumference * Math.Cos(latitude * Math.PI / 180.0) * ConversionHelper.MeterToPixelFactor / 256.0 * mapScale, 2);
-        }
-
-        private static int AdjustLevel(int level)
-        {
-            if (level > maxZoomLevel)
-            {
-                return maxZoomLevel;
-            }
-            else if (level < minZoomLevel)
-            {
-                return minZoomLevel;
-            }
-            else
-            {
-                return level;
-            }
-        }
-
-        public static ZoomScale GetUpperLevel(double scale, double latitude)
-        {
-            //double inverseScale = 1.0 / scale;
-
-            //var temp = ZoomLevels.Where(z => z.InverseScale > inverseScale);
-
-            //return temp.Count() > 0 ? temp.First() : ZoomLevels.Last();
-
-            var level = AdjustLevel((int)Math.Floor(GetLevel(scale, latitude)));
-
-            return ZoomLevels.Single(i => i.ZoomLevel == level);
-        }
-
-        public static ZoomScale GetLowerLevel(double scale, double latitude)
-        {
-            //double inverseScale = 1.0 / scale;
-
-            //var temp = ZoomLevels.Where(z => z.InverseScale < inverseScale);
-
-            //return temp.Count() > 0 ? temp.Last() : ZoomLevels.First();
-
-            var level = AdjustLevel((int)Math.Ceiling(GetLevel(scale, latitude)));
-
-            return ZoomLevels.Single(i => i.ZoomLevel == level);
-        }
-
-        public static double GetUpperLevel(double scale, List<double> availableInverseScales)
-        {
-            double inverseScale = 1.0 / scale;
-
-            var temp = availableInverseScales.Where(z => z > inverseScale).OrderBy(z => z).ToList();
-
-            return temp.Count() > 0 ? temp.First() : availableInverseScales.Max();
-        }
-
-        public static double GetLowerLevel(double scale, List<double> availableInverseScales)
-        {
-            double inverseScale = 1.0 / scale;
-
-            var temp = availableInverseScales.Where(z => z < inverseScale).OrderBy(z => z).ToList();
-
-            return temp.Count() > 0 ? temp.Last() : availableInverseScales.Min();
-        }
-        //***************
-
-        //
-        static double MaxIsometricLatitude, MinIsometricLatitude, MaxAllowableLatitude;
-
         //Spherical
-        static double FirstEccentricity = 0;
+        static double _firstEccentricity = 0;
 
         static WebMercatorUtility()
         {
             MaxAllowableLatitude = 85.05112877822864;
 
-            MaxIsometricLatitude = MapProjects.GeodeticLatitudeToIsometricLatitude(MaxAllowableLatitude, FirstEccentricity);
+            MaxIsometricLatitude = MapProjects.GeodeticLatitudeToIsometricLatitude(MaxAllowableLatitude, _firstEccentricity);
 
-            MinIsometricLatitude = MapProjects.GeodeticLatitudeToIsometricLatitude(-MaxAllowableLatitude, FirstEccentricity);
+            MinIsometricLatitude = MapProjects.GeodeticLatitudeToIsometricLatitude(-MaxAllowableLatitude, _firstEccentricity);
 
             ZoomLevels = Enumerable.Range(0, 24).Reverse().Select(i => new ZoomScale(i, 591657550.50 / Math.Pow(2, i))).ToList();
 
@@ -368,8 +81,297 @@ namespace IRI.Msh.Common.Mapping
             //ZoomLevels.Add(new ZoomScale(2, 147914387.600000));
             //ZoomLevels.Add(new ZoomScale(1, 295828775.300000));
             //ZoomLevels.Add(new ZoomScale(0, 591657550.500000));
-
         }
+
+
+
+        // ********************************************** SCREEN (PIXEL) *************************************************
+        /// <summary>
+        /// In Pixel
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static long CalculateScreenSize(int level)
+        {
+            if (level < 0 || level > 24)
+                throw new NotImplementedException();
+
+            return ImageSize * (long)Math.Pow(2, level);
+        }
+
+        /// <summary>
+        /// In Pixel
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="webMercatorLength"></param>
+        /// <returns></returns>
+        public static double ToScreenLength(int level, double webMercatorLength)
+        {
+            return webMercatorLength * CalculateScreenSize(level) / EarthCircumference;
+        }
+
+        ////1399.06.26
+        //public static System.Drawing.Size CalculateWindowSize(BoundingBox groundBoundingBox, int level, bool exactFit = false)
+        //{
+        //    var scale = GetGoogleMapScale(level);
+
+        //    var marginFactor = exactFit ? 1.0 : 1.2;
+
+        //    var width = groundBoundingBox.Width * scale * ConversionHelper.MeterToPixelFactor * marginFactor;
+
+        //    var height = groundBoundingBox.Height * scale * ConversionHelper.MeterToPixelFactor * marginFactor;
+
+        //    return new System.Drawing.Size((int)width, (int)height);
+        //}
+
+        // 1401.03.16
+        public static System.Drawing.Size ToScreenSize(int level, BoundingBox webMercatorBoundingBox, bool exactFit = false)
+        {
+            var marginFactor = exactFit ? 1.0 : 1.2;
+
+            var width = ToScreenLength(level, webMercatorBoundingBox.Width) * marginFactor;
+
+            var height = ToScreenLength(level, webMercatorBoundingBox.Height) * marginFactor;
+
+            return new System.Drawing.Size((int)width, (int)height);
+        }
+
+
+
+        // ********************************************** GROUND *********************************************************
+        /// <summary>
+        /// The ground resolution indicates the distance on the ground that’s represented by a single pixel in the map.
+        ///  For example, at a ground resolution of 10 meters/pixel, each pixel represents a ground distance of 10 meters. 
+        /// </summary>
+        /// <param name="level">google zoom level</param>
+        /// <param name="latitude">in degree</param>
+        /// <returns></returns>
+        public static double CalculateGroundResolution(int level, double latitude)
+        {
+            // 1: 1 pixel
+            return Math.Cos(latitude * Math.PI / 180.0) * ToWebMercatorLength(level, 1); // EarthCircumference / CalculateScreenSize(level);
+        }
+
+        /// <summary>
+        /// The distance on the earth equivalent to 1 pixel at the specific scale
+        /// </summary>
+        /// <param name="mapScale"></param>
+        /// <returns></returns>
+        public static double CalculateGroundResolution(double mapScale)
+        {
+            // 1 pixel * PixelToMeterFactor (meter) / mapScale
+            return ConversionHelper.PixelToMeterFactor / mapScale;
+        }
+
+
+
+        // ********************************************** WebMercator ****************************************************
+        /// <summary>
+        /// Returns the length in WebMercator
+        /// </summary>
+        /// <param name="level">Google Zoom Level</param>
+        /// <param name="screenLengthInPixel">In Pixel</param>
+        /// <returns></returns>
+        public static double ToWebMercatorLength(int level, double screenLengthInPixel)
+        {
+            return screenLengthInPixel * EarthCircumference / CalculateScreenSize(level);
+        }
+
+
+
+        // ********************************************** Map SCALE (GROUND) *********************************************
+        /// <summary>
+        /// The map scale indicates the ratio between map distance and ground distance, when measured in the same units.
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="latitude"></param>
+        /// <returns></returns>
+        public static double CalculateMapScale(int level, double latitude)
+        {
+            return 1.0 / (CalculateGroundResolution(level, latitude) * ConversionHelper.MeterToPixelFactor);
+        }
+         
+
+        // ********************************************** Google Zoom Level **********************************************
+        /// <summary>
+        /// In which scale this distance can be represented in one tile (256 pixel wide)
+        /// </summary>
+        /// <param name="webMercatorLength"></param>
+        /// <param name="latitude">In Degree</param>
+        /// <param name="screenWidth"></param>
+        /// <returns></returns>
+        public static int EstimateZoomLevel(double webMercatorLength/*, double latitude*/, double screenWidth)
+        {
+            //1 meter on ground ~ 3779.5 pixel (96 dpi)
+            //1 pixel at 1/s scale ~ s/3779.5 meter on ground
+
+            var scale = screenWidth * ConversionHelper.PixelToMeterFactor / webMercatorLength;
+
+            return GetZoomLevel(scale);
+        }
+
+        public static int EstimateZoomLevel(BoundingBox webMercatorBoundingBox/*, double latitude*/, double screenWidth, double screenHeight)
+        { 
+            var widthScale = screenWidth * ConversionHelper.PixelToMeterFactor / webMercatorBoundingBox.Width;
+            
+            var heightScale = screenHeight * ConversionHelper.PixelToMeterFactor / webMercatorBoundingBox.Height;
+            
+            var scale = Math.Min(widthScale, heightScale);
+
+            return GetZoomLevel(scale);
+        }
+
+        //public static int GetZoomLevel(BoundingBox webMercatorBoundingBox, double screenWidth, double screenHeight)
+        //{
+        //    var scaleX = screenWidth / webMercatorBoundingBox.Width;
+
+        //    var scaleY = screenHeight / webMercatorBoundingBox.Height;
+
+        //    var screenSize = scaleX < scaleY ? screenWidth : screenHeight;
+
+        //    return EstimateZoomLevel(Math.Max(webMercatorBoundingBox.Width, webMercatorBoundingBox.Height), /*35,*/ screenSize);
+
+        //}
+
+        public static int GetZoomLevel(double mapScale, double latitude = 0)
+        {
+            var level = (int)Math.Round(GetLevel(mapScale, latitude));
+
+            return AdjustLevel(level);
+        }
+
+        private static double GetLevel(double mapScale, double latitude)
+        {
+            return Math.Log(Math.Cos(latitude * Math.PI / 180.0) * EarthCircumference * ConversionHelper.MeterToPixelFactor / ImageSize * mapScale, 2);
+        }
+
+
+        #region Application Level
+
+        public static int GetNextZoomLevel(int currentZoomLevel)
+        {
+            if (currentZoomLevel >= maxZoomLevel)
+            {
+                return maxZoomLevel;
+            }
+
+            return currentZoomLevel + 1;
+        }
+
+        public static int GetPreviousZoomLevel(int currentZoomLevel)
+        {
+            if (currentZoomLevel <= minZoomLevel)
+            {
+                return minZoomLevel;
+            }
+
+            return currentZoomLevel - 1;
+        }
+
+        public static double GetGoogleMapScale(int zoomLevel)
+        {
+            if (zoomLevel < minZoomLevel)
+            {
+                return GetGoogleMapScale(minZoomLevel);
+            }
+            else if (zoomLevel > maxZoomLevel)
+            {
+                return GetGoogleMapScale(maxZoomLevel);
+            }
+            else
+            {
+                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).Scale;
+            }
+        }
+
+        public static double GetGoogleMapScale(int zoomLevel, double? latitude)
+        {
+            if (latitude == null)
+            {
+                return GetGoogleMapScale(zoomLevel);
+            }
+
+            if (zoomLevel < minZoomLevel)
+            {
+                return GetGoogleMapScale(minZoomLevel, latitude);
+            }
+            else if (zoomLevel > maxZoomLevel)
+            {
+                return GetGoogleMapScale(maxZoomLevel, latitude);
+            }
+            else
+            {
+                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel).GetScaleAt(latitude.Value);
+            }
+        }
+
+        private static ZoomScale GetGoogleZoomScale(int zoomLevel)
+        {
+            if (zoomLevel < minZoomLevel)
+            {
+                return GetGoogleZoomScale(minZoomLevel);
+            }
+            else if (zoomLevel > maxZoomLevel)
+            {
+                return GetGoogleZoomScale(maxZoomLevel);
+            }
+            else
+            {
+                return ZoomLevels.Single(i => i.ZoomLevel == zoomLevel);
+            }
+        }
+
+
+        private static int AdjustLevel(int level)
+        {
+            if (level > maxZoomLevel)
+            {
+                return maxZoomLevel;
+            }
+            else if (level < minZoomLevel)
+            {
+                return minZoomLevel;
+            }
+            else
+            {
+                return level;
+            }
+        }
+
+        public static ZoomScale GetUpperLevel(double scale, double latitude)
+        {
+            var level = AdjustLevel((int)Math.Floor(GetLevel(scale, latitude)));
+
+            return ZoomLevels.Single(i => i.ZoomLevel == level);
+        }
+
+        public static ZoomScale GetLowerLevel(double scale, double latitude)
+        {
+            var level = AdjustLevel((int)Math.Ceiling(GetLevel(scale, latitude)));
+
+            return ZoomLevels.Single(i => i.ZoomLevel == level);
+        }
+
+        public static double GetUpperLevel(double scale, List<double> availableInverseScales)
+        {
+            double inverseScale = 1.0 / scale;
+
+            var temp = availableInverseScales.Where(z => z > inverseScale).OrderBy(z => z).ToList();
+
+            return temp.Count() > 0 ? temp.First() : availableInverseScales.Max();
+        }
+
+        public static double GetLowerLevel(double scale, List<double> availableInverseScales)
+        {
+            double inverseScale = 1.0 / scale;
+
+            var temp = availableInverseScales.Where(z => z < inverseScale).OrderBy(z => z).ToList();
+
+            return temp.Count() > 0 ? temp.Last() : availableInverseScales.Min();
+        }
+
+        #endregion
+
 
         public static Point LatLonToImageNumber(double geocentricLatitude, double geocentricLongitude, int zoom)
         {
@@ -393,7 +395,7 @@ namespace IRI.Msh.Common.Mapping
 
             var columnNumber = Math.Floor(tempLongitude / xUnit);
 
-            var isoY = MapProjects.GeodeticLatitudeToIsometricLatitude(geocentricLatitude, FirstEccentricity);
+            var isoY = MapProjects.GeodeticLatitudeToIsometricLatitude(geocentricLatitude, _firstEccentricity);
 
             var rowNumber = isoY / yUnit;
 
@@ -411,18 +413,9 @@ namespace IRI.Msh.Common.Mapping
 
         public static List<TileInfo> GeodeticBoundingBoxToGoogleTileRegions(BoundingBox geodeticBoundingBox, int zoomLevel)
         {
-            //var geocentricTopLeft = Transformation.ChangeDatum(geodeticBoundingBox.TopLeft, Ellipsoids.WGS84, Ellipsoids.Sphere);
-
-            //var geocentricBottomRight = Transformation.ChangeDatum(geodeticBoundingBox.BottomRigth, Ellipsoids.WGS84, Ellipsoids.Sphere);
-
-            //var lowerLeft = GoogleMapProvider.LatLonToImageNumber(geocentricBottomRight.Y, geocentricTopLeft.X, zoomLevel);
-
-            //var upperRight = GoogleMapProvider.LatLonToImageNumber(geocentricTopLeft.Y, geocentricBottomRight.X, zoomLevel);
-
             var lowerLeft = LatLonToImageNumber(geodeticBoundingBox.BottomRight.Y, geodeticBoundingBox.TopLeft.X, zoomLevel);
 
             var upperRight = LatLonToImageNumber(geodeticBoundingBox.TopLeft.Y, geodeticBoundingBox.BottomRight.X, zoomLevel);
-
 
             var result = new List<TileInfo>();
 
@@ -514,9 +507,9 @@ namespace IRI.Msh.Common.Mapping
                 minTempRow = maxTempRow - 1;
             }
 
-            var latitude01 = MapProjects.IsometricLatitudeToGeodeticLatitude(maxTempRow * yUnit, FirstEccentricity);
+            var latitude01 = MapProjects.IsometricLatitudeToGeodeticLatitude(maxTempRow * yUnit, _firstEccentricity);
 
-            var latitude02 = MapProjects.IsometricLatitudeToGeodeticLatitude(minTempRow * yUnit, FirstEccentricity);
+            var latitude02 = MapProjects.IsometricLatitudeToGeodeticLatitude(minTempRow * yUnit, _firstEccentricity);
 
             double minLatitude, maxLatitude;
 
@@ -542,69 +535,6 @@ namespace IRI.Msh.Common.Mapping
             return new BoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
         }
 
-        /// <summary>
-        /// Returns lat/long pairs based on sphere
-        /// </summary>
-        /// <param name="row"></param>
-        /// <param name="column"></param>
-        /// <param name="zoom"></param>
-        /// <returns></returns>
-        //public static BoundingBox GetGeocentricImageBoundingBox(int row, int column, int zoom)
-        //{
-        //    int numberOfImages = (int)Math.Pow(2, zoom);
-
-        //    var unit = 360.0 / numberOfImages;
-
-        //    double minLongitude = column * unit;
-
-        //    double maxLongitude = (column + 1) * unit;
-
-        //    minLongitude = minLongitude - 180;
-
-        //    maxLongitude = maxLongitude - 180;
-
-        //    var yUnit = (MaxIsometricLatitude - MinIsometricLatitude) / numberOfImages;
-
-        //    var maxTempRow = row;
-
-        //    double minTempRow = row;
-
-        //    if (row > numberOfImages / 2.0)
-        //    {
-        //        maxTempRow = (int)(row - numberOfImages / 2.0);
-
-        //        minTempRow = maxTempRow + 1;
-
-        //        yUnit *= -1;
-        //    }
-        //    else
-        //    {
-        //        maxTempRow = (int)(numberOfImages / 2.0) - row;
-
-        //        minTempRow = maxTempRow - 1;
-        //    }
-
-        //    var latitude01 = Projection.IsometricLatitudeToGeodeticLatitude(maxTempRow * yUnit, FirstEccentricity);
-
-        //    var latitude02 = Projection.IsometricLatitudeToGeodeticLatitude(minTempRow * yUnit, FirstEccentricity);
-
-        //    double minLatitude, maxLatitude;
-
-        //    if (latitude01 < latitude02)
-        //    {
-        //        minLatitude = latitude01;
-
-        //        maxLatitude = latitude02;
-        //    }
-        //    else
-        //    {
-        //        minLatitude = latitude02;
-
-        //        maxLatitude = latitude01;
-        //    }
-
-        //    return new BoundingBox(minLongitude, minLatitude, maxLongitude, maxLatitude);
-        //}
 
     }
 }

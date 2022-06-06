@@ -50,6 +50,9 @@ namespace IRI.Msh.Common.Analysis
         [Description("RW")]
         Reumann_Witkam,
 
+        [Description("SF")]
+        SleeveFitting,
+
         // 1400.05.11
         // http://psimpl.sourceforge.net/perpendicular-distance.html
         [Description("PD")]
