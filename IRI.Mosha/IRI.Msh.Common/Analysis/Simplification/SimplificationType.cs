@@ -12,10 +12,11 @@ namespace IRI.Msh.Common.Analysis
         [Description("N")]
         NthPoint,
 
-        [Description("DST")]
+        [Description("DS")]
         DistanceSelection,
 
-        [Description("AR")]
+        // Triangular Routine
+        [Description("T")]
         Area,
 
         [Description("A-AR")]
@@ -30,7 +31,7 @@ namespace IRI.Msh.Common.Analysis
         [Description("A-ANG")]
         AdditiveByAngle,
 
-        [Description("A-DST")]
+        [Description("A-DS")]
         AdditiveByDistance,
 
         [Description("A-AR-ANG")]

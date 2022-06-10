@@ -248,11 +248,17 @@ namespace IRI.Msh.Common.Analysis
 
             var result = dotProduct / (Math.Sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
 
-            if (double.IsNaN(result))
+            // 1401.03.20
+            // to prevent NaN values when calculating ACos
+            if (result > 1 || result < 0)
             {
-
+                // p1: {5714923.59170073, 4259367.97165685}
+                // p2: {5714923.61396463, 4259367.3548049}
+                // p3: {5714923.63622853, 4259366.73795298}
+                // result: 1.0000000000000002
+                result = Math.Round(result, 13);
             }
-
+              
             return result;
         }
 
@@ -297,12 +303,7 @@ namespace IRI.Msh.Common.Analysis
 
             //result: cos(theta)^2
             var result = dotProduct * dotProduct / ((ax * ax + ay * ay) * (bx * bx + by * by));
-
-            if (double.IsNaN(result))
-            {
-
-            }
-
+             
             //return dotProduct < 0 ? -1 * result : result;
             return result;
         }
