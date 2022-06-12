@@ -454,9 +454,9 @@ namespace IRI.Msh.Common.Analysis
 
         public static double GetPointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
         {
-            var dySegment = (lineSegmentEnd.Y - lineSegmentStart.Y);
+            var dySegment = lineSegmentEnd.Y - lineSegmentStart.Y;
 
-            var dxSegment = (lineSegmentEnd.X - lineSegmentStart.X);
+            var dxSegment = lineSegmentEnd.X - lineSegmentStart.X;
 
             //اگر دو نقطه پاره خط منطبق بودند
             //فاصله بین آن‌ها تا نقطه هدف در 

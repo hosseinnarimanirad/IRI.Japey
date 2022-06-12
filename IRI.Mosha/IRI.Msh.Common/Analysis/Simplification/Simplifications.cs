@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace IRI.Msh.Common.Analysis
     {
         public static List<T> AdditiveSimplifyByAreaPlus<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -70,7 +71,7 @@ namespace IRI.Msh.Common.Analysis
         /// <returns></returns>
         public static List<T> SimplifyByAngle<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -108,7 +109,7 @@ namespace IRI.Msh.Common.Analysis
         /// <returns></returns>
         public static List<T> AdditiveSimplifyByAngle<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -159,7 +160,7 @@ namespace IRI.Msh.Common.Analysis
         /// <returns></returns>
         public static List<T> AdditiveSimplifyByAngleArea<T>(List<T> points, SimplificationParamters paramters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -216,7 +217,7 @@ namespace IRI.Msh.Common.Analysis
 
         public static List<T> AdditiveSimplifyByDistance<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -265,7 +266,7 @@ namespace IRI.Msh.Common.Analysis
 
         public static List<T> SimplifyByArea<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -300,7 +301,7 @@ namespace IRI.Msh.Common.Analysis
 
         public static List<T> AdditiveSimplifyByArea<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -902,7 +903,7 @@ namespace IRI.Msh.Common.Analysis
         // 1400.05.20
         public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
+            if (points.IsNullOrEmpty())
             {
                 return null;
             }
@@ -935,7 +936,7 @@ namespace IRI.Msh.Common.Analysis
                         result.Add(points[middleIndex]);
 
                         startIndex = middleIndex;
-                        middleIndex = startIndex + 1;
+                        //middleIndex = startIndex + 1;
 
                         // after breaking it will increment by 1 6 lines below
                         endIndex = middleIndex;
@@ -946,8 +947,8 @@ namespace IRI.Msh.Common.Analysis
                     middleIndex++;
                 }
 
-                endIndex++;
                 middleIndex = startIndex + 1;
+                endIndex++;
             }
 
             if (parameters.Retain3Points && result.Count == 1)
@@ -969,14 +970,11 @@ namespace IRI.Msh.Common.Analysis
         // 1400.05.20
         public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> points, SimplificationParamters parameters) where T : IPoint
         {
-            if (points == null || points.Count == 0)
-            {
+            if (points.IsNullOrEmpty())
                 return null;
-            }
+
             else if (points.Count == 2)
-            {
                 return points;
-            }
 
             List<T> result = new List<T>();
 
@@ -1002,7 +1000,7 @@ namespace IRI.Msh.Common.Analysis
                         result.Add(points[endIndex - 1]);
 
                         startIndex = endIndex - 1;
-                        middleIndex = startIndex + 1;
+                        //middleIndex = startIndex + 1;
 
                         // after breaking it will increment by 1 6 lines below
                         endIndex = middleIndex;
@@ -1013,8 +1011,8 @@ namespace IRI.Msh.Common.Analysis
                     middleIndex++;
                 }
 
-                endIndex++;
                 middleIndex = startIndex + 1;
+                endIndex++;
             }
 
             if (parameters.Retain3Points && result.Count == 1)
@@ -1051,22 +1049,6 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
-        //private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, double threshold, int divideIndex) where T : IPoint
-        //{
-        //    var result = new List<T>();
-
-        //    var leftList = pointList.Take(divideIndex + 1).ToList();
-
-        //    result = SimplifyByDouglasPeucker(leftList, threshold);
-
-        //    var rightList = pointList.Skip(divideIndex).ToList();
-
-        //    var rightResult = SimplifyByDouglasPeucker(rightList, threshold);
-
-        //    result.AddRange(rightResult.Skip(1));
-
-        //    return result;
-        //}
 
         private static bool AnyPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint
         {
