@@ -12,7 +12,7 @@ namespace IRI.Msh.Common.Helpers
             _random = new Random();
 
             syncLock = new object();
-        } 
+        }
 
         private static readonly Random _random;
 
@@ -23,6 +23,14 @@ namespace IRI.Msh.Common.Helpers
             lock (syncLock)
             { // synchronize
                 return _random.Next(minValue, maxValue);
+            }
+        }
+
+        public static double GetBetweenZeroAndOne()
+        {
+            lock (syncLock)
+            { // synchronize
+                return _random.Next(0, 100) / 100.0;
             }
         }
 

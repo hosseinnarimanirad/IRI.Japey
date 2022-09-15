@@ -14,11 +14,13 @@ namespace IRI.Msh.Common.Analysis
 
         public double? AreaThreshold { get; set; }
 
+        /// <summary>
+        /// Square Cosine of angle should be provided, must be between 0 and 1
+        /// </summary>
         public double? AngleThreshold { get; set; }
 
         public bool Retain3Points { get; set; } = false;
 
-        //public bool? IsRing { get; set; }
 
         // used in Lang algorithm
         public int? LookAhead { get; set; }

@@ -352,7 +352,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters() { AngleThreshold = 0.99, Retain3Points = true });
+                    var simplified = layer.Geometry.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters() { AngleThreshold = 0.99, Retain3Points = true });
                     //VisualSimplification.sim layer.Geometry.Simplify()
                     map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-{map.CurrentZoomLevel}");
 
@@ -381,7 +381,7 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 try
                 {
-                    var simplified = layer.Geometry.Simplify(SimplificationType.AdditiveByArea, map.CurrentZoomLevel, new SimplificationParamters() { Retain3Points = true });
+                    var simplified = layer.Geometry.Simplify(SimplificationType.CumulativeArea, map.CurrentZoomLevel, new SimplificationParamters() { Retain3Points = true });
                     //VisualSimplification.sim layer.Geometry.Simplify()
                     map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-{map.CurrentZoomLevel}");
 

@@ -425,51 +425,59 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => Simplifications.SimplifyByNthPoint(pList, paramters);
                     break;
 
-                case SimplificationType.DistanceSelection:
-                    filter = pList => Simplifications.SimplifyByDistanceSelection(pList, paramters);
+                case SimplificationType.RandomPointSelection:
+                    filter = pList => Simplifications.SimplifyByRandomPointSelection(pList, paramters);
+                    break;
+
+                case SimplificationType.EuclideanDistance:
+                    filter = pList => Simplifications.SimplifyByEuclideanDistance(pList, paramters);
                     break;
 
                 case SimplificationType.Area:
                     filter = pList => Simplifications.SimplifyByArea(pList, paramters);
                     break;
 
-                case SimplificationType.AdditiveByArea:
-                    filter = pList => Simplifications.AdditiveSimplifyByArea(pList, paramters);
+                case SimplificationType.CumulativeArea:
+                    filter = pList => Simplifications.SimplifyByCumulativeArea(pList, paramters);
                     break;
 
-                case SimplificationType.AdditiveByAreaPlus:
-                    filter = pList => Simplifications.AdditiveSimplifyByAreaPlus(pList, paramters);
+                case SimplificationType.ModifiedArea:
+                    filter = pList => Simplifications.SimplifyByModifiedArea(pList, paramters);
+                    break;
+
+                case SimplificationType.AdditiveAreaPlus:
+                    filter = pList => Simplifications.SimplifyByAdditiveAreaPlus(pList, paramters);
                     break;
 
                 case SimplificationType.Angle:
                     filter = pList => Simplifications.SimplifyByAngle(pList, paramters);
                     break;
 
-                case SimplificationType.AdditiveByAngle:
-                    filter = pList => Simplifications.AdditiveSimplifyByAngle(pList, paramters);
+                case SimplificationType.CumulativeAngle:
+                    filter = pList => Simplifications.SimplifyByCumulativeAngle(pList, paramters);
                     break;
 
-                case SimplificationType.AdditiveByDistance:
-                    filter = pList => Simplifications.AdditiveSimplifyByDistance(pList, paramters);
+                case SimplificationType.CumulativeDistance:
+                    filter = pList => Simplifications.SimplifyByCumulativeDistance(pList, paramters);
                     break;
 
-                case SimplificationType.AdditiveByAreaAngle:
-                    filter = pList => Simplifications.AdditiveSimplifyByAngleArea(pList, paramters);
+                case SimplificationType.CumulativeAreaAngle:
+                    filter = pList => Simplifications.SimplifyByCumulativeAngleArea(pList, paramters);
                     break;
 
-                case SimplificationType.Visvalingam:
-                    filter = pList => Simplifications.SimplifyByVisvalingam(pList, paramters, this.IsRingBase());
+                case SimplificationType.VisvalingamWhyatt:
+                    filter = pList => Simplifications.SimplifyByVisvalingamWhyatt(pList, paramters, this.IsRingBase());
                     break;
 
-                case SimplificationType.DouglasPeucker:
-                    filter = pList => Simplifications.SimplifyByDouglasPeucker(pList, paramters);
+                case SimplificationType.RamerDouglasPeucker:
+                    filter = pList => Simplifications.SimplifyByRamerDouglasPeucker(pList, paramters);
                     break;
 
                 case SimplificationType.Lang:
                     filter = pList => Simplifications.SimplifyByLang(pList, paramters);
                     break;
 
-                case SimplificationType.Reumann_Witkam:
+                case SimplificationType.ReumannWitkam:
                     filter = pList => Simplifications.SimplifyByReumannWitkam(pList, paramters);
                     break;
 
@@ -479,6 +487,10 @@ namespace IRI.Msh.Common.Primitives
 
                 case SimplificationType.PerpendicularDistance:
                     filter = pList => Simplifications.SimplifyByPerpendicularDistance(pList, paramters);
+                    break;
+
+                case SimplificationType.ModifiedPerpendicularDistance:
+                    filter = pList => Simplifications.SimplifyByModifiedPerpendicularDistance(pList, paramters);
                     break;
 
                 case SimplificationType.NormalOpeningWindow:
@@ -1199,6 +1211,11 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        /// <summary>
+        /// Split geometry into list of points or lineStrings
+        /// </summary>
+        /// <param name="clone"></param>
+        /// <returns></returns>
         public List<Geometry<T>> Split(bool clone)
         {
             switch (Type)

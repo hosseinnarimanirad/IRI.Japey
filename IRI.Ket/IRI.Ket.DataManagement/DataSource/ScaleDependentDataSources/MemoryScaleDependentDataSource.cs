@@ -31,7 +31,7 @@ namespace IRI.Ket.DataManagement.DataSource
             var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude,*/ 900);
 
             var simplifiedByAngleGeometries = geometries
-                                                .Select(g => g.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters()
+                                                .Select(g => g.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters()
                                                 {
                                                     AngleThreshold = .98,
                                                     Retain3Points = true
@@ -47,7 +47,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
-                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.AdditiveByArea, new SimplificationParamters()
+                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.CumulativeArea, new SimplificationParamters()
                                                                     {
                                                                         AreaThreshold = threshold * threshold,
                                                                         Retain3Points = true
@@ -108,7 +108,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude, */900);
 
-            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(SimplificationType.AdditiveByAngle, new SimplificationParamters() { AngleThreshold = .98, Retain3Points = true })).Where(g => !g.IsNullOrEmpty()).ToList();
+            var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters() { AngleThreshold = .98, Retain3Points = true })).Where(g => !g.IsNullOrEmpty()).ToList();
 
             for (int i = fitLevel; i < 18; i += 4)
             {
@@ -118,7 +118,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
-                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.AdditiveByArea, new SimplificationParamters() { AreaThreshold = threshold * threshold, Retain3Points = true })).Where(g => !g.IsNotValidOrEmpty()).ToList());
+                source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.CumulativeArea, new SimplificationParamters() { AreaThreshold = threshold * threshold, Retain3Points = true })).Where(g => !g.IsNotValidOrEmpty()).ToList());
             }
         }
 

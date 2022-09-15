@@ -9,55 +9,63 @@ namespace IRI.Msh.Common.Analysis
 {
     public enum SimplificationType
     {
-        [Description("N")]
-        NthPoint,
-
-        [Description("DS")]
-        DistanceSelection,
-
-        // Triangular Routine
-        [Description("T")]
-        Area,
-
-        [Description("A-AR")]
-        AdditiveByArea,
 
         [Description("AAP")]
-        AdditiveByAreaPlus,
+        AdditiveAreaPlus,
+
+        [Description("A-ANG")]
+        CumulativeAngle,
+
+        [Description("A-DS")]
+        CumulativeDistance,
+
+        [Description("A-AR-ANG")]
+        CumulativeAreaAngle,
+
+
 
         [Description("ANG")]
         Angle,
 
-        [Description("A-ANG")]
-        AdditiveByAngle,
+        [Description("ED")]
+        EuclideanDistance,
 
-        [Description("A-DS")]
-        AdditiveByDistance,
 
-        [Description("A-AR-ANG")]
-        AdditiveByAreaAngle,
+        [Description("NTH")]
+        NthPoint,
 
-        [Description("V")]
-        Visvalingam,
+        // 1401.06.24
+        [Description("RPS")]
+        RandomPointSelection,
+
+
+        [Description("LA")]
+        Lang,
 
         [Description("RDP")]
-        DouglasPeucker,
-
-        [Description("L")]
-        Lang,
+        RamerDouglasPeucker,
 
         // 1400.05.11
         // http://psimpl.sourceforge.net/reumann-witkam.html
         [Description("RW")]
-        Reumann_Witkam,
-
-        [Description("SF")]
-        SleeveFitting,
+        ReumannWitkam,
 
         // 1400.05.11
         // http://psimpl.sourceforge.net/perpendicular-distance.html
         [Description("PD")]
         PerpendicularDistance,
+
+        // 1400.06.24
+        // http://psimpl.sourceforge.net/perpendicular-distance.html
+        [Description("MPD")]
+        ModifiedPerpendicularDistance,
+
+
+        [Description("VW")]
+        VisvalingamWhyatt,
+
+        [Description("SF")]
+        SleeveFitting,
 
         // 1400.05.20
         [Description("NOPW")]
@@ -65,6 +73,18 @@ namespace IRI.Msh.Common.Analysis
 
         // 1400.05.20
         [Description("BOPW")]
-        BeforeOpeningWindow
+        BeforeOpeningWindow,
+
+
+        // Triangular Routine
+        [Description("TR")]
+        Area,
+
+        [Description("MTR")]
+        ModifiedArea,
+
+        [Description("CTR")]
+        CumulativeArea,
+
     }
 }

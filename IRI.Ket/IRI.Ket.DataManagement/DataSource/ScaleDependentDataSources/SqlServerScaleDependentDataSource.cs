@@ -90,9 +90,9 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             {
                 System.Diagnostics.Debug.WriteLine(string.Empty);
 
-                var geometries = originalGeometries.Simplify(SimplificationType.AdditiveByAreaAngle, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+                var geometries = originalGeometries.Simplify(SimplificationType.CumulativeAreaAngle, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
 
-                geometries = geometries.Simplify(SimplificationType.AdditiveByArea, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+                geometries = geometries.Simplify(SimplificationType.CumulativeArea, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
 
                 CopyToSqlServer(_pyramidParameters.TableName, geometries, i - 1);
             }

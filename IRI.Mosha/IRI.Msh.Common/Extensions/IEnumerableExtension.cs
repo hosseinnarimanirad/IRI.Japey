@@ -19,7 +19,7 @@ namespace IRI.Msh.Common.Extensions
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
         {
-            return enumerable == null || !enumerable.Any();
+            return enumerable is null || !enumerable.Any();
         }
     }
 }
