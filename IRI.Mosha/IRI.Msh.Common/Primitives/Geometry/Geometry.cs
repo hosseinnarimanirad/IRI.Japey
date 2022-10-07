@@ -663,6 +663,11 @@ namespace IRI.Msh.Common.Primitives
 
         // 1401.03.12
         // PCC
+        /// <summary>
+        /// PCC (%): No of points in simplified geometry / No of points in original geometry
+        /// </summary>
+        /// <param name="simplified"></param>
+        /// <returns>PCC in percent. between 0 and 1</returns>
         public double PercentageChangeInCoordinates(Geometry<T> simplified)
         {
             if (simplified.IsNullOrEmpty())
@@ -723,7 +728,7 @@ namespace IRI.Msh.Common.Primitives
 
         // 1401.03.15
         /// <summary>
-        /// simplified SD for Segment Length / original SD for Segment Length 
+        /// SD for Simplificed Segment Lengths / SD for Original Segment Lengths
         /// </summary>
         /// <param name="simplified"></param>
         /// <returns></returns>
@@ -1915,6 +1920,11 @@ namespace IRI.Msh.Common.Primitives
             }
         }
 
+        /// <summary>
+        /// Mean angular changes for lineString or ring in radian
+        /// </summary>
+        /// <param name="isRing"></param>
+        /// <returns></returns>
         private double CalculateMeanAngularChangeForLineStringOrRing(bool isRing)
         {
             if (this.Points == null || this.Points.Count < 3)

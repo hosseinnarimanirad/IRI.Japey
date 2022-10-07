@@ -13,13 +13,13 @@ namespace IRI.Msh.Common.Analysis
         [Description("AAP")]
         AdditiveAreaPlus,
 
-        [Description("A-ANG")]
+        [Description("CANG")]
         CumulativeAngle,
 
-        [Description("A-DS")]
+        [Description("CED")]
         CumulativeDistance,
 
-        [Description("A-AR-ANG")]
+        [Description("CTRANG")]
         CumulativeAreaAngle,
 
 
@@ -50,13 +50,11 @@ namespace IRI.Msh.Common.Analysis
         [Description("RW")]
         ReumannWitkam,
 
-        // 1400.05.11
-        // http://psimpl.sourceforge.net/perpendicular-distance.html
+        // 1400.05.11 
         [Description("PD")]
         PerpendicularDistance,
 
-        // 1400.06.24
-        // http://psimpl.sourceforge.net/perpendicular-distance.html
+        // 1400.06.24 
         [Description("MPD")]
         ModifiedPerpendicularDistance,
 
