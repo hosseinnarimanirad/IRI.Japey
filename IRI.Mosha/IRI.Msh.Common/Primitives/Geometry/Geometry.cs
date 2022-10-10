@@ -458,7 +458,7 @@ namespace IRI.Msh.Common.Primitives
                     break;
 
                 case SimplificationType.CumulativeDistance:
-                    filter = pList => Simplifications.SimplifyByCumulativeDistance(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByCumulativeEuclideanDistance(pList, paramters);
                     break;
 
                 case SimplificationType.CumulativeAreaAngle:

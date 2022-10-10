@@ -170,7 +170,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static List<T> SimplifyByCumulativeDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByCumulativeEuclideanDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             if (pointList.IsNullOrEmpty())
                 return new List<T>();
@@ -186,7 +186,7 @@ namespace IRI.Msh.Common.Analysis
 
             var temp = 0.0;
 
-            while (secondIndex < pointList.Count)
+            while (secondIndex < pointList.Count - 1)
             {
                 var semiDistance = SpatialUtility.GetSquareEuclideanDistance(pointList[firstIndex], pointList[secondIndex]);
 
@@ -212,7 +212,7 @@ namespace IRI.Msh.Common.Analysis
             filtered.Add(pointList.Count - 1);
 
             var result = filtered.Select(i => pointList[i]).ToList();
-
+             
             return result;
         }
 
@@ -272,7 +272,7 @@ namespace IRI.Msh.Common.Analysis
 
             int firstIndex = 0;
 
-            for (int i = 1; i < numberOfPoints; i++)
+            for (int i = 1; i < numberOfPoints - 1; i++)
             {
                 if (SpatialUtility.GetEuclideanDistance(pointList[i], pointList[firstIndex]) > parameters.DistanceThreshold)
                 {
