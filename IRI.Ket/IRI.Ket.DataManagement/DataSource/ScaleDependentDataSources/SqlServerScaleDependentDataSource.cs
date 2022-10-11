@@ -92,7 +92,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
                 var geometries = originalGeometries.Simplify(SimplificationType.CumulativeAreaAngle, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
 
-                geometries = geometries.Simplify(SimplificationType.CumulativeArea, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+                geometries = geometries.Simplify(SimplificationType.CumulativeTriangleRoutine, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
 
                 CopyToSqlServer(_pyramidParameters.TableName, geometries, i - 1);
             }

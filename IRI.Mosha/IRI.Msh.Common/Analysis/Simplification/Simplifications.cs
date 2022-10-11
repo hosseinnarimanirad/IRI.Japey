@@ -941,7 +941,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: Ekdemir, S., Efficient Implementation of Polyline Simplification for Large Datasets
         //      and Usability Evaluation. Master’s thesis, Uppsala University, Department of Information
         //      Technology, 2011
-        public static List<T> SimplifyByArea<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByTriangleRoutine<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             List<T> result = new List<T>();
 
@@ -1024,7 +1024,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // ***********************************************************************************************
         // Threshold values are summed in each iteration
-        public static List<T> SimplifyByCumulativeArea<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByCumulativeTriangleRoutine<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             List<T> result = new List<T>();
 

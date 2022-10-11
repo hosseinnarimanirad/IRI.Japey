@@ -433,15 +433,15 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => Simplifications.SimplifyByEuclideanDistance(pList, paramters);
                     break;
 
-                case SimplificationType.Area:
-                    filter = pList => Simplifications.SimplifyByArea(pList, paramters);
+                case SimplificationType.TriangleRoutine:
+                    filter = pList => Simplifications.SimplifyByTriangleRoutine(pList, paramters);
                     break;
 
-                case SimplificationType.CumulativeArea:
-                    filter = pList => Simplifications.SimplifyByCumulativeArea(pList, paramters);
+                case SimplificationType.CumulativeTriangleRoutine:
+                    filter = pList => Simplifications.SimplifyByCumulativeTriangleRoutine(pList, paramters);
                     break;
 
-                case SimplificationType.ModifiedArea:
+                case SimplificationType.ModifiedTriangleRoutine:
                     filter = pList => Simplifications.SimplifyByModifiedArea(pList, paramters);
                     break;
 
@@ -457,7 +457,7 @@ namespace IRI.Msh.Common.Primitives
                     filter = pList => Simplifications.SimplifyByCumulativeAngle(pList, paramters);
                     break;
 
-                case SimplificationType.CumulativeDistance:
+                case SimplificationType.CumulativeEuclideanDistance:
                     filter = pList => Simplifications.SimplifyByCumulativeEuclideanDistance(pList, paramters);
                     break;
 
