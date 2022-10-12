@@ -985,7 +985,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // ***********************************************************************************************
         // 1401.06.24
-        public static List<T> SimplifyByModifiedArea<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByModifiedTriangleRoutine<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
         {
             List<T> result = new List<T>();
 

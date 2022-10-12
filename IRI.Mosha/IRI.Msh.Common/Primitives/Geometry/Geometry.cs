@@ -442,11 +442,7 @@ namespace IRI.Msh.Common.Primitives
                     break;
 
                 case SimplificationType.ModifiedTriangleRoutine:
-                    filter = pList => Simplifications.SimplifyByModifiedArea(pList, paramters);
-                    break;
-
-                case SimplificationType.AdditiveAreaPlus:
-                    filter = pList => Simplifications.SimplifyByAdditiveAreaPlus(pList, paramters);
+                    filter = pList => Simplifications.SimplifyByModifiedTriangleRoutine(pList, paramters);
                     break;
 
                 case SimplificationType.Angle:
@@ -459,10 +455,6 @@ namespace IRI.Msh.Common.Primitives
 
                 case SimplificationType.CumulativeEuclideanDistance:
                     filter = pList => Simplifications.SimplifyByCumulativeEuclideanDistance(pList, paramters);
-                    break;
-
-                case SimplificationType.CumulativeAreaAngle:
-                    filter = pList => Simplifications.SimplifyByCumulativeAngleArea(pList, paramters);
                     break;
 
                 case SimplificationType.VisvalingamWhyatt:
@@ -499,6 +491,15 @@ namespace IRI.Msh.Common.Primitives
 
                 case SimplificationType.BeforeOpeningWindow:
                     filter = pList => Simplifications.SimplifyByBeforeOpeningWindow(pList, paramters);
+                    break;
+
+
+                case SimplificationType.AdditiveAreaPlus:
+                    filter = pList => Simplifications.SimplifyByAdditiveAreaPlus(pList, paramters);
+                    break;
+
+                case SimplificationType.CumulativeAreaAngle:
+                    filter = pList => Simplifications.SimplifyByCumulativeAngleArea(pList, paramters);
                     break;
 
                 default:
