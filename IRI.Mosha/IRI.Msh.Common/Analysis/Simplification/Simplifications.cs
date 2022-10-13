@@ -212,7 +212,7 @@ namespace IRI.Msh.Common.Analysis
             filtered.Add(pointList.Count - 1);
 
             var result = filtered.Select(i => pointList[i]).ToList();
-             
+
             return result;
         }
 
@@ -651,16 +651,48 @@ namespace IRI.Msh.Common.Analysis
 
             int startIndex = 0;
 
-            for (int i = 0; i < pointList.Count - 2; i++)
+            int endIndex = 2;
+
+            while (endIndex < pointList.Count)
             {
-                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[i + 2], pointList[i + 1]);
+                int midIndex = (int)Math.Ceiling((startIndex + endIndex) / 2.0);
+
+                if (midIndex == startIndex || midIndex == endIndex)
+                {
+                    throw new NotImplementedException();
+                }
+
+                var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[midIndex], pointList[endIndex]);
 
                 if (perpendicularDistance > distanceThreshold)
                 {
-                    result.Add(pointList[i + 1]);
-                    startIndex = i + 1;
+                    result.Add(pointList[midIndex]);
+                    startIndex = midIndex;
                 }
+
+                endIndex++;
             }
+
+            //for (int i = 0; i < pointList.Count - 2; i++)
+            //{
+            //    int midIndex = (int)Math.Ceiling((startIndex + i + 2) / 2.0);
+
+            //    if (midIndex == startIndex || midIndex == i + 2)
+            //    {
+            //        throw new NotImplementedException();
+            //    }
+
+            //    var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[midIndex/*i + 2*/], pointList[i + 1]);
+
+            //    if (perpendicularDistance > distanceThreshold)
+            //    {
+            //        //result.Add(pointList[i + 1]);
+            //        //startIndex = i + 1;
+
+            //        result.Add(pointList[midIndex]);
+            //        startIndex = midIndex;
+            //    }
+            //}
 
             if (parameters.Retain3Points && result.Count == 1)
             {
@@ -999,16 +1031,48 @@ namespace IRI.Msh.Common.Analysis
 
             int startIndex = 0;
 
-            for (int i = 0; i < pointList.Count - 2; i++)
-            {
-                var area = SpatialUtility.GetUnsignedTriangleArea(pointList[startIndex], pointList[i + 1], pointList[i + 2]);
+            int endIndex = 2;
 
-                if (area > parameters.AreaThreshold/* threshold*/)
+            while (endIndex < pointList.Count)
+            {
+                int midIndex = (int)Math.Ceiling((startIndex + endIndex) / 2.0);
+
+                if (midIndex == startIndex || midIndex == endIndex)
                 {
-                    result.Add(pointList[i + 1]);
-                    startIndex = i + 1;
+                    throw new NotImplementedException();
                 }
+
+                var area = SpatialUtility.GetUnsignedTriangleArea(pointList[startIndex], pointList[midIndex/*i + 1*/], pointList[endIndex]);
+
+                if (area > parameters.AreaThreshold)
+                { 
+                    result.Add(pointList[midIndex]);
+                    startIndex = midIndex;
+                }
+
+                endIndex++;
             }
+
+            //for (int i = 0; i < pointList.Count - 2; i++)
+            //{
+            //    int midIndex = (int)Math.Ceiling((startIndex + i + 2) / 2.0);
+
+            //    if (midIndex == startIndex || midIndex == i + 2)
+            //    {
+            //        throw new NotImplementedException();
+            //    }
+
+            //    var area = SpatialUtility.GetUnsignedTriangleArea(pointList[startIndex], pointList[midIndex/*i + 1*/], pointList[i + 2]);
+
+            //    if (area > parameters.AreaThreshold)
+            //    {
+            //        //result.Add(pointList[i + 1]);
+            //        //startIndex = i + 1;
+
+            //        result.Add(pointList[midIndex]);
+            //        startIndex = midIndex;
+            //    }
+            //}
 
             if (parameters.Retain3Points && result.Count == 1)
             {

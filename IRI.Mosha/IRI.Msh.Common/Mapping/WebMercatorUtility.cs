@@ -190,7 +190,7 @@ namespace IRI.Msh.Common.Mapping
         {
             return 1.0 / (CalculateGroundResolution(level, latitude) * ConversionHelper.MeterToPixelFactor);
         }
-         
+
 
         // ********************************************** Google Zoom Level **********************************************
         /// <summary>
@@ -211,11 +211,11 @@ namespace IRI.Msh.Common.Mapping
         }
 
         public static int EstimateZoomLevel(BoundingBox webMercatorBoundingBox/*, double latitude*/, double screenWidth, double screenHeight)
-        { 
+        {
             var widthScale = screenWidth * ConversionHelper.PixelToMeterFactor / webMercatorBoundingBox.Width;
-            
+
             var heightScale = screenHeight * ConversionHelper.PixelToMeterFactor / webMercatorBoundingBox.Height;
-            
+
             var scale = Math.Min(widthScale, heightScale);
 
             return GetZoomLevel(scale);
