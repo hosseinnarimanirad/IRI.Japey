@@ -537,9 +537,9 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 2; i < numberOfPoints; i++)
             {
-                var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
+                var temporaryDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[middleIndex], pointList[i]);
 
-                if (semiPerpendicularDistance > effectiveThreshold)
+                if (temporaryDistance > effectiveThreshold)
                 {
                     result.Add(pointList[i - 1]);
                     startIndex = i - 1;
@@ -808,16 +808,17 @@ namespace IRI.Msh.Common.Analysis
 
             int startIndex = 0;
 
-            for (int i = 2; i < numberOfPoints; i++)
+            for (int endIndex = 2; endIndex < numberOfPoints; endIndex++)
             {
-                for (int j = startIndex + 1; j < i; j++)
+                for (int middleIndex = endIndex - 1; middleIndex > startIndex; middleIndex--)
                 {
-                    var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[i], pointList[j]);
+                    var temporaryDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[startIndex], pointList[endIndex], pointList[middleIndex]);
 
-                    if (semiPerpendicularDistance > effectiveThreshold)
+                    if (temporaryDistance > effectiveThreshold)
                     {
-                        result.Add(pointList[j]);
-                        startIndex = j;
+                        result.Add(pointList[endIndex - 1]);
+                        startIndex = endIndex - 1;
+                        break;
                     }
                 }
             }
@@ -1045,7 +1046,7 @@ namespace IRI.Msh.Common.Analysis
                 var area = SpatialUtility.GetUnsignedTriangleArea(pointList[startIndex], pointList[midIndex/*i + 1*/], pointList[endIndex]);
 
                 if (area > parameters.AreaThreshold)
-                { 
+                {
                     result.Add(pointList[midIndex]);
                     startIndex = midIndex;
                 }
