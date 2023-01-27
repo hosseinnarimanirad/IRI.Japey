@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
     public class PointZReader : ShpReader<EsriPointZ>
     {
         public PointZReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriPointZ, srid)
+            : base(fileName, EsriShapeType.EsriPointZM, srid)
         {
 
         }
@@ -20,7 +20,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriPointZ)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPointZM)
             {
                 throw new NotImplementedException();
             }
@@ -50,6 +50,28 @@ namespace IRI.Ket.ShapefileFormat.Reader
             double z = reader.ReadDouble();
 
             double m = reader.ReadDouble();
+
+            return new EsriPointZ(x, y, z, m, srid);
+        }
+
+
+        public static EsriPointZ ParseGdbRecord(byte[] bytes, int srid, bool hasM)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            double x = BitConverter.ToDouble(bytes, offset);
+
+            double y = BitConverter.ToDouble(bytes, offset + ShapeConstants.DoubleSize);
+
+            double z = BitConverter.ToDouble(bytes, offset + 2 * ShapeConstants.DoubleSize);
+
+            double m = ShapeConstants.NoDataValue;
+
+            if (hasM)
+            {
+                m = BitConverter.ToDouble(bytes, offset + 3 * ShapeConstants.DoubleSize);
+            }
 
             return new EsriPointZ(x, y, z, m, srid);
         }

@@ -57,7 +57,7 @@ namespace IRI.Msh.Common.Analysis
         [Description("NTH")]
         NthPoint,
 
-
+            
         // 1401.06.24
         /// <summary>
         /// RPS

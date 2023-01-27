@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IGeometry.cs" />
     <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Analysis\Simplification\Simplifications.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\AxisType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2D.cs" />
@@ -211,6 +212,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
     <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Primitives\Geometry\" />
   </ItemGroup>
 </Project>

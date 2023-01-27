@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Images\transparentBackground.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Telerik.UI.for.Wpf.60.Xaml" Version="2022.3.912" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.CommonCore\IRI.Ket.CommonCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagementCore\IRI.Ket.DataManagementCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtensionCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\IRI.Jab.CommonCore\IRI.Jab.CommonCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types">
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <!--<Reference Include="Telerik.Windows.Controls">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Data">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Controls.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Input">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Navigation">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data">
+      <HintPath>..\..\IRI.Deploy\Telerik2019\WPF45\Telerik.Windows.Data.dll</HintPath>
+    </Reference>-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\CoordinatePanel\" />
+    <Folder Include="Model\Legend\" />
+    <Folder Include="Model\Telerik\" />
+    <Folder Include="View\Map\Auxilary\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\transparentBackground.png" />
+  </ItemGroup>
+
+</Project>

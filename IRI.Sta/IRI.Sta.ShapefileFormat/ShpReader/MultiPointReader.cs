@@ -50,7 +50,22 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             return new EsriMultiPoint(boundingBox, points);
         }
+         
+        public static EsriMultiPoint ParseGdbRecord(byte[] bytes, int srid)
+        {
+            // 4: shape type
+            var offset = 4;
 
-        
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+             
+            return new EsriMultiPoint(boundingBox, points);
+        }
     }
 }

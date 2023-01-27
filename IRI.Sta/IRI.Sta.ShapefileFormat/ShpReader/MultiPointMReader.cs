@@ -46,8 +46,6 @@ namespace IRI.Ket.ShapefileFormat.Reader
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
 
-            //var byteArray = reader.ReadBytes(contentLength * 2 - 8);
-
             var boundingBox = ShpBinaryReader.ReadBoundingBox(reader);
 
             var numPoints = reader.ReadInt32();
@@ -63,5 +61,27 @@ namespace IRI.Ket.ShapefileFormat.Reader
             return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
         }
 
+        public static EsriMultiPointM ParseGdbRecord(byte[] bytes, int srid)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+
+            double minMeasure, maxMeasure;
+
+            double[] measures;
+
+            ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
+
+            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
+        }
     }
 }

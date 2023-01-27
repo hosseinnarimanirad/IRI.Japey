@@ -12,7 +12,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
     public class MultiPointZReader : zReader<EsriMultiPointZ>
     {
         public MultiPointZReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriMultiPointZ, srid)
+            : base(fileName, EsriShapeType.EsriMultiPointZM, srid)
         {
 
         }
@@ -21,7 +21,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPointZ)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPointZM)
             {
                 throw new NotImplementedException();
             }
@@ -81,5 +81,40 @@ namespace IRI.Ket.ShapefileFormat.Reader
             return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
         }
 
+        //todo: M values
+        public static EsriMultiPointZ ParseGdbRecord(byte[] bytes, int srid, bool hasM)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+
+            // z values
+            double minZ, maxZ;
+
+            double[] zValues;
+
+            ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minZ, out maxZ, out zValues);
+            offset += (numPoints + 2) * ShapeConstants.DoubleSize;
+
+            // measure values
+            double minMeasure = ShapeConstants.NoDataValue, maxMeasure = ShapeConstants.NoDataValue;
+
+            double[] measures = new double[numPoints];
+
+            if (hasM)
+            {
+                ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
+            }
+
+            return new EsriMultiPointZ(boundingBox, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
+        }
     }
 }

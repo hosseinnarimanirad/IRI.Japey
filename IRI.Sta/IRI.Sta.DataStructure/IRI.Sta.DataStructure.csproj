@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latestMajor</LangVersion>
   </PropertyGroup>
   <Import Project="..\..\IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems" Label="Shared" />
   <ItemGroup>

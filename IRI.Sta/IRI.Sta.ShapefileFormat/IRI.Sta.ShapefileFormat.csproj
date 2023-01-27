@@ -1,15 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>IRI.ShapefileFormat</Title>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.1</Version>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Company>MakanNegar</Company>
+    <Description>A .NET standard library to read/write shapefile (*.shp, *.shx, *.dbf, *.prj)</Description>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/IRI.Japey/tree/master/IRI.Sta/IRI.Sta.ShapefileFormat</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>shapefile;GIS;spatial;dbf</PackageTags>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Info\Info.txt" />
+    <None Remove="License.txt" />
+    <None Remove="README.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Info\Info.txt" />
+    <Content Include="License.txt" />
+    <Content Include="README.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +35,10 @@
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\IRI.Sta.KmlFormat\IRI.Sta.KmlFormat.csproj" />
     <ProjectReference Include="..\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="PGdb\" />
   </ItemGroup>
 
 </Project>

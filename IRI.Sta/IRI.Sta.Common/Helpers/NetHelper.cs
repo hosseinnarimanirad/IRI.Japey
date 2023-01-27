@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -213,6 +214,45 @@ namespace IRI.Ket.Common.Helpers
             return client;
         }
 
+        private static System.Net.Http.HttpClient CreateHttpClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null, Dictionary<string, string> headers = null)
+        {
+            System.Net.Http.HttpClient client;
+
+            if (proxy?.Address != null)
+            {
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.Proxy = proxy;
+                handler.UseProxy = true;
+                client = new System.Net.Http.HttpClient(handler);
+            }
+            else
+            {
+                client = new System.Net.Http.HttpClient();
+            }
+
+            client.DefaultRequestHeaders.Add(HttpRequestHeader.ContentType.ToString(), contentType ?? contentTypeJson);
+            client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), "application!");
+
+            if (!string.IsNullOrWhiteSpace(bearer))
+            {
+                client.DefaultRequestHeaders.Add(HttpRequestHeader.Authorization.ToString(), $"Bearer {bearer}");
+            }
+
+            if (headers != null && headers.Any())
+            {
+                foreach (var header in headers)
+                {
+                    client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                }
+            }
+
+            if (encoding is null)
+                encoding = Encoding.UTF8;
+
+            client.DefaultRequestHeaders.Add(HttpRequestHeader.AcceptEncoding.ToString(), encoding.ToString());
+
+            return client;
+        }
 
 
         //Http Get

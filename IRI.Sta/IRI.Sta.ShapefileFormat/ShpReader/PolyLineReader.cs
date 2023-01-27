@@ -71,5 +71,33 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             return new EsriPolyline(boundingBox, parts, points);
         }
+
+
+        public static EsriPolyline ParseGdbRecord(byte[] bytes, int srid)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numParts = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            int[] parts = new int[numParts];
+
+            for (int i = 0; i < numParts; i++)
+            {
+                parts[i] = BitConverter.ToInt32(bytes, offset);
+                offset += ShapeConstants.IntegerSize;
+            }
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+
+            return new EsriPolyline(boundingBox, parts, points);
+        }
     }
 }

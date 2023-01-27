@@ -18,8 +18,6 @@ namespace IRI.Ket.Common.Data
         T Get(int id);
         IEnumerable<T> GetAll();        
         //we can use lambda expression to filter objects
-        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-
-
+        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);       
     }
 }

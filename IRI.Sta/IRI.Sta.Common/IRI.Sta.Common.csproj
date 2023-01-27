@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latestMajor</LangVersion>
     <SignAssembly>false</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>hosseinnarimanirad.pfx</AssemblyOriginatorKeyFile>
@@ -32,6 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Primitives\Geometry\IGeometry.cs" Link="IGeometry.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
@@ -41,9 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Model\WiseWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="Model\WiseWebClient.cs" />
   </ItemGroup>
 
   <Import Project="..\..\IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems" Label="Shared" />

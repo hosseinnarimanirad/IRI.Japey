@@ -13,7 +13,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
     public class PolygonZReader : zReader<EsriPolygonZ>
     {
         public PolygonZReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriPolygonZ, srid)
+            : base(fileName, EsriShapeType.EsriPolygonZM, srid)
         {
 
         }
@@ -22,7 +22,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
         {
             int shapeType = shpReader.ReadInt32();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriPolygonZ)
+            if ((EsriShapeType)shapeType != EsriShapeType.EsriPolygonZM)
             {
                 throw new NotImplementedException();
             }
@@ -96,6 +96,52 @@ namespace IRI.Ket.ShapefileFormat.Reader
             if (contentLength > reader.BaseStream.Position * 2 - offset)
             {
                 ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
+            }
+
+            return new EsriPolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);
+        }
+
+        public static EsriPolygonZ ParseGdbRecord(byte[] bytes, int srid, bool hasM)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numParts = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            int[] parts = new int[numParts];
+
+            for (int i = 0; i < numParts; i++)
+            {
+                parts[i] = BitConverter.ToInt32(bytes, offset);
+                offset += ShapeConstants.IntegerSize;
+            }
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+
+            // z values
+            double minZ, maxZ;
+
+            double[] zValues;
+
+            ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minZ, out maxZ, out zValues);
+            offset += (numPoints + 2) * ShapeConstants.DoubleSize;
+
+            // measure values
+            double minMeasure = ShapeConstants.NoDataValue, maxMeasure = ShapeConstants.NoDataValue;
+
+            double[] measures = new double[numPoints];
+
+            if (hasM)
+            {
+                ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
             }
 
             return new EsriPolygonZ(boundingBox, parts, points, minZ, maxZ, zValues, minMeasure, maxMeasure, measures);

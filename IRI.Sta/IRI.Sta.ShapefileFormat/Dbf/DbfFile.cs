@@ -27,7 +27,6 @@ namespace IRI.Ket.ShapefileFormat.Dbf
         static DbfFile()
         {
             //InitializeMapFunctions();
-
         }
 
         //private static void InitializeMapFunctions()

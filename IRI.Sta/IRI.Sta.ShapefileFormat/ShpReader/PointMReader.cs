@@ -49,5 +49,19 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             return new EsriPointM(x, y, m, srid);
         }
+
+        public static EsriPointM ParseGdbRecord(byte[] bytes, int srid)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            double x = BitConverter.ToDouble(bytes, offset);
+
+            double y = BitConverter.ToDouble(bytes, offset + ShapeConstants.DoubleSize);
+
+            double m = BitConverter.ToDouble(bytes, offset + 2 * ShapeConstants.DoubleSize);
+
+            return new EsriPointM(x, y, m, srid);
+        }
     }
 }

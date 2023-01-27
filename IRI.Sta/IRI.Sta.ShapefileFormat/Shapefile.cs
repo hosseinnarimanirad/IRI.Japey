@@ -80,19 +80,19 @@ namespace IRI.Ket.ShapefileFormat
                     Reader.MultiPointReader reader04 = new Reader.MultiPointReader(shpFileName, srid);
                     return reader04.elements;
 
-                case EsriShapeType.EsriPointZ:
+                case EsriShapeType.EsriPointZM:
                     Reader.PointZReader reader05 = new Reader.PointZReader(shpFileName, srid);
                     return reader05.elements;
 
-                case EsriShapeType.EsriPolyLineZ:
+                case EsriShapeType.EsriPolyLineZM:
                     Reader.PolyLineZReader reader06 = new Reader.PolyLineZReader(shpFileName, srid);
                     return reader06.elements;
 
-                case EsriShapeType.EsriPolygonZ:
+                case EsriShapeType.EsriPolygonZM:
                     Reader.PolygonZReader reader07 = new Reader.PolygonZReader(shpFileName, srid);
                     return reader07.elements;
 
-                case EsriShapeType.EsriMultiPointZ:
+                case EsriShapeType.EsriMultiPointZM:
                     Reader.MultiPointZReader reader08 = new Reader.MultiPointZReader(shpFileName, srid);
                     return reader08.elements;
 
@@ -819,22 +819,22 @@ namespace IRI.Ket.ShapefileFormat
                     switch (shxFile.MainHeader.ShapeType)
                     {
                         case EsriShapeType.EsriPoint:
-                        case EsriShapeType.EsriPointZ:
+                        case EsriShapeType.EsriPointZM:
                         case EsriShapeType.EsriPointM:
                             return ExtractPoints(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriMultiPoint:
-                        case EsriShapeType.EsriMultiPointZ:
+                        case EsriShapeType.EsriMultiPointZM:
                         case EsriShapeType.EsriMultiPointM:
                             return ExtractMultiPoints(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriPolyLine:
-                        case EsriShapeType.EsriPolyLineZ:
+                        case EsriShapeType.EsriPolyLineZM:
                         case EsriShapeType.EsriPolyLineM:
                             return ExtractPolyLines(shpReader, shxFile, filtered, srid);
 
                         case EsriShapeType.EsriPolygon:
-                        case EsriShapeType.EsriPolygonZ:
+                        case EsriShapeType.EsriPolygonZM:
                         case EsriShapeType.EsriPolygonM:
                             return ExtractPolygons(shpReader, shxFile, filtered, srid);
 

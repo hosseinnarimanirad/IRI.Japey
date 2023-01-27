@@ -20,18 +20,18 @@ namespace IRI.Ket.SpatialExtensions
             switch (ogcType)
             {
                 case OpenGisGeometryType.Point:
-                    return esriType == EsriShapeType.EsriPoint || esriType == EsriShapeType.EsriPointM || esriType == EsriShapeType.EsriPointZ;
+                    return esriType == EsriShapeType.EsriPoint || esriType == EsriShapeType.EsriPointM || esriType == EsriShapeType.EsriPointZM;
 
                 case OpenGisGeometryType.MultiLineString:
                 case OpenGisGeometryType.LineString:
-                    return esriType == EsriShapeType.EsriPolyLine || esriType == EsriShapeType.EsriPolyLineM || esriType == EsriShapeType.EsriPolyLineZ;
+                    return esriType == EsriShapeType.EsriPolyLine || esriType == EsriShapeType.EsriPolyLineM || esriType == EsriShapeType.EsriPolyLineZM;
 
                 case OpenGisGeometryType.Polygon:
                 case OpenGisGeometryType.MultiPolygon:
-                    return esriType == EsriShapeType.EsriPolygon || esriType == EsriShapeType.EsriPolygonM || esriType == EsriShapeType.EsriPolygonZ;
+                    return esriType == EsriShapeType.EsriPolygon || esriType == EsriShapeType.EsriPolygonM || esriType == EsriShapeType.EsriPolygonZM;
 
                 case OpenGisGeometryType.MultiPoint:
-                    return esriType == EsriShapeType.EsriMultiPoint || esriType == EsriShapeType.EsriMultiPointM || esriType == EsriShapeType.EsriMultiPointZ;
+                    return esriType == EsriShapeType.EsriMultiPoint || esriType == EsriShapeType.EsriMultiPointM || esriType == EsriShapeType.EsriMultiPointZM;
 
                 case OpenGisGeometryType.GeometryCollection:
                 case OpenGisGeometryType.CircularString:
@@ -126,25 +126,25 @@ namespace IRI.Ket.SpatialExtensions
 
                     case EsriShapeType.EsriPoint:
                     case EsriShapeType.EsriPointM:
-                    case EsriShapeType.EsriPointZ:
+                    case EsriShapeType.EsriPointZM:
                         WriteEsriPoint(builder, (IPoint)shape);
                         break;
 
                     case EsriShapeType.EsriMultiPoint:
                     case EsriShapeType.EsriMultiPointM:
-                    case EsriShapeType.EsriMultiPointZ:
+                    case EsriShapeType.EsriMultiPointZM:
                         WriteEsriMultiPoint(builder, (IEsriSimplePoints)shape);
                         break;
 
                     case EsriShapeType.EsriPolyLine:
                     case EsriShapeType.EsriPolyLineM:
-                    case EsriShapeType.EsriPolyLineZ:
+                    case EsriShapeType.EsriPolyLineZM:
                         WriteEsriPolyline(builder, (IEsriSimplePoints)shape);
                         break;
 
                     case EsriShapeType.EsriPolygon:
                     case EsriShapeType.EsriPolygonM:
-                    case EsriShapeType.EsriPolygonZ:
+                    case EsriShapeType.EsriPolygonZM:
                         WriteEsriPolygon(builder, (IEsriSimplePoints)shape);
                         break;
 
@@ -174,22 +174,22 @@ namespace IRI.Ket.SpatialExtensions
             {
                 case EsriShapeType.EsriPoint:
                 case EsriShapeType.EsriPointM:
-                case EsriShapeType.EsriPointZ:
+                case EsriShapeType.EsriPointZM:
                     return SqlSpatialHelper.CreateEmptyPoint(srid);
 
                 case EsriShapeType.EsriMultiPoint:
                 case EsriShapeType.EsriMultiPointM:
-                case EsriShapeType.EsriMultiPointZ:
+                case EsriShapeType.EsriMultiPointZM:
                     return SqlSpatialHelper.CreateEmptyMultipoint(srid);
 
                 case EsriShapeType.EsriPolyLine:
                 case EsriShapeType.EsriPolyLineM:
-                case EsriShapeType.EsriPolyLineZ:
+                case EsriShapeType.EsriPolyLineZM:
                     return SqlSpatialHelper.CreateEmptyLineString(srid);
 
                 case EsriShapeType.EsriPolygon:
                 case EsriShapeType.EsriPolygonM:
-                case EsriShapeType.EsriPolygonZ:
+                case EsriShapeType.EsriPolygonZM:
                     return SqlSpatialHelper.CreateEmptyPolygon(srid);
 
                 case EsriShapeType.NullShape:

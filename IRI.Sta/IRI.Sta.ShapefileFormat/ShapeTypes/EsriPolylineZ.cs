@@ -232,7 +232,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolyLineZ), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolyLineZM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -270,7 +270,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriShapeType Type
         {
-            get { return EsriShapeType.EsriPolyLineZ; }
+            get { return EsriShapeType.EsriPolyLineZM; }
         }
 
         public EsriPoint[] GetPart(int partNo)

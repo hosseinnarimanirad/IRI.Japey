@@ -52,10 +52,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
         public static EsriPolylineM Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
         {
-            if (contentLength == 38)
-            {
-
-            }
+            if (contentLength == 38) { }
 
             //+8: pass the record header; +4 pass the shapeType
             reader.BaseStream.Position = offset * 2 + 8 + 4;
@@ -82,6 +79,41 @@ namespace IRI.Ket.ShapefileFormat.Reader
             double[] measures;
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
+
+            return new EsriPolylineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
+        }
+
+
+        public static EsriPolylineM ParseGdbRecord(byte[] bytes, int srid)
+        {
+            // 4: shape type
+            var offset = 4;
+
+            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+            offset += 4 * ShapeConstants.DoubleSize;
+
+            var numParts = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            var numPoints = BitConverter.ToInt32(bytes, offset);
+            offset += ShapeConstants.IntegerSize;
+
+            int[] parts = new int[numParts];
+
+            for (int i = 0; i < numParts; i++)
+            {
+                parts[i] = BitConverter.ToInt32(bytes, offset);
+                offset += ShapeConstants.IntegerSize;
+            }
+
+            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+
+            double minMeasure, maxMeasure;
+
+            double[] measures;
+
+            ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
 
             return new EsriPolylineM(boundingBox, parts, points, minMeasure, maxMeasure, measures);
         }

@@ -194,7 +194,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolygonZ), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPolygonZM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.WriteBoundingBoxToByte(this), 0, 4 * ShapeConstants.DoubleSize);
 
@@ -232,7 +232,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriShapeType Type
         {
-            get { return EsriShapeType.EsriPolygonZ; }
+            get { return EsriShapeType.EsriPolygonZM; }
         }
 
         public EsriPoint[] GetPart(int partNo)

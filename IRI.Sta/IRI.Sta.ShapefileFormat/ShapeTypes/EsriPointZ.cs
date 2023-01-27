@@ -113,7 +113,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPointZ), 0, ShapeConstants.IntegerSize);
+            result.Write(System.BitConverter.GetBytes((int)EsriShapeType.EsriPointZM), 0, ShapeConstants.IntegerSize);
 
             result.Write(Writer.ShpWriter.CheckNoDataAndGetByteValue(this.X), 0, ShapeConstants.DoubleSize);
 
@@ -133,7 +133,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriShapeType Type
         {
-            get { return EsriShapeType.EsriPointZ; }
+            get { return EsriShapeType.EsriPointZM; }
         }
 
         public string AsSqlServerWkt()

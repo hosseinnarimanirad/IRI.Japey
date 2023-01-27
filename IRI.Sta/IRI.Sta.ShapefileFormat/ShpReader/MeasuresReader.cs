@@ -28,8 +28,6 @@ namespace IRI.Ket.ShapefileFormat.Reader
             {
                 measures[i] = shpReader.ReadDouble();
             }
-
-        }
-
+        }         
     }
 }

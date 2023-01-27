@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.CommonCore\IRI.Ket.CommonCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DataManagementCore\IRI.Ket.DataManagementCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtensionCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\IRI.Jab.CommonCore\IRI.Jab.CommonCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types">
+      <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MapViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  
+</Project>
