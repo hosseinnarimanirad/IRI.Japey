@@ -27,7 +27,6 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.MachineLearning\IRI.Sta.MachineLearning.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.OfficeFormat\IRI.Sta.OfficeFormat.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.PersonalGdb\IRI.Sta.PersonalGdb.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Security\IRI.Sta.Security.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
