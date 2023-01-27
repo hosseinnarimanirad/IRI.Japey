@@ -7,17 +7,17 @@
             <ResourceDictionary.MergedDictionaries>
 
                 
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Styles/ButtonStyles.xaml"/>
 
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/IranBoundaries.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/Appbar.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/AppbarExtension.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/IriShapes.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/MaterialDesign.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Shapes/Others.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/IRI.Converters.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/IRI.Fonts.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.CommonCore;component/Assets/IRI.Colors.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/IranBoundaries.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/Appbar.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/AppbarExtension.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/IriShapes.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/MaterialDesign.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Shapes/Others.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Converters.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Fonts.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Colors.xaml"/>
  
             </ResourceDictionary.MergedDictionaries>
 

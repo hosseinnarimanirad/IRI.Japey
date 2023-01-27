@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Bas\IRI.Bas.SqlSpatialLoader\IRI.Bas.SqlSpatialLoader.csproj" />
+    <ProjectReference Include="..\..\IRI.Bas\IRI.Bas.SqlSpatialLoader\IRI.Bas.SqlSpatialLoaderCore.csproj" />
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj" />
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj" />
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.ControlsCore\IRI.Jab.ControlsCore.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.CommonCore\IRI.Ket.CommonCore.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Geometry\IRI.Sta.Geometry.csproj" />

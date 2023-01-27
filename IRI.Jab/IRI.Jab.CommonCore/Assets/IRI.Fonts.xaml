@@ -1,6 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <FontFamily x:Key="bYekan">pack://application:,,,/IRI.Jab.CommonCore;component/Assets/Fonts/BYekan.ttf#B Yekan</FontFamily>
-    <FontFamily x:Key="iranSans">/IRI.Jab.CommonCore;component/Assets/Fonts/IRANSans.ttf#IRANSans</FontFamily>
-    <FontFamily x:Key="FontAwesome">/IRI.Jab.CommonCore;component/Assets/Fonts/FontAwesome.ttf#FontAwesome</FontFamily>
-</ResourceDictionary>

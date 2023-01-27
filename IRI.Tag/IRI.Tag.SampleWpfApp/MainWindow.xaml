@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:IRI.Tag.SampleWpfApp"
         mc:Ignorable="d" Loaded="Window_Loaded"
         xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:MapViewer="clr-namespace:IRI.Jab.MapViewer;assembly=IRI.Jab.MapViewerCore" 
-        xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.ControlsCore"
+        xmlns:MapViewer="clr-namespace:IRI.Jab.MapViewer;assembly=IRI.Jab.MapViewer" 
+        xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
         Title="MainWindow" Height="600" Width="800" x:Name="root" >
     <Window.Resources>
 
