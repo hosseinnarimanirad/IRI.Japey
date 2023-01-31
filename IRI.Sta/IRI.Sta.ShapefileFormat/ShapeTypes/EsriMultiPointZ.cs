@@ -308,9 +308,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             //byte[] result = new byte[1 + 4 + 4 + 16 * this.NumberOfPoints];
             List<byte> result = new List<byte>();
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
+            result.Add((byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr);
 
-            result.AddRange(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.MultiPoint));
+            result.AddRange(BitConverter.GetBytes((int)Msh.Common.Ogc.WkbGeometryType.MultiPoint));
 
             result.AddRange(BitConverter.GetBytes((UInt32)this.NumberOfPoints));
 

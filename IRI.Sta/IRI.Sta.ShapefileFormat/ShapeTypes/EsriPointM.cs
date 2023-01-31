@@ -11,7 +11,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 {
 
 
-    public struct EsriPointM : IRI.Msh.Common.Primitives.IPoint, IEsriShape
+    public struct EsriPointM : IRI.Msh.Common.Primitives.IPoint, IEsriShape, IHasM
     {
         private double x, y, measure;
 

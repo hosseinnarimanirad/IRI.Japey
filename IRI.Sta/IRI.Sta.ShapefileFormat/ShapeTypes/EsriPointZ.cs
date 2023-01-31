@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public struct EsriPointZ : IRI.Msh.Common.Primitives.IPoint, IEsriShape
+    public struct EsriPointZ : IRI.Msh.Common.Primitives.IPoint, IEsriShape, IHasZ
     {
         private double x, y, z, measure;
 
@@ -38,7 +38,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         public int Srid { get; set; }
 
         public EsriPointZ(double x, double y, double z, int srid)
-            : this(x, y, z, ShapeConstants.NoDataValue, srid)
+            : this(x, y, z, EsriConstants.NoDataValue, srid)
         {
         }
 
@@ -138,34 +138,19 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public string AsSqlServerWkt()
         {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "POINT({0:G17} {1:G17} {2:G17} {3})", this.X, this.Y, this.Z, this.Measure == ShapeConstants.NoDataValue ? "NULL" : this.Measure.ToString("G17"));
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "POINT({0:G17} {1:G17} {2:G17} {3})", this.X, this.Y, this.Z, this.Measure == EsriConstants.NoDataValue ? "NULL" : this.Measure.ToString("G17"));
         }
 
         public byte[] AsWkb()
         {
-            return OgcWkbMapFunctions.ToWkbPoint(this);
-            //byte[] result = new byte[37];
-
-            //Array.Copy(BitConverter.GetBytes((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr), 0, result, 0, 1);
-
-            //Array.Copy(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.PointZM), 0, result, 1, 4);
-
-            //Array.Copy(BitConverter.GetBytes(this.X), 0, result, 5, 8);
-
-            //Array.Copy(BitConverter.GetBytes(this.Y), 0, result, 13, 8);
-
-            //Array.Copy(BitConverter.GetBytes(this.Z), 0, result, 21, 8);
-
-            //Array.Copy(BitConverter.GetBytes(this.Measure), 0, result, 29, 8);
-
-            //return result;
+            return OgcWkbMapFunctions.ToWkbPointZM(this, this.Z, this.Measure);
         }
 
         /// <summary>
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }

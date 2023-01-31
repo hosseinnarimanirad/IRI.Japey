@@ -234,24 +234,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             return string.Format("MULTIPOINT{0}", SqlServerWktMapFunctions.PointMGroupElementToWkt(this.Points, this.Measures));
         }
 
-        public byte[] AsWkb()
-        {
-            ////byte[] result = new byte[1 + 4 + 4 + 16 * this.NumberOfPoints];
-            //List<byte> result = new List<byte>();
-
-            //result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            //result.AddRange(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.MultiPoint));
-
-            //result.AddRange(BitConverter.GetBytes((UInt32)this.NumberOfPoints));
-
-            //for (int i = 0; i < this.NumberOfPoints; i++)
-            //{
-            //    result.AddRange(OgcWkbMapFunctions.ToWkbPoint(this.points[i]));
-            //}
-
-            //return result.ToArray();
-            return OgcWkbMapFunctions.ToWkbMultiPointM(this.points, this.measures, Standards.OGC.SFA.WkbGeometryType.MultiPointM);
+        public byte[] AsWkb() 
+        { 
+            return OgcWkbMapFunctions.ToWkbMultiPointM(this.points, this.measures);
         }
 
         /// <summary>

@@ -213,9 +213,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             List<byte> result = new List<byte>();
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
+            result.Add((byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr);
 
-            result.AddRange(BitConverter.GetBytes((uint)IRI.Standards.OGC.SFA.WkbGeometryType.PolygonM));
+            result.AddRange(BitConverter.GetBytes((uint)Msh.Common.Ogc.WkbGeometryType.PolygonM));
 
             result.AddRange(BitConverter.GetBytes((uint)this.parts.Length));
 

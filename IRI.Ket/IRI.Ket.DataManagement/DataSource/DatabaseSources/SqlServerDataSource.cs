@@ -233,18 +233,18 @@ namespace IRI.Ket.DataManagement.DataSource
             return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="attributeColumn"></param>
-        /// <param name="whereClause">Do not include the "WHERE", e.g. coulumn01 = someValue</param>
-        /// <returns></returns>
-        public override List<object> GetAttributes(string attributeColumn, string whereClause)
-        {
-            var selectQuery = FormattableString.Invariant($"SELECT {attributeColumn} FROM {GetTable()} {MakeWhereClause(whereClause)}");
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="attributeColumn"></param>
+        ///// <param name="whereClause">Do not include the "WHERE", e.g. coulumn01 = someValue</param>
+        ///// <returns></returns>
+        //public override List<object> GetAttributes(string attributeColumn, string whereClause)
+        //{
+        //    var selectQuery = FormattableString.Invariant($"SELECT {attributeColumn} FROM {GetTable()} {MakeWhereClause(whereClause)}");
 
-            return Select<object>(selectQuery);
-        }
+        //    return Select<object>(selectQuery);
+        //}
 
         protected List<T> Select<T>(string selectQuery, string connectionString = null)
         {
@@ -307,83 +307,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<Dictionary<string, object>> SelectFeatures(string selectQuery, bool returnWkt = false)
         {
-            return Infrastructure.SqlServerInfrastructure.SelectFeatures(_connectionString, selectQuery, returnWkt);
-
-            //SqlConnection connection = new SqlConnection(_connectionString);
-
-            //List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
-
-            //try
-            //{
-
-            //    var command = new SqlCommand(selectQuery, connection);
-
-            //    connection.Open();
-
-            //    SqlDataReader reader = command.ExecuteReader();
-
-            //    if (!reader.HasRows)
-            //    {
-            //        return new List<Dictionary<string, object>>();
-            //    }
-
-            //    while (reader.Read())
-            //    {
-            //        var dict = new Dictionary<string, object>();
-
-            //        for (int i = 0; i < reader.FieldCount; i++)
-            //        {
-            //            var fieldName = reader.GetName(i);
-
-            //            //var columnOrdinal = reader.GetOrdinal(fields[i]);
-
-            //            //if (returnWkt && fieldName == _spatialColumnName)
-            //            //{
-            //            //    dict.Add(_outputSpatialAttribute, reader.IsDBNull(i) ? null : ((SqlGeometry)reader[i]).AsWkt());
-            //            //}
-            //            //else
-            //            //{
-            //            //    dict.Add(fieldName, reader.IsDBNull(i) ? null : reader[i]);
-            //            //}
-
-            //            while (dict.Keys.Contains(fieldName))
-            //            {
-            //                fieldName = $"{fieldName}_";
-            //            }
-
-            //            if (reader.IsDBNull(i))
-            //            {
-            //                dict.Add(fieldName, null);
-            //            }
-            //            else
-            //            {
-            //                if (returnWkt && reader[i] is SqlGeometry)
-            //                {
-            //                    dict.Add(fieldName, ((SqlGeometry)reader[i]).AsWkt());
-            //                }
-            //                else
-            //                {
-            //                    dict.Add(fieldName, reader[i]);
-            //                }
-            //            }
-            //        }
-
-            //        result.Add(dict);
-            //    }
-
-            //    connection.Close();
-            //}
-            //catch (Exception ex)
-            //{
-            //    connection.Close();
-            //}
-
-            //return result;
+            return Infrastructure.SqlServerInfrastructure.SelectFeatures(_connectionString, selectQuery, returnWkt);             
         }
 
         public List<Dictionary<string, object>> GetFeaturesWhereIntersects(string wktGeometryFilter, bool returnGeometryAsWktForm = false)
-        {
-            //return SelectFeatures(GetCommandString(wktGeometryFilter, false), returnWkt);
+        { 
             return SelectFeatures(MakeSelectCommandWithWkt(wktGeometryFilter, false), returnGeometryAsWktForm);
         }
 
@@ -470,13 +398,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<SqlGeometry> GetGeometriesWhereIntersects(string wktGeometryFilter)
         {
-            //if (wktGeometryFilter == null)
-            //{
-            //    return GetGeometries();
-            //}
-
-            //return SelectGeometries(GetCommandStringForGeometryOnly(wktGeometryFilter));
-            return SelectGeometries(MakeSelectCommandWithWkt(wktGeometryFilter, true));
+             return SelectGeometries(MakeSelectCommandWithWkt(wktGeometryFilter, true));
         }
 
         public List<SqlGeometry> GetGeometriesWhereIntersects(byte[] wkbGeometryFilter)

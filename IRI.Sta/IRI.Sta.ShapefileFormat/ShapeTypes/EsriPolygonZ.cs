@@ -265,11 +265,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         //Error Prone: not checking for multipolygon cases
         public byte[] AsWkb()
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)IRI.Standards.OGC.SFA.WkbGeometryType.PolygonZM));
+            result.AddRange(BitConverter.GetBytes((uint)Msh.Common.Ogc.WkbGeometryType.PolygonZM));
 
             result.AddRange(BitConverter.GetBytes((uint)this.parts.Length));
 

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using IRI.Ket.ShapefileFormat.EsriType;
+using System.Text; 
+using IRI.Msh.Common.Ogc;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat
 {
     public static class OgcWkbMapFunctions
     {
-        public static byte[] ToWkbPoint(EsriPoint point)
+        public static byte[] ToWkbPoint<T>(T point) where T : IPoint
         {
             byte[] result = new byte[21];
 
-            result[0] = (byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr;
+            result[0] = (byte)WkbByteOrder.WkbNdr;
 
-            Array.Copy(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.Point), 0, result, 1, 4);
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, 4);
 
             Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
 
@@ -23,49 +24,50 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static byte[] ToWkbPoint(EsriPointM point)
+        public static byte[] ToWkbPointM<T>(T point, double measure) where T : IPoint
         {
             byte[] result = new byte[29];
 
-            Array.Copy(BitConverter.GetBytes((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr), 0, result, 0, 1);
+            Array.Copy(BitConverter.GetBytes((byte)WkbByteOrder.WkbNdr), 0, result, 0, 1);
 
-            Array.Copy(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.PointM), 0, result, 1, 4);
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.PointM), 0, result, 1, 4);
 
             Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
 
             Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, 8);
 
-            Array.Copy(BitConverter.GetBytes(point.Measure), 0, result, 21, 8);
+            Array.Copy(BitConverter.GetBytes(measure), 0, result, 21, 8);
 
             return result;
         }
 
-        public static byte[] ToWkbPoint(EsriPointZ point)
+        public static byte[] ToWkbPointZM<T>(T point, double z, double measure) where T : IPoint
         {
             byte[] result = new byte[37];
 
-            Array.Copy(BitConverter.GetBytes((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr), 0, result, 0, 1);
+            Array.Copy(BitConverter.GetBytes((byte)WkbByteOrder.WkbNdr), 0, result, 0, 1);
 
-            Array.Copy(BitConverter.GetBytes((int)IRI.Standards.OGC.SFA.WkbGeometryType.PointZM), 0, result, 1, 4);
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.PointZM), 0, result, 1, 4);
 
             Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
 
             Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, 8);
 
-            Array.Copy(BitConverter.GetBytes(point.Z), 0, result, 21, 8);
+            Array.Copy(BitConverter.GetBytes(z), 0, result, 21, 8);
 
-            Array.Copy(BitConverter.GetBytes(point.Measure == ShapeConstants.NoDataValue ? double.NaN : point.Measure), 0, result, 29, 8);
+            Array.Copy(BitConverter.GetBytes(measure == EsriConstants.NoDataValue ? double.NaN : measure), 0, result, 29, 8);
 
             return result;
         }
 
-        public static byte[] ToWkbMultiPoint(EsriPoint[] points, IRI.Standards.OGC.SFA.WkbGeometryType type)
+        public static byte[] ToWkbMultiPoint<T>(T[] points) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)type));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPoint));
 
             result.AddRange(BitConverter.GetBytes((uint)points.Length));
 
@@ -77,43 +79,45 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbMultiPointM(EsriPoint[] points, double[] measures, IRI.Standards.OGC.SFA.WkbGeometryType type)
+        public static byte[] ToWkbMultiPointM<T>(T[] points, double[] measures) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((int)type));
+            result.AddRange(BitConverter.GetBytes((int)WkbGeometryType.MultiPointM));
 
             result.AddRange(BitConverter.GetBytes((int)points.Length));
 
             for (int i = 0; i < points.Length; i++)
             {
-                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointM(points[i].X, points[i].Y, measures[i], points[i].Srid)));
+                result.AddRange(OgcWkbMapFunctions.ToWkbPointM(points[i], measures[i]));
             }
 
             return result.ToArray();
         }
 
-        public static byte[] ToWkbMultiPointZM(EsriPoint[] points, double[] zValues, double[] measures, IRI.Standards.OGC.SFA.WkbGeometryType type)
+        public static byte[] ToWkbMultiPointZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)type));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPointZM));
 
             result.AddRange(BitConverter.GetBytes((uint)points.Length));
 
             for (int i = 0; i < points.Length; i++)
             {
-                result.AddRange(OgcWkbMapFunctions.ToWkbPoint(new EsriPointZ(points[i].X, points[i].Y, zValues[i], measures[i], points[i].Srid)));
+                result.AddRange(OgcWkbMapFunctions.ToWkbPointZM(points[i], zValues[i], measures[i]));
             }
 
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRing(EsriPoint[] points)
+        public static byte[] ToWkbLinearRing<T>(T[] points) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
@@ -129,7 +133,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRingM(EsriPoint[] points, double[] measures)
+        public static byte[] ToWkbLinearRingM<T>(T[] points, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
@@ -147,7 +151,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRingZM(EsriPoint[] points, double[] zValues, double[] measures)
+        public static byte[] ToWkbLinearRingZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
@@ -167,13 +171,14 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineString(EsriPoint[] points)
+        public static byte[] ToWkbLineString<T>(T[] points) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint) IRI.Standards.OGC.SFA.WkbGeometryType.LineString));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineString));
 
             result.AddRange(BitConverter.GetBytes((uint)points.Length));
 
@@ -187,13 +192,14 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineStringM(EsriPoint[] points, double[] measures)
+        public static byte[] ToWkbLineStringM<T>(T[] points, double[] measures) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)IRI.Standards.OGC.SFA.WkbGeometryType.LineStringM));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineStringM));
 
             result.AddRange(BitConverter.GetBytes((uint)points.Length));
 
@@ -209,13 +215,14 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineStringZM(EsriPoint[] points, double[] zValues, double[] measures)
+        public static byte[] ToWkbLineStringZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)IRI.Standards.OGC.SFA.WkbGeometryType.LineStringZM));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineStringZM));
 
             result.AddRange(BitConverter.GetBytes((uint)points.Length));
 

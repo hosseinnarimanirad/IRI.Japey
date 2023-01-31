@@ -40,12 +40,12 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public virtual List<object> GetAttributes(string attributeColumn)
-        {
-            return GetAttributes(attributeColumn, string.Empty);
-        }
+        //public virtual List<object> GetAttributes(string attributeColumn)
+        //{
+        //    return GetAttributes(attributeColumn, string.Empty);
+        //}
 
-        public abstract List<object> GetAttributes(string attributeColumn, string whereClause);
+        //public abstract List<object> GetAttributes(string attributeColumn, string whereClause);
 
         public virtual DataTable GetEntireFeatures(string whereClause)
         {

@@ -40,71 +40,64 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
 
     protected string _tableName;
 
-    protected string _queryString;
-
     protected string _spatialColumnName;
 
-    protected string _labelColumnName;
+    protected string? _labelColumnName;
 
-    public Action<ISqlGeometryAware> AddAction;
+    public Action<ISqlGeometryAware>? AddAction;
 
-    public Action<int> RemoveAction;
+    public Action<int>? RemoveAction;
 
-    public Action<ISqlGeometryAware> UpdateAction;
+    public Action<ISqlGeometryAware>? UpdateAction;
 
-    public string IdColumnName { get; set; }
+    public string? IdColumnName { get; set; }
 
-    protected PersoanlGdbDataSource()
-    {
+    //protected PersoanlGdbDataSource()
+    //{
 
-    }
+    //}
 
-    public PersoanlGdbDataSource(string mdbFileName, string tableName, string spatialColumnName = _defaultSpatialColumnName, string labelColumnName = null)
+    public PersoanlGdbDataSource(string mdbFileName, string tableName, string? spatialColumnName = null, string? labelColumnName = null)
     {
         this._mdbFileName = mdbFileName;
 
         this._tableName = tableName;
 
-        this._spatialColumnName = spatialColumnName;
+        this._spatialColumnName = spatialColumnName ?? _defaultSpatialColumnName;
 
         this._labelColumnName = labelColumnName;
-
-        if (spatialColumnName == null)
-        {
-            this.Extent = BoundingBox.NaN;
-        }
-        else
-        {
-            //IMPORTANT!
-            //this.Extent = GetGeometries().GetBoundingBox();
-        }
-
     }
 
-    public static PersoanlGdbDataSource CreateForQueryString(string mdbFileName, string queryString, string spatialColumnName, string labelColumnName = null)
-    {
-        PersoanlGdbDataSource result = new PersoanlGdbDataSource(mdbFileName, null, spatialColumnName, labelColumnName)
-        {
-            _queryString = queryString,
-        };
-
-        return result;
-    }
-
-
-    private string GetTable()
-    {
-        return this._tableName ?? $" ({this._queryString}) A";
-    }
 
     public BoundingBox GetBoundingBox()
     {
-        //var query = string.Format(CultureInfo.InvariantCulture, "SELECT {0}.STEnvelope() FROM {1} ", _spatialColumnName, GetTable());
-        var query = FormattableString.Invariant($"SELECT {_spatialColumnName}.STEnvelope() FROM {GetTable()} ");
+        using (var conn = new OleDbConnection(GetConnectionString()))
+        {
+            conn.Open();
 
-        var envelopes = SelectGeometries(query);
+            var query = FormattableString.Invariant(
+                        @$"SELECT        TableName, FieldName, ExtentLeft, ExtentBottom, ExtentRight, ExtentTop, SRID
+                            FROM            GDB_GeomColumns
+                            WHERE        (TableName = '{_tableName}')");
 
-        return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
+            var cmd = new OleDbCommand(query, conn);
+
+            using (var dataReader = cmd.ExecuteReader())
+            {
+                while (dataReader.Read())
+                {
+                    var minX = (double)dataReader["ExtentLeft"];
+                    var maxX = (double)dataReader["ExtentRight"];
+                    var minY = (double)dataReader["ExtentBottom"];
+                    var maxY = (double)dataReader["ExtentTop"];
+                    var srid = (int)dataReader["SRID"];
+
+                    return new BoundingBox(minX, minY, maxX, maxY);
+                }
+            }
+        }
+
+        return BoundingBox.NaN;
     }
 
     private string GetConnectionString()
@@ -119,11 +112,8 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
         }
     }
 
-    protected List<SqlGeometry> SelectGeometries(string selectQuery, string connectionString = null)
+    protected List<SqlGeometry> SelectGeometries(string selectQuery)
     {
-        if (connectionString == null)
-            connectionString = _mdbFileName;
-
         List<SqlGeometry> geometries = new List<SqlGeometry>();
 
         using (var conn = new OleDbConnection(GetConnectionString()))
@@ -145,7 +135,7 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
                     geometries.Add(esriShape.AsGeometry().AsSqlGeometry());
                 }
             }
-        } 
+        }
 
         return geometries;
     }
@@ -159,12 +149,7 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
     {
         throw new NotImplementedException();
     }
-
-    public override List<object> GetAttributes(string attributeColumn, string whereClause)
-    {
-        throw new NotImplementedException();
-    }
-
+     
     public override List<SqlFeature> GetFeatures(SqlGeometry geometry)
     {
         throw new NotImplementedException();

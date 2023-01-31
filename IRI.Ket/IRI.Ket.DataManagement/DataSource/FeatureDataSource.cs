@@ -114,7 +114,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public Task<List<SqlGeometry>> GetGeometriesAsync()
         {
-            return Task.Run(() => { return GetGeometries(); });
+            return Task.Run(GetGeometries);
         }
 
         //public Task<List<SqlGeometry>> GetGeometriesAsync(string whereClause)
@@ -140,7 +140,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync()
         {
-            return Task.Run(() => { return GetGeometryLabelPairs(); });
+            return Task.Run(GetGeometryLabelPairs);
         }
 
         //public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(string whereClause)

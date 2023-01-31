@@ -151,10 +151,10 @@ namespace IRI.Msh.Common.Extensions
             return result;
         }
 
-        private static GeoJsonPoint GeometryPointToGeoJsonPoint<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonPoint GeometryPointToGeoJsonPoint<T>(this Geometry<T> point, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (point.IsNullOrEmpty())
                 return new GeoJsonPoint()
                 {
                     Type = GeoJson.Point,
@@ -165,7 +165,7 @@ namespace IRI.Msh.Common.Extensions
                 return new GeoJsonPoint()
                 {
                     Type = GeoJson.Point,
-                    Coordinates = new double[] { geometry.Points[0].X, geometry.Points[0].Y }
+                    Coordinates = new double[] { point.Points[0].X, point.Points[0].Y }
                 };
             }
             else
@@ -173,29 +173,29 @@ namespace IRI.Msh.Common.Extensions
                 return new GeoJsonPoint()
                 {
                     Type = GeoJson.Point,
-                    Coordinates = new double[] { geometry.Points[0].Y, geometry.Points[0].X }
+                    Coordinates = new double[] { point.Points[0].Y, point.Points[0].X }
                 };
             }
 
         }
 
-        private static GeoJsonMultiPoint GeometryMultiPointToGeoJsonMultiPoint<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonMultiPoint GeometryMultiPointToGeoJsonMultiPoint<T>(this Geometry<T> multiPoint, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (multiPoint.IsNullOrEmpty())
                 return new GeoJsonMultiPoint()
                 {
                     Type = GeoJson.MultiPoint,
                     Coordinates = new double[0][],
                 };
 
-            var numberOfGeometries = geometry.NumberOfGeometries;
+            var numberOfGeometries = multiPoint.NumberOfGeometries;
 
             double[][] points = new double[numberOfGeometries][];
 
             for (int i = 0; i < numberOfGeometries; i++)
             {
-                points[i] = GetGeoJsonObjectPoint(geometry.Geometries[i].Points[0], isLongitudeFirst);
+                points[i] = GetGeoJsonObjectPoint(multiPoint.Geometries[i].Points[0], isLongitudeFirst);
             }
 
             return new GeoJsonMultiPoint()
@@ -206,17 +206,17 @@ namespace IRI.Msh.Common.Extensions
         }
 
         //Not supportig Z and M Values
-        private static GeoJsonLineString GeometryLineStringToGeoJsonPolyline<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonLineString GeometryLineStringToGeoJsonPolyline<T>(this Geometry<T> lineString, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (lineString.IsNullOrEmpty())
                 return new GeoJsonLineString()
                 {
                     Type = GeoJson.LineString,
                     Coordinates = new double[0][],
                 };
 
-            double[][] paths = GetGeoJsonLineStringOrRing(geometry, isLongitudeFirst, false);
+            double[][] paths = GetGeoJsonLineStringOrRing(lineString, isLongitudeFirst, false);
 
             return new GeoJsonLineString()
             {
@@ -226,23 +226,23 @@ namespace IRI.Msh.Common.Extensions
         }
 
         //Not supportig Z and M Values
-        private static GeoJsonMultiLineString GeometryMultiLineStringToGeoJsonPolyline<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonMultiLineString GeometryMultiLineStringToGeoJsonPolyline<T>(this Geometry<T> multiLineString, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (multiLineString.IsNullOrEmpty())
                 return new GeoJsonMultiLineString()
                 {
                     Type = GeoJson.MultiLineString,
                     Coordinates = new double[0][][],
                 };
 
-            int numberOfParts = geometry.NumberOfGeometries;
+            int numberOfParts = multiLineString.NumberOfGeometries;
 
             double[][][] result = new double[numberOfParts][][];
 
             for (int i = 0; i < numberOfParts; i++)
             {
-                result[i] = GetGeoJsonLineStringOrRing(geometry.Geometries[i], isLongitudeFirst, false);
+                result[i] = GetGeoJsonLineStringOrRing(multiLineString.Geometries[i], isLongitudeFirst, false);
             }
 
             return new GeoJsonMultiLineString()
@@ -253,10 +253,10 @@ namespace IRI.Msh.Common.Extensions
         }
 
         //Not supportig Z and M Values
-        private static GeoJsonPolygon GeometryPolygonToGeoJsonPolygon<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonPolygon GeometryPolygonToGeoJsonPolygon<T>(this Geometry<T> polygon, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (polygon.IsNullOrEmpty())
                 return new GeoJsonPolygon()
                 {
                     Type = GeoJson.Polygon,
@@ -264,13 +264,13 @@ namespace IRI.Msh.Common.Extensions
                 };
 
 
-            int numberOfParts = geometry.NumberOfGeometries;
+            int numberOfParts = polygon.NumberOfGeometries;
 
             double[][][] result = new double[numberOfParts][][];
 
             for (int i = 0; i < numberOfParts; i++)
             {
-                result[i] = GetGeoJsonLineStringOrRing(geometry.Geometries[i], isLongitudeFirst, true);
+                result[i] = GetGeoJsonLineStringOrRing(polygon.Geometries[i], isLongitudeFirst, true);
             }
 
             //double[][][] rings = new double[1][][] { GetGeoJsonLineStringOrRing(geometry) };
@@ -283,23 +283,23 @@ namespace IRI.Msh.Common.Extensions
         }
 
         //Not supportig Z and M Values
-        private static GeoJsonMultiPolygon GeometryMultiPolygonToGeoJsonMultiPolygon<T>(this Geometry<T> geometry, bool isLongitudeFirst) where T : IPoint, new()
+        private static GeoJsonMultiPolygon GeometryMultiPolygonToGeoJsonMultiPolygon<T>(this Geometry<T> multiPolygon, bool isLongitudeFirst) where T : IPoint, new()
         {
             //This check is required
-            if (geometry.IsNullOrEmpty())
+            if (multiPolygon.IsNullOrEmpty())
                 return new GeoJsonMultiPolygon()
                 {
                     Type = GeoJson.MultiPolygon,
                     Coordinates = new double[0][][][],
                 };
 
-            int numberOfParts = geometry.NumberOfGeometries;
+            int numberOfParts = multiPolygon.NumberOfGeometries;
 
             double[][][][] rings = new double[numberOfParts][][][];
 
             for (int i = 0; i < numberOfParts; i++)
             {
-                rings[i] = geometry.Geometries[i].GeometryPolygonToGeoJsonPolygon(isLongitudeFirst).Coordinates;
+                rings[i] = multiPolygon.Geometries[i].GeometryPolygonToGeoJsonPolygon(isLongitudeFirst).Coordinates;
             }
 
             return new GeoJsonMultiPolygon()
@@ -311,5 +311,40 @@ namespace IRI.Msh.Common.Extensions
 
         #endregion
 
+
+        #region Geometry To Wkb
+
+        public byte[] AsWkb<T>(this Geometry<T> geometry) where T : IPoint, new()
+        {
+            switch (geometry.Type)
+            {
+                case GeometryType.Point:
+                    break;
+                
+                case GeometryType.LineString:
+                    break;
+                
+                case GeometryType.Polygon:
+                    break;
+                
+                case GeometryType.MultiPoint:
+                    break;
+                
+                case GeometryType.MultiLineString:
+                    break;
+                
+                case GeometryType.MultiPolygon:
+                    break;
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        #endregion
     }
 }

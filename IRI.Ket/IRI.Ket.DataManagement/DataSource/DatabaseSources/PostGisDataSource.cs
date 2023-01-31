@@ -176,17 +176,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
         }
-
-        //public override List<object> GetAttributes(string attributeColumn)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public override List<object> GetAttributes(string attributeColumn, string whereClause)
-        {
-            throw new NotImplementedException();
-        }
-
+          
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
             throw new NotImplementedException();
@@ -204,7 +194,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
         {
-            string whereClause = string.Format(System.Globalization.CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
+            string whereClause = string.Format(CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
 
             return GetEntireFeatures(whereClause);
         }

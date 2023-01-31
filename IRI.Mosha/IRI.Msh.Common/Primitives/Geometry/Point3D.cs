@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {
-    public class Point3D : IPoint
+    public class Point3D : IPoint, IHasZ
     {
         private double _x;
 

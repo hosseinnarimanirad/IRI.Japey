@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IRI.Msh.Common.Ogc
 {
-    public enum WkbGeometryType : uint
+    public enum WkbGeometryType : int
     {
         Geometry = 0,
         Point = 1,

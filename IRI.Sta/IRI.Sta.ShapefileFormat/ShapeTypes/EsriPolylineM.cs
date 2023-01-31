@@ -219,9 +219,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
             else
             {
-                result.Add((byte)IRI.Standards.OGC.SFA.WkbByteOrder.WkbNdr);
+                result.Add((byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr);
 
-                result.AddRange(BitConverter.GetBytes((uint)IRI.Standards.OGC.SFA.WkbGeometryType.MultiLineStringM));
+                result.AddRange(BitConverter.GetBytes((uint)Msh.Common.Ogc.WkbGeometryType.MultiLineStringM));
 
                 result.AddRange(BitConverter.GetBytes((uint)this.parts.Length));
 

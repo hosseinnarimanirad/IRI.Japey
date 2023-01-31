@@ -35,7 +35,7 @@ namespace IRI.Ket.ShapefileFormat
         internal const int RecordHeaderLengthInWords = 4;
 
         
-        internal const double NoDataValue = -1.7976931348623157E+308;
+        //internal const double NoDataValue = -1.7976931348623157E+308;
 
         internal const int FileCode = 9994;
 
