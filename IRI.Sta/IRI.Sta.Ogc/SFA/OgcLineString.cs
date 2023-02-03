@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices; 
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Standards.OGC.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcLineString<T> : IOgcGeometry, IRI.Standards.OGC.SFA.IOgcLineString where T : IOgcPoint
+    public struct OgcLineString<T> : IOgcGeometry, IOgcLineString where T : IOgcPoint
     {
         byte byteOrder;
 

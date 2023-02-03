@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat
 {
@@ -20,7 +21,7 @@ namespace IRI.Ket.ShapefileFormat
 
         internal static string PointZElementToWkt(EsriPoint point, double zValue, double measure)
         {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3}", point.X, point.Y, zValue, measure == ShapeConstants.NoDataValue ? "NULL" : measure.ToString("G17"));
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3}", point.X, point.Y, zValue, measure == EsriConstants.NoDataValue ? "NULL" : measure.ToString("G17"));
         }
 
         internal static string PointGroupElementToWkt(EsriPoint[] points)

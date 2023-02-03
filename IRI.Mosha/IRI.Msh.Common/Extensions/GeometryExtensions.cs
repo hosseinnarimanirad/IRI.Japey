@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Msh.Common.Extensions
 {
@@ -312,29 +313,32 @@ namespace IRI.Msh.Common.Extensions
         #endregion
 
 
-        #region Geometry To Wkb
+        #region Wkb To Geometry
 
-        public byte[] AsWkb<T>(this Geometry<T> geometry) where T : IPoint, new()
+        public static byte[] AsWkb<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
+            if (geometry.IsNullOrEmpty())
+                return null;
+
             switch (geometry.Type)
             {
                 case GeometryType.Point:
-                    break;
-                
+                    return OgcWkbMapFunctions.ToWkbPoint(geometry.Points[0]);
+
                 case GeometryType.LineString:
-                    break;
-                
+                    return GeometryLineStringAsWkb(geometry);
+
                 case GeometryType.Polygon:
-                    break;
-                
+                    return GeometryPolygonAsWkb(geometry);
+
                 case GeometryType.MultiPoint:
-                    break;
-                
+                    return OgcWkbMapFunctions.ToWkbMultiPoint(geometry.Points);
+
                 case GeometryType.MultiLineString:
-                    break;
-                
+                    return GeometryMultiLineStringAsWkb(geometry);
+
                 case GeometryType.MultiPolygon:
-                    break;
+                    return GeometryMultiPolygonAsWkb(geometry);
 
                 case GeometryType.GeometryCollection:
                 case GeometryType.CircularString:
@@ -344,6 +348,80 @@ namespace IRI.Msh.Common.Extensions
                     throw new NotImplementedException();
             }
         }
+
+        private static byte[] GeometryLineStringAsWkb<T>(Geometry<T> lineString) where T : IPoint, new()
+        {
+            List<byte> result = new List<byte>();
+
+            result.AddRange(OgcWkbMapFunctions.ToWkbLineString(lineString.Points));
+
+            return result.ToArray();
+        }
+
+        private static byte[] GeometryPolygonAsWkb<T>(Geometry<T> polygon) where T : IPoint, new()
+        {
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
+
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.Polygon));
+
+            result.AddRange(BitConverter.GetBytes((uint)polygon.Geometries.Count));
+
+            for (int i = 0; i < polygon.Geometries.Count; i++)
+            {
+                result.AddRange(BitConverter.GetBytes((uint)polygon.Geometries[i].Points.Count));
+
+                result.AddRange(OgcWkbMapFunctions.ToWkbLinearRing(polygon.Geometries[i].Points));
+            }
+
+            return result.ToArray();
+        }
+
+        private static byte[] GeometryMultiLineStringAsWkb<T>(Geometry<T> multipoint) where T : IPoint, new()
+        {
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
+
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiLineString));
+
+            result.AddRange(BitConverter.GetBytes((uint)multipoint.Geometries.Count));
+
+            for (int i = 0; i < multipoint.Geometries.Count; i++)
+            {
+                result.AddRange(multipoint.Geometries[i].AsWkb());
+            }
+
+            return result.ToArray();
+        }
+
+        private static byte[] GeometryMultiPolygonAsWkb<T>(Geometry<T> polygon) where T : IPoint, new()
+        {
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
+
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.Polygon));
+
+            result.AddRange(BitConverter.GetBytes((uint)polygon.Geometries.Count));
+
+            for (int i = 0; i < polygon.Geometries.Count; i++)
+            {
+                result.AddRange(polygon.Geometries[i].AsWkb());
+            }
+
+            return result.ToArray();
+        }
+
+        #endregion
+
+        #region Geometry To Wkb 
+
+
 
         #endregion
     }

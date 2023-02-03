@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
@@ -18,7 +19,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
+        private BoundingBox boundingBox;
 
         public int Srid { get; set; }
 
@@ -79,7 +80,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
+            this.boundingBox = BoundingBox.CalculateBoundingBox(points/*.Cast<IPoint>()*/);
              
             this.points = points;
 
@@ -94,14 +95,14 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
             else
             {
-                this.minMeasure = ShapeConstants.NoDataValue;
+                this.minMeasure = EsriConstants.NoDataValue;
 
-                this.maxMeasure = ShapeConstants.NoDataValue;
+                this.maxMeasure = EsriConstants.NoDataValue;
             }
 
         }
 
-        internal EsriMultiPointM(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
+        internal EsriMultiPointM(BoundingBox boundingBox, EsriPoint[] points, double minMeasure, double maxMeasure, double[] measures)
         {
             if (points == null || points.Length != measures.Length)
             {
@@ -135,7 +136,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 throw new NotImplementedException();
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
+            this.boundingBox = BoundingBox.CalculateBoundingBox(points/*.Cast<IPoint>()*/);
 
             this.Srid = points.First().Srid;
 
@@ -210,27 +211,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
 
         public string AsSqlServerWkt()
-        {
-            //StringBuilder result = new StringBuilder("MULTIPOINT(");
-
-            //for (int i = 0; i < NumberOfPoints - 1; i++)
-            //{
-            //    result.Append(string.Format(" {0} {1} {2} {3},", this.Points[i].X, this.Points[i].Y, "NULL", this.Measures[i]));
-            //}
-
-            //result.Append(string.Format(" {0} {1} {2} {3})",
-            //                                this.Points[NumberOfPoints - 1].X,
-            //                                this.Points[NumberOfPoints - 1].Y,
-            //                                "NULL",
-            //                                this.Measures[NumberOfPoints - 1]));
-
-            //return result.ToString();
+        { 
             return string.Format("MULTIPOINT{0}", SqlServerWktMapFunctions.PointMGroupElementToWkt(this.Points, this.Measures));
         }
 
@@ -243,12 +230,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
@@ -16,7 +17,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
+        private BoundingBox boundingBox;
 
         public int Srid { get; set; }
 
@@ -58,13 +59,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
+            this.boundingBox = BoundingBox.CalculateBoundingBox(points/*.Cast<IPoint>()*/);
 
             this.points = points;
 
         }
 
-        internal EsriMultiPoint(IRI.Msh.Common.Primitives.BoundingBox boundingBox, EsriPoint[] points)
+        internal EsriMultiPoint(BoundingBox boundingBox, EsriPoint[] points)
         {
             if (points == null || points.Length < 1)
             {
@@ -116,7 +117,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -130,19 +131,19 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public byte[] AsWkb()
         {
-            return OgcWkbMapFunctions.ToWkbMultiPoint(this.points, Msh.Common.Ogc.WkbGeometryType.MultiPoint); 
+            return OgcWkbMapFunctions.ToWkbMultiPoint(this.points); 
         }
 
         /// <summary>
         /// Returns Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

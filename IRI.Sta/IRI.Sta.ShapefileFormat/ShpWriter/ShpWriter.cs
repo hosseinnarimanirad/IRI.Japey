@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.Writer
 {
@@ -132,7 +133,7 @@ namespace IRI.Ket.ShapefileFormat.Writer
 
         internal static byte[] CheckNoDataAndGetByteValue(double value)
         {
-            return BitConverter.GetBytes(double.IsNaN(value) ? ShapeConstants.NoDataValue : value);
+            return BitConverter.GetBytes(double.IsNaN(value) ? EsriConstants.NoDataValue : value);
         }
 
         internal static byte[] WritePointsToByte(EsriPoint[] values)

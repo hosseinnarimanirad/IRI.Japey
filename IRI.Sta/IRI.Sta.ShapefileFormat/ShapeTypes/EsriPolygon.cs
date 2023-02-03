@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
 using System.Configuration;
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
@@ -23,7 +24,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
     public struct EsriPolygon : IEsriSimplePoints
     {
 
-        private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
+        private BoundingBox boundingBox;
 
         public int Srid { get; set; }
 
@@ -102,7 +103,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
+            this.boundingBox = BoundingBox.CalculateBoundingBox(points/*.Cast<IPoint>()*/);
 
             this.parts = parts;
 
@@ -134,11 +135,11 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 parts[i] = points.Where((array, index) => index < i).Sum(array => array.Length);
             }
 
-            var boundingBoxes = points.Select(i => BoundingBox.CalculateBoundingBox(i/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/));
+            var boundingBoxes = points.Select(i => BoundingBox.CalculateBoundingBox(i/*.Cast<IPoint>()*/));
 
             this.boundingBox = BoundingBox.GetMergedBoundingBox(boundingBoxes);
 
-            //this.boundingBox = IRI.Msh.Common.Infrastructure.CalculateBoundingBox(this.points.Cast<IRI.Msh.Common.Primitives.IPoint>());
+            //this.boundingBox = IRI.Msh.Common.Infrastructure.CalculateBoundingBox(this.points.Cast<IPoint>());
         }
 
 
@@ -183,7 +184,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -207,11 +208,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         //Error Prone: not checking for multipolygon cases
         public byte[] AsWkb()
         {
-            List<byte> result = new List<byte>();
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
 
-            result.Add((byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr);
-
-            result.AddRange(BitConverter.GetBytes((uint)Msh.Common.Ogc.WkbGeometryType.Polygon));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.Polygon));
 
             result.AddRange(BitConverter.GetBytes((uint)this.parts.Length));
 
@@ -227,13 +229,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
 
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

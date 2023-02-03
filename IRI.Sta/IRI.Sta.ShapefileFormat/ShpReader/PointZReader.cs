@@ -2,6 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -66,7 +67,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             double z = BitConverter.ToDouble(bytes, offset + 2 * ShapeConstants.DoubleSize);
 
-            double m = ShapeConstants.NoDataValue;
+            double m = EsriConstants.NoDataValue;
 
             if (hasM)
             {

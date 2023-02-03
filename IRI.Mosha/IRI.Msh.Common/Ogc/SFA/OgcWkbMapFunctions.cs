@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
 using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Msh.Common.Ogc
 {
     public static class OgcWkbMapFunctions
     {
@@ -60,7 +60,7 @@ namespace IRI.Ket.ShapefileFormat
             return result;
         }
 
-        public static byte[] ToWkbMultiPoint<T>(T[] points) where T : IPoint
+        public static byte[] ToWkbMultiPoint<T>(IReadOnlyList<T> points) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -69,9 +69,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPoint));
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(OgcWkbMapFunctions.ToWkbPoint(points[i]));
             }
@@ -79,7 +79,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbMultiPointM<T>(T[] points, double[] measures) where T : IPoint
+        public static byte[] ToWkbMultiPointM<T>(IReadOnlyList<T> points, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -88,9 +88,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((int)WkbGeometryType.MultiPointM));
 
-            result.AddRange(BitConverter.GetBytes((int)points.Length));
+            result.AddRange(BitConverter.GetBytes((int)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(OgcWkbMapFunctions.ToWkbPointM(points[i], measures[i]));
             }
@@ -98,7 +98,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbMultiPointZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
+        public static byte[] ToWkbMultiPointZM<T>(IReadOnlyList<T> points, double[] zValues, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -107,9 +107,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPointZM));
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(OgcWkbMapFunctions.ToWkbPointZM(points[i], zValues[i], measures[i]));
             }
@@ -117,13 +117,13 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRing<T>(T[] points) where T : IPoint
+        public static byte[] ToWkbLinearRing<T>(IReadOnlyList<T> points) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 
@@ -133,13 +133,13 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRingM<T>(T[] points, double[] measures) where T : IPoint
+        public static byte[] ToWkbLinearRingM<T>(IReadOnlyList<T> points, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 
@@ -151,13 +151,13 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLinearRingZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
+        public static byte[] ToWkbLinearRingZM<T>(IReadOnlyList<T> points, double[] zValues, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>();
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 
@@ -171,7 +171,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineString<T>(T[] points) where T : IPoint
+        public static byte[] ToWkbLineString<T>(IReadOnlyList<T> points) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -180,9 +180,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineString));
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 
@@ -192,7 +192,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineStringM<T>(T[] points, double[] measures) where T : IPoint
+        public static byte[] ToWkbLineStringM<T>(IReadOnlyList<T> points, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -201,9 +201,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineStringM));
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 
@@ -215,7 +215,7 @@ namespace IRI.Ket.ShapefileFormat
             return result.ToArray();
         }
 
-        public static byte[] ToWkbLineStringZM<T>(T[] points, double[] zValues, double[] measures) where T : IPoint
+        public static byte[] ToWkbLineStringZM<T>(IReadOnlyList<T> points, double[] zValues, double[] measures) where T : IPoint
         {
             List<byte> result = new List<byte>
             {
@@ -224,9 +224,9 @@ namespace IRI.Ket.ShapefileFormat
 
             result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.LineStringZM));
 
-            result.AddRange(BitConverter.GetBytes((uint)points.Length));
+            result.AddRange(BitConverter.GetBytes((uint)points.Count));
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 result.AddRange(BitConverter.GetBytes(points[i].X));
 

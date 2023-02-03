@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IGeometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IHasM.cs" />

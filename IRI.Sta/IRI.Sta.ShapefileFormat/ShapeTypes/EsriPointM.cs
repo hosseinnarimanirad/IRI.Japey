@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,8 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-
-
-    public struct EsriPointM : IRI.Msh.Common.Primitives.IPoint, IEsriShape, IHasM
+     
+    public struct EsriPointM : IPoint, IEsriShape, IHasM
     {
         private double x, y, measure;
 
@@ -46,9 +46,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Msh.Common.Primitives.BoundingBox(this.X, this.Y, this.X, this.Y); }
+            get { return new BoundingBox(this.X, this.Y, this.X, this.Y); }
         }
 
         //public byte[] WriteContentsToByte()
@@ -123,12 +123,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

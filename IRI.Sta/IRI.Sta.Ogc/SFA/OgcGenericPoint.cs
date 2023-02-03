@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using IRI.Msh.Common.Ogc;
 
 namespace IRI.Standards.OGC.SFA
 {

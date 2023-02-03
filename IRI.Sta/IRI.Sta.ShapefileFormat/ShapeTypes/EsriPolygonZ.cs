@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,14 @@ using System.Text;
 
 
 namespace IRI.Ket.ShapefileFormat.EsriType
-{
-
-
+{ 
     public struct EsriPolygonZ : IEsriPointsWithZ
     {
 
         /// <summary>
         /// MinX, MinY, MaxX, MaxY
         /// </summary>
-        private IRI.Msh.Common.Primitives.BoundingBox boundingBox;
+        private BoundingBox boundingBox;
 
         public int Srid { get; set; }
 
@@ -110,7 +109,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
                 this.Srid = points.First().Srid;
             }
 
-            this.boundingBox = IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(points/*.Cast<IRI.Msh.Common.Primitives.IPoint>()*/);
+            this.boundingBox = BoundingBox.CalculateBoundingBox(points/*.Cast<IPoint>()*/);
 
             this.parts = parts;
 
@@ -128,9 +127,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
             else
             {
-                this.minMeasure = ShapeConstants.NoDataValue;
+                this.minMeasure = EsriConstants.NoDataValue;
 
-                this.maxMeasure = ShapeConstants.NoDataValue;
+                this.maxMeasure = EsriConstants.NoDataValue;
             }
 
             if (zValues?.Count() > 0)
@@ -141,13 +140,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
             else
             {
-                this.minZ = ShapeConstants.NoDataValue;
+                this.minZ = EsriConstants.NoDataValue;
 
-                this.maxZ = ShapeConstants.NoDataValue;
+                this.maxZ = EsriConstants.NoDataValue;
             }
         }
 
-        internal EsriPolygonZ(IRI.Msh.Common.Primitives.BoundingBox boundingBox,
+        internal EsriPolygonZ(BoundingBox boundingBox,
                             int[] parts,
                             EsriPoint[] points,
                             double minZ,
@@ -241,7 +240,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         }
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
             get { return boundingBox; }
         }
@@ -267,10 +266,10 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         {
             List<byte> result = new List<byte>
             {
-                (byte)Msh.Common.Ogc.WkbByteOrder.WkbNdr
+                (byte)WkbByteOrder.WkbNdr
             };
 
-            result.AddRange(BitConverter.GetBytes((uint)Msh.Common.Ogc.WkbGeometryType.PolygonZM));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.PolygonZM));
 
             result.AddRange(BitConverter.GetBytes((uint)this.parts.Length));
 
@@ -289,12 +288,12 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectFunc = null, byte[] color = null)
         {
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -144,13 +145,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// Returs Kml representation of the point. Note: Point must be in Lat/Long System
         /// </summary>
         /// <returns></returns>
-        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null, byte[] color = null)
+        public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark = new KmlFormat.Primitives.PlacemarkType();
 
             IRI.Ket.KmlFormat.Primitives.PointType point = new KmlFormat.Primitives.PointType();
 
-            IRI.Msh.Common.Primitives.Point coordinates = new Point(this.x, this.Y);
+            Point coordinates = new Point(this.x, this.Y);
 
             if (projectToGeodeticFunc != null)
             {
@@ -166,7 +167,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             //IRI.Ket.KmlFormat.Primitives.KmlType result = new KmlFormat.Primitives.KmlType();
 

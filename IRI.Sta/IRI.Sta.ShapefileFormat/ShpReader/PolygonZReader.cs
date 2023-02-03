@@ -3,6 +3,7 @@
 
 using IRI.Ket.ShapefileFormat.EsriType;
 using IRI.Ket.ShapefileFormat.ShpReader;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -48,7 +49,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             this.ReadZValues(numPoints, out minZ, out maxZ, out zValues);
 
-            double minMeasure = ShapeConstants.NoDataValue, maxMeasure = ShapeConstants.NoDataValue;
+            double minMeasure = EsriConstants.NoDataValue, maxMeasure = EsriConstants.NoDataValue;
 
             double[] measures = new double[numPoints];
 
@@ -89,7 +90,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
 
             ShpBinaryReader.ReadValues(reader, numPoints, out minZ, out maxZ, out zValues);
 
-            double minMeasure = ShapeConstants.NoDataValue, maxMeasure = ShapeConstants.NoDataValue;
+            double minMeasure = EsriConstants.NoDataValue, maxMeasure = EsriConstants.NoDataValue;
 
             double[] measures = new double[numPoints];
 
@@ -135,7 +136,7 @@ namespace IRI.Ket.ShapefileFormat.Reader
             offset += (numPoints + 2) * ShapeConstants.DoubleSize;
 
             // measure values
-            double minMeasure = ShapeConstants.NoDataValue, maxMeasure = ShapeConstants.NoDataValue;
+            double minMeasure = EsriConstants.NoDataValue, maxMeasure = EsriConstants.NoDataValue;
 
             double[] measures = new double[numPoints];
 

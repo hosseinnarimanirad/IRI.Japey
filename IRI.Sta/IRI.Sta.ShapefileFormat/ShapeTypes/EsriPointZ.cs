@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace IRI.Ket.ShapefileFormat.EsriType
 {
-    public struct EsriPointZ : IRI.Msh.Common.Primitives.IPoint, IEsriShape, IHasZ
+    public struct EsriPointZ : IPoint, IEsriShape, IHasZ
     {
         private double x, y, z, measure;
 
@@ -87,9 +88,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         #region IShape Members
 
 
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Msh.Common.Primitives.BoundingBox(this.X, this.Y, this.X, this.Y); }
+            get { return new BoundingBox(this.X, this.Y, this.X, this.Y); }
         }
 
         //public byte[] WriteContentsToByte()
@@ -155,7 +156,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             throw new NotImplementedException();
         }
 
-        public string AsKml(Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> projectToGeodeticFunc = null)
+        public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Msh.Common.Ogc;
+using System;
 namespace IRI.Standards.OGC.SFA
 {
     interface IOgcLineString
