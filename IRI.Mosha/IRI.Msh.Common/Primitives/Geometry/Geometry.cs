@@ -1403,37 +1403,43 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
         using (var stream = new BinaryReader(new MemoryStream(wkb)))
         {
-            stream.ReadInt32();
+            var byteOrder = stream.ReadByte();
             var type = (WkbGeometryType)stream.ReadInt32();
 
             switch (type)
             {
                 case WkbGeometryType.Point:
-                    break;
+                    return FromWkbPoint(stream, srid);
+
                 case WkbGeometryType.LineString:
-                    break;
+                    return FromWkbLineString(stream, srid);
+
                 case WkbGeometryType.Polygon:
-                    break;
+                    return FromWkbPolygon(stream, srid);
+
                 case WkbGeometryType.MultiPoint:
-                    break;
+                    return FromWkbMultiPoint(stream, srid);
+
                 case WkbGeometryType.MultiLineString:
-                    break;
+                    return FromWkbMultiLineString(stream, srid);
+
                 case WkbGeometryType.MultiPolygon:
-                    break;
+                    return FromWkbMultiPolygon(stream, srid)
+                        ;
                 case WkbGeometryType.PointZ:
                 case WkbGeometryType.LineStringZ:
                 case WkbGeometryType.PolygonZ:
                 case WkbGeometryType.MultiPointZ:
                 case WkbGeometryType.MultiLineStringZ:
                 case WkbGeometryType.MultiPolygonZ:
-                     
+
                 case WkbGeometryType.PointM:
                 case WkbGeometryType.LineStringM:
                 case WkbGeometryType.PolygonM:
                 case WkbGeometryType.MultiPointM:
                 case WkbGeometryType.MultiLineStringM:
                 case WkbGeometryType.MultiPolygonM:
-                     
+
                 case WkbGeometryType.PointZM:
                 case WkbGeometryType.LineStringZM:
                 case WkbGeometryType.PolygonZM:
@@ -1446,10 +1452,119 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
 
         throw new NotImplementedException();
+    }
 
+    private static Geometry<Point> FromWkbPoint(BinaryReader reader, int srid)
+    {
+        var x = reader.ReadDouble();
+        var y = reader.ReadDouble();
+
+        return Geometry<Point>.Create(x, y, srid);
+    }
+
+    private static Geometry<Point> FromWkbLineString(BinaryReader reader, int srid)
+    {
+        var points = ReadLineStringOrRing(reader, isRing: false);
+
+        return Geometry<Point>.CreatePointOrLineString(points, srid);
+    }
+
+    private static Geometry<Point> FromWkbPolygon(BinaryReader reader, int srid)
+    {
+        var numberOfRings = reader.ReadInt32();
+
+        var geometries = new List<Geometry<Point>>();
+
+        for (int i = 0; i < numberOfRings; i++)
+        {
+            var ring = ReadLineStringOrRing(reader, isRing: true);
+
+            geometries.Add(Geometry<Point>.CreatePointOrLineString(ring, srid));
+        }
+
+        return Geometry<Point>.CreatePolygonOrMultiPolygon(geometries, srid);
+    }
+
+    private static Geometry<Point> FromWkbMultiPoint(BinaryReader reader, int srid)
+    {
+        var numberOfGeometries = reader.ReadInt32();
+
+        var geometries = new List<Geometry<Point>>(numberOfGeometries);
+
+        for (int i = 0; i < numberOfGeometries; i++)
+        {
+            var byteOrder = reader.ReadByte();
+
+            var type = reader.ReadInt32();
+
+            geometries.Add(FromWkbPoint(reader, srid));
+        }
+
+        return new Geometry<Point>(geometries, GeometryType.MultiPoint, srid);
+    }
+
+    private static Geometry<Point> FromWkbMultiLineString(BinaryReader reader, int srid)
+    {
+        var numberOfGeometries = reader.ReadInt32();
+
+        var geometries = new List<Geometry<Point>>(numberOfGeometries);
+
+        for (int i = 0; i < numberOfGeometries; i++)
+        {
+            var byteOrder = reader.ReadByte();
+
+            var type = reader.ReadInt32();
+
+            geometries.Add(FromWkbLineString(reader, srid));
+        }
+
+        return new Geometry<Point>(geometries, GeometryType.MultiLineString, srid);
+    }
+
+    private static Geometry<Point> FromWkbMultiPolygon(BinaryReader reader, int srid)
+    {
+        var numberOfGeometries = reader.ReadInt32();
+
+        var geometries = new List<Geometry<Point>>(numberOfGeometries);
+
+        for (int i = 0; i < numberOfGeometries; i++)
+        {
+            var byteOrder = reader.ReadByte();
+
+            var type = reader.ReadInt32();
+
+            geometries.Add(FromWkbPolygon(reader, srid));
+        }
+
+        return new Geometry<Point>(geometries, GeometryType.MultiPolygon, srid);
+    }
+
+
+
+    private static List<Point> ReadLineStringOrRing(BinaryReader reader, bool isRing)
+    {
+        var numberOfPoints = reader.ReadInt32();
+         
+        var result = new List<Point>(numberOfPoints);
+
+        for (int i = 0; i < numberOfPoints; i++)
+        {
+            var x = reader.ReadDouble();
+
+            var y = reader.ReadDouble();
+
+            // last point is repeated in rings
+            if (isRing && i == numberOfPoints - 1)
+                break;
+
+            result.Add(new Point(x, y));
+        }
+
+        return result;
     }
 
     #endregion
+
 
     #region Static Create
 
