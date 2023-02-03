@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Ogc;
+﻿using IRI.Msh.Common.Helpers;
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.CoordinateSystem;
 using System;
 using System.Collections.Generic;
@@ -170,11 +171,11 @@ namespace IRI.Msh.Common.Primitives
 
             result[0] = (byte)WkbByteOrder.WkbNdr;
 
-            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, 4);
+            Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, BaseConversionHelper.IntegerSize);
 
-            Array.Copy(BitConverter.GetBytes(X), 0, result, 5, 8);
+            Array.Copy(BitConverter.GetBytes(X), 0, result, 5, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, 8);
+            Array.Copy(BitConverter.GetBytes(Y), 0, result, 13, BaseConversionHelper.DoubleSize);
 
             return result;
         }

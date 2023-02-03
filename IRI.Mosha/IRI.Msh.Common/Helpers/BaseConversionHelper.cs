@@ -362,6 +362,10 @@ namespace IRI.Msh.Common.Helpers
 
         private const int minimumBinaryOutputLength = 1;
 
+        public static int IntegerSize { get { return Int32Length; } }
+
+        public static int DoubleSize { get { return DoubleLength; } }
+        
 
         public static string ToBinaryString(int[] binaryRepresentation)
         {

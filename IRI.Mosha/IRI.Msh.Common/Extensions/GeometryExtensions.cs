@@ -313,7 +313,7 @@ namespace IRI.Msh.Common.Extensions
         #endregion
 
 
-        #region Wkb To Geometry
+        #region Geometry To Wkb
 
         public static byte[] AsWkb<T>(this Geometry<T> geometry) where T : IPoint, new()
         {
@@ -332,7 +332,7 @@ namespace IRI.Msh.Common.Extensions
                     return GeometryPolygonAsWkb(geometry);
 
                 case GeometryType.MultiPoint:
-                    return OgcWkbMapFunctions.ToWkbMultiPoint(geometry.Points);
+                    return GeometryMultiPointAsWkb(geometry);
 
                 case GeometryType.MultiLineString:
                     return GeometryMultiLineStringAsWkb(geometry);
@@ -371,22 +371,24 @@ namespace IRI.Msh.Common.Extensions
 
             for (int i = 0; i < polygon.Geometries.Count; i++)
             {
-                result.AddRange(BitConverter.GetBytes((uint)polygon.Geometries[i].Points.Count));
+                var points = polygon.Geometries[i].Points;
+                // add first point
+                points.Add(polygon.Geometries[i].Points[0]); 
 
-                result.AddRange(OgcWkbMapFunctions.ToWkbLinearRing(polygon.Geometries[i].Points));
+                result.AddRange(OgcWkbMapFunctions.ToWkbLinearRing(points));
             }
 
             return result.ToArray();
         }
 
-        private static byte[] GeometryMultiLineStringAsWkb<T>(Geometry<T> multipoint) where T : IPoint, new()
+        private static byte[] GeometryMultiPointAsWkb<T>(Geometry<T> multipoint) where T : IPoint, new()
         {
             List<byte> result = new List<byte>
             {
                 (byte)WkbByteOrder.WkbNdr
             };
 
-            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiLineString));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPoint));
 
             result.AddRange(BitConverter.GetBytes((uint)multipoint.Geometries.Count));
 
@@ -398,20 +400,39 @@ namespace IRI.Msh.Common.Extensions
             return result.ToArray();
         }
 
-        private static byte[] GeometryMultiPolygonAsWkb<T>(Geometry<T> polygon) where T : IPoint, new()
+        private static byte[] GeometryMultiLineStringAsWkb<T>(Geometry<T> multiLineString) where T : IPoint, new()
         {
             List<byte> result = new List<byte>
             {
                 (byte)WkbByteOrder.WkbNdr
             };
 
-            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.Polygon));
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiLineString));
 
-            result.AddRange(BitConverter.GetBytes((uint)polygon.Geometries.Count));
+            result.AddRange(BitConverter.GetBytes((uint)multiLineString.Geometries.Count));
 
-            for (int i = 0; i < polygon.Geometries.Count; i++)
+            for (int i = 0; i < multiLineString.Geometries.Count; i++)
             {
-                result.AddRange(polygon.Geometries[i].AsWkb());
+                result.AddRange(multiLineString.Geometries[i].AsWkb());
+            }
+
+            return result.ToArray();
+        }
+
+        private static byte[] GeometryMultiPolygonAsWkb<T>(Geometry<T> multiPolygon) where T : IPoint, new()
+        {
+            List<byte> result = new List<byte>
+            {
+                (byte)WkbByteOrder.WkbNdr
+            };
+
+            result.AddRange(BitConverter.GetBytes((uint)WkbGeometryType.MultiPolygon));
+
+            result.AddRange(BitConverter.GetBytes((uint)multiPolygon.Geometries.Count));
+
+            for (int i = 0; i < multiPolygon.Geometries.Count; i++)
+            {
+                result.AddRange(multiPolygon.Geometries[i].AsWkb());
             }
 
             return result.ToArray();
@@ -419,7 +440,7 @@ namespace IRI.Msh.Common.Extensions
 
         #endregion
 
-        #region Geometry To Wkb 
+        #region  Wkb To Geometry
 
 
 

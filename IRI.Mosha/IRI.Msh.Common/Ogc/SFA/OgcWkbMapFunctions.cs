@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Ogc;
 using IRI.Msh.Common.Primitives;
 
@@ -17,9 +18,9 @@ namespace IRI.Msh.Common.Ogc
 
             Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.Point), 0, result, 1, 4);
 
-            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
+            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, 8);
+            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, BaseConversionHelper.DoubleSize);
 
             return result;
         }
@@ -32,11 +33,11 @@ namespace IRI.Msh.Common.Ogc
 
             Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.PointM), 0, result, 1, 4);
 
-            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
+            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, 8);
+            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(measure), 0, result, 21, 8);
+            Array.Copy(BitConverter.GetBytes(measure), 0, result, 21, BaseConversionHelper.DoubleSize);
 
             return result;
         }
@@ -49,13 +50,13 @@ namespace IRI.Msh.Common.Ogc
 
             Array.Copy(BitConverter.GetBytes((int)WkbGeometryType.PointZM), 0, result, 1, 4);
 
-            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, 8);
+            Array.Copy(BitConverter.GetBytes(point.X), 0, result, 5, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, 8);
+            Array.Copy(BitConverter.GetBytes(point.Y), 0, result, 13, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(z), 0, result, 21, 8);
+            Array.Copy(BitConverter.GetBytes(z), 0, result, 21, BaseConversionHelper.DoubleSize);
 
-            Array.Copy(BitConverter.GetBytes(measure == EsriConstants.NoDataValue ? double.NaN : measure), 0, result, 29, 8);
+            Array.Copy(BitConverter.GetBytes(measure == EsriConstants.NoDataValue ? double.NaN : measure), 0, result, 29, BaseConversionHelper.DoubleSize);
 
             return result;
         }

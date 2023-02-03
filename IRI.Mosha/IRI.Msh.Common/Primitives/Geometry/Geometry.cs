@@ -1,8 +1,11 @@
 ﻿using IRI.Msh.Common.Analysis;
 using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Helpers;
+using IRI.Msh.Common.Ogc;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -1387,6 +1390,63 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         builder.Append(")");
 
         return builder.ToString();
+    }
+
+    #endregion
+
+    #region Wkb
+
+    public static Geometry<Point> FromWkb(byte[] wkb, int srid)
+    {
+        if (wkb.IsNullOrEmpty())
+            return null;
+
+        using (var stream = new BinaryReader(new MemoryStream(wkb)))
+        {
+            stream.ReadInt32();
+            var type = (WkbGeometryType)stream.ReadInt32();
+
+            switch (type)
+            {
+                case WkbGeometryType.Point:
+                    break;
+                case WkbGeometryType.LineString:
+                    break;
+                case WkbGeometryType.Polygon:
+                    break;
+                case WkbGeometryType.MultiPoint:
+                    break;
+                case WkbGeometryType.MultiLineString:
+                    break;
+                case WkbGeometryType.MultiPolygon:
+                    break;
+                case WkbGeometryType.PointZ:
+                case WkbGeometryType.LineStringZ:
+                case WkbGeometryType.PolygonZ:
+                case WkbGeometryType.MultiPointZ:
+                case WkbGeometryType.MultiLineStringZ:
+                case WkbGeometryType.MultiPolygonZ:
+                     
+                case WkbGeometryType.PointM:
+                case WkbGeometryType.LineStringM:
+                case WkbGeometryType.PolygonM:
+                case WkbGeometryType.MultiPointM:
+                case WkbGeometryType.MultiLineStringM:
+                case WkbGeometryType.MultiPolygonM:
+                     
+                case WkbGeometryType.PointZM:
+                case WkbGeometryType.LineStringZM:
+                case WkbGeometryType.PolygonZM:
+                case WkbGeometryType.MultiPointZM:
+                case WkbGeometryType.MultiLineStringZM:
+                case WkbGeometryType.MultiPolygonZM:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        throw new NotImplementedException();
+
     }
 
     #endregion

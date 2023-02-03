@@ -42,7 +42,6 @@
 
   <ItemGroup>
     <Folder Include="Deploy\" />
-    <Folder Include="Model\Esri\" />
   </ItemGroup>
 
   <ItemGroup>
