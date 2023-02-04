@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IGeometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IHasM.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\GeoJsonExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\VarianceCalculationMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Wkt\WktParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WktParser.cs" />
     <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\CoordinateSystems\MapProjection\SrsBases.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjectionType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\MapProjection\MapProjects.cs" />

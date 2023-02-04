@@ -1,10 +1,11 @@
 ﻿using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Common.Primitives.Wkt
+namespace IRI.Msh.Common.Ogc
 {
     public static class WktParser
     {
@@ -14,6 +15,8 @@ namespace IRI.Msh.Common.Primitives.Wkt
         const string MultiLineString = "MULTILINESTRING";
         const string Polygon = "POLYGON";
         const string MultiPolygon = "MULTIPOLYGON";
+
+        #region Wkt to Geometry
 
         public static Geometry<Point> Parse(string wktString, int srid = 0)
         {
@@ -135,7 +138,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
             return new Geometry<Point>(polygons, GeometryType.MultiPolygon, srid);
         }
 
-        public static List<Point> GetPoints(string pointArray, bool isRing)
+        private static List<Point> GetPoints(string pointArray, bool isRing)
         {
             var cleanedPointArray = pointArray?.Trim(' ', ')', '(');
 
@@ -163,7 +166,7 @@ namespace IRI.Msh.Common.Primitives.Wkt
         }
 
         // 1400.03.21
-        public static List<(int level, int start, int end)> Process(string wktString)
+        private static List<(int level, int start, int end)> Process(string wktString)
         {
             int currentLevel = 0;
 
@@ -188,5 +191,108 @@ namespace IRI.Msh.Common.Primitives.Wkt
 
             return result;
         }
+
+        #endregion
+
+        #region Geometry To Wkt
+
+        internal static string AsWkt<T>(Geometry<T> geometry) where T : IPoint, new()
+        {
+            switch (geometry.Type)
+            {
+                case GeometryType.Point:
+                    return FormattableString.Invariant($"POINT{ToWktPointArrayString(geometry, isRingBase: false)}");
+
+                case GeometryType.LineString:
+                    return FormattableString.Invariant($"LINESTRING{ToWktPointArrayString(geometry, isRingBase: false)}");
+
+                case GeometryType.Polygon:
+                    return FormattableString.Invariant($"POLYGON{ToWktPointArrayString(geometry, isRingBase: true)}");
+
+                case GeometryType.MultiPoint:
+                    return FormattableString.Invariant($"MULTIPOINT{ToWktPointArrayString(geometry, isRingBase: false)}");
+
+                case GeometryType.MultiLineString:
+                    return FormattableString.Invariant($"MULTILINESTRING{ToWktPointArrayString(geometry, isRingBase: false)}");
+
+                case GeometryType.MultiPolygon:
+                    return FormattableString.Invariant($"MULTIPOLYGON{ToWktPointArrayString(geometry, isRingBase: true)}");
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > ToWktPointArrayString");
+            }
+        }
+         
+        private static string ToWktPointArrayString<T>(Geometry<T> geometry, bool isRingBase) where T : IPoint, new()
+        {
+            switch (geometry.Type)
+            {
+                case GeometryType.Point:
+                    return FormattableString.Invariant($"({geometry.Points[0].X.ToInvariantString()} {geometry.Points[0].Y.ToInvariantString()})");
+
+                case GeometryType.LineString:
+                    return GetWktLineString(geometry.Points, isRingBase);
+
+                case GeometryType.Polygon:
+                case GeometryType.MultiPoint:
+                case GeometryType.MultiLineString:
+                case GeometryType.MultiPolygon:
+                    return GetWktLineStringForGeometry(geometry, isRingBase);
+
+                case GeometryType.GeometryCollection:
+                case GeometryType.CircularString:
+                case GeometryType.CompoundCurve:
+                case GeometryType.CurvePolygon:
+                default:
+                    throw new NotImplementedException("Geometry > ToWktPointArrayString");
+            }
+        }
+
+        // polygon, multi point, multi linestring, multipolygon
+        private static string GetWktLineStringForGeometry<T>(Geometry<T> geometry, bool isRingBase) where T : IPoint, new()
+        {
+            var items = geometry.Geometries.Select(g => ToWktPointArrayString(g, isRingBase));
+
+            StringBuilder result = new StringBuilder("(");
+
+            foreach (var ring in items)
+            {
+                result.Append(FormattableString.Invariant($"{ring},"));
+            }
+
+            result.Remove(result.Length - 1, 1);
+
+            result.Append(")");
+
+            return result.ToString();
+        }
+
+        private static string GetWktLineString<T>(List<T> points, bool isRingBase) where T : IPoint, new()
+        {
+            StringBuilder builder = new StringBuilder("(");
+
+            foreach (var point in points)
+            {
+                builder.Append(FormattableString.Invariant($"{point.X} {point.Y},"));
+            }
+
+            if (isRingBase)
+            {
+                builder.Append(FormattableString.Invariant($"{points[0].X} {points[0].Y},"));
+            }
+
+            builder.Remove(builder.Length - 1, 1);
+
+            builder.Append(")");
+
+            return builder.ToString();
+        }
+
+
+        #endregion
     }
 }
