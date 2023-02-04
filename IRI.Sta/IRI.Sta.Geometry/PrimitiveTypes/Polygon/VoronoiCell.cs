@@ -54,7 +54,7 @@ namespace IRI.Ket.Geometry
         {
             List<int> edgeIndexes;
 
-            List<Point> intersections = Intersect(firstPointLine, secondPointLine, out edgeIndexes);
+            List<Point> intersections = Intersects(firstPointLine, secondPointLine, out edgeIndexes);
 
             if (intersections.Count < 2)
             {

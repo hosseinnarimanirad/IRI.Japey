@@ -42,17 +42,29 @@ namespace IRI.Ket.Geometry
 
         public double FirstSecondSide
         {
-            get { return ComputationalGeometry.CalculateDistance(FirstPoint, SecondPoint); }
+            get
+            {
+                return FirstPoint.DistanceTo(SecondPoint);
+                //return ComputationalGeometry.CalculateDistance(FirstPoint, SecondPoint);
+            }
         }
 
         public double SecondThirdSide
         {
-            get { return ComputationalGeometry.CalculateDistance(SecondPoint, ThirdPoint); }
+            get
+            {
+                return SecondPoint.DistanceTo(ThirdPoint);
+                //return ComputationalGeometry.CalculateDistance(SecondPoint, ThirdPoint);
+            }
         }
 
         public double ThirdFirstSide
         {
-            get { return ComputationalGeometry.CalculateDistance(ThirdPoint, FirstPoint); }
+            get
+            {
+                return ThirdPoint.DistanceTo(FirstPoint);
+                //return ComputationalGeometry.CalculateDistance(ThirdPoint, FirstPoint);
+            }
         }
 
         /// <summary>

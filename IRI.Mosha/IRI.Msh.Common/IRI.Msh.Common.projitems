@@ -15,6 +15,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\TopologyUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\LineLineRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\LineLineSegmentRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointCircleRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointLineSegementRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointPolygonRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PoinTriangleRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointVectorRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\TriangleRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />

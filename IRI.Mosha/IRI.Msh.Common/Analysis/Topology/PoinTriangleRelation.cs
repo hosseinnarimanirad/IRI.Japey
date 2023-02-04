@@ -2,7 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using System;
-namespace IRI.Ket.Geometry
+namespace IRI.Msh.Common.Analysis.Topology
 {
     
     public enum PoinTriangleRelation

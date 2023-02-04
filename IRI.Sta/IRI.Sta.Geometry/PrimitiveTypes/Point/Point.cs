@@ -10,7 +10,7 @@ using IRI.Msh.Common.Primitives;
 namespace IRI.Ket.Geometry
 {
     [Serializable]
-    public struct Point : IRI.Msh.Common.Primitives.IPoint, IComparable<Point>
+    public struct Point : IPoint, IComparable<Point>
     {
         public static PointComparisonPriority ComparisonPriority = PointComparisonPriority.YBased;
 
@@ -151,13 +151,17 @@ namespace IRI.Ket.Geometry
 
         public double DistanceTo(IPoint point)
         {
-            throw new NotImplementedException();
+            double dx = this.X - point.X;
+
+            double dy = this.Y - point.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy); 
         }
 
-        public static double GetDistance(Point first, Point second)
-        {
-            return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
-        }
+        //public static double GetDistance(Point first, Point second)
+        //{
+        //    return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));
+        //}
 
     }
 }

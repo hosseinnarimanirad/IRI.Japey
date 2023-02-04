@@ -10,4 +10,8 @@
     <ProjectReference Include="..\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Relation\" />
+  </ItemGroup>
+
 </Project>

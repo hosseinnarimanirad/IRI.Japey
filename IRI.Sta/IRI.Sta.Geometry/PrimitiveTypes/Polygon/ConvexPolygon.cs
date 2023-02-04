@@ -9,7 +9,7 @@ namespace IRI.Ket.Geometry
 {
     public class ConvexPolygon
     {
-        //Points Are in ccw form
+        //Points are in ccw form
         public PointCollection Vertexes { get; set; }
 
         public List<int> Neighbours { get; set; }
@@ -97,7 +97,8 @@ namespace IRI.Ket.Geometry
             {
                 int j = (i + 1) % count;
 
-                tempValue += ComputationalGeometry.CalculateDistance(Vertexes[i], Vertexes[j]);
+                //tempValue += ComputationalGeometry.CalculateDistance(Vertexes[i], Vertexes[j]);
+                tempValue += Vertexes[i].DistanceTo(Vertexes[j]);
             }
 
             return tempValue;
@@ -171,7 +172,7 @@ namespace IRI.Ket.Geometry
             return result / 2;
         }
 
-        public List<Point> Intersect(Point firstPointLine, Point secondPointLine, out List<int> edgeIndexes)
+        public List<Point> Intersects(Point firstPointLine, Point secondPointLine, out List<int> edgeIndexes)
         {
             List<Point> result = new List<Point>();
 

@@ -258,7 +258,7 @@ namespace IRI.Msh.Common.Analysis
                 // result: 1.0000000000000002
                 result = Math.Round(result, 13);
             }
-              
+
             return result;
         }
 
@@ -303,7 +303,7 @@ namespace IRI.Msh.Common.Analysis
 
             //result: cos(theta)^2
             var result = dotProduct * dotProduct / ((ax * ax + ay * ay) * (bx * bx + by * by));
-             
+
             //return dotProduct < 0 ? -1 * result : result;
             return result;
         }
@@ -550,26 +550,20 @@ namespace IRI.Msh.Common.Analysis
         //
         public static bool IsPointInPolygon<T>(Geometry<T> ring, T point) where T : IPoint, new()
         {
-            if (ring == null || point == null)
-            {
+            if (ring.IsNullOrEmpty() || point is null)
                 return false;
-            }
 
             var numberOfPoints = ring.Points.Count;
 
             if (ring.Type != GeometryType.LineString || numberOfPoints < 3)
-            {
                 throw new NotImplementedException("SpatialUtility.cs > IsPointInPolygon");
-            }
 
             var boundingBox = ring.GetBoundingBox();
 
-            var encomapss = boundingBox.Encomapss(point);
+            var doesEncomapss = boundingBox.Encomapss(point);
 
-            if (!encomapss)
-            {
+            if (!doesEncomapss)
                 return false;
-            }
 
             double totalAngle = 0.0;
 
@@ -587,5 +581,14 @@ namespace IRI.Msh.Common.Analysis
 
             return false;
         }
+
+        #region Intersects
+
+        public static bool PointIntersectsLine<T>(Geometry<T> geometry, IPoint point) where T : IPoint, new()
+        { 
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

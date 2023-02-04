@@ -416,9 +416,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     /// <param name="type"></param>
     /// <param name="secondaryParameter">may be area threshold for `AdditiveByAreaAngle` or look ahead parameter for `Lang`</param>
     /// <returns></returns>
-    public Geometry<T> Simplify(
-        SimplificationType type,
-        SimplificationParamters paramters)
+    public Geometry<T> Simplify(SimplificationType type, SimplificationParamters paramters)
     {
         Func<List<T>, List<T>> filter;
 
@@ -593,6 +591,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+
+    public bool Intersects(IGeometry other)
+    {
+        throw new NotImplementedException();
+    }
 
     #endregion
 
@@ -1288,26 +1291,21 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
-    #region Wkt
+    #region Ogc Wkb & Wkt
 
-    public static Geometry<Point> Parse(string wktString, int srid)
+    public static Geometry<Point> FromWkt(string wktString, int srid)
     {
         return WktParser.Parse(wktString, srid);
+    }
+
+    public static IGeometry FromWkb(byte[] bytes, int srid)
+    {
+        return WkbParser.Parse(bytes, srid);
     }
 
     public string AsWkt()
     {
         return WktParser.AsWkt(this);
-    }
-
-
-    #endregion
-
-    #region Wkb
-
-    public static IGeometry FromWkb(byte[] bytes, int srid)
-    {
-        return WkbParser.Parse(bytes, srid);
     }
 
     public byte[] AsWkb()
@@ -2107,4 +2105,5 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 }

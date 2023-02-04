@@ -1,6 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Analysis.Topology;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -142,13 +144,13 @@ namespace IRI.Ket.Geometry
 
         private void DivideTheRegionWithPointInTheRegion(VoronoiCell polygon, Point point)
         {
-            Point midPoint = ComputationalGeometry.CalculateMidPoint(point, polygon.PrimaryPoint);
+            Point midPoint = TopologyUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
 
-            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / ComputationalGeometry.CalculateSlope(point, polygon.PrimaryPoint));
+            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / TopologyUtility.CalculateSlope(point, polygon.PrimaryPoint));
 
             List<int> edgeIndexes;
 
-            List<Point> newVertexes = polygon.Intersect(midPoint, temPoint, out edgeIndexes);
+            List<Point> newVertexes = polygon.Intersects(midPoint, temPoint, out edgeIndexes);
 
             //20/12/2009
             if (newVertexes.Count != 2)
@@ -190,7 +192,7 @@ namespace IRI.Ket.Geometry
 
         private List<int> GetAffectedPolygons(VoronoiCell polygon, List<Point> newVertexes, List<int> edgeIndexes)
         {
-            PointVectorRelation relation = ComputationalGeometry.GetPointVectorRelation(polygon.PrimaryPoint, newVertexes[0], newVertexes[1]);
+            PointVectorRelation relation = TopologyUtility.GetPointVectorRelation(polygon.PrimaryPoint, newVertexes[0], newVertexes[1]);
 
             if (relation == PointVectorRelation.LiesOnTheLine)
             {
@@ -203,7 +205,7 @@ namespace IRI.Ket.Geometry
 
             for (int i = 0; i < polygon.Vertexes.Count; i++)
             {
-                PointVectorRelation tempRelation = ComputationalGeometry.GetPointVectorRelation(polygon.Vertexes[i], newVertexes[0], newVertexes[1]);
+                PointVectorRelation tempRelation = TopologyUtility.GetPointVectorRelation(polygon.Vertexes[i], newVertexes[0], newVertexes[1]);
 
                 if (tempRelation != relation)
                 {
@@ -234,13 +236,13 @@ namespace IRI.Ket.Geometry
         {
             VoronoiCell polygon = this.GetPolygon(polygonCode);
 
-            Point midPoint = ComputationalGeometry.CalculateMidPoint(point, polygon.PrimaryPoint);
+            Point midPoint = TopologyUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
 
-            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / ComputationalGeometry.CalculateSlope(point, polygon.PrimaryPoint));
+            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / TopologyUtility.CalculateSlope(point, polygon.PrimaryPoint));
 
             List<int> edgeIndexes;
 
-            List<Point> newVertexes = polygon.Intersect(midPoint, temPoint, out edgeIndexes);
+            List<Point> newVertexes = polygon.Intersects(midPoint, temPoint, out edgeIndexes);
 
             if (newVertexes.Count == 1)
             {
