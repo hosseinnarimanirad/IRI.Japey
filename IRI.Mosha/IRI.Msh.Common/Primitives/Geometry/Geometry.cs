@@ -5,6 +5,7 @@ using IRI.Msh.Common.Ogc;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -591,10 +592,186 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-
-    public bool Intersects(IGeometry other)
+    // 1401.11.15
+    // Intersects
+    public bool Intersects(Geometry<T> other)
     {
-        throw new NotImplementedException();
+        if (this.IsNullOrEmpty() || other.IsNullOrEmpty())
+            return false;
+
+        var firstMbb = this.GetBoundingBox();
+
+        var secondMbb = other.GetBoundingBox();
+
+        if (!firstMbb.Intersects(secondMbb))
+            return false;
+
+        switch (other.Type)
+        {
+            case GeometryType.Point:
+                return this.IntersectsPoint(other.Points[0]);
+
+            case GeometryType.LineString:
+                return this.IntersectsLineStringOrRing(other, isRing: false);
+
+            case GeometryType.Polygon:
+                return this.IntersectsPolygon(other);
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.Intersects(other));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > Intersects");
+        }
+
+    }
+
+    private bool IntersectsPoint(T point)
+    {
+        if (point == null)
+            return false;
+
+        if (!this.GetBoundingBox().Intersects(point))
+            return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return SpatialUtility.GetEuclideanDistance(new T() { X = this.Points[0].X, Y = this.Points[0].Y }, point) > SpatialUtility.EpsilonDistance;
+
+            case GeometryType.LineString:
+                return TopologyUtility.IsPointOnLineString(this, point);
+
+            case GeometryType.Polygon:
+                var inOutterRing = TopologyUtility.IsPointInRing(this.Geometries[0], point);
+
+                if (inOutterRing && this.Geometries.Count > 1)
+                {
+                    var inInnerRings = this.Geometries.Skip(1).Any(g => TopologyUtility.IsPointInRing(g, point));
+
+                    return inOutterRing && !inInnerRings;
+                }
+
+                return inOutterRing;
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.IntersectsPoint(point));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > IntersectsPoint");
+        }
+    }
+
+    private bool IntersectsLineSegment(T startSegment, T endSegment)
+    {
+        if (startSegment is null || endSegment is null)
+            return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return TopologyUtility.GetPointLineSegmentRelation(new T() { X = this.Points[0].X, Y = this.Points[0].Y }, startSegment, endSegment)
+                            == Analysis.Topology.PointLineSegementRelation.On;
+
+            case GeometryType.LineString:
+                return TopologyUtility.DoesLineStringIntersectsLineSegment(this, startSegment, endSegment);
+
+            case GeometryType.Polygon:
+                if (this.IntersectsPoint(startSegment))
+                    return true;
+                else
+                    return this.IntersectsPoint(endSegment);
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.IntersectsLineSegment(startSegment, endSegment));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > IntersectsLineSegment");
+        }
+    }
+
+    private bool IntersectsLineStringOrRing(Geometry<T> lineString, bool isRing)
+    {
+        if (lineString.IsNullOrEmpty()) return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return TopologyUtility.IsPointOnLineString(lineString, this.Points[0]);
+
+            case GeometryType.LineString:
+                for (int i = 0; i < lineString.NumberOfPoints - 1; i++)
+                {
+                    if (IntersectsLineSegment(lineString.Points[i], lineString.Points[i + 1]))
+                        return true;
+                }
+                //todo: consider ring scenario
+                return false;
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+                return this.Geometries.Any(g => g.IntersectsLineStringOrRing(lineString, isRing: false));
+
+            case GeometryType.Polygon:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.IntersectsLineStringOrRing(lineString, isRing: true));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > IntersectsLineStringOrRing");
+        }
+
+    }
+
+    private bool IntersectsPolygon(Geometry<T> polygon)
+    {
+        if (polygon is null)
+            return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return polygon.IntersectsPoint(this.Points[0]);
+
+            case GeometryType.LineString:
+                return polygon.Geometries.Any(g => g.IntersectsLineStringOrRing(this, isRing: false));
+
+            case GeometryType.Polygon:
+                return this.Geometries.Any(g => polygon.IntersectsLineStringOrRing(g, isRing: true));
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.IntersectsPolygon(polygon));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > IntersectsPolygon");
+        }
     }
 
     #endregion
@@ -1442,10 +1619,10 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
             for (int p = 0; p < masterPolygons.Count; p++)
             {
-                if (SpatialUtility.IsPointInPolygon(masterPolygons[p].Geometries[0], currentRing.Points.First()))
+                if (TopologyUtility.IsPointInRing(masterPolygons[p].Geometries[0], currentRing.Points.First()))
                 {
                     //not in any of polygon holes
-                    if (masterPolygons[p].Geometries.Skip(1).Any(g => SpatialUtility.IsPointInPolygon(g, currentRing.Points.First())))
+                    if (masterPolygons[p].Geometries.Skip(1).Any(g => TopologyUtility.IsPointInRing(g, currentRing.Points.First())))
                         continue;
 
                     isMasterRing = false;

@@ -1,4 +1,5 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
+using System.Collections.Generic;
 
 namespace IRI.Msh.Common.Primitives;
 
@@ -20,5 +21,5 @@ public interface IGeometry
 
     SrsBase GetSrs();
 
-    bool Intersects(IGeometry other);
+    bool IsNullOrEmpty(); 
 }

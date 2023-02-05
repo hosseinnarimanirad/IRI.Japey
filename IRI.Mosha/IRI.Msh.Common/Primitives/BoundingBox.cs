@@ -234,9 +234,9 @@ namespace IRI.Msh.Common.Primitives
                 return BoundingBox.NaN;
 
             return new BoundingBox(xMin: points.Min(i => i.X),
-                                                yMin: points.Min(i => i.Y),
-                                                xMax: points.Max(i => i.X),
-                                                yMax: points.Max(i => i.Y));
+                                    yMin: points.Min(i => i.Y),
+                                    xMax: points.Max(i => i.X),
+                                    yMax: points.Max(i => i.Y));
         }
 
         public static BoundingBox Add(BoundingBox first, BoundingBox second)

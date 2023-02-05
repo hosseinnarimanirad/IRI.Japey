@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IRI.Msh.MeasurementUnit;
+using System.Net.NetworkInformation;
+using System.Drawing;
 
 namespace IRI.Msh.Common.Analysis
 {
@@ -17,7 +19,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetSquareEuclideanDistance(IPoint first, IPoint second)
+        public static double GetSquareEuclideanDistance<T>(T first, T second) where T : IPoint
         {
             var dx = first.X - second.X;
 
@@ -32,7 +34,7 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns></returns>
-        public static double GetEuclideanDistance(IPoint first, IPoint second)
+        public static double GetEuclideanDistance<T>(T first, T second) where T : IPoint
         {
             return Math.Sqrt(GetSquareEuclideanDistance(first, second));
         }
@@ -452,7 +454,7 @@ namespace IRI.Msh.Common.Analysis
 
         #region Point-Line 
 
-        public static double GetPointToLineSegmentDistance(IPoint lineSegmentStart, IPoint lineSegmentEnd, IPoint targetPoint)
+        public static double GetPointToLineSegmentDistance<T>(T lineSegmentStart, T lineSegmentEnd, T targetPoint) where T : IPoint, new()
         {
             var dySegment = lineSegmentEnd.Y - lineSegmentStart.Y;
 
@@ -547,48 +549,16 @@ namespace IRI.Msh.Common.Analysis
 
         #endregion
 
-        //
-        public static bool IsPointInPolygon<T>(Geometry<T> ring, T point) where T : IPoint, new()
+
+        public static T CalculateMidPoint<T>(T firstPoint, T secondPoint) where T : IPoint, new()
         {
-            if (ring.IsNullOrEmpty() || point is null)
-                return false;
-
-            var numberOfPoints = ring.Points.Count;
-
-            if (ring.Type != GeometryType.LineString || numberOfPoints < 3)
-                throw new NotImplementedException("SpatialUtility.cs > IsPointInPolygon");
-
-            var boundingBox = ring.GetBoundingBox();
-
-            var doesEncomapss = boundingBox.Encomapss(point);
-
-            if (!doesEncomapss)
-                return false;
-
-            double totalAngle = 0.0;
-
-            for (int i = 0; i < numberOfPoints - 1; i++)
-            {
-                var angle = GetAngle(ring.Points[i], point, ring.Points[i + 1]);
-
-                totalAngle += angle;
-            }
-
-            totalAngle += GetAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
-
-            if (Math.Abs(totalAngle - 2 * Math.PI) < 0.1)
-                return true;
-
-            return false;
+            return new T() { X = (firstPoint.X + secondPoint.X) / 2, Y = (firstPoint.Y + secondPoint.Y) / 2 };
         }
 
-        #region Intersects
-
-        public static bool PointIntersectsLine<T>(Geometry<T> geometry, IPoint point) where T : IPoint, new()
-        { 
-            throw new NotImplementedException();
+        public static double CalculateSlope<T>(T firstPoint, T secondPoint) where T : IPoint, new()
+        {
+            return (secondPoint.Y - firstPoint.Y) / (secondPoint.X - firstPoint.X);
         }
 
-        #endregion
     }
 }

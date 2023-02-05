@@ -123,9 +123,9 @@ namespace IRI.Msh.Common.Analysis
             if (firstLineFirstPoint.Equals(firstLineSecondPoint) || secondLineFirstPoint.Equals(secondLineSecondPoint))
                 throw new NotImplementedException();
             // precision issues!
-            double firstSlope = CalculateSlope(firstLineFirstPoint, firstLineSecondPoint);
+            double firstSlope = SpatialUtility.CalculateSlope(firstLineFirstPoint, firstLineSecondPoint);
 
-            double secondSlope = CalculateSlope(secondLineFirstPoint, secondLineSecondPoint);
+            double secondSlope = SpatialUtility.CalculateSlope(secondLineFirstPoint, secondLineSecondPoint);
 
             if ((firstSlope - secondSlope) == 0 ||
                     (Math.Abs(firstSlope) == double.PositiveInfinity &&
@@ -252,14 +252,95 @@ namespace IRI.Msh.Common.Analysis
         }
 
 
-        public static T CalculateMidPoint<T>(T firstPoint, T secondPoint) where T : IPoint, new()
+
+        
+
+        //
+        public static bool IsPointInRing<T>(Geometry<T> ring, T point) where T : IPoint, new()
         {
-            return new T() { X = (firstPoint.X + secondPoint.X) / 2, Y = (firstPoint.Y + secondPoint.Y) / 2 };
+            if (ring.IsNullOrEmpty() || point is null)
+                return false;
+
+            var numberOfPoints = ring.Points.Count;
+
+            if (ring.Type != GeometryType.LineString || numberOfPoints < 3)
+                throw new NotImplementedException("SpatialUtility.cs > IsPointInPolygon");
+
+            var boundingBox = ring.GetBoundingBox();
+
+            var doesEncomapss = boundingBox.Encomapss(point);
+
+            if (!doesEncomapss)
+                return false;
+
+            double totalAngle = 0.0;
+
+            for (int i = 0; i < numberOfPoints - 1; i++)
+            {
+                var angle = SpatialUtility.GetAngle(ring.Points[i], point, ring.Points[i + 1]);
+
+                totalAngle += angle;
+            }
+
+            totalAngle += SpatialUtility.GetAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
+
+            if (Math.Abs(totalAngle - 2 * Math.PI) < 0.1)
+                return true;
+
+            return false;
         }
 
-        public static double CalculateSlope<T>(T firstPoint, T secondPoint) where T : IPoint, new()
+        public static bool IsPointOnLineString<T>(Geometry<T> lineString, T point) where T : IPoint, new()
         {
-            return (secondPoint.Y - firstPoint.Y) / (secondPoint.X - firstPoint.X);
+            if (lineString.IsNullOrEmpty() || point is null)
+                return false;
+
+            var numberOfPoints = lineString.Points.Count;
+
+            if (lineString.Type != GeometryType.LineString || numberOfPoints < 2)
+                throw new NotImplementedException("SpatialUtility.cs > IsPointOnLineString");
+
+            var boundingBox = lineString.GetBoundingBox();
+
+            var doesEncomapss = boundingBox.Encomapss(point);
+
+            if (!doesEncomapss)
+                return false;
+
+            for (int i = 0; i < numberOfPoints - 1; i++)
+            {
+                if (GetPointLineSegmentRelation(point, lineString.Points[i], lineString.Points[i + 1]) == PointLineSegementRelation.On)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool DoesLineStringIntersectsLineSegment<T>(Geometry<T> lineString, T lineSegmentStart, T lineSegmentEnd) where T : IPoint, new()
+        {
+            if (lineString.IsNullOrEmpty() || lineSegmentStart is null || lineSegmentEnd is null)
+                return false;
+
+            var numberOfPoints = lineString.Points.Count;
+
+            if (lineString.Type != GeometryType.LineString || numberOfPoints < 2)
+                throw new NotImplementedException("SpatialUtility.cs > IsPointOnLineString");
+
+            var boundingBox = lineString.GetBoundingBox();
+
+            if (boundingBox.Encomapss(lineSegmentStart))
+                return false;
+
+            if (boundingBox.Encomapss(lineSegmentEnd))
+                return false;
+
+            for (int i = 0; i < numberOfPoints - 1; i++)
+            {
+                if (DoseIntersectDirectionTheLineSegment(lineString.Points[i], lineString.Points[i + 1], lineSegmentStart, lineSegmentEnd, out _))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

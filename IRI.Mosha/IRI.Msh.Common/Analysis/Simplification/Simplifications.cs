@@ -372,7 +372,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // ***********************************************************************************************
         // ref: Lang, T., 1969, Rules for robot draughtsmen. Geographical Magazine, vol.62, No.1, pp.50-51
-        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByLang<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -449,7 +449,7 @@ namespace IRI.Msh.Common.Analysis
         //      required to represent a digitized line or its caricature. Cartographica: the international
         //      journal for geographic information and geovisualization, 1973. 10(2): p. 112-122
         // link: https://doi.org/10.3138/FM57-6770-U75U-7727
-        public static List<T> SimplifyByRamerDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByRamerDouglasPeucker<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -508,7 +508,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: K. Reumann and A.P.M. Witkam. Optimizing curve segmentation in computer graphics.
         //      In Proceedings of the International Computing Symposium, pages 467–472, 1974
         // link: http://psimpl.sourceforge.net/reumann-witkam.html
-        public static List<T> SimplifyByReumannWitkam<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByReumannWitkam<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -567,7 +567,7 @@ namespace IRI.Msh.Common.Analysis
         //      and Usability Evaluation. Master’s thesis, Uppsala University, Department of Information
         //      Technology, 2011
         // link: http://psimpl.sourceforge.net/perpendicular-distance.html
-        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByPerpendicularDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -634,7 +634,7 @@ namespace IRI.Msh.Common.Analysis
         // ***********************************************************************************************
         // 1401.06.24
         // Modified methods means the traverse pattern has been modified
-        public static List<T> SimplifyByModifiedPerpendicularDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByModifiedPerpendicularDistance<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -784,7 +784,7 @@ namespace IRI.Msh.Common.Analysis
         // 1401.01.03
         // ref: Zhao, Z. and A. Saalfeld. Linear-time sleeve-fitting polyline simplification algorithms.
         //      In. Proceedings of AutoCarto 13. pages 214–223, 1997
-        public static List<T> SimplifyBySleeveFitting<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyBySleeveFitting<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -840,7 +840,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: Meratnia, N., & Rolf, A. (2004, March). Spatiotemporal compression techniques for moving
         //      point objects. In International Conference on Extending Database Technology (pp. 765-782).
         //      Springer, Berlin, Heidelberg. 
-        public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByNormalOpeningWindow<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -908,7 +908,7 @@ namespace IRI.Msh.Common.Analysis
         // ref: Meratnia, N., & Rolf, A. (2004, March). Spatiotemporal compression techniques for moving
         //      point objects. In International Conference on Extending Database Technology (pp. 765-782).
         //      Springer, Berlin, Heidelberg. 
-        public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint
+        public static List<T> SimplifyByBeforeOpeningWindow<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
         {
             var result = new List<T>();
 
@@ -1144,7 +1144,7 @@ namespace IRI.Msh.Common.Analysis
 
         #region Private Methods
 
-        private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, SimplificationParamters paramters, int divideIndex) where T : IPoint
+        private static List<T> DivideForDouglasPeucker<T>(List<T> pointList, SimplificationParamters paramters, int divideIndex) where T : IPoint, new()
         {
             var leftList = pointList.Take(divideIndex + 1).ToList();
 
@@ -1161,7 +1161,7 @@ namespace IRI.Msh.Common.Analysis
 
 
 
-        private static bool AnyPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint
+        private static bool AnyPerpendicularDistanceExceedTolerance<T>(List<T> pointList, double threshold) where T : IPoint, new()
         {
             for (int i = 1; i < pointList.Count - 1; i++)
             {

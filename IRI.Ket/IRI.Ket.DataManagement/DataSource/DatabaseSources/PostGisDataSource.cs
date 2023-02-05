@@ -26,7 +26,15 @@ namespace IRI.Ket.DataManagement.DataSource
 
         private string _schema;
 
-        public PostGisDataSource(string server, string user, string password, string database, string port, string tableName, string spatialColumnName = null, string schema = "public")
+        public PostGisDataSource(
+            string server,
+            string user,
+            string password,
+            string database,
+            string port,
+            string tableName,
+            string spatialColumnName = null,
+            string schema = "public")
             : this(Infrastructure.PostgreSqlInfrastructure.GetConnectionString(server, user, password, database, port), tableName, spatialColumnName, schema)
         {
         }
@@ -122,7 +130,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             return GetGeometriesWhereIntersects(wktRegion);
         }
-         
+
         #region Override Methods
 
         public override List<SqlGeometry> GetGeometries()
@@ -176,7 +184,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
         }
-          
+
         public override List<NamedSqlGeometry> GetGeometryLabelPairs()
         {
             throw new NotImplementedException();
