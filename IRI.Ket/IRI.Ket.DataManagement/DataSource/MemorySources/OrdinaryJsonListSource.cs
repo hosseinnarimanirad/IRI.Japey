@@ -7,17 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class OrdinaryJsonListSource<T> : MemoryDataSource<T> where T : class, ISqlGeometryAware
+    public class OrdinaryJsonListSource<T> : MemoryDataSource<T> where T : class, IGeometryAware<Point>
     {
-        private OrdinaryJsonListSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc) : this(features, mapToFeatureFunc, null)
+        private OrdinaryJsonListSource(List<T> features, Func<T, Feature<Point>> mapToFeatureFunc) : this(features, mapToFeatureFunc, null)
         {
 
         }
 
-        private OrdinaryJsonListSource(List<T> features, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc)
+        private OrdinaryJsonListSource(List<T> features, Func<T, Feature<Point>> mapToFeatureFunc, Func<T, string> labelFunc)
         {
             this._labelFunc = labelFunc;
 
@@ -38,14 +39,14 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return CreateFromFile(fileName, null);
         //}
 
-        public static OrdinaryJsonListSource<T> CreateFromJsonString(string jsonString, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
+        public static OrdinaryJsonListSource<T> CreateFromJsonString(string jsonString, Func<T, Feature<Point>> mapToFeatureFunc, Func<T, string> labelFunc = null)
         {
             var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<T>>(jsonString);
 
             return new OrdinaryJsonListSource<T>(values, mapToFeatureFunc, labelFunc);
         }
 
-        public static OrdinaryJsonListSource<T> CreateFromFile(string fileName, Func<T, SqlFeature> mapToFeatureFunc, Func<T, string> labelFunc = null)
+        public static OrdinaryJsonListSource<T> CreateFromFile(string fileName, Func<T, Feature<Point>> mapToFeatureFunc, Func<T, string> labelFunc = null)
         {
             var jsonString = System.IO.File.ReadAllText(fileName);
 

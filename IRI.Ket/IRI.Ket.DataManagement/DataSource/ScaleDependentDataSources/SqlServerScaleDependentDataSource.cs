@@ -10,6 +10,7 @@ using IRI.Ket.SpatialExtensions;
 using System.Linq;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Analysis;
+using IRI.Ket.Common.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 {
@@ -98,7 +99,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             }
         }
 
-        private void CopyToSqlServer(string tableName, List<SqlGeometry> geometries, int level)
+        private void CopyToSqlServer(string tableName, List<Geometry<Point>> geometries, int level)
         {
             var infra = new Infrastructure.SqlServerInfrastructure();
 
@@ -118,7 +119,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
                 row["Geo"] = geometries[i];
 
-                row["MBB"] = geometries[i].STEnvelope();
+                row["MBB"] = geometries[i].GetBoundingBox().AsGeometry(GetSrid());//.STEnvelope();
 
                 table.Rows.Add(row);
             }
@@ -137,12 +138,12 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
 
 
-        public List<SqlGeometry> GetGeometries(double mapScale)
+        public List<Geometry<Point>> GetGeometries(double mapScale)
         {
             return GetGeometries(mapScale, string.Empty);
         }
 
-        public List<SqlGeometry> GetGeometries(double mapScale, BoundingBox boundingBox)
+        public List<Geometry<Point>> GetGeometries(double mapScale, BoundingBox boundingBox)
         {
             int srid = GetSrid();
 
@@ -152,7 +153,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             return GetGeometries(mapScale, whereClause);
         }
 
-        public List<SqlGeometry> GetGeometries(double mapScale, string whereClause)
+        public List<Geometry<Point>> GetGeometries(double mapScale, string whereClause)
         {
             int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
@@ -181,7 +182,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
 
 
-        public List<NamedSqlGeometry> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
+        public List<NamedGeometry<Point>> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
         {
             int srid = GetSrid();
 
@@ -202,7 +203,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             }
         }
 
-        public List<NamedSqlGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
+        public List<NamedGeometry<Point>> GetGeometryLabelPairs(double mapScale, string whereClause)
         {
             int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
@@ -237,12 +238,12 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
 
 
-        public Task<List<SqlGeometry>> GetGeometriesAsync(double scale)
+        public Task<List<Geometry<Point>>> GetGeometriesAsync(double scale)
         {
             return Task.Run(() => { return GetGeometries(scale); });
         }
 
-        public Task<List<SqlGeometry>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox)
+        public Task<List<Geometry<Point>>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetGeometries(mapScale, boundingBox); });
         }

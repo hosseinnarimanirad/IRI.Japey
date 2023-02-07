@@ -1,5 +1,6 @@
 ﻿using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace IRI.Ket.DataManagement.Model
 {
     //SqlFeatureSet which is connected to its source. For Add, Remove, Update actions
     //This class was used first for FFSDB editing tool
-    public class ConnectedSqlFeatureSet<T> : SqlFeatureSet<T> where T : class, ISqlGeometryAware
+    public class ConnectedSqlFeatureSet<T> : FeatureSet<T> where T : class, IGeometryAware<Point>
     {
         public FeatureDataSource<T> DataSource { get; set; }
 

@@ -199,6 +199,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+    public bool IsNotValidOrEmpty()
+    {
+        return !IsValid();
+    }
+
     public bool IsLeafGeometry()
     {
         switch (Type)
@@ -949,7 +954,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public IPoint GetLastPoint()
+    public T GetLastPoint()
     {
         if (Points?.Any() == true)
         {
@@ -961,7 +966,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
         else
         {
-            return null;
+            return new T();
         }
     }
 

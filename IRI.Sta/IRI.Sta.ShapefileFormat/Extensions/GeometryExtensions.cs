@@ -13,7 +13,7 @@ namespace IRI.Ket.SpatialExtensions
     {
         #region Geometry > Esri Shape
 
-        public static IEsriShape AsEsriShape<T>(this Geometry<T> geometry, int srid = 0, Func<IPoint, IPoint> mapFunction = null) where T : IPoint, new()
+        public static IEsriShape AsEsriShape<T>(this Geometry<T> geometry, int srid, Func<IPoint, IPoint> mapFunction = null) where T : IPoint, new()
         {
             //var type = geometry.GeometryType;
             //if (geometry.IsNullOrEmpty())

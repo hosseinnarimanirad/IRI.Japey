@@ -1,6 +1,7 @@
 ﻿using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Ogc;
 using IRI.Msh.CoordinateSystem;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -46,7 +47,7 @@ namespace IRI.Msh.Common.Primitives
         public static Point FromPolar(double radius, double angleInRadian)
         {
             return new Point(
-                radius * Math.Cos(angleInRadian), 
+                radius * Math.Cos(angleInRadian),
                 radius * Math.Sin(angleInRadian));
         }
 
@@ -220,6 +221,11 @@ namespace IRI.Msh.Common.Primitives
             return new Point(x, y);
         }
 
+        public Geometry<Point> AsGeometry(int srid)
+        {
+            return Geometry<Point>.Create(this.X, this.Y, srid);
+        }
+
         //public static bool operator ==(Point first, Point second)
         //{
         //    return first.Equals(second);
@@ -236,5 +242,9 @@ namespace IRI.Msh.Common.Primitives
         //    return Microsoft.SqlServer.Types.SqlGeometry.Parse(
         //        new System.Data.SqlTypes.SqlString(string.Format("POINT({0} {1})", this.X.ToString(), this.Y.ToString())));
         //}
+
+
+
+
     }
 }

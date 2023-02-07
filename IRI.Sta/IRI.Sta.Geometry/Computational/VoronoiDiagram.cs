@@ -144,9 +144,9 @@ namespace IRI.Ket.Geometry
 
         private void DivideTheRegionWithPointInTheRegion(VoronoiCell polygon, Point point)
         {
-            Point midPoint = TopologyUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
+            Point midPoint = SpatialUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
 
-            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / TopologyUtility.CalculateSlope(point, polygon.PrimaryPoint));
+            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / SpatialUtility.CalculateSlope(point, polygon.PrimaryPoint));
 
             List<int> edgeIndexes;
 
@@ -236,9 +236,9 @@ namespace IRI.Ket.Geometry
         {
             VoronoiCell polygon = this.GetPolygon(polygonCode);
 
-            Point midPoint = TopologyUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
+            Point midPoint = SpatialUtility.CalculateMidPoint(point, polygon.PrimaryPoint);
 
-            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / TopologyUtility.CalculateSlope(point, polygon.PrimaryPoint));
+            Point temPoint = new Point(midPoint.X + 10, midPoint.Y - 10 / SpatialUtility.CalculateSlope(point, polygon.PrimaryPoint));
 
             List<int> edgeIndexes;
 

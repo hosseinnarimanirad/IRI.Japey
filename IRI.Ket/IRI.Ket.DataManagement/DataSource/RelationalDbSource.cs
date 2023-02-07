@@ -1,5 +1,6 @@
 ﻿using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
@@ -21,21 +22,19 @@ namespace IRI.Ket.DataManagement.DataSource
     //}
 
 
-    public abstract class RelationalDbSource<T> : FeatureDataSource<T> where T : class, ISqlGeometryAware
+    public abstract class RelationalDbSource<T> : FeatureDataSource<T> where T : class, IGeometryAware<Point>
     {
-       
-
         protected string MakeWhereClause(string whereClause)
         {
             return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");
         }
 
-        public virtual List<SqlGeometry> GetGeometries(string whereClause)
+        public virtual List<Geometry<Point>> GetGeometries(string whereClause)
         {
             throw new NotImplementedException();
         }
 
-        public virtual List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        public virtual List<NamedGeometry<Point>> GetGeometryLabelPairs(string whereClause)
         {
             throw new NotImplementedException();
         }
@@ -53,12 +52,12 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
 
-        public Task<List<SqlGeometry>> GetGeometriesAsync(string whereClause)
+        public Task<List<Geometry<Point>>> GetGeometriesAsync(string whereClause)
         {
             return Task.Run(() => { return GetGeometries(whereClause); });
         }
 
-        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(string whereClause)
+        public Task<List<NamedGeometry<Point>>> GetGeometryLabelPairsAsync(string whereClause)
         {
             return Task.Run(() => { return GetGeometryLabelPairs(whereClause); });
         }

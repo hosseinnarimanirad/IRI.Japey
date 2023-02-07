@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Msh.CoordinateSystem.MapProjection;
+using System;
 namespace IRI.Msh.Common.Primitives
 {
     public interface IPoint

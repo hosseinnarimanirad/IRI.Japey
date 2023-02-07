@@ -1,6 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Analysis.Topology;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -116,7 +118,7 @@ namespace IRI.Ket.Geometry
             {
                 int j = (i + 1) % count;
 
-                relation[i] = ComputationalGeometry.GetPointVectorRelation(point, Vertexes[i], Vertexes[j]);
+                relation[i] = TopologyUtility.GetPointVectorRelation(point, Vertexes[i], Vertexes[j]);
 
                 tempValue += (int)relation[i];
 
@@ -186,7 +188,7 @@ namespace IRI.Ket.Geometry
 
                 Point intersection;
 
-                LineLineSegmentRelation relation = ComputationalGeometry.IntersectLineWithLineSegment(firstPointLine, secondPointLine, Vertexes[i], Vertexes[j], out intersection);
+                LineLineSegmentRelation relation = TopologyUtility.IntersectLineWithLineSegment(firstPointLine, secondPointLine, Vertexes[i], Vertexes[j], out intersection);
 
                 if (relation == LineLineSegmentRelation.Intersect)
                 {

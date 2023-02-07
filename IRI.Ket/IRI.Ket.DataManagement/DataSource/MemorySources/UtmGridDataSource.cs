@@ -62,12 +62,12 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
         }
 
 
-        public override List<SqlGeometry> GetGeometries()
+        public override List<Geometry<Point>> GetGeometries()
         {
             return null;
         }
 
-        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
             //var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
@@ -78,31 +78,31 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return GetGeometries(geometry.GetBoundingBox());
         }
 
-        public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
+        public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {
             var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return UtmIndexes.GetIndexLines(geographicBoundingBox, this.Type, UtmZone)
-                   .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
+                   .Select(g => g.Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
                    .ToList();
         }
 
-        public override List<SqlGeometry> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
+        public override List<Geometry<Point>> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
         {
             var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return UtmIndexes.GetIndexLines(geographicBoundingBox, this.Type, UtmZone)
-                   .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
+                   .Select(g => g.Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
                    .ToList();
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
-                           .Select(sheet => new NamedSqlGeometry(sheet.TheGeometry.AsSqlGeometry(), sheet.SheetName))
-                            .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+                           .Select(sheet => new NamedGeometry<Point>(sheet.TheGeometry, sheet.SheetName))
+                            .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                            .ToList();
         }
 
@@ -118,37 +118,37 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return result;
         }
 
-        public override List<SqlUtmSheet> GetFeatures(SqlGeometry geometry)
+        public override List<SqlUtmSheet> GetFeatures(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
                                 .Select(s => new SqlUtmSheet(s))
-                                .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+                                .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .ToList();
         }
 
-        public override DataTable GetEntireFeatures(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(Geometry<Point> geometry)
         {
             throw new NotImplementedException();
         }
 
-        public override void Add(ISqlGeometryAware newValue)
+        public override void Add(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void Remove(ISqlGeometryAware value)
+        public override void Remove(IGeometryAware<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(ISqlGeometryAware newValue)
+        public override void Update(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateFeature(ISqlGeometryAware feature)
+        public override void UpdateFeature(IGeometryAware<Point> feature)
         {
             throw new NotImplementedException();
         }
@@ -158,21 +158,21 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             throw new NotImplementedException();
         }
 
-        public override SqlFeatureSet GetSqlFeatures()
+        public override FeatureSet GetSqlFeatures()
         {
             throw new NotImplementedException();
         }
 
-        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        public override FeatureSet GetSqlFeatures(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
                                 .Select(s => new SqlUtmSheet(s))
-                                .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
-                                .Select(s => new SqlFeature()
+                                .Where(s => s.TheGeometry?.Intersects(geometry) == true)
+                                .Select(s => new Feature<Point>()
                                 {
-                                    TheSqlGeometry = s.TheSqlGeometry,
+                                    TheGeometry = s.TheGeometry,
                                     LabelAttribute = nameof(s.SheetName),
                                     Id = s.Id,
                                     Attributes = new Dictionary<string, object>()
@@ -188,7 +188,7 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
                                 })
                                 .ToList();
 
-            return new SqlFeatureSet(GetSrid()) { Features = features };
+            return new FeatureSet(GetSrid()) { Features = features };
         }
     }
 }

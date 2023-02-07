@@ -15,6 +15,8 @@ using IRI.Msh.Common.Primitives;
 using IRI.Ket.ShapefileFormat.Prj;
 using IRI.Ket.SpatialExtensions;
 
+
+
 namespace IRI.Ket.ShapefileFormat
 {
 
@@ -156,51 +158,7 @@ namespace IRI.Ket.ShapefileFormat
 
             return result;
         }
-
-        //public static Task<List<T>> ReadAsync<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
-        //{
-        //    return Task.Run(() => { return Read(shpFileName, mapPropertiesFunc, updateGeometryAction, dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid); });
-        //}
-
-        //public static List<T> Read<T>(string shpFileName, Func<Dictionary<string, object>, T> mapPropertiesFunc, Action<IEsriShape, int, T> updateGeometryAction, Encoding dataEncoding, Encoding headerEncoding, bool correctFarsiCharacters = true, int defaultSrid = 0)
-        //{
-        //    System.Diagnostics.Debug.WriteLine($"before ReadShapes: {DateTime.Now.ToLongTimeString()}");
-
-        //    var shapes = ReadShapes(shpFileName, defaultSrid);
-
-        //    System.Diagnostics.Debug.WriteLine($"after ReadShapes & before DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
-
-        //    var attributeArray = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
-
-        //    System.Diagnostics.Debug.WriteLine($"after DbfFile.Read: {DateTime.Now.ToLongTimeString()}");
-
-        //    int srid;
-
-        //    if (defaultSrid != 0)
-        //    {
-        //        srid = defaultSrid;
-        //    }
-        //    else
-        //    {
-        //        srid = TryGetSrid(shpFileName);
-        //    }
-
-        //    List<T> result = new List<T>(shapes.Count);
-
-        //    for (int i = 0; i < attributeArray.Count; i++)
-        //    {
-        //        var feature = mapPropertiesFunc(attributeArray[i]);
-
-        //        updateGeometryAction(shapes[i], srid, feature);
-
-        //        result.Add(feature);
-        //    }
-
-        //    System.Diagnostics.Debug.WriteLine($"after parse to T: {DateTime.Now.ToLongTimeString()}");
-
-        //    return result;
-        //}
-
+  
         public static List<Feature<Point>> ReadAsFeature(string shpFileName, int? defaultSrid = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
         {
             //return Read<Feature>(shpFileName, d => new Feature() { Attributes = d }, (ies, srid, f) => f.TheGeometry = ies.AsGeometry(), dataEncoding, headerEncoding, correctFarsiCharacters, defaultSrid);
@@ -215,21 +173,7 @@ namespace IRI.Ket.ShapefileFormat
                 dataEncoding,
                 defaultSrid,
                 headerEncoding);
-
-            //var shapes = ReadShapes(shpFileName);
-
-            //var attributes = Dbf.DbfFile.Read(GetDbfFileName(shpFileName), dataEncoding, headerEncoding, correctFarsiCharacters);
-
-            //List<Feature> result = new List<Feature>(shapes.Count);
-
-            //for (int i = 0; i < attributes.Count; i++)
-            //{
-            //    var feature = new Feature() { Attributes = attributes[i], Geometry = shapes[i].AsGeometry() };
-
-            //    result.Add(feature);
-            //}
-
-            //return result;
+             
         }
 
         public static MainFileHeader GetFileHeader(string shpFileName)
@@ -250,6 +194,75 @@ namespace IRI.Ket.ShapefileFormat
 
             return MainHeader;
         }
+
+
+        public static List<Feature<Point>> ReadAsFeature(string shpFileName, Encoding dataEncoding, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true, string label = null)
+        {
+            if (targetSrs != null)
+            {
+                var sourceSrs = TryGetSrs(shpFileName);
+
+                Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
+
+                return Read(
+                        shpFileName,
+                        (d, ies) => new Feature<Point>() { Attributes = d, LabelAttribute = label, TheGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsGeometry() },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding
+                        );
+            }
+            else
+            {
+
+                return Read(
+                        shpFileName,
+                        (d, ies) => new Feature<Point>() { Attributes = d, LabelAttribute = label, TheGeometry = ies.AsGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding);
+            }
+        }
+
+        public static async Task<List<Feature<Point>>> ReadAsFeatureAsync(string shpFileName, Encoding dataEncoding, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true, string label = null)
+        {
+            if (targetSrs != null)
+            {
+                var sourceSrs = TryGetSrs(shpFileName);
+
+                Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
+
+                return await ReadAsync(
+                        shpFileName,
+                        (d, ies) => new Feature<Point>() { Attributes = d, LabelAttribute = label, TheGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding);
+            }
+            else
+            {
+                return await ReadAsync(
+                        shpFileName,
+                        (d, ies) => new Feature<Point>() { Attributes = d, LabelAttribute = label, TheGeometry = ies.AsGeometry() },
+                        //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
+                        //(d, srid, feature) => feature.TheSqlGeometry = d.AsSqlGeometry(),
+                        true,
+                        dataEncoding,
+                        null,
+                        headerEncoding);
+            }
+        }
+
+
+
 
         #endregion
 
@@ -465,7 +478,7 @@ namespace IRI.Ket.ShapefileFormat
 
         public static void SaveAsShapefile<T>(string shpFileName, IEnumerable<Feature<T>> features, SrsBase srs = null) where T : IPoint, new()
         {
-            var shapes = features.Select(f => f.TheGeometry.AsEsriShape());
+            var shapes = features.Select(f => f.TheGeometry.AsEsriShape(srs?.Srid ?? 0));
 
             Save(shpFileName, shapes, false, true, srs);
 

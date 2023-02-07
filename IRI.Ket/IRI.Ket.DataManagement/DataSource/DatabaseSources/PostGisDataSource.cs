@@ -11,10 +11,11 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Primitives;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.SpatialExtensions;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class PostGisDataSource : RelationalDbSource<SqlFeature>
+    public class PostGisDataSource : RelationalDbSource<Feature<Point>>
     {
         public override BoundingBox Extent { get; protected set; }
 
@@ -116,14 +117,14 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetAttributeColumnsWhereIntersects(wktRegion);
         }
 
-        public List<SqlGeometry> GetGeometriesWhereIntersects(string wktRegion)
+        public List<Geometry<Point>> GetGeometriesWhereIntersects(string wktRegion)
         {
             string whereClause = string.Format(CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
 
             return GetGeometries(whereClause);
         }
 
-        public List<SqlGeometry> GetGeometriesWhereIntersects(List<Point> simpleRegion)
+        public List<Geometry<Point>> GetGeometriesWhereIntersects(List<Point> simpleRegion)
         {
             string wktRegion = string.Format(" POLYGON(({0})) ",
                 string.Join(",", simpleRegion.Select(i => string.Format(System.Globalization.CultureInfo.InvariantCulture, " {0} {1}", i.X, i.Y))));
@@ -133,17 +134,17 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Override Methods
 
-        public override List<SqlGeometry> GetGeometries()
+        public override List<Geometry<Point>> GetGeometries()
         {
             return GetGeometries(string.Empty);
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
         {
             throw new NotImplementedException();
         }
 
-        public override List<SqlGeometry> GetGeometries(string whereClause)
+        public override List<Geometry<Point>> GetGeometries(string whereClause)
         {
             NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
 
@@ -157,7 +158,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             NpgsqlCommand command = new NpgsqlCommand(commandString, connection);
 
-            List<SqlGeometry> geometries = new List<SqlGeometry>();
+            List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
             var reader = command.ExecuteReader();
 
@@ -165,7 +166,8 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 var obj = Common.Helpers.HexStringHelper.ToByteArray(reader[0].ToString());
 
-                geometries.Add(SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(obj), 0));
+                //geometries.Add(SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(obj), 0));
+                geometries.Add((Geometry<Point>)Geometry<Point>.FromWkb(obj, 0));
             }
 
             connection.Close();
@@ -173,29 +175,29 @@ namespace IRI.Ket.DataManagement.DataSource
             return geometries;
         }
 
-        public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
+        public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry(GetSrid());
+            Geometry<Point> boundary = boundingBox.AsGeometry(GetSrid());
 
             return GetGeometries(boundary);
         }
 
-        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
-            return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+            return GetGeometries().Where(i => i.Intersects(geometry)).ToList();
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(string whereClause)
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairs()
         {
             throw new NotImplementedException();
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(string whereClause)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point> geometry)
         {
             throw new NotImplementedException();
         }
@@ -209,7 +211,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override DataTable GetEntireFeatures(BoundingBox geometry)
         {
-            var boundary = geometry.AsSqlGeometry(GetSrid());
+            var boundary = geometry.AsGeometry(GetSrid());
 
             return GetEntireFeatures(boundary);
         }
@@ -221,9 +223,9 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetEntireFeatures(where);
         }
 
-        public override DataTable GetEntireFeatures(SqlGeometry geometry)
+        public override DataTable GetEntireFeatures(Geometry<Point> geometry)
         {
-            string wkt = new string(geometry.STAsText().Value);
+            string wkt = new string(geometry.AsWkt());//.STAsText().Value);
 
             return GetEntireFeaturesWhereIntersects(wkt);
         }
@@ -245,22 +247,22 @@ namespace IRI.Ket.DataManagement.DataSource
             return ExecuteSql(command);
         }
 
-        public override void Add(ISqlGeometryAware newValue)
+        public override void Add(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void Remove(ISqlGeometryAware value)
+        public override void Remove(IGeometryAware<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(ISqlGeometryAware newValue)
+        public override void Update(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateFeature(ISqlGeometryAware feature)
+        public override void UpdateFeature(IGeometryAware<Point> feature)
         {
             throw new NotImplementedException();
         }
@@ -270,19 +272,19 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override List<SqlFeature> GetFeatures(SqlGeometry geometry)
+        public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
         {
             throw new NotImplementedException();
         }
 
         #endregion
 
-        public override SqlFeatureSet GetSqlFeatures()
+        public override FeatureSet GetSqlFeatures()
         {
             throw new NotImplementedException();
         }
 
-        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        public override FeatureSet GetSqlFeatures(Geometry<Point> geometry)
         {
             throw new NotImplementedException();
         }

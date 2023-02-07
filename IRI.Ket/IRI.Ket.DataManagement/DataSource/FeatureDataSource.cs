@@ -12,13 +12,14 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public abstract class FeatureDataSource  : IDataSource
+    public abstract class FeatureDataSource : IDataSource
     {
         public abstract BoundingBox Extent { get; protected set; }
 
         public virtual int GetSrid()
         {
-            return GetGeometries()?.SkipWhile(g => g.IsNotValidOrEmpty())?.FirstOrDefault()?.GetSrid() ?? 0;
+            //return GetGeometries()?.SkipWhile(g => g.IsNotValidOrEmpty())?.FirstOrDefault()?.GetSrid() ?? 0;
+            return GetGeometries().FirstOrDefault()?.Srid ?? 0;
         }
 
         #region Get Geometries
@@ -32,141 +33,141 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetGeometries().Where(i => i.Intersects(boundary)).ToList();
         }
 
-        public virtual List<Geometry<T>> GetGeometries(SqlGeometry geometry)
+        public virtual List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
-            return GetGeometries().Where(i => i.STIntersects(geometry).IsTrue).ToList();
+            return GetGeometries().Where(i => i.Intersects(geometry)).ToList();
         }
 
-        public virtual List<Geometry<T>> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
+        public virtual List<Geometry<Point>> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
         {
             return GetGeometries(boundingBox);
         }
 
         #endregion
 
+
         #region Get Geometry Label Pairs
 
-        public virtual List<NamedSqlGeometry> GetGeometryLabelPairs()
+        public virtual List<NamedGeometry<Point>> GetGeometryLabelPairs()
         {
-            SqlGeometry geometry = null;
-
-            return GetGeometryLabelPairs(geometry);
-        }
-         
-        public virtual List<NamedSqlGeometry> GetGeometryLabelPairsForDisplay(BoundingBox boundary)
-        {
-            SqlGeometry geometry = boundary.AsSqlGeometry(GetSrid());
+            Geometry<Point>? geometry = null;
 
             return GetGeometryLabelPairs(geometry);
         }
 
-        public abstract List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry);
+        public virtual List<NamedGeometry<Point>> GetGeometryLabelPairsForDisplay(BoundingBox boundary)
+        {
+            var geometry = boundary.AsGeometry(GetSrid());
+
+            return GetGeometryLabelPairs(geometry);
+        }
+
+        public abstract List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point>? geometry);
 
         #endregion
-         
+
         #region GetEntireFeature
 
         public virtual DataTable GetEntireFeatures()
         {
-            SqlGeometry geometry = null;
+            Geometry<Point>? geometry = null;
 
             return GetEntireFeatures(geometry);
         }
-         
+
         public virtual DataTable GetEntireFeatures(BoundingBox boundary)
         {
-            SqlGeometry geometry = boundary.AsSqlGeometry(GetSrid());
+            Geometry<Point> geometry = boundary.AsGeometry(GetSrid());
 
             return GetEntireFeatures(geometry);
         }
 
-        public abstract DataTable GetEntireFeatures(SqlGeometry geometry);
+        public abstract DataTable GetEntireFeatures(Geometry<Point>? geometry);
 
         #endregion
 
         #region Async Methods
 
-        public Task<List<SqlGeometry>> GetGeometriesAsync()
+        public Task<List<Geometry<Point>>> GetGeometriesAsync()
         {
             return Task.Run(GetGeometries);
         }
-         
-        public Task<List<SqlGeometry>> GetGeometriesAsync(SqlGeometry geometry)
+
+        public Task<List<Geometry<Point>>> GetGeometriesAsync(Geometry<Point> geometry)
         {
             return Task.Run(() => { return GetGeometries(geometry); });
         }
 
-        public Task<List<SqlGeometry>> GetGeometriesAsync(BoundingBox boundingBox)
+        public Task<List<Geometry<Point>>> GetGeometriesAsync(BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetGeometries(boundingBox); });
         }
 
-        public Task<List<SqlGeometry>> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
+        public Task<List<Geometry<Point>>> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetGeometriesForDisplay(mapScale, boundingBox); });
         }
 
 
-        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync()
+        public Task<List<NamedGeometry<Point>>> GetGeometryLabelPairsAsync()
         {
             return Task.Run(GetGeometryLabelPairs);
         }
-         
-        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsForDisplayAsync(BoundingBox boundingBox)
+
+        public Task<List<NamedGeometry<Point>>> GetGeometryLabelPairsForDisplayAsync(BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetGeometryLabelPairsForDisplay(boundingBox); });
         }
 
-        public Task<List<NamedSqlGeometry>> GetGeometryLabelPairsAsync(SqlGeometry geometry)
+        public Task<List<NamedGeometry<Point>>> GetGeometryLabelPairsAsync(Geometry<Point> geometry)
         {
             return Task.Run(() => { return GetGeometryLabelPairs(geometry); });
         }
-         
+
         public Task<DataTable> GetEntireFeatureAsync(BoundingBox geometry)
         {
             return Task.Run(() => { return GetEntireFeatures(geometry); });
         }
 
-        public Task<DataTable> GetEntireFeaturesWhereIntersectsAsync(SqlGeometry geometry)
+        public Task<DataTable> GetEntireFeaturesWhereIntersectsAsync(Geometry<Point> geometry)
         {
             return Task.Run(() => { return GetEntireFeatures(geometry); });
         }
 
         #endregion
 
-        public abstract SqlFeatureSet GetSqlFeatures();
+        public abstract FeatureSet GetSqlFeatures();
 
-        public virtual SqlFeatureSet GetSqlFeatures(BoundingBox boundingBox)
+        public virtual FeatureSet GetSqlFeatures(BoundingBox boundingBox)
         {
-            SqlGeometry boundary = boundingBox.AsSqlGeometry(this.GetSrid()).MakeValid();
+            Geometry<Point> boundary = boundingBox.AsGeometry(this.GetSrid());//.MakeValid();
 
-            var features = GetSqlFeatures().Features.Where(i => !i.TheSqlGeometry.IsNotValidOrEmpty() && i.TheSqlGeometry.STIntersects(boundary).IsTrue).ToList();
+            var features = GetSqlFeatures().Features.Where(i => !i.TheGeometry.IsNotValidOrEmpty() && i.TheGeometry.Intersects(boundary)).ToList();
 
-            return new SqlFeatureSet(this.GetSrid()) { Features = features };
+            return new FeatureSet(this.GetSrid()) { Features = features };
         }
-        public virtual SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        public virtual FeatureSet GetSqlFeatures(Geometry<Point> geometry)
         {
-            var features = GetSqlFeatures().Features.Where(i => !i.TheSqlGeometry.IsNotValidOrEmpty() && i.TheSqlGeometry.STIntersects(geometry).IsTrue).ToList();
+            var features = GetSqlFeatures().Features.Where(i => !i.TheGeometry.IsNotValidOrEmpty() && i.TheGeometry.Intersects(geometry)).ToList();
 
-            return new SqlFeatureSet(this.GetSrid()) { Features = features };
+            return new FeatureSet(this.GetSrid()) { Features = features };
         }
 
-        public abstract void Add(ISqlGeometryAware newValue);
+        public abstract void Add(IGeometryAware<Point> newValue);
 
-        public abstract void Remove(ISqlGeometryAware value);
+        public abstract void Remove(IGeometryAware<Point> value);
 
-        public abstract void Update(ISqlGeometryAware newValue);
+        public abstract void Update(IGeometryAware<Point> newValue);
 
-        public abstract void UpdateFeature(ISqlGeometryAware feature);
+        public abstract void UpdateFeature(IGeometryAware<Point> feature);
 
         public abstract void SaveChanges();
     }
 
-    public abstract class FeatureDataSource<TGeometry, TPoint> : FeatureDataSource 
-        where TGeometry : class, IGeometryAware<TPoint>
-        where TPoint : IPoint, new()
+    public abstract class FeatureDataSource<TGeometry> : FeatureDataSource
+        where TGeometry : class, IGeometryAware<Point> 
     {
-        const Geometry<TPoint> NullGeometry = null;
+        const Geometry<Point> NullGeometry = null;
 
         public Func<List<TGeometry>, DataTable> ToDataTableMappingFunc;
 
@@ -174,7 +175,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
 
         }
-         
+
         public virtual List<TGeometry> GetFeatures()
         {
             //SqlGeometry geometry = null;
@@ -182,9 +183,9 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetFeatures(NullGeometry);
         }
 
-        public abstract List<TGeometry> GetFeatures(Geometry<TPoint> geometry);
+        public abstract List<TGeometry> GetFeatures(Geometry<Point> geometry);
 
-        public override DataTable GetEntireFeatures(Geometry<TPoint> geometry)
+        public override DataTable GetEntireFeatures(Geometry<Point>? geometry)
         {
             return ToDataTableMappingFunc(GetFeatures(geometry));
         }
@@ -237,7 +238,7 @@ namespace IRI.Ket.DataManagement.DataSource
             };
         }
 
-        public static DataTable SqlFeatureTypeMapping(List<SqlFeature> list)
+        public static DataTable SqlFeatureTypeMapping(List<Feature<Point>> list)
         {
             var dataTable = new DataTable();
 

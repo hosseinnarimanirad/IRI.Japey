@@ -1,12 +1,11 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Ogc;
-using IRI.Msh.Common.Primitives;
-using System;
-using System.Collections.Generic;
+using IRI.Msh.Common.Ogc; 
+using System; 
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Helpers;
+using IRI.Msh.CoordinateSystem.MapProjection; 
 
 namespace System.Collections.Generic
 {
@@ -17,7 +16,7 @@ namespace System.Collections.Generic
             var stringArray = transform == null ? points.Select(i => i.AsExactString()) : points.Select(i => transform(i).AsExactString());
 
             return string.Format(CultureInfo.InvariantCulture, "POLYGON(({0}))", string.Join(",", stringArray));
-             
+
         }
 
         public static string AsPolyline(this List<Point> points, Func<Point, Point> transform = null)
@@ -25,7 +24,7 @@ namespace System.Collections.Generic
             var stringArray = transform == null ? points.Select(i => i.AsExactString()) : points.Select(i => transform(i).AsExactString());
 
             return string.Format(CultureInfo.InvariantCulture, "LINESTRING({0})", string.Join(",", stringArray));
-             
+
         }
 
         public static byte[] AsWkb(this IPoint point)
@@ -42,5 +41,7 @@ namespace System.Collections.Generic
 
             return result;
         }
+
+
     }
 }

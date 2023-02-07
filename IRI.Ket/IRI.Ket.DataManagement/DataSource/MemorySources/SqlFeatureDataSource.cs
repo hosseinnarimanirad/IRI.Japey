@@ -1,5 +1,7 @@
-﻿using IRI.Ket.SqlServerSpatialExtension.Helpers;
+﻿using IRI.Ket.ShapefileFormat;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlFeatureDataSource : MemoryDataSource<SqlFeature>
+    public class SqlFeatureDataSource : MemoryDataSource<Feature<Point>>
     {
         private const string _geoColumnName = "Geo";
 
-        private static Func<List<SqlFeature>, DataTable> sqlFeatureToDataTableMapping = (list) =>
+        private static Func<List<Feature<Point>>, DataTable> sqlFeatureToDataTableMapping = (list) =>
         {
             if (!(list?.Count > 0))
             {
@@ -39,7 +41,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     newRow[col.Key] = col.Value;
                 }
 
-                newRow[_geoColumnName] = item.TheSqlGeometry;
+                newRow[_geoColumnName] = item.TheGeometry;
 
                 table.Rows.Add(newRow);
             }
@@ -52,7 +54,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         }
 
-        public SqlFeatureDataSource(List<SqlFeature> features, Func<SqlFeature, string> labelFunc = null)
+        public SqlFeatureDataSource(List<Feature<Point>> features, Func<Feature<Point>, string> labelFunc = null)
         {
             this.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
 
@@ -65,7 +67,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static SqlFeatureDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
         {
-            var features = ShapefileHelper.ReadAsSqlFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
+            //var features = ShapefileHelper.ReadAsSqlFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
+            var features = Shapefile.ReadAsFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
 
             var result = new SqlFeatureDataSource(features, f => f.Label);
 
@@ -76,7 +79,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static async Task<SqlFeatureDataSource> CreateFromShapefileAsync(string shpFileName, string label, Encoding dataEncoding = null, SrsBase targetSrs = null, Encoding headerEncoding = null, bool correctFarsiCharacters = true)
         {
-            var features = await ShapefileHelper.ReadAsSqlFeatureAsync(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
+            var features = await Shapefile.ReadAsFeatureAsync(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
 
             var result = new SqlFeatureDataSource(features, i => i.Label);
 

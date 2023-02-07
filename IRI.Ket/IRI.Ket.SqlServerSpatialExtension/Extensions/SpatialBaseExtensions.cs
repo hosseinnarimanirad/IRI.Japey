@@ -697,23 +697,6 @@ namespace IRI.Ket.SpatialExtensions
 
         #region Projection
 
-        public static T Project<T>(this T point, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
-        {
-            if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
-            {
-                var c1 = sourceSrs.ToGeodetic(point);
-
-                return targetSrs.FromGeodetic(c1);
-            }
-            else
-            {
-                var c1 = sourceSrs.ToGeodetic(point);
-
-                return targetSrs.FromGeodetic(c1, sourceSrs.Ellipsoid);
-
-            }
-        }
-
         #endregion
 
 

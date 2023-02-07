@@ -1,6 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Analysis;
+using IRI.Msh.Common.Analysis.Topology;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -386,7 +388,7 @@ namespace IRI.Ket.Geometry
 
             Point neighbourFarPoint = points.GetPoint(GetNeighbourFarPoint(currenTriangle, neigbour));
 
-            if (ComputationalGeometry.GetPointCircleRelation(neighbourFarPoint,
+            if (TopologyUtility.GetPointCircleRelation(neighbourFarPoint,
                                                         points.GetPoint(currenTriangle.First),
                                                         points.GetPoint(currenTriangle.Second),
                                                         points.GetPoint(currenTriangle.Third)) == PointCircleRelation.In)
@@ -463,7 +465,7 @@ namespace IRI.Ket.Geometry
 
                 triangles.RemoveByCode(currenTriangle.GetHashCode());
             }
-            else if (ComputationalGeometry.GetPointCircleRelation(neighbourFarPoint,
+            else if (TopologyUtility.GetPointCircleRelation(neighbourFarPoint,
                                                         points.GetPoint(currenTriangle.First),
                                                         points.GetPoint(currenTriangle.Second),
                                                         points.GetPoint(currenTriangle.Third)) == PointCircleRelation.On)
@@ -494,9 +496,9 @@ namespace IRI.Ket.Geometry
                     IRI.Msh.Statistics.Statistics.GetMin(firstSetAngle) < IRI.Msh.Statistics.Statistics.GetMin(secondSetAngle))
                 {
 
-                    bool condition1 = ComputationalGeometry.GetPointCircleRelation(secondPoint, thirdPoint, firstPoint, neighbourFarPoint) == PointCircleRelation.In;
+                    bool condition1 = TopologyUtility.GetPointCircleRelation(secondPoint, thirdPoint, firstPoint, neighbourFarPoint) == PointCircleRelation.In;
 
-                    bool condition2 = ComputationalGeometry.GetPointCircleRelation(firstPoint, thirdPoint, secondPoint, neighbourFarPoint) == PointCircleRelation.In;
+                    bool condition2 = TopologyUtility.GetPointCircleRelation(firstPoint, thirdPoint, secondPoint, neighbourFarPoint) == PointCircleRelation.In;
 
                     if (!condition1 && !condition2)
                     {
@@ -1100,11 +1102,11 @@ namespace IRI.Ket.Geometry
 
             Point thirdVertex = points.GetPoint(triangle.Third);
 
-            int relation1 = (int)ComputationalGeometry.GetPointVectorRelation(point, firstVertex, secondVertex);
+            int relation1 = (int)TopologyUtility.GetPointVectorRelation(point, firstVertex, secondVertex);
 
-            int relation2 = (int)ComputationalGeometry.GetPointVectorRelation(point, secondVertex, thirdVertex);
+            int relation2 = (int)TopologyUtility.GetPointVectorRelation(point, secondVertex, thirdVertex);
 
-            int relation3 = (int)ComputationalGeometry.GetPointVectorRelation(point, thirdVertex, firstVertex);
+            int relation3 = (int)TopologyUtility.GetPointVectorRelation(point, thirdVertex, firstVertex);
 
             return (PoinTriangleRelation)(relation1 * QuasiTriangle.firstEdgeWeight +
                                             relation2 * QuasiTriangle.secondEdgeWeight +
@@ -1113,7 +1115,7 @@ namespace IRI.Ket.Geometry
 
         private QuasiTriangle MakeCCWTriangle(int firstPointCode, int secondPointCode, int thirdPointCode, int code)
         {
-            PointVectorRelation relation = ComputationalGeometry.GetPointVectorRelation(points.GetPoint(thirdPointCode),
+            PointVectorRelation relation = TopologyUtility.GetPointVectorRelation(points.GetPoint(thirdPointCode),
                                                                points.GetPoint(firstPointCode),
                                                                points.GetPoint(secondPointCode));
 
@@ -1339,10 +1341,11 @@ namespace IRI.Ket.Geometry
 
             foreach (QuasiTriangle item in triangles)
             {
-                Point center = ComputationalGeometry.CalculateCircumcenterCenterPoint(this.points.GetPoint(item.First),
+                var center = TopologyUtility.CalculateCircumcenterCenterPoint(this.points.GetPoint(item.First),
                                                                                         this.points.GetPoint(item.Second),
                                                                                         this.points.GetPoint(item.Third));
-                VoronoiPoint point = new VoronoiPoint(item.GetHashCode(), center);
+                
+                VoronoiPoint point = new VoronoiPoint(item.GetHashCode(),new Point() { X = center.X, Y = center.Y });
 
                 result.Add(point);
 

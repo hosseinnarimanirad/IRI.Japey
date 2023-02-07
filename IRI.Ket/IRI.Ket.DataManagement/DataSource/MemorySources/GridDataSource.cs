@@ -15,7 +15,7 @@ using System.Data;
 
 namespace IRI.Ket.DataManagement.DataSource.MemorySources
 {
-    public class GridDataSource : FeatureDataSource<SqlGeodeticSheet>
+    public class GridDataSource : FeatureDataSource<GeodeticSheet>
     {
         ////In degree
         //public double GridWidth { get; private set; }
@@ -76,12 +76,12 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return SridHelper.WebMercator;
         }
 
-        public override List<SqlGeometry> GetGeometries()
+        public override List<Geometry<Point>> GetGeometries()
         {
             return null;
         }
 
-        public override List<SqlGeometry> GetGeometries(SqlGeometry geometry)
+        public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
             //var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
@@ -92,21 +92,21 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return GetGeometries(geometry.GetBoundingBox());
         }
 
-        public override List<SqlGeometry> GetGeometries(BoundingBox boundingBox)
+        public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {
             var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return GeodeticIndexes.GetIndexLines(geographicBoundingBox, this.Type)
-                   .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
+                   .Select(g => g.Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
                    .ToList();
         }
 
-        public override List<SqlGeometry> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
+        public override List<Geometry<Point>> GetGeometriesForDisplay(double mapScale, BoundingBox boundingBox)
         {
             var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return GeodeticIndexes.GetIndexLines(geographicBoundingBox, this.Type)
-                   .Select(g => g.AsSqlGeometry().Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
+                   .Select(g => g.Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator))
                    .ToList();
         }
 
@@ -119,57 +119,56 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return result;
         }
 
-        public override List<SqlGeodeticSheet> GetFeatures()
+        public override List<GeodeticSheet> GetFeatures()
         {
             return GetFeatures(null);
         }
 
-        public override List<SqlGeodeticSheet> GetFeatures(SqlGeometry geometry)
+        public override List<GeodeticSheet> GetFeatures(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
 
             return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
-                                    .Select(s => new SqlGeodeticSheet(s))
-                                    .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+                                    .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                     .ToList();
         }
 
-        public override SqlFeatureSet GetSqlFeatures()
+        public override FeatureSet GetSqlFeatures()
         {
             throw new NotImplementedException();
         }
 
-        public override SqlFeatureSet GetSqlFeatures(SqlGeometry geometry)
+        public override FeatureSet GetSqlFeatures(Geometry<Point> geometry)
         {
             throw new NotImplementedException();
         }
 
-        public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
-                           .Select(sheet => new NamedSqlGeometry(sheet.TheGeometry.AsSqlGeometry(), sheet.SheetName))
-                           .Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+                           .Select(sheet => new NamedGeometry<Point>(sheet.TheGeometry, sheet.SheetName))
+                           .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                            .ToList();
         }
 
-        public override void Add(ISqlGeometryAware newValue)
+        public override void Add(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void Remove(ISqlGeometryAware value)
+        public override void Remove(IGeometryAware<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(ISqlGeometryAware newValue)
+        public override void Update(IGeometryAware<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateFeature(ISqlGeometryAware feature)
+        public override void UpdateFeature(IGeometryAware<Point> feature)
         {
             throw new NotImplementedException();
         }
