@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using sb = IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Jab.Common
 {
@@ -139,7 +140,7 @@ namespace IRI.Jab.Common
 
         }
 
-        public FeatureLayer(string name, List<SqlFeature> features, Func<SqlFeature, VisualParameters> symbologyRule,
+        public FeatureLayer(string name, List<sb.Feature<sb.Point>> features, Func<SqlFeature, VisualParameters> symbologyRule,
                             RenderingApproach rendering, RasterizationApproach toRasterTechnique, ScaleInterval visibleRange)
         {
             if (features == null || features.Count == 0)

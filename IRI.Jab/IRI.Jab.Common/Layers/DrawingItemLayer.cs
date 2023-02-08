@@ -43,7 +43,7 @@ namespace IRI.Jab.Common
                 _shape = value;
                 RaisePropertyChanged();
 
-                this.DataSource = new MemoryDataSource(new List<SqlGeometry>() { value?.AsSqlGeometry() });
+                this.DataSource = new MemoryDataSource(new List<Geometry<Point>>() { value });
             }
         }
 

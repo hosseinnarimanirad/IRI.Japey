@@ -86,7 +86,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     if (layer.OriginalSource != null)
                     {
-                        layer.OriginalSource.Update(new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = layer.Id });
+                        layer.OriginalSource.Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
                     }
                 }
             });

@@ -1435,6 +1435,16 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+    public Point AsPoint()
+    {
+        if (this.Type != GeometryType.Point)
+        {
+            throw new NotImplementedException("Geometry > AsPoint");
+        }
+
+        return new Point(this.Points[0].X, this.Points[1].Y);
+    }
+
     #endregion
 
     #region Project & Srs

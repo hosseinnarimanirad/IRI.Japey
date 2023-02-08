@@ -1043,7 +1043,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private async void ShowSelectedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        private async void ShowSelectedFeatures(IEnumerable<IGeometryAware<Point>> enumerable)
         {
             ClearLayer("__$selection", true);
             ClearLayer("__$highlight", true);
@@ -1053,7 +1053,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
+            await DrawGeometriesAsync(enumerable.Select(i => i.TheGeometry).ToList(), "__$selection", VisualParameters.GetDefaultForSelection());
 
         }
 
@@ -2389,10 +2389,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 if (featureSet.Features.IsNullOrEmpty())
                     return;
 
-                var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
+                var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                 //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                var dataSource = new MemoryDataSource<SqlFeature>(
+                var dataSource = new MemoryDataSource<Feature<Point>>(
                     features,
                     f => f.Label,
                     null,
@@ -2438,10 +2438,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 if (featureSet.Features.IsNullOrEmpty())
                     return;
 
-                var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
+                var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                 //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                var dataSource = new MemoryDataSource<SqlFeature>(
+                var dataSource = new MemoryDataSource<Feature<Point>>(
                     features,
                     f => f.Label,
                     null,
@@ -2472,7 +2472,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 //Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
 
-                var dataSource = OrdinaryJsonListSource<SqlFeature>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
+                var dataSource = OrdinaryJsonListSource<Feature<Point>>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
 
                 var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(geoJsonFeatureSetFileName), dataSource,
                     new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
@@ -2996,10 +2996,10 @@ namespace IRI.Jab.Common.Presenter.Map
                         if (featureSet.Features.IsNullOrEmpty())
                             return;
 
-                        var features = featureSet.Features.Select(f => f.AsSqlFeature(true, SrsBases.WebMercator)).ToList();
+                        var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                         //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                        var dataSource = new MemoryDataSource<SqlFeature>(
+                        var dataSource = new MemoryDataSource<Feature<Point>>(
                             features,
                             f => f.Label,
                             null,
@@ -3017,7 +3017,7 @@ namespace IRI.Jab.Common.Presenter.Map
                             return;
                         }
 
-                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                        AddDrawingItem(geometries.First(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                     });
                 }
 
@@ -3055,7 +3055,7 @@ namespace IRI.Jab.Common.Presenter.Map
                             return;
                         }
 
-                        AddDrawingItem(geometries.First().AsGeometry(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                        AddDrawingItem(geometries.First(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                     });
                 }
 

@@ -1487,10 +1487,20 @@ namespace IRI.Ket.SpatialExtensions
                 TheSqlGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
                                                     .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator)
             };
-
-
         }
 
+        public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
+        {
+            targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
+
+            return new Feature<Point>()
+            {
+                Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
+                //Id = feature.id,
+                TheGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                                                    .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator).AsGeometry()
+            };
+        }
         #endregion
     }
 }

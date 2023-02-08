@@ -1,4 +1,5 @@
 ﻿using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,35 +16,35 @@ namespace IRI.Jab.Common.Model.Map
 
         string LayerName { get;  }
 
-        void UpdateSelectedFeatures(IEnumerable<ISqlGeometryAware> items);
+        void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items);
 
-        void UpdateHighlightedFeatures(IEnumerable<ISqlGeometryAware> items);
+        void UpdateHighlightedFeatures(IEnumerable<IGeometryAware<Point>> items);
 
         bool ShowSelectedOnMap { get; set; }  
 
-        IEnumerable<ISqlGeometryAware> GetSelectedFeatures();
+        IEnumerable<IGeometryAware<Point>> GetSelectedFeatures();
 
         int CountOfSelectedFeatures();
 
-        IEnumerable<ISqlGeometryAware> GetHighlightedFeatures();
+        IEnumerable<IGeometryAware<Point>> GetHighlightedFeatures();
 
-        void UpdateSelectedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable);
+        void UpdateSelectedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable);
 
-        void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable);
+        void UpdateHighlightedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable);
 
-        Action<IEnumerable<ISqlGeometryAware>> FeaturesChangedAction { get; set; }
+        Action<IEnumerable<IGeometryAware<Point>>> FeaturesChangedAction { get; set; }
 
-        Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
+        Action<IEnumerable<IGeometryAware<Point>>> HighlightFeaturesChangedAction { get; set; }
 
-        Action<ISqlGeometryAware> RequestFlashSinglePoint { get; set; }
+        Action<IGeometryAware<Point>> RequestFlashSinglePoint { get; set; }
 
-        Action<IEnumerable<ISqlGeometryAware>, Action> RequestZoomTo { get; set; }
+        Action<IEnumerable<IGeometryAware<Point>>, Action> RequestZoomTo { get; set; }
         
-        Action<ISqlGeometryAware> RequestEdit { get; set; }
+        Action<IGeometryAware<Point>> RequestEdit { get; set; }
         
         Action RequestRemove { get; set; }
 
-        void Update(ISqlGeometryAware oldGeometry, ISqlGeometryAware newGeometry);
+        void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry);
 
         void UpdateFeature(object item);
     }

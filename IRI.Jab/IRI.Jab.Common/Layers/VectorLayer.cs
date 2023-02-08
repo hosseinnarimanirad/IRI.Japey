@@ -73,46 +73,6 @@ namespace IRI.Jab.Common
             }
         }
 
-        //public int ZIndex { get; set; }
-
-        //public Guid Id { get; private set; }
-
-        //private VisualParameters _visualParameters;
-
-        //public VisualParameters VisualParameters
-        //{
-        //    get { return _visualParameters; }
-        //    set
-        //    {
-        //        _visualParameters = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //private string _layerName;
-
-        //public string LayerName
-        //{
-        //    get { return _layerName; }
-        //    set
-        //    {
-        //        _layerName = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
-
-        //public SimplePointSymbol PointSymbol
-        //{
-        //    get { return _pointSymbol; }
-        //    set
-        //    {
-        //        _pointSymbol = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
 
         private sb.BoundingBox _extent;
 
@@ -145,13 +105,13 @@ namespace IRI.Jab.Common
 
         }
 
-        public VectorLayer(string name, List<SqlGeometry> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
+        public VectorLayer(string name, List<sb.Geometry<sb.Point>> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
             : this(name, features, new VisualParameters(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, 1, Visibility.Visible), type, rendering, toRasterTechnique)
         {
 
         }
 
-        public VectorLayer(string layerName, List<SqlGeometry> features, VisualParameters parameters, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
+        public VectorLayer(string layerName, List<sb.Geometry<sb.Point>> features, VisualParameters parameters, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
         {
             if (features == null || features.Count == 0)
                 throw new NotImplementedException();
@@ -217,7 +177,7 @@ namespace IRI.Jab.Common
 
         #region Default Rendering
         //StreamGeometry Approach
-        public Path AsShape(List<SqlGeometry> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
+        public Path AsShape(List<sb.Geometry<sb.Point>> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
             double height, TransformGroup viewTransform, TranslateTransform viewTransformForPoints, Func<Point, Point> mapToScreen)
         {
             StreamGeometry geo;
@@ -255,7 +215,7 @@ namespace IRI.Jab.Common
         }
 
         //DrawingVisual Approach
-        public Path AsDrawingVisual(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        public Path AsDrawingVisual(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (geometries == null)
                 return null;
@@ -295,7 +255,7 @@ namespace IRI.Jab.Common
         }
 
         //Gdi+
-        public Path AsBitmapUsingGdiPlus(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        public Path AsBitmapUsingGdiPlus(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (geometries == null)
                 return null;
@@ -341,7 +301,7 @@ namespace IRI.Jab.Common
         }
 
         //Consider Labels
-        public Path AsBitmapUsingWriteableBitmap(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        public Path AsBitmapUsingWriteableBitmap(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (geometries == null)
                 return null;
@@ -379,7 +339,7 @@ namespace IRI.Jab.Common
         }
 
         //OpenTK
-        //public Path AsBitmapUsingOpenTK(List<SqlGeometry> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        //public Path AsBitmapUsingOpenTK(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         //{
         //    if (geometries == null)
         //        return null;
@@ -438,7 +398,7 @@ namespace IRI.Jab.Common
         #region Tile Rendering
 
         //DrawingVisual Approach
-        public Path AsTileUsingDrawingVisual(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingDrawingVisual(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
                 return null;
@@ -491,7 +451,7 @@ namespace IRI.Jab.Common
         }
 
         //Gdi+ Approach
-        public Path AsTileUsingGdiPlusAsync(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingGdiPlusAsync(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
                 return null;
@@ -552,7 +512,7 @@ namespace IRI.Jab.Common
 
         //Writeable Bitmap Approach
         //Consider Labeling
-        public Path AsTileUsingWriteableBitmap(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+        public Path AsTileUsingWriteableBitmap(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         {
             if (geometries == null)
             {
@@ -597,7 +557,7 @@ namespace IRI.Jab.Common
         }
 
         ////OpenTK Approach
-        //public Path AsTileUsinOpenTK(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+        //public Path AsTileUsinOpenTK(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
         //{
         //    if (geometries == null)
         //        return null;
@@ -653,7 +613,7 @@ namespace IRI.Jab.Common
 
 
         ////StreamGeometry Approach
-        //public Path AsTileUsingStreamGeometry(List<SqlGeometry> geometries, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area,
+        //public Path AsTileUsingStreamGeometry(List<sb.Geometry<sb.Point>> geometries, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area,
         //    Transform viewTransform, sb.BoundingBox totalExtent, TranslateTransform viewTransformForPoints)
         //{
         //    if (geometries == null)
@@ -854,7 +814,7 @@ namespace IRI.Jab.Common
             }
         }
 
-        public static Func<sb.Point, sb.Point> CreateMapToScreenMapFunc(sb.BoundingBox mapExtent, double screenWidth, double screenHeight) 
+        public static Func<sb.Point, sb.Point> CreateMapToScreenMapFunc(sb.BoundingBox mapExtent, double screenWidth, double screenHeight)
         {
             double xScale = screenWidth / mapExtent.Width;
             double yScale = screenHeight / mapExtent.Height;
@@ -862,7 +822,7 @@ namespace IRI.Jab.Common
 
             return new Func<sb.Point, sb.Point>(p => new sb.Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
         }
-          
+
         public async Task<System.Drawing.Bitmap> ParseToBitmapImage(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
         {
             var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
@@ -968,30 +928,20 @@ namespace IRI.Jab.Common
 
             features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
         }
-
-        //public List<sb.Feature<sb.Point>> GetFeatures<T>(Func<T, sb.Feature<sb.Point>> map, SqlGeometry geometry) where T : class, ISqlGeometryAware
-        //{
-        //    if (DataSource as FeatureDataSource<T> != null)
-        //    {
-        //        return (DataSource as FeatureDataSource<T>).GetFeatures(map, geometry);
-        //    }
-
-        //    return null;
-        //}
-
+         
         #endregion
 
         #region GetGeometry & GetFeature Methods
 
         public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
         {
-            List<SqlGeometry> geometries; List<string> labels = null;
+            List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
 
             if (this.IsLabeled(mapScale))
             {
                 var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
 
-                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
+                geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
 
                 labels = geoLabelPairs.Select(i => i.Label).ToList();
             }
@@ -1005,13 +955,13 @@ namespace IRI.Jab.Common
 
         public GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
         {
-            List<SqlGeometry> geometries; List<string> labels = null;
+            List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
 
             if (this.IsLabeled(mapScale))
             {
                 var geoLabelPairs = this.DataSource.GetGeometryLabelPairsForDisplay(mapExtent);
 
-                geometries = geoLabelPairs.Select(i => i.TheSqlGeometry).ToList();
+                geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
 
                 labels = geoLabelPairs.Select(i => i.Label).ToList();
             }
@@ -1023,9 +973,9 @@ namespace IRI.Jab.Common
             return new GeometryLabelPairs(geometries, labels);
         }
 
-        public async Task<List<SqlGeometry>> GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
+        public async Task<List<sb.Geometry<sb.Point>>> GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
         {
-            List<SqlGeometry> geometries = new List<SqlGeometry>();
+            List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
 
             if (this.DataSource is MemoryScaleDependentDataSource)
             {
@@ -1042,9 +992,9 @@ namespace IRI.Jab.Common
             return geometries;
         }
 
-        public List<SqlGeometry> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
+        public List<sb.Geometry<sb.Point>> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
         {
-            List<SqlGeometry> geometries = new List<SqlGeometry>();
+            List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
 
             if (this.DataSource is IScaleDependentDataSource)
             {
@@ -1066,12 +1016,12 @@ namespace IRI.Jab.Common
             return DataSource?.GetEntireFeatures();
         }
 
-        public List<T> GetFeatures<T>() where T : class, ISqlGeometryAware
+        public List<T> GetFeatures<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
             return GetFeatures<T>(null);
         }
 
-        public List<T> GetFeatures<T>(SqlGeometry geometry) where T : class, ISqlGeometryAware
+        public List<T> GetFeatures<T>(sb.Geometry<sb.Point> geometry) where T : class, sb.IGeometryAware<sb.Point>
         {
             if (DataSource as FeatureDataSource<T> != null)
             {
@@ -1091,7 +1041,7 @@ namespace IRI.Jab.Common
         }
 
         //POTENTIALLY ERROR PROUNE; formattedText is always RTL
-        public void DrawLabels(List<string> labels, List<SqlGeometry> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
+        public void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
         {
             if (labels.Count != geometries.Count)
                 return;
@@ -1099,8 +1049,8 @@ namespace IRI.Jab.Common
             var mapCoordinates = geometries.ConvertAll(
                       (g) =>
                       {
-                          SqlGeometry point = this.Labels.PositionFunc(g);
-                          return new Point(point.STX.Value, point.STY.Value);
+                          var point = this.Labels.PositionFunc(g);
+                          return new Point(point.Points[0].X, point.Points[0].Y);
                       }).ToList();
 
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -1125,7 +1075,7 @@ namespace IRI.Jab.Common
 
 
 
-        private Image DrawLabels(List<string> labels, List<SqlGeometry> geometries, double width, double height, Func<Point, Point> mapToScreen)
+        private Image DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, double width, double height, Func<Point, Point> mapToScreen)
         {
             if (labels.Count != geometries.Count)
                 return null;
@@ -1133,8 +1083,9 @@ namespace IRI.Jab.Common
             List<Point> mapCoordinates = geometries.ConvertAll<Point>(
                       (g) =>
                       {
-                          SqlGeometry point = this.Labels.PositionFunc(g);
-                          return new Point(point.STX.Value, point.STY.Value);
+                          var point = this.Labels.PositionFunc(g);
+                          //return new Point(point.STX.Value, point.STY.Value);
+                          return new Point(point.Points[0].X, point.Points[0].Y);
                       }).ToList();
 
             DrawingVisual drawingVisual = new DrawingVisual();
@@ -1163,7 +1114,7 @@ namespace IRI.Jab.Common
             return image;
         }
 
-        private void DrawLabels(List<string> labels, List<SqlGeometry> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
+        private void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
         {
             if (labels.Count != geometries.Count)
                 return;
@@ -1196,7 +1147,7 @@ namespace IRI.Jab.Common
             graphic.Flush();
         }
 
-        private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<SqlGeometry> positions, Func<sb.IPoint, sb.IPoint> transform)
+        private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<sb.Geometry<sb.Point>> positions, Func<sb.IPoint, sb.IPoint> transform)
         {
             System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
 
@@ -1237,7 +1188,7 @@ namespace IRI.Jab.Common
         #region Old Codes
 
 
-        //public async Task<Path> AsTileUsingGdiPlus(List<SqlGeometry> geometries, List<string> labels, double mapScale, TileInfo region, double width, double height, Func<sb.Point, sb.Point> mapToScreen, RectangleGeometry area)
+        //public async Task<Path> AsTileUsingGdiPlus(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double width, double height, Func<sb.Point, sb.Point> mapToScreen, RectangleGeometry area)
         //{
         //    Brush brush = this.VisualParameters.Fill;
 
@@ -1295,7 +1246,7 @@ namespace IRI.Jab.Common
         //}
 
 
-        //public async Task<Path> AsSingleImage(List<SqlGeometry> geometries, List<string> labels, double width, double height, Func<sb.Point, sb.Point> mapToScreen)
+        //public async Task<Path> AsSingleImage(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double width, double height, Func<sb.Point, sb.Point> mapToScreen)
         //{
         //    Path result = new Path();
 

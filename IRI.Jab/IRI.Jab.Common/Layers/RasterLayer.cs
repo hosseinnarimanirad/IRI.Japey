@@ -246,7 +246,7 @@ namespace IRI.Jab.Common
                       region.YMin);
 
                 //??
-                var table = await ((RelationalDbSource<Ket.SqlServerSpatialExtension.Model.SqlFeature>)this.DataSource).GetEntireFeatureAsync(whereClouse);
+                var table = await ((RelationalDbSource<Feature<IRI.Msh.Common.Primitives.Point>>)this.DataSource).GetEntireFeatureAsync(whereClouse);
 
                 foreach (System.Data.DataRow item in table.Rows)
                 {

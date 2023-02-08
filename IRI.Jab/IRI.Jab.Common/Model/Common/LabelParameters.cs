@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common
 {
@@ -111,9 +112,9 @@ namespace IRI.Jab.Common
             return VisibleRange.IsInRange(inverseMapScale) && this.IsOn;
         }
 
-        public Func<SqlGeometry, SqlGeometry> PositionFunc { get; set; }
+        public Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> PositionFunc { get; set; }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc)
         {
             this.VisibleRange = visibleRange;
 
@@ -126,7 +127,7 @@ namespace IRI.Jab.Common
             this.PositionFunc = positionFunc;
         }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<SqlGeometry, SqlGeometry> positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc)
             : this(visibleRange, fontSize, new SolidColorBrush(foreground), fontFamily, positionFunc)
         {
 

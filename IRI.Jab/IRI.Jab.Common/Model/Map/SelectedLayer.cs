@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Map
 {
-    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : class, ISqlGeometryAware
+    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : class, IGeometryAware<Point>
     {
         public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
@@ -46,14 +46,14 @@ namespace IRI.Jab.Common.Model.Map
 
                 _highlightedFeatures.CollectionChanged += (sender, e) =>
                 {
-                    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+                    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
 
                     RaisePropertyChanged(nameof(IsSingleValueHighlighted));
                     //Update();
                 };
 
                 //Update();
-                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
 
                 RaisePropertyChanged(nameof(IsSingleValueHighlighted));
             }
@@ -69,7 +69,7 @@ namespace IRI.Jab.Common.Model.Map
 
         //private void Update()
         //{
-        //    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<ISqlGeometryAware>());
+        //    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
         //    RaisePropertyChanged(nameof(IsSingleValueHighlighted));
         //}
 
@@ -81,29 +81,29 @@ namespace IRI.Jab.Common.Model.Map
             this.AssociatedLayer = layer;
         }
 
-        public void UpdateSelectedFeatures(IEnumerable<ISqlGeometryAware> items)
+        public void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items)
         {
             Features = new ObservableCollection<T>(items?.Cast<T>());
         }
 
-        public void UpdateHighlightedFeatures(IEnumerable<ISqlGeometryAware> items)
+        public void UpdateHighlightedFeatures(IEnumerable<IGeometryAware<Point>> items)
         {
             HighlightedFeatures = new ObservableCollection<T>(items.Cast<T>());
         }
 
-        public void UpdateSelectedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
+        public void UpdateSelectedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable)
         {
             FeaturesChangedAction?.Invoke(enumerable);
         }
 
-        public void UpdateHighlightedFeaturesOnMap(IEnumerable<ISqlGeometryAware> enumerable)
+        public void UpdateHighlightedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable)
         {
             HighlightFeaturesChangedAction?.Invoke(enumerable);
         }
 
-        public IEnumerable<ISqlGeometryAware> GetSelectedFeatures()
+        public IEnumerable<IGeometryAware<Point>> GetSelectedFeatures()
         {
-            return Features?.Cast<ISqlGeometryAware>().ToList();
+            return Features?.Cast<IGeometryAware<Point>>().ToList();
 
             //AssociatedLayer.
         }
@@ -113,20 +113,20 @@ namespace IRI.Jab.Common.Model.Map
             return Features.Count();
         }
 
-        public IEnumerable<ISqlGeometryAware> GetHighlightedFeatures()
+        public IEnumerable<IGeometryAware<Point>> GetHighlightedFeatures()
         {
-            return HighlightedFeatures?.Cast<ISqlGeometryAware>().ToList();
+            return HighlightedFeatures?.Cast<IGeometryAware<Point>>().ToList();
         }
 
-        private void TryFlashPoint(IEnumerable<ISqlGeometryAware> point)
+        private void TryFlashPoint(IEnumerable<IGeometryAware<Point>> point)
         {
-            if (point?.Count() == 1 && point.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            if (point?.Count() == 1 && point.First().TheGeometry.Type== GeometryType.Point/*.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point*/)
             {
                 RequestFlashSinglePoint?.Invoke(point.First());
             }
         }
 
-        public void Update(ISqlGeometryAware oldGeometry, ISqlGeometryAware newGeometry)
+        public void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry)
         {
             var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
 
@@ -134,9 +134,9 @@ namespace IRI.Jab.Common.Model.Map
 
             var feature = this.Features.Single(f => f.Id == oldGeometry.Id);
 
-            feature.TheSqlGeometry = newGeometry.TheSqlGeometry;
+            feature.TheGeometry = newGeometry.TheGeometry;
 
-            //this.UpdateHighlightedFeatures(new List<ISqlGeometryAware>() { feature });
+            //this.UpdateHighlightedFeatures(new List<IGeometryAware<Point>>() { feature });
             //var highlight = HighlightedFeatures.Single(h => h.Id == oldGeometry.Id)
         }
 
@@ -149,15 +149,15 @@ namespace IRI.Jab.Common.Model.Map
             dataSource.UpdateFeature(itemValue);
         }
 
-        public Action<IEnumerable<ISqlGeometryAware>> FeaturesChangedAction { get; set; }
+        public Action<IEnumerable<IGeometryAware<Point>>> FeaturesChangedAction { get; set; }
 
-        public Action<IEnumerable<ISqlGeometryAware>> HighlightFeaturesChangedAction { get; set; }
+        public Action<IEnumerable<IGeometryAware<Point>>> HighlightFeaturesChangedAction { get; set; }
 
-        public Action<ISqlGeometryAware> RequestFlashSinglePoint { get; set; }
+        public Action<IGeometryAware<Point>> RequestFlashSinglePoint { get; set; }
 
-        public Action<IEnumerable<ISqlGeometryAware>, Action> RequestZoomTo { get; set; }
+        public Action<IEnumerable<IGeometryAware<Point>>, Action> RequestZoomTo { get; set; }
 
-        public Action<ISqlGeometryAware> RequestEdit { get; set; }
+        public Action<IGeometryAware<Point>> RequestEdit { get; set; }
 
 
         public void SaveChanges()
@@ -179,7 +179,7 @@ namespace IRI.Jab.Common.Model.Map
                 {
                     _zoomToCommand = new RelayCommand(param =>
                     {
-                        var features = HighlightedFeatures.Cast<ISqlGeometryAware>();
+                        var features = HighlightedFeatures.Cast<IGeometryAware<Point>>();
                         this.RequestZoomTo?.Invoke(features, () => { TryFlashPoint(features); });
                     });
                 }

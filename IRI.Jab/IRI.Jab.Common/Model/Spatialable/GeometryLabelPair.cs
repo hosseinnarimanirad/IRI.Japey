@@ -1,4 +1,5 @@
-﻿using Microsoft.SqlServer.Types;
+﻿using IRI.Msh.Common.Primitives;
+using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace IRI.Jab.Common.Model
 {
     public class GeometryLabelPairs
     {
-        public List<SqlGeometry> Geometries { get; set; }
+        public List<Geometry<Point>> Geometries { get; set; }
 
         public List<string> Labels { get; set; }
 
-        public GeometryLabelPairs(List<SqlGeometry> geometries, List<string> labels)
+        public GeometryLabelPairs(List<Geometry<Point>> geometries, List<string> labels)
         {
             this.Geometries = geometries;
 

@@ -27,7 +27,7 @@ namespace IRI.Jab.Common
             DataSource = source;
         }
 
-        public List<SqlGeometry> GetLines(BoundingBox boundingBox)
+        public List<Geometry<Point>> GetLines(BoundingBox boundingBox)
         {
             if (DataSource == null)
             {
