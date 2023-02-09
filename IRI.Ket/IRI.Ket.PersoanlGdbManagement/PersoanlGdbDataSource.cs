@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource;
 
-public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
+public class PersoanlGdbDataSource : RelationalDbSource<Feature<Point>>
 {
     protected BoundingBox _extent = BoundingBox.NaN;
 
@@ -112,9 +112,9 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
         }
     }
 
-    protected List<SqlGeometry> SelectGeometries(string selectQuery)
+    protected List<Geometry<Point>> SelectGeometries(string selectQuery)
     {
-        List<SqlGeometry> geometries = new List<SqlGeometry>();
+        List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
         using (var conn = new OleDbConnection(GetConnectionString()))
         {
@@ -132,7 +132,7 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
 
                     var esriShape = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0);
 
-                    geometries.Add(esriShape.AsGeometry().AsSqlGeometry());
+                    geometries.Add(esriShape.AsGeometry());
                 }
             }
         }
@@ -140,52 +140,47 @@ public class PersoanlGdbDataSource : RelationalDbSource<SqlFeature>
         return geometries;
     }
 
-
-
-
-
-
-    public override void Add(ISqlGeometryAware newValue)
-    {
-        throw new NotImplementedException();
-    }
-     
-    public override List<SqlFeature> GetFeatures(SqlGeometry geometry)
+    public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
     {
         throw new NotImplementedException();
     }
 
-    public override List<SqlGeometry> GetGeometries()
+    public override List<Geometry<Point>> GetGeometries()
     {
         throw new NotImplementedException();
     }
 
-    public override List<NamedSqlGeometry> GetGeometryLabelPairs(SqlGeometry geometry)
+    public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point>? geometry)
     {
         throw new NotImplementedException();
     }
 
-    public override SqlFeatureSet GetSqlFeatures()
+    public override FeatureSet GetSqlFeatures()
     {
         throw new NotImplementedException();
     }
 
-    public override void Remove(ISqlGeometryAware value)
+    public override void Add(IGeometryAware<Point> newValue)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Remove(IGeometryAware<Point> value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Update(IGeometryAware<Point> newValue)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void UpdateFeature(IGeometryAware<Point> feature)
     {
         throw new NotImplementedException();
     }
 
     public override void SaveChanges()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Update(ISqlGeometryAware newValue)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void UpdateFeature(ISqlGeometryAware feature)
     {
         throw new NotImplementedException();
     }
