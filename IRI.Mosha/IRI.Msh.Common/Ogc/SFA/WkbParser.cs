@@ -11,7 +11,7 @@ namespace IRI.Msh.Common.Ogc
     {
         #region Wkb To Geometry
 
-        public static IGeometry Parse(byte[] wkb, int srid)
+        public static Geometry<Point> Parse(byte[] wkb, int srid)
         {
             if (wkb.IsNullOrEmpty())
                 return null;

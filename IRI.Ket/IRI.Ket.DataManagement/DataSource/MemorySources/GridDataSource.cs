@@ -10,7 +10,6 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Primitives;
-using IRI.Ket.SqlServerSpatialExtension.Mapping;
 using System.Data;
 
 namespace IRI.Ket.DataManagement.DataSource.MemorySources

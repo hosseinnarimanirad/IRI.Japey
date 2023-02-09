@@ -5,7 +5,7 @@ using IRI.Ket.DigitalImageProcessing;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Algebra;
-using IRI.Msh.Common.Model; 
+using IRI.Msh.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,9 +20,9 @@ namespace IRI.Jab.Common.Raster
 {
     public static class RasterCalculus
     {
-        public static void Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor, double? maxDistance)
+        public static void Create(List<IGeometryAware<Point>> points, Func<IGeometryAware<Point>, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor, double? maxDistance)
         {
-            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = points.Select(p => p.TheGeometry).ToList().GetBoundingBox();
 
             //scale
             var scaleX = width / boundingBox.Width;
@@ -35,7 +35,7 @@ namespace IRI.Jab.Common.Raster
             //create empty raster
             Bitmap result = new Bitmap(width, height);
 
-            List<Point3D> pointSet = points.Select(p => new Point3D(p.TheSqlGeometry.STX.Value, p.TheSqlGeometry.STY.Value, valueFunc(p))).ToList();
+            List<Point3D> pointSet = points.Select(p => new Point3D(p.TheGeometry.Points[0].X, p.TheGeometry.Points[0].Y, valueFunc(p))).ToList();
 
             var maxValue = pointSet.Max(p => p.Z);
             var minValue = pointSet.Min(p => p.Z);
@@ -179,9 +179,9 @@ namespace IRI.Jab.Common.Raster
             });
         }
 
-        public static void CreateFast(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
+        public static void CreateFast(List<IGeometryAware<Point>> points, Func<IGeometryAware<Point>, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
-            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = points.Select(p => p.TheGeometry).ToList().GetBoundingBox();
 
             //scale
             var scaleX = width / boundingBox.Width;
@@ -200,7 +200,7 @@ namespace IRI.Jab.Common.Raster
             Bitmap result;
 
 
-            List<Point3D> pointSet = points.Select(p => new Point3D(p.TheSqlGeometry.STX.Value, p.TheSqlGeometry.STY.Value, valueFunc(p))).ToList();
+            List<Point3D> pointSet = points.Select(p => new Point3D(p.TheGeometry.Points[0].X, p.TheGeometry.Points[0].Y, valueFunc(p))).ToList();
 
             var maxValue = pointSet.Max(p => p.Z);
             var minValue = pointSet.Min(p => p.Z);
@@ -244,9 +244,9 @@ namespace IRI.Jab.Common.Raster
 
         }
 
-        public static void CreateForPolygon(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
+        public static void CreateForPolygon(List<IGeometryAware<Point>> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
-            var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+            var boundingBox = points.Select(p => p.TheGeometry).ToList().GetBoundingBox();
 
             //scale
             var scaleX = width / boundingBox.Width;
@@ -277,7 +277,7 @@ namespace IRI.Jab.Common.Raster
 
                 var color = ranges.Interpolate(value);
 
-                var mapBound = item.TheSqlGeometry.GetBoundingBox();
+                var mapBound = item.TheGeometry.GetBoundingBox();
 
                 var minBitmapX = (mapBound.XMin - boundingBox.XMin) * scale;
                 var maxBitmapX = (mapBound.XMax - boundingBox.XMin) * scale;

@@ -1443,6 +1443,11 @@ namespace IRI.Ket.SpatialExtensions
             return tile.WebMercatorExtent.AsSqlGeometry();
         }
 
+        public static Geometry<Point> AsGeometry(this IRI.Msh.Common.Model.TileInfo tile)
+        {
+            return tile.WebMercatorExtent.AsGeometry(0);
+        }
+
         #endregion
 
 

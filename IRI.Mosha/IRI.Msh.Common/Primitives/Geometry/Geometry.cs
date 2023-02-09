@@ -1541,7 +1541,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return WktParser.Parse(wktString, srid);
     }
 
-    public static IGeometry FromWkb(byte[] bytes, int srid)
+    public static Geometry<Point> FromWkb(byte[] bytes, int srid)
     {
         return WkbParser.Parse(bytes, srid);
     }
@@ -1554,6 +1554,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     public byte[] AsWkb()
     {
         return WkbParser.AsWkb(this);
+    }
+
+    public string AsWkbString()
+    {
+        return IRI.Ket.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(AsWkb(), append0x: true);
     }
 
     #endregion
