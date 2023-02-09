@@ -253,7 +253,7 @@ namespace IRI.Msh.Common.Analysis
 
 
 
-        
+
 
         //
         public static bool IsPointInRing<T>(Geometry<T> ring, T point) where T : IPoint, new()
@@ -327,11 +327,8 @@ namespace IRI.Msh.Common.Analysis
                 throw new NotImplementedException("SpatialUtility.cs > IsPointOnLineString");
 
             var boundingBox = lineString.GetBoundingBox();
-
-            if (boundingBox.Encomapss(lineSegmentStart))
-                return false;
-
-            if (boundingBox.Encomapss(lineSegmentEnd))
+            
+            if (!boundingBox.Intersects(BoundingBox.Create(lineSegmentStart, lineSegmentEnd)))
                 return false;
 
             for (int i = 0; i < numberOfPoints - 1; i++)

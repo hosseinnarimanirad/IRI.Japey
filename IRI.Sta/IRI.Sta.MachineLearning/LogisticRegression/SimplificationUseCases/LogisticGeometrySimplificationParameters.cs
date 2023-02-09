@@ -8,7 +8,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplificationParameters<T> where T : IPoint
+    public class LogisticGeometrySimplificationParameters<T> where T : IPoint, new()
     {
         //public const int NumberOfFeatures = 4;
 
@@ -105,7 +105,8 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             //};
         }
 
-        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */List<LogisticGeometrySimplificationFeatures> features, Func<T, T> toScreenMap = null) : this()
+        public LogisticGeometrySimplificationParameters(T first, T middle, T last, /*int zoomLevel, */
+            List<LogisticGeometrySimplificationFeatures> features, Func<T, T> toScreenMap = null) : this()
         {
             var firstScreenPoint = toScreenMap == null ? first : toScreenMap(first);
             var middleScreenPoint = toScreenMap == null ? middle : toScreenMap(middle);

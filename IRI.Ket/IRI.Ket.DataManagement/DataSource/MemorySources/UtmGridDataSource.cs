@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource.MemorySources
 {
-    public class UtmGridDataSource : FeatureDataSource<SqlUtmSheet>
+    public class UtmGridDataSource : FeatureDataSource<UtmSheet>
     {
         public int UtmZone { get; set; }
 
@@ -118,12 +118,11 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             return result;
         }
 
-        public override List<SqlUtmSheet> GetFeatures(Geometry<Point> geometry)
+        public override List<UtmSheet> GetFeatures(Geometry<Point> geometry)
         {
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
-                                .Select(s => new SqlUtmSheet(s))
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .ToList();
         }
@@ -168,7 +167,6 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
             var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
-                                .Select(s => new SqlUtmSheet(s))
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .Select(s => new Feature<Point>()
                                 {

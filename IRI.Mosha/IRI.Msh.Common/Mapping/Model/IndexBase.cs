@@ -44,6 +44,7 @@ namespace IRI.Msh.Common.Mapping
             get => GetBoundingBox().Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator);
             set => throw new NotImplementedException();
         }
-
+         
+        public abstract Feature<Point> AsFeature();  
     }
 }

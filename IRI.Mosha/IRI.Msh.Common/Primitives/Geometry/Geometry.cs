@@ -348,11 +348,47 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #region Analysis
 
-    public Point GetMeanPoint()
+    public T GetMeanPoint()
     {
         var allPoints = GetAllPoints();
 
-        return new Point(allPoints.Sum(i => i.X) / allPoints.Count, allPoints.Sum(i => i.Y) / allPoints.Count);
+        return new T() { X = allPoints.Sum(i => i.X) / allPoints.Count, Y = allPoints.Sum(i => i.Y) / allPoints.Count };
+    }
+
+    public Geometry<T> GetCentroidPlus()
+    {
+        if (this.IsNullOrEmpty())
+            return Geometry<T>.Null;
+
+        var centroidPoint = GetMeanPoint();
+
+        if (this.IsPolygonOrMultiPolygon() && !Contains(centroidPoint))
+        {
+            centroidPoint = this.GetLastPoint();
+        }
+
+        return Geometry<T>.CreatePointOrLineString(new List<T>() { centroidPoint }, this.Srid);
+    }
+
+    public bool Contains(T point)
+    {
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+            case GeometryType.LineString:
+            case GeometryType.MultiLineString:
+            case GeometryType.Polygon:
+            case GeometryType.MultiPolygon:
+                return IntersectsPoint(point);
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > Contains");
+        }
     }
 
     //must be reviewed: 
@@ -623,7 +659,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
         var secondMbb = other.GetBoundingBox();
 
-        if (!firstMbb.Intersects(secondMbb))
+        if (!firstMbb.Intersects(secondMbb) && !secondMbb.Intersects(firstMbb))
             return false;
 
         switch (other.Type)

@@ -33,7 +33,7 @@ namespace IRI.Ket.Common.Extensions
             LogisticGeometrySimplification<T> model,
             //int zoomLevel,
             Func<T, T> toScreenMap,
-            bool retain3Points = false) where T : IPoint
+            bool retain3Points = false) where T : IPoint, new()
         {
             if (points.IsNullOrEmpty())
                 return points;

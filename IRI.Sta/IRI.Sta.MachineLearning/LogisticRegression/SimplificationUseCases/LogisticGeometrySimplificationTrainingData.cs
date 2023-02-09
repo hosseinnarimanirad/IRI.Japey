@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplificationTrainingData<T> where T : IPoint
+    public class LogisticGeometrySimplificationTrainingData<T> where T : IPoint, new()
     {
         public int GetNumberOfFeatures()
         {

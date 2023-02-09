@@ -166,7 +166,7 @@ namespace IRI.Msh.Common.Primitives
             return xIntersects && yIntersects;
         }
 
-        public bool Intersects(IPoint point)
+        public bool Intersects<T>(T point) where T : IPoint, new()
         {
             return IsInRange(point.X, this.XMin, this.XMax) && IsInRange(point.Y, this.YMin, this.YMax);
         }
@@ -371,6 +371,18 @@ namespace IRI.Msh.Common.Primitives
 
             return (point.X >= this.XMin && point.X <= this.XMax) &&
                     (point.Y >= this.YMin && point.Y <= this.YMax);
+        }
+
+        public static BoundingBox Create<T>(params T[] points) where T : IPoint, new()
+        {
+            if (points.IsNullOrEmpty())
+                return BoundingBox.NaN;
+
+            return new BoundingBox(
+                xMin: points.Min(p => p.X),
+                yMin: points.Min(p => p.Y),
+                xMax: points.Max(p => p.X),
+                yMax: points.Max(p => p.Y));
         }
     }
 }

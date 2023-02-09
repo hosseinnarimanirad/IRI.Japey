@@ -8,7 +8,7 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class LogisticGeometrySimplification<T> where T : IPoint
+    public class LogisticGeometrySimplification<T> where T : IPoint, new()
     {
         //private const int _numberOfFeatures = 3;
 

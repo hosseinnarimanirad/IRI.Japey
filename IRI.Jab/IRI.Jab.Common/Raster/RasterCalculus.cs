@@ -5,14 +5,16 @@ using IRI.Ket.DigitalImageProcessing;
 using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Algebra;
-using IRI.Msh.Common.Model;
-using IRI.Msh.Common.Primitives;
+using IRI.Msh.Common.Model; 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Msh.Common.Primitives;
+using Point = IRI.Msh.Common.Primitives.Point;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Jab.Common.Raster
 {
@@ -111,11 +113,11 @@ namespace IRI.Jab.Common.Raster
             //return result;
         }
 
-        public static async Task<GeoReferencedImage> Create(List<ISqlGeometryAware> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, DiscreteRangeColor ranges, double? maxDistance)
+        public static async Task<GeoReferencedImage> Create(List<IGeometryAware<Point>> points, Func<IGeometryAware<Point>, double> valueFunc, int width, int height, DiscreteRangeColor ranges, double? maxDistance)
         {
             return await Task.Run<GeoReferencedImage>(() =>
             {
-                var boundingBox = SqlGeometryExtensions.GetBoundingBox(points.Select(p => p.TheSqlGeometry).ToList());
+                var boundingBox = points.Select(p => p.TheGeometry).ToList().GetBoundingBox();
 
                 //scale
                 var scaleX = width / boundingBox.Width;
@@ -130,7 +132,7 @@ namespace IRI.Jab.Common.Raster
                 Bitmap result = new Bitmap(width, height);
 
 
-                List<Point3D> pointSet = points.Select(p => new Point3D(p.TheSqlGeometry.STX.Value, p.TheSqlGeometry.STY.Value, valueFunc(p))).ToList();
+                List<Point3D> pointSet = points.Select(p => new Point3D(p.TheGeometry.Points[0].X, p.TheGeometry.Points[0].Y, valueFunc(p))).ToList();
 
                 var maxValue = pointSet.Max(p => p.Z);
                 var minValue = pointSet.Min(p => p.Z);

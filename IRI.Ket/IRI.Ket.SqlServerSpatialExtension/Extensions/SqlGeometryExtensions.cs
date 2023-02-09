@@ -223,12 +223,10 @@ namespace IRI.Ket.SpatialExtensions
             }
         }
 
-        public static SqlGeometry GetCentroidPlus(this SqlGeometry geometry)
+        public static SqlGeometry GetCentroidOrOnSurface(this SqlGeometry geometry)
         {
             if (geometry.IsNotValidOrEmpty())
-            {
                 return SqlGeometry.Null;
-            }
 
             return geometry.STContains(geometry.STCentroid()).Value ? geometry.STCentroid() : geometry.STPointOnSurface();
         }
