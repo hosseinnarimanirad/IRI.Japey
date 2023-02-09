@@ -6,9 +6,9 @@ using System.Windows.Media.Imaging;
 using Microsoft.SqlServer.Types;
 using System.Windows.Media;
 using System.Windows;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using sb = IRI.Msh.Common.Primitives;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 
 namespace IRI.Jab.Common.Convertor
 {

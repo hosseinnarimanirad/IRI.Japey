@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IRI.Sta.DataMining
+namespace IRI.Sta.MachineLearning
 {
     public static class Dbscan
     {

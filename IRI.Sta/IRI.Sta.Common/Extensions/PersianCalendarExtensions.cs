@@ -5,7 +5,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace IRI.Ket.Common.Extensions
+//namespace IRI.Extensions
 //{
 //    public static class PersianCalendarExtensions
 //    {

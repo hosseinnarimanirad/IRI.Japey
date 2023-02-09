@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Algebra;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;

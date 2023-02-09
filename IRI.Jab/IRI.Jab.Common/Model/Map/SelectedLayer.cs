@@ -1,6 +1,6 @@
 ﻿using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;

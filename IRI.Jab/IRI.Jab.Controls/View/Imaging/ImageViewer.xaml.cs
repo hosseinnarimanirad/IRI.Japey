@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using IRI.Msh.Common.Helpers;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Jab.Controls.View
 {

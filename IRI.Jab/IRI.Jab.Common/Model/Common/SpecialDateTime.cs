@@ -1,4 +1,4 @@
-﻿using IRI.Ket.Common.Extensions;
+﻿using IRI.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
   </ItemGroup>
 

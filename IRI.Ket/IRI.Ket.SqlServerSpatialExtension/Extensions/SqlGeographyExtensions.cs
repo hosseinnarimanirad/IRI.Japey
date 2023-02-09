@@ -1,20 +1,9 @@
 ﻿using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Ket.SpatialExtensions;
-using IRI.Msh.Common.Helpers;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Primitives.Esri;
 using IRI.Msh.Common.Model.GeoJson;
-using System.Diagnostics;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Ket.ShapefileFormat.EsriType;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class SqlGeographyExtensions
     {

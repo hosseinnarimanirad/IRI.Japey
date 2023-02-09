@@ -2,6 +2,7 @@
 using IRI.Msh.Common.Model;
 using System;
 using System.Text;
+using IRI.Extensions;
 
 namespace IRI.Ket.WorldfileFormat
 {

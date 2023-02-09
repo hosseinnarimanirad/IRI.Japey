@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class StreamGeometryExtensions
     {

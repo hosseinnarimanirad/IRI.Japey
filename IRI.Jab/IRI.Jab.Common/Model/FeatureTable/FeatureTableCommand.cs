@@ -1,7 +1,7 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.Presenter.Map;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class RectExtensions
     {

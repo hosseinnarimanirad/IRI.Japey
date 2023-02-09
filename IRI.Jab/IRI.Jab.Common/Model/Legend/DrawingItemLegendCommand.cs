@@ -1,15 +1,10 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
-using IRI.Ket.SpatialExtensions;
-using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Extensions;
 using IRI.Msh.Common.Analysis;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
 

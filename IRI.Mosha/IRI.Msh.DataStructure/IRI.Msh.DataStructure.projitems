@@ -11,6 +11,9 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\BalancedKdTree.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\BalancedKdTreeNode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\GeoStatistics\Group.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\GeoStatistics\KdTreePointClusters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\GeoStatistics\PointClusters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\KdTree.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AdvancedStructures\KdTreeNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BinaryHeap\BinaryHeap.cs" />

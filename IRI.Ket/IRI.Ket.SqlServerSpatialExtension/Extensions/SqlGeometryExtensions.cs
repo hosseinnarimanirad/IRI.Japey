@@ -1,18 +1,14 @@
 ﻿using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Primitives.Esri;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Extensions;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class SqlGeometryExtensions
     {
@@ -72,7 +68,7 @@ namespace IRI.Ket.SpatialExtensions
 
             var envelopes = spatialFeatures.AsParallel().Select(i => i?.STEnvelope()).Where(i => !i.IsNullOrEmpty()).ToList();
 
-            return SqlServerSpatialExtension.Helpers.SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
+            return SqlSpatialHelper.GetBoundingBoxFromEnvelopes(envelopes);
 
             //Method 0
             //return BoundingBox.GetMergedBoundingBox(spatialFeatures.Select(i => i.GetBoundingBox()).Where(i => !i.IsNaN()));

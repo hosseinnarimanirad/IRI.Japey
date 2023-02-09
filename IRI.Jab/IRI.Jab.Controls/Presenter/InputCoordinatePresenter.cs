@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
-using IRI.Jab.Controls.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem;
+using IRI.Jab.Controls.Model;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -28,9 +29,9 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        private Model.CoordinateEditor.CoordinateEditor _coordinates;
+        private CoordinateEditor _coordinates;
 
-        public Model.CoordinateEditor.CoordinateEditor Coordinates
+        public CoordinateEditor Coordinates
         {
             get { return _coordinates; }
             set

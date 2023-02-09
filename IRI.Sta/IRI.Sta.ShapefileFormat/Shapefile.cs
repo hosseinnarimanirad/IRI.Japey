@@ -3,17 +3,15 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using IRI.Ket.ShapefileFormat.EsriType;
-using System.Data.SqlTypes;
 using System.Threading.Tasks;
 using IRI.Ket.ShapefileFormat.Reader;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Ket.ShapefileFormat.Writer;
 using IRI.Ket.ShapefileFormat.Model;
 using IRI.Ket.ShapefileFormat.Dbf;
 using IRI.Msh.Common.Primitives;
 using IRI.Ket.ShapefileFormat.Prj;
-using IRI.Ket.SpatialExtensions;
 
 
 

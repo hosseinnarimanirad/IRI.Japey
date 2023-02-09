@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using System.Diagnostics;
 

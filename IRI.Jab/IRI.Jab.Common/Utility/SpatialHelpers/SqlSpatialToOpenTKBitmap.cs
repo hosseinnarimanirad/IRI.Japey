@@ -11,7 +11,7 @@
 //using OpenTK.Graphics.OpenGL;
 //using System.Diagnostics;
 //using System.Windows;
-//using IRI.Jab.Common.Extensions;
+//using IRI.Extensions;
 //using IRI.Ket.SpatialExtensions;
 
 //namespace IRI.Jab.Common.Convertor

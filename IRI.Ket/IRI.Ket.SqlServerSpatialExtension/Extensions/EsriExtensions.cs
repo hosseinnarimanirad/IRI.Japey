@@ -1,13 +1,7 @@
 ﻿using IRI.Msh.Common.Primitives.Esri;
-using IRI.Ket.SpatialExtensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class EsriExtensions
     {

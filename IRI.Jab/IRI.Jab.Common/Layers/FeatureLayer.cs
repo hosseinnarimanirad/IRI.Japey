@@ -1,23 +1,15 @@
 ﻿using IRI.Jab.Common.Convertor;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Model.Symbology;
 using IRI.Ket.DataManagement.DataSource;
-using IRI.Ket.SpatialExtensions;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using sb = IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Extensions;
 
 namespace IRI.Jab.Common
 {

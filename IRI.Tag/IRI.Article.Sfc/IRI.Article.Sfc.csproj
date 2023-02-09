@@ -13,7 +13,6 @@
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Common\IRI.Ket.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Geometry\IRI.Sta.Geometry.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
   </ItemGroup>

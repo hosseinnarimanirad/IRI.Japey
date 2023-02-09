@@ -1,23 +1,11 @@
 ﻿using IRI.Ket.ShapefileFormat.Dbf;
 using IRI.Ket.ShapefileFormat.EsriType;
-
-using IRI.Ket.SqlServerSpatialExtension;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.SqlServer.Types;
 using IRI.Msh.Common.Primitives;
 using System.Data;
-using IRI.Ket.DataManagement.Model;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.SpatialExtensions;
-using IRI.Msh.Common.Extensions;
-using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Ket.ShapefileFormat.Model;
 

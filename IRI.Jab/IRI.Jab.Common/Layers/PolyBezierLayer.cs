@@ -17,7 +17,7 @@ using IRI.Jab.Common;
 //using System.Windows;
 using System.Windows.Input; 
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Jab.Common.Helpers;
 

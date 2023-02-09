@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Msh.Common.Extensions
+namespace IRI.Extensions
 {
     public static class EnumExtensions
     {

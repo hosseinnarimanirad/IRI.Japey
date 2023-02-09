@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using IRI.Ket.ShapefileFormat.EsriType;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 
 namespace IRI.Ket.ShapefileFormat.Writer

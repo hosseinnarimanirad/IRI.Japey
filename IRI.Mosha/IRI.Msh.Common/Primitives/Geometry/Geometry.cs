@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Analysis;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Ogc;
 using IRI.Msh.CoordinateSystem.MapProjection;

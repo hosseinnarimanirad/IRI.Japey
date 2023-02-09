@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

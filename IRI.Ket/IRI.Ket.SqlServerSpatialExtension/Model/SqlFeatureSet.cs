@@ -1,4 +1,4 @@
-﻿using IRI.Ket.SpatialExtensions;
+﻿using IRI.Extensions;
 using IRI.Msh.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;

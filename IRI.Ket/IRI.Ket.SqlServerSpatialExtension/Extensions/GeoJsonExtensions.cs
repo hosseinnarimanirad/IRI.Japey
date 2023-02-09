@@ -1,21 +1,10 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives;
-using IRI.Ket.ShapefileFormat.EsriType;
-using IRI.Ket.SpatialExtensions;
 using IRI.Msh.Common.Model.GeoJson;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.ShapefileFormat.Model;
-using IRI.Ket.ShapefileFormat.Dbf;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class GeoJsonExtensions
     {

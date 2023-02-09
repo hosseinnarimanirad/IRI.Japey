@@ -2,7 +2,7 @@
 using System;
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
-namespace IRI.Jab.Controls.Model.CoordinateEditor
+namespace IRI.Jab.Controls.Model
 {
     public class PointEditorModel : CoordinateEditor
     {

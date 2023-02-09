@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.SqlServer.Types;
-using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Primitives;
 using System.Data;
-using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Ket.SpatialExtensions;
-using System.Threading.Tasks;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using System.Text;
-using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

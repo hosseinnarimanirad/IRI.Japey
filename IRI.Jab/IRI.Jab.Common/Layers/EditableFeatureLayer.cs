@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Shapes;
 using System.Windows.Media;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using System.Windows;
 using System.Windows.Input;
@@ -13,8 +13,7 @@ using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Po
 using Point = IRI.Msh.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
 using IRI.Jab.Common.Model;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.SpatialExtensions;
+using IRI.Msh.CoordinateSystem.MapProjection; 
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.MapMarkers;

@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.Common.Extensions;
+using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,7 @@ namespace IRI.Ket.Common.Service.Waze
 
             //https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=100&mu=100&left=51.263646841049194&right=51.328981161117554&bottom=35.72281242757668&top=35.74842331753895&_=1520571802973
             
-            var time = DateTime.UtcNow - IRI.Ket.Common.Extensions.DateTimeExtensions.JulianDate;
+            var time = DateTime.UtcNow - IRI.Extensions.DateTimeExtensions.JulianDate;
 
             long epoc = ((long)time.TotalSeconds) * (long)1000;
             epoc = _epoc > 0 ? _epoc : epoc;

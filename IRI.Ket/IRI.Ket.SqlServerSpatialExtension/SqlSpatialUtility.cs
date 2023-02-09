@@ -6,7 +6,7 @@ using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.SqlServerSpatialExtension

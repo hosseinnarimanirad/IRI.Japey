@@ -1,15 +1,17 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿
+using IRI.Jab.Controls.Model;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
-namespace IRI.Jab.Controls.Extensions
+namespace IRI.Extensions
 {
-    public static class GeometryExtensions
+    public static class Jab_GeometryExtensions
     {
-        public static Model.CoordinateEditor.CoordinateEditor AsCoordinateEditor(this Geometry<Point> geometry)
+        public static CoordinateEditor? AsCoordinateEditor(this Geometry<Point> geometry)
         {
             if (geometry == null)
                 return null;
@@ -17,22 +19,22 @@ namespace IRI.Jab.Controls.Extensions
             switch (geometry.Type)
             {
                 case GeometryType.LineString:
-                    return new Model.CoordinateEditor.LineStringEditorModel(geometry);
+                    return new LineStringEditorModel(geometry);
 
                 case GeometryType.Polygon:
-                    return new Model.CoordinateEditor.PolygonEditorModel(geometry);
+                    return new PolygonEditorModel(geometry);
 
                 case GeometryType.Point:
-                    return new Model.CoordinateEditor.PointEditorModel(geometry);
+                    return new PointEditorModel(geometry);
 
                 case GeometryType.MultiPoint:
-                    return new Model.CoordinateEditor.MultiPointEditorModel(geometry);
+                    return new MultiPointEditorModel(geometry);
 
                 case GeometryType.MultiLineString:
-                    return new Model.CoordinateEditor.MultiLineStringEditorModel(geometry);
+                    return new MultiLineStringEditorModel(geometry);
 
                 case GeometryType.MultiPolygon:
-                    return new Model.CoordinateEditor.MultiPolygonEditorModel(geometry);
+                    return new MultiPolygonEditorModel(geometry);
 
                 case GeometryType.GeometryCollection:
                 case GeometryType.CircularString:

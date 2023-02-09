@@ -1,6 +1,6 @@
 ﻿using IRI.Msh.Common.Model.Google;
 using IRI.Ket.Common.Devices.ManagedNativeWifi;
-using IRI.Ket.Common.Extensions;
+using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

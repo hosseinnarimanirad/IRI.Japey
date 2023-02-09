@@ -93,7 +93,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\SpatialReferenceType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\Transformation\Transformation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ArrayExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DoubleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\GeometryExtensions.cs" />

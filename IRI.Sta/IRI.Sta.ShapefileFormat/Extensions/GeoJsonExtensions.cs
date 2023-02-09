@@ -1,5 +1,5 @@
 ﻿using IRI.Ket.ShapefileFormat.EsriType;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class GeoJsonExtensions
     {

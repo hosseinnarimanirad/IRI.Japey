@@ -8,10 +8,9 @@ using Microsoft.SqlServer.Types;
 
 using IRI.Msh.Common.Mapping;
 using IRI.Ket.DataManagement.Model;
-using IRI.Ket.Common.Model;
-using IRI.Ket.SqlServerSpatialExtension.GeoStatistics;
-using IRI.Msh.Common.Primitives;
+using IRI.Ket.Common.Model;  
 using IRI.Msh.Common.Helpers;
+using IRI.Msh.DataStructure.AdvancedStructures;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

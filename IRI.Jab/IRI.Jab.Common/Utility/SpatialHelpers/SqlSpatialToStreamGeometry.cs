@@ -5,8 +5,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.SqlServer.Types;
-using IRI.Ket.SpatialExtensions;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
+using IRI.Extensions;
 using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Convertor

@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows;
 using System.ComponentModel;
 using IRI.Jab.Common;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using System.Runtime.CompilerServices;
 using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model.Symbology;

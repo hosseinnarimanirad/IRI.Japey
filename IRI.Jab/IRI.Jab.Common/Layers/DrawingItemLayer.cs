@@ -10,7 +10,7 @@ using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;

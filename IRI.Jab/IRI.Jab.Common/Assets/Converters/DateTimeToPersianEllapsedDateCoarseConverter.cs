@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using IRI.Ket.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Jab.Common.Assets.Converters
 {

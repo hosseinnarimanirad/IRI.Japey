@@ -1,4 +1,4 @@
-﻿using IRI.Ket.SpatialExtensions;
+﻿using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Primitives.Esri;
 using IRI.Msh.Common.Primitives;

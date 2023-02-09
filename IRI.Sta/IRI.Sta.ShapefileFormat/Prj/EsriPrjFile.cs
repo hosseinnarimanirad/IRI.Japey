@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.Common.Extensions;
+using IRI.Extensions;
 using IRI.Ket.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;

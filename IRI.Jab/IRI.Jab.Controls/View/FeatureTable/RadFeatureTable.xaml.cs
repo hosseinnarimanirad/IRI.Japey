@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using sb = IRI.Msh.Common.Primitives;
+using IRI.Extensions;
 
 namespace IRI.Jab.Controls.View
 {

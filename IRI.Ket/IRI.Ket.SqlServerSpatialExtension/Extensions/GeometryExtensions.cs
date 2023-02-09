@@ -1,14 +1,14 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
-using System;
 using System.Diagnostics;
-using IRI.Msh.Common.Model.GeoJson;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Ket.Common.Helpers;
+using IRI.Ket.SqlServerSpatialExtension;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
-    public static class SpatialBaseExtensions
+    public static class GeometryExtensions
     {
         //without counting the last point
         const int minimumPolygonPoints = 3;
@@ -97,11 +97,11 @@ namespace IRI.Ket.SpatialExtensions
                 {
                     case GeometryType.LineString:
                     case GeometryType.MultiLineString:
-                        return Common.Helpers.UnitHelper.GetLengthLabel(geometry.GetLength(toWgs84Geodetic));
+                        return UnitHelper.GetLengthLabel(geometry.GetLength(toWgs84Geodetic));
 
                     case GeometryType.Polygon:
                     case GeometryType.MultiPolygon:
-                        return Common.Helpers.UnitHelper.GetAreaLabel(geometry.GetTrueArea(toWgs84Geodetic));
+                        return UnitHelper.GetAreaLabel(geometry.GetTrueArea(toWgs84Geodetic));
 
                     case GeometryType.Point:
                     case GeometryType.MultiPoint:
@@ -680,7 +680,7 @@ namespace IRI.Ket.SpatialExtensions
 
             var end = toGeodeticWgs84Func(line.End);
 
-            var geodeticLine = SqlServerSpatialExtension.SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<T>() { start, end }, false);
+            var geodeticLine = SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<T>() { start, end }, false);
 
             return geodeticLine.STLength().Value;
         }
@@ -689,17 +689,12 @@ namespace IRI.Ket.SpatialExtensions
         {
             var length = CalculateLength(line, toGeodeticWgs84Func);
 
-            return Common.Helpers.UnitHelper.GetLengthLabel(length);
+            return UnitHelper.GetLengthLabel(length);
         }
 
         #endregion
 
-
-        #region Projection
-
-        #endregion
-
-
+         
 
     }
 }

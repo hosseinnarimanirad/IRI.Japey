@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Jab.Common.Model.CoordinatePanel;
 using IRI.Jab.Common.Presenter;
 

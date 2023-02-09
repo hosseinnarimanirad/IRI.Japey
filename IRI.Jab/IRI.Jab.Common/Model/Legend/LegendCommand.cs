@@ -1,11 +1,11 @@
 ﻿using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Windows;
 using System.Collections.Generic;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Model.Legend

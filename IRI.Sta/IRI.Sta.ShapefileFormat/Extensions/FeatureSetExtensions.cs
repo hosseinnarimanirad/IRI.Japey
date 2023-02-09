@@ -3,14 +3,13 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.ShapefileFormat.Dbf;
-using System.Linq;
-using IRI.Msh.Common.Extensions;
+using System.Linq; 
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Sta.Common.Extensions
+namespace IRI.Extensions
 {
     public static class FeatureSetExtensions
     {

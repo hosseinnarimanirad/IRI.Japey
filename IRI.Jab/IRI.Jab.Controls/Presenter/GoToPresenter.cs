@@ -3,10 +3,10 @@ using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Jab.Controls.Model.GoTo;
 using IRI.Jab.Controls.View.Input;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Jab.Controls.Presenter
 {

@@ -2,7 +2,7 @@
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Raster.Model;
 using IRI.Ket.DigitalImageProcessing;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Algebra;
 using IRI.Msh.Common.Model;
@@ -13,8 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
-using Point = IRI.Msh.Common.Primitives.Point;
-using IRI.Msh.Common.Extensions;
+using Point = IRI.Msh.Common.Primitives.Point; 
 
 namespace IRI.Jab.Common.Raster
 {

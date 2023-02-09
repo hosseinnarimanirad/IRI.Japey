@@ -20,7 +20,7 @@ using System.Threading;
 using Microsoft.SqlServer.Types;
 
 using IRI.Jab.Common;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Jab.MapViewer.Model;
 using sb = IRI.Msh.Common.Primitives;
@@ -28,7 +28,7 @@ using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;

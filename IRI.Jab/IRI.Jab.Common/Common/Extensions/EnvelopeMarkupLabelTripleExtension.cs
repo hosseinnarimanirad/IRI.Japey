@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;

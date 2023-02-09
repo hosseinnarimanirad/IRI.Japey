@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Standards.OGC.Extensions
+namespace IRI.Extensions
 {
     public static class BoundingBoxExtensions
     {

@@ -1,4 +1,4 @@
-﻿using IRI.Ket.Common.Extensions;
+﻿using IRI.Extensions;
 using IRI.Ket.Common.Service;
 using IRI.Msh.Common.Security;
 using System;

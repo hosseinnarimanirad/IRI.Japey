@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.DataMining
+namespace IRI.Sta.MachineLearning
 {
     public static class GeneralStatistics
     {

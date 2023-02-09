@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.DataManagement.Model;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.Common.Analysis;
-using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Analysis; 
 
 namespace IRI.Ket.DataManagement.DataSource
 {

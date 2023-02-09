@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Sta.MachineLearning
 {

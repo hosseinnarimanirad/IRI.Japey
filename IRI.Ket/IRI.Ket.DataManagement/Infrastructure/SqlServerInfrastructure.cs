@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Types;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 
 namespace IRI.Ket.DataManagement.Infrastructure
 {

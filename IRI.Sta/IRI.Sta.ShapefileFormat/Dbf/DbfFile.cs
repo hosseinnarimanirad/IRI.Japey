@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 using IRI.Ket.ShapefileFormat.Model;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Ket.ShapefileFormat.Dbf
 {

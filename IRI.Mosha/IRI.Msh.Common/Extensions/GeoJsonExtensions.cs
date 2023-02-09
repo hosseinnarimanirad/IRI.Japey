@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.Model.GeoJson
+namespace IRI.Extensions
 {
     public static class GeoJsonExtensions
     {

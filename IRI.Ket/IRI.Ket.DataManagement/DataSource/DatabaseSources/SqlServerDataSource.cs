@@ -13,9 +13,9 @@ using IRI.Ket.DataManagement.Model;
 
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using System.Globalization;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Msh.Common.Model;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

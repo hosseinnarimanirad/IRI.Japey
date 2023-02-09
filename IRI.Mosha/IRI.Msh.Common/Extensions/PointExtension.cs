@@ -5,9 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using IRI.Msh.Common.Helpers;
-using IRI.Msh.CoordinateSystem.MapProjection; 
+using IRI.Msh.CoordinateSystem.MapProjection;
+using System.Collections.Generic;
 
-namespace System.Collections.Generic
+namespace IRI.Extensions
 {
     public static class PointExtension
     {

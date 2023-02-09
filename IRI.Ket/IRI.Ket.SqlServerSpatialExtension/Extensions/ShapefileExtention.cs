@@ -1,17 +1,9 @@
 ﻿using IRI.Msh.Common.Primitives;
 using IRI.Ket.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using System.Threading.Tasks;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class ShapefileExtention
     {

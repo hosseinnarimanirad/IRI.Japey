@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Npgsql;
+﻿using Npgsql;
 using System.Globalization;
-using Microsoft.SqlServer.Types;
-using System.Threading.Tasks;
 using System.Data;
-using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Primitives;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Ket.SpatialExtensions;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {

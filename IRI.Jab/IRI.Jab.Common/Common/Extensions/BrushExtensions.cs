@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Media;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class BrushExtensions
     {

@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Xml;
 using System.Collections.Generic;
 using System.Text;
+using IRI.Extensions;
 
 namespace IRI.Msh.Common.Security
 {

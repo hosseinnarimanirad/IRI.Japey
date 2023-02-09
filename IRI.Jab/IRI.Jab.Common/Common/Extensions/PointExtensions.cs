@@ -4,10 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class PointExtensions
     {
+        public static System.Windows.Point AsWpfPoint<T>(this T value) where T : IRI.Msh.Common.Primitives.IPoint, new()
+        {
+            return new System.Windows.Point(value.X, value.Y);
+        }
+
         public static System.Drawing.PointF AsGdiPointF(this System.Windows.Point point)
         {
             return new System.Drawing.PointF((float)point.X, (float)point.Y);

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class ShapeTypeExtensions
     {

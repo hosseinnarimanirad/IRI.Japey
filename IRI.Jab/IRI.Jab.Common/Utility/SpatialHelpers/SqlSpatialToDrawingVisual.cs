@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using IRI.Jab.Common.Extensions; 
+using IRI.Extensions; 
 using System.Threading.Tasks;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Jab.Common.Model.Symbology;
 using sb = IRI.Msh.Common.Primitives;
 

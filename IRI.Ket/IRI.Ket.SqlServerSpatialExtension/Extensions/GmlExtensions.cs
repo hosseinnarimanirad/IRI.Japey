@@ -1,15 +1,9 @@
 ﻿using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
 using System.Data.SqlTypes;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class GmlExtensions
     {

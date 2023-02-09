@@ -2,13 +2,9 @@
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.Common.Gpx;
 using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 //namespace IRI.Ket.SqlServerSpatialExtension
-namespace IRI.Ket.SpatialExtensions
+namespace IRI.Extensions
 {
     public static class GpxExtensions
     {

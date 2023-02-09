@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class AnimationHelper
     {

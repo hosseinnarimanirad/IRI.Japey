@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.Extensions
+namespace IRI.Extensions
 {
     public static class FeatureExtensions
     {

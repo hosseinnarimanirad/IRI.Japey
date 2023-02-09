@@ -1,4 +1,4 @@
-﻿using IRI.Jab.Common.Extensions;
+﻿using IRI.Extensions;
 using IRI.Jab.Common.Helpers;
 using System;
 using System.Collections.Generic;

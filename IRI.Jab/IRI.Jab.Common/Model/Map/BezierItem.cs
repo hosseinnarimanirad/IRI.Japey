@@ -1,6 +1,6 @@
 ﻿using IRI.Msh.CoordinateSystem;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

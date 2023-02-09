@@ -8,7 +8,7 @@ using System.Windows.Data;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
 using System.Threading.Tasks;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using IRI.Ket.DataManagement.DataSource;
 using IRI.Ket.DataManagement.Model;
 

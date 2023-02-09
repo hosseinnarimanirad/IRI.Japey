@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Jab.Common.Extensions;
+using IRI.Extensions;
 using System.Windows;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Helpers;

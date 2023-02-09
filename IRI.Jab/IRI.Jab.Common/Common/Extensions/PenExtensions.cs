@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace IRI.Jab.Common.Extensions
+namespace IRI.Extensions
 {
     public static class PenExtensions
     {

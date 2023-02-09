@@ -1,12 +1,11 @@
-﻿using IRI.Ket.SpatialExtensions;
+﻿using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Extensions;
+using System.Threading.Tasks; 
 
 namespace IRI.Ket.DataManagement.DataSource.MemorySources
 {

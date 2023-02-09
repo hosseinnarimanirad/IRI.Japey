@@ -1,17 +1,18 @@
 ﻿using IRI.Msh.Common.Analysis;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Extensions;
+using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using IRI.Msh.Common.Ogc;
+using System.Diagnostics;
 
-namespace IRI.Msh.Common.Extensions
+namespace IRI.Extensions    
 {
-    public static class GeometryExtensions
+    public static class Msh_GeometryExtensions
     {
         public static BoundingBox GetBoundingBox<T>(this List<Geometry<T>> spatialFeatures) where T : IPoint, new()
         {

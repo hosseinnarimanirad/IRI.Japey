@@ -6,11 +6,10 @@ using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Data;
 using System.Globalization;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using System.Linq;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.Common.Analysis;
-using IRI.Ket.Common.Extensions;
+using IRI.Msh.Common.Analysis; 
 
 namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 {

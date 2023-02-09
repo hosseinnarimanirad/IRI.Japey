@@ -1,15 +1,12 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.Presenter.Map;
-using IRI.Ket.SpatialExtensions;
+using IRI.Extensions;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IRI.Msh.Common.Extensions;
-using System.Text;
-using System.Threading.Tasks;
 using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Model

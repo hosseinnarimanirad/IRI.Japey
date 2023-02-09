@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.Common.Extensions;
+using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

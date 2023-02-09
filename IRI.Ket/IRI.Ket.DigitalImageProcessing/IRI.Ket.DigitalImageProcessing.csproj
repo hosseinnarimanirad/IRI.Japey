@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.DataStructure\IRI.Sta.DataStructure.csproj" />
     <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj" />
   </ItemGroup>
 

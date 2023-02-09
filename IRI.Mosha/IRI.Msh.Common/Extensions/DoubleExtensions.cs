@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace System
+namespace IRI.Extensions
 {
     public static class DoubleExtensions
     {

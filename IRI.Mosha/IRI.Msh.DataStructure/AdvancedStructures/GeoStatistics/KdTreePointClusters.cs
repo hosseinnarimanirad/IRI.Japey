@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.SqlServerSpatialExtension.GeoStatistics
+namespace IRI.Msh.DataStructure.AdvancedStructures
 {
     public class KdTreePointClusters<T> where T : IPoint
     {

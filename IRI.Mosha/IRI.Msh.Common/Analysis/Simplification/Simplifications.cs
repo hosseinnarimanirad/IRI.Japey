@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Extensions;
+﻿using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Primitives;
 using System;

@@ -50,4 +50,6 @@
 
   <Import Project="..\..\IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems" Label="Shared" />
 
+  <Import Project="..\..\IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems" Label="Shared" />
+
 </Project>

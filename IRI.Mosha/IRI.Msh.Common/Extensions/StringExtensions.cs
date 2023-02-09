@@ -1,4 +1,7 @@
-﻿namespace System
+﻿
+using System;
+
+namespace IRI.Extensions
 {
     public static class StringExtensions
     {
