@@ -12,5 +12,6 @@ namespace IRI.Jab.Common.Extensions
         {
             return new System.Windows.Point(value.X, value.Y);
         }
+         
     }
 }

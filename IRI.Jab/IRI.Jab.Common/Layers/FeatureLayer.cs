@@ -25,7 +25,7 @@ namespace IRI.Jab.Common
     {
         public SqlFeatureDataSource DataSource { get; protected set; }
 
-        public Func<SqlFeature, VisualParameters> SymbologyRule { get; set; }
+        public Func<sb.Feature<sb.Point>, VisualParameters> SymbologyRule { get; set; }
 
         private LayerType _type;
 
@@ -81,23 +81,11 @@ namespace IRI.Jab.Common
             element.SetBinding(Path.OpacityProperty, binding5);
         }
 
-        public Path AsBitmapUsingGdiPlus(List<SqlFeature> features, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        public Path AsBitmapUsingGdiPlus(List<sb.Feature<sb.Point>> features, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
         {
             if (features == null)
                 return null;
-
-            //var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
-
-            //var pen = this.VisualParameters.GetGdiPlusPen();
-
-            //var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
-            //    geometries,
-            //    width,
-            //    height,
-            //    mapToScreen,
-            //    pen,
-            //    this.VisualParameters.Fill.AsGdiBrush(),
-            //    this.VisualParameters.PointSymbol);
+             
             var image = SqlFeatureToGdiBitmap.ParseSqlGeometry(
                 features,
                 width,
@@ -108,12 +96,7 @@ namespace IRI.Jab.Common
 
             if (image == null)
                 return null;
-
-            //if (labels != null)
-            //{
-            //    SqlSpatialToGdiBitmap.DrawLabels(labels, geometries, image, mapToScreen, this.Labels);
-            //}
-
+             
             BitmapImage bitmapImage = Helpers.ImageUtility.AsBitmapImage(image, System.Drawing.Imaging.ImageFormat.Png);
 
             image.Dispose();
@@ -140,7 +123,7 @@ namespace IRI.Jab.Common
 
         }
 
-        public FeatureLayer(string name, List<sb.Feature<sb.Point>> features, Func<SqlFeature, VisualParameters> symbologyRule,
+        public FeatureLayer(string name, List<sb.Feature<sb.Point>> features, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule,
                             RenderingApproach rendering, RasterizationApproach toRasterTechnique, ScaleInterval visibleRange)
         {
             if (features == null || features.Count == 0)
@@ -150,13 +133,13 @@ namespace IRI.Jab.Common
         }
 
         public FeatureLayer(string layerName, SqlFeatureDataSource dataSource, RenderingApproach rendering,
-                            RasterizationApproach toRasterTechnique, Func<SqlFeature, VisualParameters> symbologyRule, ScaleInterval visibleRange)
+                            RasterizationApproach toRasterTechnique, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule, ScaleInterval visibleRange)
         {
             Initialize(layerName, dataSource, rendering, toRasterTechnique, visibleRange, symbologyRule);
         }
 
         private void Initialize(string layerName, SqlFeatureDataSource dataSource, RenderingApproach rendering,
-            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Func<SqlFeature, VisualParameters> symbologyRule)
+            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule)
         {
             this.LayerId = Guid.NewGuid();
 

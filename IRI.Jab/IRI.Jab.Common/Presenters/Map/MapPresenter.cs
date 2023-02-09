@@ -229,7 +229,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
         //                LegendCommand.CreateRemoveLayer(this, layer),
 
-        private List<Func<MapPresenter, IFeatureTableCommand>> _defaultVectorLayerFeatureTableCommands = FeatureTableCommands.GetDefaultVectorLayerCommands<SqlFeature>();
+        private List<Func<MapPresenter, IFeatureTableCommand>> _defaultVectorLayerFeatureTableCommands = FeatureTableCommands.GetDefaultVectorLayerCommands<Feature<Point>>();
         public List<Func<MapPresenter, IFeatureTableCommand>> DefaultVectorLayerFeatureTableCommands
         {
             get { return _defaultVectorLayerFeatureTableCommands; }
@@ -241,7 +241,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<SqlFeature>();
+        private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>();
 
         public List<Func<MapPresenter, ILayer, ILegendCommand>> DefaultVectorLayerCommands
         {
@@ -705,7 +705,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<BoundingBox, bool, Action> RequestZoomToExtent;
 
-        public Action<SqlGeometry> RequestZoomToFeature;
+        public Action<Geometry<Point>> RequestZoomToFeature;
 
         public Action RequestEnableRectangleZoom;
 
@@ -762,9 +762,9 @@ namespace IRI.Jab.Common.Presenter.Map
         public Action<Point> RequestFlashPoint;
 
 
-        public Func<List<SqlGeometry>, VisualParameters, string, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
+        public Func<List<Geometry<Point>>, VisualParameters, string, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
 
-        public Func<List<SqlGeometry>, string, VisualParameters, Task> RequestAddGeometries;
+        public Func<List<Geometry<Point>>, string, VisualParameters, Task> RequestAddGeometries;
 
         public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
 
@@ -819,7 +819,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
-        public Func<SqlGeometry, ObservableCollection<System.Data.DataTable>> RequestIdentify;
+        public Func<Geometry<Point>, ObservableCollection<System.Data.DataTable>> RequestIdentify;
 
         public Func<Task<Response<Point>>> RequestGetPoint;
 
@@ -958,7 +958,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 selectedLayer.RequestZoomTo = (features, callback) =>
                 {
-                    var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
+                    var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
                     this.ZoomToExtent(extent, false, callback);
                 };
@@ -967,11 +967,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 selectedLayer.RequestEdit = async g =>
                 {
-                    var editResult = await EditAsync(g.TheSqlGeometry.AsGeometry(), MapSettings.EditingOptions);
+                    var editResult = await EditAsync(g.TheGeometry, MapSettings.EditingOptions);
 
                     if (editResult.HasNotNullResult())
                     {
-                        SqlFeature f = new SqlFeature(editResult.Result.AsSqlGeometry()) { Id = g.Id };
+                        Feature<Point> f = new Feature<Point>(editResult.Result) { Id = g.Id };
 
                         selectedLayer.Update(g, f);
                     }
@@ -1057,7 +1057,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         }
 
-        private async void ShowHighlightedFeatures(IEnumerable<ISqlGeometryAware> enumerable)
+        private async void ShowHighlightedFeatures(IEnumerable<IGeometryAware<Point>> enumerable)
         {
             ClearLayer("__$highlight", true);
 
@@ -1068,20 +1068,19 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            if (enumerable?.Count() < 10 && enumerable.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            if (enumerable?.Count() < 10 && enumerable.First().TheGeometry.Type== GeometryType.Point)
             {
-                FlashPoints(enumerable.Select(e => (Point)e.TheSqlGeometry.AsPoint()).ToList());
-                //FlashSinglePoint?.Invoke(enumerable.First());
+                FlashPoints(enumerable.Select(e => (Point)e.TheGeometry.AsPoint()).ToList());
             }
             else
             {
-                await DrawGeometriesAsync(enumerable.Select(i => i.TheSqlGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
+                await DrawGeometriesAsync(enumerable.Select(i => i.TheGeometry).ToList(), "__$highlight", VisualParameters.GetDefaultForHighlight(enumerable.FirstOrDefault()));
             }
         }
 
-        public void FlashHighlightedFeatures(ISqlGeometryAware geometry)
+        public void FlashHighlightedFeatures(IGeometryAware<Point> geometry)
         {
-            var point = geometry?.TheSqlGeometry?.AsPoint();
+            var point = geometry?.TheGeometry?.AsPoint();
 
             if (point != null)
             {
@@ -1092,7 +1091,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public async Task SelectDrawingItem(DrawingItemLayer layer)
         {
-            var highlightGeo = layer.Geometry.AsSqlGeometry();
+            var highlightGeo = layer.Geometry;
 
             var visualParameters = VisualParameters.GetDefaultForSelection();
 
@@ -1101,23 +1100,23 @@ namespace IRI.Jab.Common.Presenter.Map
             await SelectGeometryAsync(highlightGeo, visualParameters, layer.HighlightGeometryKey.ToString());
         }
 
-        public async Task SelectGeometryAsync(SqlGeometry geometry)
+        public async Task SelectGeometryAsync(Geometry<Point> geometry)
         {
-            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry });
+            await SelectGeometriesAsync(new List<Geometry<Point>>() { geometry });
         }
 
-        public async Task SelectGeometryAsync(SqlGeometry geometry, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometryAsync(Geometry<Point> geometry, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
         {
-            await SelectGeometriesAsync(new List<SqlGeometry>() { geometry }, visualParameters, layerName, pointSymbol);
+            await SelectGeometriesAsync(new List<Geometry<Point>>() { geometry }, visualParameters, layerName, pointSymbol);
         }
 
-        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries)
+        public async Task SelectGeometriesAsync(List<Geometry<Point>> geometries)
         {
             //await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
             await this.SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection(), null);
         }
 
-        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<Geometry<Point>> geometries, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
         {
             await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, layerName, pointSymbol);
         }
@@ -1128,14 +1127,14 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
         }
 
-        public async Task DrawGeometriesAsync(List<SqlGeometry> geometry, string name, VisualParameters parameters)
+        public async Task DrawGeometriesAsync(List<Geometry<Point>> geometry, string name, VisualParameters parameters)
         {
             await this.RequestAddGeometries?.Invoke(geometry, name, parameters);
         }
 
-        public async Task DrawGeometryAsync(SqlGeometry geometry, string name, VisualParameters parameters)
+        public async Task DrawGeometryAsync(Geometry<Point> geometry, string name, VisualParameters parameters)
         {
-            await DrawGeometriesAsync(new List<SqlGeometry> { geometry }, name, parameters);
+            await DrawGeometriesAsync(new List<Geometry<Point>> { geometry }, name, parameters);
         }
 
 
@@ -1150,11 +1149,11 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        public ObservableCollection<System.Data.DataTable> Identify(Point arg)
+        public ObservableCollection<System.Data.DataTable>? Identify(Point arg)
         {
             if (RequestIdentify != null)
             {
-                return RequestIdentify(arg.AsSqlGeometry());
+                return RequestIdentify(arg.AsGeometry(SridHelper.WebMercator)/*.AsSqlGeometry()*/);
             }
             else
             {
@@ -1162,7 +1161,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public ObservableCollection<System.Data.DataTable> Identify(SqlGeometry arg)
+        public ObservableCollection<System.Data.DataTable>? Identify(Geometry<Point> arg)
         {
             if (RequestIdentify != null)
             {
@@ -1721,16 +1720,7 @@ namespace IRI.Jab.Common.Presenter.Map
                         commands.Add(item(this, layer));
                     }
 
-                    layer.Commands = commands;
-
-                    //layer.Commands = new List<ILegendCommand>()
-                    //{
-                    //    LegendCommand.CreateZoomToExtentCommand(this, layer),
-                    //    LegendCommand.CreateSelectByDrawing<ISqlGeometryAware>(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateShowAttributeTable<ISqlGeometryAware>(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-                    //    LegendCommand.CreateRemoveLayer(this, layer),
-                    //};
+                    layer.Commands = commands; 
                 }
 
                 if (!(layer?.FeatureTableCommands?.Count > 0))
@@ -1866,60 +1856,14 @@ namespace IRI.Jab.Common.Presenter.Map
             //        ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
             //    }
             //};
-
-
+             
 
             if (layer.RequestChangeSymbology == null)
             {
                 layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
             }
         }
-
-        //protected void TrySetCommands<T>(ILayer layer) where T : class, ISqlGeometryAware
-        //{
-        //    if (layer is VectorLayer)
-        //    {
-        //        if (!(layer?.Commands?.Count > 0))
-        //        {
-        //            //1399.06.10
-        //            //layer.Commands = new List<ILegendCommand>()
-        //            //{
-        //            //    LegendCommand.CreateZoomToExtentCommand(this, layer),
-        //            //    LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer)layer),
-        //            //    LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer)layer),
-        //            //    LegendCommand.CreateClearSelected(this, (VectorLayer)layer),
-        //            //    LegendCommand.CreateRemoveLayer(this, layer),
-        //            //};
-
-        //            var commands = new List<ILegendCommand>();
-
-        //            foreach (var item in DefaultVectorLayerCommands)
-        //            {
-        //                commands.Add(item(this, layer));
-        //            }
-
-        //            layer.Commands = commands;
-        //        }
-        //        if ((layer as VectorLayer).RequestChangeSymbology == null)
-        //        {
-        //            (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
-        //        }
-        //    }
-
-        //    //this should not happed because source must be FeatureDataSource<T>
-        //    else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
-        //    {
-        //        if (!(layer?.Commands?.Count > 0))
-        //        {
-        //            layer.Commands = new List<ILegendCommand>()
-        //            {
-        //                LegendCommand.CreateZoomToExtentCommand(this, layer),
-        //                LegendCommand.CreateRemoveLayer(this, layer),
-        //            };
-        //        }
-        //    }
-        //}
-
+          
 
         public void AddLayer(ILayer layer)
         {
@@ -1931,7 +1875,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestAddLayer?.Invoke(layer);
         }
 
-        public void AddLayer<T>(ILayer layer) where T : class, ISqlGeometryAware
+        public void AddLayer<T>(ILayer layer) where T : class, IGeometryAware<Point>
         {
             TrySetCommands(layer);
 
@@ -2040,7 +1984,7 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, callback);
         }
 
-        public void Zoom(SqlGeometry geometry)
+        public void Zoom(Geometry<Point> geometry)
         {
             this.RequestZoomToFeature?.Invoke(geometry);
         }
@@ -2246,7 +2190,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     RenderingApproach.Default,
                     RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-                this.AddLayer<SqlFeature>(vectorLayer);
+                this.AddLayer<Feature<Point>>(vectorLayer);
             }
             catch (Exception ex)
             {
@@ -2480,7 +2424,7 @@ namespace IRI.Jab.Common.Presenter.Map
                     RenderingApproach.Default,
                     RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-                this.AddLayer<SqlFeature>(vectorLayer);
+                this.AddLayer<Feature<Point>>(vectorLayer);
             }
             catch (Exception ex)
             {

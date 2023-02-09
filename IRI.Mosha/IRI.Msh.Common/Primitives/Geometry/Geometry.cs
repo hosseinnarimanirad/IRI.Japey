@@ -232,6 +232,21 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return BoundingBox.CalculateBoundingBox(GetAllPoints());
     }
 
+    public bool IsPointOrMultiPoint()
+    {
+        return Type == GeometryType.Point || Type == GeometryType.MultiPoint;
+    }
+
+    public bool IsLineStringOrMultiLineString()
+    {
+        return Type == GeometryType.LineString || Type == GeometryType.MultiLineString;
+    }
+
+    public bool IsPolygonOrMultiPolygon()
+    {
+        return Type == GeometryType.Polygon || Type == GeometryType.MultiPolygon;
+    }
+
     #endregion
 
     #region Find

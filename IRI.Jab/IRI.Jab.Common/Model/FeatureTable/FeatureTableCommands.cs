@@ -10,6 +10,7 @@ using System.Linq;
 using IRI.Msh.Common.Extensions;
 using System.Text;
 using System.Threading.Tasks;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Model
 {
@@ -51,7 +52,7 @@ namespace IRI.Jab.Common.Model
 
                 var features = layer.GetHighlightedFeatures();
 
-                var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheSqlGeometry.GetBoundingBox()));
+                var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
                 map.ZoomToExtent(extent, false, () => { TryFlashPoint(map, features); });
             });
@@ -59,9 +60,9 @@ namespace IRI.Jab.Common.Model
             return result;
         }
 
-        private static void TryFlashPoint(MapPresenter map, IEnumerable<ISqlGeometryAware> point)
+        private static void TryFlashPoint(MapPresenter map, IEnumerable<IGeometryAware<Point>> point)
         {
-            if (point?.Count() == 1 && point.First().TheSqlGeometry.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point)
+            if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point)
             {
                 map.FlashHighlightedFeatures(point.First());
             }
@@ -142,7 +143,7 @@ namespace IRI.Jab.Common.Model
 
                 foreach (var feature in features)
                 {
-                    map.AddDrawingItem(feature.TheSqlGeometry.AsGeometry());
+                    map.AddDrawingItem(feature.TheGeometry);
                 }
 
                 //
@@ -173,7 +174,7 @@ namespace IRI.Jab.Common.Model
 
 
 
-        internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
+        internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
             return new List<Func<MapPresenter, IFeatureTableCommand>>()
             {

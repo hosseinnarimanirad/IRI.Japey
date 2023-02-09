@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Convertor
 {
@@ -42,5 +43,34 @@ namespace IRI.Jab.Common.Convertor
             return result;
         }
 
+        internal static drawing.Bitmap ParseSqlGeometry(
+           List<sb.Feature<sb.Point>> features,
+           double width,
+           double height,
+           Func<Point, Point> mapToScreen,
+           Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule)
+        {
+            var result = new drawing.Bitmap((int)width, (int)height);
+
+            drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+
+            int p = 0;
+
+            if (features != null)
+            {
+                foreach (var item in features)
+                {
+                    var symbology = symbologyRule(item);
+
+                    var pen = symbology.GetGdiPlusPen(symbology.Opacity);
+
+                    var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
+
+                    SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
+                }
+            }
+
+            return result;
+        }
     }
 }

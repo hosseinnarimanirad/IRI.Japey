@@ -1,6 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Map;
-using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.Common.Primitives;
+using IRI.Ket.SqlServerSpatialExtension.Model; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Controls.View
 {
@@ -75,7 +75,7 @@ namespace IRI.Jab.Controls.View
                     break;
             }
              
-            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(ISqlGeometryAware.TheSqlGeometry)) || e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
+            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(sb.IGeometryAware<sb.Point>.TheGeometry)) || e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
             {
                 e.Cancel = true;
             }
@@ -83,7 +83,7 @@ namespace IRI.Jab.Controls.View
 
         private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<ISqlGeometryAware>());
+            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<sb.IGeometryAware<sb.Point>>());
         }
 
         private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)

@@ -6,6 +6,7 @@ using System;
 using System.Windows;
 using System.Collections.Generic;
 using IRI.Jab.Common.Extensions;
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -149,11 +150,11 @@ namespace IRI.Jab.Common.Model.Legend
 
         #region Defaults for VectorLayer
 
-        public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, ISqlGeometryAware
+        public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
             return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer as VectorLayer);
         }
-        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, ISqlGeometryAware
+        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, sb.IGeometryAware<sb.Point>
         {
             var result = new LegendCommand()
             {
@@ -166,24 +167,9 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 if (layer == null || map == null)
                     return;
-
-                //System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
-
-                //System.Diagnostics.Debug.WriteLine($"Command start");
-
+                 
                 var features = (layer as VectorLayer).GetFeatures<T>();
-
-                //var list = new List<SqlIndex250k>() {
-                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k()),
-                //    new SqlIndex250k(new Msh.Common.Mapping.Index250k())};
-
-                //watch.Stop();
-                //System.Diagnostics.Debug.WriteLine($"Get Features finished {watch.ElapsedMilliseconds}");
-                //watch.Restart();
-
+                 
                 var newLayer = new Model.Map.SelectedLayer<T>(layer);
 
                 //newLayer.RequestSave = l =>
@@ -201,27 +187,18 @@ namespace IRI.Jab.Common.Model.Legend
                 }
 
 
-                map.AddSelectedLayer(newLayer);
-
-
-                //map.SelectedLayers.Add(newLayer);
-
-                //map.CurrentLayer = newLayer;               
-
-                //watch.Stop();
-                //System.Diagnostics.Debug.WriteLine($"map.SelectedLayers.Add {watch.ElapsedMilliseconds}");
-
+                map.AddSelectedLayer(newLayer); 
             });
 
             return result;
         }
 
 
-        public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, ISqlGeometryAware
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
             return (presenter, layer) => CreateSelectByDrawing<T>(presenter, layer as VectorLayer);
         }
-        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, ISqlGeometryAware
+        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, sb.IGeometryAware<sb.Point>
         {
             var result = new LegendCommand()
             {
@@ -241,7 +218,7 @@ namespace IRI.Jab.Common.Model.Legend
                 if (!drawingResult.HasNotNullResult())
                     return;
 
-                var features = layer.GetFeatures<T>(drawingResult.Result.AsSqlGeometry());
+                var features = layer.GetFeatures<T>(drawingResult.Result);
 
                 if (features == null)
                 {
@@ -381,13 +358,8 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, ISqlGeometryAware
+        internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
-            //LegendCommand.CreateZoomToExtentCommand(this, layer),
-            //                LegendCommand.CreateSelectByDrawing<T>(this, (VectorLayer) layer),
-            //                LegendCommand.CreateShowAttributeTable<T>(this, (VectorLayer) layer),
-            //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
-            //                LegendCommand.CreateRemoveLayer(this, layer),
             return new List<Func<MapPresenter, ILayer, ILegendCommand>>()
             {
                 CreateSelectByDrawingFunc<T>(),
@@ -400,30 +372,6 @@ namespace IRI.Jab.Common.Model.Legend
         }
 
         #endregion
-
-
-        //public static ILegendCommand CreateShowModal(MapPresenter map, ILayer layer, Window window)
-        //{
-        //    //var result = new LegendCommand()
-        //    //{
-        //    //    PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarCart,
-        //    //    Layer = layer,
-        //    //    ToolTip = "سمبل‌گذاری",
-        //    //};
-
-        //    //result.Command = new RelayCommand(param =>
-        //    //{
-        //    //    window.DataContext = layer;
-
-        //    //    window.Show();
-        //    //});
-
-        //    //return result;
-
-
-        //}
-
-
 
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using IRI.Msh.Common.Extensions;
 using IRI.Msh.Common.Model;
 using System.Linq;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Msh.Common.Primitives
 {

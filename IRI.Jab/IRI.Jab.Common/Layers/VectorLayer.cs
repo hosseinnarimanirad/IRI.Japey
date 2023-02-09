@@ -24,6 +24,8 @@ using IRI.Ket.SpatialExtensions;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension.Model;
+using IRI.Msh.Common.Extensions;
+using IRI.Sta.Common.Extensions;
 
 namespace IRI.Jab.Common
 {
@@ -709,38 +711,31 @@ namespace IRI.Jab.Common
 
             Binding binding5 = new Binding() { Source = this, Path = new PropertyPath("VisualParameters.Opacity"), Mode = BindingMode.TwoWay };
             element.SetBinding(Path.OpacityProperty, binding5);
-            //}
-            //else
-            //{
-            //    throw new NotImplementedException();
-            //}
         }
-
-        private LayerType GetGeometryType(SqlGeometry geometry)
+         
+        private LayerType GetGeometryType(sb.Geometry<sb.Point> geometry)
         {
-            var geometryType = geometry.GetOpenGisType();
-
-            switch (geometryType)
+            switch (geometry.Type)
             {
-                case OpenGisGeometryType.Point:
-                case OpenGisGeometryType.MultiPoint:
+                case sb.GeometryType.Point:
+                case sb.GeometryType.MultiPoint:
                     return LayerType.Point;
 
-                case OpenGisGeometryType.LineString:
-                case OpenGisGeometryType.MultiLineString:
+                case sb.GeometryType.LineString:
+                case sb.GeometryType.MultiLineString:
                     return LayerType.Polyline;
 
-                case OpenGisGeometryType.Polygon:
-                case OpenGisGeometryType.MultiPolygon:
-                    return LayerType.Polygon;
+                case sb.GeometryType.Polygon:
+                case sb.GeometryType.MultiPolygon:
+                    return LayerType.Polygon; 
 
-                case OpenGisGeometryType.GeometryCollection:
-                case OpenGisGeometryType.CircularString:
-                case OpenGisGeometryType.CompoundCurve:
-                case OpenGisGeometryType.CurvePolygon:
+                case sb.GeometryType.GeometryCollection:
+                case sb.GeometryType.CircularString:
+                case sb.GeometryType.CompoundCurve:
+                case sb.GeometryType.CurvePolygon:
                 default:
                     throw new NotImplementedException();
-            }
+            } 
         }
 
         #region Raster Save And Export Methods

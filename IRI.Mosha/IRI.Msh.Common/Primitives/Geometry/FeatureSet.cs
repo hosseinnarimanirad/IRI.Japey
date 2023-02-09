@@ -1,6 +1,9 @@
-﻿using IRI.Msh.Common.Model;
+﻿using IRI.Msh.Common.Extensions;
+using IRI.Msh.Common.Model;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IRI.Msh.Common.Primitives
@@ -21,6 +24,7 @@ namespace IRI.Msh.Common.Primitives
 
             this.Fields = new List<Field>();
         }
+         
     }
 
     public class FeatureSet<T> where T : IGeometryAware<Point>

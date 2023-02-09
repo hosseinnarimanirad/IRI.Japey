@@ -150,7 +150,7 @@ namespace IRI.Jab.MapViewer
                     HttpClientHandler handler = new HttpClientHandler();
                     handler.Proxy = null;
                     handler.UseProxy = false;
-                    HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 3) }; 
+                    HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 3) };
                     HttpClient.DefaultRequestHeaders.Add("User-Agent", "app!");
                 }
 
@@ -774,7 +774,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
 
-            presenter.RequestIdentify = point => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(point));
+            presenter.RequestIdentify = point => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(point.AsSqlGeometry()));
 
             presenter.RequestGetPoint = () => SelectPointAsync();
 
@@ -1000,7 +1000,7 @@ namespace IRI.Jab.MapViewer
 
         public void SetVectorLayer(
             ScaleInterval scaleInterval, FeatureDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
-            bool isLabeled = false, Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
+            bool isLabeled = false, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
         {
             LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
@@ -1298,7 +1298,7 @@ namespace IRI.Jab.MapViewer
                 var mapScale = this.MapScale;
 
                 //consider if layer was Labeled
-                var features = featureLayer.DataSource.GetFeatures(extent.AsSqlGeometry(SridHelper.WebMercator));
+                var features = featureLayer.DataSource.GetFeatures(extent.AsGeometry(SridHelper.WebMercator));
 
                 if (this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;
@@ -1522,11 +1522,6 @@ namespace IRI.Jab.MapViewer
             double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
 
             var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
-
-            //AddNonTiledLayer(new VectorLayer("", new List<SqlGeometry>() { tile.MercatorExtent.ToSqlGeometry(0) }, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus));
-
-            //var mapShift = new Point(tile.MercatorExtent.TopLeft.X - extent.TopLeft.X, tile.MercatorExtent.BottomRight.Y - extent.BottomRight.Y);
-
 
 
             Path pathImage;
@@ -2963,9 +2958,9 @@ namespace IRI.Jab.MapViewer
         }
 
         //Get the FontFamily in method parameters
-        public async Task DrawGeometriesAsync(List<SqlGeometry> geometries, string layerName,
+        public async Task DrawGeometriesAsync(List<sb.Geometry<sb.Point>> geometries, string layerName,
                                         VisualParameters visualElements, List<object> labels = null,
-                                        Func<SqlGeometry, SqlGeometry> positionFunc = null, int fontSize = 0,
+                                        Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null, int fontSize = 0,
                                         Brush labelBackground = null, FontFamily font = null, RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
         {
             if (geometries == null || geometries.Count < 1)
@@ -2986,7 +2981,7 @@ namespace IRI.Jab.MapViewer
             }
             else
             {
-                source = new MemoryDataSource<SqlFeature>(geometries.Zip(labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label, null, f => f);
+                source = new MemoryDataSource<sb.Feature<sb.Point>>(geometries.Zip(labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null, f => f);
             }
 
 
@@ -3013,7 +3008,7 @@ namespace IRI.Jab.MapViewer
             if (geometries == null)
                 return;
 
-            var source = new MemoryDataSource<SqlFeature>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new SqlFeature(g, l.ToString())).ToList(), f => f.Label, null, f => f);
+            var source = new MemoryDataSource<sb.Feature<sb.Point>>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null, f => f);
 
             var layer = new VectorLayer(
                 layerName,
@@ -3033,7 +3028,7 @@ namespace IRI.Jab.MapViewer
             await AddNonTiledLayer(layer);
         }
 
-        public async Task DrawGeometries(List<SqlGeometry> geometries, string layerName,
+        public async Task DrawGeometries(List<sb.Geometry<sb.Point>> geometries, string layerName,
                                         VisualParameters visualParameters, Geometry pointSymbol)
         {
             if (geometries == null || geometries.Count < 1)
@@ -3054,7 +3049,7 @@ namespace IRI.Jab.MapViewer
             await AddNonTiledLayer(layer);
         }
 
-        public async Task SelectGeometriesAsync(List<SqlGeometry> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
+        public async Task SelectGeometriesAsync(List<sb.Geometry<sb.Point>> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
         {
             ClearLayer(LayerType.Selection, true);
 
@@ -4132,14 +4127,12 @@ namespace IRI.Jab.MapViewer
             //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
         }
 
-        private void ZoomToFeature(SqlGeometry geometry)
+        private void ZoomToFeature(sb.Geometry<sb.Point> geometry)
         {
-            if (geometry == null || geometry.IsNull)
-            {
+            if (geometry.IsNullOrEmpty())
                 return;
-            }
 
-            if (geometry.GetOpenGisType() == OpenGisGeometryType.Point)
+            if (geometry.Type == sb.GeometryType.Point)
             {
                 //98.01.18. consider using
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(13), geometry.AsPoint());
@@ -4858,7 +4851,7 @@ namespace IRI.Jab.MapViewer
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))
                     continue;
 
-                var features = layer.DataSource.GetEntireFeatures(geometry);
+                var features = layer.DataSource.GetEntireFeatures(geometry.AsGeometry());
 
                 if (features != null)
                 {

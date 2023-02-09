@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem;
+using IRI.Msh.Common.Extensions;
 
 namespace IRI.Jab.Controls.Presenter
 {
