@@ -1,14 +1,33 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Extensions;
+using IRI.Msh.Algebra;
 using IRI.Msh.Common.Analysis.Topology;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IRI.Msh.Common.Analysis
 {
     public class TopologyUtility
     {
+        public static Point CalculateCircumcenterCenterPoint<T>(T firstPoint, T secondPoint, T thirdPoint) where T : IPoint, new()
+        {
+            double x1 = firstPoint.X; double y1 = firstPoint.Y;
+
+            double x2 = secondPoint.X; double y2 = secondPoint.Y;
+
+            double x3 = thirdPoint.X; double y3 = thirdPoint.Y;
+
+            double temp = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+
+            double tempX = ((y1 * y1 + x1 * x1) * (y2 - y3) + (y2 * y2 + x2 * x2) * (y3 - y1) + (y3 * y3 + x3 * x3) * (y1 - y2)) / temp;
+
+            double tempY = ((y1 * y1 + x1 * x1) * (x3 - x2) + (y2 * y2 + x2 * x2) * (x1 - x3) + (y3 * y3 + x3 * x3) * (x2 - x1)) / temp;
+
+            return new Point(tempX, tempY);
+        }
+
         public static PointCircleRelation GetPointCircleRelation<T>(T sightlyPoint, T point1, T point2, T point3) where T : IPoint, new()
         {
             // check if point1, point2, point3 are in ccw form
@@ -55,6 +74,14 @@ namespace IRI.Msh.Common.Analysis
             return (result > 0 ? PointCircleRelation.In : (result == 0 ? PointCircleRelation.On : PointCircleRelation.Out));
         }
 
+        /// <summary>
+        /// Check whether the sightly point is in the direction of the vector or not
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sightlyPoint"></param>
+        /// <param name="startVertex"></param>
+        /// <param name="endVertex"></param>
+        /// <returns></returns>
         public static PointVectorRelation GetPointVectorRelation<T>(T sightlyPoint, T startVertex, T endVertex) where T : IPoint, new()
         {
             double tempValue = (startVertex.X - sightlyPoint.X) * (endVertex.Y - sightlyPoint.Y) -
@@ -76,7 +103,8 @@ namespace IRI.Msh.Common.Analysis
             return PointVectorRelation.LiesOnTheLine;
         }
 
-        public static PointLineSegementRelation GetPointLineSegmentRelation<T>(T sightlyPoint, T startVertex, T endVertex) where T : IPoint, new()
+
+        public static bool PointIntersectsLineSegment<T>(T sightlyPoint, T startVertex, T endVertex) where T : IPoint, new()
         {
             if (GetPointVectorRelation(sightlyPoint, startVertex, endVertex) == PointVectorRelation.LiesOnTheLine)
             {
@@ -85,34 +113,17 @@ namespace IRI.Msh.Common.Analysis
                    (sightlyPoint.X < startVertex.X && sightlyPoint.X < endVertex.X) ||
                    (sightlyPoint.Y < startVertex.Y && sightlyPoint.Y < endVertex.Y))
                 {
-                    return PointLineSegementRelation.Out;
+                    return false;
                 }
                 else
                 {
-                    return PointLineSegementRelation.On;
+                    return true;
                 }
             }
 
-            return PointLineSegementRelation.Out;
+            return false;
         }
 
-
-        public static Point CalculateCircumcenterCenterPoint<T>(T firstPoint, T secondPoint, T thirdPoint) where T : IPoint, new()
-        {
-            double x1 = firstPoint.X; double y1 = firstPoint.Y;
-
-            double x2 = secondPoint.X; double y2 = secondPoint.Y;
-
-            double x3 = thirdPoint.X; double y3 = thirdPoint.Y;
-
-            double temp = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
-
-            double tempX = ((y1 * y1 + x1 * x1) * (y2 - y3) + (y2 * y2 + x2 * x2) * (y3 - y1) + (y3 * y3 + x3 * x3) * (y1 - y2)) / temp;
-
-            double tempY = ((y1 * y1 + x1 * x1) * (x3 - x2) + (y2 * y2 + x2 * x2) * (x1 - x3) + (y3 * y3 + x3 * x3) * (x2 - x1)) / temp;
-
-            return new Point(tempX, tempY);
-        }
 
         public static LineLineRelation CalculateIntersection<T>(T firstLineFirstPoint,
             T firstLineSecondPoint,
@@ -182,17 +193,15 @@ namespace IRI.Msh.Common.Analysis
 
 
         //todo: halate montabeg shodan dar nazar gerefte nashode!
-        public static bool DoseIntersectDirectionTheLineSegment<T>(
+        public static bool DoesIntersectDirectionTheLineSegment<T>(
             T startOfDirection,
             T endOfDirection,
             T startOfLine,
             T endOfLine,
             out T intersection) where T : IPoint, new()
         {
-
             if (IntersectLineWithLineSegment(startOfDirection, endOfDirection, startOfLine, endOfLine, out intersection) == LineLineSegmentRelation.Intersect)
             {
-
                 if (endOfDirection.X != startOfDirection.X)
                 {
                     return (intersection.X - startOfDirection.X) / (endOfDirection.X - startOfDirection.X) > 1;
@@ -290,6 +299,23 @@ namespace IRI.Msh.Common.Analysis
             return false;
         }
 
+        public static bool IsPointInPolygon<T>(Geometry<T> polygon, T point) where T : IPoint, new()
+        {
+            if (polygon.Type != GeometryType.Polygon)
+                throw new NotImplementedException("TopologyUtility > IsPointInPolygon");
+
+            var inOutterRing = IsPointInRing(polygon.Geometries[0], point);
+
+            if (inOutterRing && polygon.Geometries.Count > 1)
+            {
+                var inInnerRings = polygon.Geometries.Skip(1).Any(g => IsPointInRing(g, point));
+
+                return !inInnerRings;
+            }
+
+            return inOutterRing;
+        }
+
         public static bool IsPointOnLineString<T>(Geometry<T> lineString, T point) where T : IPoint, new()
         {
             if (lineString.IsNullOrEmpty() || point is null)
@@ -309,31 +335,38 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < numberOfPoints - 1; i++)
             {
-                if (GetPointLineSegmentRelation(point, lineString.Points[i], lineString.Points[i + 1]) == PointLineSegementRelation.On)
+                if (PointIntersectsLineSegment(point, lineString.Points[i], lineString.Points[i + 1]))
                     return true;
             }
 
             return false;
         }
 
-        public static bool DoesLineStringIntersectsLineSegment<T>(Geometry<T> lineString, T lineSegmentStart, T lineSegmentEnd) where T : IPoint, new()
+        public static bool LineSegmentIntersectsLineStringOrRing<T>(Geometry<T> lineStringOrRing, T lineSegmentStart, T lineSegmentEnd, bool isRing) where T : IPoint, new()
         {
-            if (lineString.IsNullOrEmpty() || lineSegmentStart is null || lineSegmentEnd is null)
+            if (lineStringOrRing.IsNullOrEmpty() || lineSegmentStart is null || lineSegmentEnd is null)
                 return false;
 
-            var numberOfPoints = lineString.Points.Count;
+            var numberOfPoints = lineStringOrRing.Points.Count;
 
-            if (lineString.Type != GeometryType.LineString || numberOfPoints < 2)
+            if (lineStringOrRing.Type != GeometryType.LineString || numberOfPoints < 2)
                 throw new NotImplementedException("SpatialUtility.cs > IsPointOnLineString");
 
-            var boundingBox = lineString.GetBoundingBox();
-            
+            var boundingBox = lineStringOrRing.GetBoundingBox();
+
             if (!boundingBox.Intersects(BoundingBox.Create(lineSegmentStart, lineSegmentEnd)))
                 return false;
 
             for (int i = 0; i < numberOfPoints - 1; i++)
             {
-                if (DoseIntersectDirectionTheLineSegment(lineString.Points[i], lineString.Points[i + 1], lineSegmentStart, lineSegmentEnd, out _))
+                if (DoesIntersectDirectionTheLineSegment(lineStringOrRing.Points[i], lineStringOrRing.Points[i + 1], lineSegmentStart, lineSegmentEnd, out _))
+                    return true;
+            }
+
+            // consider ring scenario
+            if (isRing)
+            {
+                if (DoesIntersectDirectionTheLineSegment(lineStringOrRing.Points[0], lineStringOrRing.Points[numberOfPoints - 1], lineSegmentStart, lineSegmentEnd, out _))
                     return true;
             }
 

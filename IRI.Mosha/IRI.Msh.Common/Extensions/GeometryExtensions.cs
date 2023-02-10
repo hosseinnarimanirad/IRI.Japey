@@ -10,7 +10,7 @@ using System.Linq;
 using IRI.Msh.Common.Ogc;
 using System.Diagnostics;
 
-namespace IRI.Extensions    
+namespace IRI.Extensions
 {
     public static class Msh_GeometryExtensions
     {
@@ -65,6 +65,13 @@ namespace IRI.Extensions
             }
 
             return result;
+        }
+
+
+        public static bool IsNullOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
+        {
+            return geometry is null ||
+                    (geometry.Points.IsNullOrEmpty() && geometry.Geometries.IsNullOrEmpty() || geometry.TotalNumberOfPoints == 0);
         }
 
 

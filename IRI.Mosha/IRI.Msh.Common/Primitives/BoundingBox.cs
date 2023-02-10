@@ -322,7 +322,7 @@ namespace IRI.Msh.Common.Primitives
         }
 
         public static bool operator ==(BoundingBox first, BoundingBox second)
-        {
+        { 
             return first.XMin == second.XMin &&
                     first.XMax == second.XMax &&
                     first.YMin == second.YMin &&

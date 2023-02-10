@@ -13,12 +13,12 @@ namespace IRI.Jab.Controls.Presenter
 {
     public class InputCoordinatePresenter : Notifier
     {
-        private ObservableCollection<IRI.Msh.Common.Primitives.Point> _pointCollection;
+        private ObservableCollection<Point> _pointCollection;
 
         /// <summary>
         /// Geodetic points
         /// </summary>
-        public ObservableCollection<IRI.Msh.Common.Primitives.Point> PointCollection
+        public ObservableCollection<Point> PointCollection
         {
             get { return _pointCollection; }
             set
@@ -42,7 +42,7 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        Func<IRI.Msh.Common.Primitives.Point, IRI.Msh.Common.Primitives.Point> MapFunction = p => p;
+        Func<Point, Point> MapFunction = p => p;
 
         private int _zone;
 
@@ -74,7 +74,7 @@ namespace IRI.Jab.Controls.Presenter
                         MapFunction = p => p;
                         break;
                     case SpatialReferenceType.UTM:
-                        MapFunction = p => (IRI.Msh.Common.Primitives.Point)IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
+                        MapFunction = p => (Point)IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -83,21 +83,21 @@ namespace IRI.Jab.Controls.Presenter
         }
 
         public InputCoordinatePresenter()
-            : this(new List<IRI.Msh.Common.Primitives.Point>())
+            : this(new List<Point>())
         {
 
         }
 
-        public InputCoordinatePresenter(List<IRI.Msh.Common.Primitives.Point> geographicPoints)
+        public InputCoordinatePresenter(List<Point> geographicPoints)
         {
             this.Zone = 39;
 
             FeedGeographicPoints(geographicPoints);
         }
 
-        public void FeedGeographicPoints(List<IRI.Msh.Common.Primitives.Point> geographicPoints)
+        public void FeedGeographicPoints(List<Point> geographicPoints)
         {
-            this.PointCollection = new ObservableCollection<IRI.Msh.Common.Primitives.Point>();
+            this.PointCollection = new ObservableCollection<Point>();
 
             this.PointCollection.CollectionChanged += (sender, e) => PointCollectionChanged?.Invoke(null, null);
 
@@ -107,7 +107,7 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        //internal void AddPoint(IRI.Msh.Common.Primitives.Point point)
+        //internal void AddPoint(Point point)
         //{
         //    this.PointCollection.Add(MapFunction(point));
 
@@ -117,7 +117,7 @@ namespace IRI.Jab.Controls.Presenter
         //    }
         //}
 
-        //internal void RemovePoint(IRI.Msh.Common.Primitives.Point point)
+        //internal void RemovePoint(Point point)
         //{
         //    this.PointCollection.Remove(point);
         //}
@@ -159,7 +159,7 @@ namespace IRI.Jab.Controls.Presenter
 
             this.Coordinates = geometry.AsCoordinateEditor();
 
-            //FeedGeographicPoints(geometry.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<IRI.Msh.Common.Primitives.Point>().ToList());
+            //FeedGeographicPoints(geometry.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<Point>().ToList());
         }
 
 

@@ -20,6 +20,5 @@ public interface IGeometry
     byte[] AsWkb();
 
     SrsBase GetSrs();
-
-    bool IsNullOrEmpty(); 
+     
 }

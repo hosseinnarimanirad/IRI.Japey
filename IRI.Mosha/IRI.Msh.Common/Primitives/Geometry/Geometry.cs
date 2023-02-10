@@ -148,11 +148,6 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return this.Type == GeometryType.Polygon || this.Type == GeometryType.MultiPolygon || this.Type == GeometryType.CurvePolygon;
     }
 
-    public bool IsNullOrEmpty()
-    {
-        return this.Points.IsNullOrEmpty() && this.Geometries.IsNullOrEmpty() || this.TotalNumberOfPoints == 0;
-    }
-
     public bool HasAnyPoint()
     {
         //1399.07.17
@@ -659,7 +654,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
         var secondMbb = other.GetBoundingBox();
 
-        if (!firstMbb.Intersects(secondMbb) && !secondMbb.Intersects(firstMbb))
+        if (!firstMbb.Intersects(secondMbb))
             return false;
 
         switch (other.Type)
@@ -676,7 +671,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
             case GeometryType.MultiPolygon:
-                return this.Geometries.Any(g => g.Intersects(other));
+                return other.Geometries.Any(Intersects);
 
             case GeometryType.GeometryCollection:
             case GeometryType.CircularString:
@@ -690,7 +685,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     private bool IntersectsPoint(T point)
     {
-        if (point == null)
+        if (point is null)
             return false;
 
         if (!this.GetBoundingBox().Intersects(point))
@@ -699,22 +694,13 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         switch (this.Type)
         {
             case GeometryType.Point:
-                return SpatialUtility.GetEuclideanDistance(new T() { X = this.Points[0].X, Y = this.Points[0].Y }, point) > SpatialUtility.EpsilonDistance;
+                return SpatialUtility.GetEuclideanDistance(this.AsPoint(), point) < SpatialUtility.EpsilonDistance;
 
             case GeometryType.LineString:
                 return TopologyUtility.IsPointOnLineString(this, point);
 
             case GeometryType.Polygon:
-                var inOutterRing = TopologyUtility.IsPointInRing(this.Geometries[0], point);
-
-                if (inOutterRing && this.Geometries.Count > 1)
-                {
-                    var inInnerRings = this.Geometries.Skip(1).Any(g => TopologyUtility.IsPointInRing(g, point));
-
-                    return inOutterRing && !inInnerRings;
-                }
-
-                return inOutterRing;
+                return TopologyUtility.IsPointInPolygon(this, point);
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
@@ -738,17 +724,23 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         switch (this.Type)
         {
             case GeometryType.Point:
-                return TopologyUtility.GetPointLineSegmentRelation(new T() { X = this.Points[0].X, Y = this.Points[0].Y }, startSegment, endSegment)
-                            == Analysis.Topology.PointLineSegementRelation.On;
+                return TopologyUtility.PointIntersectsLineSegment(this.AsPoint(), startSegment, endSegment);
 
             case GeometryType.LineString:
-                return TopologyUtility.DoesLineStringIntersectsLineSegment(this, startSegment, endSegment);
+                return TopologyUtility.LineSegmentIntersectsLineStringOrRing(this, startSegment, endSegment, false);
 
             case GeometryType.Polygon:
-                if (this.IntersectsPoint(startSegment))
-                    return true;
-                else
-                    return this.IntersectsPoint(endSegment);
+                foreach (var geometry in this.Geometries)
+                {
+                    for (int i = 0; i < geometry.NumberOfPoints; i++)
+                    {
+                        //if (TopologyUtility.LineSegmentIntersectsLineStringOrRing())
+                        //{
+                            
+                        //}
+                    }
+                }
+                throw new NotImplementedException();
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
@@ -1486,14 +1478,14 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public Point AsPoint()
+    public T AsPoint()
     {
         if (this.Type != GeometryType.Point)
         {
             throw new NotImplementedException("Geometry > AsPoint");
         }
 
-        return new Point(this.Points[0].X, this.Points[1].Y);
+        return new T() { X = this.Points[0].X, Y = this.Points[1].Y };
     }
 
     #endregion
