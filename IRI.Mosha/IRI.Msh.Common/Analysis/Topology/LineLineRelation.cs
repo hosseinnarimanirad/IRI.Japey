@@ -5,8 +5,8 @@ namespace IRI.Msh.Common.Analysis.Topology
 {
     public enum LineLineRelation
     {
-        Intersect,
-        Coinciding,
-        Parallel
+        Intersect = 1,
+        Coinciding = 2,
+        Parallel = 3
     }
 }

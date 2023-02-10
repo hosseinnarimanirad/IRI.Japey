@@ -727,20 +727,10 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return TopologyUtility.PointIntersectsLineSegment(this.AsPoint(), startSegment, endSegment);
 
             case GeometryType.LineString:
-                return TopologyUtility.LineSegmentIntersectsLineStringOrRing(this, startSegment, endSegment, false);
+                return TopologyUtility.LineSegmentIntersectsLineStringOrRing(this, startSegment, endSegment, isRing: false);
 
             case GeometryType.Polygon:
-                foreach (var geometry in this.Geometries)
-                {
-                    for (int i = 0; i < geometry.NumberOfPoints; i++)
-                    {
-                        //if (TopologyUtility.LineSegmentIntersectsLineStringOrRing())
-                        //{
-                            
-                        //}
-                    }
-                }
-                throw new NotImplementedException();
+                return this.Geometries.Any(g => TopologyUtility.LineSegmentIntersectsLineStringOrRing(g, startSegment, endSegment, isRing: true));
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
@@ -766,21 +756,32 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return TopologyUtility.IsPointOnLineString(lineString, this.Points[0]);
 
             case GeometryType.LineString:
+            case GeometryType.Polygon:
+
+                if (this.Type == GeometryType.Polygon)
+                {
+                    if (TopologyUtility.IsPointInPolygon(this, lineString.Points[0]))
+                        return true;
+                }
+
                 for (int i = 0; i < lineString.NumberOfPoints - 1; i++)
                 {
                     if (IntersectsLineSegment(lineString.Points[i], lineString.Points[i + 1]))
                         return true;
                 }
-                //todo: consider ring scenario
+
+                if (isRing)
+                {
+                    if (IntersectsLineSegment(lineString.Points[0], lineString.Points[lineString.NumberOfPoints - 1]))
+                        return true;
+                }
+
                 return false;
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
-                return this.Geometries.Any(g => g.IntersectsLineStringOrRing(lineString, isRing: false));
-
-            case GeometryType.Polygon:
             case GeometryType.MultiPolygon:
-                return this.Geometries.Any(g => g.IntersectsLineStringOrRing(lineString, isRing: true));
+                return this.Geometries.Any(g => g.IntersectsLineStringOrRing(lineString, isRing));
 
             case GeometryType.GeometryCollection:
             case GeometryType.CircularString:
@@ -800,10 +801,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         switch (this.Type)
         {
             case GeometryType.Point:
-                return polygon.IntersectsPoint(this.Points[0]);
+                return TopologyUtility.IsPointInPolygon(polygon, this.Points[0]);
 
             case GeometryType.LineString:
-                return polygon.Geometries.Any(g => g.IntersectsLineStringOrRing(this, isRing: false));
+                //return polygon.Geometries.Any(g => g.IntersectsLineStringOrRing(this, isRing: false));
+                return polygon.IntersectsLineStringOrRing(this, isRing: false);
 
             case GeometryType.Polygon:
                 return this.Geometries.Any(g => polygon.IntersectsLineStringOrRing(g, isRing: true));

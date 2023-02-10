@@ -188,7 +188,7 @@ namespace IRI.Ket.Geometry
 
                 Point intersection;
 
-                LineLineSegmentRelation relation = TopologyUtility.IntersectLineWithLineSegment(firstPointLine, secondPointLine, Vertexes[i], Vertexes[j], out intersection);
+                LineLineSegmentRelation relation = TopologyUtility.LineSegmentsIntersects(firstPointLine, secondPointLine, Vertexes[i], Vertexes[j], out intersection);
 
                 if (relation == LineLineSegmentRelation.Intersect)
                 {

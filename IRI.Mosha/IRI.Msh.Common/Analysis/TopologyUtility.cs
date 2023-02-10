@@ -11,6 +11,8 @@ namespace IRI.Msh.Common.Analysis
 {
     public class TopologyUtility
     {
+        #region Point-Line, Point-Circle
+
         public static Point CalculateCircumcenterCenterPoint<T>(T firstPoint, T secondPoint, T thirdPoint) where T : IPoint, new()
         {
             double x1 = firstPoint.X; double y1 = firstPoint.Y;
@@ -103,7 +105,6 @@ namespace IRI.Msh.Common.Analysis
             return PointVectorRelation.LiesOnTheLine;
         }
 
-
         public static bool PointIntersectsLineSegment<T>(T sightlyPoint, T startVertex, T endVertex) where T : IPoint, new()
         {
             if (GetPointVectorRelation(sightlyPoint, startVertex, endVertex) == PointVectorRelation.LiesOnTheLine)
@@ -124,8 +125,16 @@ namespace IRI.Msh.Common.Analysis
             return false;
         }
 
+        #endregion
 
-        public static LineLineRelation CalculateIntersection<T>(T firstLineFirstPoint,
+        public static bool CalculateIntersection<T>(T firstLinePoint, double firstLineSlope, T secondLinePoint, double secondLineSlope) where T : IPoint, new()
+        {
+            throw new NotImplementedException();
+        }
+
+        // line - line
+        public static LineLineRelation CalculateIntersection<T>(
+            T firstLineFirstPoint,
             T firstLineSecondPoint,
             T secondLineFirstPoint,
             T secondLineSecondPoint,
@@ -138,11 +147,8 @@ namespace IRI.Msh.Common.Analysis
 
             double secondSlope = SpatialUtility.CalculateSlope(secondLineFirstPoint, secondLineSecondPoint);
 
-            if ((firstSlope - secondSlope) == 0 ||
-                    (Math.Abs(firstSlope) == double.PositiveInfinity &&
-                    Math.Abs(secondSlope) == double.PositiveInfinity))
+            if ((firstSlope - secondSlope) == 0 || (double.IsInfinity(firstSlope) && double.IsInfinity(secondSlope)))
             {
-
                 if (GetPointVectorRelation(firstLineFirstPoint, secondLineFirstPoint, secondLineSecondPoint) == PointVectorRelation.LiesOnTheLine)
                 {
                     intersection = new T() { X = double.NaN, Y = double.NaN };
@@ -159,13 +165,13 @@ namespace IRI.Msh.Common.Analysis
 
             double tempX, tempY;
 
-            if (Math.Abs(firstSlope) == double.PositiveInfinity)
+            if (double.IsInfinity(firstSlope))
             {
                 tempX = firstLineFirstPoint.X;
 
                 tempY = secondLineFirstPoint.Y + secondSlope * (tempX - firstLineFirstPoint.X);
             }
-            else if (Math.Abs(secondSlope) == double.PositiveInfinity)
+            else if (double.IsInfinity(secondSlope))
             {
                 tempX = secondLineFirstPoint.X;
 
@@ -186,65 +192,32 @@ namespace IRI.Msh.Common.Analysis
             return LineLineRelation.Intersect;
         }
 
-        public static bool CalculateIntersection<T>(T firstLinePoint, double firstLineSlope, T secondLinePoint, double secondLineSlope) where T : IPoint, new()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        //todo: halate montabeg shodan dar nazar gerefte nashode!
-        public static bool DoesIntersectDirectionTheLineSegment<T>(
-            T startOfDirection,
-            T endOfDirection,
-            T startOfLine,
-            T endOfLine,
+        // segment - segment
+        public static LineLineSegmentRelation LineSegmentsIntersects<T>(
+            T firstSegmentFirstPoint,
+            T firstSegmentSecondPoint,
+            T secondSegmentFirstPoint,
+            T secondSegmentSecondPoint,
             out T intersection) where T : IPoint, new()
         {
-            if (IntersectLineWithLineSegment(startOfDirection, endOfDirection, startOfLine, endOfLine, out intersection) == LineLineSegmentRelation.Intersect)
-            {
-                if (endOfDirection.X != startOfDirection.X)
-                {
-                    return (intersection.X - startOfDirection.X) / (endOfDirection.X - startOfDirection.X) > 1;
-                }
-                else if (endOfDirection.Y != startOfDirection.Y)
-                {
-                    return (intersection.Y - startOfDirection.Y) / (endOfDirection.Y - startOfDirection.Y) > 1;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-
-                //}
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static LineLineSegmentRelation IntersectLineWithLineSegment<T>(
-            T lineFirstPoint,
-            T lineSecondPoint,
-            T startOfLineSegment,
-            T endOfLineSegment,
-            out T intersection) where T : IPoint, new()
-        {
-            LineLineRelation relation = CalculateIntersection(lineFirstPoint, lineSecondPoint, startOfLineSegment, endOfLineSegment, out intersection);
+            LineLineRelation relation =
+                CalculateIntersection(firstSegmentFirstPoint, firstSegmentSecondPoint, secondSegmentFirstPoint, secondSegmentSecondPoint, out intersection);
 
             if (relation == LineLineRelation.Intersect)
             {
-                if ((intersection.X > startOfLineSegment.X && intersection.X > endOfLineSegment.X) ||
-                    (intersection.Y > startOfLineSegment.Y && intersection.Y > endOfLineSegment.Y) ||
-                    (intersection.X < startOfLineSegment.X && intersection.X < endOfLineSegment.X) ||
-                    (intersection.Y < startOfLineSegment.Y && intersection.Y < endOfLineSegment.Y))
-                {
-                    return LineLineSegmentRelation.Nothing;
-                }
-                else
-                {
+                if (BoundingBox.Create(secondSegmentFirstPoint, secondSegmentSecondPoint).Contains(intersection))
                     return LineLineSegmentRelation.Intersect;
-                }
+
+                else
+                    return LineLineSegmentRelation.Nothing;
+
+                //if ((intersection.X > startOfLineSegment.X && intersection.X > endOfLineSegment.X) ||
+                //    (intersection.Y > startOfLineSegment.Y && intersection.Y > endOfLineSegment.Y) ||
+                //    (intersection.X < startOfLineSegment.X && intersection.X < endOfLineSegment.X) ||
+                //    (intersection.Y < startOfLineSegment.Y && intersection.Y < endOfLineSegment.Y))
+                //    return LineLineSegmentRelation.Nothing;
+                //else
+                //    return LineLineSegmentRelation.Intersect;
             }
             else if (relation == LineLineRelation.Coinciding)
             {
@@ -260,11 +233,37 @@ namespace IRI.Msh.Common.Analysis
             }
         }
 
+        ////todo: halate montabeg shodan dar nazar gerefte nashode!
+        //public static bool DoesIntersectDirectionTheLineSegment<T>(
+        //    T startOfDirection,
+        //    T endOfDirection,
+        //    T startOfLine,
+        //    T endOfLine,
+        //    out T intersection) where T : IPoint, new()
+        //{
+        //    if (IntersectLineWithLineSegment(startOfDirection, endOfDirection, startOfLine, endOfLine, out intersection) == LineLineSegmentRelation.Intersect)
+        //    {
+        //        if (endOfDirection.X != startOfDirection.X)
+        //        {
+        //            return (intersection.X - startOfDirection.X) / (endOfDirection.X - startOfDirection.X) > 1;
+        //        }
+        //        else if (endOfDirection.Y != startOfDirection.Y)
+        //        {
+        //            return (intersection.Y - startOfDirection.Y) / (endOfDirection.Y - startOfDirection.Y) > 1;
+        //        }
+        //        else
+        //        {
+        //            throw new NotImplementedException();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
+         
 
-
-
-        //
         public static bool IsPointInRing<T>(Geometry<T> ring, T point) where T : IPoint, new()
         {
             if (ring.IsNullOrEmpty() || point is null)
@@ -277,7 +276,7 @@ namespace IRI.Msh.Common.Analysis
 
             var boundingBox = ring.GetBoundingBox();
 
-            var doesEncomapss = boundingBox.Encomapss(point);
+            var doesEncomapss = boundingBox.Contains(point);
 
             if (!doesEncomapss)
                 return false;
@@ -328,7 +327,7 @@ namespace IRI.Msh.Common.Analysis
 
             var boundingBox = lineString.GetBoundingBox();
 
-            var doesEncomapss = boundingBox.Encomapss(point);
+            var doesEncomapss = boundingBox.Contains(point);
 
             if (!doesEncomapss)
                 return false;
@@ -350,7 +349,7 @@ namespace IRI.Msh.Common.Analysis
             var numberOfPoints = lineStringOrRing.Points.Count;
 
             if (lineStringOrRing.Type != GeometryType.LineString || numberOfPoints < 2)
-                throw new NotImplementedException("SpatialUtility.cs > IsPointOnLineString");
+                throw new NotImplementedException("TopologyUtility > IsPointOnLineString");
 
             var boundingBox = lineStringOrRing.GetBoundingBox();
 
@@ -359,14 +358,18 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < numberOfPoints - 1; i++)
             {
-                if (DoesIntersectDirectionTheLineSegment(lineStringOrRing.Points[i], lineStringOrRing.Points[i + 1], lineSegmentStart, lineSegmentEnd, out _))
+                var relation = LineSegmentsIntersects(lineStringOrRing.Points[i], lineStringOrRing.Points[i + 1], lineSegmentStart, lineSegmentEnd, out _);
+
+                if (relation == LineLineSegmentRelation.Intersect || relation == LineLineSegmentRelation.Coinciding)
                     return true;
             }
 
             // consider ring scenario
             if (isRing)
             {
-                if (DoesIntersectDirectionTheLineSegment(lineStringOrRing.Points[0], lineStringOrRing.Points[numberOfPoints - 1], lineSegmentStart, lineSegmentEnd, out _))
+                var relation = LineSegmentsIntersects(lineStringOrRing.Points[0], lineStringOrRing.Points[numberOfPoints - 1], lineSegmentStart, lineSegmentEnd, out _);
+                
+                if (relation == LineLineSegmentRelation.Intersect || relation == LineLineSegmentRelation.Coinciding)
                     return true;
             }
 

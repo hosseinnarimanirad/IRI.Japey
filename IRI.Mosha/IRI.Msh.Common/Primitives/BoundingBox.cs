@@ -362,7 +362,7 @@ namespace IRI.Msh.Common.Primitives
             return Geometry<Point>.Create(GetClockWiseOrderOfEsriPoints()/*.ToArray()*/, GeometryType.Polygon, srid);
         }
 
-        public bool Encomapss<T>(T point) where T : IPoint, new()
+        public bool Contains<T>(T point) where T : IPoint, new()
         {
             if (point == null)
             {
