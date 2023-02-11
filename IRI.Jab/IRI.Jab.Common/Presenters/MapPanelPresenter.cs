@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Common.Presenters
 {
@@ -93,7 +94,6 @@ namespace IRI.Jab.Common.Presenters
 
 
         private bool _isUTMEditingMode;
-
         public bool IsUTMEditingMode
         {
             get { return _isUTMEditingMode; }
@@ -117,7 +117,6 @@ namespace IRI.Jab.Common.Presenters
 
 
         private bool _isGeodeticWgs84EditingMode = true;
-
         public bool IsGeodeticWgs84EditingMode
         {
             get { return _isGeodeticWgs84EditingMode; }
@@ -134,6 +133,28 @@ namespace IRI.Jab.Common.Presenters
                 }
 
                 _isGeodeticWgs84EditingMode = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+        private bool _isWebMercatorEditingMode;
+        public bool IsWebMercatorEditingMode
+        {
+            get { return _isWebMercatorEditingMode; }
+            set
+            {
+                if (_isWebMercatorEditingMode == value)
+                {
+                    return;
+                }
+
+                if (CurrentEditingPoint != null && value)
+                {
+                    this.SpatialReference = SpatialReferenceType.WebMercator;
+                }
+
+                _isWebMercatorEditingMode = value;
                 RaisePropertyChanged();
 
             }
@@ -183,6 +204,10 @@ namespace IRI.Jab.Common.Presenters
 
                     return new Point(webMercator.X, webMercator.Y);
                 }
+                else if (this.SpatialReference == SpatialReferenceType.WebMercator)
+                {
+                    return new Point(CurrentEditingPoint.X, CurrentEditingPoint.Y);
+                }
                 else
                 {
                     throw new NotImplementedException();
@@ -198,6 +223,11 @@ namespace IRI.Jab.Common.Presenters
 
         private Point FromWebMercator(Point webMercatorPoint)
         {
+            if (this.SpatialReference == SpatialReferenceType.WebMercator)
+            {
+                return webMercatorPoint;
+            }
+
             var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
 
             if (this.SpatialReference == SpatialReferenceType.UTM)

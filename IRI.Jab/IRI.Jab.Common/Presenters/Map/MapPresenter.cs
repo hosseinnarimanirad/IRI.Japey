@@ -642,7 +642,10 @@ namespace IRI.Jab.Common.Presenter.Map
                       Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
                       return;
                   }
-                  //this.CurrentEditingLayer.ChangeCurrentEditingPoint(new Point(param.X, param.Y));
+
+                  if (MapPanel.CurrentWebMercatorEditingPoint.IsNaN())
+                      return;
+
                   this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
 
               });
@@ -1068,7 +1071,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            if (enumerable?.Count() < 10 && enumerable.First().TheGeometry.Type== GeometryType.Point)
+            if (enumerable?.Count() < 10 && enumerable.First().TheGeometry.Type == GeometryType.Point)
             {
                 FlashPoints(enumerable.Select(e => (Point)e.TheGeometry.AsPoint()).ToList());
             }
@@ -1720,7 +1723,7 @@ namespace IRI.Jab.Common.Presenter.Map
                         commands.Add(item(this, layer));
                     }
 
-                    layer.Commands = commands; 
+                    layer.Commands = commands;
                 }
 
                 if (!(layer?.FeatureTableCommands?.Count > 0))
@@ -1856,14 +1859,14 @@ namespace IRI.Jab.Common.Presenter.Map
             //        ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
             //    }
             //};
-             
+
 
             if (layer.RequestChangeSymbology == null)
             {
                 layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
             }
         }
-          
+
 
         public void AddLayer(ILayer layer)
         {
@@ -2068,6 +2071,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private void AddPointToNewDrawing()
         {
+            if (MapPanel.CurrentWebMercatorEditingPoint.IsNaN())
+                return;
+
             this.RequestAddPointToNewDrawing?.Invoke(this.MapPanel.CurrentWebMercatorEditingPoint);
         }
 

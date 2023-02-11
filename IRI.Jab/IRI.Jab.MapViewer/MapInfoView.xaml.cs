@@ -70,7 +70,6 @@ namespace IRI.Jab.MapViewer
 
 
         private PersianEnglishItem _utmZone = new PersianEnglishItem("ناحیهٔ UTM", "Zone", LanguageMode.Persian);
-
         public PersianEnglishItem UtmZone
         {
             get { return _utmZone; }
@@ -82,7 +81,6 @@ namespace IRI.Jab.MapViewer
         }
  
         private PersianEnglishItem _utmText = new PersianEnglishItem("سیستم تصویر UTM", "UTM", LanguageMode.Persian);
-
         public PersianEnglishItem UTMText
         {
             get { return _utmText; }
@@ -94,7 +92,6 @@ namespace IRI.Jab.MapViewer
         }
 
         private PersianEnglishItem _geodeticWgs84Text= new PersianEnglishItem("سیستم مختصات ژئودتیک - WGS84", "Geodetic (WGS84)", LanguageMode.Persian);
-
         public PersianEnglishItem GeodeticWgs84Text
         {
             get { return _geodeticWgs84Text; }
@@ -105,8 +102,18 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private PersianEnglishItem _newDrawingText = new PersianEnglishItem("برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید.", "Click on the last point to finish drawing.", LanguageMode.Persian);
+        public PersianEnglishItem WebMercatorText
+        {
+            get { return _webMercatorText; }
+            set
+            {
+                _webMercatorText = value;
+                RaisePropertyChanged();
+            }
+        }
+        private PersianEnglishItem _webMercatorText = new PersianEnglishItem("سیستم تصویر وب‌مرکاتور", "Web Mercator", LanguageMode.Persian);
 
+        private PersianEnglishItem _newDrawingText = new PersianEnglishItem("برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید.", "Click on the last point to finish drawing.", LanguageMode.Persian);
         public PersianEnglishItem NewDrawingText
         {
             get { return _newDrawingText; }
@@ -118,7 +125,6 @@ namespace IRI.Jab.MapViewer
         }
 
         private PersianEnglishItem _cancelDrawingText = new PersianEnglishItem("لغو ترسیم", "Cancel Drawing", LanguageMode.Persian);
-
         public PersianEnglishItem CancelDrawingText
         {
             get { return _cancelDrawingText; }
@@ -130,7 +136,6 @@ namespace IRI.Jab.MapViewer
         }
 
         private PersianEnglishItem _finishDrawingText = new PersianEnglishItem("پایان ترسیم", "Finish Drawing", LanguageMode.Persian);
-
         public PersianEnglishItem FinishDrawingText
         {
             get { return _finishDrawingText; }
@@ -142,7 +147,6 @@ namespace IRI.Jab.MapViewer
         }
 
         private PersianEnglishItem _finishDrawingPartText = new PersianEnglishItem("تکمیل بخش", "Finish Drawing Part", LanguageMode.Persian);
-
         public PersianEnglishItem FinishDrawingPartText
         {
             get { return _finishDrawingPartText; }

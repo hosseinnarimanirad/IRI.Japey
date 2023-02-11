@@ -315,6 +315,13 @@
                                         <TextBlock Text="UTM" Margin="2" Foreground="White"/>
                                     </StackPanel>
                                 </RadioButton>
+                                <RadioButton GroupName="A" ToolTip="{Binding ElementName=root, Path=WebMercatorText.Title}" Foreground="White" Margin="4,2"
+                                     IsChecked="{Binding MapPanel.IsWebMercatorEditingMode, Mode=TwoWay}" Style="{StaticResource simpleToggle}" >
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
+                                        <Path Data="{StaticResource appbarMapTreasure}" Height="16" Margin="2" FlowDirection="LeftToRight"/>
+                                        <TextBlock Text="Web Mercator" Margin="2" Foreground="White"/>
+                                    </StackPanel>
+                                </RadioButton>
                                 <TextBlock DockPanel.Dock="Left" Margin="4"
                            Visibility="{Binding MapPanel.IsUTMEditingMode, Converter={StaticResource boolToVisibilityConverter}}"
                            Text="{Binding ElementName=root, Path=UtmZone.Title}"/>

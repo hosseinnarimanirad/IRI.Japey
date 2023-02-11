@@ -4277,6 +4277,12 @@ namespace IRI.Jab.MapViewer
 
         private void AddFirstPointForNewDrawing(sb.Point webMercatorPoint)
         {
+            if (true)
+            {
+                if (webMercatorPoint.IsNaN())
+                    return;
+            }
+
             this.mapView.MouseDown -= MapView_MouseDownForPanWhileStartDrawing;
             this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartDrawing;
             this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartDrawing;
