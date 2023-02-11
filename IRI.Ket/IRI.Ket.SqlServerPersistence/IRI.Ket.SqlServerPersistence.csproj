@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -11,9 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" />
+    <ProjectReference Include="..\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj" /> 
   </ItemGroup>
+
 
   <ItemGroup>
     <Reference Include="Microsoft.SqlServer.Types">

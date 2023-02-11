@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
-using IRI.Jab.Common.Model.Symbology;
-using IRI.Ket.DataManagement.DataSource;
-using IRI.Ket.DataManagement.Model;
+using IRI.Jab.Common.Model.Symbology; 
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using IRI.Ket.DataManagement.DataSource;
 
 namespace IRI.Jab.Common
 {

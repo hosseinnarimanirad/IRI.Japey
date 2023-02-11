@@ -1660,6 +1660,19 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+    public static Geometry<Point> CreateLineStringFromPoints(List<Geometry<Point>> geometries)
+    {
+        if (geometries?.Any() != true)
+        {
+            return Geometry<Point>.Null;
+        }
+
+        var points = geometries.Select(g => g.AsPoint()).ToList();
+
+        //Geometry<Point> result = new Geometry<Point>()
+        return Geometry<Point>.CreatePointOrLineString(points, geometries?.FirstOrDefault()?.Srid ?? 0);
+    }
+
     public static Geometry<T> CreatePolygonOrMultiPolygon<T>(List<Geometry<T>> rings, int srid) where T : IPoint, new()
     {
         if (rings.IsNullOrEmpty())

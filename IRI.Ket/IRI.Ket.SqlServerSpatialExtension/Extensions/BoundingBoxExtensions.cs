@@ -6,18 +6,6 @@ namespace IRI.Extensions
 {
     public static class BoundingBoxExtensions
     {
-        public static string AsWkt(this BoundingBox boundingBox)
-        {
-            return
-                     string.Format(
-                            System.Globalization.CultureInfo.InvariantCulture,
-                            "POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))",
-                            boundingBox.XMin,
-                            boundingBox.YMin,
-                            boundingBox.YMax,
-                            boundingBox.XMax);
-        }
-
         public static SqlGeometry AsSqlGeometry(this BoundingBox boundingBox, int srid = 0)
         {
             //var result =
@@ -54,26 +42,6 @@ namespace IRI.Extensions
             }
 
             return false;
-        }
-
-        public static List<EsriPoint> GetClockWiseOrderOfEsriPoints(this BoundingBox boundingBox, int srid)
-        {
-            return new List<EsriPoint>
-            {
-                new EsriPoint(boundingBox.XMin, boundingBox.YMin, srid),
-                new EsriPoint(boundingBox.XMin, boundingBox.YMax, srid),
-                new EsriPoint(boundingBox.XMax, boundingBox.YMax, srid),
-                new EsriPoint(boundingBox.XMax, boundingBox.YMin, srid)
-            };
-        }
-
-        public static EsriPolygon AsEsriShape(this BoundingBox boundingBox, int srid)
-        {
-            var polygon = boundingBox.GetClockWiseOrderOfEsriPoints(srid);
-
-            polygon.Add(polygon.First()); //first point and last point must be the same
-
-            return new EsriPolygon(polygon.ToArray());
         }
 
         public static List<SqlGeometry> Tessellate(this BoundingBox boundingBox, int numberOfColumns, int srid)

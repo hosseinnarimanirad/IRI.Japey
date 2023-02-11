@@ -322,7 +322,7 @@ namespace IRI.Msh.Common.Primitives
         }
 
         public static bool operator ==(BoundingBox first, BoundingBox second)
-        { 
+        {
             return first.XMin == second.XMin &&
                     first.XMax == second.XMax &&
                     first.YMin == second.YMin &&
@@ -384,5 +384,17 @@ namespace IRI.Msh.Common.Primitives
                 xMax: points.Max(p => p.X),
                 yMax: points.Max(p => p.Y));
         }
+
+        public string AsWkt()
+        {
+            return string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    "POLYGON(({0} {1}, {0} {2}, {3} {2}, {3} {1}, {0} {1}))",
+                    this.XMin,
+                    this.YMin,
+                    this.YMax,
+                    this.XMax);
+        }
+
     }
 }

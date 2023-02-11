@@ -7,10 +7,7 @@ using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
 using spatialBase = IRI.Msh.Common;
-using IRI.Ket.DataManagement.DataSource;
-using IRI.Jab.Common.Model;
-
-using IRI.Jab.Common.Model;
+using IRI.Ket.DataManagement.DataSource; 
 
 namespace IRI.Jab.Common
 {

@@ -331,21 +331,9 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
 
         #endregion
 
+
         #region Geometry<T>
 
-
-        public static Geometry<Point> CreateLineStringFromPoints(List<Geometry<Point>> geometries)
-        {
-            if (geometries?.Any() != true)
-            {
-                return Geometry<Point>.Null;
-            }
-
-            var points = geometries.Select(g => g.AsPoint()).ToList();
-
-            //Geometry<Point> result = new Geometry<Point>()
-            return Geometry<Point>.CreatePointOrLineString(points, geometries?.FirstOrDefault()?.Srid ?? 0);
-        }
 
 
         #endregion
