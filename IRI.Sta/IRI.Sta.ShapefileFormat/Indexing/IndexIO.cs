@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.ShapefileFormat.Indexing
+namespace IRI.Sta.ShapefileFormat.Indexing
 {
     public static class IndexIO
     {

@@ -1,4 +1,4 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Model.GeoJson;

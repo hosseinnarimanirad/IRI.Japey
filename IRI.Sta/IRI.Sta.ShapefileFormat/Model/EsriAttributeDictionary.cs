@@ -1,11 +1,11 @@
-﻿using IRI.Ket.ShapefileFormat.Dbf;
+﻿using IRI.Sta.ShapefileFormat.Dbf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.ShapefileFormat.Model
+namespace IRI.Sta.ShapefileFormat.Model
 {
     public class EsriAttributeDictionary
     {

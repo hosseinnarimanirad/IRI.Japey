@@ -4,10 +4,10 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
-using IRI.Ket.ShapefileFormat.Model;
+using IRI.Sta.ShapefileFormat.Model;
 using IRI.Extensions;
 
-namespace IRI.Ket.ShapefileFormat.Dbf
+namespace IRI.Sta.ShapefileFormat.Dbf
 {
     public static class DbfFile
     {

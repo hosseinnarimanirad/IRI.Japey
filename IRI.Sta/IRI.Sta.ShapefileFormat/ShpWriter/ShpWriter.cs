@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.ShapefileFormat.Writer
+namespace IRI.Sta.ShapefileFormat.Writer
 {
     public static class ShpWriter
     {

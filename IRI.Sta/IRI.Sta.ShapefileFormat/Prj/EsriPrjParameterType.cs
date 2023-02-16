@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.ShapefileFormat.Prj
+namespace IRI.Sta.ShapefileFormat.Prj
 {
     public enum EsriPrjParameterType
     {

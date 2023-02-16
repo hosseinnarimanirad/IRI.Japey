@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.Dbf
+namespace IRI.Sta.ShapefileFormat.Dbf
 {
     public static class DbfFieldMappings
     {

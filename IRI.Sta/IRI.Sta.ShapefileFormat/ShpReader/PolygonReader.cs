@@ -1,13 +1,13 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Ket.ShapefileFormat.EsriType;
-using IRI.Ket.ShapefileFormat.ShpReader;
+using IRI.Sta.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.ShpReader;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader
 {
     public class PolygonReader : PointsReader<EsriPolygon>
     {

@@ -16,11 +16,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
         {
             if (targetSrs != null)
             {
-                var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
+                var sourceSrs = IRI.Sta.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
 
                 Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
 
-                return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
+                return IRI.Sta.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
                         (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsSqlGeometry() },
                         //(d, srid, feature) => feature.TheSqlGeometry = d.Transform(map, targetSrs.Srid).AsSqlGeometry(),
@@ -33,7 +33,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             else
             {
 
-                return IRI.Ket.ShapefileFormat.Shapefile.Read<SqlFeature>(
+                return IRI.Sta.ShapefileFormat.Shapefile.Read<SqlFeature>(
                         shpFileName,
                         (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.AsSqlGeometry() },
                         //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
@@ -49,11 +49,11 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
         {
             if (targetSrs != null)
             {
-                var sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
+                var sourceSrs = IRI.Sta.ShapefileFormat.Shapefile.TryGetSrs(shpFileName);
 
                 Func<Point, Point> map = p => p.Project(sourceSrs, targetSrs);
 
-                return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                return await IRI.Sta.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
                         (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.Transform(map as Func<IPoint, IPoint>, targetSrs.Srid).AsSqlGeometry() },
                         //d => new SqlFeature() { Attributes = d, LabelAttribute = label },
@@ -65,7 +65,7 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
             }
             else
             {
-                return await IRI.Ket.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
+                return await IRI.Sta.ShapefileFormat.Shapefile.ReadAsync<SqlFeature>(
                         shpFileName,
                         (d, ies) => new SqlFeature() { Attributes = d, LabelAttribute = label, TheSqlGeometry = ies.AsSqlGeometry() },
                         //d => new SqlFeature() { Attributes = d, LabelAttribute = label },

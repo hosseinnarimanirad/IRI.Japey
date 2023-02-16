@@ -10,9 +10,9 @@ using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
-    public struct EsriMultiPoint : IRI.Ket.ShapefileFormat.EsriType.IEsriSimplePoints
+    public struct EsriMultiPoint : IRI.Sta.ShapefileFormat.EsriType.IEsriSimplePoints
     {
         /// <summary>
         /// MinX, MinY, MaxX, MaxY

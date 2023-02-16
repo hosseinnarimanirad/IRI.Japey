@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
     internal static class ShapeConstants
     {

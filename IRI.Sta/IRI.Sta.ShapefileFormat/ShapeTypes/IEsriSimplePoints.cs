@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
     public interface IEsriSimplePoints : IEsriShape
     {

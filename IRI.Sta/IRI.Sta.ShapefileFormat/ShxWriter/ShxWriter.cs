@@ -1,9 +1,9 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.Writer
+namespace IRI.Sta.ShapefileFormat.Writer
 {
     internal static class ShxWriter
     {

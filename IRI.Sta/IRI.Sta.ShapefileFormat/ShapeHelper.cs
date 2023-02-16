@@ -1,11 +1,11 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
     static class ShapeHelper
     {

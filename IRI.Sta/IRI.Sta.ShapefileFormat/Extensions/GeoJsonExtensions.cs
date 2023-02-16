@@ -1,4 +1,4 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
@@ -301,7 +301,7 @@ namespace IRI.Extensions
             if (featureSet == null || featureSet.Features.IsNullOrEmpty())
                 return;
 
-            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, featureSet.Features, isLongitudeFirst, srs);
+            IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, featureSet.Features, isLongitudeFirst, srs);
         }
 
         public static void SaveAsShapefile(this IEnumerable<GeoJsonFeature> features, string shpFileName, bool isLongitudeFirst = true, SrsBase srs = null)
@@ -309,7 +309,7 @@ namespace IRI.Extensions
             if (features.IsNullOrEmpty())
                 return;
 
-            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, features, isLongitudeFirst, srs);
+            IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, features, isLongitudeFirst, srs);
         }
     }
 }

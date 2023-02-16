@@ -1,5 +1,5 @@
 ﻿using System;
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
     interface IEsriPointsWithMeasure : IEsriSimplePoints
     {

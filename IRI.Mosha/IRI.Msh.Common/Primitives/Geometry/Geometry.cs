@@ -14,6 +14,8 @@ namespace IRI.Msh.Common.Primitives;
 
 public class Geometry<T> : IGeometry where T : IPoint, new()
 {
+    T NullPoint = default(T);
+
     public GeometryType Type { get; set; }
 
     private List<T> _points;
@@ -1011,7 +1013,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
         else
         {
-            return new T();
+            return NullPoint;
         }
     }
 
@@ -2369,5 +2371,8 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     #endregion
 
 
-
+    public Feature<T> AsFeature()
+    {
+        return new Feature<T>(this);
+    }
 }

@@ -1,13 +1,13 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
   
     /// <summary>

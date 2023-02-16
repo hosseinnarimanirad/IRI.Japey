@@ -1,5 +1,5 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
-using IRI.Ket.ShapefileFormat.Reader;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.Reader;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;

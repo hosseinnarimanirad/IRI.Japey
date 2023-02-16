@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 

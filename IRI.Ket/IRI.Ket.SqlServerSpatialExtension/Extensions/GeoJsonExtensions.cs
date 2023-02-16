@@ -462,7 +462,7 @@ namespace IRI.Extensions
 
         #region Shapefile
 
-        // implemented in IRI.Ket.Shapefileformat
+        // implemented in IRI.Sta.ShapefileFormat
 
         #endregion
     }

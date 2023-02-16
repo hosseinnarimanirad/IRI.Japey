@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Linq;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
 
 
@@ -147,9 +147,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         /// <returns></returns>
         public IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(Func<Point, Point> projectToGeodeticFunc = null, byte[] color = null)
         {
-            IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark = new KmlFormat.Primitives.PlacemarkType();
+            IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark = new Ket.KmlFormat.Primitives.PlacemarkType();
 
-            IRI.Ket.KmlFormat.Primitives.PointType point = new KmlFormat.Primitives.PointType();
+            IRI.Ket.KmlFormat.Primitives.PointType point = new Ket.KmlFormat.Primitives.PointType();
 
             Point coordinates = new Point(this.x, this.Y);
 
@@ -160,7 +160,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             point.coordinates = string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17},{1:G17}", coordinates.X, coordinates.Y);
 
-            //placemark.AbstractFeatureObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { point };
+            //placemark.AbstractFeatureObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { point };
             placemark.AbstractGeometry = point;
 
             return placemark;
@@ -169,13 +169,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public string AsKml(Func<Point, Point> projectToGeodeticFunc = null)
         {
-            //IRI.Ket.KmlFormat.Primitives.KmlType result = new KmlFormat.Primitives.KmlType();
+            //IRI.Ket.KmlFormat.Primitives.KmlType result = new Ket.KmlFormat.Primitives.KmlType();
 
-            //IRI.Ket.KmlFormat.Primitives.DocumentType document = new KmlFormat.Primitives.DocumentType();
+            //IRI.Ket.KmlFormat.Primitives.DocumentType document = new Ket.KmlFormat.Primitives.DocumentType();
 
-            //document.AbstractFeature = new KmlFormat.Primitives.AbstractFeatureType[] { this.AsPlacemark(projectToGeodeticFunc) };
+            //document.AbstractFeature = new Ket.KmlFormat.Primitives.AbstractFeatureType[] { this.AsPlacemark(projectToGeodeticFunc) };
 
-            //result.KmlObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { document };
+            //result.KmlObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { document };
 
             //return IRI.Ket.IO.XmlStream.Parse(result);
             return OgcKmlMapFunctions.AsKml(this.AsPlacemark(projectToGeodeticFunc));

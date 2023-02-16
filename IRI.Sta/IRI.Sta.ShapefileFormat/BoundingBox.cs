@@ -3,7 +3,7 @@
 //using System.Linq;
 //using System.Text;
 
-//namespace IRI.Ket.ShapefileFormat
+//namespace IRI.Sta.ShapefileFormat
 //{
 //    public struct BoundingBox
 //    {

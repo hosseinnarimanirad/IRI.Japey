@@ -1,6 +1,6 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Extensions;
-using IRI.Ket.ShapefileFormat.Prj;
+using IRI.Sta.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Ket.ShapefileFormat.Prj
+namespace IRI.Sta.ShapefileFormat.Prj
 {
     public class EsriPrjFile
     {

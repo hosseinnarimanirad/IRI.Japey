@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 { 
     public struct EsriPolylineZ : IEsriPointsWithZ
     { 
@@ -343,13 +343,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolylineZ polyline, Func<Point, Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
-               new KmlFormat.Primitives.PlacemarkType();
+               new Ket.KmlFormat.Primitives.PlacemarkType();
 
             List<IRI.Ket.KmlFormat.Primitives.LineStringType> linestrings =
-                new List<KmlFormat.Primitives.LineStringType>();
+                new List<Ket.KmlFormat.Primitives.LineStringType>();
 
             IRI.Ket.KmlFormat.Primitives.MultiGeometryType multiGeometry =
-                new KmlFormat.Primitives.MultiGeometryType();
+                new Ket.KmlFormat.Primitives.MultiGeometryType();
 
             IEnumerable<string> coordinates;
 
@@ -375,7 +375,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             foreach (string item in coordinates)
             {
-                IRI.Ket.KmlFormat.Primitives.LineStringType linestring = new KmlFormat.Primitives.LineStringType();
+                IRI.Ket.KmlFormat.Primitives.LineStringType linestring = new Ket.KmlFormat.Primitives.LineStringType();
 
                 linestring.coordinates = item;
 
@@ -384,7 +384,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             multiGeometry.AbstractGeometryObjectExtensionGroup = linestrings.ToArray();
 
-            placemark.AbstractFeatureObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { multiGeometry };
+            placemark.AbstractFeatureObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { multiGeometry };
 
             return placemark;
         }

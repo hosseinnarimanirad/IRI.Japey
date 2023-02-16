@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader
 {
     internal class ShxReader
     {

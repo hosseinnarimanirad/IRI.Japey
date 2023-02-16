@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
     internal static class SqlServerWktMapFunctions
     {

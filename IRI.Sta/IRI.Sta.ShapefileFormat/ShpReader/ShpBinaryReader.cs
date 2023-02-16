@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.ShapefileFormat.ShpReader
+namespace IRI.Sta.ShapefileFormat.ShpReader
 {
     internal static class ShpBinaryReader
     {

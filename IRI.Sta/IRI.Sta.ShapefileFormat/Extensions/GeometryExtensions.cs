@@ -1,4 +1,4 @@
-﻿using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
@@ -214,7 +214,7 @@ namespace IRI.Extensions
             if (feature == null)
                 return;
 
-            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, new List<Feature<T>>() { feature }, srs);
+            IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, new List<Feature<T>>() { feature }, srs);
         }
 
         public static void SaveAsShapefile<T>(this IEnumerable<Feature<T>> features, string shpFileName, SrsBase srs = null) where T : IPoint, new()
@@ -222,7 +222,7 @@ namespace IRI.Extensions
             if (features.IsNullOrEmpty())
                 return;
 
-            IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, features, srs);
+            IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, features, srs);
         }
 
     }

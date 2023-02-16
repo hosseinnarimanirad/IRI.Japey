@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.Dbf
+namespace IRI.Sta.ShapefileFormat.Dbf
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct DbfFieldDescriptor

@@ -10,7 +10,7 @@ using IRI.Msh.Common.Primitives;
 using System.Configuration;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
 
     //A polygon consists of one or more rings.A ring is a connected sequence of four or more

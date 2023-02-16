@@ -9,9 +9,9 @@ using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
-    public struct EsriMultiPointZ : IRI.Ket.ShapefileFormat.EsriType.IEsriPointsWithZ
+    public struct EsriMultiPointZ : IRI.Sta.ShapefileFormat.EsriType.IEsriPointsWithZ
     {
 
         /// <summary>

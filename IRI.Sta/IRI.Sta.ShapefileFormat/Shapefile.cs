@@ -2,20 +2,20 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 using System.Threading.Tasks;
-using IRI.Ket.ShapefileFormat.Reader;
+using IRI.Sta.ShapefileFormat.Reader;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Extensions;
-using IRI.Ket.ShapefileFormat.Writer;
-using IRI.Ket.ShapefileFormat.Model;
-using IRI.Ket.ShapefileFormat.Dbf;
+using IRI.Sta.ShapefileFormat.Writer;
+using IRI.Sta.ShapefileFormat.Model;
+using IRI.Sta.ShapefileFormat.Dbf;
 using IRI.Msh.Common.Primitives;
-using IRI.Ket.ShapefileFormat.Prj;
+using IRI.Sta.ShapefileFormat.Prj;
 
 
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
 
     public static class Shapefile
@@ -506,7 +506,7 @@ namespace IRI.Ket.ShapefileFormat
 
         //public static Func<Point, Point> GetProjectFunc(string shapefileName, SrsBase targetCrs)
         //{
-        //    //var sourcePrj = IRI.Ket.ShapefileFormat.Shapefile.GetPrjFileName(shapefileName);
+        //    //var sourcePrj = IRI.Sta.ShapefileFormat.Shapefile.GetPrjFileName(shapefileName);
 
         //    //if (!System.IO.File.Exists(sourcePrj))
         //    //{

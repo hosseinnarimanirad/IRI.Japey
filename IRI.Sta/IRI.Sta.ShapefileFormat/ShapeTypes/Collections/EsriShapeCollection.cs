@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
     
   
@@ -31,7 +31,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public EsriShapeCollection(IEnumerable<T> values)
         {
-            if (typeof(T) is IRI.Ket.ShapefileFormat.EsriType.IEsriPointsWithMeasure)
+            if (typeof(T) is IRI.Sta.ShapefileFormat.EsriType.IEsriPointsWithMeasure)
             {
                 throw new NotImplementedException();
             }
@@ -76,15 +76,15 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
         public string AsKml()
         {
-            IRI.Ket.KmlFormat.Primitives.KmlType result = new KmlFormat.Primitives.KmlType();
+            IRI.Ket.KmlFormat.Primitives.KmlType result = new Ket.KmlFormat.Primitives.KmlType();
 
-            IRI.Ket.KmlFormat.Primitives.DocumentType document = new KmlFormat.Primitives.DocumentType();
+            IRI.Ket.KmlFormat.Primitives.DocumentType document = new Ket.KmlFormat.Primitives.DocumentType();
 
             var placemarks = ((List<T>)this).Select(i => i.AsPlacemark());
 
-            document.AbstractFeature = placemarks.OfType<KmlFormat.Primitives.AbstractFeatureType>().ToArray();
+            document.AbstractFeature = placemarks.OfType<Ket.KmlFormat.Primitives.AbstractFeatureType>().ToArray();
 
-            result.KmlObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { document };
+            result.KmlObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { document };
 
             return IRI.Ket.Common.Helpers.XmlHelper.Parse(result);
         }

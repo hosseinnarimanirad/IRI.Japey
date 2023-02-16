@@ -3,7 +3,7 @@ using System.Data;
 using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Text;
-using IRI.Ket.ShapefileFormat;
+using IRI.Sta.ShapefileFormat;
 using IRI.Msh.Common.Mapping;
 
 namespace IRI.Ket.DataManagement.DataSource

@@ -111,7 +111,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     var esriShape = layer.Geometry.AsSqlGeometry().AsEsriShape();
 
-                    IRI.Ket.ShapefileFormat.Shapefile.Save(file, new List<Ket.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+                    IRI.Sta.ShapefileFormat.Shapefile.Save(file, new List<IRI.Sta.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
                 }
                 catch (Exception ex)
                 {

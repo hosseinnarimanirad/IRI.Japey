@@ -39,9 +39,9 @@ namespace IRI.Ket.SqlServerSpatialExtension.Model
 
             //DbfFile.Write(GetDbfFileName(shpFileName), values, attributeMappings, encoding, overwrite);
 
-            ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, Features, f => f.TheSqlGeometry.AsEsriShape(), false, srs, overwrite);
+            IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(shpFileName, Features, f => f.TheSqlGeometry.AsEsriShape(), false, srs, overwrite);
 
-            ShapefileFormat.Dbf.DbfFile.Write(ShapefileFormat.Shapefile.GetDbfFileName(shpFileName), Features.Select(f => f.Attributes).ToList(), encoding, overwrite);
+            IRI.Sta.ShapefileFormat.Dbf.DbfFile.Write(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shpFileName), Features.Select(f => f.Attributes).ToList(), encoding, overwrite);
         }
 
         public void SaveAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
     public struct EsriPolygonM : IEsriPointsWithMeasure
     {

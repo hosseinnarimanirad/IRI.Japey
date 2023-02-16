@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives; 
-using IRI.Ket.ShapefileFormat;
+using IRI.Sta.ShapefileFormat;
 using IRI.Ket.DataManagement.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
@@ -54,7 +54,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public async Task MakeIndex(bool overwrite = true)
         {
-            var indexFileName = IRI.Ket.ShapefileFormat.Shapefile.GetIndexFileName(_shpFileName);
+            var indexFileName = IRI.Sta.ShapefileFormat.Shapefile.GetIndexFileName(_shpFileName);
 
             if (overwrite && System.IO.File.Exists(indexFileName))
             {

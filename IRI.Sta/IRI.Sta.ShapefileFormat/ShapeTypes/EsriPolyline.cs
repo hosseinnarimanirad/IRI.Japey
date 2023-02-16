@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Ket.ShapefileFormat.EsriType
+namespace IRI.Sta.ShapefileFormat.EsriType
 {
     public struct EsriPolyline : IEsriSimplePoints
     {
@@ -233,13 +233,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
         static IRI.Ket.KmlFormat.Primitives.PlacemarkType AsPlacemark(EsriPolyline polyline, Func<Point, Point> projectToGeodeticFunc = null, byte[] color = null)
         {
             IRI.Ket.KmlFormat.Primitives.PlacemarkType placemark =
-                new KmlFormat.Primitives.PlacemarkType();
+                new Ket.KmlFormat.Primitives.PlacemarkType();
 
             List<IRI.Ket.KmlFormat.Primitives.LineStringType> linestrings =
-                new List<KmlFormat.Primitives.LineStringType>();
+                new List<Ket.KmlFormat.Primitives.LineStringType>();
 
             IRI.Ket.KmlFormat.Primitives.MultiGeometryType multiGeometry =
-                new KmlFormat.Primitives.MultiGeometryType();
+                new Ket.KmlFormat.Primitives.MultiGeometryType();
 
             IEnumerable<string> coordinates;
 
@@ -265,7 +265,7 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             foreach (string item in coordinates)
             {
-                IRI.Ket.KmlFormat.Primitives.LineStringType linestring = new KmlFormat.Primitives.LineStringType();
+                IRI.Ket.KmlFormat.Primitives.LineStringType linestring = new Ket.KmlFormat.Primitives.LineStringType();
 
                 linestring.coordinates = item;
 
@@ -274,9 +274,9 @@ namespace IRI.Ket.ShapefileFormat.EsriType
 
             multiGeometry.AbstractGeometry = linestrings.ToArray();
 
-            //placemark.AbstractFeatureObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { multiGeometry };
+            //placemark.AbstractFeatureObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { multiGeometry };
             placemark.AbstractGeometry = multiGeometry;
-            //IRI.Ket.KmlFormat.Primitives.MultiGeometryType t = new KmlFormat.Primitives.MultiGeometryType();
+            //IRI.Ket.KmlFormat.Primitives.MultiGeometryType t = new Ket.KmlFormat.Primitives.MultiGeometryType();
 
             if (color == null)
             {
@@ -284,13 +284,13 @@ namespace IRI.Ket.ShapefileFormat.EsriType
             }
 
             IRI.Ket.KmlFormat.Primitives.StyleType style =
-                new KmlFormat.Primitives.StyleType();
+                new Ket.KmlFormat.Primitives.StyleType();
 
-            KmlFormat.Primitives.LineStyleType lineStyle = new KmlFormat.Primitives.LineStyleType();
+            Ket.KmlFormat.Primitives.LineStyleType lineStyle = new Ket.KmlFormat.Primitives.LineStyleType();
             lineStyle.color = color;
 
             style.LineStyle = lineStyle;
-            placemark.Styles = new KmlFormat.Primitives.AbstractStyleSelectorType[] { style };
+            placemark.Styles = new Ket.KmlFormat.Primitives.AbstractStyleSelectorType[] { style };
 
             return placemark;
         }

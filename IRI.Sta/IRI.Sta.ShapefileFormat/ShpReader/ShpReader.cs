@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.EsriType;
 
-namespace IRI.Ket.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader
 {
     public abstract class ShpReader<T> : IEnumerable<T> where T : IEsriShape
     {

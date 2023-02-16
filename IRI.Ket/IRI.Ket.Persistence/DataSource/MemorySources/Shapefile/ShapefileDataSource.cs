@@ -1,5 +1,5 @@
-﻿using IRI.Ket.ShapefileFormat.Dbf;
-using IRI.Ket.ShapefileFormat.EsriType;
+﻿using IRI.Sta.ShapefileFormat.Dbf;
+using IRI.Sta.ShapefileFormat.EsriType;
 using System.Text;
 using IRI.Msh.Common.Primitives;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Data;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
-using IRI.Ket.ShapefileFormat.Model;
+using IRI.Sta.ShapefileFormat.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -43,7 +43,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
             this._shapefileName = shapefileName;
 
-            _sourceSrs = IRI.Ket.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
+            _sourceSrs = IRI.Sta.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
 
             _targetSrs = targetSrs;
 
@@ -109,18 +109,18 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public static ShapefileDataSource<TGeometryAware> Create(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, TGeometryAware> map, Func<TGeometryAware, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
-            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+            var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
-            var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
+            var geometries = IRI.Sta.ShapefileFormat.Shapefile.ReadShapes(shapefileName);
 
             return new ShapefileDataSource<TGeometryAware>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
 
         public static async Task<ShapefileDataSource<TGeometryAware>> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, TGeometryAware> map, Func<TGeometryAware, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
-            var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+            var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
-            var geometries = await ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
+            var geometries = await IRI.Sta.ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
 
             return new ShapefileDataSource<TGeometryAware>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
@@ -142,7 +142,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 geometryMap = t => t.TheGeometry.AsEsriShape(_sourceSrs.Srid);
             }
 
-            IRI.Ket.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
+            IRI.Sta.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
         }
     }
 

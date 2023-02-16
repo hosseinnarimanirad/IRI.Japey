@@ -2,8 +2,8 @@
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
-using IRI.Ket.ShapefileFormat.Dbf;
-using IRI.Ket.ShapefileFormat.EsriType;
+using IRI.Sta.ShapefileFormat.Dbf;
+using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
 using System;
 using System.Collections.Generic;
@@ -19,29 +19,29 @@ namespace IRI.Ket.SqlServerSpatialExtension.Helpers
         {
             var tiles = WebMercatorUtility.GeodeticBoundingBoxToGoogleTileRegions(geodeticBoundingBox, zoomLevel);
 
-            IRI.Ket.ShapefileFormat.Shapefile.Save<TileInfo>(
+            IRI.Sta.ShapefileFormat.Shapefile.Save<TileInfo>(
                 fileName,
                 tiles,
                 t => t.GeocentricExtent.AsEsriShape(SridHelper.GeodeticWGS84),
-                new List<ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>>()
+                new List<IRI.Sta.ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>>()
                     {
-                        new ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Google Zoom"), t => t.ZoomLevel),
-                        new ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Row Number"), t => t.RowNumber),
-                        new ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Column Number"), t => t.ColumnNumber)
+                        new IRI.Sta.ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Google Zoom"), t => t.ZoomLevel),
+                        new IRI.Sta.ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Row Number"), t => t.RowNumber),
+                        new IRI.Sta.ShapefileFormat.Model.ObjectToDbfTypeMap<TileInfo>(DbfFieldDescriptors.GetIntegerField("Column Number"), t => t.ColumnNumber)
                     },
                 Encoding.ASCII,
                 new NoProjection(),
                 true);
 
-            //IRI.Ket.ShapefileFormat.Shapefile.SaveAsShapefile(
+            //IRI.Sta.ShapefileFormat.Shapefile.SaveAsShapefile(
             //    fileName,
             //    tiles.Select(r => (IEsriShape)r.GeodeticExtent.AsEsriShape()),
             //    false,
             //    new NoProjection(),
             //    true);
 
-            //IRI.Ket.ShapefileFormat.Dbf.DbfFile.Write<TileInfo>(
-            //    IRI.Ket.ShapefileFormat.Shapefile.GetDbfFileName(fileName),
+            //IRI.Sta.ShapefileFormat.Dbf.DbfFile.Write<TileInfo>(
+            //    IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(fileName),
             //    tiles,
             //    new List<Func<TileInfo, object>>()
             //    {

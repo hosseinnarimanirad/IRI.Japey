@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.ShapefileFormat.Prj;
+using IRI.Sta.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Extensions;
 
-namespace IRI.Ket.ShapefileFormat
+namespace IRI.Sta.ShapefileFormat
 {
     public static class CoordinateSystemExtensions
     {
