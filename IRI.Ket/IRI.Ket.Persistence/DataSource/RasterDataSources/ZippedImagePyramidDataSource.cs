@@ -10,10 +10,12 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Helpers;
+using IRI.Ket.Persistence.DataSource;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class ZippedImagePyramidDataSource : IDataSource
+    public class ZippedImagePyramidDataSource : IRasterDataSource
     {
         public const string _extentFileName = "extent.json";
 
@@ -24,6 +26,8 @@ namespace IRI.Ket.DataManagement.DataSource
             get { return _extent; }
             private set { _extent = value; }
         }
+
+        public int Srid => SridHelper.WebMercator;
 
         System.IO.Compression.ZipArchive _archive;
 

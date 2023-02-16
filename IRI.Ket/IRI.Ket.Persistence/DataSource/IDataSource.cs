@@ -5,5 +5,7 @@ namespace IRI.Ket.DataManagement.DataSource
     public interface IDataSource
     {
         BoundingBox Extent { get; }
+
+        public int Srid { get; }
     }
 }

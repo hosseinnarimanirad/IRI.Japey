@@ -74,6 +74,7 @@
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.DigitalImageProcessing\IRI.Ket.DigitalImageProcessing.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.GdiPersistence\IRI.Ket.GdiPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" />
+    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerPersistence\IRI.Ket.SqlServerPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.OfficeFormat\IRI.Sta.OfficeFormat.csproj" />

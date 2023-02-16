@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.SqlServer.Types;
-using System.Data.SqlClient; 
+using System.Data.SqlClient;
 
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using System.Data;
 using IRI.Ket.DataManagement.Model;
- 
+
 using System.Globalization;
 using IRI.Extensions;
 using IRI.Msh.Common.Model;
 using IRI.Extensions;
+using IRI.Msh.Common.Mapping;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class SqlServerDataSource : RelationalDbSource<Feature<Point>>
+    public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>
     {
         const string _outputSpatialAttribute = "_shape";
 
@@ -51,13 +52,15 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected string _labelColumnName;
 
-        public Action<IGeometryAware<Point>> AddAction;
+        public Action<Feature<Point>> AddAction;
 
         public Action<int> RemoveAction;
 
-        public Action<IGeometryAware<Point>> UpdateAction;
+        public Action<Feature<Point>> UpdateAction;
 
         public string IdColumnName { get; set; }
+
+        public override int Srid { get => GetSrid(); protected set => _ = value; }
 
         protected SqlServerDataSource()
         {
@@ -126,7 +129,7 @@ namespace IRI.Ket.DataManagement.DataSource
         //    return FormattableString.Invariant($"SELECT {_spatialColumnName} FROM {GetTable()} {MakeWhereClause(whereClause)}");
         //}
 
-        protected string MakeSelectCommand(string whereClause, bool returnOnlyGeometry)
+        protected string MakeSelectCommand(string? whereClause, bool returnOnlyGeometry)
         {
             if (returnOnlyGeometry)
             {
@@ -190,7 +193,7 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
-        public override int GetSrid()
+        public int GetSrid()
         {
             SqlConnection connection = null;
 
@@ -317,11 +320,6 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Get Geometries
 
-        public override List<Geometry<Point>> GetGeometries()
-        {
-            return GetGeometries(string.Empty);
-        }
-
         //3857: web mercator; 102100: web mercator
         public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {
@@ -332,18 +330,6 @@ namespace IRI.Ket.DataManagement.DataSource
             return this.GetGeometries(whereClause);
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="whereClause">Do not include the "WHERE", e.g. coulumn01 = someValue</param>
-        /// <returns></returns>
-        public override List<Geometry<Point>> GetGeometries(string whereClause)
-        {
-            //return SelectGeometries(FormattableString.Invariant($"SELECT {_spatialColumnName} FROM {GetTable()} {MakeWhereClause(whereClause)}"));
-            return SelectGeometries(MakeSelectCommand(whereClause, true));
-        }
-
         public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
             if (geometry == null)
@@ -352,6 +338,16 @@ namespace IRI.Ket.DataManagement.DataSource
             }
 
             return GetGeometriesWhereIntersects(geometry.AsWkt());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="whereClause">Do not include the "WHERE", e.g. coulumn01 = someValue</param>
+        /// <returns></returns>
+        public List<Geometry<Point>> GetGeometries(string whereClause)
+        {
+            return SelectGeometries(MakeSelectCommand(whereClause, true));
         }
 
         protected List<Geometry<Point>> SelectGeometries(string selectQuery, string connectionString = null)
@@ -418,7 +414,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Get Geometry Label Pair
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(string whereClause)
+        public List<NamedGeometry> GetGeometryLabelPairs(string whereClause)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
@@ -435,28 +431,28 @@ namespace IRI.Ket.DataManagement.DataSource
 
             connection.Open();
 
-            var result = new List<NamedGeometry<Point>>();
+            var result = new List<NamedGeometry>();
 
             using (SqlDataReader reader = command.ExecuteReader())
             {
 
                 if (!reader.HasRows)
                 {
-                    return new List<NamedGeometry<Point>>();
+                    return new List<NamedGeometry>();
                 }
 
                 if (string.IsNullOrWhiteSpace(_labelColumnName))
                 {
                     while (reader.Read())
                     {
-                        result.Add(new NamedGeometry<Point>(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));
+                        result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));
                     }
                 }
                 else
                 {
                     while (reader.Read())
                     {
-                        result.Add(new NamedGeometry<Point>(((SqlGeometry)reader[0]).AsGeometry(), reader[1]?.ToString()));
+                        result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), reader[1]?.ToString()));
                     }
                 }
             }
@@ -466,30 +462,7 @@ namespace IRI.Ket.DataManagement.DataSource
             return result;
         }
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
-        {
-            //List<string> attributes = GetAttributes(_labelColumnName).Select(i => i.ToString()).ToList();
-
-            //Geometry<Point> boundary = boundingBox.ToSqlGeometry();
-
-            //return GetGeometries().Zip(attributes, (a, b) => new NamedSqlGeometry(a, b)).Where(i => i.Geometry.STIntersects(boundary).Value).ToList();
-
-            var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
-
-            return GetGeometryLabelPairs(whereClause);
-        }
-
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point> geometry)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected List<NamedGeometry<Point>> SelectGeometryLabelPairs(string selectQuery, string connectionString = null)
+        protected List<NamedGeometry> SelectGeometryLabelPairs(string selectQuery, string connectionString = null)
         {
             if (connectionString == null)
             {
@@ -502,13 +475,13 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var command = new SqlCommand(selectQuery, connection);
 
-            List<NamedGeometry<Point>> geometries = new List<NamedGeometry<Point>>();
+            List<NamedGeometry> geometries = new List<NamedGeometry>();
 
             using (var reader = command.ExecuteReader())
             {
                 if (!reader.HasRows)
                 {
-                    return new List<NamedGeometry<Point>>();
+                    return new List<NamedGeometry>();
                 }
 
                 while (reader.Read())
@@ -519,7 +492,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     //geometries.Add(SqlGeometry.Deserialize(reader.GetSqlBytes(0))); //3220 ms
 
                     //approach 3 
-                    geometries.Add(new NamedGeometry<Point>(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));//2565 ms
+                    geometries.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));//2565 ms
 
                 }
             }
@@ -532,82 +505,77 @@ namespace IRI.Ket.DataManagement.DataSource
         #endregion
 
 
-        #region Get Entire Feature
+        //#region Get Entire Feature
 
-        public DataTable ExecuteSql(string commandString)
+        //public DataTable ExecuteSql(string commandString)
+        //{
+        //    SqlConnection connection = new SqlConnection(_connectionString);
+
+        //    SqlCommand command = new SqlCommand(commandString, connection);
+
+        //    connection.Open();
+
+        //    DataTable result = new DataTable();
+
+        //    SqlDataAdapter adapter = new SqlDataAdapter(command);
+
+        //    adapter.Fill(result);
+
+        //    //result.Load(command.ExecuteReader());
+
+        //    connection.Close();
+
+        //    return result;
+        //}
+
+        //public DataTable GetEntireFeatures()
+        //{
+        //    return GetEntireFeatures(string.Empty);
+        //}
+
+        //public DataTable GetEntireFeatures(string whereClause)
+        //{
+        //    //return ExecuteSql(string.Format(CultureInfo.InvariantCulture, "SELECT * FROM {0} {1} ", GetTable(), whereClause ?? string.Empty));
+        //    return ExecuteSql(FormattableString.Invariant($"SELECT * FROM {GetTable()} {MakeWhereClause(whereClause)} "));
+        //}
+
+        //#endregion
+
+
+        #region GetAsFeatureSet
+
+        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
+            if (geometry is not null)
+            {
+                var selectQuery = MakeSelectCommandWithWkb(geometry.AsWkb(), false);
 
-            SqlCommand command = new SqlCommand(commandString, connection);
-
-            connection.Open();
-
-            DataTable result = new DataTable();
-
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-
-            adapter.Fill(result);
-
-            //result.Load(command.ExecuteReader());
-
-            connection.Close();
-
-            return result;
+                return GetAsFeatureSet(selectQuery);
+            }
+            else
+            {
+                return GetAsFeatureSet(MakeSelectCommand(null, false));
+            }
         }
 
-        public override DataTable GetEntireFeatures()
+        public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
         {
-            //string query = string.Empty;
+            var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
 
-            //if (string.IsNullOrEmpty(_tableName))
-            //{
-            //    query = _queryString;
-            //}
-            //else
-            //{
-            //    query = string.Format(CultureInfo.InvariantCulture, "SELECT * FROM {0}", GetTable());
-            //}
-            //return ExecuteSql(query);
-            return GetEntireFeatures(string.Empty);
+            return GetAsFeatureSet(MakeSelectCommand(whereClause, false));
         }
 
-        public override DataTable GetEntireFeatures(string whereClause)
-        {
-            //return ExecuteSql(string.Format(CultureInfo.InvariantCulture, "SELECT * FROM {0} {1} ", GetTable(), whereClause ?? string.Empty));
-            return ExecuteSql(FormattableString.Invariant($"SELECT * FROM {GetTable()} {MakeWhereClause(whereClause)} "));
-        }
-
-        public override DataTable GetEntireFeatures(Geometry<Point> geometry)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override DataTable GetEntireFeatures(BoundingBox geometry)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-
-        #region Get FeatureSet
-
-        public FeatureSet QueryFeatures()
-        {
-            return QueryFeatures(MakeSelectCommand(null, false));
-        }
-
-        public FeatureSet QueryFeaturesWhereIntersects(string wktGeometryFilter)
+        public FeatureSet<Point> GetAsFeatureSetWhereIntersectsWkt(string wktGeometryFilter)
         {
             //return QueryFeatures(GetCommandString(wktGeometryFilter, false));
-            return QueryFeatures(MakeSelectCommandWithWkt(wktGeometryFilter, false));
+            return GetAsFeatureSet(MakeSelectCommandWithWkt(wktGeometryFilter, false));
         }
 
-        private FeatureSet QueryFeatures(string selectQuery)
+        private FeatureSet<Point> GetAsFeatureSet(string selectQuery)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
-            FeatureSet result = new FeatureSet(this.GetSrid()) { Fields = new List<Field>(), Features = new List<Feature<Point>>() };
+            FeatureSet result = new FeatureSet() { Srid = this.GetSrid(), Fields = new List<Field>(), Features = new List<Feature<Point>>() };
 
             try
             {
@@ -685,28 +653,96 @@ namespace IRI.Ket.DataManagement.DataSource
 
         }
 
-        public FeatureSet QueryFeaturesWhereIntersects(BoundingBox boundingBox)
-        {
-            var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
-
-            return QueryFeatures(MakeSelectCommand(whereClause, false));
-        }
-
         #endregion
 
-        public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
+        //public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
+        //{
+        //    //var selectQuery = GetCommandString(geometry?.AsWkt(), false);
+        //    var selectQuery = MakeSelectCommandWithWkb(geometry?.AsWkb(), false);
+
+        //    var featureSet = GetAsFeatureSet(selectQuery);
+
+        //    return featureSet?.Features;
+        //}
+
+
+        //public override void Update(TGeometryAware<Point> newFeature)
+        //{
+        //    this.UpdateAction?.Invoke(newFeature);
+        //}
+
+        //public override void UpdateFeature(IGeometryAware<Point> feature)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public override void Remove(IGeometryAware<Point> feature)
+        //{
+        //    Remove(feature.Id);
+        //}
+
+
+        //public FeatureSet GetSqlFeatures()
+        //{
+        //    return QueryFeatures();
+        //}
+
+        //public FeatureSet GetSqlFeatures(Geometry<Point> geometry)
+        //{
+        //    var boundingBox = geometry.GetBoundingBox();
+
+        //    var featureSet = GetAsFeatureSet(boundingBox);
+        //    //.Features
+        //    //.Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
+        //    //.ToList();
+
+        //    featureSet.Features = featureSet.Features.Where(s => s.TheGeometry?.Intersects(geometry) == true).ToList();
+
+        //    return featureSet;
+        //}
+
+
+
+
+        //
+
+        protected string MakeWhereClause(string whereClause)
         {
-            //var selectQuery = GetCommandString(geometry?.AsWkt(), false);
-            var selectQuery = MakeSelectCommandWithWkb(geometry?.AsWkb(), false);
-
-            var featureSet = QueryFeatures(selectQuery);
-
-            return featureSet?.Features;
+            return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");
         }
 
-        public override void Add(IGeometryAware<Point> newFeature)
+
+
+
+        protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
         {
-            this.AddAction?.Invoke(newFeature);
+            return geometryAware;
+        }
+
+        public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+        {
+            return GetAsFeatureSet(geometry).Features;
+        }
+
+        #region CRUD
+        public override void Add(IGeometryAware<Point> newValue)
+        {
+            Add(newValue as Feature<Point>);
+        }
+
+        public override void Remove(IGeometryAware<Point> newValue)
+        {
+            Remove(newValue as Feature<Point>);
+        }
+
+        public override void Update(IGeometryAware<Point> newValue)
+        {
+            Update(newValue as Feature<Point>);
+        }
+
+        public void Add(Feature<Point> newValue)
+        {
+            this.AddAction?.Invoke(newValue);
         }
 
         public void Remove(int featureId)
@@ -714,19 +750,14 @@ namespace IRI.Ket.DataManagement.DataSource
             this.RemoveAction?.Invoke(featureId);
         }
 
-        public override void Update(IGeometryAware<Point> newFeature)
-        {
-            this.UpdateAction?.Invoke(newFeature);
-        }
-
-        public override void UpdateFeature(IGeometryAware<Point> feature)
+        public void Remove(Feature<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public override void Remove(IGeometryAware<Point> feature)
+        public void Update(Feature<Point> newValue)
         {
-            Remove(feature.Id);
+            throw new NotImplementedException();
         }
 
         public override void SaveChanges()
@@ -734,23 +765,7 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
-        public override FeatureSet GetSqlFeatures()
-        {
-            return QueryFeatures();
-        }
 
-        public override FeatureSet GetSqlFeatures(Geometry<Point> geometry)
-        {
-            var boundingBox = geometry.GetBoundingBox();
-
-            var featureSet = QueryFeaturesWhereIntersects(boundingBox);
-            //.Features
-            //.Where(s => s.TheSqlGeometry?.STIntersects(geometry).IsTrue == true)
-            //.ToList();
-
-            featureSet.Features = featureSet.Features.Where(s => s.TheGeometry?.Intersects(geometry) == true).ToList();
-
-            return featureSet;
-        }
+        #endregion
     }
 }

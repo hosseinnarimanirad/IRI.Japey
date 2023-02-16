@@ -41,10 +41,10 @@ namespace IRI.Msh.Common.Mapping
         public Geometry<Point> TheGeometry
         {
             //1397.03.21
-            get => GetBoundingBox().Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator);
+            get => GetBoundingBox().Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry<Point>(SridHelper.WebMercator);
             set => throw new NotImplementedException();
         }
          
-        public abstract Feature<Point> AsFeature();  
+        public abstract Feature AsFeature();  
     }
 }

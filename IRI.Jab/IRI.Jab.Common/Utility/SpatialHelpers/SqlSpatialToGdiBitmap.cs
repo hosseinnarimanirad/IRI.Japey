@@ -595,7 +595,7 @@ namespace IRI.Jab.Common.Convertor
             graphic.Flush();
         }
 
-        public static void DrawLabels(List<sb.NamedGeometry<sb.Point>> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
+        public static void DrawLabels(List<sb.NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
         { 
             var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
 

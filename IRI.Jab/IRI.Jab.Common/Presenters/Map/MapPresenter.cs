@@ -822,7 +822,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
-        public Func<Geometry<Point>, ObservableCollection<System.Data.DataTable>> RequestIdentify;
+        public Func<Geometry<Point>, ObservableCollection<FeatureSet<Point>>> RequestIdentify;
 
         public Func<Task<Response<Point>>> RequestGetPoint;
 
@@ -1152,7 +1152,7 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        public ObservableCollection<System.Data.DataTable>? Identify(Point arg)
+        public ObservableCollection<FeatureSet<Point>>? Identify(Point arg)
         {
             if (RequestIdentify != null)
             {
@@ -1164,7 +1164,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public ObservableCollection<System.Data.DataTable>? Identify(Geometry<Point> arg)
+        public ObservableCollection<FeatureSet<Point>>? Identify(Geometry<Point> arg)
         {
             if (RequestIdentify != null)
             {
@@ -1286,7 +1286,7 @@ namespace IRI.Jab.Common.Presenter.Map
             string name = null,
             VisualParameters visualParameters = null,
             int id = int.MinValue,
-            FeatureDataSource source = null)
+            VectorDataSource<Feature<Point>, Point> source = null)
         {
             if (drawing.IsNullOrEmpty())
                 return;
@@ -1347,7 +1347,7 @@ namespace IRI.Jab.Common.Presenter.Map
             string name,
             VisualParameters visualParameters = null,
             int id = int.MinValue,
-            FeatureDataSource source = null)
+            VectorDataSource<Feature<Point>, Point> source = null)
         {
             var shapeItem = new DrawingItemLayer(name, drawing, visualParameters, id, source);
 
@@ -2342,11 +2342,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                 //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                var dataSource = new MemoryDataSource<Feature<Point>>(
+                var dataSource = new MemoryDataSource(
                     features,
                     f => f.Label,
-                    null,
-                    f => f);
+                    null);
 
                 AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
 
@@ -2390,12 +2389,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
                 var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
-                //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                var dataSource = new MemoryDataSource<Feature<Point>>(
+                // todo: provide parameter instead of `null`
+                var dataSource = new MemoryDataSource(
                     features,
                     f => f.Label,
-                    null,
-                    f => f);
+                    null);
 
                 AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
 
@@ -2949,11 +2947,10 @@ namespace IRI.Jab.Common.Presenter.Map
                         var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                         //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                        var dataSource = new MemoryDataSource<Feature<Point>>(
+                        var dataSource = new MemoryDataSource(
                             features,
                             f => f.Label,
-                            null,
-                            f => f);
+                            null);
 
                         var geometries = dataSource.GetGeometries();
 

@@ -774,9 +774,9 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
 
-            presenter.RequestIdentify = point => new ObservableCollection<System.Data.DataTable>(this.GetFeatures(point.AsSqlGeometry()));
+            presenter.RequestIdentify = point => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(point.AsSqlGeometry()));
 
-            presenter.RequestGetPoint = () => SelectPointAsync();
+            presenter.RequestGetPoint = SelectPointAsync;
 
             //presenter.RequestGetToScreenMap = () =>
             //{
@@ -999,7 +999,7 @@ namespace IRI.Jab.MapViewer
         }
 
         public void SetVectorLayer(
-            ScaleInterval scaleInterval, FeatureDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
+            ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
             bool isLabeled = false, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
         {
             LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
@@ -1010,7 +1010,7 @@ namespace IRI.Jab.MapViewer
         }
 
         public void SetVectorLayer(
-                ScaleInterval scaleInterval, FeatureDataSource dataSource, string layerName, VisualParameters visualElements,
+                ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements,
                 LabelParameters parameters, RenderingApproach rendering = RenderingApproach.Default, Geometry pointSymbol = null, RasterizationApproach toRasterApproach = RasterizationApproach.GdiPlus)
         {
             if (toRasterApproach == RasterizationApproach.StreamGeometry && rendering == RenderingApproach.Tiled)
@@ -1298,7 +1298,7 @@ namespace IRI.Jab.MapViewer
                 var mapScale = this.MapScale;
 
                 //consider if layer was Labeled
-                var features = featureLayer.DataSource.GetFeatures(extent.AsGeometry(SridHelper.WebMercator));
+                var features = featureLayer.DataSource.GetFeatures(extent.AsGeometry<sb.Point>(SridHelper.WebMercator));
 
                 if (this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;
@@ -1310,7 +1310,7 @@ namespace IRI.Jab.MapViewer
                 switch (featureLayer.ToRasterTechnique)
                 {
                     case RasterizationApproach.GdiPlus:
-                        path = featureLayer.AsBitmapUsingGdiPlus(features, null, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                        path = featureLayer.AsBitmapUsingGdiPlus(features.Features, null, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                         break;
                     //case RasterizationApproach.OpenTk:
                     //    path = featureLayer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
@@ -2958,10 +2958,16 @@ namespace IRI.Jab.MapViewer
         }
 
         //Get the FontFamily in method parameters
-        public async Task DrawGeometriesAsync(List<sb.Geometry<sb.Point>> geometries, string layerName,
-                                        VisualParameters visualElements, List<object> labels = null,
-                                        Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null, int fontSize = 0,
-                                        Brush labelBackground = null, FontFamily font = null, RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
+        public async Task DrawGeometriesAsync(
+            List<sb.Geometry<sb.Point>> geometries,
+            string layerName,
+            VisualParameters visualElements,
+            List<object> labels = null,
+            Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null,
+            int fontSize = 0,
+            Brush labelBackground = null,
+            FontFamily font = null,
+            RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
         {
             if (geometries == null || geometries.Count < 1)
                 return;
@@ -2973,7 +2979,7 @@ namespace IRI.Jab.MapViewer
                 parameters = new LabelParameters(null, fontSize, labelBackground, new FontFamily("tahoma"), positionFunc);
             }
 
-            FeatureDataSource source;
+            IVectorDataSource source;
 
             if (labels == null)
             {
@@ -2981,7 +2987,9 @@ namespace IRI.Jab.MapViewer
             }
             else
             {
-                source = new MemoryDataSource<sb.Feature<sb.Point>>(geometries.Zip(labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null, f => f);
+                var features = geometries.Zip(labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList();
+
+                source = new MemoryDataSource(features, f => f.Label, null);
             }
 
 
@@ -3008,7 +3016,7 @@ namespace IRI.Jab.MapViewer
             if (geometries == null)
                 return;
 
-            var source = new MemoryDataSource<sb.Feature<sb.Point>>(geometries.Geometries.Zip(geometries.Labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null, f => f);
+            var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null);
 
             var layer = new VectorLayer(
                 layerName,
@@ -4831,19 +4839,17 @@ namespace IRI.Jab.MapViewer
 
         #region Identify
 
-        public List<System.Data.DataTable> GetFeatures(sb.Point point)
+        public List<sb.FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
         {
             return GetFeatures(point.AsSqlGeometry(SridHelper.WebMercator));
         }
 
-        public List<System.Data.DataTable> GetFeatures(SqlGeometry geometry)
+        public List<sb.FeatureSet<sb.Point>>? GetFeatures(SqlGeometry geometry)
         {
             if (geometry.IsNotValidOrEmpty())
-            {
                 return null;
-            }
 
-            List<System.Data.DataTable> result = new List<System.Data.DataTable>();
+            List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
 
             if (geometry.GetOpenGisType() == OpenGisGeometryType.Point || geometry.GetOpenGisType() == OpenGisGeometryType.MultiPoint)
             {
@@ -4857,11 +4863,11 @@ namespace IRI.Jab.MapViewer
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))
                     continue;
 
-                var features = layer.DataSource.GetEntireFeatures(geometry.AsGeometry());
+                var features = layer.DataSource.GetAsFeatureSet(geometry.AsGeometry());
 
                 if (features != null)
                 {
-                    features.TableName = layer.LayerName;
+                    features.Title = layer.LayerName;
 
                     result.Add(features);
                 }

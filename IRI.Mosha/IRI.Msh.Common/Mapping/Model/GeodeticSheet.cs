@@ -11,7 +11,7 @@ namespace IRI.Msh.Common.Mapping
     {
         public int Id { get; set; }
 
-        public Geometry<Point> TheGeometry { get => GeodeticExtent.Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry(SridHelper.WebMercator); set => throw new NotImplementedException(); }
+        public Geometry<Point> TheGeometry { get => GeodeticExtent.Transform(MapProjects.GeodeticWgs84ToWebMercator).AsGeometry<Point>(SridHelper.WebMercator); set => throw new NotImplementedException(); }
 
         public BoundingBox GeodeticExtent { get; set; }
 

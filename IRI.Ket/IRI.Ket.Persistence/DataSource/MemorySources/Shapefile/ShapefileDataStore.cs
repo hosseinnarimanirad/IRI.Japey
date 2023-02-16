@@ -18,6 +18,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public BoundingBox Extent { get { throw new NotImplementedException(); } }
 
+        public int Srid => throw new NotImplementedException();
+
         public async static Task<ShapefileDataStore> Create(string shpFileName, string spatialColumnName, int srid, Encoding encoding, string labelColumnName = null)
         {
             var result = new ShapefileDataStore(shpFileName, spatialColumnName, srid, encoding, labelColumnName);

@@ -12,15 +12,18 @@ using IRI.Ket.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
+using IRI.Ket.Persistence.DataSource;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class OnlineGoogleMapDataSource<T> : IDataSource
+    public class OnlineGoogleMapDataSource<T> : IRasterDataSource
     {
         public BoundingBox Extent
         {
             get { return BoundingBox.NaN; }
         }
+
+        public int Srid => SridHelper.WebMercator;
 
         public OnlineGoogleMapDataSource()
         {

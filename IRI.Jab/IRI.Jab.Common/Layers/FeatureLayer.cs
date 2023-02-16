@@ -15,7 +15,7 @@ namespace IRI.Jab.Common
 {
     public class FeatureLayer : BaseLayer
     {
-        public SqlFeatureDataSource DataSource { get; protected set; }
+        public MemoryDataSource DataSource { get; protected set; }
 
         public Func<sb.Feature<sb.Point>, VisualParameters> SymbologyRule { get; set; }
 
@@ -77,7 +77,7 @@ namespace IRI.Jab.Common
         {
             if (features == null)
                 return null;
-             
+
             var image = SqlFeatureToGdiBitmap.ParseSqlGeometry(
                 features,
                 width,
@@ -88,7 +88,7 @@ namespace IRI.Jab.Common
 
             if (image == null)
                 return null;
-             
+
             BitmapImage bitmapImage = Helpers.ImageUtility.AsBitmapImage(image, System.Drawing.Imaging.ImageFormat.Png);
 
             image.Dispose();
@@ -121,16 +121,16 @@ namespace IRI.Jab.Common
             if (features == null || features.Count == 0)
                 throw new NotImplementedException();
 
-            Initialize(name, new SqlFeatureDataSource(features), rendering, toRasterTechnique, visibleRange, symbologyRule);
+            Initialize(name, new MemoryDataSource(features, null, null), rendering, toRasterTechnique, visibleRange, symbologyRule);
         }
 
-        public FeatureLayer(string layerName, SqlFeatureDataSource dataSource, RenderingApproach rendering,
+        public FeatureLayer(string layerName, MemoryDataSource dataSource, RenderingApproach rendering,
                             RasterizationApproach toRasterTechnique, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule, ScaleInterval visibleRange)
         {
             Initialize(layerName, dataSource, rendering, toRasterTechnique, visibleRange, symbologyRule);
         }
 
-        private void Initialize(string layerName, SqlFeatureDataSource dataSource, RenderingApproach rendering,
+        private void Initialize(string layerName, MemoryDataSource dataSource, RenderingApproach rendering,
             RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule)
         {
             this.LayerId = Guid.NewGuid();
@@ -141,9 +141,9 @@ namespace IRI.Jab.Common
 
             this.ToRasterTechnique = toRasterTechnique;
 
-            var geometries = dataSource.GetGeometries();
-
             this.Type = LayerType.Feature | LayerType.FeatureLayer;
+
+            //var geometries = dataSource.GetGeometries();
 
             //if (geometries?.Count > 0)
             //{
@@ -154,7 +154,8 @@ namespace IRI.Jab.Common
             //    this.Type = type;
             //}
 
-            this.Extent = DataSource?.GetGeometries()?.GetBoundingBox() ?? sb.BoundingBox.NaN;
+            //this.Extent = DataSource.GetFeatures()?.GetGeometries()?.GetBoundingBox() ?? sb.BoundingBox.NaN;
+            this.Extent = DataSource.Extent;
 
             this.LayerName = layerName;
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using IRI.Extensions;
 using IRI.Ket.ShapefileFormat.Dbf;
-using System.Linq; 
+using System.Linq;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
 
@@ -13,14 +13,14 @@ namespace IRI.Extensions
 {
     public static class FeatureSetExtensions
     {
-        public static void SaveAsShapefile(this FeatureSet featureSet, string shpFileName, Encoding encoding, SrsBase srs, bool overwrite = false)
+        public static void SaveAsShapefile(this FeatureSet<Point> featureSet, string shpFileName, Encoding encoding, SrsBase srs, bool overwrite = false)
         {
             Shapefile.SaveAsShapefile(shpFileName, featureSet.Features, f => f.TheGeometry.AsEsriShape(f.TheGeometry.Srid), false, srs, overwrite);
 
             DbfFile.Write(Shapefile.GetDbfFileName(shpFileName), featureSet.Features.Select(f => f.Attributes).ToList(), encoding, overwrite);
         }
 
-        public static void SaveAsGeoJson(this FeatureSet featureSet, string geoJsonFileName, bool isLongitudeFirst)
+        public static void SaveAsGeoJson(this FeatureSet<Point> featureSet, string geoJsonFileName, bool isLongitudeFirst)
         {
             var srsBase = SridHelper.AsSrsBase(featureSet.Srid);
 
@@ -34,5 +34,6 @@ namespace IRI.Extensions
 
             jsonFeatureSet.Save(geoJsonFileName, false, true);
         }
+
     }
 }

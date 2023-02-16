@@ -1,5 +1,5 @@
-﻿using IRI.Extensions; 
-using IRI.Msh.Common.Primitives; 
+﻿using IRI.Extensions;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Ket.DataManagement.DataSource;
 
-public class PersoanlGdbDataSource : RelationalDbSource<Feature<Point>>
+public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// RelationalDbSource<Feature<Point>>
 {
     protected BoundingBox _extent = BoundingBox.NaN;
 
@@ -49,6 +49,7 @@ public class PersoanlGdbDataSource : RelationalDbSource<Feature<Point>>
     public Action<IGeometryAware<Point>>? UpdateAction;
 
     public string? IdColumnName { get; set; }
+    public override int Srid { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
     //protected PersoanlGdbDataSource()
     //{
@@ -138,7 +139,7 @@ public class PersoanlGdbDataSource : RelationalDbSource<Feature<Point>>
         return geometries;
     }
 
-    public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
+    public override FeatureSet<Point> GetFeatures(Geometry<Point> geometry)
     {
         throw new NotImplementedException();
     }
@@ -148,37 +149,39 @@ public class PersoanlGdbDataSource : RelationalDbSource<Feature<Point>>
         throw new NotImplementedException();
     }
 
-    public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point>? geometry)
+    public override List<NamedGeometry<Point>> GetNamedGeometries(Geometry<Point>? geometry)
     {
         throw new NotImplementedException();
     }
-
-    public override FeatureSet GetSqlFeatures()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Add(IGeometryAware<Point> newValue)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Remove(IGeometryAware<Point> value)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Update(IGeometryAware<Point> newValue)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void UpdateFeature(IGeometryAware<Point> feature)
-    {
-        throw new NotImplementedException();
-    }
+     
+     
 
     public override void SaveChanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Add(Feature<Point> newValue)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Remove(Feature<Point> value)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Update(Feature<Point> newValue)
     {
         throw new NotImplementedException();
     }

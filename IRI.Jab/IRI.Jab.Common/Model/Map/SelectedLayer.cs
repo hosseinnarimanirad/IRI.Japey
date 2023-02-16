@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.Model.Map
 {
-    public class SelectedLayer<T> : Notifier, ISelectedLayer where T : class, IGeometryAware<Point>
+    public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeometryAware : class, IGeometryAware<Point>
     {
         public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
@@ -23,8 +23,8 @@ namespace IRI.Jab.Common.Model.Map
 
         public bool ShowSelectedOnMap { get; set; } = false;
 
-        private ObservableCollection<T> _features;
-        public ObservableCollection<T> Features
+        private ObservableCollection<TGeometryAware> _features;
+        public ObservableCollection<TGeometryAware> Features
         {
             get { return _features; }
             set
@@ -34,9 +34,9 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
-       
-        private ObservableCollection<T> _highlightedFeatures = new ObservableCollection<T>();
-        public ObservableCollection<T> HighlightedFeatures
+
+        private ObservableCollection<TGeometryAware> _highlightedFeatures = new ObservableCollection<TGeometryAware>();
+        public ObservableCollection<TGeometryAware> HighlightedFeatures
         {
             get { return _highlightedFeatures; }
             set
@@ -83,12 +83,12 @@ namespace IRI.Jab.Common.Model.Map
 
         public void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items)
         {
-            Features = new ObservableCollection<T>(items?.Cast<T>());
+            Features = new ObservableCollection<TGeometryAware>(items?.Cast<TGeometryAware>());
         }
 
         public void UpdateHighlightedFeatures(IEnumerable<IGeometryAware<Point>> items)
         {
-            HighlightedFeatures = new ObservableCollection<T>(items.Cast<T>());
+            HighlightedFeatures = new ObservableCollection<TGeometryAware>(items.Cast<TGeometryAware>());
         }
 
         public void UpdateSelectedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable)
@@ -120,7 +120,7 @@ namespace IRI.Jab.Common.Model.Map
 
         private void TryFlashPoint(IEnumerable<IGeometryAware<Point>> point)
         {
-            if (point?.Count() == 1 && point.First().TheGeometry.Type== GeometryType.Point/*.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point*/)
+            if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point/*.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point*/)
             {
                 RequestFlashSinglePoint?.Invoke(point.First());
             }
@@ -128,7 +128,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry)
         {
-            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as Ket.DataManagement.DataSource.VectorDataSource<TGeometryAware, Point>;
 
             dataSource.Update(newGeometry);
 
@@ -142,11 +142,12 @@ namespace IRI.Jab.Common.Model.Map
 
         public void UpdateFeature(object item)
         {
-            var itemValue = item as T;
+            var itemValue = item as TGeometryAware;
 
             var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
 
-            dataSource.UpdateFeature(itemValue);
+            //dataSource.UpdateFeature(itemValue);
+            dataSource.Update(itemValue);
         }
 
         public Action<IEnumerable<IGeometryAware<Point>>> FeaturesChangedAction { get; set; }

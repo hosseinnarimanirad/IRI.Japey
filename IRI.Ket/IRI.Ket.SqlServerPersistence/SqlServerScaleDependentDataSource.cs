@@ -9,7 +9,7 @@ using System.Globalization;
 using IRI.Extensions;
 using System.Linq;
 using IRI.Ket.SqlServerSpatialExtension.Model;
-using IRI.Msh.Common.Analysis; 
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 {
@@ -118,7 +118,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
                 row["Geo"] = geometries[i];
 
-                row["MBB"] = geometries[i].GetBoundingBox().AsGeometry(GetSrid());//.STEnvelope();
+                row["MBB"] = geometries[i].GetBoundingBox().AsGeometry<Point>(GetSrid());//.STEnvelope();
 
                 table.Rows.Add(row);
             }
@@ -181,7 +181,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
 
 
 
-        public List<NamedGeometry<Point>> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
+        public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
         {
             int srid = GetSrid();
 
@@ -194,7 +194,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             {
                 //zoomLevel = _levels.Max();
 
-                return GetGeometryLabelPairsForDisplay(boundingBox);
+                return GetNamedGeometries(boundingBox);// GetGeometryLabelPairsForDisplay(boundingBox);
             }
             else
             {
@@ -202,7 +202,7 @@ namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
             }
         }
 
-        public List<NamedGeometry<Point>> GetGeometryLabelPairs(double mapScale, string whereClause)
+        public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
         {
             int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
 

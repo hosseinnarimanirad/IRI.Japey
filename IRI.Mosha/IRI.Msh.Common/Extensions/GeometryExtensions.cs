@@ -14,7 +14,7 @@ namespace IRI.Extensions
 {
     public static class Msh_GeometryExtensions
     {
-        public static BoundingBox GetBoundingBox<T>(this List<Geometry<T>> spatialFeatures) where T : IPoint, new()
+        public static BoundingBox GetBoundingBox<T>(this IEnumerable<Geometry<T>> spatialFeatures) where T : IPoint, new()
         {
             if (spatialFeatures.IsNullOrEmpty() /*== null || spatialFeatures.Count < 1*/)
                 return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);

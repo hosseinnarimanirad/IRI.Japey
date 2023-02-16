@@ -1049,6 +1049,27 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return new Geometry<T>(null, this.Type, false, this.Srid);
     }
 
+    public Geometry<TPoint> NeutralizeGenericPoint<TPoint>() where TPoint : IPoint, new()
+    {
+        if (this.Points != null)
+        {
+            List<TPoint> points = new List<TPoint>(this.Points.Count);
+
+            for (int i = 0; i < this.Points.Count; i++)
+            {
+                points.Add(new TPoint() { X = this.Points[i].X, Y = this.Points[i].Y });
+            }
+
+            return Geometry<TPoint>.Create(points, this.Type, this.Srid);
+        }
+        if (this.Geometries != null)
+        {
+            return new Geometry<TPoint>(this.Geometries.Select(g => g.NeutralizeGenericPoint<TPoint>()).ToList(), this.Type, this.Srid);
+        }
+
+        return new Geometry<TPoint>(null, this.Type, false, this.Srid);
+    }
+
     //This method can better using Array.Resize()
     public void InsertLastPoint(T newPoint)
     {
@@ -2347,18 +2368,6 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
-    #region Conversions
 
-    public Feature<T> AsFeature()
-    {
-        return new Feature<T>()
-        {
-            Attributes = new Dictionary<string, object>(),
-            Id = 0,
-            TheGeometry = this
-        };
-    }
-
-    #endregion
 
 }

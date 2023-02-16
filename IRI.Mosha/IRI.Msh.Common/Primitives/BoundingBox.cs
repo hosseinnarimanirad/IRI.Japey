@@ -345,21 +345,21 @@ namespace IRI.Msh.Common.Primitives
         }
 
 
-        public List<Point> GetClockWiseOrderOfEsriPoints()
+        public List<T> GetClockWiseOrderOfEsriPoints<T>() where T : IPoint, new()
         {
-            return new List<Point>
+            return new List<T>
             {
-                new Point(this.XMin, this.YMin),
-                new Point(this.XMin, this.YMax),
-                new Point(this.XMax, this.YMax),
-                new Point(this.XMax, this.YMin)
+                new T() { X = this.XMin, Y = this.YMin },
+                new T() { X = this.XMin, Y = this.YMax },
+                new T() { X = this.XMax, Y = this.YMax },
+                new T() { X = this.XMax, Y = this.YMin }
             };
         }
 
 
-        public Geometry<Point> AsGeometry(int srid)
+        public Geometry<T> AsGeometry<T>(int srid) where T : IPoint, new()
         {
-            return Geometry<Point>.Create(GetClockWiseOrderOfEsriPoints()/*.ToArray()*/, GeometryType.Polygon, srid);
+            return Geometry<T>.Create(GetClockWiseOrderOfEsriPoints<T>()/*.ToArray()*/, GeometryType.Polygon, srid);
         }
 
         public bool Contains<T>(T point) where T : IPoint, new()

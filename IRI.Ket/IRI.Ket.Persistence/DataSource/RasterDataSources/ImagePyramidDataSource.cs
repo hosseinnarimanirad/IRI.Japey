@@ -12,7 +12,7 @@ namespace IRI.Ket.DataManagement.DataSource
     //Note: Extent is NaN for this class
     public class ImagePyramidDataSource : OfflineGoogleMapDataSource<object>
     {
-        public ImagePyramidDataSource(string directory, Func<int, int, int, string> makeFileName = null) : base(new List<ImageSource>())
+        public ImagePyramidDataSource(string directory, Func<int, int, int, string>? makeFileName = null) : base(new List<ImageSource>())
         {
             var availableZoomLevels = System.IO.Directory.EnumerateDirectories(directory, "*.*", System.IO.SearchOption.TopDirectoryOnly).ToList();
 

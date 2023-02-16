@@ -238,32 +238,57 @@ namespace IRI.Jab.Common
             }
             else
             {
-                string whereClouse =
-                  string.Format(System.Globalization.CultureInfo.InvariantCulture, " ImageMinX < {0} AND ImageMaxX > {2} AND ImageMinY < {1} AND ImageMaxY > {3}",
-                      region.XMax,
-                      region.YMax,
-                      region.XMin,
-                      region.YMin);
+                //string whereClouse =
+                //  string.Format(System.Globalization.CultureInfo.InvariantCulture, " ImageMinX < {0} AND ImageMaxX > {2} AND ImageMinY < {1} AND ImageMaxY > {3}",
+                //      region.XMax,
+                //      region.YMax,
+                //      region.XMin,
+                //      region.YMin);
 
                 //??
-                var table = await ((RelationalDbSource<Feature<IRI.Msh.Common.Primitives.Point>>)this.DataSource).GetEntireFeatureAsync(whereClouse);
+                //var featureSet = await ((SqlServerDataSource)this.DataSource).GetAsFeatureSetAsync(region);
 
-                foreach (System.Data.DataRow item in table.Rows)
+                //foreach (System.Data.DataRow item in table.Rows)
+                //{
+                //    if (item["Image"] == DBNull.Value)
+                //    {
+                //        continue;
+                //    }
+
+                //    var boundingBox = new BoundingBox(xMin: double.Parse(item["ImageMinX"].ToString()),
+                //                                        yMin: double.Parse(item["ImageMinY"].ToString()),
+                //                                        xMax: double.Parse(item["ImageMaxX"].ToString()),
+                //                                        yMax: double.Parse(item["ImageMaxY"].ToString()));
+                //    //94.12.16
+                //    RasterLayer layer =
+                //        new RasterLayer(this, this.LayerName,
+                //                            Helpers.ImageUtility.ToImage((byte[])item["Image"]),
+                //                            this.VisualParameters.Opacity,
+                //                            boundingBox,
+                //                            this.Type == LayerType.BaseMap);
+                //    result.Add(layer);
+                //}
+
+                var featureSet = await ((SqlServerDataSource)this.DataSource).GetAsFeatureSetAsync(region);
+
+                foreach (var item in featureSet.Features)
                 {
-                    if (item["Image"] == DBNull.Value)
-                    {
-                        continue;
-                    }
+                    //if (item["Image"] == DBNull.Value)
+                    //{
+                    //    continue;
+                    //}
 
-                    var boundingBox = new BoundingBox(xMin: double.Parse(item["ImageMinX"].ToString()),
-                                                        yMin: double.Parse(item["ImageMinY"].ToString()),
-                                                        xMax: double.Parse(item["ImageMaxX"].ToString()),
-                                                        yMax: double.Parse(item["ImageMaxY"].ToString()));
+                    var boundingBox = new BoundingBox(xMin: double.Parse(item.Attributes["ImageMinX"].ToString()),
+                                                        yMin: double.Parse(item.Attributes["ImageMinY"].ToString()),
+                                                        xMax: double.Parse(item.Attributes["ImageMaxX"].ToString()),
+                                                        yMax: double.Parse(item.Attributes["ImageMaxY"].ToString()));
 
-                    //94.12.16
+                    // 1401.11.27
+                    // todo: need test
+                    // 1394.12.16
                     RasterLayer layer =
                         new RasterLayer(this, this.LayerName,
-                                            Helpers.ImageUtility.ToImage((byte[])item["Image"]),
+                                            Helpers.ImageUtility.ToImage((byte[])item.Attributes["Image"]),
                                             this.VisualParameters.Opacity,
                                             boundingBox,
                                             this.Type == LayerType.BaseMap);

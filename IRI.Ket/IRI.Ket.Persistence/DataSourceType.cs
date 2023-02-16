@@ -7,10 +7,14 @@ namespace IRI.Ket.DataManagement
 {
     public enum DataSourceType
     {
-        SQLServer,
-        SQLCompact,
-        PostgreSQL,
-        Shapefile,
-        None
+        None = 1,
+        Shapefile = 2,
+        PostgreSQL = 3,
+        MongoDb = 4,
+        PersonalGdb = 5,
+        SQLServer = 6,
+        
+        // depricated
+        SQLCompact = 7,
     }
 }

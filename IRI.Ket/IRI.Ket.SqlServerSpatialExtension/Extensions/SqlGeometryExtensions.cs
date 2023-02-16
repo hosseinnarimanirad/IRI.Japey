@@ -1441,7 +1441,7 @@ namespace IRI.Extensions
 
         public static Geometry<Point> AsGeometry(this IRI.Msh.Common.Model.TileInfo tile)
         {
-            return tile.WebMercatorExtent.AsGeometry(0);
+            return tile.WebMercatorExtent.AsGeometry<Point>(0);
         }
 
         #endregion

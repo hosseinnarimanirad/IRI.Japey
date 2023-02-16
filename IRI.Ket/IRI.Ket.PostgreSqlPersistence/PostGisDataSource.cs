@@ -6,9 +6,11 @@ using IRI.Extensions;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class PostGisDataSource : RelationalDbSource<Feature<Point>>
+    // todo: implement methods
+    public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
     {
         public override BoundingBox Extent { get; protected set; }
+        public override int Srid { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
         private string _connectionString;
 
@@ -77,6 +79,11 @@ namespace IRI.Ket.DataManagement.DataSource
             return GetEntireFeaturesWhereIntersects(wktRegion);
         }
 
+        private DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
+        {
+            throw new NotImplementedException();
+        }
+
         public DataTable GetAttributeColumns(string whereClause)
         {
             List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema ?? "public", _tableName);
@@ -125,17 +132,17 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region Override Methods
 
-        public override List<Geometry<Point>> GetGeometries()
+        public List<Geometry<Point>> GetGeometries()
         {
             return GetGeometries(string.Empty);
         }
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
-        {
-            throw new NotImplementedException();
-        }
+        //public override List<NamedGeometry<Point>> GetGeometryLabelPairsForDisplay(BoundingBox boundingBox)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public override List<Geometry<Point>> GetGeometries(string whereClause)
+        public List<Geometry<Point>> GetGeometries(string whereClause)
         {
             NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
 
@@ -166,116 +173,108 @@ namespace IRI.Ket.DataManagement.DataSource
             return geometries;
         }
 
-        public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
+        public List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {
-            Geometry<Point> boundary = boundingBox.AsGeometry(GetSrid());
+            Geometry<Point> boundary = boundingBox.AsGeometry<Point>(this.Srid);
 
             return GetGeometries(boundary);
         }
 
-        public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
+        public List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
         {
             return GetGeometries().Where(i => i.Intersects(geometry)).ToList();
         }
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs()
-        {
-            throw new NotImplementedException();
-        }
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(string whereClause)
-        {
-            throw new NotImplementedException();
-        }
+        //public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
+        //{
+        //    string whereClause = string.Format(CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
 
-        public override List<NamedGeometry<Point>> GetGeometryLabelPairs(Geometry<Point> geometry)
-        {
-            throw new NotImplementedException();
-        }
+        //    return GetEntireFeatures(whereClause);
+        //}
 
-        public DataTable GetEntireFeaturesWhereIntersects(string wktRegion)
-        {
-            string whereClause = string.Format(CultureInfo.InvariantCulture, " WHERE ST_INTERSECTS({0},'{1}'::geometry)", _spatialColumnName, wktRegion);
+        //public override DataTable GetEntireFeatures(BoundingBox geometry)
+        //{
+        //    var boundary = geometry.AsGeometry(GetSrid());
 
-            return GetEntireFeatures(whereClause);
-        }
+        //    return GetEntireFeatures(boundary);
+        //}
 
-        public override DataTable GetEntireFeatures(BoundingBox geometry)
-        {
-            var boundary = geometry.AsGeometry(GetSrid());
+        //public override DataTable GetEntireFeatures()
+        //{
+        //    string where = string.Empty;
 
-            return GetEntireFeatures(boundary);
-        }
+        //    return GetEntireFeatures(where);
+        //}
 
-        public override DataTable GetEntireFeatures()
-        {
-            string where = string.Empty;
+        //public override DataTable GetEntireFeatures(Geometry<Point> geometry)
+        //{
+        //    string wkt = new string(geometry.AsWkt());//.STAsText().Value);
 
-            return GetEntireFeatures(where);
-        }
+        //    return GetEntireFeaturesWhereIntersects(wkt);
+        //}
 
-        public override DataTable GetEntireFeatures(Geometry<Point> geometry)
-        {
-            string wkt = new string(geometry.AsWkt());//.STAsText().Value);
+        ////WHERE ST_INTERSECTS(A,B)
+        //public override DataTable GetEntireFeatures(string whereClause)
+        //{
+        //    List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema, _tableName);
 
-            return GetEntireFeaturesWhereIntersects(wkt);
-        }
+        //    if (!columns.Contains(_spatialColumnName))
+        //        throw new NotImplementedException();
 
-        //WHERE ST_INTERSECTS(A,B)
-        public override DataTable GetEntireFeatures(string whereClause)
-        {
-            List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema, _tableName);
+        //    string command =
+        //        string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}",
+        //            string.Join(",", columns.Select(i => i == _spatialColumnName ? GetProperSelectForSpatialColumn(i) : i)),
+        //            _tableName,
+        //            string.IsNullOrEmpty(whereClause) ? string.Empty : whereClause);
 
-            if (!columns.Contains(_spatialColumnName))
-                throw new NotImplementedException();
-
-            string command =
-                string.Format(System.Globalization.CultureInfo.InvariantCulture, "SELECT {0} FROM {1} {2}",
-                    string.Join(",", columns.Select(i => i == _spatialColumnName ? GetProperSelectForSpatialColumn(i) : i)),
-                    _tableName,
-                    string.IsNullOrEmpty(whereClause) ? string.Empty : whereClause);
-
-            return ExecuteSql(command);
-        }
-
-        public override void Add(IGeometryAware<Point> newValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Remove(IGeometryAware<Point> value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Update(IGeometryAware<Point> newValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void UpdateFeature(IGeometryAware<Point> feature)
-        {
-            throw new NotImplementedException();
-        }
+        //    return ExecuteSql(command);
+        //}
 
         public override void SaveChanges()
         {
             throw new NotImplementedException();
         }
 
-        public override List<Feature<Point>> GetFeatures(Geometry<Point> geometry)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
 
-        public override FeatureSet GetSqlFeatures()
+
+
+
+        //
+        protected string MakeWhereClause(string whereClause)
+        {
+            return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");
+        }
+
+
+        public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(string whereClause)
+        {
+            return Task.Run(() => { return GetGeometries(whereClause); });
+        }
+
+        protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
         {
             throw new NotImplementedException();
         }
 
-        public override FeatureSet GetSqlFeatures(Geometry<Point> geometry)
+        public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Add(Feature<Point> newValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(Feature<Point> value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(Feature<Point> newValue)
         {
             throw new NotImplementedException();
         }

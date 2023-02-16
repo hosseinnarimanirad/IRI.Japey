@@ -9,6 +9,7 @@ using IRI.Ket.DataManagement.Model;
 using IRI.Ket.Common.Model;  
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.DataStructure.AdvancedStructures;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -19,6 +20,8 @@ namespace IRI.Ket.DataManagement.DataSource
         string _imageDirectory;
 
         public string ImageDirectory { get { return _imageDirectory; } }
+
+        public int Srid => SridHelper.WebMercator;
 
         List<GeoTaggedImage> _images;
 
@@ -111,7 +114,5 @@ namespace IRI.Ket.DataManagement.DataSource
             }
         }
 
-
-        
     }
 }

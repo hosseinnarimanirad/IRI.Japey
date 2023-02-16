@@ -6,10 +6,12 @@ using System.Data;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSource;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class OfflineGoogleMapDataSource<T> : IDataSource
+    public class OfflineGoogleMapDataSource<T> : IRasterDataSource
     {
         public BoundingBox Extent
         {
@@ -25,14 +27,16 @@ namespace IRI.Ket.DataManagement.DataSource
             private set { _imageSources = value; }
         }
 
+        public int Srid => SridHelper.WebMercator;
+
         public OfflineGoogleMapDataSource(List<ImageSource> imageSources)
         {
-            if (imageSources.GroupBy(i => i.ZoomLevel).Any(i => i.Count() > 1))
-            {
-                throw new NotImplementedException();
-            }
+            //if (imageSources.GroupBy(i => i.ZoomLevel).Any(i => i.Count() < 1))
+            //{
+            //    throw new NotImplementedException();
+            //}
 
-            this.ImageSources = imageSources;
+            this._imageSources = imageSources;
         }
 
         public List<GeoReferencedImage> GetTiles(BoundingBox geographicBoundingBox, double mapScale)
@@ -59,22 +63,9 @@ namespace IRI.Ket.DataManagement.DataSource
             {
                 for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
                 {
-                    //94.12.17
-                    //string imageName;
-
-                    //if (imageSource.IsZoomLevelIncluded)
-                    //{
-                    //    imageName = string.Format("{0}{1}_{2}_{3}.{4}", imageSource.ImagePrefix, i, j, zoomLevel, imageSource.FileExtension);
-                    //}
-                    //else
-                    //{
-                    //    imageName = string.Format("{0}{1}_{2}.{3}", imageSource.ImagePrefix, i, j, imageSource.FileExtension);
-                    //}
-
-                    //string fileName = System.IO.Path.Combine(imageSource.ImageDirectory, imageName);
                     string fileName = imageSource.GetFileName(j, i);
 
-                    if (System.IO.File.Exists(fileName))
+                    if (File.Exists(fileName))
                     {
                         result.Add(new GeoReferencedImage(
                             System.IO.File.ReadAllBytes(fileName),
@@ -113,7 +104,7 @@ namespace IRI.Ket.DataManagement.DataSource
             for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
             {
                 for (int j = (int)upperRight.Y; j <= lowerLeft.Y; j++)
-                {  
+                {
                     string fileName = imageSource.GetFileName(j, i);
 
                     if (System.IO.File.Exists(fileName))

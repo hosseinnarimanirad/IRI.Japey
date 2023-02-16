@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
-using IRI.Jab.Common.Model.Symbology; 
+using IRI.Jab.Common.Model.Symbology;
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
@@ -28,7 +28,7 @@ namespace IRI.Jab.Common
 
         public int Id { get; set; }
 
-        public FeatureDataSource OriginalSource { get; set; }
+        public VectorDataSource<Feature<Point>, Point> OriginalSource { get; set; }
 
         //public VisualParameters OriginalSymbology { get; set; }
 
@@ -105,7 +105,7 @@ namespace IRI.Jab.Common
             Geometry geometry,
             VisualParameters visualParameters = null,
             int id = int.MinValue,
-            FeatureDataSource source = null)
+            VectorDataSource<Feature<Point>, Point> source = null)
         {
             this.Extent = geometry.GetBoundingBox();
 

@@ -9,11 +9,11 @@ using IRI.Msh.Common.Primitives;
 using System.Diagnostics;
 using IRI.Extensions;
 using IRI.Ket.DataManagement.Model;
-using IRI.Msh.Common.Analysis; 
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class MemoryScaleDependentDataSource<T> : MemoryDataSource<T>, IScaleDependentDataSource where T : class, IGeometryAware<Point>
+    public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point>, IScaleDependentDataSource where TGeometryAware : class, IGeometryAware<Point>
     {
         Dictionary<double, List<Geometry<Point>>> source;
 
@@ -46,10 +46,10 @@ namespace IRI.Ket.DataManagement.DataSource
                 var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
                 source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.CumulativeTriangleRoutine, new SimplificationParamters()
-                                                                    {
-                                                                        AreaThreshold = threshold * threshold,
-                                                                        Retain3Points = true
-                                                                    }))
+                {
+                    AreaThreshold = threshold * threshold,
+                    Retain3Points = true
+                }))
                                                                     .Where(g => !g.IsNotValidOrEmpty())
                                                                     .ToList());
             }
@@ -66,7 +66,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<Geometry<Point>> GetGeometries(double scale, BoundingBox boundingBox)
         {
-            Geometry<Point> boundary = boundingBox.AsGeometry(GetSrid());
+            Geometry<Point> boundary = boundingBox.AsGeometry<Point>(GetSrid());
 
             return GetGeometries(scale, boundary);
 
@@ -131,7 +131,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public List<Geometry<Point>> GetGeometries(double scale, BoundingBox boundingBox)
         {
-            Geometry<Point> boundary = boundingBox.AsGeometry(GetSrid());
+            Geometry<Point> boundary = boundingBox.AsGeometry<Point>(GetSrid());
 
             return GetGeometries(scale, boundary);
 

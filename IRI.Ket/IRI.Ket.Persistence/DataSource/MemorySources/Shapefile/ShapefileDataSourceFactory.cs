@@ -31,7 +31,7 @@ public static class ShapefileDataSourceFactory
 
         var result = ShapefileDataSource<Feature<Point>>.Create(shapefileName, mapShapeToFeature, inverseAttributeMap, targetCrs, encoding);
 
-        result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
+        //result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
 
         return result;
     }
@@ -43,7 +43,7 @@ public static class ShapefileDataSourceFactory
 
         var result = await ShapefileDataSource<Feature<Point>>.CreateAsync(shapefileName, mapShapeToFeature, inverseMap, targetCrs, encoding);
 
-        result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
+        //result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
 
         return result;
     }

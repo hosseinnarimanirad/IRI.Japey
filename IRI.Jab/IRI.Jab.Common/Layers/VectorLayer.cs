@@ -26,20 +26,8 @@ namespace IRI.Jab.Common
     public class VectorLayer : BaseLayer
     {
         #region Properties, Fields
-
-        //private ScaleInterval _visibleRange;
-
-        //public ScaleInterval VisibleRange
-        //{
-        //    get { return _visibleRange; }
-        //    set
-        //    {
-        //        _visibleRange = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        public FeatureDataSource DataSource { get; protected set; }
+         
+        public IVectorDataSource DataSource { get; protected set; }
 
         private FrameworkElement _element;
 
@@ -115,13 +103,13 @@ namespace IRI.Jab.Common
             Initialize(layerName, new MemoryDataSource(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
         }
 
-        public VectorLayer(string layerName, FeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
+        public VectorLayer(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
             RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbol pointSymbol = null, LabelParameters labeling = null)
         {
             Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
         }
 
-        private void Initialize(string layerName, FeatureDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
+        private void Initialize(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
                                     RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
                                     SimplePointSymbol pointSymbol, LabelParameters labeling)
         {
@@ -133,18 +121,19 @@ namespace IRI.Jab.Common
 
             this.ToRasterTechnique = toRasterTechnique;
 
-            var geometries = dataSource.GetGeometries();
+            //var geometries = dataSource.GetGeometries();
 
-            if (geometries?.Count > 0)
-            {
-                this.Type = type | GetGeometryType(geometries.FirstOrDefault(g => g != null));
-            }
-            else
-            {
-                this.Type = type;
-            }
+            //if (geometries?.Count > 0)
+            //{
+            //    this.Type = type | GetGeometryType(geometries.FirstOrDefault(g => g != null));
+            //}
+            //else
+            //{
+            //    this.Type = type;
+            //}
 
-            this.Extent = geometries?.GetBoundingBox() ?? sb.BoundingBox.NaN;
+            //this.Extent = geometries?.GetBoundingBox() ?? sb.BoundingBox.NaN;
+            this.Extent = dataSource.Extent;
 
             this.LayerName = layerName;
 
@@ -706,7 +695,7 @@ namespace IRI.Jab.Common
             Binding binding5 = new Binding() { Source = this, Path = new PropertyPath("VisualParameters.Opacity"), Mode = BindingMode.TwoWay };
             element.SetBinding(Path.OpacityProperty, binding5);
         }
-         
+
         private LayerType GetGeometryType(sb.Geometry<sb.Point> geometry)
         {
             switch (geometry.Type)
@@ -721,7 +710,7 @@ namespace IRI.Jab.Common
 
                 case sb.GeometryType.Polygon:
                 case sb.GeometryType.MultiPolygon:
-                    return LayerType.Polygon; 
+                    return LayerType.Polygon;
 
                 case sb.GeometryType.GeometryCollection:
                 case sb.GeometryType.CircularString:
@@ -729,12 +718,12 @@ namespace IRI.Jab.Common
                 case sb.GeometryType.CurvePolygon:
                 default:
                     throw new NotImplementedException();
-            } 
+            }
         }
 
         #region Raster Save And Export Methods
 
-        public void SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
+        public async Task SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
         {
             if (maxLevel < minLevel)
             {
@@ -758,7 +747,7 @@ namespace IRI.Jab.Common
 
                 foreach (var tile in googleTiles)
                 {
-                    var geometries = this.GetGeometriesForDisplay(scale, tile.WebMercatorExtent);
+                    var geometries = await GetGeometriesForDisplayAsync(scale, tile.WebMercatorExtent);
 
                     var transform = IRI.Msh.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
@@ -906,18 +895,18 @@ namespace IRI.Jab.Common
         public void ExportAsShapefile(string shpFileName)
         {
             //var features = GetFeatures<T>();
-            var features = this.DataSource.GetSqlFeatures();
+            var features = this.DataSource.GetAsFeatureSet();
 
             features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
         }
 
         public void ExportAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
         {
-            var features = this.DataSource.GetSqlFeatures();
+            var features = this.DataSource.GetAsFeatureSet();
 
             features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
         }
-         
+
         #endregion
 
         #region GetGeometry & GetFeature Methods
@@ -928,7 +917,7 @@ namespace IRI.Jab.Common
 
             if (this.IsLabeled(mapScale))
             {
-                var geoLabelPairs = await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
+                var geoLabelPairs = await this.DataSource.GetNamedGeometriesAsync(mapExtent);
 
                 geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
 
@@ -942,27 +931,27 @@ namespace IRI.Jab.Common
             return new GeometryLabelPairs(geometries, labels);
         }
 
-        public GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
-        {
-            List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
+        //public async GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
+        //{
+        //    List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
 
-            if (this.IsLabeled(mapScale))
-            {
-                var geoLabelPairs = this.DataSource.GetGeometryLabelPairsForDisplay(mapExtent);
+        //    if (this.IsLabeled(mapScale))
+        //    {
+        //        var geoLabelPairs =await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
 
-                geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
+        //        geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
 
-                labels = geoLabelPairs.Select(i => i.Label).ToList();
-            }
-            else
-            {
-                geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
-            }
+        //        labels = geoLabelPairs.Select(i => i.Label).ToList();
+        //    }
+        //    else
+        //    {
+        //        geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
+        //    }
 
-            return new GeometryLabelPairs(geometries, labels);
-        }
+        //    return new GeometryLabelPairs(geometries, labels);
+        //}
 
-        public async Task<List<sb.Geometry<sb.Point>>> GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
+        public async Task<List<sb.Geometry<sb.Point>>>? GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
         {
             List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
 
@@ -972,7 +961,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = await this.DataSource.GetGeometriesForDisplayAsync(mapScale, boundingBox);
+                geometries = (await this.DataSource.GetAsFeatureSetForDisplayAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
             }
 
             if (geometries.Count == 0)
@@ -981,40 +970,40 @@ namespace IRI.Jab.Common
             return geometries;
         }
 
-        public List<sb.Geometry<sb.Point>> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
-        {
-            List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
+        //public List<sb.Geometry<sb.Point>> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
+        //{
+        //    List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
 
-            if (this.DataSource is IScaleDependentDataSource)
-            {
-                geometries = ((IScaleDependentDataSource)this.DataSource).GetGeometries(mapScale, boundingBox);
-            }
-            else
-            {
-                geometries = this.DataSource.GetGeometriesForDisplay(mapScale, boundingBox);
-            }
+        //    if (this.DataSource is IScaleDependentDataSource)
+        //    {
+        //        geometries = ((IScaleDependentDataSource)this.DataSource).GetGeometries(mapScale, boundingBox);
+        //    }
+        //    else
+        //    {
+        //        geometries = this.DataSource.GetGeometriesForDisplay(mapScale, boundingBox);
+        //    }
 
-            if (geometries.Count == 0)
-                return null;
+        //    if (geometries.Count == 0)
+        //        return null;
 
-            return geometries;
-        }
+        //    return geometries;
+        //}
 
-        public System.Data.DataTable GetEntireFeature()
-        {
-            return DataSource?.GetEntireFeatures();
-        }
+        //public System.Data.DataTable GetEntireFeature()
+        //{
+        //    return DataSource?.GetEntireFeatures();
+        //}
 
-        public List<T> GetFeatures<T>() where T : class, sb.IGeometryAware<sb.Point>
+        public List<T>? GetFeatures<T>() where T : class, sb.IGeometryAware<sb.Point>
         {
             return GetFeatures<T>(null);
         }
 
-        public List<T> GetFeatures<T>(sb.Geometry<sb.Point> geometry) where T : class, sb.IGeometryAware<sb.Point>
+        public List<TGeometryAware>? GetFeatures<TGeometryAware>(sb.Geometry<sb.Point> geometry) where TGeometryAware : class, sb.IGeometryAware<sb.Point>
         {
-            if (DataSource as FeatureDataSource<T> != null)
+            if (DataSource as VectorDataSource<TGeometryAware, sb.Point> != null)
             {
-                return (DataSource as FeatureDataSource<T>).GetFeatures(geometry);
+                return (DataSource as VectorDataSource<TGeometryAware, sb.Point>)!.GetGeometryAwares(geometry);
             }
 
             return null;

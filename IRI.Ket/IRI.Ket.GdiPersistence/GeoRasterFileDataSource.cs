@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using IRI.Ket.DataManagement.Model;
 using IRI.Msh.Common.Model;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -16,6 +17,8 @@ namespace IRI.Ket.DataManagement.DataSource
         GeoReferencedImage geoRaster;
 
         public BoundingBox Extent { get; private set; }
+
+        public int Srid => SridHelper.WebMercator;
 
         private GeoRasterFileDataSource(string imageFileName, int srid)
         {

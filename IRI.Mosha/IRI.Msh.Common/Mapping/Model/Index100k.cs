@@ -16,9 +16,9 @@ namespace IRI.Msh.Common.Mapping
         public string BlockNumber { get; set; }
          
 
-        public override Feature<Point> AsFeature()
+        public override Feature AsFeature()
         {
-            return new Feature<Point>()
+            return new Feature()
             {
                 TheGeometry = this.TheGeometry,
                 LabelAttribute = nameof(this.SheetNameEn),

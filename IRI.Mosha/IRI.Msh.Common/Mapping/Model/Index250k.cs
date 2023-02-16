@@ -13,9 +13,9 @@ namespace IRI.Msh.Common.Mapping
         public override double Width { get => GeodeticIndexes._250kWidth; }
 
 
-        public override Feature<Point> AsFeature()
+        public override Feature AsFeature()
         {
-            return new Feature<Point>()
+            return new Feature()
             {
                 TheGeometry = this.TheGeometry,
                 LabelAttribute = nameof(this.SheetNameEn),
