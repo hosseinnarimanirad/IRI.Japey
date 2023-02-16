@@ -192,12 +192,26 @@ namespace IRI.Ket.DataManagement.DataSource
 
 
         #region CRUD
+        public virtual  void Add(IGeometryAware<Point> newValue)
+        {
+            Add(newValue as TGeometryAware);
+        }
 
-        public abstract void Add(IGeometryAware<Point> newValue);
+        public virtual void Remove(IGeometryAware<Point> newValue)
+        {
+            Remove(newValue as TGeometryAware);
+        }
 
-        public abstract void Remove(IGeometryAware<Point> value);
+        public virtual void Update(IGeometryAware<Point> newValue)
+        {
+            Update(newValue as TGeometryAware);
+        }
 
-        public abstract void Update(IGeometryAware<Point> newValue);
+        public abstract void Add(TGeometryAware newValue);
+
+        public abstract void Remove(TGeometryAware value);
+
+        public abstract void Update(TGeometryAware newValue);
 
         //public abstract void UpdateFeature(TGeometryAware feature);
 

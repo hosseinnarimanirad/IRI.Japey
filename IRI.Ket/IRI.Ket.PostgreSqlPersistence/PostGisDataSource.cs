@@ -259,6 +259,11 @@ namespace IRI.Ket.DataManagement.DataSource
             throw new NotImplementedException();
         }
 
+        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
         {
             throw new NotImplementedException();

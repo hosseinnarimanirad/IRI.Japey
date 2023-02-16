@@ -51,10 +51,6 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     public string? IdColumnName { get; set; }
     public override int Srid { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
-    //protected PersoanlGdbDataSource()
-    //{
-
-    //}
 
     public PersoanlGdbDataSource(string mdbFileName, string tableName, string? spatialColumnName = null, string? labelColumnName = null)
     {
@@ -139,31 +135,15 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         return geometries;
     }
 
-    public override FeatureSet<Point> GetFeatures(Geometry<Point> geometry)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override List<Geometry<Point>> GetGeometries()
-    {
-        throw new NotImplementedException();
-    }
-
-    public override List<NamedGeometry<Point>> GetNamedGeometries(Geometry<Point>? geometry)
-    {
-        throw new NotImplementedException();
-    }
-     
-     
-
-    public override void SaveChanges()
-    {
-        throw new NotImplementedException();
-    }
 
     protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
     {
-        throw new NotImplementedException();
+        return geometryAware;
+    }
+
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+    {
+        return new FeatureSet<Point>(GetGeometryAwares(geometry));
     }
 
     public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
@@ -182,6 +162,11 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     }
 
     public override void Update(Feature<Point> newValue)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void SaveChanges()
     {
         throw new NotImplementedException();
     }

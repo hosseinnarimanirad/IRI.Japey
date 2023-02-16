@@ -107,32 +107,32 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
         #region CRUD
 
-        public override void Add(IGeometryAware<Point> newValue)
-        {
-            Add(newValue as UtmSheet);
-        }
+        //public override void Add(IGeometryAware<Point> newValue)
+        //{
+        //    Add(newValue as UtmSheet);
+        //}
 
-        public override void Remove(IGeometryAware<Point> newValue)
-        {
-            Remove(newValue as UtmSheet);
-        }
+        //public override void Remove(IGeometryAware<Point> newValue)
+        //{
+        //    Remove(newValue as UtmSheet);
+        //}
 
-        public override void Update(IGeometryAware<Point> newValue)
-        {
-            Update(newValue as UtmSheet);
-        }
+        //public override void Update(IGeometryAware<Point> newValue)
+        //{
+        //    Update(newValue as UtmSheet);
+        //}
 
-        public void Add(GeodeticSheet newValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(GeodeticSheet value)
+        public override void Add(GeodeticSheet newValue)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(GeodeticSheet newValue)
+        public override void Remove(GeodeticSheet value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Update(GeodeticSheet newValue)
         {
             throw new NotImplementedException();
         }

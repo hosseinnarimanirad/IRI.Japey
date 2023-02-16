@@ -29,7 +29,7 @@ namespace IRI.Ket.DataManagement.DataSource
             this.Extent = geometries.GetBoundingBox();
         }
 
-        public MemoryDataSource(List<Feature<Point>> features, Func<Feature<Point>, string> labelFunc, Func<int, Feature> idFunc)
+        public MemoryDataSource(List<Feature<Point>> features, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc)
         {
             this._features = features;
 
@@ -137,9 +137,26 @@ namespace IRI.Ket.DataManagement.DataSource
 
         private int _uniqueId = 0;
 
-        protected Func<int, TGeometryAware> _idFunc;
+        protected Func<int, TGeometryAware>? _idFunc;
 
         protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
+
+        public MemoryDataSource()
+        {
+
+        }
+
+        public MemoryDataSource(
+            List<TGeometryAware> features,
+            Func<TGeometryAware, string> labelingFunc,
+            Func<int, TGeometryAware> idFunc,
+            Func<TGeometryAware, Feature<TPoint>> mapToFeatureFunc)
+        {
+            this._features = features;
+            this._labelFunc = labelingFunc;
+            this._idFunc = idFunc;
+            _mapToFeatureFunc = mapToFeatureFunc;
+        }
 
         // todo: remove this method
         public int GetSrid()
@@ -205,32 +222,32 @@ namespace IRI.Ket.DataManagement.DataSource
 
         #region CRUD
 
-        public override void Add(IGeometryAware<Point> newValue)
-        {
-            Add(newValue as TGeometryAware);
-        }
+        //public override void Add(IGeometryAware<Point> newValue)
+        //{
+        //    Add(newValue as TGeometryAware);
+        //}
 
-        public override void Remove(IGeometryAware<Point> newValue)
-        {
-            Remove(newValue as TGeometryAware);
-        }
+        //public override void Remove(IGeometryAware<Point> newValue)
+        //{
+        //    Remove(newValue as TGeometryAware);
+        //}
 
-        public override void Update(IGeometryAware<Point> newValue)
-        {
-            Update(newValue as TGeometryAware);
-        }
+        //public override void Update(IGeometryAware<Point> newValue)
+        //{
+        //    Update(newValue as TGeometryAware);
+        //}
 
-        public void Add(TGeometryAware newGeometry)
+        public override void Add(TGeometryAware newGeometry)
         {
             this._features.Add(newGeometry);
         }
 
-        public void Remove(TGeometryAware geometry)
+        public override void Remove(TGeometryAware geometry)
         {
             this._features.Remove(geometry);
         }
 
-        public void Update(TGeometryAware newGeometry)
+        public override void Update(TGeometryAware newGeometry)
         {
             if (_idFunc == null)
                 return;

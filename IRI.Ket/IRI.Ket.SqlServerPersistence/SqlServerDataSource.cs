@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.SqlServer.Types;
+﻿using Microsoft.SqlServer.Types;
 using System.Data.SqlClient;
-
-using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using System.Data;
-using IRI.Ket.DataManagement.Model;
-
-using System.Globalization;
 using IRI.Extensions;
 using IRI.Msh.Common.Model;
-using IRI.Extensions;
-using IRI.Msh.Common.Mapping;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -725,22 +714,22 @@ namespace IRI.Ket.DataManagement.DataSource
         }
 
         #region CRUD
-        public override void Add(IGeometryAware<Point> newValue)
-        {
-            Add(newValue as Feature<Point>);
-        }
+        //public override void Add(IGeometryAware<Point> newValue)
+        //{
+        //    Add(newValue as Feature<Point>);
+        //}
 
-        public override void Remove(IGeometryAware<Point> newValue)
-        {
-            Remove(newValue as Feature<Point>);
-        }
+        //public override void Remove(IGeometryAware<Point> newValue)
+        //{
+        //    Remove(newValue as Feature<Point>);
+        //}
 
-        public override void Update(IGeometryAware<Point> newValue)
-        {
-            Update(newValue as Feature<Point>);
-        }
+        //public override void Update(IGeometryAware<Point> newValue)
+        //{
+        //    Update(newValue as Feature<Point>);
+        //}
 
-        public void Add(Feature<Point> newValue)
+        public override void Add(Feature<Point> newValue)
         {
             this.AddAction?.Invoke(newValue);
         }
@@ -750,12 +739,12 @@ namespace IRI.Ket.DataManagement.DataSource
             this.RemoveAction?.Invoke(featureId);
         }
 
-        public void Remove(Feature<Point> value)
+        public override void Remove(Feature<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Feature<Point> newValue)
+        public override void Update(Feature<Point> newValue)
         {
             throw new NotImplementedException();
         }
@@ -767,5 +756,10 @@ namespace IRI.Ket.DataManagement.DataSource
 
 
         #endregion
+
+        public void ExecuteSql(string command)
+        {
+            Infrastructure.SqlServerInfrastructure.ExecuteNonQuery(command, _connectionString);
+        }
     }
 }

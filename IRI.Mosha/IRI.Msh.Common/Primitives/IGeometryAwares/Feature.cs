@@ -6,6 +6,7 @@ using IRI.Extensions;
 using IRI.Msh.Common.Model;
 using System.Linq;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using System.Data;
 
 namespace IRI.Msh.Common.Primitives;
 public class Feature<T> : IGeometryAware<T> where T : IPoint, new()
@@ -75,6 +76,7 @@ public class Feature<T> : IGeometryAware<T> where T : IPoint, new()
     {
         return $"Geometry: {TheGeometry?.Type}, Attributes: {Attributes?.Count}";
     }
+
 }
 
 
