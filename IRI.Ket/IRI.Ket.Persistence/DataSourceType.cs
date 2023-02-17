@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.DataManagement
+namespace IRI.Ket.Persistence
 {
     public enum DataSourceType
     {

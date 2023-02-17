@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives; 
-
-using IRI.Ket.DataManagement.Model;
+﻿using System.Data;
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Ket.Common.Helpers;
-using IRI.Ket.Persistence.DataSource;
+using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.CoordinateSystem.MapProjection;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.RasterDataSources
 {
     public class ZippedImagePyramidDataSource : IRasterDataSource
     {

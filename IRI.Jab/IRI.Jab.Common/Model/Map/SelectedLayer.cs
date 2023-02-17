@@ -1,15 +1,17 @@
-﻿using IRI.Jab.Common;
-using IRI.Jab.Common.Assets.Commands;
-using IRI.Extensions;
-
-using IRI.Msh.Common.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using IRI.Extensions;
+using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Jab.Common;
+using IRI.Jab.Common.Assets.Commands;
+
 
 namespace IRI.Jab.Common.Model.Map
 {
@@ -128,7 +130,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry)
         {
-            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as Ket.DataManagement.DataSource.VectorDataSource<TGeometryAware, Point>;
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as VectorDataSource<TGeometryAware, Point>;
 
             dataSource.Update(newGeometry);
 

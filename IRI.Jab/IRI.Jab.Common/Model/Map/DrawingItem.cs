@@ -9,7 +9,7 @@
 //using IRI.Jab.Common.Model.Legend;
 //using System.Collections.ObjectModel;
 //using IRI.Jab.Common.Assets.ShapeStrings;
-//using IRI.Ket.DataManagement.Model;
+//
 
 //namespace IRI.Jab.Common.Model.Map
 //{

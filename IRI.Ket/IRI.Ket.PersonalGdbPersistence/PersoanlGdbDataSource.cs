@@ -1,6 +1,4 @@
-﻿using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -8,7 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.DataManagement.DataSource;
+using IRI.Extensions;
+using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSources;
+
+
+namespace IRI.Ket.PersonalGdbPersistence;
 
 public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// RelationalDbSource<Feature<Point>>
 {

@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using IRI.Msh.Common.Primitives;
 using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using System.Windows.Shapes;
-using IRI.Jab.Common.Model;
 using System.Threading.Tasks;
+
 using IRI.Extensions;
-using IRI.Ket.DataManagement.DataSource;
-using IRI.Ket.DataManagement.Model;
+using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Common
 {

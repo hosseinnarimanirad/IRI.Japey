@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
-
 using System.Diagnostics;
-using IRI.Msh.CoordinateSystem;
-using IRI.Ket.DataManagement.Model;
-using IRI.Ket.Common.Model;
+
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
-using IRI.Ket.Persistence.DataSource;
+using IRI.Ket.Common.Model;
+using IRI.Ket.Persistence.DataSources;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.RasterDataSources
 {
     public class OnlineGoogleMapDataSource<T> : IRasterDataSource
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.DataManagement.Model
+namespace IRI.Ket.Persistence.Model
 {
     public class SqlServerSourceParameter
     {

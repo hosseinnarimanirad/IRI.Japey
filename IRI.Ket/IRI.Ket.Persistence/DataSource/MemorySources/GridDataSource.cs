@@ -9,7 +9,7 @@ using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Primitives;
 using System.Data;
 
-namespace IRI.Ket.DataManagement.DataSource.MemorySources
+namespace IRI.Ket.Persistence.DataSources
 {
     public class GridDataSource : VectorDataSource<GeodeticSheet, Point>
     {

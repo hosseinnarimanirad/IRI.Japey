@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.DataManagement.DataSource;
+namespace IRI.Ket.Persistence.DataSources;
 
 public static class ShapefileDataSourceFactory
 {

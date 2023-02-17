@@ -14,7 +14,11 @@ namespace IRI.Msh.Common.Primitives;
 
 public class Geometry<T> : IGeometry where T : IPoint, new()
 {
-    T NullPoint = default(T);
+    static readonly T NullPoint = default(T);
+
+    private static readonly Geometry<T> _empty = new Geometry<T>();
+
+    public static Geometry<T> Empty { get { return _empty; } }
 
     public GeometryType Type { get; set; }
 
@@ -355,7 +359,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     public Geometry<T> GetCentroidPlus()
     {
         if (this.IsNullOrEmpty())
-            return Geometry<T>.Null;
+            return Geometry<T>.Empty;
 
         var centroidPoint = GetMeanPoint();
 
@@ -432,7 +436,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.CircularString:
             case GeometryType.CompoundCurve:
             case GeometryType.CurvePolygon:
-                return Geometry<T>.Null;
+                return Geometry<T>.Empty;
 
             case GeometryType.GeometryCollection:
                 return new Geometry<T>(this.Geometries.Select(i => i.FilterPoints(filter)).ToList(), GeometryType.GeometryCollection, this.Srid);
@@ -584,7 +588,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.CurvePolygon:
             case GeometryType.GeometryCollection:
                 System.Diagnostics.Debug.WriteLine($"****WARNNING: Geometry.cs -> Filter method invalid geometry type");
-                return Geometry<T>.Null;
+                return Geometry<T>.Empty;
 
             case GeometryType.MultiPoint:
                 return new Geometry<T>(this.Geometries.Select(i => i.Transform(transform)).ToList(), GeometryType.MultiPoint, newSrid);
@@ -1510,7 +1514,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             throw new NotImplementedException("Geometry > AsPoint");
         }
 
-        return new T() { X = this.Points[0].X, Y = this.Points[1].Y };
+        return new T() { X = this.Points[0].X, Y = this.Points[0].Y };
     }
 
     #endregion
@@ -1599,10 +1603,6 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
 
     #region Static Create
-
-    private static readonly Geometry<T> _null = new Geometry<T>();
-
-    public static Geometry<T> Null { get { return _null; } }
 
     //public static readonly Geometry EmptyPoint = new Geometry(new IPoint[0], GeometryType.Point);
     //public static readonly Geometry EmptyLineString = new Geometry(new IPoint[0], GeometryType.LineString);
@@ -1704,7 +1704,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     {
         if (geometries?.Any() != true)
         {
-            return Geometry<Point>.Null;
+            return Geometry<Point>.Empty;
         }
 
         var points = geometries.Select(g => g.AsPoint()).ToList();

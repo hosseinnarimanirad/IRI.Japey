@@ -8,7 +8,7 @@ using System.Data.SqlTypes;
 using Microsoft.SqlServer.Types;
 using IRI.Extensions;
 
-namespace IRI.Ket.DataManagement.Infrastructure
+namespace IRI.Ket.Persistence.Infrastructure
 {
     //Remember; 
     //What about e.g. decimal(5,2)

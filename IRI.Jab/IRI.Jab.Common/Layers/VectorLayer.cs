@@ -7,19 +7,18 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-
 using System.Threading.Tasks;
 
-using sb = IRI.Msh.Common.Primitives;
-
-using IRI.Jab.Common.Model;
 using IRI.Extensions;
-using IRI.Jab.Common.Convertor;
-using IRI.Ket.DataManagement.DataSource;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Convertor;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
+
+using sb = IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Common
 {

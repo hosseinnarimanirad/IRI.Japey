@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
-using spatialBase = IRI.Msh.Common;
-using IRI.Ket.DataManagement.DataSource; 
+using IRI.Ket.Persistence.DataSources;
+ 
 
 namespace IRI.Jab.Common
 {
@@ -69,33 +69,7 @@ namespace IRI.Jab.Common
             }
 
             return new SpecialPointLayer(LayerName, locatables);
-        }
-
-        //private ScaleInterval _visibleRange;
-
-        //public ScaleInterval VisibleRange
-        //{
-        //    get { return _visibleRange; }
-        //    set
-        //    {
-        //        _visibleRange = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //public Guid Id { get; private set; }
-
-        //private string _layerName;
-
-        //public string LayerName
-        //{
-        //    get { return _layerName; }
-        //    set
-        //    {
-        //        _layerName = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
+        } 
 
         public override BoundingBox Extent
         {
@@ -105,9 +79,7 @@ namespace IRI.Jab.Common
             }
             protected set
             {
-                throw new NotImplementedException();
-                //_extent = value;
-                //OnPropertyChanged("Extent");
+                throw new NotImplementedException(); 
             }
         }
 
@@ -116,46 +88,13 @@ namespace IRI.Jab.Common
             get { return RenderingApproach.Default; }
             protected set { }
         }
-
-        //public RasterizationApproach ToRasterTechnique { get { return RasterizationApproach.None; } }
-
-        //public bool IsValid { get; set; }
-
-        //public override void Invalidate() => IsValid = false;
-
-        //private LayerType _type;
-        //private VisualParameters _visualParameters;
-
-        //public VisualParameters VisualParameters
-        //{
-        //    get { return _visualParameters; }
-        //    set
-        //    {
-        //        _visualParameters = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
+          
         public override LayerType Type
         {
             get { return LayerType.Complex; }
-            protected set { }
-            //private set
-            //{
-            //    if (value == LayerType.Complex || value == LayerType.RightClickOption || value == LayerType.GridAndGraticule)
-            //    {
-            //        this._type = value;
-            //    }
-            //    else
-            //    {
-            //        throw new NotImplementedException();
-            //    }
-            //}
-        }
-
-        //public int ZIndex { get; set; }
+            protected set { _ = value; }            
+        } 
 
         public event EventHandler OnRequestMouseDownHandle;
-
     }
 }

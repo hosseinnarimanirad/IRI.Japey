@@ -7,13 +7,10 @@ using IRI.Sta.ShapefileFormat;
 using IRI.Msh.Common.Mapping;
 using System;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
     {
-        //const string _geoColumnName = "Geo";
-
-
         public MemoryDataSource() : this(new List<Feature<Point>>(), null, null)
         {
 
@@ -142,11 +139,7 @@ namespace IRI.Ket.DataManagement.DataSource
         protected Func<int, TGeometryAware>? _idFunc;
 
         protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
-
-        public override GeometryType? GeometryType
-        {
-            get; protected set;
-        }
+         
 
         public MemoryDataSource()
         {

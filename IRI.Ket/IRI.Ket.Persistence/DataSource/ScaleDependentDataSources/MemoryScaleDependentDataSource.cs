@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 using System.Diagnostics;
 using IRI.Extensions;
-using IRI.Ket.DataManagement.Model;
+
 using IRI.Msh.Common.Analysis;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point>, IScaleDependentDataSource where TGeometryAware : class, IGeometryAware<Point>
     {

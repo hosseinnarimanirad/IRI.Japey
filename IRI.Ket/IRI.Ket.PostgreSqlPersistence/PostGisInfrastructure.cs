@@ -5,7 +5,7 @@ using System.Text;
 using Npgsql;
 using System.Data;
 
-namespace IRI.Ket.DataManagement.Infrastructure
+namespace IRI.Ket.Persistence.Infrastructure
 {
     public class PostgreSqlInfrastructure : DataSourceInfrastructure
     {

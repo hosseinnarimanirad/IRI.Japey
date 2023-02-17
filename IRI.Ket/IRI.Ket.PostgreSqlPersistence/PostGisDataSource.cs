@@ -4,7 +4,7 @@ using System.Data;
 using IRI.Msh.Common.Primitives;
 using IRI.Extensions;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     // todo: implement methods
     public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>

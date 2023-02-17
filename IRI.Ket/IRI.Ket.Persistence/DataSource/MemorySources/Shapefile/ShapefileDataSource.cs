@@ -9,7 +9,7 @@ using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Sta.ShapefileFormat.Model;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
     {
@@ -21,8 +21,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         //public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
 
-        public override GeometryType? GeometryType { get; protected set; }
-
+         
         // 1400.02.03
         //ObjectToDfbFields<T> _fields;
         List<ObjectToDbfTypeMap<Feature<Point>>> _fields;

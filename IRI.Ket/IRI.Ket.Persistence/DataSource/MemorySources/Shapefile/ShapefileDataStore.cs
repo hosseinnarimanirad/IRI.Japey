@@ -4,11 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives; 
-using IRI.Sta.ShapefileFormat;
-using IRI.Ket.DataManagement.Model;
 
-namespace IRI.Ket.DataManagement.DataSource
+using IRI.Msh.Common.Primitives; 
+using IRI.Sta.ShapefileFormat; 
+
+namespace IRI.Ket.Persistence.DataSources
 {
     public class ShapefileDataStore : IDataSource
     {

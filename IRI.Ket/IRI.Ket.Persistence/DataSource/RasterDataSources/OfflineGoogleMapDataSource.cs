@@ -6,10 +6,10 @@ using System.Data;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
 using IRI.Msh.Common.Primitives;
-using IRI.Ket.Persistence.DataSource;
+using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.CoordinateSystem.MapProjection;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.RasterDataSources
 {
     public class OfflineGoogleMapDataSource<T> : IRasterDataSource
     {

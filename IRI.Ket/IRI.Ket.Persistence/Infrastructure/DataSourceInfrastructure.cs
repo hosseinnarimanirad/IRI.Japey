@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data; 
 
-namespace IRI.Ket.DataManagement.Infrastructure
+namespace IRI.Ket.Persistence.Infrastructure
 {
     //Remember; 
     //What about e.g. decimal(5,2)

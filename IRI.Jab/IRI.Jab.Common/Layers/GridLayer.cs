@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Model.Symbology;
-using IRI.Ket.DataManagement.DataSource.MemorySources;
-using IRI.Ket.DataManagement.Model;
+﻿using System.Collections.Generic;
 using IRI.Msh.Common.Primitives;
-using Microsoft.SqlServer.Types;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Common
 {

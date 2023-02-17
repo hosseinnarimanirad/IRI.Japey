@@ -1,15 +1,20 @@
-﻿using IRI.Jab.Common.Convertor;
-using IRI.Extensions;
-using IRI.Jab.Common.Model;
-using IRI.Ket.DataManagement.DataSource;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using sb = IRI.Msh.Common.Primitives;
+
+using IRI.Jab.Common.Convertor;
+using IRI.Extensions;
+using IRI.Jab.Common.Model;
+using IRI.Ket.Persistence.DataSources;
+
+using IRI.Msh.Common.Primitives;
+
+using WpfPoint = System.Windows.Point;
+using Point = IRI.Msh.Common.Primitives.Point;
 
 namespace IRI.Jab.Common
 {
@@ -17,7 +22,7 @@ namespace IRI.Jab.Common
     {
         public MemoryDataSource DataSource { get; protected set; }
 
-        public Func<sb.Feature<sb.Point>, VisualParameters> SymbologyRule { get; set; }
+        public Func<Feature<Point>, VisualParameters> SymbologyRule { get; set; }
 
         private LayerType _type;
 
@@ -47,9 +52,9 @@ namespace IRI.Jab.Common
             }
         }
 
-        private sb.BoundingBox _extent;
+        private BoundingBox _extent;
 
-        public override sb.BoundingBox Extent
+        public override BoundingBox Extent
         {
             get { return _extent; }
             protected set
@@ -73,7 +78,8 @@ namespace IRI.Jab.Common
             element.SetBinding(Path.OpacityProperty, binding5);
         }
 
-        public Path AsBitmapUsingGdiPlus(List<sb.Feature<sb.Point>> features, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+        // todo: unused input parameters
+        public Path AsBitmapUsingGdiPlus(List<Feature<Point>> features, List<string> labels, double mapScale, BoundingBox boundingBox, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
         {
             if (features == null)
                 return null;
@@ -115,7 +121,7 @@ namespace IRI.Jab.Common
 
         }
 
-        public FeatureLayer(string name, List<sb.Feature<sb.Point>> features, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule,
+        public FeatureLayer(string name, List<Feature<Point>> features, Func<Feature<Point>, VisualParameters> symbologyRule,
                             RenderingApproach rendering, RasterizationApproach toRasterTechnique, ScaleInterval visibleRange)
         {
             if (features == null || features.Count == 0)
@@ -125,13 +131,13 @@ namespace IRI.Jab.Common
         }
 
         public FeatureLayer(string layerName, MemoryDataSource dataSource, RenderingApproach rendering,
-                            RasterizationApproach toRasterTechnique, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule, ScaleInterval visibleRange)
+                            RasterizationApproach toRasterTechnique, Func<Feature<Point>, VisualParameters> symbologyRule, ScaleInterval visibleRange)
         {
             Initialize(layerName, dataSource, rendering, toRasterTechnique, visibleRange, symbologyRule);
         }
 
         private void Initialize(string layerName, MemoryDataSource dataSource, RenderingApproach rendering,
-            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule)
+            RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, Func<Feature<Point>, VisualParameters> symbologyRule)
         {
             this.LayerId = Guid.NewGuid();
 
@@ -154,7 +160,7 @@ namespace IRI.Jab.Common
             //    this.Type = type;
             //}
 
-            //this.Extent = DataSource.GetFeatures()?.GetGeometries()?.GetBoundingBox() ?? sb.BoundingBox.NaN;
+            //this.Extent = DataSource.GetFeatures()?.GetGeometries()?.GetBoundingBox() ?? BoundingBox.NaN;
             this.Extent = DataSource.Extent;
 
             this.LayerName = layerName;

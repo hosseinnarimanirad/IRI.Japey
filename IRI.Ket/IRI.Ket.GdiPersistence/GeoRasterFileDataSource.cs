@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
-using IRI.Ket.DataManagement.Model;
+﻿using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class GeoRasterFileDataSource : IDataSource
     {

@@ -21,12 +21,12 @@ namespace IRI.Msh.Common.Ogc
         public static Geometry<Point> Parse(string wktString, int srid = 0)
         {
             if (string.IsNullOrWhiteSpace(wktString))
-                return Geometry<Point>.Null;
+                return Geometry<Point>.Empty;
 
             var typeChars = wktString.TakeWhile(c => c != '(')?.ToArray();
 
             if (typeChars.IsNullOrEmpty())
-                return Geometry<Point>.Null;
+                return Geometry<Point>.Empty;
 
             var type = new string(typeChars);
 
@@ -71,7 +71,7 @@ namespace IRI.Msh.Common.Ogc
             var points = GetPoints(cleanedString, isRing);
 
             if (points.IsNullOrEmpty())
-                return Geometry<Point>.Null;
+                return Geometry<Point>.Empty;
 
             return new Geometry<Point>(points.Select(p => Geometry<Point>.Create(p.X, p.Y, srid)).ToList(), GeometryType.MultiPoint, srid);
         }

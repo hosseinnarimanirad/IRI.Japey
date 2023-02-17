@@ -1,11 +1,13 @@
-﻿using IRI.Jab.Common.Model.Legend;
-using IRI.Ket.DataManagement.DataSource;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Jab.Common.Model.Legend;
+
 
 namespace IRI.Jab.Common.Utility.Legend
 {

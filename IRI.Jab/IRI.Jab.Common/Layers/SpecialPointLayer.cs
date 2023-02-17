@@ -1,16 +1,10 @@
-﻿using IRI.Jab.Common.Model;
-using IRI.Jab.Common;
-using IRI.Ket.DataManagement;
-using Microsoft.SqlServer.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text; 
-using System.Windows.Data;
-using System.Windows.Shapes; 
-using IRI.Jab.Common.Model;
+
 using IRI.Msh.Common.Primitives;
+using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Common
 {

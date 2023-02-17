@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives; 
 using IRI.Msh.Common.Model;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.RasterDataSources
 {
     //Note: Extent is NaN for this class
     public class ImagePyramidDataSource : OfflineGoogleMapDataSource<object>

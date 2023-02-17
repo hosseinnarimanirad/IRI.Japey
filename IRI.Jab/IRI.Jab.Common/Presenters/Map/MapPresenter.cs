@@ -1,17 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Model.Map;
-using IRI.Jab.Common.TileServices;
-using IRI.Jab.Common.Assets.Commands;
-using IRI.Extensions;
-using IRI.Jab.Common.Helpers;
-using IRI.Jab.Common.Model.Common;
-using IRI.Jab.Common.Model.Spatialable;
-using IRI.Jab.Common.Presenters;
-using IRI.Ket.DataManagement.DataSource;
-using IRI.Extensions;
-using Microsoft.SqlServer.Types;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -20,20 +7,27 @@ using System.Linq;
 using System.Threading.Tasks;
 //using System.Windows;
 using System.Windows.Input;
-using WpfPoint = System.Windows.Point;
 
-using IRI.Jab.Common.Model.Legend;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.DataManagement.Model;
-using IRI.Msh.Common.Model;
-using IRI.Ket.Common.Service;
-//using Geometry = IRI.Geometry<IRI.Point>;
 using IRI.Extensions;
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Model.GeoJson;
-
-using static System.Windows.Media.Colors;
-using static System.Windows.FrameworkElement;
+using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Msh.Common.Model;
 using IRI.Sta.Common.Helpers;
+using IRI.Ket.Common.Service;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Model.Map;
+using IRI.Jab.Common.TileServices;
+using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Helpers;
+using IRI.Jab.Common.Model.Common;
+using IRI.Jab.Common.Model.Spatialable;
+using IRI.Jab.Common.Presenters;
+using IRI.Jab.Common.Model.Legend;
+ 
+using WpfPoint = System.Windows.Point;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -2342,10 +2336,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                 //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                var dataSource = new MemoryDataSource(
-                    features,
-                    f => f.Label,
-                    null);
+                var dataSource = new MemoryDataSource(features, f => f.Label, null);
 
                 AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
 

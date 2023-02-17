@@ -1,13 +1,15 @@
-﻿using IRI.Ket.DataManagement.DataSource;
-using IRI.Msh.Common.Model;
-using IRI.Msh.Common.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.DataManagement.Model
+using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSources;
+
+
+namespace IRI.Ket.Persistence.Model
 {
     //SqlFeatureSet which is connected to its source. For Add, Remove, Update actions
     //This class was used first for FFSDB editing tool

@@ -1,17 +1,12 @@
-﻿using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Data;
+
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Mapping;
-using IRI.Ket.DataManagement.Model;
-using IRI.Ket.Common.Model;  
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.DataStructure.AdvancedStructures;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Ket.Common.Model; 
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class ClusteredGeoTaggedImageSource : IDataSource
     {

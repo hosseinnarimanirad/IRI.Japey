@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Jab.Common.Assets.Commands;
+
+using IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
-using IRI.Jab.Common.Model.Symbology;
-using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
-using Microsoft.SqlServer.Types;
+
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
-using IRI.Ket.DataManagement.DataSource;
 
 namespace IRI.Jab.Common
 {

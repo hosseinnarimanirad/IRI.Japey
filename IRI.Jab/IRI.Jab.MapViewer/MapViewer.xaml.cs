@@ -1,5 +1,5 @@
-﻿//BESMELLAHERAHMANERAHIM
-//ALLAHOMAAJJELLEVALIEKALFARAJ
+﻿// BESMELLAHERAHMANERAHIM
+// ALLAHOMAAJJELLEVALIEKALFARAJ
 
 using System;
 using System.Collections.Generic;
@@ -17,26 +17,24 @@ using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Net.Http;
 using Microsoft.SqlServer.Types;
 
-using IRI.Jab.Common;
 using IRI.Extensions;
-using IRI.Jab.Common.Model;
-using IRI.Jab.MapViewer.Model;
-using sb = IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model;
-using IRI.Ket.DataManagement.DataSource;
-using IRI.Ket.DataManagement.Model;
-using IRI.Extensions;
 using IRI.Ket.Common.Helpers;
+using IRI.Ket.Common.Service;
+using IRI.Ket.Persistence.DataSources;
+using IRI.Jab.MapViewer.Model;
+using IRI.Jab.Common;
+using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
-using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Jab.Common.Model.Legend;
-using IRI.Ket.Common.Service;
-using DocumentFormat.OpenXml.Vml.Office;
-using System.Net.Http;
+
+using sb = IRI.Msh.Common.Primitives;
+using IRI.Ket.Persistence.RasterDataSources;
 
 //using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 

@@ -5,7 +5,7 @@ using System.Data;
 using IRI.Extensions;
 using IRI.Msh.Common.Model;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>
     {

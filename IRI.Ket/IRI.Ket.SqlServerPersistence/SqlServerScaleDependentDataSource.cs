@@ -1,17 +1,13 @@
-﻿using IRI.Ket.DataManagement.Model;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
+﻿using System.Data;
+
 using Microsoft.SqlServer.Types;
-using System.Data;
-using System.Globalization;
+
 using IRI.Extensions;
-using System.Linq;
-
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Analysis;
+using IRI.Ket.Persistence.Model;
 
-namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources
+namespace IRI.Ket.Persistence.DataSources
 {
     public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDependentDataSource
     {

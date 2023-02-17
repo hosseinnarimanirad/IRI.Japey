@@ -429,7 +429,7 @@ namespace IRI.Extensions
             // This check is required!
             if (geometry.IsNull)
             {
-                return Geometry<Point>.Null;
+                return Geometry<Point>.Empty;
             }
             if (geometry.STIsEmpty().IsTrue)
             {

@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Ket.DataManagement.DataSource;
+
 using IRI.Extensions;
 using System;
 using System.Collections.Generic;
@@ -9,14 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Standards.OGC.WMS;
 
-namespace IRI.Ket.DataManagement.DataSource
+namespace IRI.Ket.Persistence.DataSources
 {
     public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSource
         where TGeometryAware : class, IGeometryAware<TPoint>
         where TPoint : IPoint, new()
     {
-        readonly Geometry<TPoint> NullGeometry = Geometry<TPoint>.Null;
-
         protected abstract Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware);
 
         public virtual BoundingBox Extent { get; protected set; }
@@ -112,7 +110,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public FeatureSet<Point> GetAsFeatureSet()
         {
-            return GetAsFeatureSet(Geometry<Point>.Null);
+            return GetAsFeatureSet(Geometry<Point>.Empty);
         }
 
         public virtual FeatureSet<Point> GetAsFeatureSet(BoundingBox boundary)
@@ -153,7 +151,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             //SqlGeometry geometry = null;
 
-            return GetGeometryAwares(NullGeometry);
+            return GetGeometryAwares(Geometry<TPoint>.Empty);
         }
 
         public abstract List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry);
