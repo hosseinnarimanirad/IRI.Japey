@@ -1,6 +1,6 @@
 ﻿using IRI.Jab.Common;
 using IRI.Jab.Common.Model.CoordinatePanel;
-using IRI.Ket.SqlServerSpatialExtension.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

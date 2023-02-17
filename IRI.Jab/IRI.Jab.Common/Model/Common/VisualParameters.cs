@@ -10,7 +10,6 @@ using IRI.Extensions;
 using System.Runtime.CompilerServices;
 using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model.Symbology;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 
 namespace IRI.Jab.Common
 {

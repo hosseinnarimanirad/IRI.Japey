@@ -11,7 +11,7 @@ using IRI.Sta.ShapefileFormat.Model;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
-    public class ShapefileDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point> where TGeometryAware : class, IGeometryAware<Point>
+    public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
     {
         string _shapefileName;
 
@@ -25,7 +25,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         // 1400.02.03
         //ObjectToDfbFields<T> _fields;
-        List<ObjectToDbfTypeMap<TGeometryAware>> _fields;
+        List<ObjectToDbfTypeMap<Feature<Point>>> _fields;
 
         protected ShapefileDataSource()
         {
@@ -34,8 +34,8 @@ namespace IRI.Ket.DataManagement.DataSource
         private ShapefileDataSource(string shapefileName,
                                     IEsriShapeCollection geometries,
                                     EsriAttributeDictionary attributes,
-                                    Func<Geometry<Point>, Dictionary<string, object>, TGeometryAware> map,
-                                    Func<TGeometryAware, List<object>> inverseAttributeMap,
+                                    Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map,
+                                    Func<Feature<Point>, List<object>> inverseAttributeMap,
                                     SrsBase targetSrs)
         {
             if (attributes == null)
@@ -72,11 +72,11 @@ namespace IRI.Ket.DataManagement.DataSource
             //this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
 
             // 1400.02.19
-            this._fields = new List<ObjectToDbfTypeMap<TGeometryAware>>();
+            this._fields = new List<ObjectToDbfTypeMap<Feature<Point>>>();
 
             for (int i = 0; i < attributes.Fields.Count; i++)
             {
-                this._fields.Add(new ObjectToDbfTypeMap<TGeometryAware>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
+                this._fields.Add(new ObjectToDbfTypeMap<Feature<Point>>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
             }
 
 
@@ -85,7 +85,7 @@ namespace IRI.Ket.DataManagement.DataSource
                 throw new NotImplementedException();
             }
 
-            this._features = new List<TGeometryAware>();
+            this._features = new List<Feature<Point>>();
 
             for (int i = 0; i < geometries.Count; i++)
             {
@@ -105,34 +105,36 @@ namespace IRI.Ket.DataManagement.DataSource
 
                 feature.Id = GetNewId();
 
-                this._idFunc = id => this._features.Single(f => f.Id == id);
-
                 this._features.Add(feature);
             }
+
+            this._idFunc = id => this._features.Single(f => f.Id == id);
+
+            this._mapToFeatureFunc = f => f;
         }
 
 
-        public static ShapefileDataSource<TGeometryAware> Create(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, TGeometryAware> map, Func<TGeometryAware, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
+        public static ShapefileDataSource Create(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
             var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
             var geometries = IRI.Sta.ShapefileFormat.Shapefile.ReadShapes(shapefileName);
 
-            return new ShapefileDataSource<TGeometryAware>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
+            return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
 
-        public static async Task<ShapefileDataSource<TGeometryAware>> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, TGeometryAware> map, Func<TGeometryAware, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
+        public static async Task<ShapefileDataSource> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
         {
             var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
             var geometries = await IRI.Sta.ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
 
-            return new ShapefileDataSource<TGeometryAware>(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
+            return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
         }
 
         public override void SaveChanges()
         {
-            Func<TGeometryAware, IEsriShape> geometryMap = null;
+            Func<Feature<Point>, IEsriShape> geometryMap = null;
 
             //save shp, shx, dbf, prj, cpg
 

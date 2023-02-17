@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Primitives.Esri;
@@ -1449,44 +1448,44 @@ namespace IRI.Extensions
 
         #region SqlFeature  
 
-        public static SqlFeature AsSqlFeature<T>(this Feature<T> feature) where T : IPoint, new()
-        {
-            if (feature == null)
-            {
-                return null;
-            }
+        //public static SqlFeature AsSqlFeature<T>(this Feature<T> feature) where T : IPoint, new()
+        //{
+        //    if (feature == null)
+        //    {
+        //        return null;
+        //    }
 
-            return new SqlFeature()
-            {
-                Attributes = feature.Attributes,
-                Id = feature.Id,
-                TheSqlGeometry = feature.TheGeometry.AsSqlGeometry()
-            };
-        }
+        //    return new SqlFeature()
+        //    {
+        //        Attributes = feature.Attributes,
+        //        Id = feature.Id,
+        //        TheSqlGeometry = feature.TheGeometry.AsSqlGeometry()
+        //    };
+        //}
 
-        public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<Point, Point> toWgs84Func, bool isLongitudeFirst)
-        {
-            return new GeoJsonFeature()
-            {
-                Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(isLongitudeFirst),
-                Id = feature.Id.ToString(),
-                Properties = feature.Attributes/*.ToDictionary(k => k.Key, k => k.Value)*/,
+        //public static GeoJsonFeature AsGeoJsonFeature(this SqlFeature feature, Func<Point, Point> toWgs84Func, bool isLongitudeFirst)
+        //{
+        //    return new GeoJsonFeature()
+        //    {
+        //        Geometry = feature.TheSqlGeometry.Project(toWgs84Func, SridHelper.GeodeticWGS84).AsGeoJson(isLongitudeFirst),
+        //        Id = feature.Id.ToString(),
+        //        Properties = feature.Attributes/*.ToDictionary(k => k.Key, k => k.Value)*/,
 
-            };
-        }
+        //    };
+        //}
 
-        public static SqlFeature AsSqlFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
-        {
-            targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
+        //public static SqlFeature AsSqlFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
+        //{
+        //    targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
 
-            return new SqlFeature()
-            {
-                Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
-                //Id = feature.id,
-                TheSqlGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
-                                                    .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator)
-            };
-        }
+        //    return new SqlFeature()
+        //    {
+        //        Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
+        //        //Id = feature.id,
+        //        TheSqlGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
+        //                                            .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator)
+        //    };
+        //}
 
         public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
         {

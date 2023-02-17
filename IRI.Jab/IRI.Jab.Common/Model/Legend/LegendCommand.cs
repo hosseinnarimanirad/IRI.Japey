@@ -1,7 +1,6 @@
 ﻿using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Extensions;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using System;
 using System.Windows;
 using System.Collections.Generic;

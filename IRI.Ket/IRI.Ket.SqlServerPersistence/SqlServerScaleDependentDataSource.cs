@@ -8,7 +8,7 @@ using System.Data;
 using System.Globalization;
 using IRI.Extensions;
 using System.Linq;
-using IRI.Ket.SqlServerSpatialExtension.Model;
+
 using IRI.Msh.Common.Analysis;
 
 namespace IRI.Ket.DataManagement.DataSource.ScaleDependentDataSources

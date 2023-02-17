@@ -1,5 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Map;
-using IRI.Ket.SqlServerSpatialExtension.Model; 
+ 
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿//using IRI.Extensions;
-//using IRI.Ket.SqlServerSpatialExtension.Model;
+//
 //using IRI.Msh.Common.Primitives;
 //using IRI.Msh.CoordinateSystem.MapProjection;
 //using System;

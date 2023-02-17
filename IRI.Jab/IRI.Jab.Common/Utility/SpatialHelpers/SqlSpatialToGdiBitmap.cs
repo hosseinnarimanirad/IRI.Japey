@@ -6,7 +6,6 @@ using System.Linq;
 using Microsoft.SqlServer.Types;
 using IRI.Extensions; 
 using IRI.Extensions;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Symbology;
 using sb = IRI.Msh.Common.Primitives;
 
@@ -279,47 +278,47 @@ namespace IRI.Jab.Common.Convertor
             graphic.Flush();
         }
 
-        public static void DrawLabels(List<NamedSqlGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
-        {
-            //var mapCoordinates = geometries..ConvertAll(
-            //          (g) =>
-            //          {
-            //              return labelParameters.PositionFunc(g).AsWpfPoint();
-            //          }).ToList();
+        //public static void DrawLabels(List<NamedSqlGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
+        //{
+        //    //var mapCoordinates = geometries..ConvertAll(
+        //    //          (g) =>
+        //    //          {
+        //    //              return labelParameters.PositionFunc(g).AsWpfPoint();
+        //    //          }).ToList();
 
-            var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
+        //    var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
 
-            var graphic = drawing.Graphics.FromImage(image);
+        //    var graphic = drawing.Graphics.FromImage(image);
 
-            graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
+        //    graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //    graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-            graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        //    graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-            graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+        //    graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
-            for (int i = 0; i < namedGeometries.Count; i++)
-            {
-                //var location = mapToScreen(mapCoordinates[i]);
-                //graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+        //    for (int i = 0; i < namedGeometries.Count; i++)
+        //    {
+        //        //var location = mapToScreen(mapCoordinates[i]);
+        //        //graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
 
-                var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry.AsGeometry()).AsWpfPoint());
+        //        var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry.AsGeometry()).AsWpfPoint());
 
-                System.Drawing.StringFormat format = new drawing.StringFormat();
+        //        System.Drawing.StringFormat format = new drawing.StringFormat();
 
-                if (labelParameters.IsRtl)
-                {
-                    format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
-                }
+        //        if (labelParameters.IsRtl)
+        //        {
+        //            format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+        //        }
 
-                var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
+        //        var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
 
-                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
-            }
+        //        graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
+        //    }
 
-            graphic.Flush();
-        }
+        //    graphic.Flush();
+        //}
 
 
 

@@ -2,7 +2,6 @@
 using IRI.Msh.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Ket.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension;
 
@@ -150,14 +149,14 @@ namespace IRI.Extensions
 
         #region SqlGeometry
 
-        public static SqlFeature AsSqlFeature<T>(this Geometry<T> geometry) where T : IPoint, new()
-        {
-            return new SqlFeature()
-            {
-                TheSqlGeometry = geometry.AsSqlGeometry(),
-                Attributes = new System.Collections.Generic.Dictionary<string, object>()
-            };
-        }
+        //public static SqlFeature AsSqlFeature<T>(this Geometry<T> geometry) where T : IPoint, new()
+        //{
+        //    return new SqlFeature()
+        //    {
+        //        TheSqlGeometry = geometry.AsSqlGeometry(),
+        //        Attributes = new System.Collections.Generic.Dictionary<string, object>()
+        //    };
+        //}
 
         //ERROR PRONE: NaN and Infinity points are not supported
         public static SqlGeometry AsSqlGeometry<T>(this T point, int srid = 0) where T : IPoint, new()
@@ -695,6 +694,5 @@ namespace IRI.Extensions
         #endregion
 
          
-
     }
 }

@@ -3,7 +3,6 @@ using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Raster.Model;
 using IRI.Ket.DigitalImageProcessing;
 using IRI.Extensions;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Msh.Algebra;
 using IRI.Msh.Common.Model;
 using System;
@@ -243,7 +242,7 @@ namespace IRI.Jab.Common.Raster
 
         }
 
-        public static void CreateForPolygon(List<IGeometryAware<Point>> points, Func<ISqlGeometryAware, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
+        public static void CreateForPolygon(List<IGeometryAware<Point>> points, Func<IGeometryAware<Point>, double> valueFunc, int width, int height, List<double> values, List<Color> colors, double? maxDistance)
         {
             var boundingBox = points.Select(p => p.TheGeometry).ToList().GetBoundingBox();
 
@@ -258,8 +257,8 @@ namespace IRI.Jab.Common.Raster
             var bitmap = new Bitmap(width, height);
 
 
-            var maxValue = points.Max(p => (double.Parse(((SqlFeature)p).Attributes["Value"].ToString())));
-            var minValue = points.Min(p => (double.Parse(((SqlFeature)p).Attributes["Value"].ToString())));
+            var maxValue = points.Max(p => (double.Parse(((Feature)p).Attributes["Value"].ToString())));
+            var minValue = points.Min(p => (double.Parse(((Feature)p).Attributes["Value"].ToString())));
             var rangeValue = maxValue - minValue;
             var midValue = rangeValue / 2.0 + minValue;
 
@@ -272,7 +271,7 @@ namespace IRI.Jab.Common.Raster
 
             foreach (var item in points)
             {
-                var value = double.Parse((((SqlFeature)item).Attributes["Value"].ToString()));
+                var value = double.Parse((((Feature)item).Attributes["Value"].ToString()));
 
                 var color = ranges.Interpolate(value);
 

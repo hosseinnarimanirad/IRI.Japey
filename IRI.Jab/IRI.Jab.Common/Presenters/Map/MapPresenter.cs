@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 //using System.Windows;
 using System.Windows.Input;
 using WpfPoint = System.Windows.Point;
-using IRI.Ket.SqlServerSpatialExtension.Model;
+
 using IRI.Jab.Common.Model.Legend;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.DataManagement.Model;

@@ -19,6 +19,11 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         public const int UtmNorthZone41 = 32641;
 
+        // https://epsg.io/3395
+        public const int Mercator = 3395;
+
+        // https://epsg.io/54034
+        public const int CylindricalEqualArea = 54034;
 
         public static SrsBase AsSrsBase(int srid)
         {
@@ -41,6 +46,12 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
                 case SridHelper.UtmNorthZone41:
                     return new UTM(Ellipsoids.WGS84, MapProjects.CalculateCentralMeridian(41));
+
+                case SridHelper.Mercator:
+                    return new Mercator();
+
+                case SridHelper.CylindricalEqualArea:
+                    return new CylindricalEqualArea();
 
                 default:
                     return null;

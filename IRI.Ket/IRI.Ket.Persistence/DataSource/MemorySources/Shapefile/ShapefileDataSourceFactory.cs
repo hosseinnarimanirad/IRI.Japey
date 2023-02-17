@@ -25,11 +25,11 @@ public static class ShapefileDataSourceFactory
     }
 
 
-    public static ShapefileDataSource<Feature<Point>> Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
+    public static ShapefileDataSource Create(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
     {
         Func<Feature<Point>, List<object>> inverseAttributeMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
 
-        var result = ShapefileDataSource<Feature<Point>>.Create(shapefileName, mapShapeToFeature, inverseAttributeMap, targetCrs, encoding);
+        var result = ShapefileDataSource.Create(shapefileName, mapShapeToFeature, inverseAttributeMap, targetCrs, encoding);
 
         //result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
 
@@ -37,11 +37,11 @@ public static class ShapefileDataSourceFactory
     }
 
 
-    public static async Task<ShapefileDataSource<Feature<Point>>> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
+    public static async Task<ShapefileDataSource> CreateAsync(string shapefileName, SrsBase targetCrs, Encoding encoding = null)
     {
         Func<Feature<Point>, List<object>> inverseMap = feature => feature.Attributes.Select(kvp => kvp.Value).ToList();
 
-        var result = await ShapefileDataSource<Feature<Point>>.CreateAsync(shapefileName, mapShapeToFeature, inverseMap, targetCrs, encoding);
+        var result = await ShapefileDataSource.CreateAsync(shapefileName, mapShapeToFeature, inverseMap, targetCrs, encoding);
 
         //result.ToDataTableMappingFunc = ToDataTableDefaultMappings.SqlFeatureTypeMapping;
 

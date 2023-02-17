@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Extensions;
 using System.Windows.Input;
 using sb = IRI.Msh.Common.Primitives;

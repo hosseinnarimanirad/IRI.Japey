@@ -33,7 +33,6 @@ using IRI.Ket.Common.Helpers;
 using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.SqlServerSpatialExtension.Model;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Ket.Common.Service;
 using DocumentFormat.OpenXml.Vml.Office;

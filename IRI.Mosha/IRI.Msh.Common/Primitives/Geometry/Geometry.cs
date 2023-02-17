@@ -1549,6 +1549,23 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+
+    public Geometry<T> GeodeticToMercator()
+    {
+        return this.Transform(point => MapProjects.GeodeticToMercator(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84), SridHelper.Mercator);
+    }
+
+    public Geometry<T> GeodeticWgs84ToWebMercator()
+    {
+        return this.Transform(point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
+    }
+
+    public Geometry<T> GeodeticToCylindricalEqualArea()
+    {
+        return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);
+    }
+
+
     #endregion
 
     #region Ogc Wkb & Wkt
