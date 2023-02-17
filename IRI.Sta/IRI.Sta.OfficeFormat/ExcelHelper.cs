@@ -156,6 +156,9 @@ namespace IRI.Ket.OfficeFormat
 
         public static void WriteDictionary(List<Dictionary<string, object>> rows, string outputFileName, string sheetName, List<CellValues> types = null, List<string> headers = null)
         {
+            if (rows is null || rows.Count == 0)
+                return;
+
             var numberOfColumns = rows.First().Keys.Count;
 
             types = types == null ? Enumerable.Range(0, numberOfColumns).Select(k => CellValues.String).ToList() : types;

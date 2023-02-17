@@ -21,6 +21,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
         //public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
 
+        public override GeometryType? GeometryType { get; protected set; }
+
         // 1400.02.03
         //ObjectToDfbFields<T> _fields;
         List<ObjectToDbfTypeMap<TGeometryAware>> _fields;
@@ -57,6 +59,9 @@ namespace IRI.Ket.DataManagement.DataSource
             //string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
 
             this.Extent = geometries.MainHeader.MinimumBoundingBox;
+
+            // 1401.11.28
+            this.GeometryType = geometries.MainHeader.ShapeType.AsGeometryType();
 
             if (transformFunc != null)
             {

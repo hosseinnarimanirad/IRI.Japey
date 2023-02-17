@@ -17,7 +17,26 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
         public UtmIndexType Type { get; protected set; }
 
-        public override BoundingBox Extent { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
+        public BoundingBox GeodeticWgs84Extent { get; set; }
+
+        public override GeometryType? GeometryType
+        {
+            get { return IRI.Msh.Common.Primitives.GeometryType.Polygon; }
+            protected set { throw new NotImplementedException("GridDataSource > GeometryType"); }
+        }
+
+        public override BoundingBox Extent
+        {
+            get
+            {
+                return GeodeticWgs84Extent.Transform(MapProjects.GeodeticWgs84ToWebMercator);
+            }
+
+            protected set
+            {
+                _ = value;
+            }
+        }
 
         private UtmGridDataSource()
         {
@@ -51,6 +70,13 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
             //    return result;
             //};
+
+            this.GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
+        }
+
+        public override string ToString()
+        {
+            return $"UtmGridDataSource {Type.GetName()}";
         }
 
         public override int Srid { get => SridHelper.WebMercator; protected set => _ = value; }
@@ -208,7 +234,6 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
         public static UtmGridDataSource Create(UtmIndexType indexType, int utmZone)
         {
-
             UtmGridDataSource result = new UtmGridDataSource();
 
             result.Type = indexType;
@@ -220,16 +245,11 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
 
         public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
         {
-            if (geometry.IsNullOrEmpty())
-            {
-                return null;
-            }
-
-            var geographicBoundingBox = geometry.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84);
-
+            var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
+             
             var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
-                                .Select(s => ToFeatureMappingFunc(s))
+                                .Select(ToFeatureMappingFunc)
                                 .ToList();
 
             return new FeatureSet<Point>(features);

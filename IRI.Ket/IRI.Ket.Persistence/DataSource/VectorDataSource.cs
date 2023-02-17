@@ -23,6 +23,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public abstract int Srid { get; protected set; }
 
+        public virtual GeometryType? GeometryType { get; protected set; }
 
         #region Get Geometries
 
@@ -123,7 +124,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public abstract FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
 
-        public  Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundingBox)
+        public Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundingBox)
         {
             return Task.Run(() => { return GetAsFeatureSet(boundingBox); });
         }
@@ -142,7 +143,7 @@ namespace IRI.Ket.DataManagement.DataSource
         {
             return Task.Run(() => { return GetAsFeatureSetForDisplay(mapScale, boundingBox); });
         }
-         
+
         #endregion
 
 
@@ -192,7 +193,7 @@ namespace IRI.Ket.DataManagement.DataSource
 
 
         #region CRUD
-        public virtual  void Add(IGeometryAware<Point> newValue)
+        public virtual void Add(IGeometryAware<Point> newValue)
         {
             Add(newValue as TGeometryAware);
         }

@@ -28,6 +28,8 @@ namespace IRI.Ket.DataManagement.DataSource
 
             var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude,*/ 900);
 
+            this.GeometryType = geometries.First().Type;
+
             var simplifiedByAngleGeometries = geometries
                                                 .Select(g => g.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters()
                                                 {
@@ -101,6 +103,8 @@ namespace IRI.Ket.DataManagement.DataSource
         public MemoryScaleDependentDataSource(List<Geometry<Point>> geometries)
         {
             source = new Dictionary<double, List<Geometry<Point>>>();
+
+            this.GeometryType = geometries.First().Type;
 
             var boundingBox = geometries.GetBoundingBox();
 

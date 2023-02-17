@@ -92,9 +92,15 @@ namespace IRI.Jab.Common.Model
 
                 foreach (var item in features)
                 {
-                    if (item is SqlFeature feature)
+                    if (item is Feature<Point> feature)
                     {
                         rows.Add(feature.Attributes);
+                    }
+                    
+                    // todo: consider solving the general case
+                    else if (item is IGeometryAware<Point> geometryAware)
+                    {
+                        rows.Add(new Dictionary<string, object>() { { "Id", item.Id } });
                     }
                 }
 

@@ -13,35 +13,35 @@ namespace IRI.Jab.Common.Convertor
     public static class SqlFeatureToGdiBitmap
     {
 
-        internal static drawing.Bitmap ParseSqlGeometry(
-            List<SqlFeature> features,
-            double width,
-            double height,
-            Func<Point, Point> mapToScreen,
-            Func<SqlFeature, VisualParameters> symbologyRule)
-        {
-            var result = new drawing.Bitmap((int)width, (int)height);
+        //internal static drawing.Bitmap ParseSqlGeometry(
+        //    List<SqlFeature> features,
+        //    double width,
+        //    double height,
+        //    Func<Point, Point> mapToScreen,
+        //    Func<SqlFeature, VisualParameters> symbologyRule)
+        //{
+        //    var result = new drawing.Bitmap((int)width, (int)height);
 
-            drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+        //    drawing.Graphics graphics = drawing.Graphics.FromImage(result);
 
-            int p = 0;
+        //    int p = 0;
 
-            if (features != null)
-            {
-                foreach (SqlFeature item in features)
-                {
-                    var symbology = symbologyRule(item);
+        //    if (features != null)
+        //    {
+        //        foreach (SqlFeature item in features)
+        //        {
+        //            var symbology = symbologyRule(item);
 
-                    var pen = symbology.GetGdiPlusPen(symbology.Opacity);
+        //            var pen = symbology.GetGdiPlusPen(symbology.Opacity);
 
-                    var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
+        //            var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
 
-                    SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheSqlGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
-                }
-            }
+        //            SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheSqlGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
+        //        }
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         internal static drawing.Bitmap ParseSqlGeometry(
            List<sb.Feature<sb.Point>> features,

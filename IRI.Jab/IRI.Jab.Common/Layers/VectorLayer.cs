@@ -26,7 +26,7 @@ namespace IRI.Jab.Common
     public class VectorLayer : BaseLayer
     {
         #region Properties, Fields
-         
+
         public IVectorDataSource DataSource { get; protected set; }
 
         private FrameworkElement _element;
@@ -121,16 +121,18 @@ namespace IRI.Jab.Common
 
             this.ToRasterTechnique = toRasterTechnique;
 
+            this.Type = type;
+
             //var geometries = dataSource.GetGeometries();
 
-            //if (geometries?.Count > 0)
-            //{
-            //    this.Type = type | GetGeometryType(geometries.FirstOrDefault(g => g != null));
-            //}
-            //else
-            //{
-            //    this.Type = type;
-            //}
+            if (dataSource.GeometryType.AsLayerType() is not null)
+            {
+                this.Type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
+            }
+            else
+            {
+                this.Type = type;
+            }
 
             //this.Extent = geometries?.GetBoundingBox() ?? sb.BoundingBox.NaN;
             this.Extent = dataSource.Extent;
@@ -158,7 +160,10 @@ namespace IRI.Jab.Common
 
         #endregion
 
-
+        public override string ToString()
+        {
+            return $"{Enum.GetName(this.Type)} - {this.DataSource.ToString()}";
+        }
 
         #region Default Rendering
         //StreamGeometry Approach
@@ -597,49 +602,6 @@ namespace IRI.Jab.Common
         #endregion
 
 
-        ////StreamGeometry Approach
-        //public Path AsTileUsingStreamGeometry(List<sb.Geometry<sb.Point>> geometries, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area,
-        //    Transform viewTransform, sb.BoundingBox totalExtent, TranslateTransform viewTransformForPoints)
-        //{
-        //    if (geometries == null)
-        //        return null;
-
-        //    StreamGeometry geo;
-
-        //    //var transform = MapToTileScreenWpf(totalExtent, region.MercatorExtent, viewTransform);
-
-        //    if (this.Type.HasFlag(LayerType.Point))
-        //    {
-        //        geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, p => viewTransform.Transform(p), this.GeometryPointSymbol);
-
-        //        geo.FillRule = FillRule.Nonzero;
-
-        //        //geo.Transform = viewTransform;
-        //    }
-        //    else
-        //    {
-        //        geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, p => viewTransform.Transform(p));
-
-        //        //geo.Transform = viewTransform;
-        //    }
-
-        //    geo.Transform = viewTransformForPoints;
-
-        //    GeometryDrawing drawing = new GeometryDrawing();
-
-        //    Path path = new Path() { Data = geo, Tag = new LayerTag(mapScale) { Tile = region, Layer = this, IsTiled = true }, Stroke = VisualParameters.Stroke, Fill = VisualParameters.Fill, StrokeThickness = VisualParameters.StrokeThickness };
-        //    //path.RenderTransform = viewTransform;
-        //    this.Element = path;
-
-        //    return path;
-        //}
-
-        //private static Func<sb.Point, sb.Point> MapToTileScreen(sb.BoundingBox totalExtent, sb.BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
-        //{
-        //    var mapShift = mapBoundingBoxOfTile.Center - new sb.Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0);
-
-        //    return p => { return viewTransform.Transform(new Point(p.X - mapShift.X, p.Y - mapShift.Y)).AsPoint(); };
-        //}
         private static Func<Point, Point> MapToTileScreenWpf(sb.BoundingBox totalExtent, sb.BoundingBox mapBoundingBoxOfTile, Func<Point, Point> viewTransform)
         {
             //var mapShift = (mapBoundingBoxOfTile.TopLeft - new sb.Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();

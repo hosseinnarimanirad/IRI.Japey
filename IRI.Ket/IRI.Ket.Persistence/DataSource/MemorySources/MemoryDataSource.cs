@@ -5,6 +5,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Text;
 using IRI.Sta.ShapefileFormat;
 using IRI.Msh.Common.Mapping;
+using System;
 
 namespace IRI.Ket.DataManagement.DataSource
 {
@@ -20,31 +21,31 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public MemoryDataSource(List<Geometry<Point>> geometries)
         {
-            this._features = geometries.Select(g => new Feature<Point>(g) { Id = GetNewId() }).ToList();
+            var features = geometries.Select(g => new Feature<Point>(g) { Id = GetNewId() }).ToList();
 
-            this._labelFunc = null;
+            Func<int, Feature<Point>> idFunc = id => features.Single(f => f.Id == id);
 
-            this._idFunc = id => this._features.Single(f => f.Id == id);
-
-            this.Extent = geometries.GetBoundingBox();
+            Initialize(features, null, idFunc);
         }
 
         public MemoryDataSource(List<Feature<Point>> features, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc)
         {
+            Initialize(features, labelFunc, idFunc);
+        }
+
+        private void Initialize(List<Feature<Point>> features, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc)
+        {
+            int id = 0;
+
+            foreach (var item in features)
+                item.Id = id++;
+
             this._features = features;
-
-            foreach (var item in _features)
-            {
-                item.Id = GetNewId();
-            }
-
             this._labelFunc = labelFunc;
-
             this._idFunc = idFunc;
-
-            this.Extent = _features.Select(f => f.TheGeometry).GetBoundingBox();
-
-            _mapToFeatureFunc = f => f;// mapToFeatureFunc;
+            this.Extent = features.Select(f => f.TheGeometry).GetBoundingBox();
+            this._mapToFeatureFunc = f => f;
+            this.GeometryType = features.First().TheGeometry.Type;
         }
 
         public static MemoryDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
@@ -76,6 +77,7 @@ namespace IRI.Ket.DataManagement.DataSource
                     .Select(ToFeatureMappingFunc)
                     .ToList());
         }
+
         //public override List<Geometry<Point>> GetGeometries()
         //{
         //    return this._geometries;
@@ -141,6 +143,11 @@ namespace IRI.Ket.DataManagement.DataSource
 
         protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
 
+        public override GeometryType? GeometryType
+        {
+            get; protected set;
+        }
+
         public MemoryDataSource()
         {
 
@@ -156,12 +163,18 @@ namespace IRI.Ket.DataManagement.DataSource
             this._labelFunc = labelingFunc;
             this._idFunc = idFunc;
             _mapToFeatureFunc = mapToFeatureFunc;
+            this.GeometryType = features.First().TheGeometry.Type;
         }
 
         // todo: remove this method
         public int GetSrid()
         {
             return this._features?.SkipWhile(g => g == null || g.TheGeometry == null || g.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
+        }
+
+        public override string ToString()
+        {
+            return $"MEMORY DATASOURCE {typeof(TGeometryAware).Name}";
         }
 
         public override int Srid { get => GetSrid(); protected set => _ = value; }
@@ -295,7 +308,15 @@ namespace IRI.Ket.DataManagement.DataSource
 
         public override List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry)
         {
-            return this._features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
+            if (geometry is null)
+            {
+                return this._features.ToList();
+            }
+            else
+            {
+                return this._features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
+            }
+
         }
 
         public override FeatureSet<TPoint> GetFeatures()

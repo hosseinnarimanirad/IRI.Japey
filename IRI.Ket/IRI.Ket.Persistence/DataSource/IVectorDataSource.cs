@@ -9,6 +9,8 @@ namespace IRI.Ket.DataManagement.DataSource;
 
 public interface IVectorDataSource : IDataSource
 {
+    GeometryType? GeometryType { get; }
+
     #region Get Geometries
 
     List<Geometry<Point>> GetGeometries();

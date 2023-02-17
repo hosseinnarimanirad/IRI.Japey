@@ -15,16 +15,26 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
     {
         public GeodeticIndexType Type { get; protected set; }
 
+
+        public override GeometryType? GeometryType
+        {
+            get { return IRI.Msh.Common.Primitives.GeometryType.Polygon; }
+            protected set { throw new NotImplementedException("GridDataSource > GeometryType"); }
+        }
+
         public BoundingBox GeodeticWgs84Extent { get; set; }
 
         //web mercator extent
         public override BoundingBox Extent
         {
-            get { return GeodeticWgs84Extent.Transform(MapProjects.GeodeticWgs84ToWebMercator); }
+            get
+            {
+                return GeodeticWgs84Extent.Transform(MapProjects.GeodeticWgs84ToWebMercator);
+            }
 
             protected set
             {
-                throw new NotImplementedException();
+                _ = value;
             }
         }
 
@@ -63,6 +73,10 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             this.GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
         }
 
+        public override string ToString()
+        {
+            return $"GRID DATASOURCE {Type.GetName()}";
+        }
 
         //public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         //{
@@ -88,7 +102,7 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
 
             return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
-                                    .Where(s => s.TheGeometry?.Intersects(geometry) == true)
+                                    //.Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                     .ToList();
         }
 
@@ -198,7 +212,7 @@ namespace IRI.Ket.DataManagement.DataSource.MemorySources
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
 
             return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
-                                    .Where(s => s.TheGeometry?.Intersects(geometry) == true)
+                                    //.Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                     .Select(ToFeatureMappingFunc)
                                     .ToList());
         }
