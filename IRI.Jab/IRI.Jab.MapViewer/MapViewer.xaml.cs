@@ -3813,7 +3813,7 @@ namespace IRI.Jab.MapViewer
         {
             var layerExtent = new Rect(boundingBox.TopLeft.AsWpfPoint(), boundingBox.BottomRight.AsWpfPoint());
             //Rect layerExtent = MapExtentToIntermediateExtent(boundingBox);
-
+            
             ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
         }
 
