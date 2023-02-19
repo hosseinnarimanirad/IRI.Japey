@@ -14,8 +14,6 @@ namespace IRI.Sta.ShapefileFormat.Prj
 {
     public class EsriPrjFile
     {
-        private EsriPrjTreeNode _root;
-
         #region Constants
 
         public const string _esriLambertConformalConic = "Lambert_Conformal_Conic";
@@ -51,9 +49,12 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         #endregion
 
+        private EsriPrjTreeNode _rootNode;
+
+
         public EsriPrjFile(EsriPrjTreeNode root)
         {
-            this._root = root;
+            this._rootNode = root;
 
             //sample: AUTHORITY["EPSG", "4326"]
             //var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
@@ -70,7 +71,7 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         public EsriPrjFile(string prjFileName)
         {
-            this._root = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
+            this._rootNode = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
 
             this._srid = GetCrsSrid();
 
@@ -86,7 +87,7 @@ namespace IRI.Sta.ShapefileFormat.Prj
         {
             get
             {
-                switch (_root?.Name)
+                switch (_rootNode?.Name)
                 {
                     case _projcs:
                         return EsriSrType.Projcs;
@@ -100,22 +101,17 @@ namespace IRI.Sta.ShapefileFormat.Prj
             }
         }
 
-        //Projection Type
+
+        // Projection Type
+        private string _projectionName;
         public string ProjectionName
         {
             get
             {
-                switch (Type)
-                {
-                    case EsriSrType.Projcs:
-                        return _root.Children.Single(i => i.Name.EqualsIgnoreCase(_projection)).Values.First();
+                if (string.IsNullOrEmpty(_projectionName))
+                    _projectionName = GetProjectionName();
 
-                    case EsriSrType.Geogcs:
-                        return "None";
-
-                    default:
-                        throw new NotImplementedException();
-                }
+                return _projectionName;
             }
         }
 
@@ -145,35 +141,32 @@ namespace IRI.Sta.ShapefileFormat.Prj
             }
         }
 
-
         public string Title
         {
-            get { return _root?.Values?.First(); }
+            get { return _rootNode?.Values?.First(); }
         }
 
-        private EsriPrjTreeNode Geogcs
+        private EsriPrjTreeNode _geogcsNode;
+        private EsriPrjTreeNode GeogcsNode
         {
             get
             {
-                switch (Type)
-                {
-                    case EsriSrType.Projcs:
-                        return _root.Children.Single(i => i.Name.EqualsIgnoreCase(_geogcs));
+                if (_geogcsNode is null)
+                    _geogcsNode = GetGeogcs();
 
-                    case EsriSrType.Geogcs:
-                        return _root;
-
-                    default:
-                        throw new NotImplementedException();
-                }
+                return _geogcsNode;
             }
         }
 
-        private EsriPrjTreeNode Datum
+        private EsriPrjTreeNode _datumNode;
+        private EsriPrjTreeNode DatumNode
         {
             get
             {
-                return Geogcs.Children.Single(i => i.Name.EqualsIgnoreCase(_datum));
+                if (_datumNode is null)
+                    _datumNode = GetDatumNode();
+
+                return _datumNode;
             }
         }
 
@@ -183,12 +176,16 @@ namespace IRI.Sta.ShapefileFormat.Prj
             get { return _srid; }
         }
 
-        //Ellipsoid
+        // Ellipsoid
+        private string _ellipsoidName;
         public string EllipsoidName
         {
             get
             {
-                return Datum.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values?.First();
+                if (string.IsNullOrEmpty(_ellipsoidName))
+                    _ellipsoidName = GetEllipsoidName();
+
+                return _ellipsoidName;
             }
         }
 
@@ -197,16 +194,24 @@ namespace IRI.Sta.ShapefileFormat.Prj
         {
             get
             {
-                var spheroidValues = Datum.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
+                var spheroidValues = DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
 
-                var toWgs84Values = Datum.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_toWgs84))?.Values;
+                var toWgs84Values = DatumNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_toWgs84))?.Values;
 
                 var srid = GetEllipsoidSrid();
+                 
+                if (srid == 0)
+                {
+                    if (Type == EsriSrType.Geogcs && spheroidValues.First().ToUpper() == "WGS_1984")
+                    {
+                        srid = SridHelper.GeodeticWGS84;
+                    }
+                }
 
                 if (toWgs84Values == null)
                 {
                     return new Ellipsoid(spheroidValues.First(),
-                                        new Msh.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
                                         double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture), srid)
                     {
                         EsriName = spheroidValues.First(),
@@ -223,7 +228,7 @@ namespace IRI.Sta.ShapefileFormat.Prj
                     var drz = double.Parse(toWgs84Values[5], CultureInfo.InvariantCulture);
 
                     return new Ellipsoid(spheroidValues.First(),
-                                        new Msh.MeasurementUnit.Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                        new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
                                         double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
                                         new IRI.Msh.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
                                         new Msh.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
@@ -232,19 +237,60 @@ namespace IRI.Sta.ShapefileFormat.Prj
                         EsriName = spheroidValues.First(),
                     };
                 }
-
-
             }
+        }
+
+
+        #region Private Methods
+
+        private string GetProjectionName()
+        {
+            switch (Type)
+            {
+                case EsriSrType.Projcs:
+                    return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_projection)).Values.First();
+
+                case EsriSrType.Geogcs:
+                    return "None";
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private EsriPrjTreeNode GetDatumNode()
+        {
+            return GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_datum));
+        }
+
+        private EsriPrjTreeNode GetGeogcs()
+        {
+            switch (Type)
+            {
+                case EsriSrType.Projcs:
+                    return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_geogcs));
+
+                case EsriSrType.Geogcs:
+                    return _rootNode;
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private string GetEllipsoidName()
+        {
+            return DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values?.First();
         }
 
         private int GetCrsSrid()
         {
-            var crsAuthorityNode = _root.Children.SingleOrDefault(i => i.Name == _authority);
+            var crsAuthorityNode = _rootNode.Children.SingleOrDefault(i => i.Name == _authority);
 
             var srid = GetSridFromAuthorityNode(crsAuthorityNode);
-
-            //1399.06.13
-            //in the authority field was not available
+             
+            ////1399.06.13
+            ////in the authority field was not available
             if (srid == 0)
             {
                 if (Type == EsriSrType.Geogcs && Ellipsoid.Name.ToUpper() == "WGS_1984")
@@ -258,9 +304,11 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         private int GetEllipsoidSrid()
         {
-            var ellipsoidAuthorityNode = Geogcs.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_authority));
+            var ellipsoidAuthorityNode = GeogcsNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_authority));
 
-            return GetSridFromAuthorityNode(ellipsoidAuthorityNode);
+            var srid = GetSridFromAuthorityNode(ellipsoidAuthorityNode);
+
+            return srid;
         }
 
         private int GetSridFromAuthorityNode(EsriPrjTreeNode authorityNode)
@@ -277,12 +325,12 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         public bool IsSISystem()
         {
-            var isDegree = Geogcs.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "degree";
+            var isDegree = GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "degree";
 
             switch (Type)
             {
                 case EsriSrType.Projcs:
-                    return isDegree && _root.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "meter";
+                    return isDegree && _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "meter";
 
                 case EsriSrType.Geogcs:
                     return isDegree;
@@ -291,14 +339,6 @@ namespace IRI.Sta.ShapefileFormat.Prj
                     throw new NotImplementedException();
             }
         }
-
-        //public string TypeName
-        //{
-        //    get
-        //    {
-        //        return _root.Name;
-        //    }
-        //}
 
         private bool HasParameter(EsriPrjParameterType parameter)
         {
@@ -332,7 +372,7 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         private bool HasParameter(string parameterName)
         {
-            var parameters = _root.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+            var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
 
             return parameters.Any(i => i.Values.First().EqualsIgnoreCase(parameterName));
         }
@@ -374,24 +414,27 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         private double GetParameter(string parameterName)
         {
-            var parameters = _root.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+            var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
 
             return double.Parse(parameters.Single(i => i.Values.First().EqualsIgnoreCase(parameterName)).Values.Skip(1).First());
         }
+
+        #endregion
+
 
         public SrsBase AsMapProjection()
         {
             switch (ProjectionType)
             {
                 case MapProjectionType.None:
-                    return new NoProjection(this.Title, this.Ellipsoid) { DatumName = this.Geogcs.Values?.First() };
+                    return new NoProjection(this.Title, this.Ellipsoid) { DatumName = this.GeogcsNode.Values?.First() };
 
                 case MapProjectionType.AlbersEqualAreaConic:
                 case MapProjectionType.AzimuthalEquidistant:
                     throw new NotImplementedException();
 
                 case MapProjectionType.CylindricalEqualArea:
-                    return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.Geogcs.Values?.First() };
+                    return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.GeogcsNode.Values?.First() };
 
                 case MapProjectionType.LambertConformalConic:
                     return new LambertConformalConic2P(
@@ -406,14 +449,14 @@ namespace IRI.Sta.ShapefileFormat.Prj
                         Srid)
                     {
                         Title = this.Title,
-                        DatumName = this.Geogcs.Values?.First()
+                        DatumName = this.GeogcsNode.Values?.First()
                     };
 
                 case MapProjectionType.Mercator:
                     return new Mercator(this.Ellipsoid, Srid)
                     {
                         Title = this.Title,
-                        DatumName = this.Geogcs.Values?.First()
+                        DatumName = this.GeogcsNode.Values?.First()
                     };
 
                 case MapProjectionType.TransverseMercator:
@@ -428,14 +471,14 @@ namespace IRI.Sta.ShapefileFormat.Prj
                         Srid)
                     {
                         Title = this.Title,
-                        DatumName = this.Geogcs.Values?.First()
+                        DatumName = this.GeogcsNode.Values?.First()
                     };
 
                 case MapProjectionType.WebMercator:
                     return new WebMercator()
                     {
                         Title = this.Title,
-                        DatumName = this.Geogcs.Values?.First()
+                        DatumName = this.GeogcsNode.Values?.First()
                     };
 
                 default:
@@ -445,7 +488,7 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         public string AsEsriCrsWkt()
         {
-            return _root.AsEsriCrsWkt();
+            return _rootNode.AsEsriCrsWkt();
         }
 
         public void Save(string prjFileName)

@@ -7,15 +7,15 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 {
     public enum MapProjectionType
     {
-        None,
+        None = 1,
 
-        AlbersEqualAreaConic,
-        AzimuthalEquidistant,
-        CylindricalEqualArea,
-        LambertConformalConic,
-        Mercator,
-        TransverseMercator,
-        UTM,
-        WebMercator,
+        AlbersEqualAreaConic = 2,
+        AzimuthalEquidistant = 3,
+        CylindricalEqualArea = 4,
+        LambertConformalConic = 5,
+        Mercator = 6,
+        TransverseMercator = 7,
+        UTM = 8,
+        WebMercator = 9,
     }
 }

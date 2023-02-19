@@ -11,6 +11,7 @@ using IRI.Msh.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.PersonalGdb;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 
@@ -140,11 +141,11 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                 SELECT {_spatialColumnName} FROM {_tableName} WHERE {_spatialColumnName}.STIntersects(@filter)=1");
         }
         else
-        { 
-            var geometry = $"GEOMETRY::STGeomFromWKB({wkbString},{Srid})";
-
-            return FormattableString.Invariant($@" 
-                SELECT * FROM {_tableName} WHERE {_spatialColumnName}.STIntersects({geometry})=1");
+        {
+            return FormattableString.Invariant($@"
+                DECLARE @filter GEOMETRY;
+                SET @filter = GEOMETRY::STGeomFromWKB({wkbString},{Srid});
+                SELECT * FROM {_tableName} WHERE {_spatialColumnName}.STIntersects(@filter)=1");
         }
     }
 
@@ -159,8 +160,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         {
             conn.Open();
 
+            var srsDictionary = PersonalGdbInfrastructure.GetSpatialReferenceSystems(conn);
+
             var query = FormattableString.Invariant(
-                        @$"SELECT        TableName, FieldName, ExtentLeft, ExtentBottom, ExtentRight, ExtentTop, SRID
+                        @$"SELECT        TableName, ShapeType, FieldName, ExtentLeft, ExtentBottom, ExtentRight, ExtentTop, SRID
                             FROM            GDB_GeomColumns
                             WHERE        (TableName = '{_tableName}')");
 
@@ -176,8 +179,8 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                     var maxY = (double)dataReader["ExtentTop"];
                     var srid = (int)dataReader["SRID"];
 
-                    this.Srid = srid;
-
+                    this.Srid = srsDictionary[srid]?.Srid ?? 0;
+                    this.GeometryType = ((EsriPGDBColumnShapeType)(int)dataReader["ShapeType"]).AsGeometryType();
                     this._extent = new BoundingBox(minX, minY, maxX, maxY).Transform(_onTheFlyProj);
                     //return new BoundingBox(minX, minY, maxX, maxY);
                 }
@@ -227,13 +230,13 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         return geometries;
     }
 
-    protected FeatureSet<Point> Select(string selectQuery)
+    protected FeatureSet<Point> Select(Geometry<Point> geometryBoundingBox)
     {
         FeatureSet result = new FeatureSet() { Srid = Srid, Fields = new List<Field>(), Features = new List<Feature<Point>>() };
 
         using (var conn = new OleDbConnection(GetConnectionString()))
         {
-            var command = new OleDbCommand(selectQuery, conn);
+            var command = new OleDbCommand(FormattableString.Invariant($"SELECT * FROM {_tableName}"), conn);
 
             conn.Open();
 
@@ -246,13 +249,13 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                     var type = dataReader.GetFieldType(i);
 
                     //if (type != typeof(SqlGeometry))
-                    if (dataReader.GetName(0) != "Shape")
+                    if (dataReader.GetName(i).ToUpper() == "SHAPE" && type == typeof(byte[]))
                     {
-                        result.Fields.Add(new Field() { Name = dataReader.GetName(i), Type = type.ToString() });
+                        geoIndex = i;
                     }
                     else
                     {
-                        geoIndex = i;
+                        result.Fields.Add(new Field() { Name = dataReader.GetName(i), Type = type.ToString() });
                     }
                 }
 
@@ -266,6 +269,15 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                     var dict = new Dictionary<string, object>();
 
                     var feature = new Feature<Point>();
+
+                    var esriByteGeometry = (byte[])dataReader[geoIndex];
+
+                    var geometry = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
+
+                    if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
+                        continue;
+
+                    feature.TheGeometry = geometry;
 
                     for (int i = 0; i < dataReader.FieldCount; i++)
                     {
@@ -282,16 +294,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                         }
                         else
                         {
-                            //if (dataReader[i] is SqlGeometry)
-                            if (i == geoIndex)
-                            {
-                                var esriByteGeometry = (byte[])dataReader[i];
-
-                                var esriShape = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0);
-
-                                feature.TheGeometry = esriShape.AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
-                            }
-                            else
+                            if (i != geoIndex)
                             {
                                 dict.Add(fieldName, dataReader[i]);
                             }
@@ -324,13 +327,13 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     {
         if (geometry is not null)
         {
-            var selectQuery = MakeSelectCommandWithWkb(geometry.AsWkb(), false);
+            //var selectQuery = MakeSelectCommandWithWkb(geometry.AsWkb(), false);
 
-            return Select(selectQuery);
+            return Select(geometry);
         }
         else
         {
-            return Select(MakeSelectCommand(null, false));
+            return Select(geometry/*MakeSelectCommand(null, false)*/);
         }
     }
 

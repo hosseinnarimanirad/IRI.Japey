@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PoinTriangleRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointVectorRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\TriangleRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customization\DictionaryPropertyDescriptor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />

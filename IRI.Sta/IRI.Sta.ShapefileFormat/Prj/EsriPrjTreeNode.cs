@@ -128,6 +128,23 @@ namespace IRI.Sta.ShapefileFormat.Prj
 
         }
 
+        public override string ToString()
+        {
+            return $"Name: {Name}, Children: {Children.Count}, Values:{string.Join(",", Values)}";
+        }
+
+        public string AsEsriCrsWkt()
+        {
+            if (Children?.Count > 0)
+            {
+                return $"{Name}[{ValueString},{string.Join(",", Children.Select(i => i.AsEsriCrsWkt()))}]";
+            }
+            else
+            {
+                return $"{Name}[{ValueString}]";
+            }
+        }
+
         private static List<string> GetParts(string input)
         {
             var brackets = input.Select((i, index) => new Bracket { Character = i, Index = index }).Where(i => i.Character == ']' || i.Character == '[').ToList();
@@ -162,22 +179,6 @@ namespace IRI.Sta.ShapefileFormat.Prj
             return ranges.Select(i => input.Substring(i.Item1 + 1, i.Item2 - i.Item1 - 1)).ToList();
         }
 
-        public override string ToString()
-        {
-            return $"Name: {Name}, Children: {Children.Count}, Values:{string.Join(",", Values)}";
-        }
-
-        public string AsEsriCrsWkt()
-        {
-            if (Children?.Count > 0)
-            {
-                return $"{Name}[{ValueString},{string.Join(",", Children.Select(i => i.AsEsriCrsWkt()))}]";
-            }
-            else
-            {
-                return $"{Name}[{ValueString}]";
-            }
-        }
 
         private static EsriPrjTreeNode _meter;
 

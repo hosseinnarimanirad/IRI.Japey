@@ -76,7 +76,8 @@ namespace IRI.Jab.Controls.View
                     break;
             }
              
-            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(sb.IGeometryAware<sb.Point>.TheGeometry)) || e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
+            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(sb.IGeometryAware<sb.Point>.TheGeometry)) || 
+                e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
             {
                 e.Cancel = true;
             }

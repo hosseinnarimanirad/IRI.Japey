@@ -1,5 +1,8 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Sta.ShapefileFormat.EsriType;
+﻿using IRI.Msh.Common.Model.Bing;
+using IRI.Msh.Common.Model.Google;
+using IRI.Msh.Common.Primitives;
+using IRI.Sta.PersonalGdb;
+using IRI.Sta.ShapefileFormat.EsriType; 
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,6 +76,32 @@ namespace IRI.Extensions
                 case EsriShapeType.EsriPolygonZ:
                 case EsriShapeType.EsriMultiPointZ:
                     return true;
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static GeometryType? AsGeometryType(this EsriPGDBColumnShapeType type)
+        {
+            switch (type)
+            {
+
+                case EsriPGDBColumnShapeType.Point:
+                    return GeometryType.Point;
+
+                case EsriPGDBColumnShapeType.Multipoint:
+                    return GeometryType.MultiPoint;
+
+                case EsriPGDBColumnShapeType.Polyline:
+                    return GeometryType.LineString;
+
+                case EsriPGDBColumnShapeType.Polygon:
+                    return GeometryType.Polygon;
+
+                case EsriPGDBColumnShapeType.Null:
+                case EsriPGDBColumnShapeType.MultiPatch:
+                    return null;
 
                 default:
                     throw new NotImplementedException();
