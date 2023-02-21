@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Model
+namespace IRI.Sta.Common.Model
 {
     public class WiseWebClient : System.Net.WebClient
     {

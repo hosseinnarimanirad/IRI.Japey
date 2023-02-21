@@ -1,4 +1,4 @@
-﻿using IRI.Ket.Common.Encodings;
+﻿using IRI.Sta.Common.Encodings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Security
+namespace IRI.Sta.Common.Security
 {
     public class SignedJsonWebToken
     {

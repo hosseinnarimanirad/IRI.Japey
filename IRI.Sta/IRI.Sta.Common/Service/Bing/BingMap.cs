@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.Common.Service.Bing
+namespace IRI.Sta.Common.Service.Bing
 {
     public static class BingMap
     {

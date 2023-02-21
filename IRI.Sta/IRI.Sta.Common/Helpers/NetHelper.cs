@@ -1,5 +1,5 @@
 ﻿using IRI.Extensions;
-using IRI.Ket.Common.Service;
+using IRI.Sta.Common.Service;
 using IRI.Msh.Common.Security;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Helpers
+namespace IRI.Sta.Common.Helpers
 {
     public static class NetHelper
     {

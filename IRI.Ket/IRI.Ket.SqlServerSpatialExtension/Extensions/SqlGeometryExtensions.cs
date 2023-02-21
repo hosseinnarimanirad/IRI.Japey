@@ -101,7 +101,7 @@ namespace IRI.Extensions
 
         public static string AsWkbString(this SqlGeometry geometry)
         {
-            return IRI.Ket.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
+            return IRI.Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
         }
 
 

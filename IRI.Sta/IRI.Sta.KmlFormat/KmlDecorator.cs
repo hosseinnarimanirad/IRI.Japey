@@ -58,7 +58,7 @@ namespace IRI.Ket.KmlFormat
 
             result.KmlObjectExtensionGroup = new KmlFormat.Primitives.AbstractObjectType[] { document };
 
-            return IRI.Ket.Common.Helpers.XmlHelper.Parse(result);
+            return IRI.Sta.Common.Helpers.XmlHelper.Parse(result);
         }
 
         public static string DecorateWithSybmols(List<PlacemarkType> placemark)

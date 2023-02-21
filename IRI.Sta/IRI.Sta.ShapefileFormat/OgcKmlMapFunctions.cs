@@ -24,7 +24,7 @@ namespace IRI.Sta.ShapefileFormat
 
             result.KmlObjectExtensionGroup = new AbstractObjectType[] { document };
 
-            return IRI.Ket.Common.Helpers.XmlHelper.Parse(result);
+            return IRI.Sta.Common.Helpers.XmlHelper.Parse(result);
         }
     }
 }

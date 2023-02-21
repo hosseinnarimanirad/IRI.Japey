@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using IRI.Msh.Common.Model;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.Common.Service.Google
+namespace IRI.Sta.Common.Service.Google
 {
     public static class GoogleStaticMapProvider
     {

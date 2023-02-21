@@ -1,6 +1,6 @@
 ﻿
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Ket.Common.Gpx;
+using IRI.Sta.Common.Gpx;
 using Microsoft.SqlServer.Types;
 
 //namespace IRI.Ket.SqlServerSpatialExtension

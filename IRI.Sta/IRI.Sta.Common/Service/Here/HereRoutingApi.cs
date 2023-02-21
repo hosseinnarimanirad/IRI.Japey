@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
 
-namespace IRI.Ket.Common.Service.Here
+namespace IRI.Sta.Common.Service.Here
 {
     public static class HereRoutingApi
     {

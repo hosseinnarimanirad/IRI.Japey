@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
-using IRI.Jab.Common.Model;
-using IRI.Jab.Common;
-
 using System.Net;
-using IRI.Msh.CoordinateSystem;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Data;
-using IRI.Ket.Common.Model; 
-using IRI.Msh.CoordinateSystem.MapProjection;
+using System.Threading.Tasks;
+
+using IRI.Msh.Common.Primitives;
 using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
+using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;
-using System.Net.Http;
-using DocumentFormat.OpenXml.Vml.Office;
+
 
 namespace IRI.Jab.Common
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Helpers
+namespace IRI.Sta.Common.Helpers
 {
     public class JsonHelper
     {

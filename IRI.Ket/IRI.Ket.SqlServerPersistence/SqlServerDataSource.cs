@@ -164,7 +164,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             var srid = GetSrid();
 
-            var wkbString = Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbGeometryFilter, true);
+            var wkbString = Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbGeometryFilter, true);
 
             if (returnOnlyGeometry)
             {

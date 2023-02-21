@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.Common.Gpx
+namespace IRI.Sta.Common.Gpx
 {
     [Serializable]
     public class GpxTrackPoint

@@ -3,7 +3,7 @@ using IRI.Msh.Common.Model.Google;
 using System;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Google
+namespace IRI.Sta.Common.Service.Google
 {
     public static class GoogleDirectionsService
     {

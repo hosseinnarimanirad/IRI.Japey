@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace IRI.Ket.Common.Gpx
+namespace IRI.Sta.Common.Gpx
 {
     public static class GpxFormat
     {

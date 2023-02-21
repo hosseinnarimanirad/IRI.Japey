@@ -1,21 +1,8 @@
-﻿using IRI.Jab.Common.Model.Security;
-using IRI.Ket.Common.Helpers;
-using IRI.Msh.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using IRI.Msh.Common.Helpers;
+using IRI.Sta.Common.Helpers;
+using IRI.Jab.Common.Model.Security;
 
 namespace IRI.Jab.Controls.View.Security
 {

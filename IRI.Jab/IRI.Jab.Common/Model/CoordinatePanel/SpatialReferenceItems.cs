@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Jab.Common.Model.CoordinatePanel
 {

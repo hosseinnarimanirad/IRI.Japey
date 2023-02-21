@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Mapzen
+namespace IRI.Sta.Common.Service.Mapzen
 {
     public static class MapzenService
     {

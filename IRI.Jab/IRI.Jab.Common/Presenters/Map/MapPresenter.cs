@@ -14,7 +14,7 @@ using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Model;
 using IRI.Sta.Common.Helpers;
-using IRI.Ket.Common.Service;
+using IRI.Sta.Common.Service;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;
@@ -1508,7 +1508,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             var proxy = this.RequestGetProxy?.Invoke();
 
-            this.IsConnected = await IRI.Ket.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
+            this.IsConnected = await IRI.Sta.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
         }
 
 

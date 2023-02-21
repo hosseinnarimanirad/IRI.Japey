@@ -1,4 +1,4 @@
-﻿using IRI.Ket.Common.Helpers;
+﻿using IRI.Sta.Common.Helpers;
 using IRI.Msh.Common.Model.Google;
 using IRI.Msh.Common.Security;
 using System;
@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Google
+namespace IRI.Sta.Common.Service.Google
 {
     public static class GoogleOAuthApi
     {

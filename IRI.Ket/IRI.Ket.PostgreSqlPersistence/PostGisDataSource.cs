@@ -162,7 +162,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             while (reader.Read())
             {
-                var obj = Common.Helpers.HexStringHelper.ToByteArray(reader[0].ToString());
+                var obj = IRI.Sta.Common.Helpers.HexStringHelper.ToByteArray(reader[0].ToString());
 
                 //geometries.Add(SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes(obj), 0));
                 geometries.Add((Geometry<Point>)Geometry<Point>.FromWkb(obj, 0));

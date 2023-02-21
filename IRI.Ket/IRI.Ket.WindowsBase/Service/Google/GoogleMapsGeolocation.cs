@@ -1,12 +1,10 @@
-﻿using IRI.Msh.Common.Model.Google;
-using IRI.Ket.Common.Devices.ManagedNativeWifi;
+﻿using System.Diagnostics;
+
 using IRI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
+using IRI.Msh.Common.Model.Google;
+using IRI.Sta.Common.Service;
+using IRI.Sta.Common.Helpers;
+using IRI.Ket.Common.Devices.ManagedNativeWifi;
 
 namespace IRI.Ket.Common.Service.Google
 {
@@ -57,7 +55,7 @@ namespace IRI.Ket.Common.Service.Google
 
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
-                return await Helpers.NetHelper.HttpPostAsync<GoogleGeolocationResult>(new Helpers.HttpParameters() { Address = url, Data = parameter, Proxy = proxy });
+                return await NetHelper.HttpPostAsync<GoogleGeolocationResult>(new HttpParameters() { Address = url, Data = parameter, Proxy = proxy });
             }
             catch (Exception ex)
             {
@@ -79,7 +77,7 @@ namespace IRI.Ket.Common.Service.Google
                 var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={key}";
 
                 //return Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(url, parameter, null, null);
-                return Helpers.NetHelper.HttpPost<GoogleGeolocationResult>(new Helpers.HttpParameters() { Address = url, Data = parameter });
+                return NetHelper.HttpPost<GoogleGeolocationResult>(new HttpParameters() { Address = url, Data = parameter });
             }
             catch (Exception ex)
             {

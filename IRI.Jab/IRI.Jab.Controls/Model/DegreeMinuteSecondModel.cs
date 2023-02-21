@@ -85,7 +85,7 @@ namespace IRI.Jab.Controls.Model
 
             double second;
 
-            IRI.Ket.Common.Helpers.DegreeHelper.ToDms(value, true, out degree, out minute, out second);
+            IRI.Sta.Common.Helpers.DegreeHelper.ToDms(value, true, out degree, out minute, out second);
 
             this.Degree = degree;
 

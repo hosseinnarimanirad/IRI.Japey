@@ -1,13 +1,13 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Msh.Common.Primitives;
-using IRI.Ket.Common.Helpers;
+using IRI.Sta.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.News
+namespace IRI.Sta.Common.Service.News
 {
     public class LiveuaMapApiResults
     {

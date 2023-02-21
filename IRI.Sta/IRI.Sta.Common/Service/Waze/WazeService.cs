@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Waze
+namespace IRI.Sta.Common.Service.Waze
 {
     public static class WazeService
     {
@@ -25,7 +25,7 @@ namespace IRI.Ket.Common.Service.Waze
             //epoc = 1520571803066;
             var url = $"https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=1&mu=400&left={geographicBound.XMin}&right={geographicBound.XMax}&bottom={geographicBound.YMin}&top={geographicBound.YMax}&_={epoc}";
 
-            //var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<WazeGeoRssResult>(url);
+            //var result = await IRI.Sta.Common.Helpers.NetHelper.HttpGetAsync<WazeGeoRssResult>(url);
             try
             {
                 WebClient client = new WebClient();

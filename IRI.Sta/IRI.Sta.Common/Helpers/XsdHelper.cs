@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace IRI.Ket.Common.Helpers
+namespace IRI.Sta.Common.Helpers
 {
     public static class XsdHelper
     {

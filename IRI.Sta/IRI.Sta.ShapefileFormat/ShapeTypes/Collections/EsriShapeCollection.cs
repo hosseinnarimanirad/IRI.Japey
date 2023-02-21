@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
+
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Sta.ShapefileFormat.EsriType
 {
@@ -86,7 +86,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
 
             result.KmlObjectExtensionGroup = new Ket.KmlFormat.Primitives.AbstractObjectType[] { document };
 
-            return IRI.Ket.Common.Helpers.XmlHelper.Parse(result);
+            return XmlHelper.Parse(result);
         }
 
         #endregion

@@ -131,7 +131,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
             return MakeSelectCommand(string.Empty, returnOnlyGeometry);
         }
 
-        var wkbString = Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbGeometryFilter, true);
+        var wkbString = IRI.Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(wkbGeometryFilter, true);
 
         if (returnOnlyGeometry)
         {

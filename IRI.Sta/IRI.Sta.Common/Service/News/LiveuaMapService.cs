@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.News
+namespace IRI.Sta.Common.Service.News
 {
     public static class LiveuaMapService
     {
@@ -17,7 +17,7 @@ namespace IRI.Ket.Common.Service.News
 
             var url = $"http://{region}.liveuamap.com/ajax/do?act=pts&curid=0&time={minutes}&last=0";
 
-            var result = await IRI.Ket.Common.Helpers.NetHelper.HttpGetAsync<LiveuaMapApiResults>(url);
+            var result = await IRI.Sta.Common.Helpers.NetHelper.HttpGetAsync<LiveuaMapApiResults>(url);
               
             return result?.Result;
         }

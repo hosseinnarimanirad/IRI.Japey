@@ -1,13 +1,10 @@
-﻿using IRI.Jab.Common.Assets.Commands;
+﻿using System;
+using System.Threading.Tasks;
+using IRI.Msh.Common.Model.Google;
+using IRI.Sta.Common.Service;
+using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
 using IRI.Jab.Common.Service.Dialog;
-using IRI.Ket.Common.Service;
-using IRI.Msh.Common.Model.Google;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs
 {
@@ -364,7 +361,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                 {
                     _loginWithGoogleOAuthCommand = new RelayCommand(async param =>
                     {
-                        var result = await Ket.Common.Service.Google.GoogleOAuthApi.RunOAuth2();
+                        var result = await IRI.Sta.Common.Service.Google.GoogleOAuthApi.RunOAuth2();
 
                         this.RequestLoginWithGoogleOAuth?.Invoke(result);
 

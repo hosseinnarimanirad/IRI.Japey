@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Service.Waze
+namespace IRI.Sta.Common.Service.Waze
 {
      
     public class WazeGeoRssResult

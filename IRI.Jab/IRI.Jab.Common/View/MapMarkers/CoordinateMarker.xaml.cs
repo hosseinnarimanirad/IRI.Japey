@@ -131,7 +131,7 @@ namespace IRI.Jab.Common.View.MapMarkers
 
             if (_current == coordinates.GeodeticDms)
             {
-                XLabel = Ket.Common.Helpers.DegreeHelper.ToDms(value.X, true); YLabel = Ket.Common.Helpers.DegreeHelper.ToDms(value.Y, true);
+                XLabel = IRI.Sta.Common.Helpers.DegreeHelper.ToDms(value.X, true); YLabel = IRI.Sta.Common.Helpers.DegreeHelper.ToDms(value.Y, true);
             }
             else
             {

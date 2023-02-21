@@ -1,8 +1,9 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Primitives;
+﻿using System.Diagnostics;
 using Microsoft.SqlServer.Types;
-using System.Diagnostics;
-using IRI.Ket.Common.Helpers;
+
+using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension;
 
 namespace IRI.Extensions
