@@ -219,7 +219,7 @@ namespace IRI.Extensions
         //            };
         //        }
 
-        //        public static IRI.Standards.OGC.GML.v212.AbstractGeometryType ParseToEsriJsonGeometry(this SqlGeometry geometry)
+        //        public static IRI.Sta.Ogc.GML.v212.AbstractGeometryType ParseToEsriJsonGeometry(this SqlGeometry geometry)
         //        { 
         //            OpenGisGeometryType geometryType = geometry.GetOpenGisType();
 

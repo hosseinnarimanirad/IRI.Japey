@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Standards.OGC.WMS
+namespace IRI.Sta.Ogc.WMS
 {
     public static class WmsConstants
     {

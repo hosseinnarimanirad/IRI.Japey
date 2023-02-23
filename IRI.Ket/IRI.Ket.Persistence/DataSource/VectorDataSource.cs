@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using IRI.Standards.OGC.WMS;
+using System.Threading.Tasks; 
 
 namespace IRI.Ket.Persistence.DataSources
 {

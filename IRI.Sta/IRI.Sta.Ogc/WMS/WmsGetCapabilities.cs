@@ -1,7 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
-namespace IRI.Standards.OGC.WMS
+namespace IRI.Sta.Ogc.WMS
 {
     //public partial class elementB
     //{

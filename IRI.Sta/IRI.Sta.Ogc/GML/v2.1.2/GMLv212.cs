@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Standards.OGC.GML.v212
+namespace IRI.Sta.Ogc.GML.v212
 {
     using System.Collections.Generic;
 

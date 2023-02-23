@@ -3,7 +3,7 @@
 //using System.Linq;
 //using System.Text;
 
-//namespace IRI.Standards.OGC.SFA
+//namespace IRI.Sta.Ogc.SFA
 //{
 //    public enum WkbByteOrder : byte
 //    {

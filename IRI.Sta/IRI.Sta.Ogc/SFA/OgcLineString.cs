@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices; 
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Standards.OGC.SFA
+namespace IRI.Sta.Ogc.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct OgcLineString<T> : IOgcGeometry, IOgcLineString where T : IOgcPoint

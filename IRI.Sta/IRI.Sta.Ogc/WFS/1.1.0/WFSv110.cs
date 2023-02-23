@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IRI.Standards.OGC.WFS.v110
+namespace IRI.Sta.Ogc.WFS.v110
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2053.0")]
     [System.SerializableAttribute()]

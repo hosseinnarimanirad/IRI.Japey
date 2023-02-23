@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Standards.OGC.SFA
+namespace IRI.Sta.Ogc.SFA
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct OgcPolygon<T> : IOgcGeometry where T : IOgcPoint

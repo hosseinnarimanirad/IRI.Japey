@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using IRI.Msh.Common.Ogc;
 
-namespace IRI.Standards.OGC.SFA
+namespace IRI.Sta.Ogc.SFA
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

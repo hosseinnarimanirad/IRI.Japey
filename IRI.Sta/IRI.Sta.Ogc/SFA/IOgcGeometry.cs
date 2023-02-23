@@ -1,7 +1,7 @@
 ﻿using IRI.Msh.Common.Ogc;
 using System;
 
-namespace IRI.Standards.OGC.SFA
+namespace IRI.Sta.Ogc.SFA
 {
     public interface IOgcGeometry
     {

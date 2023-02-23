@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.Common.Primitives;
-using IRI.Standards.OGC.WMS;
+using IRI.Sta.Ogc.WMS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace IRI.Standards.OGC.SFA
+namespace IRI.Sta.Ogc.SFA
 {
     public interface IOgcPoint
     {
