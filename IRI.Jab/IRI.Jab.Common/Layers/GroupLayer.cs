@@ -41,5 +41,10 @@ namespace IRI.Jab.Common
             }
 
         }
+
+        public override string ToString()
+        {
+            return $"GROUP LAYER - {LayerName}";
+        }
     }
 }

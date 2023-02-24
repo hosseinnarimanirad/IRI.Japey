@@ -2168,9 +2168,13 @@ namespace IRI.Jab.MapViewer
 
             //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
 
+
+            // 1401.12.05
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+
             foreach (var tile in tiles)
             {
-                RefreshTiles(tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
+                RefreshTiles(infos, tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
             }
 
             //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
@@ -2258,9 +2262,10 @@ namespace IRI.Jab.MapViewer
         //    //                        );
         //}
 
-        public void RefreshTiles(TileInfo tile, Func<ILayer, bool> criteria)
+        public void RefreshTiles(IEnumerable<ILayer> infos, TileInfo tile, Func<ILayer, bool> criteria)
         {
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+            // 1401.12.05
+            //IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
 
             Action action = async () =>
             {
@@ -3452,6 +3457,9 @@ namespace IRI.Jab.MapViewer
         {
             //Debug.Print($"ExtentManager_OnTilesAdded: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
 
+            // 1401.12.05
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+
             foreach (var item in e.Arg)
             {
                 if (item.ZoomLevel != this.CurrentZoomLevel)
@@ -3467,7 +3475,7 @@ namespace IRI.Jab.MapViewer
                     continue;
                 }
 
-                RefreshTiles(item, l => true);
+                RefreshTiles(infos, item, l => true);
 
             }
 
@@ -3813,7 +3821,7 @@ namespace IRI.Jab.MapViewer
         {
             var layerExtent = new Rect(boundingBox.TopLeft.AsWpfPoint(), boundingBox.BottomRight.AsWpfPoint());
             //Rect layerExtent = MapExtentToIntermediateExtent(boundingBox);
-            
+
             ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
         }
 

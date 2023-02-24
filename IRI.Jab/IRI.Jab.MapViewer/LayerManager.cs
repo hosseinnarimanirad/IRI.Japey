@@ -47,7 +47,12 @@ namespace IRI.Jab.MapViewer
 
             try
             {
-                if (layer.ZIndex > CurrentLayers.Count || layer.ZIndex < 1)
+                // 1401.12.05
+                if (layer.ParentLayerId != Guid.Empty)
+                {
+                    // do not add it to the current layers
+                }
+                else if (layer.ZIndex > CurrentLayers.Count || layer.ZIndex < 1)
                 {
                     this.CurrentLayers.Add(layer);
                 }
@@ -229,6 +234,7 @@ namespace IRI.Jab.MapViewer
                                         .ThenBy(i => i.Type == LayerType.EditableItem)
                                         .ThenBy(i => i.Type == LayerType.Complex)
                                         .ThenBy(i => i.Type == LayerType.Drawing)
+                                        .ThenBy(i => i.Type == LayerType.GroupLayer)
                                         .ThenBy(i => i.ZIndex);
 
             //if (rendering == RenderingApproach.Default)
@@ -247,6 +253,11 @@ namespace IRI.Jab.MapViewer
 
             for (int i = 0; i < toBeAdded.Count; i++)
             {
+                // 1401.12.05
+                // child layers are already shown in parent layer hierarchy
+                if (toBeAdded[i].ParentLayerId != Guid.Empty)
+                    continue;
+
                 this.CurrentLayers.Add(toBeAdded[i]);
             }
 
