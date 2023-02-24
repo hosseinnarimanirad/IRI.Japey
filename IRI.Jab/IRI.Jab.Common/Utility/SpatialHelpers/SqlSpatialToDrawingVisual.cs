@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using IRI.Extensions; 
+using IRI.Extensions;
 using System.Threading.Tasks;
 using IRI.Extensions;
 using IRI.Jab.Common.Model.Symbology;
@@ -113,7 +113,7 @@ namespace IRI.Jab.Common.Convertor
             int numberOfPoints = lineString.STNumPoints().Value;
 
             //STPointN(index): index is between 1 and number of points
-            for (int i = 1; i <= numberOfPoints; i++)
+            for (int i = 1; i < numberOfPoints; i++)
             {
                 var start = lineString.STPointN(i).AsWpfPoint();
 
@@ -282,7 +282,7 @@ namespace IRI.Jab.Common.Convertor
         {
             int numberOfPoints = lineString.NumberOfPoints;
 
-            for (int i = 0; i < numberOfPoints; i++)
+            for (int i = 0; i < numberOfPoints - 1; i++)
             {
                 var start = lineString.Points[i].AsWpfPoint();
 
@@ -349,7 +349,7 @@ namespace IRI.Jab.Common.Convertor
         {
             int numberOfPoints = multiPoint.NumberOfGeometries;
 
-            for (int i = 1; i < numberOfPoints; i++)
+            for (int i = 0; i < numberOfPoints; i++)
             {
                 var point = multiPoint.Geometries[i];
 

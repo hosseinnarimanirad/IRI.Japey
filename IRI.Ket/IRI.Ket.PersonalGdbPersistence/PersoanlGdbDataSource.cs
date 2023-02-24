@@ -44,6 +44,8 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     protected string _tableName;
 
+    protected string _tableDisplayName;
+
     protected string _spatialColumnName;
 
     protected string? _labelColumnName;
@@ -60,11 +62,19 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     public override int Srid { get; protected set; }
 
 
-    public PersoanlGdbDataSource(string mdbFileName, string tableName, string? spatialColumnName = null, string? labelColumnName = null, Func<Point, Point> onTheFlyProj = null)
+    public PersoanlGdbDataSource(
+        string mdbFileName,
+        string tableName,
+        string tableDisplayName,
+        string? spatialColumnName = null,
+        string? labelColumnName = null,
+        Func<Point, Point> onTheFlyProj = null)
     {
         this._mdbFileName = mdbFileName;
 
         this._tableName = tableName;
+
+        this._tableDisplayName = tableDisplayName;
 
         this._spatialColumnName = spatialColumnName ?? _defaultSpatialColumnName;
 
