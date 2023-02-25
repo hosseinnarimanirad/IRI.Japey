@@ -1,4 +1,5 @@
-﻿using IRI.Jab.Common.Helpers;
+﻿using IRI.Extensions;
+using IRI.Jab.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,7 +20,9 @@ namespace IRI.Jab.Common.Assets.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ColorHelper.ToHexString((Color)value);
+            //return ColorHelper.ToHexString((Color)value);
+
+            return ((Color)value).ToHexString();
         }
     }
 }

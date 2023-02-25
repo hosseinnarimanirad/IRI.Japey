@@ -10,7 +10,7 @@ namespace IRI.Jab.Common.Helpers
 {
     public static class ColorHelper
     {
-        public static Color ToWpfColor(string hexColor)
+        public static Color ToWpfColor(string? hexColor)
         {
             if (string.IsNullOrEmpty(hexColor))
             {
@@ -45,11 +45,6 @@ namespace IRI.Jab.Common.Helpers
             //1395.10.20: returns color name for system defined colors!
             //return System.Drawing.ColorTranslator.ToHtml(color); 
             return $"#{color.A.ToString("X2")}{color.R.ToString("X2") }{color.G.ToString("X2")}{color.B.ToString("X2")}";
-        }
-
-        public static string ToHexString(Color color)
-        {
-            return color.ToString();
         }
 
         public static Color GetRandomWpfColor()
