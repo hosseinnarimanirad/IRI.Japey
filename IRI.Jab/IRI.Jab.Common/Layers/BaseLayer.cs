@@ -63,6 +63,9 @@ namespace IRI.Jab.Common
 
         public int ZIndex { get; set; }
 
+        // use for identify tool
+        public bool IsSearchable { get; set; } = false;
+
         private bool _isSelectedInToc;
 
         public bool IsSelectedInToc

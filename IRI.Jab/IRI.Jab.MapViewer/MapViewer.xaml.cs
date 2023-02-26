@@ -1107,7 +1107,7 @@ namespace IRI.Jab.MapViewer
             if (layer.IsGroupLayer)
             {
                 foreach (var item in layer.SubLayers)
-                {                    
+                {
                     AddLayer(item);
                 }
 
@@ -4862,17 +4862,22 @@ namespace IRI.Jab.MapViewer
 
                 geometry = geometry.STBuffer(mapDistance);
             }
-
-            foreach (var layer in this.Layers.OfType<VectorLayer>())
+             
+            foreach (var layer in GetAllVectorLayers(this.Layers))
             {
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))
                     continue;
 
+                if (!layer.IsSearchable)
+                    continue;
+
                 var features = layer.DataSource.GetAsFeatureSet(geometry.AsGeometry());
 
-                if (features != null)
+                if (features is not null && !features.Features.IsNullOrEmpty())
                 {
                     features.Title = layer.LayerName;
+
+                    features.LayerId = layer.LayerId;
 
                     result.Add(features);
                 }
@@ -4880,6 +4885,24 @@ namespace IRI.Jab.MapViewer
 
             return result;
         }
+
+
+        public List<VectorLayer> GetAllVectorLayers(IEnumerable<ILayer>? layers)
+        {
+            var result = new List<VectorLayer>();
+
+            if (layers.IsNullOrEmpty())
+            {
+                return result;
+            }
+
+            result.AddRange(layers.Where(l => l.IsSearchable).OfType<VectorLayer>());
+
+            result.AddRange(layers.Where(l => l.IsGroupLayer && l.IsSearchable).SelectMany(l => GetAllVectorLayers((l as GroupLayer).SubLayers)));
+
+            return result;
+        }
+
 
         #endregion
 

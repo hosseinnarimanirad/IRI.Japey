@@ -10,6 +10,8 @@ namespace IRI.Msh.Common.Primitives
 {
     public class FeatureSet<T> where T : IPoint, new()
     {
+        public Guid LayerId { get; set; }
+
         public string Title { get; set; }
 
         public int Srid { get; set; }

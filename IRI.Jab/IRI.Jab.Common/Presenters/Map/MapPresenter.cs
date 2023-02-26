@@ -1903,6 +1903,26 @@ namespace IRI.Jab.Common.Presenter.Map
             return this.RequestTransformScreenGeometryToWebMercatorGeometry?.Invoke(screenGeometry);
         }
 
+        public ILayer FindLayer(Guid layerId)
+        {
+            var result = GetAllLayers(this.Layers).SingleOrDefault(l => l.LayerId == layerId);
+
+            return result;
+        }
+         
+
+        public List<ILayer> GetAllLayers(IEnumerable<ILayer>? layers)
+        {
+            if (layers is null || layers.IsNullOrEmpty())
+                return new List<ILayer>();
+
+            var result = layers.Where(l => l.IsGroupLayer == false).ToList();
+
+            result.AddRange(layers.Where(l => l.IsGroupLayer).SelectMany(l => GetAllLayers((l as GroupLayer)?.SubLayers)));
+
+            return result;
+        }
+
         #endregion
 
 
