@@ -1107,7 +1107,7 @@ namespace IRI.Jab.MapViewer
             if (layer.IsGroupLayer)
             {
                 foreach (var item in layer.SubLayers)
-                {
+                {                    
                     AddLayer(item);
                 }
 

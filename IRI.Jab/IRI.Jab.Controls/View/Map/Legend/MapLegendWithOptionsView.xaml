@@ -40,9 +40,17 @@
                     </Style>
                 </HierarchicalDataTemplate.Resources>
                 
-                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="{Binding ElementName=root, Path=GroupName}"
-                             HorizontalAlignment="Stretch" DataContext="{Binding }" IsEnabled="{Binding VisualParameters.IsInScaleRange}" IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
-                    <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName}" Symbology="{Binding VisualParameters}"  
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" 
+                             GroupName="{Binding ElementName=root, Path=GroupName}"
+                             HorizontalAlignment="Stretch" 
+                             DataContext="{Binding }" 
+                             IsEnabled="{Binding VisualParameters.IsInScaleRange}" 
+                             IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
+                    <RadioButton.InputBindings>
+                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ToggleExpandCommand}"/>
+                    </RadioButton.InputBindings>
+                    <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName}" 
+                                                                 Symbology="{Binding VisualParameters}"  
                                                                  HorizontalAlignment="Stretch"
                                                                  Commands="{Binding Commands}"
                                                                  IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
@@ -50,7 +58,8 @@
             </HierarchicalDataTemplate>
         </Grid.Resources>
 
-        <TreeView ItemsSource="{Binding Source={StaticResource collectionViewSource}}" ItemTemplate="{StaticResource legendTemplate}">
+        <TreeView ItemsSource="{Binding Source={StaticResource collectionViewSource}}" ItemTemplate="{StaticResource legendTemplate}"
+                  >
             <TreeView.Resources>
                 <!--<Style TargetType="TreeViewItem">
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -141,6 +150,10 @@
                                                     </Setter>
                                                 </Style>
                                             </ToggleButton.Style>
+                                            <!--<ToggleButton.InputBindings>
+                                                <MouseBinding MouseAction="Doub" Command="... />
+                                            </ToggleButton.InputBindings>-->
+                                        
                                         </ToggleButton>
                                         <Border x:Name="Bd" HorizontalAlignment="Stretch"
                                                 BorderThickness="{TemplateBinding Border.BorderThickness}"
@@ -161,6 +174,7 @@
                                         <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="1" />
                                     </Grid>
                                 </StackPanel>
+                                
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="TreeViewItem.IsExpanded" Value="False">
                                         <Setter TargetName="ItemsHost" Property="UIElement.Visibility" Value="Collapsed" />
@@ -205,8 +219,13 @@
                     </Setter>
                 </Style>
             </TreeView.ItemContainerStyle>-->
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <!--<Setter Property="IsSelected" Value="{Binding IsSelectedInToc, Mode=TwoWay}" />-->
+                    <Setter Property="IsExpanded" Value="{Binding IsExpandedInToc, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
 
-            
         </TreeView>
         
         

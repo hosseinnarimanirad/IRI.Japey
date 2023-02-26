@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Windows;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
 using IRI.Jab.Common.Model;
-using System.Windows;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Assets.Commands;
-using System.Collections.ObjectModel;
 
 namespace IRI.Jab.Common
 {
@@ -71,7 +73,7 @@ namespace IRI.Jab.Common
                 if (value && _isSelectedInToc == value)
                 {
                     value = false;
-                } 
+                }
 
                 _isSelectedInToc = value;
                 RaisePropertyChanged();
@@ -82,6 +84,34 @@ namespace IRI.Jab.Common
             }
         }
 
+        private bool _isExpandedInToc;
+
+        public bool IsExpandedInToc
+        {
+            get { return _isExpandedInToc; }
+            set
+            {
+                if (value && _isExpandedInToc == value)
+                {
+                    value = false;
+                }
+
+                _isExpandedInToc = value;
+                RaisePropertyChanged();
+                //RaisePropertyChanged(nameof(ShowOptions));
+                //ChangeSymbologyCommand?.CanExecute(null);
+
+                //OnIsSelectedInTocChanged?.Invoke(this, new CustomEventArgs<BaseLayer>(this));
+
+                //if (this.IsGroupLayer && !this.SubLayers.IsNullOrEmpty())
+                //{
+                //    foreach (var subLayer in SubLayers)
+                //    {
+                //        subLayer.IsExpandedInToc = value;
+                //    }
+                //}
+            }
+        }
         public bool ShowOptions
         {
             get { return IsSelectedInToc && Commands?.Count > 0 && !IsGroupLayer; }
@@ -155,7 +185,7 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged(nameof(ShowOptions));
             }
         }
-         
+
 
         private List<IFeatureTableCommand> _featureTableCommands;
         public List<IFeatureTableCommand> FeatureTableCommands
@@ -182,6 +212,23 @@ namespace IRI.Jab.Common
                 }
 
                 return _changeSymbologyCommand;
+            }
+        }
+
+
+
+        private RelayCommand _toggleExpandCommand;
+        public RelayCommand ToggleExpandCommand
+        {
+            get
+            {
+                if (_toggleExpandCommand == null)
+                {
+                    //_changeSymbologyCommand = new RelayCommand(param => { this.RequestChangeSymbology?.Invoke(this); }, param => IsSelectedInToc);
+                    _toggleExpandCommand = new RelayCommand(param => { this.IsExpandedInToc = !this.IsExpandedInToc; });
+                }
+
+                return _toggleExpandCommand;
             }
         }
 

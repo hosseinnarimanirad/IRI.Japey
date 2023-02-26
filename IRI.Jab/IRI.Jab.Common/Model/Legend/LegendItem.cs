@@ -92,6 +92,20 @@ namespace IRI.Jab.Common.Model.Legend
             }
         }
 
+
+        private bool _isExpanded;
+
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                _isExpanded = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private bool _haveDetails;
 
         public bool HaveDetails

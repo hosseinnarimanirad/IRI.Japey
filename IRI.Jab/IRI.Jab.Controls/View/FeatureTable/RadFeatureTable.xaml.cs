@@ -1,5 +1,5 @@
 ﻿using IRI.Jab.Common.Model.Map;
- 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using sb = IRI.Msh.Common.Primitives;
+using WpfPoint = System.Windows.Point;
+using Point = IRI.Msh.Common.Primitives.Point;
 using IRI.Extensions;
+using IRI.Msh.Common.Primitives;
 
 namespace IRI.Jab.Controls.View
 {
@@ -24,6 +26,14 @@ namespace IRI.Jab.Controls.View
     /// </summary>
     public partial class RadFeatureTable : UserControl
     {
+        public bool IsZoomToGeometryEnabled
+        {
+            get { return (bool)GetValue(IsZoomToGeometryEnabledProperty); }
+            set { SetValue(IsZoomToGeometryEnabledProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsZoomToGeometryEnabledProperty =
+          DependencyProperty.Register(nameof(IsZoomToGeometryEnabled), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
 
 
         public bool CanUserEditGeometry
@@ -35,6 +45,7 @@ namespace IRI.Jab.Controls.View
         // Using a DependencyProperty as the backing store for CanUserEditGeometry.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CanUserEditGeometryProperty =
             DependencyProperty.Register(nameof(CanUserEditGeometry), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
 
 
         public bool CanUserEditAttribute
@@ -75,8 +86,8 @@ namespace IRI.Jab.Controls.View
                 default:
                     break;
             }
-             
-            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(sb.IGeometryAware<sb.Point>.TheGeometry)) || 
+
+            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(IGeometryAware<Point>.TheGeometry)) ||
                 e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
             {
                 e.Cancel = true;
@@ -85,7 +96,7 @@ namespace IRI.Jab.Controls.View
 
         private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<sb.IGeometryAware<sb.Point>>());
+            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<IGeometryAware<Point>>());
         }
 
         private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
@@ -106,6 +117,24 @@ namespace IRI.Jab.Controls.View
                 {
                     throw new NotImplementedException();
                 }
+            }
+        }
+
+        private void grid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (IsZoomToGeometryEnabled)
+            {
+                var selectedItems = grid.SelectedItems.Cast<IGeometryAware<Point>>();
+
+                var action = new Action(() =>
+                {
+                    if (selectedItems?.Count() == 1 && selectedItems.First().TheGeometry.Type == GeometryType.Point)
+                    {
+                        Presenter.RequestFlashSinglePoint(selectedItems.First());
+                    }
+                });
+
+                Presenter.RequestZoomTo?.Invoke(selectedItems, action);
             }
         }
     }

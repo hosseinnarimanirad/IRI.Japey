@@ -89,7 +89,7 @@
         <telerik:RadGridView ItemsSource="{Binding Features}" AutoGenerateColumns="True" AutoGeneratingColumn="RadGridView_AutoGeneratingColumn"
                                 ShowGroupPanel="False" IsReadOnly="{Binding ElementName=root, Path=CanUserEditAttribute, Converter={StaticResource notConverter}}" 
                              x:Name="grid" telerik:StyleManager.Theme="Office2019" SelectionMode="Extended" SelectionChanged="grid_SelectionChanged"
-                                RowEditEnded="grid_RowEditEnded">
+                                RowEditEnded="grid_RowEditEnded" MouseDoubleClick="grid_MouseDoubleClick">
 
             <!--<i:Interaction.Behaviors>
                 <localTelerik:RadMultiSelectBehavior SelectedItems="{Binding HighlightedFeatures}"/>

@@ -38,6 +38,8 @@ namespace IRI.Jab.Common
 
         bool IsSelectedInToc { get; set; }
 
+        bool IsExpandedInToc { get; set; }
+
         bool IsGroupLayer { get; set; }
 
         Guid ParentLayerId { get; set; }

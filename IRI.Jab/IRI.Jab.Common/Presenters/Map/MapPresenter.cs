@@ -26,7 +26,7 @@ using IRI.Jab.Common.Model.Common;
 using IRI.Jab.Common.Model.Spatialable;
 using IRI.Jab.Common.Presenters;
 using IRI.Jab.Common.Model.Legend;
- 
+
 using WpfPoint = System.Windows.Point;
 
 namespace IRI.Jab.Common.Presenter.Map
@@ -1705,6 +1705,15 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void TrySetCommands(ILayer layer)
         {
+            if (layer.IsGroupLayer && !layer.SubLayers.IsNullOrEmpty())
+            {
+                foreach (var subLayer in layer.SubLayers)
+                {
+                    TrySetCommands(subLayer);
+                }
+
+                return;
+            }
 
             if (layer is VectorLayer)
             {
@@ -1864,10 +1873,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddLayer(ILayer layer)
         {
-            if (!layer.IsGroupLayer)
-            {
-                TrySetCommands(layer);
-            }
+            TrySetCommands(layer);
 
             this.RequestAddLayer?.Invoke(layer);
         }
