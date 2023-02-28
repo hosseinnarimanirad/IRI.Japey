@@ -816,7 +816,7 @@ namespace IRI.Jab.Common.Presenter.Map
         public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
-        public Func<Geometry<Point>, ObservableCollection<FeatureSet<Point>>> RequestIdentify;
+        public Func<Point, ObservableCollection<FeatureSet<Point>>> RequestIdentify;
 
         public Func<Task<Response<Point>>> RequestGetPoint;
 
@@ -1150,18 +1150,6 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             if (RequestIdentify != null)
             {
-                return RequestIdentify(arg.AsGeometry(SridHelper.WebMercator)/*.AsSqlGeometry()*/);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public ObservableCollection<FeatureSet<Point>>? Identify(Geometry<Point> arg)
-        {
-            if (RequestIdentify != null)
-            {
                 return RequestIdentify(arg);
             }
             else
@@ -1169,7 +1157,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 return null;
             }
         }
-
+          
 
         public Task<Response<Point>> GetPoint()
         {

@@ -44,6 +44,17 @@ namespace IRI.Msh.Common.Primitives
             this.yMax = yMax;
         }
 
+        public BoundingBox(Point center, double offset)
+        {
+            this.xMin = center.X - offset;
+
+            this.xMax = center.X + offset;
+
+            this.yMin = center.Y - offset;
+
+            this.yMax = center.Y + offset;
+        }
+
         [JsonIgnore]
         public double Width
         {

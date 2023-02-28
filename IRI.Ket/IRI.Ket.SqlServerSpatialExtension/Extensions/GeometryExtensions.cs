@@ -174,6 +174,7 @@ namespace IRI.Extensions
         {
             var type = geometry.Type;
 
+            
             if (geometry.IsNullOrEmpty())
             {
                 return IRI.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);

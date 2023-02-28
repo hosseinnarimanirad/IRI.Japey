@@ -205,7 +205,8 @@ namespace IRI.Msh.Common.Analysis
 
             if (relation == LineLineRelation.Intersect)
             {
-                if (BoundingBox.Create(secondSegmentFirstPoint, secondSegmentSecondPoint).Contains(intersection))
+                if (BoundingBox.Create(secondSegmentFirstPoint, secondSegmentSecondPoint).Contains(intersection) &&
+                    BoundingBox.Create(firstSegmentFirstPoint, firstSegmentSecondPoint).Contains(intersection))
                     return LineLineSegmentRelation.Intersect;
 
                 else

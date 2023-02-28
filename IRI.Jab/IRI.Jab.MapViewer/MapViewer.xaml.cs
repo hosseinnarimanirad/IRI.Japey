@@ -771,7 +771,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
 
-            presenter.RequestIdentify = point => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(point.AsSqlGeometry()));
+            presenter.RequestIdentify = point => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(point));
 
             presenter.RequestGetPoint = SelectPointAsync;
 
@@ -4844,25 +4844,25 @@ namespace IRI.Jab.MapViewer
 
         #region Identify
 
+
         public List<sb.FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
         {
-            return GetFeatures(point.AsSqlGeometry(SridHelper.WebMercator));
-        }
-
-        public List<sb.FeatureSet<sb.Point>>? GetFeatures(SqlGeometry geometry)
-        {
-            if (geometry.IsNotValidOrEmpty())
-                return null;
-
             List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
 
-            if (geometry.GetOpenGisType() == OpenGisGeometryType.Point || geometry.GetOpenGisType() == OpenGisGeometryType.MultiPoint)
-            {
-                var mapDistance = ScreenToMap(7);
+            sb.Geometry<sb.Point> geometryBoundary;
 
-                geometry = geometry.STBuffer(mapDistance);
-            }
-             
+            var offset = ScreenToMap(7);
+
+            geometryBoundary = new sb.BoundingBox(point, offset).AsGeometry<sb.Point>(SridHelper.WebMercator);
+
+
+            //if (geometry.GetOpenGisType() == OpenGisGeometryType.Point || geometry.GetOpenGisType() == OpenGisGeometryType.MultiPoint)
+            //{
+            //    var mapDistance = ScreenToMap(7);
+
+            //    geometry = geometry.STBuffer(mapDistance);
+            //}
+
             foreach (var layer in GetAllVectorLayers(this.Layers))
             {
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))
@@ -4871,7 +4871,7 @@ namespace IRI.Jab.MapViewer
                 if (!layer.IsSearchable)
                     continue;
 
-                var features = layer.DataSource.GetAsFeatureSet(geometry.AsGeometry());
+                var features = layer.DataSource.GetAsFeatureSet(geometryBoundary);
 
                 if (features is not null && !features.Features.IsNullOrEmpty())
                 {
