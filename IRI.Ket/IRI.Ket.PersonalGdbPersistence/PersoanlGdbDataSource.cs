@@ -12,6 +12,7 @@ using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Sta.PersonalGdb;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 
@@ -212,33 +213,33 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         }
     }
 
-    protected List<Geometry<Point>> SelectGeometries(string selectQuery)
-    {
-        List<Geometry<Point>> geometries = new List<Geometry<Point>>();
+    //protected List<Geometry<Point>> SelectGeometries(string selectQuery)
+    //{
+    //    List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
-        using (var conn = new OleDbConnection(GetConnectionString()))
-        {
-            conn.Open();
+    //    using (var conn = new OleDbConnection(GetConnectionString()))
+    //    {
+    //        conn.Open();
 
-            var query = $"SELECT {_spatialColumnName} FROM {_tableName}";
+    //        var query = $"SELECT {_spatialColumnName} FROM {_tableName}";
 
-            var cmd = new OleDbCommand(query, conn);
+    //        var cmd = new OleDbCommand(query, conn);
 
-            using (var dataReader = cmd.ExecuteReader())
-            {
-                while (dataReader.Read())
-                {
-                    var esriByteGeometry = (byte[])dataReader[0];
+    //        using (var dataReader = cmd.ExecuteReader())
+    //        {
+    //            while (dataReader.Read())
+    //            {
+    //                var esriByteGeometry = (byte[])dataReader[0];
 
-                    var esriShape = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0);
+    //                var esriShape = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0);
 
-                    geometries.Add(esriShape.AsGeometry());
-                }
-            }
-        }
+    //                geometries.Add(esriShape.AsGeometry());
+    //            }
+    //        }
+    //    }
 
-        return geometries;
-    }
+    //    return geometries;
+    //}
 
     protected FeatureSet<Point> Select(Geometry<Point> geometryBoundingBox)
     {
@@ -274,53 +275,70 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                     return result;
                 }
 
+                int I = 0;
+
                 while (dataReader.Read())
                 {
-                    var dict = new Dictionary<string, object>();
-
-                    var feature = new Feature<Point>();
-
-                    var esriByteGeometry = (byte[])dataReader[geoIndex];
-
-                    var geometry = IRI.Sta.PersonalGdb.EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
-
-                    if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
-                        continue;
-
-                    feature.TheGeometry = geometry;
-
-                    for (int i = 0; i < dataReader.FieldCount; i++)
+                    try
                     {
-                        var fieldName = dataReader.GetName(i);
+                        var dict = new Dictionary<string, object>();
 
-                        while (dict.Keys.Contains(fieldName))
+                        var feature = new Feature<Point>();
+
+                        var esriByteGeometry = (byte[])dataReader[geoIndex];
+
+                        if (_tableName.ToUpper() == "SUBSTAT" && result.Features.Count < 40)
                         {
-                            fieldName = $"{fieldName}_";
+                            System.Diagnostics.Trace.WriteLine($"GEOMETRY {I++:N2} - {HexStringHelper.ByteToHexBitFiddle(esriByteGeometry, append0x: true)}");
                         }
 
-                        if (dataReader.IsDBNull(i))
+                        var geometry = EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
+
+                        if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
+                            continue;
+
+                        feature.TheGeometry = geometry;
+
+                        for (int i = 0; i < dataReader.FieldCount; i++)
                         {
-                            dict.Add(fieldName, null);
-                        }
-                        else
-                        {
-                            if (i != geoIndex)
+                            var fieldName = dataReader.GetName(i);
+
+                            while (dict.Keys.Contains(fieldName))
                             {
-                                dict.Add(fieldName, dataReader[i]);
+                                fieldName = $"{fieldName}_";
+                            }
+
+                            if (dataReader.IsDBNull(i))
+                            {
+                                dict.Add(fieldName, null);
+                            }
+                            else
+                            {
+                                if (i != geoIndex)
+                                {
+                                    dict.Add(fieldName, dataReader[i]);
+                                }
                             }
                         }
-                    }
 
-                    if (!string.IsNullOrWhiteSpace(IdColumnName))
+                        if (!string.IsNullOrWhiteSpace(IdColumnName))
+                        {
+                            feature.Id = (int)dict[IdColumnName];
+                        }
+
+                        feature.Attributes = dict;
+
+                        result.Features.Add(feature);
+
+                    }
+                    catch (Exception ex)
                     {
-                        feature.Id = (int)dict[IdColumnName];
+                        //throw new NotImplementedException("PersoanlGdbDataSource > Select");
                     }
-
-                    feature.Attributes = dict;
-
-                    result.Features.Add(feature);
                 }
             }
+
+            conn.Close();
         }
 
         return result;

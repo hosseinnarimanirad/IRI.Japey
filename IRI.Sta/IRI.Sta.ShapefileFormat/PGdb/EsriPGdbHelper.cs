@@ -69,12 +69,10 @@ namespace IRI.Sta.PersonalGdb
                 case EsriShapeType.EsriMultiPointZ:
                     return MultiPointZReader.ParseGdbRecord(bytes, srid, hasM: false);
 
-                case EsriShapeType.EsriMultiPatch:
+                case EsriShapeType.EsriMultiPatch:                    
                 default:
                     throw new NotImplementedException("EsriPGdbHelper > Parse");
-            }
-
-            throw new NotImplementedException("EsriPGdbHelper > Parse");
+            } 
         }       
     }
 }
