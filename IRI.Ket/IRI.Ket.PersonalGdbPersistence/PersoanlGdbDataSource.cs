@@ -294,9 +294,6 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
                         var geometry = EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
 
-                        if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
-                            continue;
-
                         feature.TheGeometry = geometry;
 
                         for (int i = 0; i < dataReader.FieldCount; i++)
@@ -327,6 +324,9 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                         }
 
                         feature.Attributes = dict;
+
+                        if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
+                            continue;
 
                         result.Features.Add(feature);
 

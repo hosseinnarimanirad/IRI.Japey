@@ -1,4 +1,5 @@
 ﻿using IRI.Extensions;
+using IRI.Msh.Algebra;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -217,6 +218,17 @@ namespace IRI.Msh.Common.Primitives
             return new BoundingBox(center.X - xShift, center.Y - yShift, center.X + xShift, center.Y + yShift);
         }
 
+        public BoundingBox Extend(double value)
+        {
+            var xShift = this.Width / 2.0 + value;
+
+            var yShift = this.Height / 2.0 + value;
+
+            var center = this.Center;
+
+            return new BoundingBox(center.X - xShift, center.Y - yShift, center.X + xShift, center.Y + yShift);
+        }
+
         public static BoundingBox GetMergedBoundingBox(IEnumerable<BoundingBox> boundingBoxes, bool ignoreNanValues = false)
         {
             if (boundingBoxes == null || boundingBoxes.Count() == 0)
@@ -382,6 +394,14 @@ namespace IRI.Msh.Common.Primitives
 
             return (point.X >= this.XMin && point.X <= this.XMax) &&
                     (point.Y >= this.YMin && point.Y <= this.YMax);
+        }
+
+        public bool ContainsApproximately<T>(T point, double threshold = 0.01) where T : IPoint, new()
+        {
+            if (point == null)
+                return false;
+
+            return this.Extend(threshold).Contains(point);
         }
 
         public static BoundingBox Create<T>(params T[] points) where T : IPoint, new()

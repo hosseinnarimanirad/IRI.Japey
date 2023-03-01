@@ -656,6 +656,9 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         if (this.IsNullOrEmpty() || other.IsNullOrEmpty())
             return false;
 
+        if (this.Srid != other.Srid)
+            return false;
+
         var firstMbb = this.GetBoundingBox();
 
         var secondMbb = other.GetBoundingBox();
