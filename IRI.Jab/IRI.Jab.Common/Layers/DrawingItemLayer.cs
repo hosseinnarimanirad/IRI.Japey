@@ -37,6 +37,7 @@ namespace IRI.Jab.Common
                 RaisePropertyChanged();
 
                 this.DataSource = new MemoryDataSource(new List<Geometry<Point>>() { value });
+                this.Extent = value.GetBoundingBox();
             }
         }
 
