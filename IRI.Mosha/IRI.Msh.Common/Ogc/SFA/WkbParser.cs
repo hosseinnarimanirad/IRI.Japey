@@ -39,8 +39,7 @@ namespace IRI.Msh.Common.Ogc
                         return FromWkbMultiLineString(stream, srid);
 
                     case WkbGeometryType.MultiPolygon:
-                        return FromWkbMultiPolygon(stream, srid)
-                            ;
+                        return FromWkbMultiPolygon(stream, srid);
                     case WkbGeometryType.PointZ:
                     case WkbGeometryType.LineStringZ:
                     case WkbGeometryType.PolygonZ:
@@ -226,6 +225,7 @@ namespace IRI.Msh.Common.Ogc
             return result.ToArray();
         }
 
+        // todo: do not modify input polygon. consider add/remove points as a bad practice!
         private static byte[] GeometryPolygonAsWkb<T>(Geometry<T> polygon) where T : IPoint, new()
         {
             List<byte> result = new List<byte>
@@ -244,6 +244,8 @@ namespace IRI.Msh.Common.Ogc
                 points.Add(polygon.Geometries[i].Points[0]);
 
                 result.AddRange(OgcWkbMapFunctions.ToWkbLinearRing(points));
+
+                points.RemoveAt(points.Count - 1);
             }
 
             return result.ToArray();

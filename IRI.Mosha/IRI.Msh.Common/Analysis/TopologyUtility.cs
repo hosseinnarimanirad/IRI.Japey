@@ -169,7 +169,7 @@ namespace IRI.Msh.Common.Analysis
             {
                 tempX = firstLineFirstPoint.X;
 
-                tempY = secondLineFirstPoint.Y + secondSlope * (tempX - firstLineFirstPoint.X);
+                tempY = secondLineFirstPoint.Y + secondSlope * (tempX - secondLineFirstPoint.X);
             }
             else if (double.IsInfinity(secondSlope))
             {
@@ -263,7 +263,7 @@ namespace IRI.Msh.Common.Analysis
         //    }
         //}
 
-         
+
 
         public static bool IsPointInRing<T>(Geometry<T> ring, T point) where T : IPoint, new()
         {
@@ -286,14 +286,14 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < numberOfPoints - 1; i++)
             {
-                var angle = SpatialUtility.GetAngle(ring.Points[i], point, ring.Points[i + 1]);
+                var angle = SpatialUtility.GetSignedAngle(ring.Points[i], point, ring.Points[i + 1]);
 
                 totalAngle += angle;
             }
 
-            totalAngle += SpatialUtility.GetAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
+            totalAngle += SpatialUtility.GetSignedAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
 
-            if (Math.Abs(totalAngle - 2 * Math.PI) < 0.1)
+            if (Math.Abs(Math.Abs(totalAngle) - 2 * Math.PI) < 0.1)
                 return true;
 
             return false;
@@ -369,7 +369,7 @@ namespace IRI.Msh.Common.Analysis
             if (isRing)
             {
                 var relation = LineSegmentsIntersects(lineStringOrRing.Points[0], lineStringOrRing.Points[numberOfPoints - 1], lineSegmentStart, lineSegmentEnd, out _);
-                
+
                 if (relation == LineLineSegmentRelation.Intersect || relation == LineLineSegmentRelation.Coinciding)
                     return true;
             }

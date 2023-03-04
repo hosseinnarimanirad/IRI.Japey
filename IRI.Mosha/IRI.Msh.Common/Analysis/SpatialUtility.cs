@@ -6,6 +6,7 @@ using System.Linq;
 using IRI.Msh.MeasurementUnit;
 using System.Net.NetworkInformation;
 using System.Drawing;
+using Newtonsoft.Json.Linq;
 
 namespace IRI.Msh.Common.Analysis
 {
@@ -48,15 +49,13 @@ namespace IRI.Msh.Common.Analysis
         /// <typeparam name="T"></typeparam>
         /// <param name="points">last point should not be repeated for ring</param>
         /// <returns></returns>
-        public static double GetSignedRingArea<T>(List<T> points) where T : IPoint, new()
+        public static double GetSignedRingArea<T>(List<T> points) where T : IPoint
         {
             if (points == null || points.Count < 3)
                 return 0;
 
             if (SpatialUtility.GetEuclideanDistance(points[0], points[points.Count - 1]) == 0)
-            {
                 throw new NotImplementedException("SpatialUtility > CalculateSignedTriangleAreaForRing");
-            }
 
             double area = 0;
 
@@ -197,6 +196,14 @@ namespace IRI.Msh.Common.Analysis
 
         #region Angle
 
+        public static double GetSignedAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
+        {
+            var isClockwise = IsClockwise(new List<T> { firstPoint, middlePoint, lastPoint });
+
+            var angle = GetAngle(firstPoint, middlePoint, lastPoint, mode);
+
+            return isClockwise ? angle : -angle;
+        }
 
         /// <summary>
         /// returns the angle in desired mode between 0 and 180
@@ -320,18 +327,9 @@ namespace IRI.Msh.Common.Analysis
         /// </summary>
         /// <param name="points"></param>
         /// <returns></returns>
-        public static bool IsClockwise<T>(IList<T> points) where T : IPoint
+        public static bool IsClockwise<T>(List<T> points) where T : IPoint
         {
-            int numberOfPoints = points.Count;
-
-            List<double> values = new List<double>(numberOfPoints);
-
-            for (int i = 0; i < numberOfPoints - 1; i++)
-            {
-                values.Add((points[i + 1].X - points[i].X) * (points[i + 1].Y + points[i].Y));
-            }
-
-            return values.Sum() > 0;
+            return GetSignedRingArea(points) < 0;
         }
 
         ///// <summary>
