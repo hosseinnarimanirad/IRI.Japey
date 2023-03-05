@@ -124,7 +124,7 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
             this.DistanceToPrevious = SpatialUtility.GetEuclideanDistance(middleScreenPoint, firstScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.CosineOfAngle))
-            this.CosineOfAngle = SpatialUtility.GetCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
+            this.CosineOfAngle = SpatialUtility.GetCosineOfOuterAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);
 
             //if (Features.Contains(LogisticGeometrySimplificationFeatures.SquareCosineOfAngle))
             //this.SquareCosineOfAngle = SpatialUtility.GetSquareCosineOfAngle(firstScreenPoint, middleScreenPoint, lastScreenPoint);

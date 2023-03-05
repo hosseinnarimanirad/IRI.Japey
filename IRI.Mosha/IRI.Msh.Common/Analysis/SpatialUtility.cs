@@ -195,12 +195,20 @@ namespace IRI.Msh.Common.Analysis
 
 
         #region Angle
-
-        public static double GetSignedAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
+        public static double GetSignedInnerAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
         {
             var isClockwise = IsClockwise(new List<T> { firstPoint, middlePoint, lastPoint });
 
-            var angle = GetAngle(firstPoint, middlePoint, lastPoint, mode);
+            var angle = GetInnerAngle(firstPoint, middlePoint, lastPoint, mode);
+
+            return isClockwise ? angle : -angle;
+        }
+
+        public static double GetSignedOuterAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
+        {
+            var isClockwise = IsClockwise(new List<T> { firstPoint, middlePoint, lastPoint });
+
+            var angle = GetOuterAngle(firstPoint, middlePoint, lastPoint, mode);
 
             return isClockwise ? angle : -angle;
         }
@@ -212,9 +220,36 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
+        public static double GetInnerAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
         {
-            var radianAngle = Math.Acos(GetCosineOfAngle(firstPoint, middlePoint, lastPoint));
+            var radianAngle = Math.Acos(GetCosineOfInnerAngle(firstPoint, middlePoint, lastPoint));
+
+            if (mode == AngleMode.Radian)
+            {
+                return radianAngle;
+            }
+            else if (mode == AngleMode.Degree)
+            {
+                return UnitConversion.RadianToDegree(radianAngle);
+            }
+            else if (mode == AngleMode.Grade)
+            {
+                return UnitConversion.RadianToGrade(radianAngle);
+            }
+
+            throw new NotImplementedException("SpatialUtility > GetAngle");
+        }
+
+        /// <summary>
+        /// returns the angle in desired mode between 0 and 180
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
+        public static double GetOuterAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint
+        {
+            var radianAngle = Math.Acos(GetCosineOfOuterAngle(firstPoint, middlePoint, lastPoint));
 
             if (mode == AngleMode.Radian)
             {
@@ -239,7 +274,47 @@ namespace IRI.Msh.Common.Analysis
         /// <param name="middlePoint"></param>
         /// <param name="lastPoint"></param>
         /// <returns></returns>
-        public static double GetCosineOfAngle<T>(T firstPoint, T middlePoint, T lastPoint) where T : IPoint
+        public static double GetCosineOfInnerAngle<T>(T firstPoint, T middlePoint, T lastPoint) where T : IPoint
+        {
+            if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
+            {
+                return 1;
+            }
+
+            //cos(theta) = (A.B)/(|A|*|B|)
+            var ax = lastPoint.X - middlePoint.X;
+            var ay = lastPoint.Y - middlePoint.Y;
+
+            var bx = firstPoint.X - middlePoint.X;
+            var by = firstPoint.Y - middlePoint.Y;
+
+            var dotProduct = ax * bx + ay * by;
+
+            var result = dotProduct / (Math.Sqrt((ax * ax + ay * ay) * (bx * bx + by * by)));
+
+            // 1401.03.20
+            // to prevent NaN values when calculating ACos
+            if (result > 1 || result < 0)
+            {
+                // p1: {5714923.59170073, 4259367.97165685}
+                // p2: {5714923.61396463, 4259367.3548049}
+                // p3: {5714923.63622853, 4259366.73795298}
+                // result: 1.0000000000000002
+                result = Math.Round(result, 13);
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// returns cos(theta)
+        /// </summary>
+        /// <param name="firstPoint"></param>
+        /// <param name="middlePoint"></param>
+        /// <param name="lastPoint"></param>
+        /// <returns></returns>
+        public static double GetCosineOfOuterAngle<T>(T firstPoint, T middlePoint, T lastPoint) where T : IPoint
         {
             if (firstPoint.Equals(middlePoint) || middlePoint.Equals(lastPoint))
             {
@@ -271,7 +346,7 @@ namespace IRI.Msh.Common.Analysis
             return result;
         }
 
-        public static double[] GetCosineOfAngles<T>(T[] points) where T : IPoint
+        public static double[] GetCosineOfOuterAngle<T>(T[] points) where T : IPoint
         {
             if (points == null || points.Length == 0 || points.Length == 2)
                 return null;
@@ -280,7 +355,7 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < points.Length - 2; i++)
             {
-                result[i] = GetCosineOfAngle(points[i], points[i + 1], points[i + 2]);
+                result[i] = GetCosineOfOuterAngle(points[i], points[i + 1], points[i + 2]);
             }
 
             return result;

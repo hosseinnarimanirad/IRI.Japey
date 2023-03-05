@@ -245,6 +245,7 @@ namespace IRI.Msh.Common.Ogc
 
                 result.AddRange(OgcWkbMapFunctions.ToWkbLinearRing(points));
 
+                // to enforce idempotency
                 points.RemoveAt(points.Count - 1);
             }
 

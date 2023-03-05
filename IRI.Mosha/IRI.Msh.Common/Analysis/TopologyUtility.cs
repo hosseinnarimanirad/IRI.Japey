@@ -286,14 +286,15 @@ namespace IRI.Msh.Common.Analysis
 
             for (int i = 0; i < numberOfPoints - 1; i++)
             {
-                var angle = SpatialUtility.GetSignedAngle(ring.Points[i], point, ring.Points[i + 1]);
+                var angle = SpatialUtility.GetSignedInnerAngle(ring.Points[i], point, ring.Points[i + 1]);
 
                 totalAngle += angle;
             }
 
-            totalAngle += SpatialUtility.GetSignedAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
+            totalAngle += SpatialUtility.GetSignedInnerAngle(ring.Points[numberOfPoints - 1], point, ring.Points[0]);
 
-            if (Math.Abs(Math.Abs(totalAngle) - 2 * Math.PI) < 0.1)
+            //if (Math.Abs(Math.Abs(totalAngle) - 2 * Math.PI) < 0.1)
+            if (Math.Abs(totalAngle) > Math.PI / 2.0)
                 return true;
 
             return false;

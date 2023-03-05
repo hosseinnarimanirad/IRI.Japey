@@ -770,7 +770,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 if (this.Type == GeometryType.Polygon)
                 {
                     if (TopologyUtility.IsPointInPolygon(this, lineString.Points[0]))
-                        return true;
+                        return true; 
                 }
 
                 for (int i = 0; i < lineString.NumberOfPoints - 1; i++)
@@ -817,6 +817,13 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return polygon.IntersectsLineStringOrRing(this, isRing: false);
 
             case GeometryType.Polygon:
+                if (TopologyUtility.IsPointInPolygon(this, polygon.GetLastPoint()))
+                    return true;
+
+                else if (TopologyUtility.IsPointInPolygon(polygon, this.GetLastPoint()))
+                    return true;
+
+
                 return this.Geometries.Any(g => polygon.IntersectsLineStringOrRing(g, isRing: true));
 
             case GeometryType.MultiPoint:
@@ -2158,13 +2165,13 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
         for (int i = 0; i < this.Points.Count - 2; i++)
         {
-            result += SpatialUtility.GetAngle(Points[i], Points[i + 1], Points[i + 2]);
+            result += SpatialUtility.GetOuterAngle(Points[i], Points[i + 1], Points[i + 2]);
         }
 
         if (isRing)
         {
-            result += SpatialUtility.GetAngle(this.Points[this.Points.Count - 2], this.Points[this.Points.Count - 1], this.Points[0]);
-            result += SpatialUtility.GetAngle(this.Points[this.Points.Count - 1], this.Points[0], this.Points[1]);
+            result += SpatialUtility.GetOuterAngle(this.Points[this.Points.Count - 2], this.Points[this.Points.Count - 1], this.Points[0]);
+            result += SpatialUtility.GetOuterAngle(this.Points[this.Points.Count - 1], this.Points[0], this.Points[1]);
         }
 
         result = isRing ? result / Points.Count : result / (Points.Count - 2);
