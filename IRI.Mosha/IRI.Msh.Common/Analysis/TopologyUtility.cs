@@ -300,16 +300,19 @@ namespace IRI.Msh.Common.Analysis
             return false;
         }
 
-        public static bool IsPointInPolygon<T>(Geometry<T> polygon, T point) where T : IPoint, new()
+        public static bool IsPointInPolygon<T>(Geometry<T> polygonOrMultiPolygon, T point) where T : IPoint, new()
         {
-            if (polygon.Type != GeometryType.Polygon)
+            if (polygonOrMultiPolygon.Type == GeometryType.MultiPolygon)
+                return polygonOrMultiPolygon.Geometries.Any(g => IsPointInPolygon(g, point));
+
+            else if (polygonOrMultiPolygon.Type != GeometryType.Polygon)
                 throw new NotImplementedException("TopologyUtility > IsPointInPolygon");
 
-            var inOutterRing = IsPointInRing(polygon.Geometries[0], point);
+            var inOutterRing = IsPointInRing(polygonOrMultiPolygon.Geometries[0], point);
 
-            if (inOutterRing && polygon.Geometries.Count > 1)
+            if (inOutterRing && polygonOrMultiPolygon.Geometries.Count > 1)
             {
-                var inInnerRings = polygon.Geometries.Skip(1).Any(g => IsPointInRing(g, point));
+                var inInnerRings = polygonOrMultiPolygon.Geometries.Skip(1).Any(g => IsPointInRing(g, point));
 
                 return !inInnerRings;
             }

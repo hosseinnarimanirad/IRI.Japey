@@ -820,8 +820,8 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 if (TopologyUtility.IsPointInPolygon(this, polygon.GetLastPoint()))
                     return true;
 
-                else if (TopologyUtility.IsPointInPolygon(polygon, this.GetLastPoint()))
-                    return true;
+                //else if (TopologyUtility.IsPointInPolygon(polygon, this.GetLastPoint()))
+                //    return true;
 
 
                 return this.Geometries.Any(g => polygon.IntersectsLineStringOrRing(g, isRing: true));
