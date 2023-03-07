@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.Persistence.DataSources
 {
@@ -29,9 +30,9 @@ namespace IRI.Ket.Persistence.DataSources
             return GetAsFeatureSet().Features.Select(f => f.TheGeometry).ToList();
         }
 
-        public virtual List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
+        public virtual List<Geometry<Point>> GetGeometries(BoundingBox webMercatorBoundingBox)
         {
-            Geometry<Point> boundary = boundingBox.AsGeometry<Point>(this.Srid);
+            Geometry<Point> boundary = webMercatorBoundingBox.AsGeometry<Point>(SridHelper.WebMercator);
 
             return GetGeometries().Where(i => i.Intersects(boundary)).ToList();
         }
@@ -68,9 +69,9 @@ namespace IRI.Ket.Persistence.DataSources
             return GetNamedGeometries(geometry);
         }
 
-        public virtual List<NamedGeometry> GetNamedGeometries(BoundingBox boundary)
+        public virtual List<NamedGeometry> GetNamedGeometries(BoundingBox webMercatorBoundingBox)
         {
-            var geometry = boundary.AsGeometry<Point>(Srid);
+            var geometry = webMercatorBoundingBox.AsGeometry<Point>(SridHelper.WebMercator);
 
             return GetNamedGeometries(geometry);
         }
@@ -112,9 +113,9 @@ namespace IRI.Ket.Persistence.DataSources
             return GetAsFeatureSet(Geometry<Point>.Empty);
         }
 
-        public virtual FeatureSet<Point> GetAsFeatureSet(BoundingBox boundary)
+        public virtual FeatureSet<Point> GetAsFeatureSet(BoundingBox webMercatorBoundingBox)
         {
-            Geometry<Point> geometry = boundary.AsGeometry<Point>(this.Srid);
+            Geometry<Point> geometry = webMercatorBoundingBox.AsGeometry<Point>(SridHelper.WebMercator);
 
             return GetAsFeatureSet(geometry);
         }
@@ -165,9 +166,9 @@ namespace IRI.Ket.Persistence.DataSources
             return new FeatureSet<TPoint>(GetGeometryAwares().Select(ToFeatureMappingFunc).ToList());
         }
 
-        public virtual FeatureSet<TPoint> GetFeatures(BoundingBox boundingBox)
+        public virtual FeatureSet<TPoint> GetFeatures(BoundingBox webMercatorBoundingBox)
         {
-            Geometry<TPoint> boundary = boundingBox.AsGeometry<TPoint>(Srid);//.MakeValid();
+            Geometry<TPoint> boundary = webMercatorBoundingBox.AsGeometry<TPoint>(SridHelper.WebMercator);//.MakeValid();
 
             return GetFeatures(boundary);
         }

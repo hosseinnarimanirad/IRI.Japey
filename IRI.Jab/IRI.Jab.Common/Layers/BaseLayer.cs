@@ -190,6 +190,41 @@ namespace IRI.Jab.Common
         }
 
 
+        public void TurnOff()
+        {
+            SetVisibility(Visibility.Collapsed);
+        }
+
+        public void TurnOn()
+        {
+            SetVisibility(Visibility.Visible);
+        }
+
+        public void SetVisibility(Visibility visibility)
+        {
+            this.VisualParameters.Visibility = visibility;
+
+            if (!SubLayers.IsNullOrEmpty())
+            {
+                foreach (var item in SubLayers)
+                {
+                    item.SetVisibility(visibility);
+                }
+            }
+        }
+
+        public void ToggleVisibility()
+        {
+            if (this.VisualParameters.Visibility == Visibility.Visible)
+            {
+                TurnOff();
+            }
+            else
+            {
+                TurnOn();
+            }
+        }
+
         private List<IFeatureTableCommand> _featureTableCommands;
         public List<IFeatureTableCommand> FeatureTableCommands
         {

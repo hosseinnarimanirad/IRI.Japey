@@ -770,8 +770,8 @@ namespace IRI.Jab.Common.TileServices
         {
             return new List<TileMapProvider>()
             {
+                GoogleRoadMap, GoogleTerrain, GoogleSatellite, GoogleHybrid,
                 BingHybrid, BingSatellite,
-                GoogleHybrid, GoogleRoadMap, GoogleSatellite, GoogleTerrain,
                 OpenStreetMap, OpenTopoMap
             };
         }

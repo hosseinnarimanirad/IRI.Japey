@@ -36,7 +36,7 @@ namespace IRI.Jab.MapViewer
             this.CurrentLayers = new ObservableCollection<ILayer>();
         }
 
-        public void Add(ILayer layer)
+        public void Add(ILayer layer, double inverseMapScale)
         {
             if (allLayers.Any(l => l == layer))
                 return;
@@ -44,6 +44,8 @@ namespace IRI.Jab.MapViewer
             layer.OnVisibilityChanged -= RefreshLayerVisibility;
 
             layer.OnVisibilityChanged += RefreshLayerVisibility;
+
+            UpdateIsInRange(layer, inverseMapScale);
 
             try
             {
@@ -80,7 +82,7 @@ namespace IRI.Jab.MapViewer
             {
                 foreach (var item in layer.SubLayers)
                 {
-                    Add(item);
+                    Add(item, inverseMapScale);
                 }
             }
         }
@@ -270,12 +272,17 @@ namespace IRI.Jab.MapViewer
         {
             foreach (var layer in allLayers)
             {
-                layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
+                UpdateIsInRange(layer, inverseMapScale);
+            }
+        }
 
-                if (layer.Labels != null)
-                {
-                    layer.Labels.IsInScaleRange = layer.Labels.VisibleRange.IsInRange(inverseMapScale);
-                }
+        private void UpdateIsInRange(ILayer layer, double inverseMapScale)
+        {
+            layer.VisualParameters.IsInScaleRange = layer.VisibleRange.IsInRange(inverseMapScale);
+
+            if (layer.Labels != null)
+            {
+                layer.Labels.IsInScaleRange = layer.Labels.VisibleRange.IsInRange(inverseMapScale);
             }
         }
 

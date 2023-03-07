@@ -483,7 +483,7 @@ namespace IRI.Jab.MapViewer
 
             _presenter = presenter;
 
-            presenter.RequestPrint = () => this.Print();
+            presenter.RequestPrint = this.Print;
 
             presenter.RequestGetProxy = () => this.Proxy;
 
@@ -497,21 +497,21 @@ namespace IRI.Jab.MapViewer
 
             presenter.RegisterAction = async (i) => { await this.Register(i); };
 
-            presenter.RequestSetDefaultCursor = (ma, c) => { this.SetDefaultCursor(ma, c); };
+            presenter.RequestSetDefaultCursor = this.SetDefaultCursor;
 
-            presenter.RequestSetCursor = (c) => { this.SetCursor(c); };
+            presenter.RequestSetCursor = this.SetCursor;
 
-            presenter.RequestRefresh = () => { this.Refresh(); };
+            presenter.RequestRefresh = this.Refresh;
 
-            presenter.RequestRefreshLayerVisibility = (layer) => { this.RefreshLayerVisibility(layer); };
+            presenter.RequestRefreshLayerVisibility = this.RefreshLayerVisibility;
 
             presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox); };
 
-            presenter.RequestFullExtent = () => this.FullExtent();
+            presenter.RequestFullExtent = this.FullExtent;
 
-            presenter.RequestEnableRectangleZoom = () => { this.ZoomIn(); };
+            presenter.RequestEnableRectangleZoom = this.ZoomIn;
 
-            presenter.RequestEnableZoomOut = () => { this.ZoomOutPoint(); };
+            presenter.RequestEnableZoomOut = this.ZoomOutPoint;
 
             presenter.MapSettings.FireIsDoubleClickZoomEnabledChanged = (e) =>
             {
@@ -920,7 +920,7 @@ namespace IRI.Jab.MapViewer
 
             layer.VisibleRange = scaleInterval;
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             this.AddComplexLayer(layer.GetLayer(MapScale), true);
         }
@@ -931,7 +931,7 @@ namespace IRI.Jab.MapViewer
             {
                 return;
             }
-            this._layerManager.Add(new RasterLayer(dataSource, layerName, scaleInterval, isBaseMap, isPyramid, Visibility.Visible, opacity, rendering));
+            this._layerManager.Add(new RasterLayer(dataSource, layerName, scaleInterval, isBaseMap, isPyramid, Visibility.Visible, opacity, rendering), 1.0 / _mapScale);
         }
 
         //public void SetTileService(ScaleInterval scaleInterval, MapProviderType provider, TileType type, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
@@ -968,7 +968,7 @@ namespace IRI.Jab.MapViewer
 
             layer.IsOffline = isOffline;
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             //SetTileService(layer, isCachEnabled, cacheDirectory, isOffline, getFileName);
         }
@@ -1003,7 +1003,7 @@ namespace IRI.Jab.MapViewer
 
             var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
         }
 
         public void SetVectorLayer(
@@ -1017,12 +1017,12 @@ namespace IRI.Jab.MapViewer
 
             var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
         }
 
         public void SetLayer(ILayer layer)
         {
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
         }
 
         public void RemoveLayer(string layerName)
@@ -1037,7 +1037,7 @@ namespace IRI.Jab.MapViewer
 
         public void SetSpecialPointLayer(ScaleInterval scaleInterval, string layerName, List<Locateable> items, double opacity = 1)
         {
-            this._layerManager.Add(new SpecialPointLayer(layerName, items, opacity, scaleInterval, LayerType.Complex));
+            this._layerManager.Add(new SpecialPointLayer(layerName, items, opacity, scaleInterval, LayerType.Complex), 1.0 / _mapScale);
         }
 
         public void AddSpecialPointLayerToMap(ScaleInterval scaleInterval, string layerName, List<Locateable> items)
@@ -3007,7 +3007,7 @@ namespace IRI.Jab.MapViewer
                 pointSymbol: null,
                 labeling: parameters);
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             //AddTiledLayer(layer);
             await AddNonTiledLayer(layer);
@@ -3032,7 +3032,7 @@ namespace IRI.Jab.MapViewer
                 pointSymbol: null,
                 labeling: labelParameters);
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             //AddTiledLayer(layer);
             await AddNonTiledLayer(layer);
@@ -3054,7 +3054,7 @@ namespace IRI.Jab.MapViewer
                 ScaleInterval.All,
                 new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             await AddNonTiledLayer(layer);
         }
@@ -3079,7 +3079,7 @@ namespace IRI.Jab.MapViewer
                 ZIndex = int.MaxValue
             };
 
-            this._layerManager.Add(layer);
+            this._layerManager.Add(layer, 1.0 / _mapScale);
 
             await AddNonTiledLayer(layer);
 

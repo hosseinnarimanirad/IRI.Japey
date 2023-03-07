@@ -1875,6 +1875,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     #region Area
 
 
+    // https://www.mathopenref.com/coordpolygonarea.html
     public double CalculateUnsignedEuclideanArea()
     {
         if (this.IsNullOrEmpty())

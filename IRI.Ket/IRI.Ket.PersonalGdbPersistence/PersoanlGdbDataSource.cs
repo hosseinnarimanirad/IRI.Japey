@@ -277,6 +277,11 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
                 int I = 0;
 
+                if (result.Fields.All(f => f.Name != _labelColumnName))
+                {
+                    _labelColumnName = null;
+                }
+
                 while (dataReader.Read())
                 {
                     try
@@ -324,6 +329,8 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                         }
 
                         feature.Attributes = dict;
+
+                        feature.LabelAttribute = _labelColumnName;
 
                         if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
                             continue;

@@ -1863,7 +1863,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             TrySetCommands(layer);
 
-            this.RequestAddLayer?.Invoke(layer);
+            this.RequestAddLayer?.Invoke(layer);            
         }
 
         public void AddLayer<T>(ILayer layer) where T : class, IGeometryAware<Point>
