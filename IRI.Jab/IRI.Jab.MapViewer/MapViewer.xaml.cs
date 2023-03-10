@@ -773,6 +773,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestIdentify = point => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(point));
 
+            presenter.RequestSearch = searchText => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(searchText));
+
             presenter.RequestGetPoint = SelectPointAsync;
 
             //presenter.RequestGetToScreenMap = () =>
@@ -4841,6 +4843,38 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+
+        #region Search
+
+
+        public List<sb.FeatureSet<sb.Point>>? GetFeatures(string searchText)
+        {
+            List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
+              
+            foreach (var layer in GetAllVectorLayers(this.Layers))
+            {
+                if (!layer.Type.HasFlag(LayerType.VectorLayer))
+                    continue;
+
+                if (!layer.IsSearchable)
+                    continue;
+
+                var features = layer.DataSource.Search(searchText);
+
+                if (features is not null && !features.Features.IsNullOrEmpty())
+                {
+                    features.Title = layer.LayerName;
+
+                    features.LayerId = layer.LayerId;
+
+                    result.Add(features);
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
 
         #region Identify
 

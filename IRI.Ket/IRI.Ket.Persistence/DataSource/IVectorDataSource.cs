@@ -40,6 +40,8 @@ public interface IVectorDataSource : IDataSource
     FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
     Task<FeatureSet<Point>> GetAsFeatureSetForDisplayAsync(double mapScale, BoundingBox boundingBox);
 
+    FeatureSet<Point> Search(string searchText);
+
     #endregion
 
     #region CRUD

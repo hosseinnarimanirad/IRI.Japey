@@ -761,5 +761,15 @@ namespace IRI.Ket.Persistence.DataSources
         {
             Infrastructure.SqlServerInfrastructure.ExecuteNonQuery(command, _connectionString);
         }
+
+        public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public override FeatureSet<Point> GetAsFeatureSet(string searchText)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

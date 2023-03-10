@@ -336,5 +336,10 @@ namespace IRI.Ket.Persistence.DataSources
                     })
                     .ToList());
         }
+
+        public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

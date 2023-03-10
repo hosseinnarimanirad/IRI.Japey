@@ -69,7 +69,7 @@ namespace IRI.Jab.Common
 
             if (sqlGeometryAware?.TheGeometry?.IsPointOrMultiPoint() == true)
             {
-                result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 2, .8) { PointSymbol = new Model.Symbology.SimplePointSymbol(10) };
+                result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 3, .9) { PointSymbol = new Model.Symbology.SimplePointSymbol(10) };
             }
             else
             {

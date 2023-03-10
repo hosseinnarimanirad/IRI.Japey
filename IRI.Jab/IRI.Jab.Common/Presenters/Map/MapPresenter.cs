@@ -818,6 +818,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<Point, ObservableCollection<FeatureSet<Point>>> RequestIdentify;
 
+        public Func<string, ObservableCollection<FeatureSet<Point>>> RequestSearch;
+
         public Func<Task<Response<Point>>> RequestGetPoint;
 
         //public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
@@ -1157,7 +1159,50 @@ namespace IRI.Jab.Common.Presenter.Map
                 return null;
             }
         }
-          
+
+
+        public ObservableCollection<FeatureSet<Point>>? Search(string? searchTest)
+        {
+            if (RequestSearch is null || string.IsNullOrWhiteSpace(searchTest))
+            {
+                return null;
+            }
+            else
+            {
+                return RequestSearch(searchTest);
+            }
+
+        }
+
+        public void SearchByAttribute(string? searchTest)
+        {
+            RemoveAllDrawingItems();
+
+            if (string.IsNullOrWhiteSpace(searchTest))
+                return;
+
+            var result = this.Search(searchTest);
+
+            this.SelectedLayers = new ObservableCollection<ISelectedLayer>();
+
+            foreach (var item in result)
+            {
+                var layer = this.FindLayer(item.LayerId);
+
+                if (layer == null)
+                    continue;
+
+                var newLayer = new SelectedLayer<Feature<Point>>(layer)
+                {
+                    ShowSelectedOnMap = true,
+                    Features = new ObservableCollection<Feature<Point>>(item.Features)
+                };
+
+                this.AddSelectedLayer(newLayer);
+            }
+
+            RemoveMapOptions();
+        }
 
         public Task<Response<Point>> GetPoint()
         {
@@ -1863,7 +1908,7 @@ namespace IRI.Jab.Common.Presenter.Map
         {
             TrySetCommands(layer);
 
-            this.RequestAddLayer?.Invoke(layer);            
+            this.RequestAddLayer?.Invoke(layer);
         }
 
         public void AddLayer<T>(ILayer layer) where T : class, IGeometryAware<Point>
@@ -1897,7 +1942,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             return result;
         }
-         
+
 
         public List<ILayer> GetAllLayers(IEnumerable<ILayer>? layers)
         {
@@ -2925,6 +2970,23 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
+
+
+        private RelayCommand _searchByAttributeCommand;
+
+        public RelayCommand SearchByAttributeCommand
+        {
+            get
+            {
+                if (_searchByAttributeCommand == null)
+                {
+                    _searchByAttributeCommand = new RelayCommand(param => this.SearchByAttribute(param?.ToString()));
+                }
+
+                return _searchByAttributeCommand;
+            }
+        }
         #endregion
 
 

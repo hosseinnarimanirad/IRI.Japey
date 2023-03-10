@@ -187,8 +187,11 @@ namespace IRI.Ket.Persistence.DataSources
             }
         }
 
+
         #endregion
 
+        public abstract FeatureSet<Point> Search(string searchText);
+        
 
         #region CRUD
         public virtual void Add(IGeometryAware<Point> newValue)
@@ -215,6 +218,9 @@ namespace IRI.Ket.Persistence.DataSources
         //public abstract void UpdateFeature(TGeometryAware feature);
 
         public abstract void SaveChanges();
+
+     
+
 
         #endregion
     }

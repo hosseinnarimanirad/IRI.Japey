@@ -254,5 +254,10 @@ namespace IRI.Ket.Persistence.DataSources
 
             return new FeatureSet<Point>(features);
         }
+
+        public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

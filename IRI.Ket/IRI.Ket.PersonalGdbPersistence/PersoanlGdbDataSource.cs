@@ -62,6 +62,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     public string? IdColumnName { get; set; }
     public override int Srid { get; protected set; }
 
+    public string SearchColumn { get; set; }
 
     public PersoanlGdbDataSource(
         string mdbFileName,
@@ -243,104 +244,114 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     protected FeatureSet<Point> Select(Geometry<Point> geometryBoundingBox)
     {
+        return Select(geometryBoundingBox, null);
+    }
+
+    private FeatureSet<Point> Select(Geometry<Point>? geometryBoundingBox, string? searchText)
+    {
         FeatureSet result = new FeatureSet() { Srid = Srid, Fields = new List<Field>(), Features = new List<Feature<Point>>() };
 
         using (var conn = new OleDbConnection(GetConnectionString()))
         {
-            var command = new OleDbCommand(FormattableString.Invariant($"SELECT * FROM {_tableName}"), conn);
+            var commandString = string.IsNullOrEmpty(searchText) || string.IsNullOrEmpty(SearchColumn) ?
+                FormattableString.Invariant($"SELECT * FROM {_tableName}") :
+                FormattableString.Invariant($"SELECT * FROM {_tableName} WHERE {SearchColumn} LIKE '%{searchText}%'");
 
-            conn.Open();
-
-            using (var dataReader = command.ExecuteReader())
+            using (var command = new OleDbCommand(commandString, conn))
             {
-                int geoIndex = -1;
+                conn.Open();
 
-                for (int i = 0; i < dataReader.FieldCount; i++)
+                using (var dataReader = command.ExecuteReader())
                 {
-                    var type = dataReader.GetFieldType(i);
+                    int geoIndex = -1;
 
-                    //if (type != typeof(SqlGeometry))
-                    if (dataReader.GetName(i).ToUpper() == "SHAPE" && type == typeof(byte[]))
+                    for (int i = 0; i < dataReader.FieldCount; i++)
                     {
-                        geoIndex = i;
-                    }
-                    else
-                    {
-                        result.Fields.Add(new Field() { Name = dataReader.GetName(i), Type = type.ToString() });
-                    }
-                }
+                        var type = dataReader.GetFieldType(i);
 
-                if (!dataReader.HasRows)
-                {
-                    return result;
-                }
-
-                int I = 0;
-
-                if (result.Fields.All(f => f.Name != _labelColumnName))
-                {
-                    _labelColumnName = null;
-                }
-
-                while (dataReader.Read())
-                {
-                    try
-                    {
-                        var dict = new Dictionary<string, object>();
-
-                        var feature = new Feature<Point>();
-
-                        var esriByteGeometry = (byte[])dataReader[geoIndex];
-
-                        if (_tableName.ToUpper() == "SUBSTAT" && result.Features.Count < 40)
+                        //if (type != typeof(SqlGeometry))
+                        if (dataReader.GetName(i).ToUpper() == "SHAPE" && type == typeof(byte[]))
                         {
-                            System.Diagnostics.Trace.WriteLine($"GEOMETRY {I++:N2} - {HexStringHelper.ByteToHexBitFiddle(esriByteGeometry, append0x: true)}");
+                            geoIndex = i;
                         }
-
-                        var geometry = EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
-
-                        feature.TheGeometry = geometry;
-
-                        for (int i = 0; i < dataReader.FieldCount; i++)
+                        else
                         {
-                            var fieldName = dataReader.GetName(i);
+                            result.Fields.Add(new Field() { Name = dataReader.GetName(i), Type = type.ToString() });
+                        }
+                    }
 
-                            while (dict.Keys.Contains(fieldName))
-                            {
-                                fieldName = $"{fieldName}_";
-                            }
+                    if (!dataReader.HasRows)
+                    {
+                        return result;
+                    }
 
-                            if (dataReader.IsDBNull(i))
+                    //int I = 0;
+
+                    if (result.Fields.All(f => f.Name != _labelColumnName))
+                    {
+                        _labelColumnName = null;
+                    }
+
+                    while (dataReader.Read())
+                    {
+                        try
+                        {
+                            var dict = new Dictionary<string, object>();
+
+                            var feature = new Feature<Point>();
+
+                            var esriByteGeometry = (byte[])dataReader[geoIndex];
+
+                            //if (_tableName.ToUpper() == "SUBSTAT" && result.Features.Count < 40)
+                            //{
+                            //    System.Diagnostics.Trace.WriteLine($"GEOMETRY {I++:N2} - {HexStringHelper.ByteToHexBitFiddle(esriByteGeometry, append0x: true)}");
+                            //}
+
+                            var geometry = EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
+
+                            feature.TheGeometry = geometry;
+
+                            for (int i = 0; i < dataReader.FieldCount; i++)
                             {
-                                dict.Add(fieldName, null);
-                            }
-                            else
-                            {
-                                if (i != geoIndex)
+                                var fieldName = dataReader.GetName(i);
+
+                                while (dict.Keys.Contains(fieldName))
                                 {
-                                    dict.Add(fieldName, dataReader[i]);
+                                    fieldName = $"{fieldName}_";
+                                }
+
+                                if (dataReader.IsDBNull(i))
+                                {
+                                    dict.Add(fieldName, null);
+                                }
+                                else
+                                {
+                                    if (i != geoIndex)
+                                    {
+                                        dict.Add(fieldName, dataReader[i]);
+                                    }
                                 }
                             }
-                        }
 
-                        if (!string.IsNullOrWhiteSpace(IdColumnName))
+                            if (!string.IsNullOrWhiteSpace(IdColumnName))
+                            {
+                                feature.Id = (int)dict[IdColumnName];
+                            }
+
+                            feature.Attributes = dict;
+
+                            feature.LabelAttribute = _labelColumnName;
+
+                            if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
+                                continue;
+
+                            result.Features.Add(feature);
+
+                        }
+                        catch (Exception ex)
                         {
-                            feature.Id = (int)dict[IdColumnName];
+                            //throw new NotImplementedException("PersoanlGdbDataSource > Select");
                         }
-
-                        feature.Attributes = dict;
-
-                        feature.LabelAttribute = _labelColumnName;
-
-                        if (!geometryBoundingBox.IsNullOrEmpty() && !geometry.Intersects(geometryBoundingBox))
-                            continue;
-
-                        result.Features.Add(feature);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        //throw new NotImplementedException("PersoanlGdbDataSource > Select");
                     }
                 }
             }
@@ -350,7 +361,6 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
         return result;
     }
-
 
     protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
     {
@@ -395,5 +405,15 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     public override void SaveChanges()
     {
         throw new NotImplementedException();
+    }
+
+    public override FeatureSet<Point> Search(string searchText)
+    {
+        if (string.IsNullOrWhiteSpace(SearchColumn))
+        {
+            return null;
+        }
+
+        return Select(null, searchText);
     }
 }

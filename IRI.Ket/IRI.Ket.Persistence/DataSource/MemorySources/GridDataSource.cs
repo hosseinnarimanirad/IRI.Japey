@@ -216,5 +216,10 @@ namespace IRI.Ket.Persistence.DataSources
                                     .Select(ToFeatureMappingFunc)
                                     .ToList());
         }
+
+        public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
