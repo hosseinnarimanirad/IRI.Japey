@@ -4,7 +4,7 @@ using System.Windows;
 using drawing = System.Drawing;
 using System.Linq;
 using Microsoft.SqlServer.Types;
-using IRI.Extensions; 
+using IRI.Extensions;
 using IRI.Extensions;
 using IRI.Jab.Common.Model.Symbology;
 using sb = IRI.Msh.Common.Primitives;
@@ -13,6 +13,8 @@ namespace IRI.Jab.Common.Convertor
 {
     public static class SqlSpatialToGdiBitmap
     {
+        static readonly drawing.SolidBrush _labelBackground = new drawing.SolidBrush(drawing.Color.FromArgb(150, 255, 255, 255));
+
         public static void WriteToImage(drawing.Bitmap image, List<SqlGeometry> geometries, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             drawing.Graphics graphics = drawing.Graphics.FromImage(image);
@@ -575,27 +577,38 @@ namespace IRI.Jab.Common.Convertor
 
             graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
+            var brush = labelParameters.Foreground.AsGdiBrush();
+
+            System.Drawing.StringFormat format = new drawing.StringFormat();
+
+            if (labelParameters.IsRtl)
+            {
+                format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+            }
+
             for (int i = 0; i < labels.Count; i++)
             {
                 var location = mapToScreen(mapCoordinates[i]);
 
-                System.Drawing.StringFormat format = new drawing.StringFormat();
-
-                if (labelParameters.IsRtl)
-                {
-                    format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
-                }
-
                 var stringSize = graphic.MeasureString(labels[i], font);
 
-                graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
+                drawing.PointF locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
+
+                graphic.FillRectangle(_labelBackground, new drawing.RectangleF((float)(location.X - 3.0 / 2.0 * stringSize.Width), (float)(location.Y - stringSize.Height / 2.0), stringSize.Width, stringSize.Height));
+
+                graphic.DrawString(labels[i] ?? string.Empty, font, brush, locationF, format);
+
+                //graphic.DrawString(labels[i], font, brush, (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
             }
 
             graphic.Flush();
+
+            graphic.Dispose();
+            brush.Dispose();
         }
 
         public static void DrawLabels(List<sb.NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
-        { 
+        {
             var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
 
             var graphic = drawing.Graphics.FromImage(image);
@@ -608,23 +621,32 @@ namespace IRI.Jab.Common.Convertor
 
             graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
+            var brush = labelParameters.Foreground.AsGdiBrush();
+
+            System.Drawing.StringFormat format = new drawing.StringFormat();
+
+            if (labelParameters.IsRtl)
+            {
+                format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+            }
+
             for (int i = 0; i < namedGeometries.Count; i++)
             {
                 var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheGeometry).AsWpfPoint());
 
-                System.Drawing.StringFormat format = new drawing.StringFormat();
-
-                if (labelParameters.IsRtl)
-                {
-                    format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
-                }
-
                 var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
 
-                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
+                var locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
+
+                graphic.FillRectangle(_labelBackground, new drawing.RectangleF((float)(location.X - 3.0 / 2.0 * stringSize.Width), (float)(location.Y - stringSize.Height / 2.0), stringSize.Width, stringSize.Height));
+
+                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, brush, locationF, format);
             }
 
             graphic.Flush();
+
+            graphic.Dispose();
+            brush.Dispose();
         }
 
     }

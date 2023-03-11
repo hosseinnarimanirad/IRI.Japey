@@ -65,5 +65,9 @@ namespace IRI.Jab.Common
         event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged;
 
         event EventHandler<CustomEventArgs<LabelParameters>> OnLabelChanged;
+
+        bool CanRenderLayer(double mapScale);
+
+        bool CanRenderLabels(double mapScale);
     }
 }

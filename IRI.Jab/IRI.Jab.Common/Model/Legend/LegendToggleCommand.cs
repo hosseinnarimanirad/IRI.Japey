@@ -59,7 +59,7 @@ namespace IRI.Jab.Common.Model.Legend
                 _isSelected = value;
                 RaisePropertyChanged();
 
-                Command.Execute(value);
+                Command?.Execute(value);
             }
         }
 
@@ -101,7 +101,7 @@ namespace IRI.Jab.Common.Model.Legend
 
         public ILayer Layer { get; set; }
 
-
+         
 
         public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, ILayer layer, LabelParameters labels)
         {
@@ -111,6 +111,7 @@ namespace IRI.Jab.Common.Model.Legend
             result.NotCheckedPathMarkup = IRI.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone;
             result.ToolTip = "نمایش برچسب عوارض";
             result.Layer = layer;
+            result.IsSelected = layer.Labels?.IsOn == true;
 
             EventHandler<CustomEventArgs<LabelParameters>> labels_IsInScaleRangeChanged = (sender, e) =>
             {
@@ -142,7 +143,7 @@ namespace IRI.Jab.Common.Model.Legend
                 if (result.IsSelected)
                 {
                     result.Layer.Labels.IsOn = true;
-                     
+
                     //map.Refresh();
                 }
                 else

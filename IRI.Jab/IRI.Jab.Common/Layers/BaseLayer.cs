@@ -225,6 +225,16 @@ namespace IRI.Jab.Common
             }
         }
 
+        public bool CanRenderLayer(double mapScale)
+        {
+            return this.VisualParameters?.Visibility == Visibility.Visible && this.VisibleRange.IsInRange(1.0 / mapScale);
+        }
+
+        public bool CanRenderLabels(double mapScale)
+        {
+            return this.Labels?.IsLabeled(1.0 / mapScale) == true;
+        }
+
         private List<IFeatureTableCommand> _featureTableCommands;
         public List<IFeatureTableCommand> FeatureTableCommands
         {

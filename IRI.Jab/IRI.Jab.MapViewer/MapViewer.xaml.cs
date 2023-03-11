@@ -414,10 +414,7 @@ namespace IRI.Jab.MapViewer
 
             this.RegisterRightClickOptions();
 
-            _layerManager.RequestRefreshVisibility = (layer) =>
-            {
-                RefreshLayerVisibility(layer);
-            };
+            _layerManager.RequestRefreshVisibility = RefreshLayerVisibility;
 
             this.extentManager.OnTilesAdded -= ExtentManager_OnTilesAdded;
             this.extentManager.OnTilesAdded += ExtentManager_OnTilesAdded;
@@ -1116,10 +1113,12 @@ namespace IRI.Jab.MapViewer
                 return;
             }
 
-            if (layer.VisualParameters == null || layer.VisualParameters.Visibility != Visibility.Visible)
-                return;
-
             var mapScale = this.MapScale;
+
+            // 1401.12.20
+            //if (layer.VisualParameters == null || layer.VisualParameters.Visibility != Visibility.Visible)
+            if (!layer.CanRenderLayer(mapScale))
+                return;
 
             if (layer.Rendering == RenderingApproach.Tiled)
                 return;
@@ -1359,7 +1358,11 @@ namespace IRI.Jab.MapViewer
             if (layer == null)
                 return;
 
-            if (layer.VisualParameters.Visibility != Visibility.Visible)
+            var mapScale = MapScale;
+
+            // 1401.12.20
+            //if (layer.VisualParameters.Visibility != Visibility.Visible)
+            if (!layer.CanRenderLayer(mapScale))
                 return;
 
             Action action = async () =>
@@ -1377,8 +1380,6 @@ namespace IRI.Jab.MapViewer
             };
 
             var extent = this.CurrentExtent;
-
-            var mapScale = MapScale;
 
             Task.Run(() =>
             {
@@ -2182,92 +2183,12 @@ namespace IRI.Jab.MapViewer
             //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
         }
 
-        //private void RefreshTiles()
-        //{
-        //    this.ClearTiled();
-
-        //    var tiles = this.CurrentTileInfos;
-
-        //    if (tiles == null)
-        //        return;
-
-        //    foreach (var tile in tiles)
-        //    {
-        //        RefreshTiles(tile, l => true);
-        //    }
-        //}
-
-        //public void RefreshTiles(TileInfo tile, bool processBaseMaps = true)
-        //{
-        //    IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
-
-        //    Action action = async () =>
-        //    {
-        //        foreach (ILayer item in infos)
-        //        {
-        //            if (item.VisualParameters.Visibility != Visibility.Visible)
-        //                continue;
-
-        //            if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
-        //            {
-        //                //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
-        //                return;
-        //            }
-
-        //            if (item.Rendering != RenderingApproach.Tiled)
-        //                continue;
-
-        //            //Do not draw base map in the case of change visibility for layers
-        //            if (item.Type == LayerType.BaseMap && !processBaseMaps)
-        //                continue;
-
-        //            //Debug.Print($"{item.LayerName} - {tile.ToShortString()}");
-
-        //            if (item is VectorLayer)
-        //            {
-        //                VectorLayer vectorLayer = (VectorLayer)item;
-
-        //                vectorLayer.TileManager.TryAdd(tile);
-
-        //                await AddTiledLayerAsync(vectorLayer, tile);
-        //            }
-        //            else if (item is TileServiceLayer)
-        //            {
-        //                await AddTileServiceLayerAsync(item as TileServiceLayer, tile);
-        //            }
-        //            else
-        //            {
-        //                //return;
-        //                throw new NotImplementedException();
-        //            }
-
-        //        }
-        //    };
-
-        //    Task.Run(() =>
-        //    {
-        //        lock (locker)
-        //        {
-        //            this.jobs.Add(
-        //                    new Job(
-        //                        new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
-        //                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
-        //        }
-        //    });
-
-        //    ////94.09.17
-        //    //Task.Run(() =>
-        //    // this.jobs.Add(
-        //    //     new Job(
-        //    //         new LayerTag(WebMercatorUtility.GetGoogleMapScale(tile.ZoomLevel)) { LayerType = LayerType.None, Tile = tile },
-        //    //         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)))
-        //    //                        );
-        //}
 
         public void RefreshTiles(IEnumerable<ILayer> infos, TileInfo tile, Func<ILayer, bool> criteria)
         {
             // 1401.12.05
             //IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+            double mapScale = MapScale;
 
             Action action = async () =>
             {
@@ -2275,7 +2196,8 @@ namespace IRI.Jab.MapViewer
 
                 foreach (ILayer item in infos)
                 {
-                    if (item.VisualParameters.Visibility != Visibility.Visible)
+                    //if (item.VisualParameters.Visibility != Visibility.Visible)
+                    if (!item.CanRenderLayer(mapScale))
                         continue;
 
                     if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
@@ -2321,7 +2243,7 @@ namespace IRI.Jab.MapViewer
                 //{
                 this.jobs.Add(
                         new Job(
-                            new LayerTag(this.MapScale) { LayerType = LayerType.None, Tile = tile },
+                            new LayerTag(mapScale) { LayerType = LayerType.None, Tile = tile },
                             Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
                 //}
             });
@@ -2345,15 +2267,7 @@ namespace IRI.Jab.MapViewer
 
             if (layer.Rendering == RenderingApproach.Tiled)
             {
-                AddTiledLayer(layer as VectorLayer);
-
-                // 1400.03.15-comment
-                //if (!(layer is VectorLayer))
-                //{
-                //    throw new NotImplementedException();
-                //}
-
-                //AddTiledLayer(layer as VectorLayer);
+                AddTiledLayer(layer as VectorLayer); 
             }
             else
             {
@@ -2382,7 +2296,7 @@ namespace IRI.Jab.MapViewer
 
             var mapScale = this.MapScale;
 
-            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Default);
+            IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / mapScale, RenderingApproach.Default);
 
             Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-UpdateAndGetLayers finished");
 
@@ -2392,7 +2306,7 @@ namespace IRI.Jab.MapViewer
             {
                 Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-Proccessing {item.LayerName}");
 
-                if (item.VisualParameters.Visibility != Visibility.Visible)
+                if (!item.CanRenderLayer(mapScale))
                     continue;
 
                 if (MapScale != mapScale)
@@ -4850,7 +4764,7 @@ namespace IRI.Jab.MapViewer
         public List<sb.FeatureSet<sb.Point>>? GetFeatures(string searchText)
         {
             List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
-              
+
             foreach (var layer in GetAllVectorLayers(this.Layers))
             {
                 if (!layer.Type.HasFlag(LayerType.VectorLayer))

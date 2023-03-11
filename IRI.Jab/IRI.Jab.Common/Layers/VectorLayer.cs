@@ -223,7 +223,7 @@ namespace IRI.Jab.Common
 
             image.Render(drawingVisual);
 
-            if (this.IsLabeled(mapScale))
+            if (this.CanRenderLabels(mapScale))
             {
                 this.DrawLabels(labels, geometries, image, mapToScreen);
             }
@@ -831,7 +831,7 @@ namespace IRI.Jab.Common
 
             image.Render(drawingVisual);
 
-            if (this.IsLabeled(mapScale))
+            if (this.CanRenderLabels(mapScale))
             {
                 this.DrawLabels(geoLabledPairs.Labels, geoLabledPairs.Geometries, image, mapToScreen);
             }
@@ -874,9 +874,11 @@ namespace IRI.Jab.Common
 
         public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
         {
-            List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
+            List<sb.Geometry<sb.Point>>? geometries;
 
-            if (this.IsLabeled(mapScale))
+            List<string>? labels = null;
+
+            if (this.CanRenderLabels(mapScale))
             {
                 var geoLabelPairs = await this.DataSource.GetNamedGeometriesAsync(mapExtent);
 
@@ -974,10 +976,7 @@ namespace IRI.Jab.Common
 
 
 
-        public bool IsLabeled(double mapScale)
-        {
-            return this.Labels?.IsLabeled(1.0 / mapScale) == true;
-        }
+
 
         //POTENTIALLY ERROR PROUNE; formattedText is always RTL
         public void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
@@ -996,15 +995,20 @@ namespace IRI.Jab.Common
 
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
             {
+                var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+
+                var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+                var culture = System.Globalization.CultureInfo.CurrentCulture;
+
                 for (int i = 0; i < labels.Count; i++)
                 {
-                    FormattedText formattedText =
-                        new FormattedText(labels[i] ?? string.Empty, System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
-                        new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
-                        this.Labels.FontSize, this.Labels.Foreground);
+                    FormattedText formattedText = new FormattedText(labels[i] ?? string.Empty, culture, flowDirection,
+                        typeface, this.Labels.FontSize, this.Labels.Foreground, pixelsPerDip: 96);
 
                     Point location = mapToScreen(mapCoordinates[i]);
 
+                    drawingContext.DrawRectangle(new SolidColorBrush(Color.FromArgb(50, 255, 255, 255)), null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
                     drawingContext.DrawText(formattedText, new Point(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
                 }
             }
@@ -1031,12 +1035,16 @@ namespace IRI.Jab.Common
 
             using (DrawingContext drawingContext = drawingVisual.RenderOpen())
             {
+                var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+
+                var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+                var culture = System.Globalization.CultureInfo.CurrentCulture;
+
                 for (int i = 0; i < labels.Count; i++)
                 {
                     FormattedText formattedText =
-                        new FormattedText(labels[i], System.Globalization.CultureInfo.CurrentCulture, this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight,
-                        new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal),
-                        this.Labels.FontSize, this.Labels.Foreground);
+                        new FormattedText(labels[i] ?? string.Empty, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
 
                     Point location = mapToScreen(mapCoordinates[i]);
 
@@ -1111,11 +1119,13 @@ namespace IRI.Jab.Common
 
             graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
+            var foreground = Labels.Foreground.AsGdiBrush();
+
             for (int i = 0; i < labels.Count; i++)
             {
                 var location = transform(mapCoordinates[i]);
 
-                graphic.DrawString(labels[i], font, Labels.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+                graphic.DrawString(labels[i], font, foreground, (float)location.X, (float)location.Y);
             }
 
             graphic.Flush();
