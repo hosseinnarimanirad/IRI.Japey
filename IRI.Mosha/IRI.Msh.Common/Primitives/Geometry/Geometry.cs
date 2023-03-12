@@ -770,7 +770,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 if (this.Type == GeometryType.Polygon)
                 {
                     if (TopologyUtility.IsPointInPolygon(this, lineString.Points[0]))
-                        return true; 
+                        return true;
                 }
 
                 for (int i = 0; i < lineString.NumberOfPoints - 1; i++)
@@ -837,6 +837,41 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.CurvePolygon:
             default:
                 throw new NotImplementedException("Geometry > IntersectsPolygon");
+        }
+    }
+
+
+    public bool Intersects(BoundingBox boundingBox)
+    {
+        if (this.IsNullOrEmpty())
+            return false;
+
+        var mbb = this.GetBoundingBox();
+
+        if (!boundingBox.Intersects(mbb))
+            return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return boundingBox.Contains(this.Points[0]);
+
+            case GeometryType.LineString:
+                return this.Points.Any(p => boundingBox.Contains(p));
+
+            case GeometryType.Polygon:
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.Intersects(boundingBox));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > Intersects");
         }
     }
 
