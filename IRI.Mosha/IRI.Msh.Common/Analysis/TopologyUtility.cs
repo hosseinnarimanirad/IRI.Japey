@@ -205,8 +205,8 @@ namespace IRI.Msh.Common.Analysis
 
             if (relation == LineLineRelation.Intersect)
             {
-                if (BoundingBox.Create(secondSegmentFirstPoint, secondSegmentSecondPoint).ContainsApproximately(intersection) &&
-                    BoundingBox.Create(firstSegmentFirstPoint, firstSegmentSecondPoint).ContainsApproximately(intersection))
+                if (BoundingBox.Create(secondSegmentFirstPoint, secondSegmentSecondPoint).CoversApproximately(intersection) &&
+                    BoundingBox.Create(firstSegmentFirstPoint, firstSegmentSecondPoint).CoversApproximately(intersection))
                     return LineLineSegmentRelation.Intersect;
 
                 else
@@ -277,7 +277,7 @@ namespace IRI.Msh.Common.Analysis
 
             var boundingBox = ring.GetBoundingBox();
 
-            var doesEncomapss = boundingBox.Contains(point);
+            var doesEncomapss = boundingBox.Covers(point);
 
             if (!doesEncomapss)
                 return false;
@@ -332,7 +332,7 @@ namespace IRI.Msh.Common.Analysis
 
             var boundingBox = lineString.GetBoundingBox();
 
-            var doesEncomapss = boundingBox.Contains(point);
+            var doesEncomapss = boundingBox.Covers(point);
 
             if (!doesEncomapss)
                 return false;

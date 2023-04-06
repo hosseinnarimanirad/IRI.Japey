@@ -385,21 +385,30 @@ namespace IRI.Msh.Common.Primitives
             return Geometry<T>.Create(GetClockWiseOrderOfEsriPoints<T>()/*.ToArray()*/, GeometryType.Polygon, srid);
         }
 
-        public bool Contains<T>(T point) where T : IPoint
+        public bool Covers<T>(T point) where T : IPoint
         {
             if (point is null)
                 return false;
 
             return (point.X >= this.XMin && point.X <= this.XMax) &&
-                    (point.Y >= this.YMin && point.Y <= this.YMax);
+                   (point.Y >= this.YMin && point.Y <= this.YMax);
         }
 
-        public bool ContainsApproximately<T>(T point, double threshold = 0.01) where T : IPoint
+        public bool Contains<T>(T point) where T : IPoint
         {
             if (point is null)
                 return false;
 
-            return this.Extend(threshold).Contains(point);
+            return (point.X > this.XMin && point.X < this.XMax) &&
+                   (point.Y > this.YMin && point.Y < this.YMax);
+        }
+
+        public bool CoversApproximately<T>(T point, double threshold = 0.01) where T : IPoint
+        {
+            if (point is null)
+                return false;
+
+            return this.Extend(threshold).Covers(point);
         }
 
         public static BoundingBox Create<T>(params T[] points) where T : IPoint

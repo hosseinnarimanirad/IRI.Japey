@@ -1296,7 +1296,7 @@ namespace IRI.Jab.MapViewer
                 var mapScale = this.MapScale;
 
                 //consider if layer was Labeled
-                var features = featureLayer.DataSource.GetFeatures(extent.AsGeometry<sb.Point>(SridHelper.WebMercator));
+                var features = featureLayer.DataSource.GetAsFeatureSet(extent.AsGeometry<sb.Point>(SridHelper.WebMercator));
 
                 if (this.MapScale != mapScale || this.CurrentExtent != extent)
                     return;
@@ -4819,7 +4819,7 @@ namespace IRI.Jab.MapViewer
                 if (!layer.IsSearchable)
                     continue;
 
-                var features = layer.DataSource.GetAsFeatureSet(geometryBoundary);
+                var features = layer.DataSource.GetAsFeatureSetOfPoint(geometryBoundary);
 
                 if (features is not null && !features.Features.IsNullOrEmpty())
                 {

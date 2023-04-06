@@ -270,7 +270,7 @@ namespace IRI.Jab.Common
                 //    result.Add(layer);
                 //}
 
-                var featureSet = await ((SqlServerDataSource)this.DataSource).GetAsFeatureSetAsync(region);
+                var featureSet = await ((SqlServerDataSource)this.DataSource).GetAsFeatureSetOfPointAsync(region);
 
                 foreach (var item in featureSet.Features)
                 {

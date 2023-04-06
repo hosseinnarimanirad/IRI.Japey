@@ -138,7 +138,6 @@ namespace IRI.Ket.Persistence.DataSources
             Geometry<Point> boundary = boundingBox.AsGeometry<Point>(GetSrid());
 
             return GetGeometries(scale, boundary);
-
         }
 
         public List<Geometry<Point>> GetGeometries(double scale, Geometry<Point> geometry)

@@ -9,6 +9,192 @@ using System;
 
 namespace IRI.Ket.Persistence.DataSources
 {
+    public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeometryAware, TPoint>
+        where TGeometryAware : class, IGeometryAware<TPoint>
+        where TPoint : IPoint, new()
+    {
+        public override BoundingBox Extent { get; protected set; }
+
+        protected List<TGeometryAware> _features;
+
+        protected Func<TGeometryAware, string>? _labelFunc;
+
+        private int _uniqueId = 0;
+
+        protected Func<int, TGeometryAware>? _idFunc;
+
+        protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
+
+        public MemoryDataSource()
+        {
+
+        }
+
+        public MemoryDataSource(
+            List<TGeometryAware> features,
+            Func<TGeometryAware, string> labelingFunc,
+            Func<int, TGeometryAware> idFunc,
+            Func<TGeometryAware, Feature<TPoint>> mapToFeatureFunc)
+        {
+            this._features = features;
+            this._labelFunc = labelingFunc;
+            this._idFunc = idFunc;
+            _mapToFeatureFunc = mapToFeatureFunc;
+            this.GeometryType = features.First().TheGeometry.Type;
+        }
+
+        // todo: remove this method
+        public int GetSrid()
+        {
+            return this._features?.SkipWhile(g => g == null || g.TheGeometry == null || g.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
+        }
+
+        public override string ToString()
+        {
+            return $"MEMORY DATASOURCE {typeof(TGeometryAware).Name}";
+        }
+
+        public override int Srid { get => GetSrid(); protected set => _ = value; }
+
+        protected int GetNewId()
+        {
+            return _uniqueId++;
+        }
+
+        #region CRUD
+
+        //public override void Add(IGeometryAware<Point> newValue)
+        //{
+        //    Add(newValue as TGeometryAware);
+        //}
+
+        //public override void Remove(IGeometryAware<Point> newValue)
+        //{
+        //    Remove(newValue as TGeometryAware);
+        //}
+
+        //public override void Update(IGeometryAware<Point> newValue)
+        //{
+        //    Update(newValue as TGeometryAware);
+        //}
+
+        public override void Add(TGeometryAware newGeometry)
+        {
+            this._features.Add(newGeometry);
+        }
+
+        public override void Remove(TGeometryAware geometry)
+        {
+            this._features.Remove(geometry);
+        }
+
+        public override void Update(TGeometryAware newGeometry)
+        {
+            if (_idFunc == null)
+                return;
+
+            var geometry = _idFunc(newGeometry.Id);
+
+            var index = this._features.IndexOf(geometry);
+
+            //var index = newGeometry.Id;
+
+            //if (index < 0)
+            //{
+            //    return;
+            //}
+
+            this._features[index] = newGeometry;
+        }
+
+        public override void SaveChanges()
+        {
+            return;
+        }
+
+        #endregion
+
+        //public override void UpdateFeature(TGeometryAware newGeometry)
+        //{
+        //    if (_idFunc == null)
+        //        return;
+
+        //    var geometry = _idFunc(newGeometry.Id);
+
+        //    var index = this._features.IndexOf(geometry);
+
+        //    //var index = newGeometry.Id;
+
+        //    //if (index < 0)
+        //    //{
+        //    //    return;
+        //    //}
+
+        //    _features[index] = newGeometry as T;
+        //}
+
+        public override List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry)
+        {
+            if (geometry.IsNullOrEmpty())
+            {
+                return this._features.ToList();
+            }
+            else
+            {
+                return this._features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
+            }
+        }
+
+        public override List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox)
+        {
+            return this._features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
+        }
+
+        public override FeatureSet<TPoint> GetAsFeatureSet()
+        {
+            var features = _features.Select(f => _mapToFeatureFunc(f)).ToList();
+
+            return new FeatureSet<TPoint>(features);
+        }
+
+        protected override Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware)
+        {
+            return _mapToFeatureFunc(geometryAware);
+        }
+
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+        {
+            return new FeatureSet<Point>(GetGeometryAwares(geometry?.NeutralizeGenericPoint<TPoint>())
+                    .Select(ToFeatureMappingFunc)
+                    .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
+                    {
+                        LabelAttribute = g.LabelAttribute,
+                        Id = g.Id,
+                        Attributes = g.Attributes
+                    })
+                    .ToList());
+        }
+
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+        {
+            return new FeatureSet<Point>(GetGeometryAwares(boundingBox)
+                    .Select(ToFeatureMappingFunc)
+                    .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
+                    {
+                        LabelAttribute = g.LabelAttribute,
+                        Id = g.Id,
+                        Attributes = g.Attributes
+                    })
+                    .ToList());
+        }
+
+        public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
     public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
     {
         public MemoryDataSource() : this(new List<Feature<Point>>(), null, null)
@@ -68,7 +254,7 @@ namespace IRI.Ket.Persistence.DataSources
             return result;
         }
 
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
         {
             return new FeatureSet<Point>(GetGeometryAwares(geometry)
                     .Select(ToFeatureMappingFunc)
@@ -124,222 +310,4 @@ namespace IRI.Ket.Persistence.DataSources
         //}
     }
 
-    public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeometryAware, TPoint>
-        where TGeometryAware : class, IGeometryAware<TPoint>
-        where TPoint : IPoint, new()
-    {
-        public override BoundingBox Extent { get; protected set; }
-
-        protected List<TGeometryAware> _features;
-
-        protected Func<TGeometryAware, string>? _labelFunc;
-
-        private int _uniqueId = 0;
-
-        protected Func<int, TGeometryAware>? _idFunc;
-
-        protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
-         
-
-        public MemoryDataSource()
-        {
-
-        }
-
-        public MemoryDataSource(
-            List<TGeometryAware> features,
-            Func<TGeometryAware, string> labelingFunc,
-            Func<int, TGeometryAware> idFunc,
-            Func<TGeometryAware, Feature<TPoint>> mapToFeatureFunc)
-        {
-            this._features = features;
-            this._labelFunc = labelingFunc;
-            this._idFunc = idFunc;
-            _mapToFeatureFunc = mapToFeatureFunc;
-            this.GeometryType = features.First().TheGeometry.Type;
-        }
-
-        // todo: remove this method
-        public int GetSrid()
-        {
-            return this._features?.SkipWhile(g => g == null || g.TheGeometry == null || g.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
-        }
-
-        public override string ToString()
-        {
-            return $"MEMORY DATASOURCE {typeof(TGeometryAware).Name}";
-        }
-
-        public override int Srid { get => GetSrid(); protected set => _ = value; }
-
-        protected int GetNewId()
-        {
-            return _uniqueId++;
-        }
-
-        //public override List<Geometry<Point>> GetGeometries()
-        //{
-        //    Geometry<Point> geometry = null;
-
-        //    return GetGeometries(geometry);
-        //}
-
-        //public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
-        //{
-        //    return GetFeatures(geometry)?.Select(f => f.TheGeometry).ToList();
-
-        //}
-
-        //public override List<T> GetFeatures(Geometry<Point> geometry)
-        //{
-        //    if (this._features == null || this._features.Count == 0)
-        //    {
-        //        return new List<T>();
-        //    }
-
-        //    if (geometry == null)
-        //    {
-        //        return this._features.ToList();
-        //    }
-        //    else
-        //    {
-        //        if (geometry?.Srid != this.GetSrid())
-        //        {
-        //            throw new ArgumentException("srid mismatch");
-        //        }
-
-        //        return this._features.Where(i => i?.TheGeometry?.Intersects(geometry) == true).ToList();
-        //    }
-        //}
-
-        //public override List<NamedGeometry> GetGeometryLabelPairs()
-        //{
-        //    return this._features.Select(f => new NamedGeometry(f.TheGeometry, _labelFunc(f))).ToList();
-        //}
-
-        //public override List<NamedGeometry> GetGeometryLabelPairs(Geometry<Point> geometry)
-        //{
-        //    //return this._features.Where(i => i?.TheGeometry?.Intersects(geometry) == true)
-        //    //                        .Select(f => new NamedGeometry(f.TheGeometry, _labelFunc(f))).ToList();
-
-        //    return GetFeatures(geometry).Select(f => new NamedGeometry(f.TheGeometry, _labelFunc(f))).ToList();
-        //}
-
-
-        #region CRUD
-
-        //public override void Add(IGeometryAware<Point> newValue)
-        //{
-        //    Add(newValue as TGeometryAware);
-        //}
-
-        //public override void Remove(IGeometryAware<Point> newValue)
-        //{
-        //    Remove(newValue as TGeometryAware);
-        //}
-
-        //public override void Update(IGeometryAware<Point> newValue)
-        //{
-        //    Update(newValue as TGeometryAware);
-        //}
-
-        public override void Add(TGeometryAware newGeometry)
-        {
-            this._features.Add(newGeometry);
-        }
-
-        public override void Remove(TGeometryAware geometry)
-        {
-            this._features.Remove(geometry);
-        }
-
-        public override void Update(TGeometryAware newGeometry)
-        {
-            if (_idFunc == null)
-                return;
-
-            var geometry = _idFunc(newGeometry.Id);
-
-            var index = this._features.IndexOf(geometry);
-
-            //var index = newGeometry.Id;
-
-            //if (index < 0)
-            //{
-            //    return;
-            //}
-
-            this._features[index] = newGeometry;
-        }
-
-        public override void SaveChanges()
-        {
-            return;
-        }
-
-        #endregion
-
-
-        //public override void UpdateFeature(TGeometryAware newGeometry)
-        //{
-        //    if (_idFunc == null)
-        //        return;
-
-        //    var geometry = _idFunc(newGeometry.Id);
-
-        //    var index = this._features.IndexOf(geometry);
-
-        //    //var index = newGeometry.Id;
-
-        //    //if (index < 0)
-        //    //{
-        //    //    return;
-        //    //}
-
-        //    _features[index] = newGeometry as T;
-        //}
-
-        public override List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry)
-        {
-            if (geometry is null)
-            {
-                return this._features.ToList();
-            }
-            else
-            {
-                return this._features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
-            }
-
-        }
-
-        public override FeatureSet<TPoint> GetFeatures()
-        {
-            var features = _features.Select(f => _mapToFeatureFunc(f)).ToList();
-
-            return new FeatureSet<TPoint>(features);
-        }
-
-        protected override Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware)
-        {
-            return _mapToFeatureFunc(geometryAware);
-        }
-
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
-        {
-            return new FeatureSet<Point>(GetGeometryAwares(geometry.NeutralizeGenericPoint<TPoint>())
-                    .Select(ToFeatureMappingFunc)
-                    .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
-                    {
-                        LabelAttribute = g.LabelAttribute,
-                        Id = g.Id,
-                        Attributes = g.Attributes
-                    })
-                    .ToList());
-        }
-
-        public override FeatureSet<Point> Search(string searchText)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

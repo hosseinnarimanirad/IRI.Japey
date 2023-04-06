@@ -533,7 +533,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         #region GetAsFeatureSet
 
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
         {
             if (geometry is not null)
             {
@@ -547,7 +547,7 @@ namespace IRI.Ket.Persistence.DataSources
             }
         }
 
-        public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
         {
             var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
 
@@ -710,7 +710,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
         {
-            return GetAsFeatureSet(geometry).Features;
+            return GetAsFeatureSetOfPoint(geometry).Features;
         }
 
         #region CRUD

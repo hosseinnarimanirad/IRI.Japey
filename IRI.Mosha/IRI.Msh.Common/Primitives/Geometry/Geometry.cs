@@ -656,6 +656,9 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         if (this.IsNullOrEmpty() || other.IsNullOrEmpty())
             return false;
 
+        if (this.IsNotValidOrEmpty() || other.IsNotValidOrEmpty())
+            return false;
+
         if (this.Srid != other.Srid)
             return false;
 
@@ -845,10 +848,67 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     {
         if (this.IsNullOrEmpty())
             return false;
+         
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return boundingBox.Covers(this.Points[0]);
 
-        var mbb = this.GetBoundingBox();
+            case GeometryType.LineString:
+                return this.Points.Any(boundingBox.Covers);
 
-        if (!boundingBox.Intersects(mbb))
+            case GeometryType.Polygon:
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.Any(g => g.Intersects(boundingBox));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > Intersects");
+        }
+    }
+
+    // 1402.01.17
+    // may reside on the boundary of BoundingBox 
+    public bool IsCoveredBy(BoundingBox boundingBox)
+    {
+        if (this.IsNullOrEmpty())
+            return false;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+                return boundingBox.Covers(this.Points[0]);
+
+            case GeometryType.LineString:
+                return this.Points.All(boundingBox.Covers);
+
+            case GeometryType.Polygon:
+
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return this.Geometries.All(g => g.IsCoveredBy(boundingBox));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > Intersects");
+        }
+    }
+
+    // 1402.01.17
+    // cannot reside on the boundary of BoundingBox 
+    public bool IsInside(BoundingBox boundingBox)
+    {
+        if (this.IsNullOrEmpty())
             return false;
 
         switch (this.Type)
@@ -857,14 +917,14 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return boundingBox.Contains(this.Points[0]);
 
             case GeometryType.LineString:
-                return this.Points.Any(p => boundingBox.Contains(p));
+                return this.Points.All(boundingBox.Contains);
 
             case GeometryType.Polygon:
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
             case GeometryType.MultiPolygon:
-                return this.Geometries.Any(g => g.Intersects(boundingBox));
+                return this.Geometries.All(g => g.IsInside(boundingBox));
 
             case GeometryType.GeometryCollection:
             case GeometryType.CircularString:

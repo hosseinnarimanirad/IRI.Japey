@@ -856,14 +856,14 @@ namespace IRI.Jab.Common
         public void ExportAsShapefile(string shpFileName)
         {
             //var features = GetFeatures<T>();
-            var features = this.DataSource.GetAsFeatureSet();
+            var features = this.DataSource.GetAsFeatureSetOfPoint();
 
             features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
         }
 
         public void ExportAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
         {
-            var features = this.DataSource.GetAsFeatureSet();
+            var features = this.DataSource.GetAsFeatureSetOfPoint();
 
             features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
         }
@@ -924,7 +924,7 @@ namespace IRI.Jab.Common
             }
             else
             {
-                geometries = (await this.DataSource.GetAsFeatureSetForDisplayAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
+                geometries = (await this.DataSource.GetAsFeatureSetOfPointAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
             }
 
             if (geometries.Count == 0)

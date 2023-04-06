@@ -259,7 +259,7 @@ namespace IRI.Ket.Persistence.DataSources
             throw new NotImplementedException();
         }
 
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
         {
             throw new NotImplementedException();
         }

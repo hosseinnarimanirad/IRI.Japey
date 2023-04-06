@@ -97,6 +97,11 @@ namespace IRI.Ket.Persistence.DataSources
             return result;
         }
 
+        public override List<GeodeticSheet> GetGeometryAwares(BoundingBox boundingBox)
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
         {
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
@@ -207,7 +212,12 @@ namespace IRI.Ket.Persistence.DataSources
             };
         }
 
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
         {
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
 
@@ -221,5 +231,6 @@ namespace IRI.Ket.Persistence.DataSources
         {
             throw new NotImplementedException();
         }
+
     }
 }

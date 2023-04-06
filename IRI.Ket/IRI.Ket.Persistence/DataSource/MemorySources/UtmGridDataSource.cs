@@ -243,10 +243,10 @@ namespace IRI.Ket.Persistence.DataSources
             return result;
         }
 
-        public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
         {
             var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
-             
+
             var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .Select(ToFeatureMappingFunc)
@@ -258,6 +258,27 @@ namespace IRI.Ket.Persistence.DataSources
         public override FeatureSet<Point> Search(string searchText)
         {
             throw new NotImplementedException();
+        }
+
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+        {
+            var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToMercatorWgs84);
+
+            var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+                                .Where(s => s.TheGeometry?.Intersects(boundingBox) == true)
+                                .Select(ToFeatureMappingFunc)
+                                .ToList();
+
+            return new FeatureSet<Point>(features);
+        }
+
+        public override List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
+        {
+            var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
+
+            return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+                                .Where(s => s.TheGeometry?.Intersects(boundingBox) == true)
+                                .ToList();
         }
     }
 }

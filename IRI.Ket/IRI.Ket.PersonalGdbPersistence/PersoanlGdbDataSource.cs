@@ -368,7 +368,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     }
 
 
-    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
     {
         if (geometry is not null)
         {
@@ -384,7 +384,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
     {
-        return GetAsFeatureSet(geometry).Features;
+        return GetAsFeatureSetOfPoint(geometry).Features;
     }
 
     public override void Add(Feature<Point> newValue)
