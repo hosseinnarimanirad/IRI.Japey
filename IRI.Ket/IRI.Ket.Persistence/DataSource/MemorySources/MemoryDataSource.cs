@@ -13,7 +13,7 @@ namespace IRI.Ket.Persistence.DataSources
         where TGeometryAware : class, IGeometryAware<TPoint>
         where TPoint : IPoint, new()
     {
-        public override BoundingBox Extent { get; protected set; }
+        public override BoundingBox WebMercatorExtent { get; protected set; }
 
         protected List<TGeometryAware> _features;
 
@@ -226,7 +226,7 @@ namespace IRI.Ket.Persistence.DataSources
             this._features = features;
             this._labelFunc = labelFunc;
             this._idFunc = idFunc;
-            this.Extent = features.Select(f => f.TheGeometry).GetBoundingBox();
+            this.WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
             this._mapToFeatureFunc = f => f;
             this.GeometryType = features.First().TheGeometry.Type;
         }

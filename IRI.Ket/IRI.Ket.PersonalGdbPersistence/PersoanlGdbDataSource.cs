@@ -22,7 +22,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     private const string _defaultSpatialColumnName = "SHAPE";
 
-    public override BoundingBox Extent
+    public override BoundingBox WebMercatorExtent
     {
         get
         {
@@ -415,5 +415,15 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         }
 
         return Select(null, searchText);
+    }
+
+    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
+    {
+        throw new NotImplementedException();
     }
 }

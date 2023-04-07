@@ -96,7 +96,7 @@ namespace IRI.Ket.Persistence.DataSources
             }
         }
 
-        public BoundingBox Extent
+        public BoundingBox WebMercatorExtent
         {
             get
             {

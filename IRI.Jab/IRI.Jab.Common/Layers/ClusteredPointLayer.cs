@@ -75,7 +75,7 @@ namespace IRI.Jab.Common
         {
             get
             {
-                return _source.Extent;
+                return _source.WebMercatorExtent;
             }
             protected set
             {

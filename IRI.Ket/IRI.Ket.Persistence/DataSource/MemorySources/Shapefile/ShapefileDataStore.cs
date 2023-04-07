@@ -16,7 +16,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         int _srid;
 
-        public BoundingBox Extent { get { throw new NotImplementedException(); } }
+        public BoundingBox WebMercatorExtent { get { throw new NotImplementedException(); } }
 
         public int Srid => throw new NotImplementedException();
 

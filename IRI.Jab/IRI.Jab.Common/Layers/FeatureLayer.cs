@@ -161,7 +161,7 @@ namespace IRI.Jab.Common
             //}
 
             //this.Extent = DataSource.GetFeatures()?.GetGeometries()?.GetBoundingBox() ?? BoundingBox.NaN;
-            this.Extent = DataSource.Extent;
+            this.Extent = DataSource.WebMercatorExtent;
 
             this.LayerName = layerName;
 

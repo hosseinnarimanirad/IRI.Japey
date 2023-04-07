@@ -4,7 +4,7 @@ namespace IRI.Ket.Persistence.DataSources
 {
     public interface IDataSource
     {
-        BoundingBox Extent { get; }
+        BoundingBox WebMercatorExtent { get; }
 
         public int Srid { get; }
     }

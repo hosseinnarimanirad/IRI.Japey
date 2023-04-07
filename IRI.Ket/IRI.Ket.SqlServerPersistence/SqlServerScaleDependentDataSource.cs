@@ -44,7 +44,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             if (sourceParameters.SpatialColumnName == null)
             {
-                this.Extent = BoundingBox.NaN;
+                this.WebMercatorExtent = BoundingBox.NaN;
             }
             else
             {

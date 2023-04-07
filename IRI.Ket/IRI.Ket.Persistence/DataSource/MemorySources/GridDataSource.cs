@@ -25,7 +25,7 @@ namespace IRI.Ket.Persistence.DataSources
         public BoundingBox GeodeticWgs84Extent { get; set; }
 
         //web mercator extent
-        public override BoundingBox Extent
+        public override BoundingBox WebMercatorExtent
         {
             get
             {

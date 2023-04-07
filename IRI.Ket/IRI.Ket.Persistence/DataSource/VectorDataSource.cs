@@ -18,7 +18,7 @@ namespace IRI.Ket.Persistence.DataSources
     {
         protected abstract Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware);
 
-        public virtual BoundingBox Extent { get; protected set; }
+        public virtual BoundingBox WebMercatorExtent { get; protected set; }
 
         public abstract int Srid { get; protected set; }
 

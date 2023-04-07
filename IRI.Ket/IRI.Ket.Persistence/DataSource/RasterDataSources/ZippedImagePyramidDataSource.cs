@@ -14,7 +14,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
 
         private BoundingBox _extent;
 
-        public BoundingBox Extent
+        public BoundingBox WebMercatorExtent
         {
             get { return _extent; }
             private set { _extent = value; }
@@ -90,11 +90,11 @@ namespace IRI.Ket.Persistence.RasterDataSources
                     }
                 );
 
-                this.Extent = BoundingBox.GetMergedBoundingBox(
+                this.WebMercatorExtent = BoundingBox.GetMergedBoundingBox(
                                 _archive.Entries.Where(e => e.FullName.StartsWith(lastPyramid.ToString()))
                                                 .Select(e => _inverseFunction(e.FullName).WebMercatorExtent), true);
 
-                ZipFileHelper.WriteString(_archive, Newtonsoft.Json.JsonConvert.SerializeObject(Extent), _extentFileName);
+                ZipFileHelper.WriteString(_archive, Newtonsoft.Json.JsonConvert.SerializeObject(WebMercatorExtent), _extentFileName);
 
                 _archive.Dispose();
 
@@ -102,7 +102,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
             }
             else
             {
-                this.Extent = JsonHelper.ParseFromJson<BoundingBox>(extentString);
+                this.WebMercatorExtent = JsonHelper.ParseFromJson<BoundingBox>(extentString);
             }
 
 

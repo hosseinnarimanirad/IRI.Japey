@@ -16,7 +16,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
 {
     public class OnlineGoogleMapDataSource<T> : IRasterDataSource
     {
-        public BoundingBox Extent
+        public BoundingBox WebMercatorExtent
         {
             get { return BoundingBox.NaN; }
         }

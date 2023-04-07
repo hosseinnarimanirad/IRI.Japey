@@ -57,14 +57,14 @@ namespace IRI.Ket.Persistence.DataSources
 
             //string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
 
-            this.Extent = geometries.MainHeader.MinimumBoundingBox;
+            this.WebMercatorExtent = geometries.MainHeader.MinimumBoundingBox;
 
             // 1401.11.28
             this.GeometryType = geometries.MainHeader.ShapeType.AsGeometryType();
 
             if (transformFunc != null)
             {
-                this.Extent = this.Extent.Transform(p => transformFunc(p));
+                this.WebMercatorExtent = this.WebMercatorExtent.Transform(p => transformFunc(p));
             }
 
             // 1400.02.03-comment

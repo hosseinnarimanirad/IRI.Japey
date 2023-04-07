@@ -25,7 +25,7 @@ namespace IRI.Ket.Persistence.DataSources
             protected set { throw new NotImplementedException("GridDataSource > GeometryType"); }
         }
 
-        public override BoundingBox Extent
+        public override BoundingBox WebMercatorExtent
         {
             get
             {

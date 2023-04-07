@@ -13,7 +13,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         protected BoundingBox _extent = BoundingBox.NaN;
 
-        public override BoundingBox Extent
+        public override BoundingBox WebMercatorExtent
         {
             get
             {
@@ -68,7 +68,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             if (spatialColumnName == null)
             {
-                this.Extent = BoundingBox.NaN;
+                this.WebMercatorExtent = BoundingBox.NaN;
             }
             else
             {
@@ -763,6 +763,11 @@ namespace IRI.Ket.Persistence.DataSources
         }
 
         public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
         {
             throw new NotImplementedException();
         }

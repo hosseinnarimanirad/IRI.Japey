@@ -9,7 +9,7 @@ namespace IRI.Ket.Persistence.DataSources
     // todo: implement methods
     public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
     {
-        public override BoundingBox Extent { get; protected set; }
+        public override BoundingBox WebMercatorExtent { get; protected set; }
         public override int Srid { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
 
         private string _connectionString;
@@ -44,7 +44,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             this._schema = schema;
 
-            this.Extent = GetGeometries().GetBoundingBox();
+            this.WebMercatorExtent = GetGeometries().GetBoundingBox();
         }
 
         private string GetProperSelectForSpatialColumn(string columnName)
@@ -285,6 +285,16 @@ namespace IRI.Ket.Persistence.DataSources
         }
 
         public override FeatureSet<Point> Search(string searchText)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
         {
             throw new NotImplementedException();
         }

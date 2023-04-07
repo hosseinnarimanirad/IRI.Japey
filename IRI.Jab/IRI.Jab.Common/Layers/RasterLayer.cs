@@ -330,9 +330,9 @@ namespace IRI.Jab.Common
 
             this.DataSource = dataSource;
 
-            if (!BoundingBox.IsNaN(dataSource.Extent))
+            if (!BoundingBox.IsNaN(dataSource.WebMercatorExtent))
             {
-                this._extent = dataSource.Extent;
+                this._extent = dataSource.WebMercatorExtent;
             }
 
             //AddTiled method is not supported for raster layers and image pyramid

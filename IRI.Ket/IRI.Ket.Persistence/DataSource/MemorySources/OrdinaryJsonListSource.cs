@@ -26,7 +26,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             this._features = features;
 
-            this.Extent = features.Select(f => f.TheGeometry).GetBoundingBox();
+            this.WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
 
             this._mapToFeatureFunc = mapToFeatureFunc;
 

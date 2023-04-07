@@ -9,7 +9,7 @@ namespace IRI.Ket.Persistence.DataSources
         //string imageFileName;
         GeoReferencedImage geoRaster;
 
-        public BoundingBox Extent { get; private set; }
+        public BoundingBox WebMercatorExtent { get; private set; }
 
         public int Srid => SridHelper.WebMercator;
 
@@ -17,14 +17,14 @@ namespace IRI.Ket.Persistence.DataSources
         {
             this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName, srid);
 
-            this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
         public GeoRasterFileDataSource(GeoReferencedImage image)
         {
             this.geoRaster = image;
             
-            this.Extent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
         public static GeoRasterFileDataSource Create(string imageFileName, int srid)
@@ -41,7 +41,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         public GeoReferencedImage Get(BoundingBox boundingBox)//, Func<string, GeoReferencedImage> func)
         {
-            if (this.Extent.Intersects(boundingBox))
+            if (this.WebMercatorExtent.Intersects(boundingBox))
             {
                 return geoRaster;
             }
