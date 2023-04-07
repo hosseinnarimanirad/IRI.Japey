@@ -55,14 +55,4 @@ public interface IVectorDataSource : IDataSource
     // Other ******************************************************************
     FeatureSet<Point> Search(string searchText);
 
-
-    // CRUD ******************************************************************
-
-    void Add(IGeometryAware<Point> newValue);
-
-    void Remove(IGeometryAware<Point> value);
-
-    void Update(IGeometryAware<Point> newValue);
-
-    void SaveChanges();
 }

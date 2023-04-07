@@ -74,6 +74,10 @@ namespace IRI.Extensions
                     (geometry.Points.IsNullOrEmpty() && geometry.Geometries.IsNullOrEmpty() || geometry.TotalNumberOfPoints == 0);
         }
 
+        public static bool IsNotValidOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
+        {
+            return geometry.IsNullOrEmpty() || !geometry.IsValid();
+        }
 
         #region Geometry To GeoJson
 

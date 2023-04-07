@@ -3,15 +3,33 @@ using System.Data.SqlClient;
 using IRI.Msh.Common.Primitives;
 using System.Data;
 using IRI.Extensions;
-using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Model; 
 
 namespace IRI.Ket.Persistence.DataSources
 {
-    public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>
+    public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>, IEditableVectorDataSource<Feature<Point>, Point>
     {
         const string _outputSpatialAttribute = "_shape";
 
         protected BoundingBox _extent = BoundingBox.NaN;
+
+        protected string _connectionString;
+
+        protected string _tableName;
+
+        protected string? _queryString;
+
+        protected string? _spatialColumnName;
+
+        protected string? _labelColumnName;
+
+        public Action<Feature<Point>>? AddAction;
+
+        public Action<int>? RemoveAction;
+
+        public Action<Feature<Point>>? UpdateAction;
+
+        public string? IdColumnName { get; set; }
 
         public override BoundingBox WebMercatorExtent
         {
@@ -19,7 +37,6 @@ namespace IRI.Ket.Persistence.DataSources
             {
                 if (double.IsNaN(_extent.Width) || double.IsNaN(_extent.Height) && _spatialColumnName != null)
                 {
-                    //this._extent = GetGeometries().GetBoundingBox();
                     this._extent = GetBoundingBox();
                 }
 
@@ -31,24 +48,6 @@ namespace IRI.Ket.Persistence.DataSources
             }
         }
 
-        protected string _connectionString;
-
-        protected string _tableName;
-
-        protected string _queryString;
-
-        protected string _spatialColumnName;
-
-        protected string _labelColumnName;
-
-        public Action<Feature<Point>> AddAction;
-
-        public Action<int> RemoveAction;
-
-        public Action<Feature<Point>> UpdateAction;
-
-        public string IdColumnName { get; set; }
-
         public override int Srid { get => GetSrid(); protected set => _ = value; }
 
         protected SqlServerDataSource()
@@ -56,7 +55,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         }
 
-        public SqlServerDataSource(string connectionString, string tableName, string spatialColumnName = null, string labelColumnName = null)
+        public SqlServerDataSource(string connectionString, string tableName, string? spatialColumnName = null, string? labelColumnName = null)
         {
             this._connectionString = connectionString;
 
@@ -225,18 +224,6 @@ namespace IRI.Ket.Persistence.DataSources
             return envelopes.GetBoundingBox();
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="attributeColumn"></param>
-        ///// <param name="whereClause">Do not include the "WHERE", e.g. coulumn01 = someValue</param>
-        ///// <returns></returns>
-        //public override List<object> GetAttributes(string attributeColumn, string whereClause)
-        //{
-        //    var selectQuery = FormattableString.Invariant($"SELECT {attributeColumn} FROM {GetTable()} {MakeWhereClause(whereClause)}");
-
-        //    return Select<object>(selectQuery);
-        //}
 
         protected List<T> Select<T>(string selectQuery, string connectionString = null)
         {
@@ -339,12 +326,10 @@ namespace IRI.Ket.Persistence.DataSources
             return SelectGeometries(MakeSelectCommand(whereClause, true));
         }
 
-        protected List<Geometry<Point>> SelectGeometries(string selectQuery, string connectionString = null)
+        protected List<Geometry<Point>> SelectGeometries(string selectQuery, string? connectionString = null)
         {
             if (connectionString == null)
-            {
                 connectionString = _connectionString;
-            }
 
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -714,22 +699,24 @@ namespace IRI.Ket.Persistence.DataSources
         }
 
         #region CRUD
-        //public override void Add(IGeometryAware<Point> newValue)
+        
+
+        //public void Add(IGeometryAware<Point> newValue)
         //{
         //    Add(newValue as Feature<Point>);
         //}
 
-        //public override void Remove(IGeometryAware<Point> newValue)
+        //public void Remove(IGeometryAware<Point> value)
         //{
-        //    Remove(newValue as Feature<Point>);
+        //    Remove(value as Feature<Point>);
         //}
 
-        //public override void Update(IGeometryAware<Point> newValue)
+        //public void Update(IGeometryAware<Point> newValue)
         //{
         //    Update(newValue as Feature<Point>);
         //}
 
-        public override void Add(Feature<Point> newValue)
+        public void Add(Feature<Point> newValue)
         {
             this.AddAction?.Invoke(newValue);
         }
@@ -739,17 +726,17 @@ namespace IRI.Ket.Persistence.DataSources
             this.RemoveAction?.Invoke(featureId);
         }
 
-        public override void Remove(Feature<Point> value)
+        public void Remove(Feature<Point> value)
         {
             throw new NotImplementedException();
         }
 
-        public override void Update(Feature<Point> newValue)
+        public void Update(Feature<Point> newValue)
         {
             throw new NotImplementedException();
         }
 
-        public override void SaveChanges()
+        public void SaveChanges()
         {
             throw new NotImplementedException();
         }
@@ -771,6 +758,7 @@ namespace IRI.Ket.Persistence.DataSources
         {
             throw new NotImplementedException();
         }
+
 
         //public override FeatureSet<Point> GetAsFeatureSet(string searchText)
         //{

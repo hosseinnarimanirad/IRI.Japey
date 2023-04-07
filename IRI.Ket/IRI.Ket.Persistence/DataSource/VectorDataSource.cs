@@ -171,18 +171,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         public virtual FeatureSet<TPoint> GetAsFeatureSet(Geometry<TPoint>? geometry)
         {
-            return new FeatureSet<TPoint>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList());
-
-            //if (geometry.IsNullOrEmpty())
-            //{
-            //    return GetAsFeatureSet();
-            //}
-            //else
-            //{
-            //    var features = GetAsFeatureSet().Features.Where(i => !i.TheGeometry.IsNotValidOrEmpty() && i.TheGeometry.Intersects(geometry)).ToList();
-
-            //    return new FeatureSet<TPoint>(features);
-            //}
+            return new FeatureSet<TPoint>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList()); 
         }
 
         #endregion
@@ -195,32 +184,33 @@ namespace IRI.Ket.Persistence.DataSources
         #endregion
 
 
-        #region CRUD
-        public virtual void Add(IGeometryAware<Point> newValue)
-        {
-            Add(newValue as TGeometryAware);
-        }
+        //#region CRUD
 
-        public virtual void Remove(IGeometryAware<Point> newValue)
-        {
-            Remove(newValue as TGeometryAware);
-        }
+        //public virtual void Add(IGeometryAware<Point> newValue)
+        //{
+        //    Add(newValue as TGeometryAware);
+        //}
 
-        public virtual void Update(IGeometryAware<Point> newValue)
-        {
-            Update(newValue as TGeometryAware);
-        }
+        //public virtual void Remove(IGeometryAware<Point> newValue)
+        //{
+        //    Remove(newValue as TGeometryAware);
+        //}
+
+        //public virtual void Update(IGeometryAware<Point> newValue)
+        //{
+        //    Update(newValue as TGeometryAware);
+        //}
 
 
-        public abstract void Add(TGeometryAware? newValue);
+        //public abstract void Add(TGeometryAware? newValue);
 
-        public abstract void Remove(TGeometryAware? value);
+        //public abstract void Remove(TGeometryAware? value);
 
-        public abstract void Update(TGeometryAware? newValue);
+        //public abstract void Update(TGeometryAware? newValue);
          
-        public abstract void SaveChanges();
+        //public abstract void SaveChanges();
          
-        #endregion
+        //#endregion
     }
 
     //public static class ToDataTableDefaultMappings

@@ -20,7 +20,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         }
 
-        private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string> labelFunc)
+        private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string>? labelFunc)
         {
             this._labelFunc = labelFunc;
 

@@ -200,10 +200,10 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public bool IsNotValidOrEmpty()
-    {
-        return !IsValid();
-    }
+    //public bool IsNotValidOrEmpty()
+    //{
+    //    return this.IsNullOrEmpty() || !IsValid();
+    //}
 
     public bool IsLeafGeometry()
     {
@@ -848,7 +848,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     {
         if (this.IsNullOrEmpty())
             return false;
-         
+
         switch (this.Type)
         {
             case GeometryType.Point:

@@ -130,9 +130,9 @@ namespace IRI.Jab.Common.Model.Map
 
         public void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry)
         {
-            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as VectorDataSource<TGeometryAware, Point>;
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource<TGeometryAware, Point>;
 
-            dataSource.Update(newGeometry);
+            dataSource.Update(newGeometry as TGeometryAware);
 
             var feature = this.Features.Single(f => f.Id == oldGeometry.Id);
 
@@ -146,7 +146,7 @@ namespace IRI.Jab.Common.Model.Map
         {
             var itemValue = item as TGeometryAware;
 
-            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource;
+            var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource<TGeometryAware, Point>;
 
             //dataSource.UpdateFeature(itemValue);
             dataSource.Update(itemValue);
@@ -165,7 +165,7 @@ namespace IRI.Jab.Common.Model.Map
 
         public void SaveChanges()
         {
-            (this.AssociatedLayer as VectorLayer).DataSource.SaveChanges();
+            ((AssociatedLayer as VectorLayer).DataSource as IEditableVectorDataSource<TGeometryAware, Point>).SaveChanges();
         }
 
 
