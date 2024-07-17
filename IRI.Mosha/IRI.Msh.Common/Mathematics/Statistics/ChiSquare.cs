@@ -173,6 +173,11 @@ namespace IRI.Msh.Statistics
 
         //    return result / (numberOfTuples * firstSd * secondSd);
         //}
+
+        //public static double GammaLowerRegularized(double a, double x)
+        //{
+
+        //}
     }
 
 }

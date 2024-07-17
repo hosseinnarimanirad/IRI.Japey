@@ -98,5 +98,10 @@ namespace IRI.Ket.DigitalTerrainModeling
         {
             throw new NotImplementedException();
         }
+
+        public bool IsNaN()
+        {
+            return double.IsNaN(X) || double.IsNaN(Y);
+        }
     }
 }

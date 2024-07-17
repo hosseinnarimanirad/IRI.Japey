@@ -351,6 +351,8 @@ namespace IRI.Sta.ShapefileFormat.EsriType
             return Points == null || Points.Length < 1;
         }
 
+        public bool IsRingBase() => false;
+
         #endregion
     }
 }

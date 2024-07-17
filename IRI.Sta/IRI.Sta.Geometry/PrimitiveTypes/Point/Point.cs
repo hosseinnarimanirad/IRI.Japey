@@ -158,6 +158,11 @@ namespace IRI.Ket.Geometry
             return Math.Sqrt(dx * dx + dy * dy); 
         }
 
+        public bool IsNaN()
+        {
+            return double.IsNaN(X) || double.IsNaN(Y);
+        }
+
         //public static double GetDistance(Point first, Point second)
         //{
         //    return Math.Sqrt((first.X - second.X) * (first.X - second.X) + (first.Y - second.Y) * (first.Y - second.Y));

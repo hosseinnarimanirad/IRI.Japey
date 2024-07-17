@@ -223,7 +223,7 @@ namespace IRI.Jab.Common.Convertor
             if (geometries != null)
             {
                 using (DrawingContext context = result.RenderOpen())
-                {
+                {                    
                     foreach (sb.Geometry<sb.Point> item in geometries)
                     {
                         p += AddGeometry(context, item, transform, brush, pen, pointSymbol);

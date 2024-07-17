@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Windows.Media;
+using IRI.Ket.Persistence.DataSources;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -67,7 +68,7 @@ namespace IRI.Jab.Common.Model.Legend
                 if (editResult.HasNotNullResult())
                 {
                     layer.Geometry = editResult.Result;
-               
+
                     //shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
                     map.ClearLayer(layer);
@@ -82,7 +83,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                     if (layer.OriginalSource != null)
                     {
-                        layer.OriginalSource.Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
+                        (layer.OriginalSource as IEditableVectorDataSource<Feature<Point>, Point>).Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
                     }
                 }
             });

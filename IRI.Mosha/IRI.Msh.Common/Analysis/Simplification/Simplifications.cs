@@ -178,9 +178,7 @@ namespace IRI.Msh.Common.Analysis
             else if (pointList.Count < 3)
                 return pointList;
 
-            List<int> filtered = new List<int>();
-
-            filtered.Add(0);
+            List<int> filtered = new List<int> { 0 };
 
             int firstIndex = 0, secondIndex = 1;
 
@@ -1141,6 +1139,33 @@ namespace IRI.Msh.Common.Analysis
 
             return result;
         }
+
+        // ***********************************************************************************************
+        // ***********************************************************************************************
+        // ref: Kronenfeld, B. J., Stanislawski, L. V., Buttenfield, B. P., & Brockmeyer, T. (2020).
+        // Simplification of polylines by segment collapse: Minimizing areal displacement while preserving area.
+        // International Journal of Cartography, 6(1), 22-46.
+        // link: https://www.tandfonline.com/doi/abs/10.1080/23729333.2019.1631535
+        public static List<T> SimplifyByAPSC<T>(List<T> pointList, SimplificationParamters parameters) where T : IPoint, new()
+        {
+            List<T> result = new List<T>();
+
+            if (pointList.IsNullOrEmpty())
+                return result;
+
+            else if (pointList.Count < 4)
+                return pointList;
+
+            result = ApscSimplification<T>.SimplifiedLine(pointList, parameters.AreaThreshold.Value);
+             
+            if (parameters.Retain3Points && result.Count == 2)
+            {
+                result.Insert(1, pointList[pointList.Count() / 2]);
+            }
+
+            return result;
+        }
+
 
         #region Private Methods
 

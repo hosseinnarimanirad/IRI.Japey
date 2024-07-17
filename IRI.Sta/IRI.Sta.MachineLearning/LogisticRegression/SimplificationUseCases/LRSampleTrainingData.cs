@@ -5,15 +5,15 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    public class SampleTrainingData
+    public class LRSampleTrainingData
     {
-        List<LogisticGeometrySimplificationParameters<Point>> zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters<Point>>();
+        List<LRSimplificationParameters<Point>> zeroAgnleSamples = new List<LRSimplificationParameters<Point>>();
 
-        public SampleTrainingData()
+        public LRSampleTrainingData()
         {
-            zeroAgnleSamples = new List<LogisticGeometrySimplificationParameters<Point>>()
+            zeroAgnleSamples = new List<LRSimplificationParameters<Point>>()
             {
-                new LogisticGeometrySimplificationParameters<Point>()
+                new LRSimplificationParameters<Point>()
                 {
                     CosineOfAngle = 0,
                     Area = 100,
@@ -25,10 +25,10 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
                 }};
         }
 
-        public IEnumerable<LogisticGeometrySimplificationParameters<Point>> Get()
+        public IEnumerable<LRSimplificationParameters<Point>> Get()
         {
             //"100 100, 200 100.5, 300 100"
-            yield return new LogisticGeometrySimplificationParameters<Point>() {   };
+            yield return new LRSimplificationParameters<Point>() {   };
         }
     }
 }

@@ -152,7 +152,5 @@ namespace IRI.Ket.CombinatorialOptimization
             return temp[1, (int)(weightLimit)];
 
         }
-
-
     }
 }

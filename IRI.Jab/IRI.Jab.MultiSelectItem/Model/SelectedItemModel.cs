@@ -23,7 +23,7 @@ namespace IRI.Jab.MultiSelectItem.Model
             }
         }
 
-        private string _title;
+        //private string _title;
 
         public string Title
         {
@@ -59,5 +59,10 @@ namespace IRI.Jab.MultiSelectItem.Model
         }
 
         public event EventHandler OnRequestRemove;
+
+        public override string ToString()
+        {
+            return $"Title: {Title}, Value: {Value}";
+        }
     }
 }

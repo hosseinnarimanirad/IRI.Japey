@@ -178,7 +178,14 @@ namespace IRI.Sta.ShapefileFormat.EsriType
             return false;
         }
 
+        public bool IsRingBase() => false;
+
         #endregion
+
+        public bool IsNaN()
+        {
+            return double.IsNaN(X) || double.IsNaN(Y);
+        }
 
     }
 

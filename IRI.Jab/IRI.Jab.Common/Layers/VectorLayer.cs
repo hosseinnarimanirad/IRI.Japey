@@ -849,6 +849,33 @@ namespace IRI.Jab.Common
 
         }
 
+        public async Task<DrawingVisual> AsDrawingVisual(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+
+            if (geoLabledPairs.Geometries == null)
+                return null;
+
+            double xScale = imageWidth / mapExtent.Width;
+            double yScale = imageHeight / mapExtent.Height;
+            double scale = xScale > yScale ? yScale : xScale;
+
+            Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+
+            var pen = this.VisualParameters.GetWpfPen();
+            pen.LineJoin = PenLineJoin.Round;
+            pen.EndLineCap = PenLineCap.Round;
+            pen.StartLineCap = PenLineCap.Round;   
+            
+            Brush brush = this.VisualParameters.Fill;
+
+            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+            
+            drawingVisual.Opacity=this.VisualParameters.Opacity;
+
+            return drawingVisual;
+        }
+
         #endregion
 
         #region Vector Export Methods

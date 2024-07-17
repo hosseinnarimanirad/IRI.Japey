@@ -13,7 +13,7 @@ namespace IRI.Extensions
     {
         public static Geometry<T> Simplify<T>(
             this Geometry<T> geometry,
-            LogisticGeometrySimplification<T> model,
+            LogisticSimplification<T> model,
             Func<T, T> toScreenMap,
             bool retain3Poins) where T : IPoint, new()
         {
@@ -24,7 +24,7 @@ namespace IRI.Extensions
 
         public static List<T> SimplifyByLogisticRegression<T>(
             this List<T> points,
-            LogisticGeometrySimplification<T> model,
+            LogisticSimplification<T> model,
             Func<T, T> toScreenMap,
             bool retain3Points = false) where T : IPoint, new()
         {

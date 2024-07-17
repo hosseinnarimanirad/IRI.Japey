@@ -11,6 +11,11 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\AreaStatistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Analysis\ShapeCharacteristics\CharacteristicsMeasure.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\APSC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\DisplacementComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\GeomUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\VertexRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationMetrics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
@@ -228,6 +233,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Units\UnitConversion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Analysis\simplification\APCS\" />
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
     <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
   </ItemGroup>

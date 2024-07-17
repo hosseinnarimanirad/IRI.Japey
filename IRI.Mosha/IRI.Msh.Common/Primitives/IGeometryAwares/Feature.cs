@@ -61,7 +61,7 @@ public class Feature<T> : IGeometryAware<T>, ICustomTypeDescriptor where T : IPo
 
     public GeoJsonFeature AsGeoJsonFeature()
     {
-        return new GeoJsonFeature() { Geometry = TheGeometry.AsGeoJson(), Id = Id.ToString(), Properties = Attributes };
+        return new GeoJsonFeature() { Geometry = TheGeometry.Project(SrsBases.GeodeticWgs84).AsGeoJson(), Id = Id.ToString(), Properties = Attributes };
     }
 
     public GeoJsonFeature AsGeoJsonFeature(Func<T, T> toWgs84Func, bool isLongitudeFirst)

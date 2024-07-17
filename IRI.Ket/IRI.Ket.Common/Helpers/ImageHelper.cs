@@ -293,8 +293,42 @@ namespace IRI.Ket.Common.Helpers
             return (result, differentPixels / totalPixels * 100.0);
         }
 
+        public static Bitmap OverlayBitmaps(List<Bitmap> images)
+        {
+            if (images.Select(i => i.Width).Distinct().Count() > 1 ||
+                images.Select(i => i.Height).Distinct().Count() > 1)
+            {
+                throw new Exception("Sizes must be equal.");
+            }
 
-      
+            var width = images[0].Width;
+
+            var height = images[0].Height;
+
+            Bitmap result = new Bitmap(width, height);
+
+            var nullColor = Color.FromArgb(0);
+
+            for (int a = 0; a < images.Count; a++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        var pixel1 = images[a].GetPixel(i, j);
+
+                        if (pixel1 == nullColor)
+                            continue;
+
+                        result.SetPixel(i, j, pixel1);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
 
 
         //private unsafe Bitmap GetDiffBitmap(Bitmap bmp, Bitmap bmp2)

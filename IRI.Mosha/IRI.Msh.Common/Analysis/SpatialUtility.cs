@@ -55,7 +55,7 @@ namespace IRI.Msh.Common.Analysis
                 return 0;
 
             if (SpatialUtility.GetEuclideanDistance(points[0], points[points.Count - 1]) == 0)
-                throw new NotImplementedException("SpatialUtility > CalculateSignedTriangleAreaForRing");
+                throw new NotImplementedException("SpatialUtility > GetSignedRingArea");
 
             double area = 0;
 

@@ -12,7 +12,8 @@ namespace IRI.Msh.Common.Primitives
         //double DistanceTo(IPoint point);
 
         byte[] AsWkb();
-         
+        bool IsNaN();
+
 
         //T Transform<T>(Func<T, T> transform, int newSrid) where T : IPoint, new();
     }

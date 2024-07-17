@@ -130,6 +130,9 @@ namespace IRI.Msh.Common.Primitives
             return result;
         }
 
-         
+        public bool IsNaN()
+        {
+            return double.IsNaN(X) || double.IsNaN(Y) || double.IsNaN(Z);
+        }
     }
 }

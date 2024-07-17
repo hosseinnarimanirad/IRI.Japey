@@ -4,8 +4,11 @@ using System.Text;
 
 namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 {
-    [Flags]
-    public enum LogisticGeometrySimplificationFeatures
+
+    /// <summary>
+    /// Logistic Regression Simplification Features
+    /// </summary>
+    public enum LRSimplificationFeatures
     {
         VerticalDistance = 1,
         DistanceToPrevious = 2,
@@ -16,15 +19,5 @@ namespace IRI.Sta.MachineLearning.LogisticRegressionUseCases
 
         // فاصله نقطه اول تا سوم
         BaseLength = 7
-
-        //VerticalDistance = 1,
-        //DistanceToPrevious = 2,
-        //DistanceToNext = 4,
-        //Area = 8,
-        //SquareCosineOfAngle = 16,
-        //CosineOfAngle = 32,
-
-        //// فاصله نقطه اول تا سوم
-        //BaseLength = 64
     }
 }

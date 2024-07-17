@@ -560,6 +560,10 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case SimplificationType.CumulativeAreaAngle:
                 filter = pList => Simplifications.SimplifyByCumulativeAngleArea(pList, paramters);
                 break;
+                
+            case SimplificationType.APSC:
+                filter = pList => Simplifications.SimplifyByAPSC(pList, paramters);
+                break;
 
             default:
                 throw new NotImplementedException();
@@ -1027,7 +1031,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     // 1401.03.12
-    // PCPD
+    // PDD
     public double PercentageChangeInPointDensity(Geometry<T> simplified)
     {
         if (simplified.IsNullOrEmpty())
@@ -1038,6 +1042,9 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         if (density == 0)
             return 1.0;
 
+        // 1402.10.03
+        // it should be noted that the result value maybe negative
+        // that means simplification may increase the density
         return density - simplified.CalculatePointDensity();
     }
 
@@ -1551,6 +1558,13 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return result;
     }
 
+    public void CloseLineString()
+    {
+        if (this.Type != GeometryType.LineString)
+            return;
+
+        this.Points.Add(this.Points[0]);
+    }
 
     private void Reverse()
     {
@@ -1596,9 +1610,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return new List<Geometry<T>> { clone ? this.Clone() : this };
 
             case GeometryType.MultiPoint:
-            case GeometryType.Polygon:
             case GeometryType.MultiLineString:
                 return Geometries.Select(g => clone ? g.Clone() : g).ToList();
+
+            case GeometryType.Polygon:
+
 
             case GeometryType.MultiPolygon:
                 return Geometries.SelectMany(g => g.Split(clone)).ToList();
@@ -1706,6 +1722,17 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+    public IRI.Msh.Common.Model.GeoJson.GeoJsonFeatureSet AsGeoJsonFeatureSet()
+    {
+        return new Model.GeoJson.GeoJsonFeatureSet()
+        {
+            TotalFeatures = 1,
+            Features = new List<Model.GeoJson.GeoJsonFeature>()
+            {
+                this.AsFeature().AsGeoJsonFeature()
+            }
+        };
+    }
 
     #region Static Create
 

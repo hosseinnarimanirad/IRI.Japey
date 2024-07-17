@@ -38,5 +38,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
         Geometry<Point> AsGeometry();
 
         bool IsNullOrEmpty();
+
+        bool IsRingBase();
     }
 }

@@ -231,10 +231,10 @@ namespace IRI.Ket.Persistence.DataSources
         //    return ExecuteSql(command);
         //}
 
-        public override void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
+        //public override void SaveChanges()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
         #endregion
@@ -269,20 +269,20 @@ namespace IRI.Ket.Persistence.DataSources
             throw new NotImplementedException();
         }
 
-        public override void Add(Feature<Point> newValue)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void Add(Feature<Point> newValue)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public override void Remove(Feature<Point> value)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void Remove(Feature<Point> value)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public override void Update(Feature<Point> newValue)
-        {
-            throw new NotImplementedException();
-        }
+        //public override void Update(Feature<Point> newValue)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override FeatureSet<Point> Search(string searchText)
         {

@@ -387,25 +387,25 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         return GetAsFeatureSetOfPoint(geometry).Features;
     }
 
-    public override void Add(Feature<Point> newValue)
-    {
-        throw new NotImplementedException();
-    }
+    //public override void Add(Feature<Point> newValue)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public override void Remove(Feature<Point> value)
-    {
-        throw new NotImplementedException();
-    }
+    //public override void Remove(Feature<Point> value)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public override void Update(Feature<Point> newValue)
-    {
-        throw new NotImplementedException();
-    }
+    //public override void Update(Feature<Point> newValue)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public override void SaveChanges()
-    {
-        throw new NotImplementedException();
-    }
+    //public override void SaveChanges()
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     public override FeatureSet<Point> Search(string searchText)
     {

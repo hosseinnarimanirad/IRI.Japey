@@ -40,7 +40,7 @@ namespace IRI.Sta.MachineLearning
             this.xStatistics = xStatistics;
         }
 
-        public void Fit(Matrix xValues, double[] yValues, bool normalizeFeatures = true)
+        public void Fit(Matrix xValues, double[] yValues)
         {
             // x: n*p
             // y: n*1
@@ -57,7 +57,7 @@ namespace IRI.Sta.MachineLearning
             beta = Enumerable.Repeat(1.0, numberOfParameters).ToArray();
 
 
-            if (normalizeFeatures)
+            if (_options.NormalizeFeatures)
             {
                 // 1399.12.20
                 // *******************************************************
@@ -70,19 +70,7 @@ namespace IRI.Sta.MachineLearning
             {
                 xStatistics = null;
             }
-
-            //// 1399.12.27
-            //// *******************************************************
-            //// پیش پردازش داده
-            //// به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
-            //// این گام باید قبل از نرمال‌سازی باشه چون به 
-            //// استتیستیک ستون یک هم نیاز هست بعدا برای 
-            //// پردیکت. در غیر این صورت بردارها هم‌ساز 
-            //// نخواهند شد.
-            //// *******************************************************
-            //var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
-            //xValues.InsertColumn(0, ones);
-
+             
             // 1399.12.20
             // *******************************************************
             // ذخیره‌سازی پارامترها برای استفاده 
@@ -90,7 +78,7 @@ namespace IRI.Sta.MachineLearning
             // *******************************************************
             //xStatistics = xValues.GetStatisticsByColumns();
 
-            if (normalizeFeatures)
+            if (_options.NormalizeFeatures)
             {
                 // *******************************************************
                 // پیش پردازش داده
@@ -107,15 +95,11 @@ namespace IRI.Sta.MachineLearning
             // *******************************************************
             // پیش پردازش داده
             // به ارايه ایکس‌ها بایستی مقدار ۱ اضافه کرد
-            // این گام باید قبل از نرمال‌سازی باشه چون به 
-            // استتیستیک ستون یک هم نیاز هست بعدا برای 
-            // پردیکت. در غیر این صورت بردارها هم‌ساز 
-            // نخواهند شد.
             // *******************************************************
             var ones = Enumerable.Repeat(1.0, numberOfRow).ToArray();
             xValues.InsertColumn(0, ones);
 
-            if (normalizeFeatures)
+            if (_options.NormalizeFeatures)
             {
                 xStatistics.Insert(0, new BasicStatisticsInfo() { Mean = 1, StandardDeviation = 0 });
             }
@@ -139,23 +123,6 @@ namespace IRI.Sta.MachineLearning
                     {
                         grad[xi] += error * xs[xi];
                     }
-
-
-                    // 1400.03.13
-                    //if (this._options.RegularizationMethod == RegularizationMethods.L2)
-                    //{
-                    //    //1400.03.12
-                    //    // regularization
-                    //    var lambda = 1.0;
-                    //    double sigmaBeta = 0;
-                    //    for (int j = 0; j < numberOfParameters; j++)
-                    //    {
-                    //        sigmaBeta += beta[j];
-                    //    }
-
-                    //    grad[j] += lambda
-                    //}
-
                 }
 
                 // 1400.03.13
@@ -224,18 +191,87 @@ namespace IRI.Sta.MachineLearning
             return LogisticRegressionHelper.CalculateLogisticFunction(xValues.ToArray(), Beta);
         }
 
-        public void Serialize(string fileName)
+        private Matrix ComputeTheFisherInformationMatrix_Copilot(Matrix xValues, double[] yValues)
         {
-            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            var numberOfRow = xValues.NumberOfRows;
 
-            System.IO.File.WriteAllText(fileName, jsonString);
+            var numberOfParameters = xValues.NumberOfColumns;
+
+            Matrix fisherInformationMatrix = new Matrix(numberOfParameters, numberOfParameters);
+
+            for (int i = 0; i < numberOfRow; i++)
+            {
+                var xs = xValues.GetRow(i);
+
+                var yPredicted = LogisticRegressionHelper.CalculateLogisticFunction(xs, beta);
+
+                var error = yPredicted - yValues[i];
+
+                for (int j = 0; j < numberOfParameters; j++)
+                {
+                    for (int k = 0; k < numberOfParameters; k++)
+                    {
+                        fisherInformationMatrix[j, k] += xs[j] * xs[k] * yPredicted * (1 - yPredicted);
+                    }
+                }
+            }
+
+            return fisherInformationMatrix;
         }
 
-        public static LogisticRegression Deserialize(string fileName)
+        private Matrix ComputeTheFisherInformationMatrix(Matrix xValues)
         {
-            var jsonString = System.IO.File.ReadAllText(fileName);
+            var numberOfRow = xValues.NumberOfRows;
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticRegression>(jsonString);
+            var numberOfParameters = xValues.NumberOfColumns;
+
+            Matrix weight = new Matrix(numberOfRow, numberOfRow);
+
+            for (int i = 0; i < numberOfRow; i++)
+            {
+                var xs = xValues.GetRow(i);
+
+                var yPredicted = LogisticRegressionHelper.CalculateLogisticFunction(xs, beta);
+
+                weight[i, i] = yPredicted * (1 - yPredicted);
+            }
+
+            return xValues.Transpose() * weight * xValues;
         }
+
+
+        //private object ComputeWaldStatistics(Matrix xValues)
+        //{
+        //    var fisherMatrix = ComputeTheFisherInformationMatrix(xValues);
+
+        //    var covariance = fisherMatrix.Inverse();
+
+        //    double[] variance = covariance.DiagonalVector();
+
+        //    double[] waldStatistics = new double[variance.Length];
+
+        //    for (int i = 0; i < variance.Length; i++)
+        //    {
+        //        waldStatistics[i] = beta[i] / Math.Sqrt(variance[i]);
+        //    }
+
+        //    double[] pValues = new double[variance.Length];
+
+        //    ChiSquare.
+        //}
+
+        //public void Serialize(string fileName)
+        //{
+        //    var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+
+        //    System.IO.File.WriteAllText(fileName, jsonString);
+        //}
+
+        //public static LogisticRegression Deserialize(string fileName)
+        //{
+        //    var jsonString = System.IO.File.ReadAllText(fileName);
+
+        //    return Newtonsoft.Json.JsonConvert.DeserializeObject<LogisticRegression>(jsonString);
+        //}
     }
 }

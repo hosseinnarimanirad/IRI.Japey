@@ -155,5 +155,11 @@ namespace IRI.Msh.Common.Analysis
         /// </summary>
         [Description("CTR")]
         CumulativeTriangleRoutine,
+
+        // 1403.03.08
+        /// <summary>
+        /// APSC
+        /// </summary>
+        APSC
     }
 }
