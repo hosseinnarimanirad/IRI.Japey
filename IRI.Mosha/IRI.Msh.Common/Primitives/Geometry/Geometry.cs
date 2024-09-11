@@ -450,7 +450,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.LineString:
                 //todo: multiple cast consider changing it
                 //return CreatePointOrLineString<T>(filter(this.Points.Select(i => (T)i).ToList()).Select(i => (IPoint)i).ToList(), this.Srid);
-                return CreatePointOrLineString<T>(filter(this.Points), this.Srid);
+                return CreatePointOrLineString(filter(this.Points), this.Srid);
 
             case GeometryType.MultiLineString:
                 return new Geometry<T>(this.Geometries.Select(i => i.FilterPoints(filter)).ToList(), GeometryType.MultiLineString, this.Srid);
@@ -560,7 +560,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case SimplificationType.CumulativeAreaAngle:
                 filter = pList => Simplifications.SimplifyByCumulativeAngleArea(pList, paramters);
                 break;
-                
+
             case SimplificationType.APSC:
                 filter = pList => Simplifications.SimplifyByAPSC(pList, paramters);
                 break;
@@ -1820,7 +1820,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public static Geometry<T> CreatePointOrLineString<T>(List<T> points, int srid) where T : IPoint, new()
+    public static Geometry<T> CreatePointOrLineString(List<T> points, int srid) 
     {
         if (points.Count == 1)
         {
@@ -1830,6 +1830,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         {
             return new Geometry<T>(points, GeometryType.LineString, srid);
         }
+    }
+
+    public static Geometry<T> CreatePointOrLineString(int srid, params T[] points) 
+    {
+        return CreatePointOrLineString(points.ToList(), srid);
     }
 
     public static Geometry<Point> CreateLineStringFromPoints(List<Geometry<Point>> geometries)
@@ -1844,6 +1849,8 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         //Geometry<Point> result = new Geometry<Point>()
         return Geometry<Point>.CreatePointOrLineString(points, geometries?.FirstOrDefault()?.Srid ?? 0);
     }
+
+
 
     public static Geometry<T> CreatePolygonOrMultiPolygon<T>(List<Geometry<T>> rings, int srid) where T : IPoint, new()
     {

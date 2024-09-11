@@ -1,11 +1,11 @@
 ﻿using IRI.Msh.Common.Analysis;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
-using IRI.Sta.MachineLearning.LogisticRegressionUseCases;
+using IRI.Msh.Common.Primitives; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IRI.Sta.MachineLearning;
 
 namespace IRI.Extensions
 {

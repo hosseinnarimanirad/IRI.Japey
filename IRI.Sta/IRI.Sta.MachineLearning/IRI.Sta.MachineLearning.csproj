@@ -9,8 +9,4 @@
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Spatial\" />
-  </ItemGroup>
-
 </Project>

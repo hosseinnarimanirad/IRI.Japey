@@ -14,7 +14,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
         //private static Dictionary<char, Func<byte[], object>> _mapFunctions;
 
-        internal const int _arabicWindowsEncoding = 1256;
+        internal const int _arabicWindowsEncoding = 1252;
 
         internal static Encoding _arabicEncoding = Encoding.GetEncoding(_arabicWindowsEncoding);
 
@@ -175,7 +175,11 @@ namespace IRI.Sta.ShapefileFormat.Dbf
         }
 
         //public static List<Dictionary<string, object>> Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
-        public static EsriAttributeDictionary Read(string dbfFileName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
+        public static EsriAttributeDictionary Read(
+            string dbfFileName, 
+            bool correctFarsiCharacters = true, 
+            Encoding dataEncoding = null, 
+            Encoding fieldHeaderEncoding = null)
         {
             dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
@@ -216,6 +220,8 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
                 fields.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
+
+            fields = fields.Where(c => c.Length != 0).ToList();
 
             var _mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 
@@ -260,7 +266,11 @@ namespace IRI.Sta.ShapefileFormat.Dbf
             return new EsriAttributeDictionary(attributes, fields);
         }
 
-        public static object[][] ReadToObject(string dbfFileName, string tableName, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding fieldHeaderEncoding = null)
+        public static object[][] ReadToObject(
+            string dbfFileName, 
+            bool correctFarsiCharacters = true, 
+            Encoding dataEncoding = null, 
+            Encoding fieldHeaderEncoding = null)
         {
             dataEncoding = dataEncoding ?? (TryDetectEncoding(dbfFileName) ?? Encoding.UTF8);
 
@@ -291,6 +301,8 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
+
+            columns = columns.Where(c => c.Length != 0).ToList();
 
             var _mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 
@@ -728,6 +740,9 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             foreach (DbfFieldDescriptor item in columns)
             {
+                if (item.Length == 0)
+                    continue;
+
                 switch (char.ToUpper(item.Type))
                 {
                     case 'F':
@@ -781,7 +796,12 @@ namespace IRI.Sta.ShapefileFormat.Dbf
         }
 
         //Read
-        public static System.Data.DataTable Read(string dbfFileName, string tableName, Encoding dataEncoding, Encoding fieldHeaderEncoding, bool correctFarsiCharacters)
+        public static System.Data.DataTable Read(
+            string dbfFileName,
+            string tableName,
+            Encoding dataEncoding,
+            Encoding fieldHeaderEncoding,
+            bool correctFarsiCharacters)
         {
             ChangeEncoding(dataEncoding);
 
@@ -804,9 +824,9 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
 
-            if ((header.LengthOfHeader - 33) % 32 != 0) { throw new NotImplementedException(); }
+            if ((header.LengthOfHeader - 40) % 32 != 0) { throw new NotImplementedException(); }
 
-            int numberOfFields = (header.LengthOfHeader - 33) / 32;
+            int numberOfFields = (header.LengthOfHeader - 40) / 32;
 
             for (int i = 0; i < numberOfFields; i++)
             {
@@ -814,6 +834,8 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
                 columns.Add(DbfFieldDescriptor.Parse(buffer, DbfFile._fieldsEncoding));
             }
+
+            columns = columns.Where(c => c.Length != 0).ToList();
 
             var mapFunctions = DbfFieldMappings.GetMappingFunctions(_currentEncoding, _correctFarsiCharacters);
 

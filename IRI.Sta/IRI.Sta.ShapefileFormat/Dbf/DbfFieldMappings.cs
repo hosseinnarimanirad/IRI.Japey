@@ -1,4 +1,5 @@
 ﻿using IRI.Extensions;
+using IRI.Sta.Common.Encodings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,13 +50,22 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
         internal static string ConvertDbfGeneralToString(byte[] buffer, Encoding encoding, bool correctFarsiCharacters)
         {
+            var bytes = encoding.GetType() == typeof(PersianDOS) ? buffer.Reverse().ToArray() : buffer;
+
+            var result = encoding.GetString(bytes).Replace('\0', ' ').Trim();
+
+            if (encoding.GetType() == typeof(PersianDOS) && !string.IsNullOrEmpty(result) && result.All(c => c == '*'))
+            {
+                result = Msh.Common.Helpers.EncodingHelper.ArabicEncoding.GetString(buffer).Replace('\0', ' ').Trim();
+            }
+
             if (correctFarsiCharacters)
             {
-                return _defaultCorrection(encoding.GetString(buffer).Replace('\0', ' ').Trim());
+                return _defaultCorrection(result/*encoding.GetString(buffer).Replace('\0', ' ').Trim()*/);
             }
             else
             {
-                return encoding.GetString(buffer).Replace('\0', ' ').Trim();
+                return result;// encoding.GetString(buffer.Reverse().ToArray()).Replace('\0', ' ').Trim();
             }
 
         }
@@ -100,7 +110,9 @@ namespace IRI.Sta.ShapefileFormat.Dbf
                 return decimal.TryParse(value, out decimalValue) ? (object)decimalValue : DBNull.Value;
             };
 
-        internal static Dictionary<char, Func<byte[], object>> GetMappingFunctions(Encoding currentEncoding, bool correctFarsiCharacters)
+        internal static Dictionary<char, Func<byte[], object>> GetMappingFunctions(
+            Encoding currentEncoding,
+            bool correctFarsiCharacters)
         {
             var _mapFunctions = new Dictionary<char, Func<byte[], object>>();
 

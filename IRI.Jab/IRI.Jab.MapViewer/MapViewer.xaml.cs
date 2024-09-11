@@ -1119,7 +1119,7 @@ namespace IRI.Jab.MapViewer
             //if (layer.VisualParameters == null || layer.VisualParameters.Visibility != Visibility.Visible)
             if (!layer.CanRenderLayer(mapScale))
                 return;
-
+             
             if (layer.Rendering == RenderingApproach.Tiled)
                 return;
 
@@ -2267,7 +2267,7 @@ namespace IRI.Jab.MapViewer
 
             if (layer.Rendering == RenderingApproach.Tiled)
             {
-                AddTiledLayer(layer as VectorLayer); 
+                AddTiledLayer(layer as VectorLayer);
             }
             else
             {

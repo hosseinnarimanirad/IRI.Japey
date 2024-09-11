@@ -21,5 +21,10 @@ namespace IRI.Msh.Statistics
 
             this.StandardDeviation = Statistics.CalculateStandardDeviation(values);
         }
+
+        public override string ToString()
+        {
+            return $"Mean: {Mean}, Std: {StandardDeviation}";
+        }
     }
 }
