@@ -9,6 +9,11 @@ using IRI.Msh.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Windows.Media;
 using IRI.Ket.Persistence.DataSources;
+using IRI.Msh.Common.Mapping;
+using System.Windows.Media.Media3D;
+using System.Windows.Media.Imaging;
+using System.Windows.Forms;
+using IRI.Sta.Ogc.WMS;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -22,6 +27,7 @@ namespace IRI.Jab.Common.Model.Legend
 
         private const string _saveAsShapefileToolTip = "ذخیره‌سازی در قالب شیپ‌فایل";
         private const string _saveAsGeoJsonToolTip = "ذخیره‌سازی در قالب ژئوجی‌سان";
+        private const string _saveAsPngToolTip = "ذخیره‌سازی در قالب png";
 
 
         // ***************** Remove ******************
@@ -117,7 +123,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -152,13 +158,62 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
             return result;
         }
 
+        public static ILegendCommand CreateExportDrawingItemLayerAsPng(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarImage,
+                Layer = layer,
+                ToolTip = _saveAsPngToolTip,
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var fileName = map.DialogService.ShowSaveFileDialog("*.png|*.png", null, layer.LayerName);
+
+                    if (string.IsNullOrWhiteSpace(fileName))
+                        return;
+
+                    var groundBoundingBox = layer.Geometry.GetBoundingBox().Expand(1.1);
+
+                    var currentScreenSize = WebMercatorUtility.ToScreenSize(map.CurrentZoomLevel, groundBoundingBox);
+
+                    var scale = WebMercatorUtility.GetGoogleMapScale(map.CurrentZoomLevel);
+
+                    var drawingVisual = await layer.AsDrawingVisual(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+                    RenderTargetBitmap image = new RenderTargetBitmap(currentScreenSize.Width, currentScreenSize.Height, 96, 96, PixelFormats.Pbgra32);
+
+                    image.Render(drawingVisual);
+
+                    var frame = BitmapFrame.Create(image);
+
+                    PngBitmapEncoder pngImage = new PngBitmapEncoder();
+
+                    pngImage.Frames.Add(frame);
+
+                    using (System.IO.Stream stream = System.IO.File.Create(fileName))
+                    {
+                        pngImage.Save(stream);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
+                }
+            });
+
+            return result;
+        }
 
         // ***************** Exterior Ring ***********
         // *******************************************
@@ -181,7 +236,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -209,7 +264,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -237,7 +292,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -265,7 +320,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -298,7 +353,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -327,7 +382,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -356,7 +411,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -385,7 +440,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -414,12 +469,76 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
             return result;
         }
 
+        // ***************** Simplifications **********
+        // *******************************************
+        public static ILegendCommand CreateSimplifyByVWCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarFlag,
+                Layer = layer,
+                ToolTip = "ساده‌سازی روش ویزوال",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var simplified = layer.Geometry.Simplify(SimplificationType.VisvalingamWhyatt, map.CurrentZoomLevel, new SimplificationParamters() { Retain3Points = true });
+                    //VisualSimplification.sim layer.Geometry.Simplify()
+                    map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-VW-{map.CurrentZoomLevel}");
+
+                }
+                catch (Exception ex)
+                {
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
+                }
+            });
+
+            return result;
+        }
+
+        public static ILegendCommand CreateSimplifyByRDPCommand(MapPresenter map, DrawingItemLayer layer)
+        {
+            var result = new LegendCommand()
+            {
+                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarFlag,
+                Layer = layer,
+                ToolTip = "ساده‌سازی روش داگلاس",
+            };
+
+            result.Command = new RelayCommand(async param =>
+            {
+                try
+                {
+                    var simplified = layer.Geometry.Simplify(SimplificationType.RamerDouglasPeucker, map.CurrentZoomLevel, new SimplificationParamters() { Retain3Points = true });
+                    //VisualSimplification.sim layer.Geometry.Simplify()
+                    map.AddDrawingItem(simplified, $"{layer.LayerName} simplified-RDP-{map.CurrentZoomLevel}");
+
+                }
+                catch (Exception ex)
+                {
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
+                }
+            });
+
+            return result;
+        }
+
+        internal static List<Func<MapPresenter, DrawingItemLayer, ILegendCommand>> GetDefaultTextLayerCommands()
+        {
+            return new List<Func<MapPresenter, DrawingItemLayer, ILegendCommand>>()
+            {
+                CreateRemoveDrawingItemLayer,
+                (p,l)=>LegendCommand. CreateZoomToExtentCommandFunc(p,l)
+            };
+        }
     }
 }

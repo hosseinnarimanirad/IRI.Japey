@@ -42,6 +42,7 @@ namespace IRI.Jab.Common
 
         bool IsGroupLayer { get; set; }
 
+        // is layer discoverable in identify
         bool IsSearchable { get; set; }  
 
         Guid ParentLayerId { get; set; }

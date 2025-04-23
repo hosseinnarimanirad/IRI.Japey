@@ -46,5 +46,11 @@ namespace IRI.Msh.Common.Model.GeoJson
         {
             return Coordinates == null ? 0 : Coordinates.Sum(part => part == null ? 0 : part.Length);
         }
+
+        public Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true)
+        {
+            return this.Parse(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                        .Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator);
+        }
     }
 }

@@ -18,7 +18,6 @@ using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
-using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
@@ -35,6 +34,8 @@ using IRI.Jab.Common.Model.Spatialable;
 
 using sb = IRI.Msh.Common.Primitives;
 using IRI.Ket.Persistence.RasterDataSources;
+//using DocumentFormat.OpenXml.Drawing.Charts;
+using IRI.Msh.Common.Model.Enums;
 
 //using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
 
@@ -471,7 +472,9 @@ namespace IRI.Jab.MapViewer
         #endregion
 
 
-        public async Task Register(Common.Presenter.Map.MapPresenter presenter)
+        public async Task Register(Common.Presenter.Map.MapPresenter presenter,
+                                    sb.BoundingBox? initialView = null,
+                                    List<IrProvince93>? provinces = null)
         {
             if (presenter == null)
             {
@@ -481,6 +484,9 @@ namespace IRI.Jab.MapViewer
             _presenter = presenter;
 
             presenter.RequestPrint = this.Print;
+
+            presenter.RequestGetLayersAsDrawingVisual = this.GetAsDrawingVisual;
+            //presenter.RequestPrintAsPngAsync = this.PrintAsPngAsync;
 
             presenter.RequestGetProxy = () => this.Proxy;
 
@@ -492,7 +498,7 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestGetActualWidth = () => this.mapView.ActualWidth;
 
-            presenter.RegisterAction = async (i) => { await this.Register(i); };
+            //presenter.RegisterAction = async (i) => { await this.Register(i); };
 
             presenter.RequestSetDefaultCursor = this.SetDefaultCursor;
 
@@ -577,11 +583,11 @@ namespace IRI.Jab.MapViewer
             };
 
             //IMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func< TileInfo, string> getFileName = null
-            presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName) =>
+            presenter.RequestSetTileService = (iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName, opacity) =>
             {
                 this.UnSetTileServices();
 
-                this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName);
+                this.SetTileService(iMapProvider, isCachEnabled, cacheDirectory, isOffline, getlocalFileName, opacity);
 
                 //this.RefreshTiles();
                 this.RefreshBaseMaps();
@@ -653,19 +659,20 @@ namespace IRI.Jab.MapViewer
                 return this.GetDrawingAsync(mode, options, display);
             };
 
-            presenter.RequestCancelNewDrawing = () => this.CancelDrawing();
+            presenter.RequestCancelNewDrawing = CancelDrawing;
 
-            presenter.RequestFinishDrawingPart = () => this.FinishDrawingPart();
+            presenter.RequestFinishDrawingPart = FinishDrawingPart;
 
-            presenter.RequestFinishNewDrawing = () => this.FinishDrawing();
+            presenter.RequestFinishNewDrawing = FinishDrawing;
 
-            presenter.RequestCancelEdit = () => this.CancelEditGeometry();
+            presenter.RequestCancelEdit = CancelEditGeometry;
 
-            presenter.RequestFinishEdit = () => this.FinishEditing();
+            presenter.RequestFinishEdit = FinishEditing;
 
             //presenter.RequestMeasure = async (mode, isEdgeLabelVisible) => await this.MeasureAsync(mode, isEdgeLabelVisible, null);
-            presenter.RequestMeasure = async (mode, drawingOptions, editingOptions, action) => await this.MeasureAsync(mode, drawingOptions, editingOptions, action);
+            presenter.RequestMeasure = MeasureAsync;
 
+            //presenter.RequestAddText = AddTextAsync;
 
             presenter.RequestCancelMeasure = this.CancelMeasure;
 
@@ -774,6 +781,8 @@ namespace IRI.Jab.MapViewer
 
             presenter.RequestGetPoint = SelectPointAsync;
 
+            presenter.RequestToScreenMap = this.MapToScreen;
+
             //presenter.RequestGetToScreenMap = () =>
             //{
             //    return p =>
@@ -784,23 +793,41 @@ namespace IRI.Jab.MapViewer
             //    };
             //};
 
-            presenter.RequestGetToScreenMapMatrix = () =>
+            presenter.RequestGetMapToScreenMatrix = () =>
             {
                 return this.viewTransform.Value;
             };
 
-            presenter.Ostanha = Common.Model.Spatialable.EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
+            presenter.RequestGetScreenToMapMatrix = () =>
             {
-                this.ZoomToExtent(a.GetBoundingBox(SridHelper.WebMercator));
+                var matrix = this.viewTransform.Value;
+
+                if (matrix.HasInverse)
+                {
+                    matrix.Invert();
+
+                    return matrix;
+                }
+
+                return null;
+            };
+
+            var ostanha = EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
+            {
+                this.ZoomToExtent(a.GetBoundingBox(/*SridHelper.WebMercator*/));
             });
 
-            presenter.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox, true);
+            presenter.Ostanha = provinces is null ? ostanha : ostanha.Where(o => provinces.Contains(o.Province)).ToList();
 
             presenter.Pan();
 
             presenter.SetMapCursorSet1();
 
             await presenter.Initialize();
+
+
+            presenter.ZoomToExtent(initialView ?? sb.BoundingBoxes.IranMercatorBoundingBox, true);
+
 
             presenter.RegisterMapOptions();
 
@@ -956,9 +983,9 @@ namespace IRI.Jab.MapViewer
         //    SetTileService(ScaleInterval.All, provider, type, isCachEnabled, cacheDirectory, isOffline, getFileName);
         //}
 
-        public void SetTileService(TileMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string> getFileName = null)
+        public void SetTileService(TileMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string>? getFileName = null, double opacity = 1)
         {
-            var layer = new TileServiceLayer(mapProvider, getFileName) { VisibleRange = ScaleInterval.All };
+            var layer = new TileServiceLayer(mapProvider, opacity, getFileName) { VisibleRange = ScaleInterval.All };
 
             if (isCachEnabled && Sta.Common.Helpers.IOHelper.TryCreateDirectory(cacheDirectory))
             {
@@ -1119,7 +1146,7 @@ namespace IRI.Jab.MapViewer
             //if (layer.VisualParameters == null || layer.VisualParameters.Visibility != Visibility.Visible)
             if (!layer.CanRenderLayer(mapScale))
                 return;
-             
+
             if (layer.Rendering == RenderingApproach.Tiled)
                 return;
 
@@ -1189,17 +1216,26 @@ namespace IRI.Jab.MapViewer
             }
             else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
             {
-                Action action = () =>
+                SpecialPointLayer? specialPointLayer = null;
+
+                if (layer is SpecialPointLayer)
                 {
-                    AddComplexLayer((SpecialPointLayer)layer);
-                };
+                    specialPointLayer = (SpecialPointLayer)layer;
+                }
+                else
+                {
+                    // in the case of text layer
+                    specialPointLayer = ((DrawingItemLayer)layer).SpecialPointLayer;
+                }
 
-                Task.Run(() =>
-                  this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
-                      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                  );
+                if (specialPointLayer is not null)
+                {
+                    Action action = () => AddComplexLayer(specialPointLayer);
 
-                //this.tasks.Add(task);
+                    Task.Run(() =>
+                      this.jobs.Add(new Job(new LayerTag(mapScale) { LayerType = LayerType.Complex, Tile = null },
+                          Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null))));
+                }
             }
             else if (layer is TileServiceLayer)
             {
@@ -1492,14 +1528,10 @@ namespace IRI.Jab.MapViewer
             var layerTile = layer.TileManager.Find(tile);
 
             if (layerTile == null || layerTile.IsProcessing)
-            {
-                //Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
                 return;
-            }
 
             if (tile.ZoomLevel != this.CurrentZoomLevel)
             {
-                //Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 layerTile.IsProcessing = false;
                 return;
             }
@@ -1510,7 +1542,6 @@ namespace IRI.Jab.MapViewer
 
             if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
             {
-                //Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                 layerTile.IsProcessing = false;
                 return;
             }
@@ -1715,37 +1746,7 @@ namespace IRI.Jab.MapViewer
 
             Debug.WriteLine($"MapViewer; {DateTime.Now.ToShortTimeString()}; AddEditableFeatureLayer {layer.LayerName} finished");
         }
-
-        //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
-
-        //public void AddMoveableItem(Locateable item)
-        //{
-        //    var element = item.Element;
-
-        //    var screenLocation = item.AncherFunction(
-        //        MapToScreen(new Point(item.X, item.Y)), element.Width, element.Height);
-
-        //    //element.RenderTransformOrigin = new Point(.5, .5);
-        //    var tempPoint = item.AncherFunction(new Point(0, 0), element.Width, element.Height);
-
-        //    element.RenderTransformOrigin = new Point(-tempPoint.X / element.Width, -tempPoint.Y / element.Height);
-
-        //    var scaleTransform = ((TransformGroup)(element.RenderTransform)).Children.First();
-        //    ((TransformGroup)(element.RenderTransform)).Children.Clear();
-
-        //    ((TransformGroup)(element.RenderTransform)).Children.Add(scaleTransform);
-
-        //    ((TransformGroup)(element.RenderTransform)).Children.Add(this.panTransformForPoints);
-
-        //    ((TransformGroup)(element.RenderTransform)).Children.Add(new TranslateTransform(screenLocation.X, screenLocation.Y));
-
-        //    element.Tag = new LayerTag(this.MapScale) { Layer = null, IsTiled = false, LayerType = LayerType.MoveableItem };
-
-        //    element.MouseDown -= Element_MouseDownForMoveableItem;
-        //    element.MouseDown += Element_MouseDownForMoveableItem;
-
-        //    AddToCanvasWithAnimation(element, element.Opacity);
-        //}
+         
 
         bool itemIsMoving = false;
 
@@ -1858,8 +1859,11 @@ namespace IRI.Jab.MapViewer
             var item = sender as Locateable;
 
             var element = item.Element;
+             
+            var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
+            var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
 
-            var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), element.Width, element.Height);
+            var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), width, height);
 
             ((TransformGroup)(element.RenderTransform)).Children[2] = (new TranslateTransform(screenLocation.X, screenLocation.Y));
 
@@ -1920,12 +1924,21 @@ namespace IRI.Jab.MapViewer
 
             element.Opacity = specialPointLayer.VisualParameters.Opacity;
 
-            var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), element.Width, element.Height);
+            var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
+            var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
 
-            //element.RenderTransformOrigin = new Point(.5, .5);
-            var tempPoint = item.AncherFunction(new Point(0, 0), element.Width, element.Height);
+            var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), width, height);
 
-            element.RenderTransformOrigin = new Point(-tempPoint.X / element.Width, -tempPoint.Y / element.Height);
+            if (height != 0 && width != 0)
+            {
+                var tempPoint = item.AncherFunction(new Point(0, 0), width, height);
+
+                element.RenderTransformOrigin = new Point(-tempPoint.X / width, -tempPoint.Y / height);
+            }
+            else
+            {
+                element.RenderTransformOrigin = new Point(0, 0);
+            }
 
             var scaleTransform = ((TransformGroup)(element.RenderTransform)).Children.First();
 
@@ -1940,14 +1953,27 @@ namespace IRI.Jab.MapViewer
             //What about other types: RightClickOption, GridAndGraticule
             if (specialPointLayer.Type.HasFlag(LayerType.MoveableItem))
             {
-                element.Tag = new LayerTag(this.MapScale) { Layer = specialPointLayer, IsTiled = false, LayerType = specialPointLayer.Type };
+                element.Tag = new LayerTag(this.MapScale)
+                {
+                    Layer = specialPointLayer,
+                    IsTiled = false,
+                    LayerType = specialPointLayer.Type,
+                    // in the case specialPointLayer is used in DrawingItemLayer to handle proper remove of element from canvas
+                    AncestorLayerId = specialPointLayer.ParentLayerId,
+                };
 
                 element.MouseLeftButtonDown -= Element_MouseDownForMoveableItem;
                 element.MouseLeftButtonDown += Element_MouseDownForMoveableItem;
             }
             else if (specialPointLayer.Type.HasFlag(LayerType.Complex) || specialPointLayer.Type.HasFlag(LayerType.EditableItem))
             {
-                element.Tag = new LayerTag(this.MapScale) { Layer = specialPointLayer, IsTiled = false, LayerType = specialPointLayer.Type };
+                element.Tag = new LayerTag(this.MapScale)
+                {
+                    Layer = specialPointLayer,
+                    IsTiled = false,
+                    LayerType = specialPointLayer.Type,
+                    AncestorLayerId = specialPointLayer.ParentLayerId
+                };
             }
             else
             {
@@ -2076,10 +2102,7 @@ namespace IRI.Jab.MapViewer
                 if (tile.ZoomLevel != CurrentZoomLevel ||
                     //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType ||*/ !layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
                     (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
-                {
-                    //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
-                }
 
                 //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
@@ -2091,10 +2114,7 @@ namespace IRI.Jab.MapViewer
                 if (tile.ZoomLevel != CurrentZoomLevel ||
                      //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType || */!layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
                      (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
-                {
-                    //Debug.Print($"TileServiceLayer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
                     return;
-                }
 
                 var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
 
@@ -2201,10 +2221,7 @@ namespace IRI.Jab.MapViewer
                         continue;
 
                     if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
-                    {
-                        //Debug.Print("Not in `CurrentTileInfos` [@RefreshTiles(TileInfo tile)]");
                         return;
-                    }
 
                     if (item.Rendering != RenderingApproach.Tiled)
                         continue;
@@ -2310,11 +2327,7 @@ namespace IRI.Jab.MapViewer
                     continue;
 
                 if (MapScale != mapScale)
-                {
-                    //Debug.Print("Zoom Level Conflict! [@Refresh foreach loop]");
-
                     return;
-                }
 
                 if (item.Rendering == RenderingApproach.Tiled)
                     continue;
@@ -3004,209 +3017,45 @@ namespace IRI.Jab.MapViewer
         #endregion
 
 
-        #region SelectPoint
-
-        //public void SelectPoint()
-        //{
-        //    ResetMapViewEvents();
-
-        //    this.SetCursor(Cursors.Cross);
-
-        //    this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
-
-        //    this.mapView.MouseUp += new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
-        //}
-
-        //public void ReleaseSelectPoint()
-        //{
-        //    //this.SetCursor(Cursors.Arrow);
-        //    this.SetCursor(CursorSettings[_currentMouseAction]);
-
-        //    this.mapView.MouseUp -= new MouseButtonEventHandler(mapView_MouseUpForSelectPoint);
-        //}
-
-        //private void mapView_MouseUpForSelectPoint(object sender, MouseButtonEventArgs e)
-        //{
-        //    Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
-
-        //    Point point = Mouse.GetPosition(this.mapView);
-
-        //    //if (this.OnPointSelected != null)
-        //    //{
-        //    //    this.OnPointSelected(null, new Common.PointEventArgs(ScreenToGeodetic(point)));
-        //    //}
-        //    this.OnPointSelected.SafeInvoke(null, new PointEventArgs(ScreenToGeodetic(point)));
-        //}
-
-        public bool itWasPanningWhileSelectThePoint { get; set; }
-
-        CancellationTokenSource selectPointCancelationToken;
-
-        private Task<sb.Point> SelectThePoint()
-        {
-            selectPointCancelationToken = new CancellationTokenSource();
-
-            var tcs = new TaskCompletionSource<sb.Point>();
-
-            ResetMapViewEvents();
-
-            this.SetCursor(Cursors.Cross);
-
-            MouseButtonEventHandler action = null;
-
-            action = (sender, e) =>
-              {
-                  //this.mapView.MouseUp -= action;
-
-                  //this.SetCursor(CursorSettings[_currentMouseAction]);
-
-                  //tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
-
-                  if (e.ChangedButton != MouseButton.Left)
-                      return;
-
-                  this.prevMouseLocation = e.GetPosition(this.mapView);
-
-                  if (itWasPanningWhileSelectThePoint)
-                  {
-                      this.ResetMapViewEvents();
-
-                      this.Refresh();
-
-                      this.SetCursor(Cursors.Cross);
-
-                      this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
-                      this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
-
-                      this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
-                      this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
-
-                      this.mapView.MouseUp -= action;
-                      this.mapView.MouseUp += action;
-
-                      itWasPanningWhileSelectThePoint = false;
-
-                      return;
-                  }
-                  else
-                  {
-                      this.mapView.MouseUp -= action;
-
-                      this.SetCursor(CursorSettings[_currentMouseAction]);
-
-                      tcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
-                  }
-              };
-
-            this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
-            this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
-
-            this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
-            this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
-
-            this.mapView.MouseUp -= action;
-            this.mapView.MouseUp += action;
-
-            selectPointCancelationToken.Token.Register(() =>
-            {
-                tcs.TrySetCanceled();
-
-                this.SetCursor(CursorSettings[_currentMouseAction]);
-
-                tcs = null;
-
-            }, useSynchronizationContext: false);
-
-
-            return tcs.Task;
-        }
-
-        public async Task<Response<sb.Point>> SelectPointAsync()
-        {
-            try
-            {
-                if (selectPointCancelationToken != null)
-                {
-                    selectPointCancelationToken.Cancel();
-                }
-
-                var result = await SelectThePoint();
-
-                return new Response<sb.Point>() { Result = result };
-            }
-            catch (TaskCanceledException)
-            {
-                return new Response<sb.Point>() { IsCanceled = true };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        double _knownAsPanThreshold = 3;
-
-        private void MapView_MouseMoveSelectThePoint(object sender, MouseEventArgs e)
-        {
-            Point currentMouseLocation = e.GetPosition(this.mapView);
-
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                double xOffset = currentMouseLocation.X - this.prevMouseLocation.X;
-
-                double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
-
-                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
-                {
-                    this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
-
-                    this.panTransform.Y += yOffset * 1.0 / this.zoomTransform.ScaleY;
-
-                    this.prevMouseLocation = currentMouseLocation;
-
-                    this.panTransformForPoints.X += xOffset;
-
-                    this.panTransformForPoints.Y += yOffset;
-
-                    UpdateTileInfos();
-
-                    this.itWasPanningWhileSelectThePoint = true;
-                }
-                else { }
-            }
-            else
-            {
-                //var mapLocation = ScreenToMap(currentMouseLocation);
-                //this.drawingLayer.UpdateLastVertexLocation(mapLocation.AsPoint());
-                //onMoveForDrawAction?.Invoke(mapLocation);
-            }
-        }
-
-        private void MapView_MouseDownForPanWhileSelectThePoint(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton != MouseButton.Left)
-                return;
-
-            e.Handled = true;
-
-            itWasPanningWhileSelectThePoint = false;
-
-            this.prevMouseLocation = e.GetPosition(this.mapView);
-        }
-
-
-
-
-
-        #endregion
-
-
         #region Print
 
         public void Print()
         {
             //IRI.Jab.Common.Helpers.PrintHelper.Print(this.mapView);
             IRI.Jab.Common.Helpers.PrintHelper.Print(this);
+        }
+
+        public async Task<List<DrawingVisual>> GetAsDrawingVisual(sb.BoundingBox boundingBox, int width, int height)
+        {
+            // print all layers in rectangle
+            var layers = this._layerManager.GetOrderedLayers();
+
+            List<DrawingVisual> visuals = new List<DrawingVisual>();
+
+            foreach (var item in layers)
+            {
+                if (item.VisualParameters.Visibility != Visibility.Visible)
+                    continue;
+
+                switch (item)
+                {
+                    case VectorLayer vectorLayer:
+                        visuals.Add(await vectorLayer.AsDrawingVisual(boundingBox, width, height, this.MapScale));
+                        break;
+
+                    case DrawingLayer drawingLayer:
+                        visuals.Add(drawingLayer.AsDrawingVisual(boundingBox, width, height, this.MapScale));
+                        break;
+
+                    case FeatureLayer featureLayer:
+                    default:
+                        break;
+                }
+            }
+
+            visuals = visuals.Where(v => v != null).ToList();
+
+            return visuals;
         }
 
         #endregion
@@ -3845,7 +3694,7 @@ namespace IRI.Jab.MapViewer
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        throw;
                     }
                 }
 
@@ -4628,7 +4477,7 @@ namespace IRI.Jab.MapViewer
 
             this.drawMode = mode;
 
-            if (this.viewTransform == null || drawMode == DrawMode.Rectange || drawMode == DrawMode.Freehand)
+            if (this.viewTransform == null || drawMode == DrawMode.Rectangle || drawMode == DrawMode.Freehand)
                 drawingTcs.TrySetCanceled();
 
             ResetMapViewEvents();
@@ -4686,17 +4535,11 @@ namespace IRI.Jab.MapViewer
         {
             try
             {
-                //if (drawingCancellationToken != null)
-                //{
-                //    drawingCancellationToken.Cancel();
-                //}
                 CancelAsyncMapInteractions();
 
                 this.Status = MapStatus.Drawing;
 
                 options = options ?? EditableFeatureLayerOptions.CreateDefault();
-
-                //options.IsNewDrawing = true;
 
                 var result = await GetDrawing(mode, options, display);
 
@@ -4710,8 +4553,6 @@ namespace IRI.Jab.MapViewer
                 {
                     return new Response<sb.Geometry<sb.Point>>();
                 }
-
-
             }
             catch (TaskCanceledException)
             {
@@ -4734,7 +4575,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Pan();
 
-                throw ex;
+                throw;
             }
             finally
             {
@@ -4753,6 +4594,196 @@ namespace IRI.Jab.MapViewer
             }
         }
 
+
+
+        #endregion
+
+
+        #region SelectPoint
+
+
+        double _knownAsPanThreshold = 3;
+
+        public bool itWasPanningWhileSelectThePoint { get; set; }
+
+        CancellationTokenSource selectPointCancelationToken;
+
+        /// <summary>
+        /// Returns the point selected by the user in WGS84
+        /// </summary>
+        /// <returns></returns>
+        private Task<sb.Point> SelectThePoint()
+        {
+            var selectPointTcs = new TaskCompletionSource<sb.Point>();
+
+            selectPointCancelationToken = new CancellationTokenSource();
+
+            ResetMapViewEvents();
+
+            this.SetCursor(Cursors.Cross);
+
+            MouseButtonEventHandler action = null;
+
+            action = (sender, e) =>
+            {
+                if (e.ChangedButton != MouseButton.Left)
+                    return;
+
+                e.Handled = true;
+
+                this.prevMouseLocation = e.GetPosition(this.mapView);
+
+                if (itWasPanningWhileSelectThePoint)
+                {
+                    this.ResetMapViewEvents();
+
+                    this.Refresh();
+
+                    this.SetCursor(Cursors.Cross);
+
+                    this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+                    this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
+
+                    this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+                    this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
+
+                    this.mapView.MouseUp -= action;
+                    this.mapView.MouseUp += action;
+
+                    itWasPanningWhileSelectThePoint = false;
+
+                    return;
+                }
+                else
+                {
+                    this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+                    this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+                    this.mapView.MouseUp -= action;
+
+                    this.SetCursor(CursorSettings[_currentMouseAction]);
+
+                    selectPointTcs.SetResult(ScreenToGeodetic(Mouse.GetPosition(this.mapView)).AsPoint());
+                }
+            };
+
+            this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+            this.mapView.MouseMove += MapView_MouseMoveSelectThePoint;
+
+            this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+            this.mapView.MouseDown += MapView_MouseDownForPanWhileSelectThePoint;
+
+            this.mapView.MouseUp -= action;
+            this.mapView.MouseUp += action;
+
+            selectPointCancelationToken.Token.Register(() =>
+            {
+                selectPointTcs.TrySetCanceled();
+
+                this.SetCursor(CursorSettings[_currentMouseAction]);
+
+                this.mapView.MouseMove -= MapView_MouseMoveSelectThePoint;
+                this.mapView.MouseDown -= MapView_MouseDownForPanWhileSelectThePoint;
+                this.mapView.MouseUp -= action;
+
+                selectPointTcs = null;
+
+                selectPointCancelationToken = null;
+
+            }, useSynchronizationContext: false);
+
+            return selectPointTcs.Task;
+        }
+
+        /// <summary>
+        /// Returns the point selected by the user in WGS84
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Response<sb.Point>> SelectPointAsync()
+        {
+            try
+            {
+                if (selectPointCancelationToken != null)
+                {
+                    selectPointCancelationToken.Cancel();
+                }
+
+                var result = await SelectThePoint();
+
+                return new Response<sb.Point>() { Result = result };
+            }
+            catch (TaskCanceledException)
+            {
+                if (selectPointCancelationToken == null)
+                {
+                    this.Status = MapStatus.Idle;
+
+                    this.Pan();
+                }
+                return new Response<sb.Point>() { IsCanceled = true };
+            }
+            catch (Exception ex)
+            {
+                this.Status = MapStatus.Idle;
+
+                selectPointCancelationToken = null;
+
+                this.Pan();
+
+                throw;
+            }
+            finally
+            {
+                this.Pan();
+            }
+        }
+
+        private void MapView_MouseDownForPanWhileSelectThePoint(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != MouseButton.Left)
+                return;
+
+            e.Handled = true;
+
+            itWasPanningWhileSelectThePoint = false;
+
+            this.prevMouseLocation = e.GetPosition(this.mapView);
+        }
+
+        private void MapView_MouseMoveSelectThePoint(object sender, MouseEventArgs e)
+        {
+            Point currentMouseLocation = e.GetPosition(this.mapView);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                double xOffset = currentMouseLocation.X - this.prevMouseLocation.X;
+
+                double yOffset = currentMouseLocation.Y - this.prevMouseLocation.Y;
+
+                if (Math.Abs(xOffset) > _knownAsPanThreshold || Math.Abs(yOffset) > _knownAsPanThreshold)
+                {
+                    this.panTransform.X += xOffset * 1.0 / this.zoomTransform.ScaleX;
+
+                    this.panTransform.Y += yOffset * 1.0 / this.zoomTransform.ScaleY;
+
+                    this.prevMouseLocation = currentMouseLocation;
+
+                    this.panTransformForPoints.X += xOffset;
+
+                    this.panTransformForPoints.Y += yOffset;
+
+                    UpdateTileInfos();
+
+                    this.itWasPanningWhileSelectThePoint = true;
+                }
+                else { }
+            }
+            else
+            {
+                //var mapLocation = ScreenToMap(currentMouseLocation);
+                //this.drawingLayer.UpdateLastVertexLocation(mapLocation.AsPoint());
+                //onMoveForDrawAction?.Invoke(mapLocation);
+            }
+        }
 
 
         #endregion
@@ -4790,6 +4821,7 @@ namespace IRI.Jab.MapViewer
 
         #endregion
 
+
         #region Identify
 
 
@@ -4817,6 +4849,9 @@ namespace IRI.Jab.MapViewer
                     continue;
 
                 if (!layer.IsSearchable)
+                    continue;
+
+                if (layer.VisualParameters.Visibility != Visibility.Visible)
                     continue;
 
                 var features = layer.DataSource.GetAsFeatureSetOfPoint(geometryBoundary);
@@ -5010,7 +5045,7 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
-                throw ex;
+                throw;
             }
         }
 
@@ -5189,7 +5224,7 @@ namespace IRI.Jab.MapViewer
             {
                 this.Status = MapStatus.Idle;
 
-                throw ex;
+                throw;
             }
         }
 
@@ -5319,7 +5354,7 @@ namespace IRI.Jab.MapViewer
 
                 this.Status = MapStatus.Idle;
 
-                throw ex;
+                throw;
             }
         }
 

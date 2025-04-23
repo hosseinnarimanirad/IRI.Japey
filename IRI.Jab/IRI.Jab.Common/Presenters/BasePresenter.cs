@@ -107,6 +107,7 @@ namespace IRI.Jab.Common.Presenter
             //this.RequestShowMessage = message => presenter.ShowMessage(message);
         }
 
+
         //public async Task<bool?> RequestYesNoDialog<T>(string message, string title)
         //{
         //    return await DialogService?.ShowYesNoDialogAsync<T>(message, title);

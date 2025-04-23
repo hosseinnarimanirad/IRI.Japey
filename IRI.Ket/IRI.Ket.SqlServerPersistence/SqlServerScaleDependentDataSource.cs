@@ -119,7 +119,7 @@ namespace IRI.Ket.Persistence.DataSources
                 table.Rows.Add(row);
             }
 
-            infra.InsertTable(this._pyramidParameters.ConnectionString, table, tableName, false);
+            infra.InsertTable(this._pyramidParameters.ConnectionString, table, "dbo", tableName, false, false);
         }
 
         private DataColumn GetSpatialColumn(string name)

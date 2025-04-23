@@ -1,5 +1,7 @@
 ﻿
+using IRI.Msh.Common.Model.Google;
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -47,7 +49,13 @@ namespace IRI.Msh.Common.Model.GeoJson
 
         public static GeoJsonPoint Create(double longitude, double latitude)
         {
-            return new GeoJsonPoint() { Coordinates = new double[] { longitude, latitude }, Type = GeoJson.Point };
+            return new GeoJsonPoint() { Coordinates = [longitude, latitude], Type = GeoJson.Point };
+        }
+
+        public Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true)
+        {
+            return this.Parse(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                        .Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator);                          
         }
     }
 

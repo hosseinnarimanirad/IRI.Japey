@@ -5,7 +5,7 @@ using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Text;
 using IRI.Sta.ShapefileFormat;
 using IRI.Msh.Common.Mapping;
-using System; 
+using System;
 
 namespace IRI.Ket.Persistence.DataSources;
 
@@ -85,7 +85,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
     // Get as FeatureSet of Point
     public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
     {
-        return new FeatureSet<Point>(GetGeometryAwares(geometry?.NeutralizeGenericPoint<TPoint>())
+        return new FeatureSet<Point>(GetGeometryAwares(geometry == null ? null : geometry.NeutralizeGenericPoint<TPoint>())
                 .Select(ToFeatureMappingFunc)
                 .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
                 {

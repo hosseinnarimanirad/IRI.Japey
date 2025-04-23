@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" Background="Transparent"
-             xmlns:local="clr-namespace:IRI.Jab.Common.View.MapMarkers" x:Name="root" Width="80" Height="30" MinWidth="40"
+             xmlns:local="clr-namespace:IRI.Jab.Common.View.MapMarkers" x:Name="root" Width="80" Height="30" MinWidth="40" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib" Canvas.ZIndex="1000000">
     
     <UserControl.Resources>
@@ -72,7 +72,6 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!--<Ellipse Width="22" Height="22" Fill="White"  />-->
         
         <Border CornerRadius="5"  BorderBrush="White" BorderThickness="1" Grid.ColumnSpan="2" Background="{DynamicResource MahApps.Brushes.Highlight}">
             <Border.Effect>
@@ -80,13 +79,8 @@
             </Border.Effect>
         </Border>
         <Path Data="F1 M 14,0L0,0L7,10 Z" Fill="{DynamicResource MahApps.Brushes.Highlight}" HorizontalAlignment="Center" Margin="33,27.561,33,-7.555" Grid.RowSpan="2"/>
-        <!--</StackPanel>-->
 
-
-
-        <!--<Border Width="10" Height="10" Margin="2" Opacity=".8" Canvas.Top="15" Canvas.Right="0">-->
         <TextBlock Grid.Column="0" x:Name="labelBox" TextAlignment="Center" FontSize="11" Margin="0" Height="Auto"                       
                        HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=root, Path=LabelValue}" Foreground="White" TextWrapping="Wrap"/>
-        <!--</Border>-->
     </Grid>
 </UserControl>

@@ -10,7 +10,6 @@ namespace IRI.Jab.Common
 {
     public class SpecialPointLayer : BaseLayer
     {
-
         private ObservableCollection<Locateable> _items;
 
         public ObservableCollection<Locateable> Items
@@ -72,6 +71,7 @@ namespace IRI.Jab.Common
         public override LayerType Type
         {
             get { return _type; }
+
             protected set
             {
                 if (value.HasFlag(LayerType.Complex) ||

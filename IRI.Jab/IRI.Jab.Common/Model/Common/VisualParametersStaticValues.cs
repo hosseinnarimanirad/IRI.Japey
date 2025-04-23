@@ -24,6 +24,16 @@ namespace IRI.Jab.Common
             return new VisualParameters(null, new SolidColorBrush(stroke), strokeThickness, opacity);
         }
 
+        public static VisualParameters GetFill(string? hexFill, double opacity = 1)
+        {            
+            return new VisualParameters(new SolidColorBrush(ColorHelper.ToWpfColor(hexFill)), null, 0, opacity);
+        }
+
+        public static VisualParameters GetStroke(string? hexStroke, double strokeThickness = 1, double opacity = 1)
+        {
+            return new VisualParameters(null, new SolidColorBrush(ColorHelper.ToWpfColor(hexStroke)), strokeThickness, opacity);
+        }
+
         public static VisualParameters Get(Color fill, Color stroke, double strokeThickness, double opacity = 1)
         {
             return new VisualParameters(new SolidColorBrush(fill), new SolidColorBrush(stroke), strokeThickness, opacity);

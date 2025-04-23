@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Model;
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace IRI.Ket.Persistence.DataSources;
 public interface IVectorDataSource : IDataSource
 {
     GeometryType? GeometryType { get; }
+
+    List<Field>? Fields { get; set; }
 
 
     // Get Geometries *********************************************************

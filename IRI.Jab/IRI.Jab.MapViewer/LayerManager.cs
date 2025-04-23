@@ -115,58 +115,16 @@ namespace IRI.Jab.MapViewer
 
         internal void Remove(LayerType type, bool forceRemove)
         {
-            Clear(layer => layer.Type.HasFlag(type), forceRemove);
-
-            //lock (allLayers)
-            //{
-            //    lock (CurrentLayers)
-            //    {
-            //        this.allLayers.RemoveAll(i => (forceRemove || i.CanUserDelete) && i.Type.HasFlag(type));
-
-            //        for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-            //        {
-            //            if (CurrentLayers[i].Type.HasFlag(type))
-            //            {
-            //                this.CurrentLayers.Remove(CurrentLayers[i]);
-            //            }
-            //        }
-            //    }
-            //}
+            Clear(layer => layer.Type.HasFlag(type), forceRemove); 
         }
 
         public void Remove(Predicate<ILayer> rule, bool forceRemove)
         {
-            Clear(rule, forceRemove);
-
-            //this.allLayers.RemoveAll(rule);
-
-
-            //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-            //{
-            //    if (rule(CurrentLayers[i]))
-            //    {
-            //        this.CurrentLayers.Remove(CurrentLayers[i]);
-            //    }
-            //}
+            Clear(rule, forceRemove); 
         }
 
         public void RemoveTile(string providerFullName, /*TileType type, */bool forceRemove)
         {
-            //for (int i = CurrentLayers.Count - 1; i >= 0; i--)
-            //{
-            //    if (CurrentLayers[i] is TileServiceLayer)
-            //    {
-            //        var layer = CurrentLayers[i] as TileServiceLayer;
-
-            //        if (layer.Provider == provider && layer.TileType == type)
-            //        {
-            //            this.CurrentLayers.Remove(layer);
-
-            //            //map.Remove(layer);
-            //        }
-            //    }
-            //}
-
             Clear(layer => (layer as TileServiceLayer)?.ProviderFullName?.ToUpper() == providerFullName?.ToUpper() /*&& (layer as TileServiceLayer)?.TileType == type*/, forceRemove);
         }
 
@@ -195,7 +153,7 @@ namespace IRI.Jab.MapViewer
             }
         }
 
-        private List<ILayer> GetOrderedLayers()
+        public List<ILayer> GetOrderedLayers()
         {
             return allLayers.OrderBy(i => i.Type.HasFlag(LayerType.RightClickOption))
                                          .ThenBy(i => i.Type.HasFlag(LayerType.MoveableItem))

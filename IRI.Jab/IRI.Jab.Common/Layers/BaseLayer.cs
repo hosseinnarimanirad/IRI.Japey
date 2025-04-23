@@ -24,6 +24,8 @@ namespace IRI.Jab.Common
             this.ParentLayerId = Guid.Empty;
         }
 
+        public int AuxilaryId { get; set; }
+
         public abstract LayerType Type { get; protected set; }
 
         public abstract BoundingBox Extent { get; protected set; }
@@ -177,8 +179,8 @@ namespace IRI.Jab.Common
             }
         }
 
-        private List<ILegendCommand> _commands;
-        public List<ILegendCommand> Commands
+        private List<ILegendCommand>? _commands;
+        public List<ILegendCommand>? Commands
         {
             get { return _commands; }
             set

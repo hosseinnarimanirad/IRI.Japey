@@ -11,6 +11,7 @@ using IRI.Msh.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Msh.Common.Model;
 
 
 namespace IRI.Jab.Common.Model.Map
@@ -36,6 +37,7 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
+        public List<Field>? Fields { get; set; }
 
         private ObservableCollection<TGeometryAware> _highlightedFeatures = new ObservableCollection<TGeometryAware>();
         public ObservableCollection<TGeometryAware> HighlightedFeatures

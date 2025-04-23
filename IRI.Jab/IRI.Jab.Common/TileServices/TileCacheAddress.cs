@@ -59,7 +59,7 @@ namespace IRI.Jab.Common.TileServices
 
         private Func<TileInfo, string> _getFileName;
 
-        public TileCacheAddress(string provider, string subTitle, Func<TileInfo, string> getFileName = null)
+        public TileCacheAddress(string provider, string subTitle, Func<TileInfo, string>? getFileName)
         {
             if (getFileName == null)
             {

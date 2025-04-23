@@ -99,7 +99,7 @@ namespace IRI.Jab.Common.Model.Legend
         }
 
 
-        public static Func<MapPresenter, ILayer, LegendCommand> CreateZoomToExtentCommandFunc = (presenter, layer) => CreateZoomToExtentCommand(presenter, layer);
+        public static Func<MapPresenter, ILayer, LegendCommand> CreateZoomToExtentCommandFunc = CreateZoomToExtentCommand;
         public static LegendCommand CreateZoomToExtentCommand(MapPresenter map, ILayer layer)
         {
             var result = new LegendCommand()
@@ -121,7 +121,7 @@ namespace IRI.Jab.Common.Model.Legend
         }
 
 
-        public static Func<MapPresenter, ILayer, ILegendCommand> CreateRemoveLayerFunc = (presenter, layer) => CreateRemoveLayer(presenter, layer);
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateRemoveLayerFunc = CreateRemoveLayer;
         public static ILegendCommand CreateRemoveLayer(MapPresenter map, ILayer layer)
         {
             var result = new LegendCommand()
@@ -166,10 +166,10 @@ namespace IRI.Jab.Common.Model.Legend
             {
                 if (layer == null || map == null)
                     return;
-                 
-                var features = (layer as VectorLayer).GetFeatures<T>();
-                 
-                var newLayer = new Model.Map.SelectedLayer<T>(layer);
+
+                var features = layer.GetFeatures<T>();
+
+                var newLayer = new Map.SelectedLayer<T>(layer) { Fields = layer.GetFields() };
 
                 //newLayer.RequestSave = l =>
                 //{
@@ -186,7 +186,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
 
 
-                map.AddSelectedLayer(newLayer); 
+                map.AddSelectedLayer(newLayer);
             });
 
             return result;
@@ -285,7 +285,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -316,7 +316,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -350,7 +350,7 @@ namespace IRI.Jab.Common.Model.Legend
                 }
                 catch (Exception ex)
                 {
-                    await map.DialogService.ShowMessageAsync(null, ex.Message, null, null);
+                    await map.DialogService.ShowMessageAsync(ex.Message, null, param);
                 }
             });
 
@@ -369,6 +369,8 @@ namespace IRI.Jab.Common.Model.Legend
                 CreateZoomToExtentCommandFunc
             };
         }
+
+       
 
         #endregion
 

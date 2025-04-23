@@ -25,6 +25,8 @@ namespace IRI.Msh.Common.Model.GeoJson
         int NumberOfGeometries();
 
         int NumberOfPoints();
+
+        Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true);
          
     }
 }

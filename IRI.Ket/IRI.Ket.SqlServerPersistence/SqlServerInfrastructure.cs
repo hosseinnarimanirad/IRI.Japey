@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Types;
-using IRI.Extensions;
+using IRI.Extensions; 
 
 namespace IRI.Ket.Persistence.Infrastructure
 {
@@ -126,7 +126,7 @@ namespace IRI.Ket.Persistence.Infrastructure
             };
         }
 
-        public void InsertTable(string connectionString, System.Data.DataTable table, string tableName, bool createTable = false)
+        public void InsertTable(string connectionString, System.Data.DataTable table, string schema, string tableName, bool resetTable, bool createTable = false)
         {
             SqlConnection connection = new SqlConnection(connectionString);
 
@@ -138,8 +138,18 @@ namespace IRI.Ket.Persistence.Infrastructure
 
                 create.ExecuteNonQuery();
             }
+            if (resetTable)
+            {
+                //DELETE FROM[tr].[Circuit]
+                //DBCC CHECKIDENT('[tr].[Circuit]', RESEED, 0);
+                SqlCommand delete = new SqlCommand(string.Format("DELETE FROM [{0}].[{1}]", schema, tableName), connection);
+                delete.ExecuteNonQuery();
+                
+                SqlCommand reseed = new SqlCommand(string.Format("DBCC CHECKIDENT ('[{0}].[{1}]', RESEED, 0)", schema, tableName), connection);
+                reseed.ExecuteNonQuery();
+            }
 
-            BulkInsertDataTable(connection, tableName, table);
+            BulkInsertDataTable(connection, schema, tableName, table);
 
             connection.Close();
         }
@@ -202,28 +212,26 @@ namespace IRI.Ket.Persistence.Infrastructure
             connection.Close();
         }
 
-        private static void BulkInsertDataTable(SqlConnection connection, string tableName, System.Data.DataTable table)
+        private static void BulkInsertDataTable(SqlConnection connection, string schema, string tableName, System.Data.DataTable table)
         {
             //using (SqlConnection connection = new SqlConnection(connectionString))
             //{
-            SqlBulkCopy bulkCopy =
-                new SqlBulkCopy
-                (
-                connection,
-                SqlBulkCopyOptions.TableLock |
-                SqlBulkCopyOptions.FireTriggers |
-                SqlBulkCopyOptions.UseInternalTransaction,
-                null
-                );
+            using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.TableLock |
+                                                                        SqlBulkCopyOptions.FireTriggers |
+                                                                        SqlBulkCopyOptions.UseInternalTransaction, null))
+            {
 
-            bulkCopy.DestinationTableName = tableName;
+                // Optional: Map columns if names don't match
+                foreach (DataColumn column in table.Columns)
+                {
+                    bulkCopy.ColumnMappings.Add(column.ColumnName, column.ColumnName);
+                }
+                bulkCopy.BatchSize = 5000;
+                bulkCopy.BulkCopyTimeout = 0;
+                bulkCopy.DestinationTableName = $"{schema}.[{tableName}]";
 
-            //connection.Open();
-
-            bulkCopy.WriteToServer(table);
-
-            //connection.Close();
-            //}
+                bulkCopy.WriteToServer(table);
+            }
         }
 
         public static void ExecuteNonQuery(string commandString, string connectionString)
@@ -373,7 +381,7 @@ namespace IRI.Ket.Persistence.Infrastructure
 
                 SqlDataReader reader = command.ExecuteReader();
 
-                if (reader.FieldCount!=updateFieldFuncs.Count)
+                if (reader.FieldCount != updateFieldFuncs.Count)
                 {
                     throw new NotImplementedException("fieldCount must be equal to update functions");
                 }
@@ -421,5 +429,81 @@ namespace IRI.Ket.Persistence.Infrastructure
             return result;
         }
 
+        public static async Task<List<Msh.Common.Model.Field>> GetTableSchema(string connectionString, string tableName)
+        {
+            var fields = new List<Msh.Common.Model.Field>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Get columns schema
+                var columns = await connection.GetSchemaAsync("Columns", new[] { null, null, tableName });
+
+                foreach (System.Data.DataRow row in columns.Rows)
+                {
+                    fields.Add(new Msh.Common.Model.Field()
+                    {
+                        Alias = string.Empty,
+                        Length = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value ? 0 : int.Parse(row["CHARACTER_MAXIMUM_LENGTH"].ToString()!),
+                        Name = row["COLUMN_NAME"].ToString(),
+                        Type = row["DATA_TYPE"].ToString()!.ToLower(),
+                        IsNullable = row["IS_NULLABLE"].ToString() == "YES",
+                        Scale = row["NUMERIC_SCALE"] == DBNull.Value ? 0 : int.Parse(row["NUMERIC_SCALE"].ToString()!),
+                        Precision = row["NUMERIC_PRECISION"] == DBNull.Value ? 0 : int.Parse(row["NUMERIC_PRECISION"].ToString()!),
+                        DateTimePrecision = row["DATETIME_PRECISION"] == DBNull.Value ? 0 : int.Parse(row["DATETIME_PRECISION"].ToString()!)
+                    });
+                }
+            }
+
+            return fields.OrderBy(i => i.Name).ToList();
+        }
+
+
+        //private static Type GetDataType(string sqlType)
+        //{
+        //    // Map OLEDB type to friendly name
+        //    return sqlType switch
+        //    {
+        //        // 	16-bit Integer.
+        //        "smallint" => typeof(short),
+
+        //        // 	32-bit Integer.
+        //        "int" => typeof(int),
+
+        //        //	Double-precision floating-point number.
+        //        "float" => typeof(double),
+
+        //        "decimal" => typeof(decimal),
+        //        "numeric" => typeof(decimal),
+
+        //        "date" => typeof(DateOnly),
+
+        //        "bit" => typeof(bool),
+
+        //        "tinyint" => typeof(byte),
+
+        //        // 	Globally Unique Identifier.
+        //        "uniqueidentifier" => typeof(Guid),
+
+        //        // 	Binary Large Object.
+        //        "binary" => typeof(byte[]),
+        //        "varbinary" => typeof(byte[]),
+
+        //        // 	Character string.
+        //        "char" => typeof(string),
+        //        "nchar" => typeof(string),
+        //        "varchar" => typeof(string),
+        //        "nvarchar" => typeof(string),
+
+        //        // 	Date.
+        //        "time" => typeof(TimeOnly),
+
+        //        "datetime2" => typeof(DateTime),
+        //        "datetime" => typeof(DateTime),
+
+        //        _ => typeof(object)
+        //    };
+        //}
     }
 }

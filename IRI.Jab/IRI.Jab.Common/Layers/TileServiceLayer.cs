@@ -56,13 +56,14 @@ namespace IRI.Jab.Common
         public bool IsOffline { get; set; }
 
 
-        public TileServiceLayer(TileServices.TileMapProvider mapProvider, Func<TileInfo, string> getFileName = null)
+        public TileServiceLayer(TileMapProvider mapProvider, double opacity, Func<TileInfo, string>? getFileName = null)
         {
             //this.Provider = TileServices.MapProviderType.Custom;
 
-            this._cache = new TileServices.TileCacheAddress(mapProvider.Provider.EnglishTitle, mapProvider.MapType.EnglishTitle, getFileName);
+            this._cache = new TileCacheAddress(mapProvider.Provider.EnglishTitle, mapProvider.MapType.EnglishTitle, getFileName);
 
             this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+            this.VisualParameters.Opacity = opacity;    
 
             this._mapProvider = mapProvider;
         }
@@ -163,7 +164,7 @@ namespace IRI.Jab.Common
             {
                 if (IsOffline && _mapProvider.RequireInternetConnection)
                     return GetNotFoundImage(tile);
-                 
+
                 WiseWebClient client = new WiseWebClient(3000);
 
                 // 1401.10.27
@@ -176,7 +177,7 @@ namespace IRI.Jab.Common
                 //}
 
                 client.Headers.Add(HttpRequestHeader.UserAgent, "App!");
-                 
+
                 var url = this._mapProvider.GetUrl(tile);
 
                 if (url == null)
@@ -230,7 +231,7 @@ namespace IRI.Jab.Common
             {
                 if (IsOffline && _mapProvider.RequireInternetConnection)
                     return GetNotFoundImage(tile);
-                   
+
                 var url = this._mapProvider.GetUrl(tile);
 
                 if (url == null)

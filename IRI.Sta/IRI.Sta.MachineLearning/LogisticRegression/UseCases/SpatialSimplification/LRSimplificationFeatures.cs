@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,6 +19,24 @@ public enum LRSimplificationFeatures
     CosineOfAngle = 6,
 
     // فاصله نقطه اول تا سوم
-    BaseLength = 7
+    BaseLength = 7,
+
+    // abs(x1 - x2)
+    dX12 = 10,
+    
+    // abs(x1 - x3)
+    dX13 = 11,
+    
+    // abs(x2 - x3)
+    dX23 = 12,
+
+    // abs(y1 - y2)
+    dY12 = 13,
+
+    // abs(y1 - y3)
+    dY13 = 14,
+
+    // abs(y2 - y3)
+    dY23 = 15
 }
 

@@ -3,83 +3,82 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace IRI.Msh.Algebra
+namespace IRI.Msh.Algebra;
+
+[DataContract]
+public class NumberOfElementsException : Exception
 {
-    [DataContract]
-    public class NumberOfElementsException : Exception
-    {
 
-        public NumberOfElementsException() : base("Uncorrect number of elements") { }
-        public NumberOfElementsException(string message) : base(message) { }
-        public NumberOfElementsException(string message, Exception inner) : base(message, inner) { }
-        //protected NumberOfElementsException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public NumberOfElementsException() : base("Uncorrect number of elements") { }
+    public NumberOfElementsException(string message) : base(message) { }
+    public NumberOfElementsException(string message, Exception inner) : base(message, inner) { }
+    //protected NumberOfElementsException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
+}
 
-    [DataContract]
-    public class NonSquareMatrixException : Exception
-    {
+[DataContract]
+public class NonSquareMatrixException : Exception
+{
 
-        public NonSquareMatrixException() : base("Matrix must be square") { }
-        public NonSquareMatrixException(string message) : base(message) { }
-        public NonSquareMatrixException(string message, Exception inner) : base(message, inner) { }
-        //protected NonSquareMatrixException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public NonSquareMatrixException() : base("Matrix must be square") { }
+    public NonSquareMatrixException(string message) : base(message) { }
+    public NonSquareMatrixException(string message, Exception inner) : base(message, inner) { }
+    //protected NonSquareMatrixException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
+}
 
-    [DataContract]
-    public class OutOfBoundIndexException : Exception
-    {
+[DataContract]
+public class OutOfBoundIndexException : Exception
+{
 
-        public OutOfBoundIndexException() : base("Index was out of bound") { }
-        public OutOfBoundIndexException(string message) : base(message) { }
-        public OutOfBoundIndexException(string message, Exception inner) : base(message, inner) { }
-        //protected OutOfBoundIndexException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public OutOfBoundIndexException() : base("Index was out of bound") { }
+    public OutOfBoundIndexException(string message) : base(message) { }
+    public OutOfBoundIndexException(string message, Exception inner) : base(message, inner) { }
+    //protected OutOfBoundIndexException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
+}
 
-    [DataContract]
-    public class IllegalInputException : Exception
-    {
+[DataContract]
+public class IllegalInputException : Exception
+{
 
-        public IllegalInputException() : base("Some input values are illegal") { }
-        public IllegalInputException(string message) : base(message) { }
-        public IllegalInputException(string message, Exception inner) : base(message, inner) { }
-        //protected IllegalInputException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public IllegalInputException() : base("Some input values are illegal") { }
+    public IllegalInputException(string message) : base(message) { }
+    public IllegalInputException(string message, Exception inner) : base(message, inner) { }
+    //protected IllegalInputException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
+}
 
-    [DataContract]
-    public class UnequalMatrixSizeException : Exception
-    {
+[DataContract]
+public class UnequalMatrixSizeException : Exception
+{
 
-        public UnequalMatrixSizeException() : base("Matrixes must be the same size") { }
-        public UnequalMatrixSizeException(string message) : base(message) { }
-        public UnequalMatrixSizeException(string message, Exception inner) : base(message, inner) { }
-        //protected UnequalMatrixSizeException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public UnequalMatrixSizeException() : base("Matrixes must be the same size") { }
+    public UnequalMatrixSizeException(string message) : base(message) { }
+    public UnequalMatrixSizeException(string message, Exception inner) : base(message, inner) { }
+    //protected UnequalMatrixSizeException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
+}
 
-    [DataContract]
-    public class ImproperMatrixSizeForMultiplicationException : Exception
-    {
+[DataContract]
+public class ImproperMatrixSizeForMultiplicationException : Exception
+{
 
-        public ImproperMatrixSizeForMultiplicationException() : base("Columns of the first Matrix must be equal with rows of second Matrix,in number") { }
-        public ImproperMatrixSizeForMultiplicationException(string message) : base(message) { }
-        public ImproperMatrixSizeForMultiplicationException(string message, Exception inner) : base(message, inner) { }
-        //protected ImproperMatrixSizeForMultiplicationException(
-        //  SerializationInfo info,
-        //  StreamingContext context)
-        //    : base(info, context) { }
-    }
+    public ImproperMatrixSizeForMultiplicationException() : base("Columns of the first Matrix must be equal with rows of second Matrix,in number") { }
+    public ImproperMatrixSizeForMultiplicationException(string message) : base(message) { }
+    public ImproperMatrixSizeForMultiplicationException(string message, Exception inner) : base(message, inner) { }
+    //protected ImproperMatrixSizeForMultiplicationException(
+    //  SerializationInfo info,
+    //  StreamingContext context)
+    //    : base(info, context) { }
 }

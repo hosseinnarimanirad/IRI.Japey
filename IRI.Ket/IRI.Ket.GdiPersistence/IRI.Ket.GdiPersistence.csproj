@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\IRI.Ket.Common\IRI.Ket.Common.csproj" />
+    <ProjectReference Include="..\IRI.Ket.GdiPlus\IRI.Ket.GdiPlus.csproj" />
     <ProjectReference Include="..\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" /> 
   </ItemGroup>
 

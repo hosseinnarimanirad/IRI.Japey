@@ -51,9 +51,9 @@ namespace IRI.Jab.Common.Service.Dialog
         // ********************************************************************
         //                          Message Dialog
         // ********************************************************************
-        Task ShowMessageAsync<T>(string message, string pathMarkup, string title);
+        Task ShowMessageAsync<T>(string message, string? title, string? pathMarkup);
 
-        Task ShowMessageAsync(string pathMarkup, string message, string title, object ownerWindow);
+        Task ShowMessageAsync(string message, string? title, object ownerWindow, string? pathMarkup = null);
 
 
         // ********************************************************************

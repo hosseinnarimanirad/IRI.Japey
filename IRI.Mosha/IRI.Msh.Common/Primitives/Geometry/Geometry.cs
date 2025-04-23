@@ -9,6 +9,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace IRI.Msh.Common.Primitives;
 
@@ -866,13 +869,15 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
             case GeometryType.MultiPolygon:
+            case GeometryType.GeometryCollection:
                 return this.Geometries.Any(g => g.Intersects(boundingBox));
 
-            case GeometryType.GeometryCollection:
             case GeometryType.CircularString:
             case GeometryType.CompoundCurve:
             case GeometryType.CurvePolygon:
             default:
+                // consider handling this
+                //return false;
                 throw new NotImplementedException("Geometry > Intersects");
         }
     }
@@ -1029,6 +1034,8 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
         return simplified.TotalNumberOfPoints / totalNumberOfPoints;
     }
+
+    public double Compression(Geometry<T> simplified) => 1 - PercentageChangeInCoordinates(simplified);
 
     // 1401.03.12
     // PDD
@@ -1614,7 +1621,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return Geometries.Select(g => clone ? g.Clone() : g).ToList();
 
             case GeometryType.Polygon:
-
+                return SplitPolygon(this, clone);
 
             case GeometryType.MultiPolygon:
                 return Geometries.SelectMany(g => g.Split(clone)).ToList();
@@ -1626,6 +1633,17 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             default:
                 throw new NotImplementedException("Geometry > Split");
         }
+    }
+
+    private static List<Geometry<T>> SplitPolygon(Geometry<T> polygon, bool clone)
+    {
+        if (polygon.Type != GeometryType.Polygon)
+            throw new NotImplementedException("Geometry > SplitPolygon");
+
+        if (polygon.NumberOfGeometries == 1)
+            return new List<Geometry<T>>() { clone ? polygon.Clone() : polygon };
+
+        return polygon.Geometries.Select(g => Geometry<T>.CreatePolygonOrMultiPolygon(new List<Geometry<T>>() { clone ? g.Clone() : g }, g.Srid)).ToList();
     }
 
     public T AsPoint()
@@ -1713,6 +1731,39 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     public byte[] AsWkb()
     {
         return WkbParser.AsWkb(this);
+    }
+
+    public byte[] AsSqlServerByte()
+    {
+        //using (var ms = new MemoryStream())
+        //using (var bw = new BinaryWriter(ms))
+        //{
+        //    bw.Write(Srid);          // SRID (little-endian)
+        //    bw.Write((byte)0x01);    // Version marker
+        //    bw.Write((byte)0x0C);    // Version marker
+
+        //    // Write the actual geography bytes
+        //    var wkb = AsWkb(); 
+        //    bw.Write(wkb);
+
+        //    return ms.ToArray();
+        //}
+
+        // ************************************************************
+        //string hex = "0xE6100000010C10FA420AD60941406069CF8839A54840";
+
+        //if (hex.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+        //    hex = hex.Substring(2);
+
+        //var result = Enumerable.Range(0, hex.Length / 2)
+        //.Select(x => Convert.ToByte(hex.Substring(x * 2, 2), 16))
+        //.ToArray();
+
+        //var hex2 = "0x" + BitConverter.ToString(result).Replace("-", "");
+        // ************************************************************
+
+
+        return null;
     }
 
     public string AsWkbString()
@@ -1820,7 +1871,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public static Geometry<T> CreatePointOrLineString(List<T> points, int srid) 
+    public static Geometry<T> CreatePointOrLineString(List<T> points, int srid)
     {
         if (points.Count == 1)
         {
@@ -1832,7 +1883,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
-    public static Geometry<T> CreatePointOrLineString(int srid, params T[] points) 
+    public static Geometry<T> CreatePointOrLineString(int srid, params T[] points)
     {
         return CreatePointOrLineString(points.ToList(), srid);
     }

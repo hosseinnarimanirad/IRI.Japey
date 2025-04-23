@@ -530,7 +530,7 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                     //sample: CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type esiDb:Shell}}}"
                     _showSignUpDialogViewCommand = new RelayCommand(async param =>
                     {
-                        var model = await DialogService?.ShowUserNameSignUpDialogAsync(param);
+                        var model = await DialogService.ShowUserNameSignUpDialogAsync(param);
 
                         if (model == null)
                         {
@@ -541,11 +541,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
                         {
                             this.RequestShowSignUpDialogView?.Invoke(model);
 
-                            await DialogService?.ShowMessageAsync(null, "کاربر جدید با موفقیت اضافه شد", "پیغام", param);
+                            await DialogService.ShowMessageAsync("کاربر جدید با موفقیت اضافه شد", "پیغام", param);
                         }
                         catch (Exception ex)
                         {
-                            await DialogService?.ShowMessageAsync(null, ex.Message, "خطا", param);
+                            await DialogService.ShowMessageAsync(ex.Message, "خطا", param);
                         }
 
                     });
@@ -665,11 +665,11 @@ namespace IRI.Jab.Common.ViewModel.Dialogs
             {
                 this.RequestChangePassword?.Invoke(viewModel.Model);
 
-                await DialogService?.ShowMessageAsync(null, "رمز عبور با موفقیت تغییر یافت", "پیغام", ownerWindow);
+                await DialogService?.ShowMessageAsync("رمز عبور با موفقیت تغییر یافت", "پیغام", ownerWindow, null);
             }
             catch (Exception ex)
             {
-                await DialogService?.ShowMessageAsync(null, ex.Message, "خطا", ownerWindow);
+                await DialogService?.ShowMessageAsync(ex.Message, "خطا", ownerWindow, null);
             }
         }
 

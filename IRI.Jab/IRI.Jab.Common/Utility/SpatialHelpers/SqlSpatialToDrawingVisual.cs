@@ -223,7 +223,7 @@ namespace IRI.Jab.Common.Convertor
             if (geometries != null)
             {
                 using (DrawingContext context = result.RenderOpen())
-                {                    
+                {
                     foreach (sb.Geometry<sb.Point> item in geometries)
                     {
                         p += AddGeometry(context, item, transform, brush, pen, pointSymbol);
@@ -268,6 +268,9 @@ namespace IRI.Jab.Common.Convertor
                     break;
 
                 case sb.GeometryType.GeometryCollection:
+                    AddGeometryCollection(context, geometry, transform, brush, pen, pointSymbol);
+                    break;
+
                 case sb.GeometryType.CircularString:
                 case sb.GeometryType.CompoundCurve:
                 case sb.GeometryType.CurvePolygon:
@@ -319,6 +322,18 @@ namespace IRI.Jab.Common.Convertor
             var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<sb.Geometry<sb.Point>>() { multiPolygon }, transform);
 
             context.DrawGeometry(brush, pen, geometry);
+        }
+
+        private void AddGeometryCollection(DrawingContext context, sb.Geometry<sb.Point> multiLineString, Func<Point, Point> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+        {
+            int numberOfLineStrings = multiLineString.NumberOfGeometries;
+
+            for (int i = 0; i < numberOfLineStrings; i++)
+            {
+                var lineString = multiLineString.Geometries[i];
+
+                AddGeometry(context, lineString, transform, brush, pen, pointSymbol);
+            }
         }
 
         private void AddPoint(DrawingContext context, sb.Geometry<sb.Point> point, Func<Point, Point> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)

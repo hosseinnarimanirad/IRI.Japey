@@ -184,7 +184,7 @@ public class LogisticRegression
             }
         }
 
-        return LogisticRegressionHelper.CalculateLogisticFunction(xValues.ToArray(), Beta);
+        return LogisticRegressionHelper.CalculateLogisticFunction(xValues, Beta);
     }
 
     private Matrix ComputeTheFisherInformationMatrix_Copilot(Matrix xValues, double[] yValues)

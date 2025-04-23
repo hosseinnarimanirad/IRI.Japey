@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.OleDb;
 
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
@@ -12,7 +6,7 @@ using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Sta.PersonalGdb;
-using IRI.Sta.Common.Helpers;
+using IRI.Ket.PersonalGdbPersistence.Model;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 
@@ -53,6 +47,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     private Func<Point, Point> _onTheFlyProj;
 
+    private readonly List<GdbCodedValueDomain>? _domains;
+
+    private readonly List<GdbItemColumnInfo>? _columns;
+
     public Action<IGeometryAware<Point>>? AddAction;
 
     public Action<int>? RemoveAction;
@@ -70,7 +68,9 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         string tableDisplayName,
         string? spatialColumnName = null,
         string? labelColumnName = null,
-        Func<Point, Point> onTheFlyProj = null)
+        Func<Point, Point> onTheFlyProj = null,
+        List<GdbCodedValueDomain>? domains = null,
+        List<GdbItemColumnInfo>? columns = null)
     {
         this._mdbFileName = mdbFileName;
 
@@ -83,6 +83,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         this._labelColumnName = labelColumnName;
 
         _onTheFlyProj = onTheFlyProj;
+
+        _domains = domains;
+
+        _columns = columns;
 
         SetBoundingBoxAndSrid();
     }
@@ -168,7 +172,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
 
     public void SetBoundingBoxAndSrid()
     {
-        using (var conn = new OleDbConnection(GetConnectionString()))
+        using (var conn = new OleDbConnection(PersonalGdbInfrastructure.GetConnectionString(_mdbFileName)))
         {
             conn.Open();
 
@@ -202,17 +206,17 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         //return BoundingBox.NaN;
     }
 
-    private string GetConnectionString()
-    {
-        if (System.IO.File.Exists(_mdbFileName))
-        {
-            return $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_mdbFileName};Persist Security Info=False;";
-        }
-        else
-        {
-            return string.Empty;
-        }
-    }
+    //private string GetConnectionString()
+    //{
+    //    if (System.IO.File.Exists(_mdbFileName))
+    //    {
+    //        return $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={_mdbFileName};Persist Security Info=False;";
+    //    }
+    //    else
+    //    {
+    //        return string.Empty;
+    //    }
+    //}
 
     //protected List<Geometry<Point>> SelectGeometries(string selectQuery)
     //{
@@ -251,7 +255,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     {
         FeatureSet result = new FeatureSet() { Srid = Srid, Fields = new List<Field>(), Features = new List<Feature<Point>>() };
 
-        using (var conn = new OleDbConnection(GetConnectionString()))
+        using (var conn = new OleDbConnection(PersonalGdbInfrastructure.GetConnectionString(_mdbFileName)))
         {
             var commandString = string.IsNullOrEmpty(searchText) || string.IsNullOrEmpty(SearchColumn) ?
                 FormattableString.Invariant($"SELECT * FROM {_tableName}") :
@@ -264,6 +268,8 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                 using (var dataReader = command.ExecuteReader())
                 {
                     int geoIndex = -1;
+
+                    var schema = dataReader.GetColumnSchemaAsync();
 
                     for (int i = 0; i < dataReader.FieldCount; i++)
                     {
@@ -281,39 +287,34 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                     }
 
                     if (!dataReader.HasRows)
-                    {
                         return result;
-                    }
-
-                    //int I = 0;
 
                     if (result.Fields.All(f => f.Name != _labelColumnName))
-                    {
                         _labelColumnName = null;
-                    }
 
                     while (dataReader.Read())
                     {
                         try
                         {
-                            var dict = new Dictionary<string, object>();
+                            var dict = new Dictionary<string, object?>();
 
                             var feature = new Feature<Point>();
 
                             var esriByteGeometry = (byte[])dataReader[geoIndex];
 
-                            //if (_tableName.ToUpper() == "SUBSTAT" && result.Features.Count < 40)
-                            //{
-                            //    System.Diagnostics.Trace.WriteLine($"GEOMETRY {I++:N2} - {HexStringHelper.ByteToHexBitFiddle(esriByteGeometry, append0x: true)}");
-                            //}
-
                             var geometry = EsriPGdbHelper.ParseToEsriShape(esriByteGeometry, 0).AsGeometry().Transform(_onTheFlyProj, SridHelper.WebMercator);
 
                             feature.TheGeometry = geometry;
 
+                            //var schemaT = dataReader.GetSchemaTable();
+
                             for (int i = 0; i < dataReader.FieldCount; i++)
                             {
                                 var fieldName = dataReader.GetName(i);
+
+                                var columnInfo = _columns?.FirstOrDefault(c => c.Name == fieldName);
+
+                                var domain = _domains?.FirstOrDefault(d => d.DomainName == columnInfo?.DomainName);
 
                                 while (dict.Keys.Contains(fieldName))
                                 {
@@ -328,7 +329,11 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
                                 {
                                     if (i != geoIndex)
                                     {
-                                        dict.Add(fieldName, dataReader[i]);
+                                        var value = dataReader[i];
+
+                                        var mappedDomain = domain?.Values.FirstOrDefault(d => d.Code.ToString() == value?.ToString())?.Name;
+
+                                        dict.Add(fieldName, mappedDomain ?? value);
                                     }
                                 }
                             }

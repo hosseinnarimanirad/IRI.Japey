@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IRI.Msh.Common.Analysis;
 
 namespace IRI.Sta.MachineLearning;
 
@@ -14,17 +15,18 @@ public class LogisticSimplification<T> where T : IPoint, new()
 
     private List<LRSimplificationFeatures> _features;
 
+    public string Title { get; set; }
 
     private LogisticSimplification()
     {
 
     }
 
-    public static LogisticSimplification<T> Create(LRSimplificationTrainingData<T> trainingData)
+    public static LogisticSimplification<T> Create(LRSimplificationTrainingData<T> trainingData, string title)
     {
         if (trainingData is null || trainingData.IsNullOrEmpty())
             return null;
-
+         
         // 1400.03.20 
         var countOfFeatures = trainingData.GetCountOfFeatures();
 
@@ -62,7 +64,7 @@ public class LogisticSimplification<T> where T : IPoint, new()
 
         //System.IO.File.WriteAllLines("data2.txt", builder);
 
-        var result = new LogisticSimplification<T>();
+        var result = new LogisticSimplification<T>() { Title = title };
 
         result._regression = new LogisticRegression(new LogisticRegressionOptions() { RegularizationMethod = RegularizationMethods.L1 });
 
@@ -70,22 +72,23 @@ public class LogisticSimplification<T> where T : IPoint, new()
 
         result._features = trainingData.Features;
 
-#if DEBUG
-        if (trainingData.Features.Any())
-        {
-            System.Diagnostics.Debug.WriteLine(" ************************ ");
-            for (int i = 0; i < trainingData.Features.Count; i++)
-            {
-                System.Diagnostics.Debug.WriteLine($"{trainingData.Features[i]}: {result._regression.Beta[i + 1]}");
-            }
-            System.Diagnostics.Debug.WriteLine(" ************************ ");
-        }
-#endif
+        //#if DEBUG
+        //        if (trainingData.Features.Any())
+        //        {
+        //            System.Diagnostics.Debug.WriteLine(" ************************ ");
+        //            for (int i = 0; i < trainingData.Features.Count; i++)
+        //            {
+        //                System.Diagnostics.Debug.WriteLine($"{trainingData.Features[i]}: {result._regression.Beta[i + 1]}");
+        //            }
+        //            System.Diagnostics.Debug.WriteLine(" ************************ ");
+        //        }
+        //#endif
 
         return result;
     }
 
     public static LogisticSimplification<T> Create(
+        string title,
         List<T> originalPoints,
         List<T> simplifiedPoints,
         Func<T, T> toScreenMap,
@@ -94,7 +97,7 @@ public class LogisticSimplification<T> where T : IPoint, new()
     {
         var parameters = LRSimplificationTrainingData<T>.Create(originalPoints, simplifiedPoints, isRingMode, features, toScreenMap);
 
-        return Create(parameters);
+        return Create(parameters, title);
     }
 
 
@@ -157,9 +160,10 @@ public class LogisticSimplification<T> where T : IPoint, new()
         {
             middleIndex = lastIndex - 1;
 
-            int secondFloating = 1;
+            int floatingIndex = 1;
 
             while (middleIndex > firstIndex)
+            //while (middleIndex > firstIndex && middleIndex >= Math.Floor((firstIndex + lastIndex) / 2.0))
             {
                 // 1400.06.04
                 // var parameters = new LogisticGeometrySimplificationParameters<T>(points[firstIndex], points[middleIndex], points[lastIndex], toScreenMap);
@@ -171,15 +175,16 @@ public class LogisticSimplification<T> where T : IPoint, new()
                     result.Add(points[lastIndex]);
 
                     firstIndex = lastIndex;
-                    //middleIndex = lastIndex + 1;
-                    //lastIndex = lastIndex + 2;
+                    lastIndex++;
 
                     break;
                 }
                 else
                 {
-                    middleIndex = middleIndex - secondFloating;
-                    secondFloating = secondFloating * 2;
+                    //middleIndex = middleIndex - secondFloating;
+                    //secondFloating = secondFloating * 2;
+                    floatingIndex = floatingIndex * 2;
+                    middleIndex = lastIndex - floatingIndex;
                 }
             }
 
@@ -191,7 +196,11 @@ public class LogisticSimplification<T> where T : IPoint, new()
             result.Add(points[points.Count() / 2]);
         }
 
-        result.Add(points.Last());
+        // do not add last point if it is already added 
+        if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
+        {
+            result.Add(points.Last());
+        }
 
         return result;
     }
@@ -224,6 +233,12 @@ public class LogisticSimplification<T> where T : IPoint, new()
         {
             middleIndex = lastIndex - 1;
 
+            if (firstIndex == middleIndex)
+            {
+                lastIndex++;
+                break;
+            }
+
             var parameters = new LRSimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
 
             tempArea += parameters.Area ?? 0;
@@ -251,7 +266,12 @@ public class LogisticSimplification<T> where T : IPoint, new()
             result.Add(points[points.Count() / 2]);
         }
 
-        result.Add(points.Last());
+        // do not add last point if it is already added
+        if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
+        {
+            result.Add(points.Last());
+        }
+
 
         return result;
     }
@@ -278,7 +298,13 @@ public class LogisticSimplification<T> where T : IPoint, new()
 
         while (lastIndex < points.Count)
         {
-            middleIndex = lastIndex - 1;
+            middleIndex = (lastIndex + firstIndex) / 2;
+
+            if (firstIndex == middleIndex || middleIndex == lastIndex)
+            {
+                lastIndex++;
+                break;
+            }
 
             var parameters = new LRSimplificationParameters<T>(screenPoints[firstIndex], screenPoints[middleIndex], screenPoints[lastIndex], _features, null);
 
@@ -300,7 +326,12 @@ public class LogisticSimplification<T> where T : IPoint, new()
             result.Add(points[points.Count() / 2]);
         }
 
-        result.Add(points.Last());
+        // do not add last point if it is already added
+        if (SpatialUtility.GetEuclideanDistance(result.Last(), points.Last()) != 0)
+        {
+            result.Add(points.Last());
+        }
+
 
         return result;
     }

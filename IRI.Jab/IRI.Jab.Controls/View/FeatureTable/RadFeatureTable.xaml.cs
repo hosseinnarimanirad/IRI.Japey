@@ -92,6 +92,14 @@ namespace IRI.Jab.Controls.View
             {
                 e.Cancel = true;
             }
+
+            if (Presenter.Fields.IsNullOrEmpty())
+                return;
+
+            var field = Presenter?.Fields?.FirstOrDefault(f => f.Name == e.Column.Header.ToString());
+
+            if (field is not null)
+                e.Column.Header = field.Alias;
         }
 
         private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)

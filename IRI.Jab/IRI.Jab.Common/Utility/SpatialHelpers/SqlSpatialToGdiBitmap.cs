@@ -402,7 +402,7 @@ namespace IRI.Jab.Common.Convertor
                     break;
 
                 case sb.GeometryType.GeometryCollection:
-                    System.Diagnostics.Trace.WriteLine($"******************WARNNING------at SqlSpatialToGdiBitmap.cs GeometryCollection escaped {new System.Diagnostics.StackTrace().GetFrame(0).GetFileLineNumber()}");
+                    AddGeometryCollection(graphics, geometry, transform, pen, brush, pointSymbol);
                     break;
                 case sb.GeometryType.CircularString:
                 case sb.GeometryType.CompoundCurve:
@@ -552,6 +552,20 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
+        private static void AddGeometryCollection(drawing.Graphics graphics, sb.Geometry<sb.Point> multiPolygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        {
+            int numberOfPolygons = multiPolygon.NumberOfGeometries;
+
+            for (int i = 0; i < numberOfPolygons; i++)
+            {
+                var polygon = multiPolygon.Geometries[i];
+
+                if (polygon.IsNotValidOrEmpty())
+                    continue;
+
+                AddGeometry(graphics, polygon, transform, pen, brush, pointSymbol);
+            }
+        }
 
         //Labeling
         public static void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)

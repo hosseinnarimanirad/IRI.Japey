@@ -28,6 +28,10 @@ using IRI.Jab.Common.Presenters;
 using IRI.Jab.Common.Model.Legend;
 
 using WpfPoint = System.Windows.Point;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using IRI.Jab.Common.View.MapMarkers;
 
 namespace IRI.Jab.Common.Presenter.Map
 {
@@ -92,6 +96,22 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 _ostanha = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        private double _baseMapOpacity = 1;
+        public double BaseMapOpacity
+        {
+            get { return _baseMapOpacity; }
+            set
+            {
+                _baseMapOpacity = value;
+                RaisePropertyChanged();
+
+                foreach (var layer in this.Layers.Where(i => i.Type == LayerType.BaseMap))
+                {
+                    layer.VisualParameters.Opacity = value;
+                }
             }
         }
 
@@ -235,13 +255,13 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>();
+        //private List<Func<MapPresenter, ILayer, ILegendCommand>> _defaultVectorLayerCommands = LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>();
 
-        public List<Func<MapPresenter, ILayer, ILegendCommand>> DefaultVectorLayerCommands
-        {
-            get { return _defaultVectorLayerCommands; }
-            set { value = _defaultVectorLayerCommands; }
-        }
+        //public List<Func<MapPresenter, ILayer, ILegendCommand>> DefaultVectorLayerCommands
+        //{
+        //    get { return _defaultVectorLayerCommands; }
+        //    set { value = _defaultVectorLayerCommands; }
+        //}
 
         public ILayer GetSelectedLayerInToc()
         {
@@ -260,8 +280,8 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        private DrawingItemLayer _SelectedDrawingItem;
-        public DrawingItemLayer SelectedDrawingItem
+        private DrawingItemLayer? _SelectedDrawingItem;
+        public DrawingItemLayer? SelectedDrawingItem
         {
             get { return _SelectedDrawingItem; }
             set
@@ -273,6 +293,19 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+
+        private BoundingBox _printArea = BoundingBox.NaN;
+
+        // in map coordinates. determinse the area used for save as png
+        public BoundingBox PrintArea
+        {
+            get { return _printArea; }
+            set
+            {
+                _printArea = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private Point _currentPoint;
@@ -360,7 +393,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //    await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
         //}
 
-        public async Task SetTileBaseMap(TileMapProvider provider)
+        public async Task SetTileBaseMap(TileMapProvider provider, double opacity)
         {
             if (provider == null)
                 return;
@@ -371,7 +404,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
             this.SelectedMapProvider = provider;
 
-            await SetTileService(provider, MapSettings.GetLocalFileName);
+            await SetTileService(provider, opacity, MapSettings.GetLocalFileName);
         }
 
         private bool _doNotCheckInternet = false;
@@ -652,6 +685,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestPrint;
 
+        public Func<BoundingBox, int, int, Task<List<DrawingVisual>>> RequestGetLayersAsDrawingVisual;
+
         public Action<System.Net.WebProxy> RequestSetProxy;
 
         public Func<System.Net.WebProxy> RequestGetProxy;
@@ -664,13 +699,13 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Func<double> RequestGetActualHeight;
 
-        public Action<MapPresenter> RegisterAction;
+        //public Action<MapPresenter> RegisterAction;
 
         public Action<bool> RequestSetConnectedState;
 
         public Action RequestRefreshBaseMaps;
 
-        public Action<TileMapProvider, bool, string, bool, Func<TileInfo, string>> RequestSetTileService;
+        public Action<TileMapProvider, bool, string, bool, Func<TileInfo, string>, double> RequestSetTileService;
 
         //public Action RequestRemoveAllTileServices;
 
@@ -801,7 +836,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //public Func<DrawMode, bool, Task<Geometry>> RequestMeasure;
         public Func<DrawMode, EditableFeatureLayerOptions, EditableFeatureLayerOptions, Action, Task<Response<Geometry<Point>>>> RequestMeasure;
 
-        //public Action RequestMeasureLength;
+        //public Func<string, Task> RequestAddText;
 
         public Action RequestCancelMeasure;
 
@@ -824,14 +859,37 @@ namespace IRI.Jab.Common.Presenter.Map
 
         //public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
 
-        public Func<System.Windows.Media.Matrix> RequestGetToScreenMapMatrix;
+        public Func<System.Windows.Media.Matrix> RequestGetMapToScreenMatrix;
+
+        public Func<System.Windows.Media.Matrix?> RequestGetScreenToMapMatrix;
+
+        public Func<double, double> RequestToScreenMap;
 
 
         #endregion
 
-        public Func<Point, Point> CreateToScreenMapFunc()
+        public Func<Point, Point> CreateMapToScreenFunc()
         {
-            var matrix = RequestGetToScreenMapMatrix?.Invoke();
+            var matrix = RequestGetMapToScreenMatrix?.Invoke();
+
+            return CreateMapFunc(matrix);
+            //var m11 = matrix.Value.M11;
+            //var m12 = matrix.Value.M12;
+            //var m21 = matrix.Value.M21;
+            //var m22 = matrix.Value.M22;
+
+            //return p => new Point(m11 * p.X + m12 * p.Y + matrix.Value.OffsetX, m21 * p.X + m22 * p.Y + matrix.Value.OffsetY);
+        }
+
+        public Func<Point, Point> CreateScreenToMapFunc()
+        {
+            var matrix = RequestGetScreenToMapMatrix?.Invoke();
+
+            return CreateMapFunc(matrix);
+        }
+
+        private Func<Point, Point> CreateMapFunc(Matrix? matrix)
+        {
 
             var m11 = matrix.Value.M11;
             var m12 = matrix.Value.M12;
@@ -893,7 +951,7 @@ namespace IRI.Jab.Common.Presenter.Map
         //}
 
 
-        public async Task SetTileService(TileMapProvider baseMap, Func<TileInfo, string> getLocalFileName)
+        public async Task SetTileService(TileMapProvider baseMap, double opacity, Func<TileInfo, string> getLocalFileName)
         {
             //98.01.18
             //if (MapProviders.ContainsKey(baseMap.ProviderName))
@@ -901,13 +959,12 @@ namespace IRI.Jab.Common.Presenter.Map
             //    this.MapProviders.Add(baseMap.ProviderName, t => { baseMap.TileType = t; return baseMap; });
             //}
 
-
             if (!IsConnected)
             {
                 await CheckInternetAccess();
             }
 
-            this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName);
+            this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName, opacity);
         }
 
         //public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)
@@ -1204,16 +1261,15 @@ namespace IRI.Jab.Common.Presenter.Map
             RemoveMapOptions();
         }
 
+        /// <summary>
+        /// Returns the point selected by the user in WGS84
+        /// </summary>
+        /// <returns>Selected point in WGS84</returns>
         public Task<Response<Point>> GetPoint()
         {
-            if (RequestGetPoint != null)
-            {
-                return RequestGetPoint();
-            }
-            else
-            {
-                return new Task<Response<Point>>(() => new Response<Point>() { Result = Point.NaN, IsFailed = true });
-            }
+            return RequestGetPoint != null
+                ? RequestGetPoint()
+                : new Task<Response<Point>>(() => new Response<Point>() { Result = Point.NaN, IsFailed = true });
         }
 
         #endregion
@@ -1257,9 +1313,9 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
 
-        List<Func<DrawingItemLayer, ILegendCommand>> drawingItemCommands = null;
+        List<Func<DrawingItemLayer, ILegendCommand>>? drawingItemCommands = null;
 
-        public List<Func<DrawingItemLayer, ILegendCommand>> DrawingItemCommands
+        public List<Func<DrawingItemLayer, ILegendCommand>>? DrawingItemCommands
         {
             get
             {
@@ -1282,7 +1338,10 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void AddDrawingItemCommand(Func<DrawingItemLayer, ILegendCommand> drawingItemCommandFunc)
         {
-            this.DrawingItemCommands.Add(drawingItemCommandFunc);
+            if (DrawingItemCommands is null)
+                DrawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>();
+
+            DrawingItemCommands.Add(drawingItemCommandFunc);
         }
 
 
@@ -1376,8 +1435,7 @@ namespace IRI.Jab.Common.Presenter.Map
             int id = int.MinValue,
             VectorDataSource<Feature<Point>, Point> source = null)
         {
-            var shapeItem = new DrawingItemLayer(name, drawing, visualParameters, id, source);
-
+            var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
 
             shapeItem.OnIsSelectedInTocChanged += (sender, e) =>
             {
@@ -1750,11 +1808,28 @@ namespace IRI.Jab.Common.Presenter.Map
 
             if (layer is VectorLayer)
             {
+                if (layer is DrawingItemLayer drawingItemLayer)
+                {
+                    if (drawingItemLayer.IsSpecialLayer())
+                    {
+                        var commands = new List<ILegendCommand>();
+
+                        foreach (var item in DrawingItemLegendCommands.GetDefaultTextLayerCommands())
+                        {
+                            commands.Add(item(this, drawingItemLayer));
+                        }
+
+                        layer.Commands = commands;
+
+                        return;
+                    }
+                }
+
                 if (!(layer?.Commands?.Count > 0))
                 {
                     var commands = new List<ILegendCommand>();
 
-                    foreach (var item in DefaultVectorLayerCommands)
+                    foreach (var item in LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>())
                     {
                         commands.Add(item(this, layer));
                     }
@@ -1794,7 +1869,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void TrySetCommandsForDrawingItemLayer(DrawingItemLayer layer)
         {
-            layer.Commands = this.DrawingItemCommands.Select(dic => dic(layer))?.ToList();
+            layer.Commands = DrawingItemCommands?.Select(dic => dic(layer))?.ToList();
 
             //1398.11.14
             //layer.Commands = new List<ILegendCommand>()
@@ -1807,10 +1882,6 @@ namespace IRI.Jab.Common.Presenter.Map
 
             layer.RequestHighlightGeometry = async di =>
              {
-                 //this.ClearLayer(layer, true);
-
-                 //this.AddLayer(layer);
-
                  if (di.CanShowHighlightGeometry())
                  {
                      await SelectDrawingItem(di);
@@ -1822,56 +1893,10 @@ namespace IRI.Jab.Common.Presenter.Map
 
                      ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
                  }
-
-                 //var defaultFill = layer.OriginalSymbology.Fill.AsSolidColor();
-
-                 //var defaultStroke = layer.OriginalSymbology.Stroke.AsSolidColor();
-
-
-                 //if (di.IsSelectedInToc)
-                 //{
-                 //    if (defaultFill != null)
-                 //    {
-                 //        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionFill.Color);
-                 //    }
-
-                 //    if (defaultStroke != null)
-                 //    {
-                 //        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(VisualParameters.DefaultSelectionStroke.Color);
-                 //    }
-
-                 //    this.ClearLayer(layer, true);
-
-                 //    this.AddLayer(layer);
-                 //}
-                 //else
-                 //{
-                 //    if (defaultFill != null)
-                 //    {
-                 //        layer.VisualParameters.Fill = new System.Windows.Media.SolidColorBrush(defaultFill.Value);
-                 //    }
-
-                 //    if (defaultStroke != null)
-                 //    {
-                 //        layer.VisualParameters.Stroke = new System.Windows.Media.SolidColorBrush(defaultStroke.Value);
-                 //    }
-
-                 //    this.ClearLayer(layer, true);
-
-                 //    this.AddLayer(layer);
-                 //}
-
              };
 
             layer.RequestChangeVisibility = async di =>
              {
-                 //var alreadyExists = this.DrawingItems.SingleOrDefault(l => l == di);
-
-                 //if (di.VisualParameters.Visibility == Visibility.Visible)
-                 //{
-                 //    AddLayer(di);
-                 //}
-
                  RefreshLayerVisibility(di);
 
                  if (di.CanShowHighlightGeometry())
@@ -1883,19 +1908,6 @@ namespace IRI.Jab.Common.Presenter.Map
                      ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
                  }
              };
-
-            //layer.RequestChangeVisibilityForHighlightGeometry = async di =>
-            //{
-            //    if (di.CanShowHighlightGeometry())
-            //    {
-            //        await SelectDrawingItem(di);
-            //    }
-            //    else
-            //    {
-            //        ClearLayer(di.HighlightGeometryKey.ToString(), true, true);
-            //    }
-            //};
-
 
             if (layer.RequestChangeSymbology == null)
             {
@@ -2092,8 +2104,6 @@ namespace IRI.Jab.Common.Presenter.Map
 
         protected void CancelNewDrawing()
         {
-            //this.IsDrawMode = false;
-
             this.RequestCancelNewDrawing?.Invoke(); //this is called in MapViewer
 
             this.OnCancelNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
@@ -2101,8 +2111,6 @@ namespace IRI.Jab.Common.Presenter.Map
 
         private void FinishNewDrawing()
         {
-            //this.IsDrawMode = false;
-
             this.RequestFinishNewDrawing?.Invoke(); //this is called in MapViewer
 
             this.OnFinishNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
@@ -2176,7 +2184,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -2190,6 +2198,38 @@ namespace IRI.Jab.Common.Presenter.Map
         #endregion
 
 
+        #region AddText
+
+        protected async Task AddText()
+        {
+            try
+            {
+                var response = await this.GetPoint();
+
+                if (!response.HasNotNullResult())
+                    return;
+
+                var text = "sample text!";
+
+                var drawingItemLayer = DrawingItemLayer.CreateSpecialLayer("Text", new List<Locateable>()
+                {
+                    new Locateable(response.Result, AncherFunctionHandlers.BottomCenter){ Element = new TextboxMarker(){ LabelValue=" asfdsdf"} }
+                });
+
+                //TrySetCommandsForDrawingItemLayer(drawingItemLayer);
+
+                AddDrawingItem(drawingItemLayer);
+
+                return;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
         public void UpdateCurrentEditingPoint(Point webMercatorPoint)
         {
             MapPanel.UpdateCurrentEditingPoint(webMercatorPoint);
@@ -2198,6 +2238,75 @@ namespace IRI.Jab.Common.Presenter.Map
         public void Print()
         {
             this.RequestPrint?.Invoke();
+        }
+
+        public async Task ClipAndExportMapAsPngAsync(object owner)
+        {
+            // select a rectangle 
+            var polygon = await this.GetDrawingAsync(DrawMode.Polygon);
+
+            if (polygon.IsNullOrEmpty())
+                return;
+
+            var boundingBox = polygon.Result.GetBoundingBox();
+
+            await ExportMapAsPngAsync(owner, boundingBox);
+        }
+
+        public async Task ExportMapAsPngAsync(object owner)
+        {
+            var boundingBos = this.PrintArea.IsNaN() ? this.CurrentExtent : this.PrintArea;
+
+            await ExportMapAsPngAsync(owner, boundingBos);
+        }
+
+        protected async Task ExportMapAsPngAsync(object owner, BoundingBox boundingBox)
+        {
+            if (RequestGetLayersAsDrawingVisual is null)
+                return;
+
+            var fileName = await DialogService.ShowSaveFileDialogAsync("*.png|*.png", owner);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+                return;
+
+            var toScreenMap = CreateMapToScreenFunc();
+
+            var width = (int)RequestToScreenMap(boundingBox.Width);
+            var height = (int)RequestToScreenMap(boundingBox.Height);
+
+            var visuals = await RequestGetLayersAsDrawingVisual(boundingBox, width, height);
+
+            RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+
+            foreach (var drawingVisual in visuals)
+            {
+                image.Render(drawingVisual);
+            }
+
+            var frame = BitmapFrame.Create(image);
+
+            //PngBitmapEncoder pngImage = new PngBitmapEncoder();
+            TiffBitmapEncoder tiffImage = new TiffBitmapEncoder();
+            tiffImage.Frames.Add(frame);
+
+            using (System.IO.Stream stream = System.IO.File.Create(fileName))
+            {
+                tiffImage.Save(stream);
+            }
+        }
+
+        public async Task SetPrintAreaAsync()
+        {
+            // select a rectangle 
+            var polygon = await this.GetDrawingAsync(DrawMode.Polygon);
+
+            if (polygon.IsNullOrEmpty())
+                return;
+
+            var boundingBox = polygon.Result.GetBoundingBox();
+
+            this.PrintArea = boundingBox;
         }
 
         public void Refresh()
@@ -2212,11 +2321,11 @@ namespace IRI.Jab.Common.Presenter.Map
 
         const string _error = "خطا";
 
-        public virtual async Task AddShapefile()
+        public virtual async Task AddShapefile(object owner)
         {
             this.IsBusy = true;
 
-            var fileName = await this.DialogService.ShowOpenFileDialogAsync("shapefile|*.shp", null);
+            var fileName = await this.DialogService.ShowOpenFileDialogAsync("shapefile|*.shp", owner);
 
             if (!File.Exists(fileName))
             {
@@ -2234,10 +2343,10 @@ namespace IRI.Jab.Common.Presenter.Map
             //    return;
             //}
 
-            await AddShapefile(fileName);
+            await AddShapefile(fileName, owner);
         }
 
-        public async Task AddShapefile(string fileName)
+        public async Task AddShapefile(string fileName, object owner)
         {
             try
             {
@@ -2253,7 +2362,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2261,7 +2370,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        public virtual async Task AddWebMercatorWorldfile()
+        public virtual async Task AddWebMercatorWorldfile(object owner)
         {
             this.IsBusy = true;
 
@@ -2274,10 +2383,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            await AddWorldfile(fileName, SridHelper.WebMercator);
+            await AddWorldfile(fileName, SridHelper.WebMercator, owner);
         }
 
-        public virtual async Task AddWorldfile()
+        public virtual async Task AddWorldfile(object owner)
         {
             this.IsBusy = true;
 
@@ -2290,10 +2399,10 @@ namespace IRI.Jab.Common.Presenter.Map
                 return;
             }
 
-            await AddWorldfile(fileName, SridHelper.GeodeticWGS84);
+            await AddWorldfile(fileName, SridHelper.GeodeticWGS84, owner);
         }
 
-        public virtual async Task AddWorldfile(string fileName, int srid)
+        public virtual async Task AddWorldfile(string fileName, int srid, object owner)
         {
             try
             {
@@ -2322,7 +2431,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2358,7 +2467,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2402,7 +2511,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2450,7 +2559,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, owner);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2464,7 +2573,7 @@ namespace IRI.Jab.Common.Presenter.Map
         /// </summary>
         /// <param name="geoJsonFeatureSetFileName">path to GeoJsonFeatureSet file</param>
         /// <returns></returns>
-        public async Task AddGeoJson(string geoJsonFeatureSetFileName)
+        public async Task AddGeoJson(string geoJsonFeatureSetFileName, object owner)
         {
             try
             {
@@ -2482,7 +2591,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
             catch (Exception ex)
             {
-                await DialogService.ShowMessageAsync(null, ex.Message, _error, null);
+                await DialogService.ShowMessageAsync(ex.Message, _error, owner);
             }
             finally
             {
@@ -2495,9 +2604,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         #region Command
 
-        //
-        private RelayCommand _goToIranExtentCommand;
+        #region -   Zoom/Pan Commands
 
+        private RelayCommand _goToIranExtentCommand;
         public RelayCommand GoToIranExtentCommand
         {
             get
@@ -2512,7 +2621,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _fullExtentCommand;
-
         public RelayCommand FullExtentCommand
         {
             get
@@ -2527,7 +2635,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _clearAllCommand;
-
         public RelayCommand ClearAllCommand
 
         {
@@ -2546,7 +2653,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _rectangleZoomCommand;
-
         public RelayCommand RectangleZoomCommand
         {
             get
@@ -2561,7 +2667,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _zoomOutCommand;
-
         public RelayCommand ZoomOutCommand
         {
             get
@@ -2576,7 +2681,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _panCommand;
-
         public RelayCommand PanCommand
         {
             get
@@ -2590,25 +2694,11 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        #endregion
 
-        //
-        private RelayCommand _checkInternetAccessCommand;
+        #region -   Layer Management Commands
 
-        public RelayCommand CheckInternetAccessCommand
-        {
-            get
-            {
-                if (_checkInternetAccessCommand == null)
-                {
-                    _checkInternetAccessCommand = new RelayCommand(async param => { await CheckInternetAccess(); });
-                }
-
-                return _checkInternetAccessCommand;
-            }
-        }
-        //
         private RelayCommand _addShapefileCommand;
-
         public RelayCommand AddShapefileCommand
         {
             get
@@ -2617,46 +2707,40 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _addShapefileCommand = new RelayCommand(async param =>
                     {
-                        await AddShapefile();
+                        await AddShapefile(param);
                     });
                 }
                 return _addShapefileCommand;
             }
         }
 
-
-
         private RelayCommand _addWgs84WorldfileCommand;
-
         public RelayCommand AddWgs84WorldfileCommand
         {
             get
             {
                 if (_addWgs84WorldfileCommand == null)
                 {
-                    _addWgs84WorldfileCommand = new RelayCommand(async param => { await AddWorldfile(); });
+                    _addWgs84WorldfileCommand = new RelayCommand(async param => { await AddWorldfile(param); });
                 }
                 return _addWgs84WorldfileCommand;
             }
         }
 
         private RelayCommand _addWebMercatorWorldfileCommand;
-
         public RelayCommand AddWebMercatorWorldfileCommand
         {
             get
             {
                 if (_addWebMercatorWorldfileCommand == null)
                 {
-                    _addWebMercatorWorldfileCommand = new RelayCommand(async param => { await AddWebMercatorWorldfile(); });
+                    _addWebMercatorWorldfileCommand = new RelayCommand(async param => { await AddWebMercatorWorldfile(param); });
                 }
                 return _addWebMercatorWorldfileCommand;
             }
         }
 
-
         private RelayCommand _addZippedImagePyramidCommand;
-
         public RelayCommand AddZippedImagePyramidCommand
         {
             get
@@ -2670,9 +2754,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-
         private RelayCommand _addTsvCommand;
-
         public RelayCommand AddTsvCommand
         {
             get
@@ -2686,9 +2768,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-
         private RelayCommand _addCsvCommand;
-
         public RelayCommand AddCsvCommand
         {
             get
@@ -2699,94 +2779,6 @@ namespace IRI.Jab.Common.Presenter.Map
                 }
 
                 return _addCsvCommand;
-            }
-        }
-
-
-        private RelayCommand _cancelNewDrawingCommand;
-
-        public RelayCommand CancelNewDrawingCommand
-        {
-            get
-            {
-                if (_cancelNewDrawingCommand == null)
-                {
-                    _cancelNewDrawingCommand = new RelayCommand(param => this.CancelNewDrawing());
-                }
-                return _cancelNewDrawingCommand;
-            }
-        }
-
-        private RelayCommand _finishDrawingPartCommand;
-
-        public RelayCommand FinishDrawingPartCommand
-        {
-            get
-            {
-                if (_finishDrawingPartCommand == null)
-                {
-                    _finishDrawingPartCommand = new RelayCommand(param => this.FinishDrawingPart());
-                }
-                return _finishDrawingPartCommand;
-            }
-        }
-
-        private RelayCommand _finishNewDrawingCommand;
-
-        public RelayCommand FinishNewDrawingCommand
-        {
-            get
-            {
-                if (_finishNewDrawingCommand == null)
-                {
-                    _finishNewDrawingCommand = new RelayCommand(param => this.FinishNewDrawing());
-                }
-                return _finishNewDrawingCommand;
-            }
-        }
-
-        private RelayCommand _cancelEditDrawingCommand;
-
-        public RelayCommand CancelEditDrawingCommand
-        {
-            get
-            {
-                if (_cancelEditDrawingCommand == null)
-                {
-                    _cancelEditDrawingCommand = new RelayCommand(param => this.CancelEdit());
-                }
-                return _cancelEditDrawingCommand;
-            }
-        }
-
-        private RelayCommand _deleteDrawingCommand;
-
-        public RelayCommand DeleteDrawingCommand
-        {
-            get
-            {
-                if (_deleteDrawingCommand == null)
-                {
-                    _deleteDrawingCommand = new RelayCommand(param => this.DeleteDrawing());
-                }
-                return _deleteDrawingCommand;
-            }
-
-        }
-
-
-        private RelayCommand _finishEditDrawingCommand;
-
-        public RelayCommand FinishEditDrawingCommand
-        {
-            get
-            {
-
-                if (_finishEditDrawingCommand == null)
-                {
-                    _finishEditDrawingCommand = new RelayCommand(param => this.FinishEdit());
-                }
-                return _finishEditDrawingCommand;
             }
         }
 
@@ -2812,7 +2804,7 @@ namespace IRI.Jab.Common.Presenter.Map
                             //this.ProviderTypeFullName = provider;
                             var provider = this.MapProviders.FirstOrDefault(m => m.FullName.EqualsIgnoreCase(param?.ToString()));
 
-                            await this.SetTileBaseMap(provider);
+                            await this.SetTileBaseMap(provider, BaseMapOpacity);
 
                         }
                         catch (Exception ex)
@@ -2826,7 +2818,10 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        //**********Measurements
+        #endregion
+
+        #region -   Measurement Commands
+
         private RelayCommand _measureLengthCommand;
 
         public RelayCommand MeasureLengthCommand
@@ -2857,9 +2852,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _measureAreaCommand = new RelayCommand(async param =>
                     {
-                        //this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
-
-                        await this.Measure(DrawMode.Polygon);
+                        _ = await Measure(DrawMode.Polygon);
                     });
                 }
 
@@ -2882,9 +2875,26 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        #endregion
+
+        #region -   Drawing Commands
+
+
+        private RelayCommand _addTextCommand;
+        public RelayCommand AddTextCommand
+        {
+            get
+            {
+                if (_addTextCommand == null)
+                {
+                    _addTextCommand = new RelayCommand(async param => await this.AddText());
+                }
+
+                return _addTextCommand;
+            }
+        }
 
         private RelayCommand _drawPointCommand;
-
         public RelayCommand DrawPointCommand
         {
             get
@@ -2898,7 +2908,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _drawPolygonCommand;
-
         public RelayCommand DrawPolygonCommand
         {
             get
@@ -2912,7 +2921,6 @@ namespace IRI.Jab.Common.Presenter.Map
         }
 
         private RelayCommand _drawPolylineCommand;
-
         public RelayCommand DrawPolylineCommand
         {
             get
@@ -2925,23 +2933,8 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private RelayCommand _goToCommand;
-
-        public RelayCommand GoToCommand
-        {
-            get
-            {
-                if (_goToCommand == null)
-                {
-                    _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke());
-                }
-
-                return _goToCommand;
-            }
-        }
 
         private RelayCommand _addPointToNewDrawingCommand;
-
         public RelayCommand AddPointToNewDrawingCommand
         {
             get
@@ -2955,8 +2948,91 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private RelayCommand _printCommand;
+        private RelayCommand _cancelNewDrawingCommand;
+        public RelayCommand CancelNewDrawingCommand
+        {
+            get
+            {
+                if (_cancelNewDrawingCommand == null)
+                {
+                    _cancelNewDrawingCommand = new RelayCommand(param => this.CancelNewDrawing());
+                }
+                return _cancelNewDrawingCommand;
+            }
+        }
 
+        private RelayCommand _finishDrawingPartCommand;
+        public RelayCommand FinishDrawingPartCommand
+        {
+            get
+            {
+                if (_finishDrawingPartCommand == null)
+                {
+                    _finishDrawingPartCommand = new RelayCommand(param => this.FinishDrawingPart());
+                }
+                return _finishDrawingPartCommand;
+            }
+        }
+
+        private RelayCommand _finishNewDrawingCommand;
+        public RelayCommand FinishNewDrawingCommand
+        {
+            get
+            {
+                if (_finishNewDrawingCommand == null)
+                {
+                    _finishNewDrawingCommand = new RelayCommand(param => this.FinishNewDrawing());
+                }
+                return _finishNewDrawingCommand;
+            }
+        }
+
+        private RelayCommand _cancelEditDrawingCommand;
+        public RelayCommand CancelEditDrawingCommand
+        {
+            get
+            {
+                if (_cancelEditDrawingCommand == null)
+                {
+                    _cancelEditDrawingCommand = new RelayCommand(param => this.CancelEdit());
+                }
+                return _cancelEditDrawingCommand;
+            }
+        }
+
+        private RelayCommand _deleteDrawingCommand;
+        public RelayCommand DeleteDrawingCommand
+        {
+            get
+            {
+                if (_deleteDrawingCommand == null)
+                {
+                    _deleteDrawingCommand = new RelayCommand(param => this.DeleteDrawing());
+                }
+                return _deleteDrawingCommand;
+            }
+
+        }
+
+        private RelayCommand _finishEditDrawingCommand;
+        public RelayCommand FinishEditDrawingCommand
+        {
+            get
+            {
+
+                if (_finishEditDrawingCommand == null)
+                {
+                    _finishEditDrawingCommand = new RelayCommand(param => this.FinishEdit());
+                }
+                return _finishEditDrawingCommand;
+            }
+        }
+
+        #endregion
+
+        #region -   Print & Export Commands
+
+        private RelayCommand _printCommand;
         public RelayCommand PrintCommand
         {
             get
@@ -2970,11 +3046,54 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        private RelayCommand _clipAndExportMapAsPngCommand;
+        public RelayCommand ClipAndExportMapAsPngCommand
+        {
+            get
+            {
+                if (_clipAndExportMapAsPngCommand == null)
+                {
+                    _clipAndExportMapAsPngCommand = new RelayCommand(async param => await this.ClipAndExportMapAsPngAsync(param));
+                }
+
+                return _clipAndExportMapAsPngCommand;
+            }
+        }
+
+        private RelayCommand _exportMapAsPngCommand;
+        public RelayCommand ExportMapAsPngCommand
+        {
+            get
+            {
+                if (_exportMapAsPngCommand == null)
+                {
+                    _exportMapAsPngCommand = new RelayCommand(async param => await this.ExportMapAsPngAsync(param));
+                }
+
+                return _exportMapAsPngCommand;
+            }
+        }
+
+        private RelayCommand _setPrintAreaCommand;
+        public RelayCommand SetPrintAreaCommand
+        {
+            get
+            {
+                if (_setPrintAreaCommand == null)
+                {
+                    _setPrintAreaCommand = new RelayCommand(async param => { await this.SetPrintAreaAsync(); });
+                }
+
+                return _setPrintAreaCommand;
+            }
+        }
+
+        #endregion
 
 
-
+        // ******************** Others *********************
+        // *************************************************
         private RelayCommand _searchByAttributeCommand;
-
         public RelayCommand SearchByAttributeCommand
         {
             get
@@ -2987,6 +3106,36 @@ namespace IRI.Jab.Common.Presenter.Map
                 return _searchByAttributeCommand;
             }
         }
+
+        private RelayCommand _goToCommand;
+        public RelayCommand GoToCommand
+        {
+            get
+            {
+                if (_goToCommand == null)
+                {
+                    _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke());
+                }
+
+                return _goToCommand;
+            }
+        }
+
+        private RelayCommand _checkInternetAccessCommand;
+        public RelayCommand CheckInternetAccessCommand
+        {
+            get
+            {
+                if (_checkInternetAccessCommand == null)
+                {
+                    _checkInternetAccessCommand = new RelayCommand(async param => { await CheckInternetAccess(); });
+                }
+
+                return _checkInternetAccessCommand;
+            }
+        }
+
+
         #endregion
 
 
@@ -3001,7 +3150,7 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     _addGeoJsonToDrawingItemsCommand = new RelayCommand(async param =>
                     {
-                        var fileName = await DialogService.ShowOpenFileDialogAsync("*.json|*.json", null);
+                        var fileName = await DialogService.ShowOpenFileDialogAsync("*.json|*.json", param);
 
                         if (string.IsNullOrWhiteSpace(fileName))
                             return;
@@ -3026,7 +3175,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         if (geometries.Count != 1)
                         {
-                            await DialogService.ShowMessageAsync(null, "فایل جی‌سان حاوی تک عارضه باید باشد", _error, null);
+                            await DialogService.ShowMessageAsync("فایل جی‌سان حاوی تک عارضه باید باشد", _error, param);
 
                             return;
                         }
@@ -3064,7 +3213,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                         if (geometries.Count != 1)
                         {
-                            await DialogService.ShowMessageAsync(null, "شیپ فایل حاوی تک عارضه باید باشد", _error, null);
+                            await DialogService.ShowMessageAsync("شیپ فایل حاوی تک عارضه باید باشد", _error, param);
 
                             return;
                         }

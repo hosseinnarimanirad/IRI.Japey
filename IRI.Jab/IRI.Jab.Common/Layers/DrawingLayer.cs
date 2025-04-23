@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 using sb = IRI.Msh.Common.Primitives;
-using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Convertor;
+using System.Threading.Tasks;
 
 namespace IRI.Jab.Common
 {
@@ -85,7 +86,7 @@ namespace IRI.Jab.Common
                 case DrawMode.Polygon:
                     type = sb.GeometryType.Polygon;
                     break;
-                case DrawMode.Rectange:
+                case DrawMode.Rectangle:
                 case DrawMode.Freehand:
                 default:
                     throw new NotImplementedException();
@@ -154,6 +155,34 @@ namespace IRI.Jab.Common
         public void StartNewPart(sb.Point webMercatorPoint)
         {
             this._editableFeatureLayer.StartNewPart(webMercatorPoint);
+        }
+
+        public DrawingVisual? AsDrawingVisual(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+        {
+            var geometry = _editableFeatureLayer.GetFinalGeometry();
+
+            if (geometry == null)
+                return null;
+
+            double xScale = imageWidth / mapExtent.Width;
+            double yScale = imageHeight / mapExtent.Height;
+            double scale = xScale > yScale ? yScale : xScale;
+
+            Func<System.Windows.Point, System.Windows.Point> mapToScreen =
+                new Func<System.Windows.Point, System.Windows.Point>(p => new System.Windows.Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+
+            var pen = this.VisualParameters.GetWpfPen();
+            pen.LineJoin = PenLineJoin.Round;
+            pen.EndLineCap = PenLineCap.Round;
+            pen.StartLineCap = PenLineCap.Round;
+
+            Brush brush = this.VisualParameters.Fill;
+
+            DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(new List<sb.Geometry<sb.Point>>() { geometry }, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+
+            drawingVisual.Opacity = this.VisualParameters.Opacity;
+
+            return drawingVisual;
         }
     }
 }

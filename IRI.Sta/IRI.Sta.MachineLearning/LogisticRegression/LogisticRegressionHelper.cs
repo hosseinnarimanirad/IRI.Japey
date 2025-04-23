@@ -14,12 +14,27 @@ public static class LogisticRegressionHelper
         return x.DotProduct(weights);
     }
 
+    public static double? CalculateLogit(List<double> x, double[] weights)
+    {
+        return x.DotProduct(weights);
+    }
+
     // باید دقت داشت که اولین مقدار ایکس
     // برابر است با عدد یک به این ترتیب
     // طول بردار ظرایب و ایکس یکی می‌شود
     // صفحه ۹۵ کتاب زیر
     // Introduction to Algorithms for Data Mining and Machine Learning, Academic Press, 2019
     public static double CalculateLogisticFunction(double[] x, double[] weights)
+    {
+        var zValue = CalculateLogit(x, weights);
+
+        if (zValue == null)
+            throw new NotImplementedException("LogisticRegressionHelper > CalculateLogisticFunction");
+
+        return Sigmoid.CalculateSigmoid(zValue.Value);
+    }
+
+    public static double CalculateLogisticFunction(List<double> x, double[] weights)
     {
         var zValue = CalculateLogit(x, weights);
 

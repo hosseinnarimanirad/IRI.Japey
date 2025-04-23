@@ -7,33 +7,29 @@ using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
 
 using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using System.Linq;
+using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Jab.Common
 {
     public class DrawingItemLayer : VectorLayer, IIdentifiable
     {
-        private const string _removeToolTip = "حذف";
+        public Action<DrawingItemLayer>? RequestHighlightGeometry;
 
-        private const string _editToolTip = "ویرایش";
+        public Action<DrawingItemLayer>? RequestChangeVisibility;
 
-        private const string _zoomToolTip = "بزرگ‌نمایی";
-
-        private const string _saveToolTip = "ذخیره‌سازی";
 
         public int Id { get; set; }
 
-        public VectorDataSource<Feature<Point>, Point> OriginalSource { get; set; }
+        public Guid HighlightGeometryKey { get; private set; }
 
-        //public VisualParameters OriginalSymbology { get; set; }
-
-        private Geometry _shape;
-
-        public Geometry Geometry
+        private Geometry? _geometry;
+        public Geometry? Geometry
         {
-            get { return _shape; }
+            get { return _geometry; }
             set
             {
-                _shape = value;
+                _geometry = value;
                 RaisePropertyChanged();
 
                 this.DataSource = new MemoryDataSource(new List<Geometry<Point>>() { value });
@@ -41,116 +37,128 @@ namespace IRI.Jab.Common
             }
         }
 
-        //private ILayer _associatedLayer;
+        public VectorDataSource<Feature<Point>, Point>? OriginalSource { get; set; }
 
-        //public ILayer AssociatedLayer
-        //{
-        //    get { return _associatedLayer; }
-        //    set
-        //    {
-        //        _associatedLayer = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
+        public SpecialPointLayer? SpecialPointLayer { get; set; }
 
 
-        //public VisualParameters VisualParameters
-        //{
-        //    get { return AssociatedLayer?.VisualParameters; }
-        //    set
-        //    {
-        //        if (AssociatedLayer != null)
-        //        {
-        //            AssociatedLayer.VisualParameters = value;
-        //        }
-
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
-
-        //private string _title;
-
-        //public string Title
-        //{
-        //    get { return _title; }
-        //    set
-        //    {
-        //        _title = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        public bool CanShowHighlightGeometry()
+        private DrawingItemLayer(string layerName, int id, RasterizationApproach rasterizationApproach)
         {
-            return this.IsSelectedInToc && VisualParameters?.Visibility == System.Windows.Visibility.Visible;
+            this.Id = id;
+            this.LayerName = layerName;
+            this.Rendering = RenderingApproach.Default;
+            this.ToRasterTechnique = rasterizationApproach;
+            this.ZIndex = int.MaxValue;
+            this.HighlightGeometryKey = Guid.NewGuid();
         }
 
-        public Action<DrawingItemLayer> RequestHighlightGeometry;
+        //internal DrawingItemLayer(
+        //    string layerName,
+        //    Geometry geometry,
+        //    VisualParameters? visualParameters = null,
+        //    int id = int.MinValue,
+        //    VectorDataSource<Feature<Point>, Point>? source = null) : this(layerName, id, RasterizationApproach.DrawingVisual)
+        //{
+        //    this.Extent = geometry.GetBoundingBox();
 
-        //public Action<DrawingItemLayer> RequestChangeVisibilityForHighlightGeometry;
+        //    this.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
 
-        public Action<DrawingItemLayer> RequestChangeVisibility;
+        //    this.OriginalSource = source;
 
-        public Guid HighlightGeometryKey { get; private set; }
+        //    this.Geometry = geometry;
 
-        internal DrawingItemLayer(
-            string title,
+        //    var featureType =
+        //        (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint) ? LayerType.Point :
+        //        ((geometry.Type == GeometryType.LineString || geometry.Type == GeometryType.MultiLineString) ? LayerType.Polyline :
+        //        (geometry.Type == GeometryType.Polygon || geometry.Type == GeometryType.MultiPolygon) ? LayerType.Polygon : LayerType.None);
+
+        //    this.Type = LayerType.Drawing | featureType;
+
+        //    this.Commands = new List<ILegendCommand>();
+
+        //    this.OnIsSelectedInTocChanged += (sender, e) =>
+        //    {
+        //        this.RequestHighlightGeometry?.Invoke(this);
+        //    };
+
+        //    this.OnVisibilityChanged += (sender, e) =>
+        //    {
+        //        this.RequestChangeVisibility?.Invoke(this);
+        //    };
+
+        //    //HighlightGeometryKey = Guid.NewGuid();
+
+        //    //this.Rendering = RenderingApproach.Default;
+
+        //    //this.ToRasterTechnique = RasterizationApproach.GdiPlus;
+
+        //    //this.Id = id;
+
+        //    //this.ZIndex = int.MaxValue;
+
+        //    //this.LayerName = layerName;
+        //}
+
+        public bool IsSpecialLayer() => SpecialPointLayer != null;
+
+        public bool CanShowHighlightGeometry() => this.IsSelectedInToc && VisualParameters?.Visibility == System.Windows.Visibility.Visible;
+
+        public static DrawingItemLayer CreateGeometryLayer(
+            string layerName,
             Geometry geometry,
-            VisualParameters visualParameters = null,
+            VisualParameters? visualParameters = null,
             int id = int.MinValue,
-            VectorDataSource<Feature<Point>, Point> source = null)
+            VectorDataSource<Feature<Point>, Point>? source = null)
         {
-            this.Extent = geometry.GetBoundingBox();
+            DrawingItemLayer result = new DrawingItemLayer(layerName, id, RasterizationApproach.DrawingVisual);
 
-            this.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
+            result.Extent = geometry.GetBoundingBox();
 
-            //this.VisualParameters.OnVisibilityChanged += (sender, e) => { this.RequestChangeVisibility?.Invoke(this); };
+            result.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
 
-            HighlightGeometryKey = Guid.NewGuid();
+            result.OriginalSource = source;
 
-            //this.OriginalSymbology = VisualParameters.Clone();
+            result.Geometry = geometry;
 
             var featureType =
                 (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint) ? LayerType.Point :
                 ((geometry.Type == GeometryType.LineString || geometry.Type == GeometryType.MultiLineString) ? LayerType.Polyline :
                 (geometry.Type == GeometryType.Polygon || geometry.Type == GeometryType.MultiPolygon) ? LayerType.Polygon : LayerType.None);
 
-            this.Type = LayerType.Drawing | featureType;
+            result.Type = LayerType.Drawing | featureType;
 
-            this.Rendering = RenderingApproach.Default;
+            result.Commands = new List<ILegendCommand>();
 
-            this.ToRasterTechnique = RasterizationApproach.GdiPlus;
-
-            this.Id = id;
-
-            this.OriginalSource = source;
-
-            this.ZIndex = int.MaxValue;
-
-            //this.DataSource = new MemoryDataSource(new List<SqlGeometry>() { geometry.AsSqlGeometry() });
-
-            //this.Title = title;
-
-            this.LayerName = title;
-
-            this.Geometry = geometry;
-
-            this.Commands = new List<ILegendCommand>();
-
-            this.OnIsSelectedInTocChanged += (sender, e) =>
+            result.OnIsSelectedInTocChanged += (sender, e) =>
             {
-                this.RequestHighlightGeometry?.Invoke(this);
+                result.RequestHighlightGeometry?.Invoke(result);
             };
 
-            this.OnVisibilityChanged += (sender, e) =>
+            result.OnVisibilityChanged += (sender, e) =>
             {
-                this.RequestChangeVisibility?.Invoke(this);
+                result.RequestChangeVisibility?.Invoke(result);
             };
+
+            return result;
         }
 
+        public static DrawingItemLayer CreateSpecialLayer(
+            string layerName,
+            List<Locateable> locateables,
+            int id = int.MinValue)
+        {
+            DrawingItemLayer result = new DrawingItemLayer(layerName, id, RasterizationApproach.DrawingVisual)
+            {
+                Extent = BoundingBox.CalculateBoundingBox(locateables.Select(l => new Point() { X = l.Location.X, Y = l.Location.Y })),
 
+                VisualParameters = VisualParameters.GetDefaultForDrawingItems(),
 
+                Type = LayerType.MoveableItem,
+            };
+
+            result.SpecialPointLayer = new SpecialPointLayer(layerName, locateables, .8, null, LayerType.MoveableItem) { ParentLayerId = result.LayerId };
+
+            return result;
+        }
     }
 }

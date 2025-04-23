@@ -1,5 +1,6 @@
 ﻿
 using IRI.Msh.Common.Primitives;
+using IRI.Msh.CoordinateSystem.MapProjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,12 @@ namespace IRI.Msh.Common.Model.GeoJson
         public int NumberOfPoints()
         {
             return Coordinates == null ? 0 : Coordinates.Sum(ring => ring == null ? 0 : ring.Length);
+        }
+         
+        public Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true)
+        {
+            return this.Parse(isLongitudeFirst, SridHelper.GeodeticWGS84)
+                        .Transform(MapProjects.GeodeticWgs84ToWebMercator, SridHelper.WebMercator);
         }
     }
 }

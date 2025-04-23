@@ -2,28 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latestMajor</LangVersion>
-    <SignAssembly>false</SignAssembly>
-    <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>hosseinnarimanirad.pfx</AssemblyOriginatorKeyFile>
+    <LangVersion>latestMajor</LangVersion> 
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Analysis\**" />
     <Compile Remove="CoordinateSystems\**" />
     <Compile Remove="Mapping\**" />
     <Compile Remove="Mathematics\**" />
     <Compile Remove="Ogc\**" />
     <Compile Remove="Primitives\**" />
     <Compile Remove="Units\**" />
-    <EmbeddedResource Remove="Analysis\**" />
     <EmbeddedResource Remove="CoordinateSystems\**" />
     <EmbeddedResource Remove="Mapping\**" />
     <EmbeddedResource Remove="Mathematics\**" />
     <EmbeddedResource Remove="Ogc\**" />
     <EmbeddedResource Remove="Primitives\**" />
     <EmbeddedResource Remove="Units\**" />
-    <None Remove="Analysis\**" />
     <None Remove="CoordinateSystems\**" />
     <None Remove="Mapping\**" />
     <None Remove="Mathematics\**" />
@@ -32,6 +26,10 @@
     <None Remove="Units\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.0" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Primitives\Geometry\IGeometry.cs" Link="IGeometry.cs" />
   </ItemGroup>

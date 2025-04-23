@@ -9,27 +9,11 @@
     <Import_RootNamespace>IRI.Msh.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\AreaStatistics.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Interpolation\Idw.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\ShapeCharacteristics\CharacteristicsMeasure.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\APSC.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\DisplacementComparer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\GeomUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)analysis\simplification\apcs\VertexRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationMetrics.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationParamters.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Simplification\SimplificationType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\SpatialUtility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\TopologyUtility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\LineLineRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\LineLineSegmentRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointCircleRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointLineSegementRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointPolygonRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PoinTriangleRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\PointVectorRelation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Analysis\Topology\TriangleRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Customization\DictionaryPropertyDescriptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Customization\FieldAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ListExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ConfusionMatrix.cs" />
+    <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Model\Enums\IrProvince93.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />
@@ -40,7 +24,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\IHasM.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\IHasZ.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\IGeometryAwares\NamedGeometry.cs" />
-    <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Analysis\Simplification\Simplifications.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\AxisType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2DPoint.cs" />
@@ -147,7 +130,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistics.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exception\ZeroSizeArrayException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Bing\BingIsolineResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Enum\EnumInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Enums\EnumInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriFeature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriFeatureSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriJsonGeometry.cs" />
@@ -233,7 +216,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Units\UnitConversion.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Analysis\simplification\APCS\" />
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
     <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
   </ItemGroup>

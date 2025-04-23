@@ -11,7 +11,7 @@ namespace IRI.Jab.Common.Model
         Point,
         Polyline,
         Polygon,
-        Rectange,
+        Rectangle,
         Freehand
     }
 }

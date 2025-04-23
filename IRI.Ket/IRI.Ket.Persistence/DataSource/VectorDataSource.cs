@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Sta.Ogc.WMS;
+using IRI.Msh.Common.Model;
 
 namespace IRI.Ket.Persistence.DataSources
 {
@@ -24,10 +25,11 @@ namespace IRI.Ket.Persistence.DataSources
 
         public virtual GeometryType? GeometryType { get; protected set; }
 
+        public List<Field>? Fields { get; set; }
 
         #region Get Geometries
 
-        public virtual List<Geometry<Point>> GetGeometries() => GetGeometries(Geometry<Point>.Empty);
+        public virtual List<Geometry<Point>> GetGeometries() => GetGeometries(null);
 
         public virtual List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
         {

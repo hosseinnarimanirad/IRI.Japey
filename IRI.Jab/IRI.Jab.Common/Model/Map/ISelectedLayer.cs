@@ -1,4 +1,5 @@
 ﻿
+using IRI.Msh.Common.Model;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
@@ -14,13 +15,15 @@ namespace IRI.Jab.Common.Model.Map
 
         ILayer AssociatedLayer { get; set; }
 
-        string LayerName { get;  }
+        string LayerName { get; }
+
+        List<Field>? Fields { get; set; }
 
         void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items);
 
         void UpdateHighlightedFeatures(IEnumerable<IGeometryAware<Point>> items);
 
-        bool ShowSelectedOnMap { get; set; }  
+        bool ShowSelectedOnMap { get; set; }
 
         IEnumerable<IGeometryAware<Point>> GetSelectedFeatures();
 
@@ -39,9 +42,9 @@ namespace IRI.Jab.Common.Model.Map
         Action<IGeometryAware<Point>> RequestFlashSinglePoint { get; set; }
 
         Action<IEnumerable<IGeometryAware<Point>>, Action> RequestZoomTo { get; set; }
-        
+
         Action<IGeometryAware<Point>> RequestEdit { get; set; }
-        
+
         Action RequestRemove { get; set; }
 
         void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry);

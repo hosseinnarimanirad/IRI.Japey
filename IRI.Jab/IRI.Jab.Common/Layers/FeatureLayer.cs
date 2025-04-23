@@ -15,6 +15,7 @@ using IRI.Msh.Common.Primitives;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Msh.Common.Primitives.Point;
+using System.Threading.Tasks;
 
 namespace IRI.Jab.Common
 {
@@ -113,6 +114,8 @@ namespace IRI.Jab.Common
 
             return path;
         }
+
+         
 
         #region Constructors
 

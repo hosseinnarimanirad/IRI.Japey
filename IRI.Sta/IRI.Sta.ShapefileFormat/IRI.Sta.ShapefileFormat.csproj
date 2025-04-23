@@ -33,7 +33,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\IRI.Sta.KmlFormat\IRI.Sta.KmlFormat.csproj" />
     <ProjectReference Include="..\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
   </ItemGroup>
 

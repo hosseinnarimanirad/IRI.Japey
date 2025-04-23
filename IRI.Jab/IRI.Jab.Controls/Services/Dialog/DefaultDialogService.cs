@@ -370,23 +370,23 @@ namespace IRI.Jab.Controls.Services.Dialog
 
         #region Show Message
 
-        public Task ShowMessageAsync<T>(string message, string pathMarkup, string title = _defaultShowMessageTitle)
+        public Task ShowMessageAsync<T>(string message, string? title, string? pathMarkup)
         {
             var owner = Application.Current.Windows.OfType<T>().FirstOrDefault() as Window;
 
-            return ShowMessageAsync(pathMarkup, message, title, owner);
+            return ShowMessageAsync(message, title, owner, pathMarkup);
         }
 
-        public Task ShowMessageAsync(string pathMarkup, string message, string title, object ownerWindow)
+        public Task ShowMessageAsync(string message, string? title, object? ownerWindow, string? pathMarkup = null)
         {
             var tcs = new TaskCompletionSource<bool?>();
 
-            IRI.Jab.Controls.ViewModel.Dialogs.DialogViewModel viewModel = new Jab.Controls.ViewModel.Dialogs.DialogViewModel(true)
+            DialogViewModel viewModel = new(true)
             {
                 Message = message,
                 Title = title ?? _defaultShowMessageTitle,
                 IsTwoOptionsMode = false,
-                IconPathMarkup = pathMarkup
+                IconPathMarkup = pathMarkup ?? IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarInformation
             };
 
             View.Dialogs.MessageBoxView dialog = new View.Dialogs.MessageBoxView();

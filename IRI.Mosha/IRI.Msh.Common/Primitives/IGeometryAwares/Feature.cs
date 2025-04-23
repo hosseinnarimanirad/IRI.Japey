@@ -35,7 +35,7 @@ public class Feature<T> : IGeometryAware<T>, ICustomTypeDescriptor where T : IPo
 
             return string.Empty;
         }
-    }
+    }    
 
     public Feature(Geometry<T> geometry) : this(geometry, new Dictionary<string, object>())
     {

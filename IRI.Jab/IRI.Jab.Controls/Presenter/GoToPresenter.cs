@@ -20,6 +20,11 @@ namespace IRI.Jab.Controls.Presenter
 {
     public class GoToPresenter : Notifier
     {
+        private Action<Point> RequestZoomTo;
+
+        private Action<Point> RequestPanTo;
+
+
         private double _x;
 
         public double X
@@ -66,6 +71,18 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
+        private bool _isPaneOpen;
+
+        public bool IsPaneOpen
+        {
+            get { return _isPaneOpen; }
+            set
+            {
+                _isPaneOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private Model.DegreeMinuteSecondModel _longitudeDms;
 
@@ -92,72 +109,39 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        private RelayCommand _zoomToCommand;
+        private List<HamburgerGoToMenuItem> _menuItems;
 
-        public RelayCommand ZoomToCommand
+        public List<HamburgerGoToMenuItem> MenuItems
         {
-            get
+            get { return _menuItems; }
+            set
             {
-                if (_zoomToCommand == null)
+                _menuItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private HamburgerGoToMenuItem _selectedItem;
+
+        public HamburgerGoToMenuItem SelectedItem
+        {
+            get { return _selectedItem; }
+            set
+            {
+                if (_selectedItem == value)
                 {
-                    _zoomToCommand = new RelayCommand(param => { this.ZoomTo(); });
+                    return;
                 }
 
-                return _zoomToCommand;
+                _selectedItem = value;
+                RaisePropertyChanged();
+                //RaisePropertyChanged("SelectedItem.Content");
+
+                this.LongitudeDms.SetValue(0);
+                this.LatitudeDms.SetValue(0);
             }
         }
 
-        private RelayCommand _panToCommand;
-
-        public RelayCommand PanToCommand
-        {
-            get
-            {
-                if (_panToCommand == null)
-                {
-                    _panToCommand = new RelayCommand(param => { this.PanTo(); });
-                }
-
-                return _panToCommand;
-            }
-        }
-
-        public void ZoomTo()
-        {
-            this.RequestZoomTo?.Invoke(GetWgs84Point());
-        }
-
-        public void PanTo()
-        {
-            this.RequestPanTo?.Invoke(new IRI.Msh.Common.Primitives.Point(X, Y));
-        }
-
-        public IRI.Msh.Common.Primitives.Point GetWgs84Point()
-        {
-            var point = new IRI.Msh.Common.Primitives.Point(X, Y);
-
-            switch (this.SelectedItem?.MenuType)
-            {
-                case SpatialReferenceType.Geodetic:
-                    return point;//.Project( ,new IRI.Msh.CoordinateSystem.MapProjection.NoProjection());
-
-                case SpatialReferenceType.UTM:
-                    return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
-
-                case SpatialReferenceType.Mercator:
-                case SpatialReferenceType.TransverseMercator:
-                case SpatialReferenceType.CylindricalEqualArea:
-                case SpatialReferenceType.LambertConformalConic:
-                case SpatialReferenceType.WebMercator:
-                case SpatialReferenceType.AlbersEqualAreaConic:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public Action<IRI.Msh.Common.Primitives.Point> RequestZoomTo;
-
-        public Action<IRI.Msh.Common.Primitives.Point> RequestPanTo;
 
         public GoToPresenter(Action<Point> requestPanTo, Action<Point> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
         {
@@ -187,6 +171,39 @@ namespace IRI.Jab.Controls.Presenter
             this.IsPaneOpen = false;
         }
 
+        public void ZoomTo()
+        {
+            this.RequestZoomTo?.Invoke(GetWgs84Point());
+        }
+
+        public void PanTo()
+        {
+            this.RequestPanTo?.Invoke(GetWgs84Point());
+        }
+
+        public Point GetWgs84Point()
+        {
+            var point = new Point(X, Y);
+
+            switch (this.SelectedItem?.MenuType)
+            {
+                case SpatialReferenceType.Geodetic:
+                    return point;//.Project( ,new IRI.Msh.CoordinateSystem.MapProjection.NoProjection());
+
+                case SpatialReferenceType.UTM:
+                    return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
+
+                case SpatialReferenceType.Mercator:
+                case SpatialReferenceType.TransverseMercator:
+                case SpatialReferenceType.CylindricalEqualArea:
+                case SpatialReferenceType.LambertConformalConic:
+                case SpatialReferenceType.WebMercator:
+                case SpatialReferenceType.AlbersEqualAreaConic:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         private List<HamburgerGoToMenuItem> GetDefaultItems()
         {
             return new List<HamburgerGoToMenuItem>()
@@ -204,30 +221,6 @@ namespace IRI.Jab.Controls.Presenter
                     Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure,
                 }
             };
-        }
-
-        private List<HamburgerGoToMenuItem> _menuItems;
-
-        public List<HamburgerGoToMenuItem> MenuItems
-        {
-            get { return _menuItems; }
-            set
-            {
-                _menuItems = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private bool _isPaneOpen;
-
-        public bool IsPaneOpen
-        {
-            get { return _isPaneOpen; }
-            set
-            {
-                _isPaneOpen = value;
-                RaisePropertyChanged();
-            }
         }
 
         private void UpdateXY()
@@ -256,27 +249,6 @@ namespace IRI.Jab.Controls.Presenter
             }
         }
 
-        private HamburgerGoToMenuItem _selectedItem;
-
-        public HamburgerGoToMenuItem SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                if (_selectedItem == value)
-                {
-                    return;
-                }
-
-                _selectedItem = value;
-                RaisePropertyChanged();                 
-                //RaisePropertyChanged("SelectedItem.Content");
-
-                this.LongitudeDms.SetValue(0);
-                this.LatitudeDms.SetValue(0);
-            }
-        }
-
         public void SelectDefaultMenu()
         {
             if (this.MenuItems?.Count > 0)
@@ -286,6 +258,43 @@ namespace IRI.Jab.Controls.Presenter
             }
 
         }
+
+        #region Commands
+
+
+        private RelayCommand _zoomToCommand;
+
+        public RelayCommand ZoomToCommand
+        {
+            get
+            {
+                if (_zoomToCommand == null)
+                {
+                    _zoomToCommand = new RelayCommand(param => { this.ZoomTo(); });
+                }
+
+                return _zoomToCommand;
+            }
+        }
+
+
+        private RelayCommand _panToCommand;
+
+        public RelayCommand PanToCommand
+        {
+            get
+            {
+                if (_panToCommand == null)
+                {
+                    _panToCommand = new RelayCommand(param => { this.PanTo(); });
+                }
+
+                return _panToCommand;
+            }
+        }
+
+
+        #endregion
 
         public static GoToPresenter Create(MapPresenter mapPresenter)
         {
@@ -302,7 +311,7 @@ namespace IRI.Jab.Controls.Presenter
                },
                p =>
                {
-                   var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p);
+                   var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
 
                    mapPresenter.ZoomToLevelAndCenter(13, webMercatorPoint, () =>
                    {

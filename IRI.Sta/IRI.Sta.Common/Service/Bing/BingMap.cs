@@ -3,8 +3,7 @@ using IRI.Msh.Common.Model.Bing;
 using IRI.Extensions;
 using System;
 using System.Globalization;
-using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
+using System.Threading.Tasks; 
 
 namespace IRI.Sta.Common.Service.Bing
 {

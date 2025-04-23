@@ -50,7 +50,10 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
 
     public void SaveAsJson(string fileName)
     {
-        var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings()
+        {
+            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        });
 
         System.IO.File.WriteAllText(fileName, jsonString);
     }
@@ -62,11 +65,7 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
         {
             string.Join(",", this.Features.Select(f => f.ToString()).Concat([decisionFieldName]))
         };
-
-        var countOfFeatures = this.GetCountOfFeatures();
-
-        var countOfRecords = this.GetCountOfRecords();
-
+         
         foreach (var record in this.Records)
         {
             lines.Add(string.Join(",", record.FeatureValues.Concat([record.IsRetained ? 1 : 0])));

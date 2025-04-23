@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace IRI.Sta.Common.Helpers
 {
@@ -121,5 +122,27 @@ namespace IRI.Sta.Common.Helpers
                 reader.Close();
             }
         }
+
+        public static T ParseFromXml<T>(string xmlString)
+        {
+            if (string.IsNullOrEmpty(xmlString))
+                throw new ArgumentException("XML string cannot be null or empty", nameof(xmlString));
+
+            var serializer = new XmlSerializer(typeof(T));
+             
+            using (var reader = new StringReader(xmlString))
+            {
+                try
+                {
+                    return (T)serializer.Deserialize(reader);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    // Wrap the exception with more context
+                    throw new InvalidOperationException($"Failed to deserialize XML into type {typeof(T).Name}", ex);
+                }
+            }
+        }
+
     }
 }

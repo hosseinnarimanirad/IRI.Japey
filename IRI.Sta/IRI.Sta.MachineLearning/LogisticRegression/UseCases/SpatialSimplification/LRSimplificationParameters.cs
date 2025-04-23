@@ -19,20 +19,44 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
     /// </summary>
     //public const double MinVerticalSquareDistanceThreshold = 0.1;
 
+    [JsonProperty]
     public double? DistanceToPrevious { get; private set; }
 
+    [JsonProperty]
     public double? DistanceToNext { get; private set; }
 
+    [JsonProperty]
     public double? Area { get; private set; }
 
+    [JsonProperty]
     public double? SquareCosineOfAngle { get; private set; }
 
+    [JsonProperty]
     public double? CosineOfAngle { get; private set; }
 
+    [JsonProperty]
     public double? VerticalDistance { get; private set; }
 
+    [JsonProperty]
     public double? BaseLength { get; private set; }
 
+
+    [JsonProperty]
+    public double? dX12 { get; private set; }
+    [JsonProperty]
+    public double? dX13 { get; private set; }
+    [JsonProperty]
+    public double? dX23 { get; private set; }
+
+    [JsonProperty]
+    public double? dY12 { get; private set; }
+    [JsonProperty]
+    public double? dY13 { get; private set; }
+    [JsonProperty]
+    public double? dY23 { get; private set; }
+
+
+    [JsonProperty]
     public List<LRSimplificationFeatures> Features { get; set; }
 
     [JsonIgnore]
@@ -68,6 +92,12 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
                 LRSimplificationFeatures.CosineOfAngle => this.CosineOfAngle,
                 LRSimplificationFeatures.SquareCosineOfAngle => this.SquareCosineOfAngle,
                 LRSimplificationFeatures.Area => this.Area,
+                LRSimplificationFeatures.dX12 => this.dX12,
+                LRSimplificationFeatures.dX13 => this.dX13,
+                LRSimplificationFeatures.dX23 => this.dX23,
+                LRSimplificationFeatures.dY12 => this.dY12,
+                LRSimplificationFeatures.dY13 => this.dY13,
+                LRSimplificationFeatures.dY23 => this.dY23,
                 _ => throw new NotImplementedException()
             };
 
@@ -98,6 +128,7 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
         _featureValues = result;
     }
 
+    [JsonProperty]
     public bool IsRetained { get; set; }
 
     public LRSimplificationParameters()
@@ -137,17 +168,68 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
 
         if (Features.Contains(LRSimplificationFeatures.BaseLength))
             this.BaseLength = SpatialUtility.GetEuclideanDistance(firstScreenPoint, lastScreenPoint);
+
+        if (Features.Contains(LRSimplificationFeatures.dX12))
+            this.dX12 = Math.Abs(middleScreenPoint.X - firstScreenPoint.X);
+
+        if (Features.Contains(LRSimplificationFeatures.dX13))
+            this.dX13 = Math.Abs(lastScreenPoint.X - firstScreenPoint.X);
+
+        if (Features.Contains(LRSimplificationFeatures.dX23))
+            this.dX23 = Math.Abs(lastScreenPoint.X - middleScreenPoint.X);
+
+        if (Features.Contains(LRSimplificationFeatures.dY12))
+            this.dY12 = Math.Abs(middleScreenPoint.Y - firstScreenPoint.Y);
+
+        if (Features.Contains(LRSimplificationFeatures.dY13))
+            this.dY13 = Math.Abs(lastScreenPoint.Y - firstScreenPoint.Y);
+
+        if (Features.Contains(LRSimplificationFeatures.dY23))
+            this.dY23 = Math.Abs(lastScreenPoint.Y - middleScreenPoint.Y);
     }
+
+    //public LRSimplificationParameters(
+    //    double? distanceToPrevious, 
+    //    double? distanceToNext, 
+    //    double? area, 
+    //    double? squareCosineOfAngle, 
+    //    double? cosineOfAngle, 
+    //    double? verticalDistance, 
+    //    double? baseLength, 
+    //    List<LRSimplificationFeatures> features, 
+    //    bool isRetained)
+    //{
+    //    DistanceToPrevious = distanceToPrevious;
+    //    DistanceToNext = distanceToNext;
+    //    Area = area;
+    //    SquareCosineOfAngle = squareCosineOfAngle;
+    //    CosineOfAngle = cosineOfAngle;
+    //    VerticalDistance = verticalDistance;
+    //    BaseLength = baseLength;
+    //    Features = features;
+    //    IsRetained = isRetained;
+
+    //    InitFeatureValues();
+    //}
 
     public void UpdateArea(double newArea)
     {
-        this.Area = newArea; 
+        this.Area = newArea;
 
         InitFeatureValues();
     }
 
     public override string ToString()
     {
-        return $"DistanceToNext: {DistanceToNext} \n DistanceToPrevious: {DistanceToPrevious} \n Area: {Area} \n SquareCosineOfAngle: {SquareCosineOfAngle} \n CosineOfAngle: {CosineOfAngle} \n VerticalDistance: {VerticalDistance} \n BaseLength: {BaseLength}";
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < FeatureValues.Count; i++)
+        {
+            sb.AppendLine($"{Features[i]}: {FeatureValues[i]:N4}");
+        }
+
+        return sb.ToString();
+
+        //return $"DistanceToNext: {DistanceToNext} \n DistanceToPrevious: {DistanceToPrevious} \n Area: {Area} \n SquareCosineOfAngle: {SquareCosineOfAngle} \n CosineOfAngle: {CosineOfAngle} \n VerticalDistance: {VerticalDistance} \n BaseLength: {BaseLength}";
     }
 }

@@ -15,10 +15,22 @@ namespace IRI.Jab.Common
 {
     public class Locateable : Notifier
     {
+        public event EventHandler OnRequestHandleMouseDown;
+
+        public event EventHandler<ChangeEventArgs<WpfPoint>> OnPositionChanged;
+
+        public Action<bool> RequestChangeIsSelected;
+
+        public AncherFunctionHandler AncherFunction;
+
         public Guid Id { get; set; }
 
-        private double _x;
+        public bool CanBeUsedAsEditingPoint { get; set; } = false;
 
+        private double _x;
+        /// <summary>
+        /// Web Mercator X coordinate
+        /// </summary>
         public double X
         {
             get { return _x; }
@@ -39,7 +51,9 @@ namespace IRI.Jab.Common
         }
 
         private double _y;
-
+        /// <summary>
+        /// Web Mercator Y coordinate
+        /// </summary>
         public double Y
         {
             get { return _y; }
@@ -60,14 +74,27 @@ namespace IRI.Jab.Common
         }
 
         private System.Windows.Point _location;
-
+        /// <summary>
+        /// Web Mercator System.Windows.Point
+        /// </summary>
         public System.Windows.Point Location
         {
             get { return _location; }
         }
 
-        protected System.Windows.FrameworkElement _element;
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                RaisePropertyChanged();
+                this.RequestChangeIsSelected?.Invoke(value);
+            }
+        }
 
+        protected System.Windows.FrameworkElement _element;
         public virtual System.Windows.FrameworkElement Element
         {
             get { return _element; }
@@ -78,16 +105,9 @@ namespace IRI.Jab.Common
                 this._element.MouseDown += Element_MouseDown;
             }
         }
+         
 
-        //public System.Windows.Controls.Primitives.Popup Popup
-        //{
-        //    get;
-        //    set;
-        //}
-
-        public AncherFunctionHandler AncherFunction;
-
-        public Locateable(AncherFunctionHandler ancherFunction = null)
+        public Locateable(AncherFunctionHandler? ancherFunction = null)
         {
             if (ancherFunction == null)
             {
@@ -187,26 +207,5 @@ namespace IRI.Jab.Common
 
             storyBoard.Begin(this.Element);
         }
-
-        public event EventHandler OnRequestHandleMouseDown;
-
-        public event EventHandler<ChangeEventArgs<WpfPoint>> OnPositionChanged;
-
-        private bool _isSelected;
-
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set
-            {
-                _isSelected = value;
-                RaisePropertyChanged();
-                this.RequestChangeIsSelected?.Invoke(value);
-            }
-        }
-
-        public Action<bool> RequestChangeIsSelected;
-
-        public bool CanBeUsedAsEditingPoint { get; set; } = false;
     }
 }

@@ -9,4 +9,13 @@
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="KML\Ogckml22.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Update="KML\OgcKml22Urn.cs">
+      <SubType>code</SubType>
+    </Compile>  
+  </ItemGroup>
+
 </Project>

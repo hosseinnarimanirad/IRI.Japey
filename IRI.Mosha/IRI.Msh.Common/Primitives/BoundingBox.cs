@@ -269,9 +269,9 @@ namespace IRI.Msh.Common.Primitives
 
         public BoundingBox Transform(Func<Point, Point> func)
         {
-            var newTopLeft = func(this.TopLeft);
+            var newTopLeft = func is null ? this.TopLeft : func(this.TopLeft);
 
-            var newButtomRight = func(this.BottomRight);
+            var newButtomRight = func is null ? this.BottomRight : func(this.BottomRight);
 
             return new BoundingBox(newTopLeft.X, newButtomRight.Y, newButtomRight.X, newTopLeft.Y);
         }
