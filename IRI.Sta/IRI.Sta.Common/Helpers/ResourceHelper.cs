@@ -6,38 +6,37 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Helpers
+namespace IRI.Sta.Common.Helpers;
+
+public static class ResourceHelper
 {
-    public static class ResourceHelper
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="assembly"></param>
+    /// <param name="resourceName">ProjectName.FolderName.FileName</param>
+    /// <returns></returns>
+    public static string ReadAllText(Assembly assembly, string resourceName)
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="assembly"></param>
-        /// <param name="resourceName">ProjectName.FolderName.FileName</param>
-        /// <returns></returns>
-        public static string ReadAllText(Assembly assembly, string resourceName)
+        string result;
+
+        using (Stream stream = assembly.GetManifestResourceStream(resourceName))
         {
-            string result;
-
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            if (stream == null)
             {
-                if (stream == null)
-                {
-                    //stream.Dispose(); throws null exception
+                //stream.Dispose(); throws null exception
 
-                    return null;
-                }
-
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    result = reader.ReadToEnd();
-                }
+                return null;
             }
 
-            return result;
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                result = reader.ReadToEnd();
+            }
         }
 
-
+        return result;
     }
+
+
 }

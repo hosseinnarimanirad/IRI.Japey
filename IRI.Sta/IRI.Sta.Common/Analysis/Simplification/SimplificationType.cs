@@ -5,161 +5,160 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Msh.Common.Analysis
+namespace IRI.Sta.Common.Analysis;
+
+public enum SimplificationType
 {
-    public enum SimplificationType
-    {
-        /// <summary>
-        /// AAP
-        /// </summary>
-        [Description("AAP")]
-        AdditiveAreaPlus,
+    /// <summary>
+    /// AAP
+    /// </summary>
+    [Description("AAP")]
+    AdditiveAreaPlus,
 
 
-        /// <summary>
-        /// CANG
-        /// </summary>
-        [Description("CANG")]
-        CumulativeAngle,
+    /// <summary>
+    /// CANG
+    /// </summary>
+    [Description("CANG")]
+    CumulativeAngle,
 
 
-        /// <summary>
-        /// CED
-        /// </summary>
-        [Description("CED")]
-        CumulativeEuclideanDistance,
+    /// <summary>
+    /// CED
+    /// </summary>
+    [Description("CED")]
+    CumulativeEuclideanDistance,
 
 
-        /// <summary>
-        /// CTRANG
-        /// </summary>
-        [Description("CTRANG")]
-        CumulativeAreaAngle,
+    /// <summary>
+    /// CTRANG
+    /// </summary>
+    [Description("CTRANG")]
+    CumulativeAreaAngle,
 
 
-        /// <summary>
-        /// ANG
-        /// </summary>
-        [Description("ANG")]
-        Angle,
+    /// <summary>
+    /// ANG
+    /// </summary>
+    [Description("ANG")]
+    Angle,
 
 
-        /// <summary>
-        /// ED
-        /// </summary>
-        [Description("ED")]
-        EuclideanDistance,
+    /// <summary>
+    /// ED
+    /// </summary>
+    [Description("ED")]
+    EuclideanDistance,
 
 
-        /// <summary>
-        /// NTH
-        /// </summary>
-        [Description("NTH")]
-        NthPoint,
+    /// <summary>
+    /// NTH
+    /// </summary>
+    [Description("NTH")]
+    NthPoint,
 
-            
-        // 1401.06.24
-        /// <summary>
-        /// RPS
-        /// </summary>
-        [Description("RPS")]
-        RandomPointSelection,
-
-
-        /// <summary>
-        /// LA
-        /// </summary>
-        [Description("LA")]
-        Lang,
+        
+    // 1401.06.24
+    /// <summary>
+    /// RPS
+    /// </summary>
+    [Description("RPS")]
+    RandomPointSelection,
 
 
-        /// <summary>
-        /// RDP
-        /// </summary>
-        [Description("RDP")]
-        RamerDouglasPeucker,
+    /// <summary>
+    /// LA
+    /// </summary>
+    [Description("LA")]
+    Lang,
 
 
-        // 1400.05.11
-        // http://psimpl.sourceforge.net/reumann-witkam.html
-        /// <summary>
-        /// RW
-        /// </summary>
-        [Description("RW")]
-        ReumannWitkam,
+    /// <summary>
+    /// RDP
+    /// </summary>
+    [Description("RDP")]
+    RamerDouglasPeucker,
 
 
-        // 1400.05.11 
-        /// <summary>
-        /// PD
-        /// </summary>
-        [Description("PD")]
-        PerpendicularDistance,
+    // 1400.05.11
+    // http://psimpl.sourceforge.net/reumann-witkam.html
+    /// <summary>
+    /// RW
+    /// </summary>
+    [Description("RW")]
+    ReumannWitkam,
 
 
-        // 1400.06.24 
-        /// <summary>
-        /// MPD
-        /// </summary>
-        [Description("MPD")]
-        ModifiedPerpendicularDistance,
+    // 1400.05.11 
+    /// <summary>
+    /// PD
+    /// </summary>
+    [Description("PD")]
+    PerpendicularDistance,
 
 
-        /// <summary>
-        /// VW
-        /// </summary>
-        [Description("VW")]
-        VisvalingamWhyatt,
+    // 1400.06.24 
+    /// <summary>
+    /// MPD
+    /// </summary>
+    [Description("MPD")]
+    ModifiedPerpendicularDistance,
 
 
-        /// <summary>
-        /// SF
-        /// </summary>
-        [Description("SF")]
-        SleeveFitting,
+    /// <summary>
+    /// VW
+    /// </summary>
+    [Description("VW")]
+    VisvalingamWhyatt,
 
 
-        // 1400.05.20
-        /// <summary>
-        /// NOPW
-        /// </summary>
-        [Description("NOPW")]
-        NormalOpeningWindow,
+    /// <summary>
+    /// SF
+    /// </summary>
+    [Description("SF")]
+    SleeveFitting,
 
 
-        // 1400.05.20
-        /// <summary>
-        /// BOPW
-        /// </summary>
-        [Description("BOPW")]
-        BeforeOpeningWindow,
+    // 1400.05.20
+    /// <summary>
+    /// NOPW
+    /// </summary>
+    [Description("NOPW")]
+    NormalOpeningWindow,
 
 
-        // Triangular Routine
-        /// <summary>
-        /// TR
-        /// </summary>
-        [Description("TR")]
-        TriangleRoutine,
+    // 1400.05.20
+    /// <summary>
+    /// BOPW
+    /// </summary>
+    [Description("BOPW")]
+    BeforeOpeningWindow,
 
 
-        /// <summary>
-        /// MTR
-        /// </summary>
-        [Description("MTR")]
-        ModifiedTriangleRoutine,
+    // Triangular Routine
+    /// <summary>
+    /// TR
+    /// </summary>
+    [Description("TR")]
+    TriangleRoutine,
 
 
-        /// <summary>
-        /// CTR
-        /// </summary>
-        [Description("CTR")]
-        CumulativeTriangleRoutine,
+    /// <summary>
+    /// MTR
+    /// </summary>
+    [Description("MTR")]
+    ModifiedTriangleRoutine,
 
-        // 1403.03.08
-        /// <summary>
-        /// APSC
-        /// </summary>
-        APSC
-    }
+
+    /// <summary>
+    /// CTR
+    /// </summary>
+    [Description("CTR")]
+    CumulativeTriangleRoutine,
+
+    // 1403.03.08
+    /// <summary>
+    /// APSC
+    /// </summary>
+    APSC
 }

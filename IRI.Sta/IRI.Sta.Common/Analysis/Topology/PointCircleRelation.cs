@@ -1,12 +1,11 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Msh.Common.Analysis.Topology
+namespace IRI.Sta.Common.Analysis.Topology;
+
+public enum PointCircleRelation
 {
-    public enum PointCircleRelation
-    {
-        In,
-        On,
-        Out
-    }
+    In,
+    On,
+    Out
 }

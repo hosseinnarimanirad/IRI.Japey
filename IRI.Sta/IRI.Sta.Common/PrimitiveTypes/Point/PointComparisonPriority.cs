@@ -1,11 +1,10 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Ket.Geometry
+namespace IRI.Sta.Common;
+
+public enum PointComparisonPriority
 {
-    public enum PointComparisonPriority
-    {
-        XBased,
-        YBased
-    }
+    XBased,
+    YBased
 }

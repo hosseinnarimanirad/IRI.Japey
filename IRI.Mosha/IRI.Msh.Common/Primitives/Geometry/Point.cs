@@ -14,7 +14,6 @@ namespace IRI.Msh.Common.Primitives
 {
     public class Point : IPoint
     {
-
         public double X { get; set; }
 
         public double Y { get; set; }
@@ -98,7 +97,14 @@ namespace IRI.Msh.Common.Primitives
             return newR * c; // in meters
         }
 
+        public double DistanceTo(IPoint point)
+        {
+            double dx = this.X - point.X;
 
+            double dy = this.Y - point.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
 
         public override string ToString()
         {
@@ -245,6 +251,37 @@ namespace IRI.Msh.Common.Primitives
         //}
 
 
+        public byte[] AsSqlServerNativeBinary()
+        {
+            // Option #1
+            //byte[] result = new byte[16];
+
+            //Array.Copy(BitConverter.GetBytes(X), 0, result, 0, 8);
+
+            //Array.Copy(BitConverter.GetBytes(Y), 0, result, 8, 8);
+
+            //return result;
+
+
+            // Option #2
+            //byte[] result = new byte[16];
+
+            //BitConverter.TryWriteBytes(result.AsSpan(0, 8), X);
+
+            //BitConverter.TryWriteBytes(result.AsSpan(8, 8), Y);
+
+            //return result;
+
+
+            // Option #3
+            Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
+
+            BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
+
+            BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
+
+            return buffer.ToArray();  // Only allocates when creating final array
+        }
 
 
     }

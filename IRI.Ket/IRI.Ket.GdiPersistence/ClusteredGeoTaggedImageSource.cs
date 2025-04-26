@@ -79,7 +79,7 @@ namespace IRI.Ket.Persistence.DataSources
 
                 var logic = new Func<GeoTaggedImage, GeoTaggedImage, bool>((first, second) =>
                 {
-                    var distance = Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(first.WebMercatorLocation, second.WebMercatorLocation);
+                    var distance = Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(first.WebMercatorLocation, second.WebMercatorLocation);
 
                     var tolerance = 50 * ConversionHelper.InchToMeterFactor / 96.0;
 

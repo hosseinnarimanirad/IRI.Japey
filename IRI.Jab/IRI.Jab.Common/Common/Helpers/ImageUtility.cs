@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Model;
+﻿using IRI.Ket.WorldfileFormat;
+using IRI.Msh.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -494,9 +495,9 @@ namespace IRI.Jab.Common.Helpers
 
             outputImage.Save(outputFileName);
 
-            var worldFile = Ket.WorldfileFormat.WorldfileManager.Create(tiles.GetTotalImageBoundsInGeodetic(), width * 256, height * 256);
+            var worldFile = WorldfileManager.Create(tiles.GetTotalImageBoundsInGeodetic(), width * 256, height * 256);
 
-            Ket.WorldfileFormat.WorldfileManager.SaveWorldFile(Ket.WorldfileFormat.WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
+            WorldfileManager.SaveWorldFile(WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
         }
 
 

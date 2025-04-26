@@ -2,7 +2,7 @@ using IRI.Msh.Common.Primitives;
 using System.Collections.Generic;
 using System;
 
-namespace IRI.Msh.Common.Analysis;
+namespace IRI.Sta.Common.Analysis;
 
 public class DisplacementComparer<T> : IComparer<Tuple<double, int, int, int, int, T, int>> where T : IPoint
 {

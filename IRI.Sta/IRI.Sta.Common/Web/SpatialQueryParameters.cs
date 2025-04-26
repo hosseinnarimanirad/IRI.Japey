@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Web
+namespace IRI.Sta.Common.Web;
+
+public class SpatialQueryParameters
 {
-    public class SpatialQueryParameters
-    {
-        public string Where { get; set; }
+    public string Where { get; set; }
 
-        public string SpatialReference { get; set; }
+    public string SpatialReference { get; set; }
 
-        public string EsriJsonGeometry { get; set; }
+    public string EsriJsonGeometry { get; set; }
 
-        public bool ReturnIdsOnly { get; set; }
+    public bool ReturnIdsOnly { get; set; }
 
-        public string Type { get; set; }
-    }
+    public string Type { get; set; }
 }

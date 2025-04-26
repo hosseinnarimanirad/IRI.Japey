@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using sb = IRI.Msh.Common.Primitives;
+using IRI.Sta.OfficeFormat;
 
 namespace IRI.Jab.Common.Model
 {
@@ -109,7 +110,7 @@ namespace IRI.Jab.Common.Model
                 if (string.IsNullOrWhiteSpace(fileName))
                     return;
 
-                Ket.OfficeFormat.ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
+                ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
 
             });
 

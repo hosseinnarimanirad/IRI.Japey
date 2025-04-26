@@ -1,12 +1,11 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Msh.Common.Analysis.Topology
+namespace IRI.Sta.Common.Analysis.Topology;
+
+public enum PointVectorRelation
 {
-    public enum PointVectorRelation
-    {
-        LiesLeft = -1,
-        LiesOnTheLine = 0,
-        LiesRight = 1,
-    }
+    LiesLeft = -1,
+    LiesOnTheLine = 0,
+    LiesRight = 1,
 }

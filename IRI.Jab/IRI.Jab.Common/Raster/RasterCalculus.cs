@@ -12,7 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.Common.Primitives;
-using Point = IRI.Msh.Common.Primitives.Point; 
+using Point = IRI.Msh.Common.Primitives.Point;
+using IRI.Sta.Common.Analysis;
 
 namespace IRI.Jab.Common.Raster
 {
@@ -60,7 +61,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
+                    var value = Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
 
                     //map value to color
                     //var r = (int)(minR + rangeR / rangeValue * (value - minValue));
@@ -148,7 +149,7 @@ namespace IRI.Jab.Common.Raster
                     {
                         var x = boundingBox.XMin + j / scale;
                         var y = boundingBox.YMax - i / scale;
-                        var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
+                        var value = Idw.Calculate(pointSet, new Point(x, y), maxDistance);
 
                         if (value.HasValue)
                         {
@@ -216,7 +217,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = IRI.Msh.Common.Analysis.Interpolation.Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
+                    var value = Idw.Calculate(pointSet, new Point(x, y), maxDistance);
 
                     //حالت transparent چی؟
                     if (value.HasValue)

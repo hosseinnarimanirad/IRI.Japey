@@ -91,5 +91,16 @@ namespace IRI.Jab.Common.Model
             return double.IsNaN(X) || double.IsNaN(Y);
         }
 
+        public byte[] AsSqlServerNativeBinary()
+        {
+            // Option #3
+            Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
+
+            BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
+
+            BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
+
+            return buffer.ToArray();  // Only allocates when creating final array
+        }
     }
 }

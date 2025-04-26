@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IRI.Msh.Common.Analysis; 
+namespace IRI.Sta.Common.Analysis; 
 
 public class GeomUtils<T> where T : IPoint, new()
 {

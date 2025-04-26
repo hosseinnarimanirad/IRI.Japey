@@ -1,12 +1,11 @@
 using IRI.Extensions;
-using IRI.Msh.Common.Analysis.Interpolation;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IRI.Msh.Common.Analysis;
+namespace IRI.Sta.Common.Analysis;
 
 public static class ApscSimplification<T> where T : IPoint, new()
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Bibliography;
-using IRI.Msh.Common.Analysis;
+using IRI.Sta.Common.Analysis;
 using IRI.Msh.Common.Mapping;
 using IRI.Msh.Common.Model.GeoJson;
 using System.Windows.Media;

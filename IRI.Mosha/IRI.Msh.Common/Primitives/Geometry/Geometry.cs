@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Analysis;
+﻿using IRI.Sta.Common.Analysis;
 using IRI.Extensions;
 using IRI.Msh.Common.Helpers;
 using IRI.Msh.Common.Ogc;
@@ -1733,6 +1733,15 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return WkbParser.AsWkb(this);
     }
 
+    public string AsWkbString()
+    {
+        return IRI.Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(AsWkb(), append0x: true);
+    }
+
+    #endregion
+
+    #region Sql Server Native Binary
+
     public byte[] AsSqlServerByte()
     {
         //using (var ms = new MemoryStream())
@@ -1766,10 +1775,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return null;
     }
 
-    public string AsWkbString()
-    {
-        return IRI.Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(AsWkb(), append0x: true);
-    }
+
 
     #endregion
 

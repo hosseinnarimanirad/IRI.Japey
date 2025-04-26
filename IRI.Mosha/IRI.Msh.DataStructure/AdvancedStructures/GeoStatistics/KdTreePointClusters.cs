@@ -54,7 +54,7 @@ namespace IRI.Msh.DataStructure.AdvancedStructures
 
                     var tempGroup = new Group<T>(_allSingleMembers[i]);
 
-                    var nearestGroup = Groups.FindNearestNeighbour(tempGroup, ((g1, g2) => Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(g1.Center, g2.Center)));
+                    var nearestGroup = Groups.FindNearestNeighbour(tempGroup, ((g1, g2) => Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(g1.Center, g2.Center)));
 
                     if (groupLogic(nearestGroup.Center, _allSingleMembers[i]))
                     {

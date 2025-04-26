@@ -4,7 +4,7 @@ using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
 using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Analysis;
+using IRI.Sta.Common.Analysis;
 using IRI.Ket.Persistence.Model;
 
 namespace IRI.Ket.Persistence.DataSources

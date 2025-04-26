@@ -1,7 +1,7 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Extensions;
-using IRI.Msh.Common.Analysis;
+using IRI.Sta.Common.Analysis;
 using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;

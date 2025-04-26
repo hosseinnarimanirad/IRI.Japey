@@ -1,75 +1,75 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Msh.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Geometry
+namespace IRI.Sta.Common;
+
+
+public class VoronoiPoint
 {
 
-    public class VoronoiPoint
+    //private double m_X;
+
+    //private double m_Y;
+
+    private int m_TriangleCode;
+
+    public double X { get; set; }
+
+    public double Y { get; set; }
+
+    public int TriangleCode
     {
+        get { return this.m_TriangleCode; }
+    }
 
-        //private double m_X;
+    public VoronoiPoint(int triangleCode, Point position)
+    {
+        this.m_TriangleCode = triangleCode;
 
-        //private double m_Y;
+        this.X = position.X;
 
-        private int m_TriangleCode;
+        this.Y = position.Y;
 
-        public double X { get; set; }
+        this.NeigboursCode = new List<int>();
+    }
 
-        public double Y { get; set; }
+    public List<int> NeigboursCode;
 
-        public int TriangleCode
+    public override string ToString()
+    {
+        //StringBuilder temp = new StringBuilder();
+
+        //temp.Append(string.Format("X:{0}, Y:{1}, Neighbours:", X.ToString(), Y.ToString()));
+
+        //foreach (int item in NeigboursCode)
+        //{
+        //    temp.Append(string.Format(", {0}", item.ToString()));
+        //}
+
+        //return temp.ToString();
+
+        return string.Format("X:{0}, Y:{1}, Triangle{2}:", X.ToString(), Y.ToString(), TriangleCode);
+    }
+
+    // dar soorate neveshtane hamsayeha dat methode ToString()
+    // ba tagire hamsayeha hascode nogata ham avaz mishavad!
+    public override int GetHashCode()
+    {
+        return this.ToString().GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() != typeof(VoronoiPoint))
         {
-            get { return this.m_TriangleCode; }
+            return false;
         }
 
-        public VoronoiPoint(int triangleCode, Point position)
-        {
-            this.m_TriangleCode = triangleCode;
-
-            this.X = position.X;
-
-            this.Y = position.Y;
-
-            this.NeigboursCode = new List<int>();
-        }
-
-        public List<int> NeigboursCode;
-
-        public override string ToString()
-        {
-            //StringBuilder temp = new StringBuilder();
-
-            //temp.Append(string.Format("X:{0}, Y:{1}, Neighbours:", X.ToString(), Y.ToString()));
-
-            //foreach (int item in NeigboursCode)
-            //{
-            //    temp.Append(string.Format(", {0}", item.ToString()));
-            //}
-
-            //return temp.ToString();
-
-            return string.Format("X:{0}, Y:{1}, Triangle{2}:", X.ToString(), Y.ToString(), TriangleCode);
-        }
-
-        // dar soorate neveshtane hamsayeha dat methode ToString()
-        // ba tagire hamsayeha hascode nogata ham avaz mishavad!
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() != typeof(VoronoiPoint))
-            {
-                return false;
-            }
-
-            return this.ToString().Equals(obj.ToString());
-        }
+        return this.ToString().Equals(obj.ToString());
     }
 }

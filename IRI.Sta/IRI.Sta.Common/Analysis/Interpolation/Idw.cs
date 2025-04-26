@@ -4,42 +4,41 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace IRI.Msh.Common.Analysis.Interpolation
+namespace IRI.Sta.Common.Analysis;
+
+public static class Idw
 {
-    public static class Idw
+    public static double? Calculate(IEnumerable<Point3D> points, IPoint measurePoint, double? maxDistance)
     {
-        public static double? Calculate(IEnumerable<Point3D> points, IPoint measurePoint, double? maxDistance)
+        //var weights = new List<double>();
+
+        double weightedSum = 0;
+
+        double sum = 0;
+
+        int count = 0;
+
+        foreach (var item in points)
         {
-            //var weights = new List<double>();
+            double distance = Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(measurePoint, item);
 
-            double weightedSum = 0;
-
-            double sum = 0;
-
-            int count = 0;
-
-            foreach (var item in points)
+            if (distance < maxDistance)
             {
-                double distance = Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(measurePoint, item);
+                double weight = 1.0 / (distance * distance);
 
-                if (distance < maxDistance)
-                {
-                    double weight = 1.0 / (distance * distance);
+                //weights.Add(weight);
 
-                    //weights.Add(weight);
+                weightedSum += weight * item.Z;
 
-                    weightedSum += weight * item.Z;
+                sum += weight;
 
-                    sum += weight;
-
-                    count++;
-                }
+                count++;
             }
-            if (count > 0)
-            {
-
-            }
-            return count > 0 ? (double?)(weightedSum / sum) : null;
         }
+        if (count > 0)
+        {
+
+        }
+        return count > 0 ? (double?)(weightedSum / sum) : null;
     }
 }

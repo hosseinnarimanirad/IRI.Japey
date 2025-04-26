@@ -7,7 +7,7 @@ using System;
 namespace IRI.Ket.DigitalTerrainModeling;
 
 [Serializable]
-public struct AttributedPoint : IRI.Msh.Common.Primitives.IPoint
+public struct AttributedPoint : IPoint
 {
     private double m_X, m_Y, m_Value;
 
@@ -95,6 +95,19 @@ public struct AttributedPoint : IRI.Msh.Common.Primitives.IPoint
     public byte[] AsWkb()
     {
         throw new NotImplementedException();
+    }
+
+
+    public byte[] AsSqlServerNativeBinary()
+    {
+        // Option #3
+        Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
+
+        BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
+
+        BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
+         
+        return buffer.ToArray();  // Only allocates when creating final array
     }
 
     public bool IsNaN()

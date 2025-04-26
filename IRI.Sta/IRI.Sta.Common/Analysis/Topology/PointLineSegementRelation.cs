@@ -1,11 +1,10 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Msh.Common.Analysis.Topology
+namespace IRI.Sta.Common.Analysis.Topology;
+
+public enum PointLineSegementRelation
 {
-    public enum PointLineSegementRelation
-    {
-        On = 0,
-        Out = 1
-    }
+    On = 0,
+    Out = 1
 }

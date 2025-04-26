@@ -105,7 +105,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
         {
             //return Point.GetDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
 
-            return Msh.Common.Analysis.SpatialUtility.GetEuclideanDistance(this, point);
+            return Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(this, point);
         }
 
 
@@ -162,6 +162,17 @@ namespace IRI.Sta.ShapefileFormat.EsriType
             return double.IsNaN(X) || double.IsNaN(Y);
         }
 
+        public byte[] AsSqlServerNativeBinary()
+        {
+            // Option #3
+            Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
+
+            BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
+
+            BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
+
+            return buffer.ToArray();  // Only allocates when creating final array
+        }
     }
 
 }

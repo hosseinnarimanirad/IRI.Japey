@@ -1,4 +1,6 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Msh.Common.Helpers;
+using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +53,6 @@ namespace IRI.Tag.SampleWpfApp
             presenter.MapProviders.Add(Jab.Common.TileServices.TileMapProviderFactory.WazeStreet);
 
             presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false);
-
 
         }
     }

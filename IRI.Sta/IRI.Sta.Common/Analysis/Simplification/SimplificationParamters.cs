@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Common.Analysis
+namespace IRI.Sta.Common.Analysis;
+
+public class SimplificationParamters
 {
-    public class SimplificationParamters
-    {
-        // 1401.02.26
-        // used in n-th point simplification methods
-        public uint N { get; set; }
+    // 1401.02.26
+    // used in n-th point simplification methods
+    public uint N { get; set; }
 
-        public double? DistanceThreshold { get; set; }
+    public double? DistanceThreshold { get; set; }
 
-        public double? AreaThreshold { get; set; }
+    public double? AreaThreshold { get; set; }
 
-        /// <summary>
-        /// Square Cosine of angle should be provided, must be between 0 and 1
-        /// </summary>
-        public double? AngleThreshold { get; set; }
+    /// <summary>
+    /// Square Cosine of angle should be provided, must be between 0 and 1
+    /// </summary>
+    public double? AngleThreshold { get; set; }
 
-        public bool Retain3Points { get; set; } = false;
+    public bool Retain3Points { get; set; } = false;
 
 
-        // used in Lang algorithm
-        public int? LookAhead { get; set; }
+    // used in Lang algorithm
+    public int? LookAhead { get; set; }
 
-        public double? AverageLatitude { get; set; }
-    }
+    public double? AverageLatitude { get; set; }
 }

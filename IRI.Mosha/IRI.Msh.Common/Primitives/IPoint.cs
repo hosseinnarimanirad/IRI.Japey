@@ -14,6 +14,7 @@ namespace IRI.Msh.Common.Primitives
         byte[] AsWkb();
         bool IsNaN();
 
+        byte[] AsSqlServerNativeBinary();
 
         //T Transform<T>(Func<T, T> transform, int newSrid) where T : IPoint, new();
     }

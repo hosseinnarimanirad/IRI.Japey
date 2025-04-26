@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Extensions
+namespace IRI.Extensions;
+
+public static class NullableIntExtensions
 {
-    public static class NullableIntExtensions
+    public static int GetValue(this int? value)
     {
-        public static int GetValue(this int? value)
-        {
-            return value == null ? 0 : (value.HasValue ? value.Value : 0);
-        }
+        return value == null ? 0 : (value.HasValue ? value.Value : 0);
     }
 }

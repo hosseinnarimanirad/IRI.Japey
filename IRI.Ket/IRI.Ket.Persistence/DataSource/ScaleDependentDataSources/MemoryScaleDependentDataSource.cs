@@ -9,7 +9,7 @@ using IRI.Msh.Common.Primitives;
 using System.Diagnostics;
 using IRI.Extensions;
 
-using IRI.Msh.Common.Analysis;
+using IRI.Sta.Common.Analysis;
 
 namespace IRI.Ket.Persistence.DataSources
 {
