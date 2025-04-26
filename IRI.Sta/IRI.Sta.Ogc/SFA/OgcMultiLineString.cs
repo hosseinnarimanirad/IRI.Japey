@@ -4,80 +4,79 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using IRI.Msh.Common.Ogc;
+using IRI.Sta.Common.IO.OgcSFA;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct OgcMultiLineString<T> : IOgcGeometry where T : IOgcPoint
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcMultiLineString<T> : IOgcGeometry where T : IOgcPoint
+    byte byteOrder;
+
+    UInt32 type;
+
+    UInt32 numLineStrings;
+
+    OgcLineString<T>[] lineStrings;
+
+    public WkbByteOrder ByteOrder
     {
-        byte byteOrder;
+        get { return (WkbByteOrder)this.byteOrder; }
+    }
 
-        UInt32 type;
+    public WkbGeometryType Type
+    {
+        get { return (WkbGeometryType)this.type; }
+    }
 
-        UInt32 numLineStrings;
+    public OgcLineString<T>[] LineStrings { get { return this.lineStrings; } }
 
-        OgcLineString<T>[] lineStrings;
-
-        public WkbByteOrder ByteOrder
+    public byte[] ToWkb()
+    {
+        using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
         {
-            get { return (WkbByteOrder)this.byteOrder; }
-        }
+            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-        public WkbGeometryType Type
-        {
-            get { return (WkbGeometryType)this.type; }
-        }
+            writer.Write(byteOrder);
 
-        public OgcLineString<T>[] LineStrings { get { return this.lineStrings; } }
+            writer.Write(type);
 
-        public byte[] ToWkb()
-        {
-            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
+            writer.Write(numLineStrings);
+
+            foreach (OgcLineString<T> item in LineStrings)
             {
-                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
-
-                writer.Write(byteOrder);
-
-                writer.Write(type);
-
-                writer.Write(numLineStrings);
-
-                foreach (OgcLineString<T> item in LineStrings)
-                {
-                    writer.Write(item.ToWkb());
-                }
-
-                writer.Close();
-
-                return stream.ToArray();
-            }
-        }
-
-        public OgcMultiLineString(byte[] buffer)
-            : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
-        {
-        }
-
-        public OgcMultiLineString(System.IO.BinaryReader reader)
-        {
-            this.byteOrder = reader.ReadByte();
-
-            this.type = reader.ReadUInt32();
-
-            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcMultiLineString<T>)] != (WkbGeometryType)this.type)
-            {
-                throw new NotImplementedException();
+                writer.Write(item.ToWkb());
             }
 
-            this.numLineStrings = reader.ReadUInt32();
+            writer.Close();
 
-            this.lineStrings = new OgcLineString<T>[this.numLineStrings];
+            return stream.ToArray();
+        }
+    }
 
-            for (int i = 0; i < this.numLineStrings; i++)
-            {
-                this.lineStrings[i] = new OgcLineString<T>(reader);
-            }
+    public OgcMultiLineString(byte[] buffer)
+        : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
+    {
+    }
+
+    public OgcMultiLineString(System.IO.BinaryReader reader)
+    {
+        this.byteOrder = reader.ReadByte();
+
+        this.type = reader.ReadUInt32();
+
+        if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcMultiLineString<T>)] != (WkbGeometryType)this.type)
+        {
+            throw new NotImplementedException();
+        }
+
+        this.numLineStrings = reader.ReadUInt32();
+
+        this.lineStrings = new OgcLineString<T>[this.numLineStrings];
+
+        for (int i = 0; i < this.numLineStrings; i++)
+        {
+            this.lineStrings[i] = new OgcLineString<T>(reader);
         }
     }
 }

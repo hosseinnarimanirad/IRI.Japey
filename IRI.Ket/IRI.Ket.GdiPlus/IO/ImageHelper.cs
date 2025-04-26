@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
 using IRI.Msh.Statistics;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Common.Helpers;
 
@@ -103,7 +103,7 @@ public static class ImageHelper
         return result;
     }
 
-    public static IRI.Msh.Common.Primitives.Point3D GetWgs84Location(Bitmap bitmap)
+    public static IRI.Sta.Common.Primitives.Point3D GetWgs84Location(Bitmap bitmap)
     {
         var latitude = GetLatitude(bitmap);
 
@@ -113,29 +113,29 @@ public static class ImageHelper
 
         if (!(latitude.HasValue && longitude.HasValue))
         {
-            return IRI.Msh.Common.Primitives.Point3D.NaN;
+            return IRI.Sta.Common.Primitives.Point3D.NaN;
         }
         else
         {
             if (height.HasValue)
             {
-                return new IRI.Msh.Common.Primitives.Point3D(longitude.Value, latitude.Value, height.Value);
+                return new IRI.Sta.Common.Primitives.Point3D(longitude.Value, latitude.Value, height.Value);
             }
             else
             {
-                return new IRI.Msh.Common.Primitives.Point3D(longitude.Value, latitude.Value, double.NaN);
+                return new IRI.Sta.Common.Primitives.Point3D(longitude.Value, latitude.Value, double.NaN);
             }
         }
 
     }
 
-    //public static IRI.Msh.Common.Point3D GetMercatorLocation(Bitmap bitmap)
+    //public static IRI.Sta.Common.Point3D GetMercatorLocation(Bitmap bitmap)
     //{
     //    var wgs84 = GetWgs84Location(bitmap);
 
-    //    var mercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Msh.Common.Primitives.Point)wgs84);
+    //    var mercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Sta.Common.Primitives.Point)wgs84);
 
-    //    return new IRI.Msh.Common.Point3D(mercator.X, mercator.Y, wgs84.Z);
+    //    return new IRI.Sta.Common.Point3D(mercator.X, mercator.Y, wgs84.Z);
     //}
 
     /// <summary>
@@ -143,7 +143,7 @@ public static class ImageHelper
     /// </summary>
     /// <param name="bitmap"></param>
     /// <param name="point"></param>
-    public static void SaveGeoTagInfo(ref Bitmap bitmap, IRI.Msh.Common.Primitives.Point3D point)
+    public static void SaveGeoTagInfo(ref Bitmap bitmap, IRI.Sta.Common.Primitives.Point3D point)
     {
         if (point.Y < -90 || point.Y > 90 || point.X < -180 || point.X > 360)
             throw new NotImplementedException();

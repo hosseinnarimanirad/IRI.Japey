@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common.Convertor
 {

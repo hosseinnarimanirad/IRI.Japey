@@ -18,7 +18,7 @@ namespace IRI.Sta.ShapefileFormat.Reader
 
         }
 
-        protected IRI.Msh.Common.Primitives.BoundingBox ReadBoundingBox()
+        protected IRI.Sta.Common.Primitives.BoundingBox ReadBoundingBox()
         {
             double xMin = shpReader.ReadDouble();
 
@@ -28,7 +28,7 @@ namespace IRI.Sta.ShapefileFormat.Reader
 
             double yMax = shpReader.ReadDouble();
 
-            return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
         protected EsriPoint[] ReadPoints(int numberOfPoints, int srid)

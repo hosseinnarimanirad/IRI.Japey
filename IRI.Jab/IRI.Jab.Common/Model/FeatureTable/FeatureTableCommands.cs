@@ -2,12 +2,12 @@
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using sb = IRI.Msh.Common.Primitives;
-using IRI.Sta.OfficeFormat;
+using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.IO.OfficeFormats;
 
 namespace IRI.Jab.Common.Model
 {

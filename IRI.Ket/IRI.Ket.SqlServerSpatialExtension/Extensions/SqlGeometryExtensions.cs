@@ -1,8 +1,8 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Msh.Common.Model.GeoJson;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Primitives.Esri;
+using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Primitives.Esri;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;
 using System.Text;
@@ -395,7 +395,7 @@ namespace IRI.Extensions
         {
             return geometry.STPointN(index).AsPoint();
 
-            //return new IRI.Msh.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
+            //return new IRI.Sta.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
         }
 
 
@@ -1433,12 +1433,12 @@ namespace IRI.Extensions
 
         #region Model
 
-        public static SqlGeometry AsSqlGeometry(this IRI.Msh.Common.Model.TileInfo tile)
+        public static SqlGeometry AsSqlGeometry(this IRI.Sta.Common.Model.TileInfo tile)
         {
             return tile.WebMercatorExtent.AsSqlGeometry();
         }
 
-        public static Geometry<Point> AsGeometry(this IRI.Msh.Common.Model.TileInfo tile)
+        public static Geometry<Point> AsGeometry(this IRI.Sta.Common.Model.TileInfo tile)
         {
             return tile.WebMercatorExtent.AsGeometry<Point>(0);
         }

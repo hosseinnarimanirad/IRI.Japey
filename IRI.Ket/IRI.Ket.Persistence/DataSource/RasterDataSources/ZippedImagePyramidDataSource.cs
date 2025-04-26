@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Msh.CoordinateSystem.MapProjection;
@@ -112,7 +112,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
         {
             //94.12.17
             //int zoomLevel = GetZoomLevel(mapScale);
-            int zoomLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var result = new List<GeoReferencedImage>();
 
@@ -140,7 +140,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
                     {
                         var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i)/*.Replace("\\", "/")*/, StringComparison.OrdinalIgnoreCase)).Open();
 
-                        byte[] bytes = IRI.Msh.Common.Helpers.StreamHelper.ToByteArray(stream);
+                        byte[] bytes = IRI.Sta.Common.Helpers.StreamHelper.ToByteArray(stream);
 
                         result.Add(new GeoReferencedImage(bytes, WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
                     }

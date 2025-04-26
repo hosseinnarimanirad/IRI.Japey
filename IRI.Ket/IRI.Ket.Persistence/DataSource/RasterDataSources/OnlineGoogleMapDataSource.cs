@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Model;
 using IRI.Ket.Persistence.DataSources;
 
@@ -34,7 +34,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
 
             var center = MapProjects.WebMercatorToGeodeticWgs84(mbb.Center);
 
-            var zoom = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            var zoom = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var url = $@"https://maps.googleapis.com/maps/api/staticmap?center={center.Y},{center.X}&zoom={zoom}&size=256x256&maptype=roadmap&key=AIzaSyASDX3dnoItXvimcgmsfNgw3J2piODjx9E";
 
@@ -51,7 +51,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
                 client.Headers.Add("user-agent", "App!");
 
                 //var zoom = GetZoomLevel(mapScale);
-                var zoom = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+                var zoom = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
                 //google map
                 var url = $@"https://mt0.google.com/vt?x={tile.ColumnNumber}&y={tile.RowNumber}&z={tile.ZoomLevel}";
@@ -74,7 +74,7 @@ namespace IRI.Ket.Persistence.RasterDataSources
 
         public async Task<List<Tuple<TileInfo, GeoReferencedImage>>> GetTiles(BoundingBox mbb, double mapScale)
         {
-            var zoom = IRI.Msh.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+            var zoom = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
 
             var tilesBoundary = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(mbb, zoom);
 

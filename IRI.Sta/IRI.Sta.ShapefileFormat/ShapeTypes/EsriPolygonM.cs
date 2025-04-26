@@ -1,8 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Msh.Common.Ogc;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.IO.OgcSFA;
 using System;
 using System.Collections.Generic;
 using System.Linq;

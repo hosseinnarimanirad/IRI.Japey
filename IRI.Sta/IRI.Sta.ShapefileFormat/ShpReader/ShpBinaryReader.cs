@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using System;
 using System.Collections.Generic;

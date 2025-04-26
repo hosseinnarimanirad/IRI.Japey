@@ -4,80 +4,79 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using IRI.Msh.Common.Ogc;
+using IRI.Sta.Common.IO.OgcSFA;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct OgcPolyhedralSurface<T> : IOgcGeometry where T : IOgcPoint, new()
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcPolyhedralSurface<T> : IOgcGeometry where T : IOgcPoint, new()
+    byte byteOrder;
+
+    UInt32 type;
+
+    UInt32 numPolygons;
+
+    OgcPolygon<T>[] polygons;
+
+    public OgcPolygon<T>[] Polygons { get { return this.polygons; } }
+
+    public WkbByteOrder ByteOrder
     {
-        byte byteOrder;
+        get { return (WkbByteOrder)this.byteOrder; }
+    }
 
-        UInt32 type;
+    public WkbGeometryType Type
+    {
+        get { return (WkbGeometryType)this.type; }
+    }
 
-        UInt32 numPolygons;
-
-        OgcPolygon<T>[] polygons;
-
-        public OgcPolygon<T>[] Polygons { get { return this.polygons; } }
-
-        public WkbByteOrder ByteOrder
+    public byte[] ToWkb()
+    {
+        using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
         {
-            get { return (WkbByteOrder)this.byteOrder; }
-        }
+            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-        public WkbGeometryType Type
-        {
-            get { return (WkbGeometryType)this.type; }
-        }
+            writer.Write(byteOrder);
 
-        public byte[] ToWkb()
-        {
-            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
+            writer.Write(type);
+
+            writer.Write(numPolygons);
+
+            foreach (OgcPolygon<T> item in Polygons)
             {
-                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
-
-                writer.Write(byteOrder);
-
-                writer.Write(type);
-
-                writer.Write(numPolygons);
-
-                foreach (OgcPolygon<T> item in Polygons)
-                {
-                    writer.Write(item.ToWkb());
-                }
-
-                writer.Close();
-
-                return stream.ToArray();
-            }
-        }
-
-        public OgcPolyhedralSurface(byte[] buffer)
-            : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
-        {
-        }
-
-        public OgcPolyhedralSurface(System.IO.BinaryReader reader)
-        {
-            this.byteOrder = reader.ReadByte();
-
-            this.type = reader.ReadUInt32();
-
-            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcPolyhedralSurface<T>)] != (WkbGeometryType)this.type)
-            {
-                throw new NotImplementedException();
+                writer.Write(item.ToWkb());
             }
 
-            this.numPolygons = reader.ReadUInt32();
+            writer.Close();
 
-            this.polygons = new OgcPolygon<T>[this.numPolygons];
+            return stream.ToArray();
+        }
+    }
 
-            for (int i = 0; i < this.numPolygons; i++)
-            {
-                this.polygons[i] = new OgcPolygon<T>(reader);
-            }
+    public OgcPolyhedralSurface(byte[] buffer)
+        : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
+    {
+    }
+
+    public OgcPolyhedralSurface(System.IO.BinaryReader reader)
+    {
+        this.byteOrder = reader.ReadByte();
+
+        this.type = reader.ReadUInt32();
+
+        if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcPolyhedralSurface<T>)] != (WkbGeometryType)this.type)
+        {
+            throw new NotImplementedException();
+        }
+
+        this.numPolygons = reader.ReadUInt32();
+
+        this.polygons = new OgcPolygon<T>[this.numPolygons];
+
+        for (int i = 0; i < this.numPolygons; i++)
+        {
+            this.polygons[i] = new OgcPolygon<T>(reader);
         }
     }
 }

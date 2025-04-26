@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 using System;
 using System.Text;
 using IRI.Extensions;
@@ -170,12 +170,12 @@ public static class WorldfileManager
         return new Worldfile(xPixelSize, yPixelSize, new Point(mapBoundingBox.XMin + xPixelSize / 2.0, mapBoundingBox.YMax - yPixelSize / 2.0));
     }
 
-    public static Worldfile CreateByGeodeticValues(IRI.Msh.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+    public static Worldfile CreateByGeodeticValues(IRI.Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
     {
         return Create(tile.GeodeticExtent, imagePixelWidth, imagePixelHeight);
     }
 
-    public static Worldfile CreateByWebMercatorValues(IRI.Msh.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+    public static Worldfile CreateByWebMercatorValues(IRI.Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
     {
         return Create(tile.WebMercatorExtent, imagePixelWidth, imagePixelHeight);
     }

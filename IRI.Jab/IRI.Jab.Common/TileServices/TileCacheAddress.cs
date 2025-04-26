@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Jab.Common.TileServices
 {

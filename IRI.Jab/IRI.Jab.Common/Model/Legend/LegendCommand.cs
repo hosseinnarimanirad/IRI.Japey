@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using System.Collections.Generic;
 using IRI.Extensions;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common.Model.Legend
 {

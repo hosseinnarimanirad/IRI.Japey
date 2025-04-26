@@ -1,0 +1,57 @@
+﻿using System;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text;
+
+namespace IRI.Sta.Common.Model.GeoJson
+{
+
+    public class GeoJsonFeatureSet
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; } = "FeatureCollection";
+
+        [JsonProperty("totalFeatures")]
+        public int TotalFeatures { get; set; }
+
+        [JsonProperty("features")]
+        public List<GeoJsonFeature> Features { get; set; }
+
+        [JsonProperty("crs")]
+        public GeoJsonCrs Crs { get; set; }
+
+        public void Save(string fileName, bool indented, bool removeSpaces = false)
+        {
+            var result = Newtonsoft.Json.JsonConvert.SerializeObject(this, indented ? Formatting.Indented : Formatting.None);
+
+            System.IO.File.WriteAllText(fileName, removeSpaces ? result.Replace(" ", string.Empty) : result);
+        }
+
+        public static GeoJsonFeatureSet Load(string fileName)
+        {
+            return Parse(System.IO.File.ReadAllText(fileName));
+        }
+
+        public static GeoJsonFeatureSet Parse(string geoJsonFeaturesSetString)
+        {
+            return JsonConvert.DeserializeObject<GeoJsonFeatureSet>(geoJsonFeaturesSetString);
+        }
+    }
+
+    public class GeoJsonCrs
+    {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        [JsonProperty("properties")]
+        public Properties Properties { get; set; }
+    }
+
+    public class Properties
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+
+}

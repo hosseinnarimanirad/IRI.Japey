@@ -1,8 +1,8 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.Statistics;
-using IRI.Sta.Common.Service.Oxford;
+using IRI.Sta.Common.Services.Oxford;
 using System;
 using System.Collections.Generic;
 using System.Linq;

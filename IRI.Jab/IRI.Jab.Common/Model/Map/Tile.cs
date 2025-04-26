@@ -1,5 +1,5 @@
 ﻿
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

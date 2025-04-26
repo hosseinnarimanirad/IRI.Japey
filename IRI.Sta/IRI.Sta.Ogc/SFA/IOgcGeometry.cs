@@ -1,14 +1,13 @@
-﻿using IRI.Msh.Common.Ogc;
+﻿using IRI.Sta.Common.IO.OgcSFA;
 using System;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+public interface IOgcGeometry
 {
-    public interface IOgcGeometry
-    {
-        WkbByteOrder ByteOrder { get; }
+    WkbByteOrder ByteOrder { get; }
 
-        byte[] ToWkb();
+    byte[] ToWkb();
 
-        WkbGeometryType Type { get; }
-    }
+    WkbGeometryType Type { get; }
 }

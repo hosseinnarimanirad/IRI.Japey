@@ -1,12 +1,12 @@
 ﻿using IRI.Sta.ShapefileFormat.Dbf;
 using IRI.Sta.ShapefileFormat.EsriType;
 using System.Text;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Extensions;
-using IRI.Msh.Common.Helpers;
+using IRI.Sta.Common.Helpers;
 using IRI.Sta.ShapefileFormat.Model;
 
 namespace IRI.Ket.Persistence.DataSources

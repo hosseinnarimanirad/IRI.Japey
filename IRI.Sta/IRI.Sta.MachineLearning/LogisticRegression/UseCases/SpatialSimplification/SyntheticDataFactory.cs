@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.MachineLearning;
 

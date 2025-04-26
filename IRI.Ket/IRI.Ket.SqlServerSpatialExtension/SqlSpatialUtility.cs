@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Extensions;
 using IRI.Sta.Common.Analysis;

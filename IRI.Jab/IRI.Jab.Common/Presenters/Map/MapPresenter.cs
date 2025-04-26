@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Service;
+using IRI.Sta.Common.Services;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;
@@ -134,7 +134,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
                     _currentEditingLayer.RequestZoomToPoint = (p) =>
                     {
-                        this.Zoom(IRI.Msh.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
+                        this.Zoom(IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(14), p);
                     };
 
                     _currentEditingLayer.RequestZoomToGeometry = g =>

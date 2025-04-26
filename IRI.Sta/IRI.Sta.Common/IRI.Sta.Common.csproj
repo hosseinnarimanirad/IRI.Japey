@@ -8,27 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CoordinateSystems\**" />
-    <Compile Remove="Mapping\**" />
-    <Compile Remove="Mathematics\**" />
-    <Compile Remove="Ogc\**" />
-    <Compile Remove="Primitives\**" />
-    <Compile Remove="Units\**" />
-    <EmbeddedResource Remove="CoordinateSystems\**" />
-    <EmbeddedResource Remove="Mapping\**" />
-    <EmbeddedResource Remove="Mathematics\**" />
-    <EmbeddedResource Remove="Ogc\**" />
-    <EmbeddedResource Remove="Primitives\**" />
-    <EmbeddedResource Remove="Units\**" />
-    <None Remove="CoordinateSystems\**" />
-    <None Remove="Mapping\**" />
-    <None Remove="Mathematics\**" />
-    <None Remove="Ogc\**" />
-    <None Remove="Primitives\**" />
-    <None Remove="Units\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.0" />
   </ItemGroup>
 
@@ -37,10 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Model\WiseWebClient.cs" />
+    <Compile Update="Models\WiseWebClient.cs" />
   </ItemGroup>
 
-  <Import Project="..\..\IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems" Label="Shared" />
+  <ItemGroup>
+    <Folder Include="CoordinateSystems\CoordinateSystem\Orbital\" />
+  </ItemGroup>
 
   <Import Project="..\..\IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems" Label="Shared" />
 

@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Ket.WorldfileFormat;
 using IRI.Ket.Persistence.RasterDataSources;
 

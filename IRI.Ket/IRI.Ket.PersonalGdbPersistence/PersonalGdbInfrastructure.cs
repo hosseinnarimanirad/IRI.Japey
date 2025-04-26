@@ -2,6 +2,7 @@
 using IRI.Ket.PersonalGdbPersistence.Model;
 using IRI.Ket.PersonalGdbPersistence.Xml;
 using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.PersonalGdb;
 using System;
 using System.Collections.Generic;
@@ -185,16 +186,16 @@ public static class PersonalGdbInfrastructure
         return result.OrderBy(r => r.DomainName).ToList();
     }
 
-    public static async Task<List<Msh.Common.Primitives.Field>> GetTableSchema(OleDbConnection connection, string tableName)
+    public static async Task<List<Field>> GetTableSchema(OleDbConnection connection, string tableName)
     {
-        var fields = new List<Msh.Common.Primitives.Field>();
+        var fields = new List<Field>();
 
         // Get columns schema
         var columns = await connection.GetSchemaAsync("Columns", new[] { null, null, tableName });
 
         foreach (System.Data.DataRow row in columns.Rows)
         {
-            var field = new Msh.Common.Primitives.Field()
+            var field = new Field()
             {
                 Alias = string.Empty,
                 Length = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value ? 0 : int.Parse(row["CHARACTER_MAXIMUM_LENGTH"].ToString()!),

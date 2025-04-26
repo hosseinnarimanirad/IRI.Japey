@@ -2,14 +2,14 @@
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Extensions;
 using IRI.Sta.Common.Analysis;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
-using IRI.Msh.Common.Model.GeoJson;
+using IRI.Sta.Common.Model.GeoJson;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Windows.Media;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Msh.Common.Mapping;
+using IRI.Sta.Common.Mapping;
 using System.Windows.Media.Media3D;
 using System.Windows.Media.Imaging;
 using System.Windows.Forms;

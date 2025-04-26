@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.DataStructure;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Common.Analysis.SFC.PointSorting;
 

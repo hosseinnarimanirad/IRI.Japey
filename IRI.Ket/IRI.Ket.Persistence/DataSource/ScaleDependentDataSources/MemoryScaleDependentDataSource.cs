@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Diagnostics;
 using IRI.Extensions;
 
@@ -26,7 +26,7 @@ namespace IRI.Ket.Persistence.DataSources
 
             var boundingBox = geometries.GetBoundingBox();
 
-            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude,*/ 900);
+            var fitLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude,*/ 900);
 
             this.GeometryType = geometries.First().Type;
 
@@ -41,11 +41,11 @@ namespace IRI.Ket.Persistence.DataSources
 
             for (int i = fitLevel; i < 18; i += 4)
             {
-                var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+                var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
 
                 Debug.Print($"threshold: {threshold}, level:{i}");
 
-                var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+                var inverseScale = IRI.Sta.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
                 source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.CumulativeTriangleRoutine, new SimplificationParamters()
                 {
@@ -61,7 +61,7 @@ namespace IRI.Ket.Persistence.DataSources
         {
             var availableScales = source.Select(k => k.Key).ToList();
 
-            var selectedScale = IRI.Msh.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
+            var selectedScale = IRI.Sta.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
 
             return source[selectedScale];
         }
@@ -108,17 +108,17 @@ namespace IRI.Ket.Persistence.DataSources
 
             var boundingBox = geometries.GetBoundingBox();
 
-            var fitLevel = IRI.Msh.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude, */900);
+            var fitLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude, */900);
 
             var simplifiedByAngleGeometries = geometries.Select(g => g.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters() { AngleThreshold = .98, Retain3Points = true })).Where(g => !g.IsNullOrEmpty()).ToList();
 
             for (int i = fitLevel; i < 18; i += 4)
             {
-                var threshold = IRI.Msh.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+                var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
 
                 Debug.Print($"threshold: {threshold}, level:{i}");
 
-                var inverseScale = IRI.Msh.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
+                var inverseScale = IRI.Sta.Common.Mapping.WebMercatorUtility.ZoomLevels.Single(z => z.ZoomLevel == i).InverseScale;
 
                 source.Add(inverseScale, simplifiedByAngleGeometries.Select(g => g.Simplify(SimplificationType.CumulativeTriangleRoutine, new SimplificationParamters() { AreaThreshold = threshold * threshold, Retain3Points = true })).Where(g => !g.IsNotValidOrEmpty()).ToList());
             }
@@ -128,7 +128,7 @@ namespace IRI.Ket.Persistence.DataSources
         {
             var availableScales = source.Select(k => k.Key).ToList();
 
-            var selectedScale = IRI.Msh.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
+            var selectedScale = IRI.Sta.Common.Mapping.WebMercatorUtility.GetUpperLevel(scale, availableScales);
 
             return source[selectedScale];
         }

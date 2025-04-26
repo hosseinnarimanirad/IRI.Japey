@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using IRI.Msh.MeasurementUnit;
 using System.Net.NetworkInformation;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
-using IRI.Msh.Common.Enums;
+using IRI.Sta.Common.Enums;
 
 namespace IRI.Sta.Common.Analysis;
 

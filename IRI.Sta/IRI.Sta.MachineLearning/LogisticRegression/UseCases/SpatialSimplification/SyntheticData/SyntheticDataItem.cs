@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Model.GeoJson;
-using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

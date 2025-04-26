@@ -1,9 +1,9 @@
 ﻿using Microsoft.SqlServer.Types;
 using System.Data.SqlClient;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Extensions;
-using IRI.Msh.Common.Model; 
+using IRI.Sta.Common.Model; 
 
 namespace IRI.Ket.Persistence.DataSources
 {

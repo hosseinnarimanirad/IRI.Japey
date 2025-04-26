@@ -1,7 +1,7 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Primitives.Esri;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives.Esri;
+using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using System;
 using System.Collections.Generic;

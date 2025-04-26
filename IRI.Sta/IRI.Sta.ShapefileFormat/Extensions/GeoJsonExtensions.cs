@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
-using IRI.Msh.Common.Model.GeoJson;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -66,7 +66,7 @@ namespace IRI.Extensions
             }
             else
             {
-                var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+                var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
 
                 return new EsriPoint(temporaryPoint.X, temporaryPoint.Y, srid);
             }
@@ -94,7 +94,7 @@ namespace IRI.Extensions
 
             //foreach (var item in geometry.Coordinates)
             //{
-            //    IPoint temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+            //    IPoint temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
 
             //    if (mapFunction != null)
             //    {
@@ -259,7 +259,7 @@ namespace IRI.Extensions
 
             foreach (var item in coordinates)
             {
-                IPoint temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+                IPoint temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
 
                 if (mapFunction != null)
                 {

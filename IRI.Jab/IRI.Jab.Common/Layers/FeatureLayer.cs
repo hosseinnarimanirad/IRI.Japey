@@ -11,10 +11,10 @@ using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Ket.Persistence.DataSources;
 
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 using WpfPoint = System.Windows.Point;
-using Point = IRI.Msh.Common.Primitives.Point;
+using Point = IRI.Sta.Common.Primitives.Point;
 using System.Threading.Tasks;
 
 namespace IRI.Jab.Common

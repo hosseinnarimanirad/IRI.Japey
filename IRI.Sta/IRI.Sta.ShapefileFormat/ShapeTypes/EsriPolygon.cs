@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Configuration;
-using IRI.Msh.Common.Ogc;
+using IRI.Sta.Common.IO.OgcSFA;
 
 namespace IRI.Sta.ShapefileFormat.EsriType
 {
@@ -139,7 +139,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
 
             this.boundingBox = BoundingBox.GetMergedBoundingBox(boundingBoxes);
 
-            //this.boundingBox = IRI.Msh.Common.Infrastructure.CalculateBoundingBox(this.points.Cast<IPoint>());
+            //this.boundingBox = IRI.Sta.Common.Infrastructure.CalculateBoundingBox(this.points.Cast<IPoint>());
         }
 
 

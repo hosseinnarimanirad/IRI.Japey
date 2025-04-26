@@ -11,9 +11,9 @@ namespace IRI.Jab.Common
     {
         public T View { get; set; }
 
-        public IRI.Msh.Common.Primitives.ILocateable DataContext { get; set; }
+        public IRI.Sta.Common.Primitives.ILocateable DataContext { get; set; }
 
-        public MapOptionsEventArgs(T view, IRI.Msh.Common.Primitives.ILocateable dataContext)
+        public MapOptionsEventArgs(T view, IRI.Sta.Common.Primitives.ILocateable dataContext)
         {
             this.View = view;
 

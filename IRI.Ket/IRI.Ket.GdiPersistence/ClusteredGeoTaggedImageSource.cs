@@ -1,7 +1,7 @@
 ﻿using System.Data;
 
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Helpers;
 using IRI.Msh.DataStructure.AdvancedStructures;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Ket.Common.Model; 

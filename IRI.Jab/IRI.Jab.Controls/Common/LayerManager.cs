@@ -5,7 +5,7 @@ using System.Text;
 using IRI.Jab.Common;
 using Microsoft.SqlServer.Types;
 using System.Windows;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;

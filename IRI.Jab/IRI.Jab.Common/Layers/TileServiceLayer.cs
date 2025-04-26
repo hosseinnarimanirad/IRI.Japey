@@ -6,8 +6,8 @@ using System.Windows.Shapes;
 using System.Windows.Data;
 using System.Threading.Tasks;
 
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Model;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;

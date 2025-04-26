@@ -1,7 +1,7 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Model.GeoJson;
+using IRI.Sta.Common.Model.GeoJson;
 
 namespace IRI.Extensions
 {
@@ -203,7 +203,7 @@ namespace IRI.Extensions
         {
             return geography.STPointN(index).AsPoint();
 
-            //return new IRI.Msh.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
+            //return new IRI.Sta.Common.Primitives.Point(temp.Long.Value, temp.Lat.Value);
         }
 
 

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem;
 using IRI.Jab.Controls.Model;
 

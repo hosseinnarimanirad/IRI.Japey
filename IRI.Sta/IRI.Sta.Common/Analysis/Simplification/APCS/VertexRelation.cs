@@ -1,5 +1,5 @@
 
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Collections.Generic;
 
 public class VertexRelation<T> where T : IPoint

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
 using IRI.Extensions;
-using IRI.Msh.Common.Contracts.Google;
-using IRI.Sta.Common.Service;
+using IRI.Sta.Common.Contracts.Google;
+using IRI.Sta.Common.Services;
 using IRI.Sta.Common.Helpers;
 using IRI.Ket.Common.Devices.ManagedNativeWifi;
 

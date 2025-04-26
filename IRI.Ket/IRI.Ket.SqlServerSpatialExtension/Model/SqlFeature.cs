@@ -5,7 +5,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 //using IRI.Extensions;
-//using IRI.Msh.Common.Primitives;
+//using IRI.Sta.Common.Primitives;
 //using Microsoft.SqlServer.Types;
 
 //namespace IRI.Ket.SqlServerSpatialExtension.Model

@@ -1,6 +1,7 @@
 ﻿
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common;
+using IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

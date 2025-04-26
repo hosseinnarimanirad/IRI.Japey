@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,7 +91,7 @@ namespace IRI.Jab.Common.Model
             return double.IsNaN(X) || double.IsNaN(Y);
         }
 
-        public byte[] AsSqlServerNativeBinary()
+        public byte[] AsByteArray()
         {
             // Option #3
             Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation

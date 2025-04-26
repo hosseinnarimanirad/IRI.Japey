@@ -1,6 +1,6 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         public override GeometryType? GeometryType
         {
-            get => IRI.Msh.Common.Primitives.GeometryType.Polygon;
+            get => IRI.Sta.Common.Primitives.GeometryType.Polygon;
             protected set => _ = value;
         }
 

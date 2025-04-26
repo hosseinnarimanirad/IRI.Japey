@@ -1,6 +1,6 @@
 ﻿using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Bibliography;
 using IRI.Sta.Common.Analysis;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model.GeoJson;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model.GeoJson;
 using System.Windows.Media;
 using IRI.Sta.MachineLearning;
 using IRI.Extensions;
@@ -21,7 +21,7 @@ namespace IRI.Jab.Common.Helpers;
 
 public static class SimplificationHelper
 {
-    private static VectorLayer GetAsLayer(string layerName, List<Geometry<Msh.Common.Primitives.Point>> geometries)
+    private static VectorLayer GetAsLayer(string layerName, List<Geometry<Sta.Common.Primitives.Point>> geometries)
     {
         var vectorLayer = new VectorLayer(layerName,
                                             geometries,

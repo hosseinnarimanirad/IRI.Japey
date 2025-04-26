@@ -1,8 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Msh.Common.Ogc;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.IO.OgcSFA;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -10,7 +10,7 @@ using System.Text;
 
 namespace IRI.Sta.ShapefileFormat.EsriType
 {
-     
+
     public struct EsriPointM : IPoint, IEsriShape, IHasM
     {
         private double x, y, measure;
@@ -162,7 +162,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
             return double.IsNaN(X) || double.IsNaN(Y);
         }
 
-        public byte[] AsSqlServerNativeBinary()
+        public byte[] AsByteArray()
         {
             // Option #3
             Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation

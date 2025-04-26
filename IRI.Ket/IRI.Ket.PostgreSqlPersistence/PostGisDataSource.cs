@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Globalization;
 using System.Data;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Extensions;
 
 namespace IRI.Ket.Persistence.DataSources

@@ -4,15 +4,15 @@ using IRI.Jab.Common.Raster.Model;
 using IRI.Ket.DigitalImageProcessing;
 using IRI.Extensions;
 using IRI.Msh.Algebra;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
-using Point = IRI.Msh.Common.Primitives.Point;
+using IRI.Sta.Common.Primitives;
+using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Analysis;
 
 namespace IRI.Jab.Common.Raster
@@ -61,7 +61,7 @@ namespace IRI.Jab.Common.Raster
                 {
                     var x = boundingBox.XMin + j / scale;
                     var y = boundingBox.YMax - i / scale;
-                    var value = Idw.Calculate(pointSet, new Msh.Common.Primitives.Point(x, y), maxDistance);
+                    var value = Idw.Calculate(pointSet, new Point(x, y), maxDistance);
 
                     //map value to color
                     //var r = (int)(minR + rangeR / rangeValue * (value - minValue));

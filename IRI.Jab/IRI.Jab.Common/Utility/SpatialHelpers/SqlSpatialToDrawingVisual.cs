@@ -9,7 +9,7 @@ using IRI.Extensions;
 using System.Threading.Tasks;
 using IRI.Extensions;
 using IRI.Jab.Common.Model.Symbology;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common.Convertor
 {

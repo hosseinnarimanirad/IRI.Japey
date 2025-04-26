@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model.GeoJson;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.GeoJson;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
@@ -71,7 +71,7 @@ namespace IRI.Extensions
         {
             builder.BeginGeometry(OpenGisGeometryType.Point);
 
-            var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+            var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
 
             builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 
@@ -88,7 +88,7 @@ namespace IRI.Extensions
             {
                 builder.BeginGeometry(OpenGisGeometryType.Point);
 
-                var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+                var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
 
                 builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 
@@ -294,7 +294,7 @@ namespace IRI.Extensions
         {
             builder.BeginGeography(OpenGisGeographyType.Point);
 
-            var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+            var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
 
             builder.BeginFigure(temporaryPoint.Y, temporaryPoint.X);
 
@@ -311,7 +311,7 @@ namespace IRI.Extensions
             {
                 builder.BeginGeography(OpenGisGeographyType.Point);
 
-                var temporaryPoint = IRI.Msh.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+                var temporaryPoint = IRI.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
 
                 builder.BeginFigure(temporaryPoint.Y, temporaryPoint.X);
 

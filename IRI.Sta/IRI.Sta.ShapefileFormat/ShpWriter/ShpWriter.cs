@@ -7,7 +7,7 @@ using System.Text;
 using System.Linq;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.ShapefileFormat.Writer
 {
@@ -18,7 +18,7 @@ namespace IRI.Sta.ShapefileFormat.Writer
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(ShapeConstants.FileCode), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Sta.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(ShapeConstants.FileCode), 0, ShapeConstants.IntegerSize);
 
             result.Write(System.BitConverter.GetBytes(0), 0, ShapeConstants.IntegerSize);
 
@@ -30,7 +30,7 @@ namespace IRI.Sta.ShapefileFormat.Writer
 
             result.Write(System.BitConverter.GetBytes(0), 0, ShapeConstants.IntegerSize);
 
-            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(fileLength), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Sta.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(fileLength), 0, ShapeConstants.IntegerSize);
 
             result.Write(System.BitConverter.GetBytes(ShapeConstants.Version), 0, ShapeConstants.IntegerSize);
 
@@ -79,9 +79,9 @@ namespace IRI.Sta.ShapefileFormat.Writer
         {
             System.IO.MemoryStream result = new System.IO.MemoryStream();
 
-            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(recordNumber), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Sta.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(recordNumber), 0, ShapeConstants.IntegerSize);
 
-            result.Write(IRI.Msh.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(shape.ContentLength), 0, ShapeConstants.IntegerSize);
+            result.Write(IRI.Sta.Common.Helpers.StreamHelper.Int32ToBigEndianOrderedBytes(shape.ContentLength), 0, ShapeConstants.IntegerSize);
 
             return result.ToArray();
         }

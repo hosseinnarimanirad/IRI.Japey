@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
 using IRI.Extensions;

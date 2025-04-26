@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.Reader;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;

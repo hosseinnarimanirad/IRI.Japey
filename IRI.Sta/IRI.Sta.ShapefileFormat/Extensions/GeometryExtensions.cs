@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;

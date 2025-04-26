@@ -145,9 +145,9 @@ namespace IRI.Jab.Controls.View.Map
         //{
         //    try
         //    {
-        //        IRI.Msh.Common.Primitives.Point result =
+        //        IRI.Sta.Common.Primitives.Point result =
         //            IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(
-        //                    new IRI.Msh.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
+        //                    new IRI.Sta.Common.Primitives.Point(geodeticPoint.X, geodeticPoint.Y),
         //                    IRI.Msh.CoordinateSystem.Ellipsoids.WGS84);
 
         //        return new Point(result.X, result.Y);

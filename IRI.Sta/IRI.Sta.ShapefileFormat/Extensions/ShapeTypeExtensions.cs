@@ -1,6 +1,6 @@
-﻿using IRI.Msh.Common.Contracts.Bing;
-using IRI.Msh.Common.Contracts.Google;
-using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Contracts.Bing;
+using IRI.Sta.Common.Contracts.Google;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.PersonalGdb;
 using IRI.Sta.ShapefileFormat.EsriType; 
 using System;

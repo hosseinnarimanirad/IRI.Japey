@@ -2,8 +2,8 @@
 //// Allahomma ajjel le-valiyek al-faraj
 
 //using System;
-//using IRI.Msh.Common.Ogc;
-//using IRI.Msh.Common.Primitives;
+//using IRI.Sta.Common.Ogc;
+//using IRI.Sta.Common.Primitives;
 
 //namespace IRI.Sta.Common;
 

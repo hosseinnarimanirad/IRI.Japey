@@ -1,10 +1,10 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using System.Text;
 using IRI.Sta.ShapefileFormat;
-using IRI.Msh.Common.Mapping;
+using IRI.Sta.Common.Mapping;
 using System; 
 
 namespace IRI.Ket.Persistence.DataSources;

@@ -1,4 +1,4 @@
-﻿//using IRI.Msh.Common.Primitives.Esri;
+﻿//using IRI.Sta.Common.Primitives.Esri;
 //
 
 //namespace IRI.Extensions

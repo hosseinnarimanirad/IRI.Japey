@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model.MapMarkers;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common.View.MapMarkers
 {

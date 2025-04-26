@@ -1,6 +1,6 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using System;
-using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model
 {

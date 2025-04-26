@@ -4,80 +4,79 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using IRI.Msh.Common.Ogc;
+using IRI.Sta.Common.IO.OgcSFA;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct OgcPolygon<T> : IOgcGeometry where T : IOgcPoint
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcPolygon<T> : IOgcGeometry where T : IOgcPoint
+    byte byteOrder;
+
+    UInt32 type;
+
+    UInt32 numRings;
+
+    OgcLinearRing<T>[] rings;
+
+    public OgcLinearRing<T>[] Rings { get { return this.rings; } }
+
+    public WkbByteOrder ByteOrder
     {
-        byte byteOrder;
+        get { return (WkbByteOrder)this.byteOrder; }
+    }
 
-        UInt32 type;
+    public WkbGeometryType Type
+    {
+        get { return (WkbGeometryType)this.type; }
+    }
 
-        UInt32 numRings;
-
-        OgcLinearRing<T>[] rings;
-
-        public OgcLinearRing<T>[] Rings { get { return this.rings; } }
-
-        public WkbByteOrder ByteOrder
+    public byte[] ToWkb()
+    {
+        using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
         {
-            get { return (WkbByteOrder)this.byteOrder; }
-        }
+            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-        public WkbGeometryType Type
-        {
-            get { return (WkbGeometryType)this.type; }
-        }
+            writer.Write(byteOrder);
 
-        public byte[] ToWkb()
-        {
-            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
+            writer.Write(type);
+
+            writer.Write(numRings);
+
+            foreach (OgcLinearRing<T> item in Rings)
             {
-                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
-
-                writer.Write(byteOrder);
-
-                writer.Write(type);
-
-                writer.Write(numRings);
-
-                foreach (OgcLinearRing<T> item in Rings)
-                {
-                    writer.Write(item.ToBinary());
-                }
-
-                writer.Close();
-
-                return stream.ToArray();
-            }
-        }
-
-        public OgcPolygon(byte[] buffer)
-            : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
-        {
-        }
-
-        public OgcPolygon(System.IO.BinaryReader reader)
-        {
-            this.byteOrder = reader.ReadByte();
-
-            this.type = reader.ReadUInt32();
-
-            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcPolygon<T>)] != (WkbGeometryType)this.type)
-            {
-                throw new NotImplementedException();
+                writer.Write(item.ToBinary());
             }
 
-            this.numRings = reader.ReadUInt32();
+            writer.Close();
 
-            this.rings = new OgcLinearRing<T>[this.numRings];
+            return stream.ToArray();
+        }
+    }
 
-            for (int i = 0; i < this.numRings; i++)
-            {
-                this.rings[i] = new OgcLinearRing<T>(reader);
-            }
+    public OgcPolygon(byte[] buffer)
+        : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
+    {
+    }
+
+    public OgcPolygon(System.IO.BinaryReader reader)
+    {
+        this.byteOrder = reader.ReadByte();
+
+        this.type = reader.ReadUInt32();
+
+        if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcPolygon<T>)] != (WkbGeometryType)this.type)
+        {
+            throw new NotImplementedException();
+        }
+
+        this.numRings = reader.ReadUInt32();
+
+        this.rings = new OgcLinearRing<T>[this.numRings];
+
+        for (int i = 0; i < this.numRings; i++)
+        {
+            this.rings[i] = new OgcLinearRing<T>(reader);
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.SqlServer.Types;
 using System.Windows.Media;
 using System.Windows;
 using IRI.Extensions;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 using IRI.Extensions;
 
 namespace IRI.Jab.Common.Convertor

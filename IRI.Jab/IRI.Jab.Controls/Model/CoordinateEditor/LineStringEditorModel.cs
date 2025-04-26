@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives; 
+﻿using IRI.Sta.Common.Primitives; 
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls.Model
 {

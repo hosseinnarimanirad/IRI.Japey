@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 
 
 namespace IRI.Jab.Common.Model.Map

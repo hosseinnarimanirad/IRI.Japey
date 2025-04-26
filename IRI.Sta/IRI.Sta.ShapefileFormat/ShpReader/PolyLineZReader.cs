@@ -3,7 +3,7 @@
 
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShpReader;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 
 namespace IRI.Sta.ShapefileFormat.Reader
@@ -25,7 +25,7 @@ namespace IRI.Sta.ShapefileFormat.Reader
                 throw new NotImplementedException();
             }
 
-            IRI.Msh.Common.Primitives.BoundingBox boundingBox = this.ReadBoundingBox();
+            IRI.Sta.Common.Primitives.BoundingBox boundingBox = this.ReadBoundingBox();
 
             int numParts = shpReader.ReadInt32();
 

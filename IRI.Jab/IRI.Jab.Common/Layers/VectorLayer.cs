@@ -10,15 +10,15 @@ using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Msh.Common.Mapping;
+using IRI.Sta.Common.Mapping;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
 
-using sb = IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Jab.Common;
 
@@ -711,7 +711,7 @@ public class VectorLayer : BaseLayer
             {
                 var geometries = await GetGeometriesForDisplayAsync(scale, tile.WebMercatorExtent);
 
-                var transform = IRI.Msh.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+                var transform = IRI.Sta.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
                 Func<Point, Point> mapToScreen = p =>
                 {

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Primitives;
 using System.Data;
 
 namespace IRI.Ket.Persistence.DataSources
@@ -27,7 +27,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         public override GeometryType? GeometryType
         {
-            get => IRI.Msh.Common.Primitives.GeometryType.Polygon;
+            get => IRI.Sta.Common.Primitives.GeometryType.Polygon;
             protected set => _ = value;
         }
 

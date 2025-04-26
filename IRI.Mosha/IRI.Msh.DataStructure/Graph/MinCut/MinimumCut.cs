@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Ket.Graph.GraphRepresentation;
-using IRI.Msh.Common.Helpers;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Ket.Graph.MinCut
 {

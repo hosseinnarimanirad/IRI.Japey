@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
 
-using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using System.Linq;
 using IRI.Msh.CoordinateSystem.MapProjection;
 

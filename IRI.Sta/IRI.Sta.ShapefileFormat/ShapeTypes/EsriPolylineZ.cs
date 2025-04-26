@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Runtime.Serialization;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Ogc;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.IO.OgcSFA;
 
 namespace IRI.Sta.ShapefileFormat.EsriType
-{ 
+{
     public struct EsriPolylineZ : IEsriPointsWithZ
     { 
         /// <summary>

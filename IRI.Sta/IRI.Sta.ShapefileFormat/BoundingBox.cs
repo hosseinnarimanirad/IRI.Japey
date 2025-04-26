@@ -50,7 +50,7 @@
 //            get { return this.YMax - this.YMin; }
 //        }
 
-//        public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(Point[] points)
+//        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(Point[] points)
 //        {
 //            double xMin = points[0].X, yMin = points[0].Y, xMax = points[0].X, yMax = points[0].Y;
 
@@ -68,7 +68,7 @@
 //            return new BoundingBox(xMin, yMin, xMax, yMax);
 //        }
 
-//        public IRI.Msh.Common.Primitives.BoundingBox Add(BoundingBox secondBoundingBox)
+//        public IRI.Sta.Common.Primitives.BoundingBox Add(BoundingBox secondBoundingBox)
 //        {
 //            double t = Math.Min(this.XMin, secondBoundingBox.XMin);
 

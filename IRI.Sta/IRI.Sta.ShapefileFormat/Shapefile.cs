@@ -10,8 +10,9 @@ using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Writer;
 using IRI.Sta.ShapefileFormat.Model;
 using IRI.Sta.ShapefileFormat.Dbf;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.Prj;
+using IRI.Sta.Common.Model.GeoJson;
 
 
 
@@ -461,7 +462,7 @@ namespace IRI.Sta.ShapefileFormat
             //SaveAsPrj(shpFileName, crs, overwrite);
         }
 
-        public static void SaveAsShapefile(string shpFileName, IEnumerable<Msh.Common.Model.GeoJson.GeoJsonFeature> features, bool isLongitudeFirst = true, SrsBase srs = null)
+        public static void SaveAsShapefile(string shpFileName, IEnumerable<GeoJsonFeature> features, bool isLongitudeFirst = true, SrsBase srs = null)
         {
             var shapes = features.Select(f => f.Geometry.AsEsriShape(isLongitudeFirst, srs.Srid));
 
@@ -635,7 +636,7 @@ namespace IRI.Sta.ShapefileFormat
 
         #region Helper Functions
 
-        public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
+        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader header, params MainFileHeader[] headers)
         {
             double xMin = header.XMin;
 
@@ -667,10 +668,10 @@ namespace IRI.Sta.ShapefileFormat
                     }
                 }
             }
-            return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
-        public static IRI.Msh.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
+        public static IRI.Sta.Common.Primitives.BoundingBox CalculateBoundingBox(MainFileHeader[] headers)
         {
             if (headers.Length < 1)
                 throw new NotImplementedException();
@@ -703,7 +704,7 @@ namespace IRI.Sta.ShapefileFormat
                 }
             }
 
-            return new IRI.Msh.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
+            return new IRI.Sta.Common.Primitives.BoundingBox(xMin, yMin, xMax, yMax);
         }
 
         public static string GetShxFileName(string shpFileName)
@@ -806,7 +807,7 @@ namespace IRI.Sta.ShapefileFormat
 
         }
 
-        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Msh.Common.Primitives.BoundingBox boundingBox)
+        public static async Task<IEsriShapeCollection> Read(string shpFileName, IRI.Sta.Common.Primitives.BoundingBox boundingBox)
         {
             var indexFileName = GetIndexFileName(shpFileName);
 

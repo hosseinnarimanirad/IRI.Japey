@@ -7,7 +7,7 @@ using IRI.Jab.Common.Model;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System.Diagnostics;
 
 namespace IRI.Jab.Common

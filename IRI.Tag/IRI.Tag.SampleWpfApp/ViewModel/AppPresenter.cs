@@ -3,7 +3,7 @@ using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.View.MapMarkers;
 using IRI.Jab.Controls.Presenter;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

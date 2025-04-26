@@ -1,0 +1,37 @@
+﻿using IRI.Sta.Common.Primitives;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace IRI.Sta.Common.Mapping;
+
+public class Index25k : IndexBase
+{
+    public override double Height { get => GeodeticIndexes._25kSize; }
+
+    public override double Width { get => GeodeticIndexes._25kSize; }
+
+    public string ShortSheetNumber { get { return SheetNumber?.Split(' ').Last(); } }
+
+    public override Feature AsFeature()
+    {
+        return new Feature()
+        {
+            TheGeometry = this.TheGeometry,
+            LabelAttribute = nameof(this.SheetNameEn),
+            Attributes = new Dictionary<string, object>()
+            {
+                {nameof(this.Height), this.Height },
+                {nameof(this.Id), this.Id},
+                {nameof(this.MinLatitude), this.MinLatitude},
+                {nameof(this.MinLongitude), this.MinLongitude },
+                {nameof(this.SheetNameEn), this.SheetNameEn },
+                {nameof(this.SheetNameFa), this.SheetNameFa },
+                {nameof(this.SheetNumber), this.SheetNumber },
+                {nameof(this.Width), this.Width },
+                {nameof(this.ShortSheetNumber), this.ShortSheetNumber},
+            },
+        };
+    }
+}

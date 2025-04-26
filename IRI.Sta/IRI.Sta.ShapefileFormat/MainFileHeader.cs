@@ -87,9 +87,9 @@ namespace IRI.Sta.ShapefileFormat
         }
 
        
-        public IRI.Msh.Common.Primitives.BoundingBox MinimumBoundingBox
+        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox
         {
-            get { return new IRI.Msh.Common.Primitives.BoundingBox(xMin: XMin, yMin: YMin, xMax: XMax, yMax: YMax); }
+            get { return new IRI.Sta.Common.Primitives.BoundingBox(xMin: XMin, yMin: YMin, xMax: XMax, yMax: YMax); }
         }
 
         public MainFileHeader(byte[] values)
@@ -114,28 +114,28 @@ namespace IRI.Sta.ShapefileFormat
 
             this.m_FileLength = System.BitConverter.ToInt32(temp, 0);
 
-            this.m_Version = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToInt32(values, ShapeConstants.VersionOffset);
+            this.m_Version = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToInt32(values, ShapeConstants.VersionOffset);
 
-            this.m_ShapeType = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToInt32(values, ShapeConstants.ShapeTypeOffset);
+            this.m_ShapeType = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToInt32(values, ShapeConstants.ShapeTypeOffset);
 
-            this.m_XMin = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.XMinOffset);
+            this.m_XMin = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.XMinOffset);
 
-            this.m_YMin = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.YMinOffset);
+            this.m_YMin = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.YMinOffset);
 
-            this.m_XMax = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.XMaxOffset);
+            this.m_XMax = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.XMaxOffset);
 
-            this.m_YMax = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.YMaxOffset);
+            this.m_YMax = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.YMaxOffset);
 
-            this.m_ZMin = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.ZMinOffset);
+            this.m_ZMin = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.ZMinOffset);
 
-            this.m_ZMax = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.ZMaxOffset);
+            this.m_ZMax = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.ZMaxOffset);
 
-            this.m_MMin = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMinOffset);
+            this.m_MMin = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMinOffset);
 
-            this.m_MMax = IRI.Msh.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMaxOffset);
+            this.m_MMax = IRI.Sta.Common.Helpers.StreamHelper.LittleEndianOrderedBytesToDouble(values, ShapeConstants.MMaxOffset);
         }
 
-        internal MainFileHeader(int fileLength, EsriShapeType type, IRI.Msh.Common.Primitives.BoundingBox minimumnBoundingBox)
+        internal MainFileHeader(int fileLength, EsriShapeType type, IRI.Sta.Common.Primitives.BoundingBox minimumnBoundingBox)
         {
             this.m_Version = 9994;
 

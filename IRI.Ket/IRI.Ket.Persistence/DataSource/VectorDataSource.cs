@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 
 using IRI.Extensions;
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Sta.Ogc.WMS;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.Persistence.DataSources
 {

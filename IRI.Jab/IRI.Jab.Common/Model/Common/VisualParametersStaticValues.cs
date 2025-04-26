@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Media;
 using IRI.Extensions;
 using System.Windows.Input;
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common
 {

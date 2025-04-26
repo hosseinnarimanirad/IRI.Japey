@@ -1,5 +1,6 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Common.Encodings;
+using IRI.Sta.Common.Common.Encodings;
+using IRI.Sta.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             if (encoding.GetType() == typeof(PersianDOS) && !string.IsNullOrEmpty(result) && result.All(c => c == '*'))
             {
-                result = Msh.Common.Helpers.EncodingHelper.ArabicEncoding.GetString(buffer).Replace('\0', ' ').Trim();
+                result = EncodingHelper.ArabicEncoding.GetString(buffer).Replace('\0', ' ').Trim();
             }
 
             if (correctFarsiCharacters)

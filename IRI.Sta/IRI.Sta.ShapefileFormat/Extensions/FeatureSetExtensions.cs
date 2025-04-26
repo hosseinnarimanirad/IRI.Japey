@@ -6,8 +6,8 @@ using System.Text;
 using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Dbf;
 using System.Linq;
-using IRI.Msh.Common.Model.GeoJson;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions
 {

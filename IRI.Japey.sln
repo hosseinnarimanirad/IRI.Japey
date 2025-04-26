@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Sta.Common", "IRI.Sta\I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mosha", "Mosha", "{055212DF-37DF-460F-97FC-E345D654A30F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "IRI.Msh.Common", "IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.shproj", "{F5A00383-D576-4652-B8EE-DEB1AB2BA083}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Taghche", "Taghche", "{B5AE1C6D-C747-476A-B892-FF58DF006254}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Sta.Ogc", "IRI.Sta\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj", "{BE942544-C359-4A3A-A249-930A55AB801F}"
@@ -233,7 +231,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1ED088E6-1806-4D77-9143-2221DCBCF8F1} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
-		{F5A00383-D576-4652-B8EE-DEB1AB2BA083} = {055212DF-37DF-460F-97FC-E345D654A30F}
 		{BE942544-C359-4A3A-A249-930A55AB801F} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
 		{3D4EF053-1BE3-4867-B8DA-E0EB58BB52AE} = {055212DF-37DF-460F-97FC-E345D654A30F}
 		{DDA5CADB-6BEF-4AE1-80A3-3FDDB150B05B} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
@@ -260,11 +257,9 @@ Global
 		SolutionGuid = {E2292D5F-9EDC-489F-BAE4-75BC33F646F6}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems*{1ed088e6-1806-4d77-9143-2221dcbcf8f1}*SharedItemsImports = 5
 		IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems*{1ed088e6-1806-4d77-9143-2221dcbcf8f1}*SharedItemsImports = 5
 		IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems*{3d4ef053-1be3-4867-b8da-e0eb58bb52ae}*SharedItemsImports = 13
 		IRI.Mosha\IRI.Msh.GsmGprsCommunication\IRI.Msh.GsmGprsCommunication.projitems*{849cc742-9d3d-4597-a963-008c3d9a6755}*SharedItemsImports = 13
-		IRI.Mosha\IRI.Msh.Common\IRI.Msh.Common.projitems*{f5a00383-d576-4652-b8ee-deb1ab2ba083}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MainProject.vsmdi

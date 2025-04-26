@@ -1,7 +1,7 @@
 ﻿//using IRI.Extensions;
 //
-//using IRI.Msh.Common.Mapping;
-//using IRI.Msh.Common.Primitives;
+//using IRI.Sta.Common.Mapping;
+//using IRI.Sta.Common.Primitives;
 //using Microsoft.SqlServer.Types;
 //using System;
 //using System.Collections.Generic;
@@ -18,22 +18,22 @@
 //            switch (type)
 //            {
 //                case GeodeticIndexType.Ncc250k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find250kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find250kIndexMbbs);
 
 //                case GeodeticIndexType.Ncc100k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find100kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find100kIndexMbbs);
 
 //                case GeodeticIndexType.Ncc50k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find50kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find50kIndexMbbs);
 
 //                case GeodeticIndexType.Ncc25k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find25kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find25kIndexMbbs);
 
 //                case GeodeticIndexType.Ncc10k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find10kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find10kIndexMbbs);
 
 //                case GeodeticIndexType.Ncc5k:
-//                    return GetIndexes(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find5kIndexMbbs);
+//                    return GetIndexes(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find5kIndexMbbs);
                      
 //                default:
 //                    throw new NotImplementedException();
@@ -57,22 +57,22 @@
 //            //switch (type)
 //            //{
 //            //    case GeodeticIndexType.Ncc250k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find250kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find250kIndexSheets);
 
 //            //    case GeodeticIndexType.Ncc100k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find100kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find100kIndexSheets);
 
 //            //    case GeodeticIndexType.Ncc50k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find50kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find50kIndexSheets);
 
 //            //    case GeodeticIndexType.Ncc25k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find25kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find25kIndexSheets);
 
 //            //    case GeodeticIndexType.Ncc10k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find10kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find10kIndexSheets);
 
 //            //    case GeodeticIndexType.Ncc5k:
-//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Msh.Common.Mapping.GeodeticIndexes.Find5kIndexSheets);
+//            //        return GetIndexeSheets(webMercatorGeometry, IRI.Sta.Common.Mapping.GeodeticIndexes.Find5kIndexSheets);
 
 //            //    default:
 //            //        throw new NotImplementedException();

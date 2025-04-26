@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Compression;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 
 namespace IRI.Ket.WorldfileFormat;
 

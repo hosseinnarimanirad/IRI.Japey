@@ -21,7 +21,7 @@ public static class ZipFileHelper
 
         var stream = file.First().Open();
 
-        return IRI.Msh.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
+        return IRI.Sta.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
     }
 
     public static string OpenAndReadAsString(string zippedArchiveFile, string fileName)
@@ -37,7 +37,7 @@ public static class ZipFileHelper
 
         var stream = file.First().Open();
 
-        return IRI.Msh.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
+        return IRI.Sta.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
 
     }
 
@@ -47,7 +47,7 @@ public static class ZipFileHelper
 
         using (var stream = archive.Entries.Single(e => e.FullName.Equals(fileName, StringComparison.OrdinalIgnoreCase)).Open())
         {
-            return IRI.Msh.Common.Helpers.StreamHelper.ToByteArray(stream);
+            return IRI.Sta.Common.Helpers.StreamHelper.ToByteArray(stream);
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 

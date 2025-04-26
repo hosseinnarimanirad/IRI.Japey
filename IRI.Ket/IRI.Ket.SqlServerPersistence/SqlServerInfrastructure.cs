@@ -6,7 +6,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Types;
-using IRI.Extensions; 
+using IRI.Extensions;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Persistence.Infrastructure
 {
@@ -429,20 +430,20 @@ namespace IRI.Ket.Persistence.Infrastructure
             return result;
         }
 
-        public static async Task<List<Msh.Common.Primitives.Field>> GetTableSchema(string connectionString, string tableName)
+        public static async Task<List<Field>> GetTableSchema(string connectionString, string tableName)
         {
-            var fields = new List<Msh.Common.Primitives.Field>();
+            var fields = new List<Field>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
                 // Get columns schema
-                var columns = await connection.GetSchemaAsync("Columns", new[] { null, null, tableName });
+                var columns = await connection.GetSchemaAsync("Columns", [null, null, tableName]);
 
                 foreach (System.Data.DataRow row in columns.Rows)
                 {
-                    fields.Add(new Msh.Common.Primitives.Field()
+                    fields.Add(new Field()
                     {
                         Alias = string.Empty,
                         Length = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value ? 0 : int.Parse(row["CHARACTER_MAXIMUM_LENGTH"].ToString()!),

@@ -1,7 +1,7 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Sta.ShapefileFormat.Dbf;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;

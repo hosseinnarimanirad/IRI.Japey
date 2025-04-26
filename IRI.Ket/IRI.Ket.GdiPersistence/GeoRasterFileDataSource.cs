@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Common.Primitives;
-using IRI.Msh.Common.Model;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model;
 using IRI.Msh.CoordinateSystem.MapProjection;
 
 namespace IRI.Ket.Persistence.DataSources

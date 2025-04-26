@@ -13,7 +13,7 @@ namespace IRI.Extensions
             return new System.Windows.Point(pointGeometry.STX.Value, pointGeometry.STY.Value);
         }
 
-        public static System.Windows.Point AsWpfPoint(this IRI.Msh.Common.Primitives.Geometry<Msh.Common.Primitives.Point> pointGeometry)
+        public static System.Windows.Point AsWpfPoint(this IRI.Sta.Common.Primitives.Geometry<Sta.Common.Primitives.Point> pointGeometry)
         {
             return new System.Windows.Point(pointGeometry.Points[0].X, pointGeometry.Points[0].Y);
         }

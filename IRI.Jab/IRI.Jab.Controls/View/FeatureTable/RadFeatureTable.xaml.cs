@@ -15,9 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfPoint = System.Windows.Point;
-using Point = IRI.Msh.Common.Primitives.Point;
+using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Controls.View
 {

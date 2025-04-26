@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;

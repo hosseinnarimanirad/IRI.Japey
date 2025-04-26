@@ -2,84 +2,83 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices; 
-using IRI.Msh.Common.Ogc;
+using System.Runtime.InteropServices;
+using IRI.Sta.Common.IO.OgcSFA;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct OgcLineString<T> : IOgcGeometry, IOgcLineString where T : IOgcPoint
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct OgcLineString<T> : IOgcGeometry, IOgcLineString where T : IOgcPoint
+    byte byteOrder;
+
+    UInt32 type;
+
+    UInt32 numPoints;
+
+    OgcPointCollection<T> points;
+
+    public IOgcPointCollection Points
     {
-        byte byteOrder;
+        get { return this.points; }
+    }
 
-        UInt32 type;
+    public WkbByteOrder ByteOrder
+    {
+        get { return (WkbByteOrder)this.byteOrder; }
+    }
 
-        UInt32 numPoints;
+    public WkbGeometryType Type { get { return (WkbGeometryType)this.type; } }
 
-        OgcPointCollection<T> points;
-
-        public IOgcPointCollection Points
+    public byte[] ToWkb()
+    {
+        using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
         {
-            get { return this.points; }
-        }
+            System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
 
-        public WkbByteOrder ByteOrder
-        {
-            get { return (WkbByteOrder)this.byteOrder; }
-        }
+            writer.Write(byteOrder);
 
-        public WkbGeometryType Type { get { return (WkbGeometryType)this.type; } }
+            writer.Write(type);
 
-        public byte[] ToWkb()
-        {
-            using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
+            writer.Write(numPoints);
+
+            foreach (T item in points)
             {
-                System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
-
-                writer.Write(byteOrder);
-
-                writer.Write(type);
-
-                writer.Write(numPoints);
-
-                foreach (T item in points)
-                {
-                    writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
-                }
-
-                writer.Close();
-
-                return stream.ToArray();
-            }
-        }
-
-        public OgcLineString(byte[] buffer)
-            : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
-        {
-        }
-
-        public OgcLineString(System.IO.BinaryReader reader)
-        {
-            this.byteOrder = reader.ReadByte();
-
-            this.type = reader.ReadUInt32();
-
-            if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcLineString<T>)] != (WkbGeometryType)this.type)
-            {
-                throw new NotImplementedException();
+                writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(item));
             }
 
-            this.numPoints = reader.ReadUInt32();
+            writer.Close();
 
-            this.points = new OgcPointCollection<T>((int)this.numPoints);
+            return stream.ToArray();
+        }
+    }
 
-            int length = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+    public OgcLineString(byte[] buffer)
+        : this(new System.IO.BinaryReader(new System.IO.MemoryStream(buffer)))
+    {
+    }
 
-            for (int i = 0; i < this.numPoints; i++)
-            {
-                this.points.Add(IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
-                                    reader.ReadBytes(length)));
-            }
+    public OgcLineString(System.IO.BinaryReader reader)
+    {
+        this.byteOrder = reader.ReadByte();
+
+        this.type = reader.ReadUInt32();
+
+        if (WkbGeometryTypeFactory.WkbTypeMap[typeof(OgcLineString<T>)] != (WkbGeometryType)this.type)
+        {
+            throw new NotImplementedException();
+        }
+
+        this.numPoints = reader.ReadUInt32();
+
+        this.points = new OgcPointCollection<T>((int)this.numPoints);
+
+        int length = System.Runtime.InteropServices.Marshal.SizeOf(typeof(T));
+
+        for (int i = 0; i < this.numPoints; i++)
+        {
+            this.points.Add(IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<T>(
+                                reader.ReadBytes(length)));
         }
     }
 }

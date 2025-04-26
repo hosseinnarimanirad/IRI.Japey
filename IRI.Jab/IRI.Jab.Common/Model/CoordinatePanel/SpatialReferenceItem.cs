@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.CoordinateSystem;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Globalization;
@@ -31,9 +31,9 @@ namespace IRI.Jab.Common.Model.CoordinatePanel
         //    }
         //}
 
-        //private IRI.Msh.Common.CoordinateSystem.SpatialReferenceType _spatialReference;
+        //private IRI.Sta.Common.CoordinateSystem.SpatialReferenceType _spatialReference;
 
-        //public IRI.Msh.Common.CoordinateSystem.SpatialReferenceType SpatialReference
+        //public IRI.Sta.Common.CoordinateSystem.SpatialReferenceType SpatialReference
         //{
         //    get { return _spatialReference; }
         //    set

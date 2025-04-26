@@ -45,7 +45,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
              
             ////////this.mainHeader = new MainFileHeader(length, values[0].Type, minimumBoundingBox);
 
-            var minimumBoundingBox = IRI.Msh.Common.Primitives.BoundingBox.GetMergedBoundingBox(values.Select(i => i.MinimumBoundingBox));
+            var minimumBoundingBox = IRI.Sta.Common.Primitives.BoundingBox.GetMergedBoundingBox(values.Select(i => i.MinimumBoundingBox));
            
             //The content length for a record is the length of the record contents section measured in
             //16-bit words. Each record, therefore, contributes (4 + content length) 16-bit words

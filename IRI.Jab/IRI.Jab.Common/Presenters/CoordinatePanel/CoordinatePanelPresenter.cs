@@ -1,15 +1,8 @@
-﻿using IRI.Jab.Common;
-using IRI.Jab.Common.Model.CoordinatePanel;
-
-using System;
-using System.Collections.Generic;
+﻿using IRI.Jab.Common.Model.CoordinatePanel;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Jab.Common.Model;
-using System.Windows;
-using IRI.Msh.Common.Primitives;
+using System.Windows; 
 
 namespace IRI.Jab.Common.Presenter
 {
@@ -89,7 +82,7 @@ namespace IRI.Jab.Common.Presenter
             }
         }
 
-        public string GetCurrentPosstionString(Msh.Common.Primitives.Point geodeticPoint)
+        public string GetCurrentPosstionString(IRI.Sta.Common.Primitives.Point geodeticPoint)
         {
             return this.SelectedItem?.GetPositionString(geodeticPoint);
         }

@@ -1,12 +1,11 @@
-﻿using IRI.Msh.Common.Ogc;
+﻿using IRI.Sta.Common.IO.OgcSFA;
 using System;
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+interface IOgcLineString
 {
-    interface IOgcLineString
-    {
-        WkbByteOrder ByteOrder { get; }
-        IOgcPointCollection Points { get; }
-        byte[] ToWkb();
-        WkbGeometryType Type { get; }
-    }
+    WkbByteOrder ByteOrder { get; }
+    IOgcPointCollection Points { get; }
+    byte[] ToWkb();
+    WkbGeometryType Type { get; }
 }

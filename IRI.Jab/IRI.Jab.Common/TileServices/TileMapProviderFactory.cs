@@ -1,7 +1,6 @@
 ﻿using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model.Globalization;
-using IRI.Msh.Common.Helpers;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -780,13 +779,13 @@ namespace IRI.Jab.Common.TileServices
         public static string GetServer(int min = 0, int max = 3)
         {
             //first bound is inclusive second bound is exclusive
-            return RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            return Sta.Common.Helpers.RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static char GetServerCharacter(int min = 0, int max = 2)
         {
             //first bound is inclusive second bound is exclusive
-            var random = RandomHelper.Get(min, max + 1);
+            var random = Sta.Common.Helpers.RandomHelper.Get(min, max + 1);
 
             return _serverChar[random];
         }

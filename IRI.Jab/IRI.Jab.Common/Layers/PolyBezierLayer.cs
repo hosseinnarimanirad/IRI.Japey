@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.Common.Primitives;
+using IRI.Sta.Common.Primitives;
 using WpfPoint = System.Windows.Point;
 using GdiPoint = System.Drawing.Point;
 
@@ -46,7 +46,7 @@ namespace IRI.Jab.Common
         {
             get
             {
-                return IRI.Msh.Common.Primitives.BoundingBox.CalculateBoundingBox(mercatorPolyline);
+                return IRI.Sta.Common.Primitives.BoundingBox.CalculateBoundingBox(mercatorPolyline);
             }
 
             protected set

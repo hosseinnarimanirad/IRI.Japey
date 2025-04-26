@@ -21,10 +21,10 @@ using System.Net.Http;
 
 using IRI.Extensions;
 using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Msh.Common.Mapping;
-using IRI.Msh.Common.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Service;
+using IRI.Sta.Common.Services;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Controls.Model;
 using IRI.Jab.Common;
@@ -32,11 +32,11 @@ using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 
-using sb = IRI.Msh.Common.Primitives;
+using sb = IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.RasterDataSources; 
-using IRI.Msh.Common.Enums;
+using IRI.Sta.Common.Enums;
 
-//using Geometry = IRI.Msh.Common.Primitives.Geometry<IRI.Msh.Common.Primitives.Point>;
+//using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls
 {
@@ -848,7 +848,7 @@ namespace IRI.Jab.Controls
                 double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
 
                 //size of each pixel (in meter)
-                _unitDistance = IRI.Msh.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
+                _unitDistance = IRI.Sta.Common.Helpers.ConversionHelper.InchToMeterFactor / dpiX;
             }
 
             return _unitDistance.Value;
@@ -863,7 +863,7 @@ namespace IRI.Jab.Controls
         {
             //PresentationSource source = PresentationSource.FromVisual(this.mapView);
             //double dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-            //double unitDistance = IRI.Msh.Common.ConstantValues.InchToMeterFactor / dpiX; // Meter
+            //double unitDistance = IRI.Sta.Common.ConstantValues.InchToMeterFactor / dpiX; // Meter
             //return mapScale / unitDistance;
 
             return mapScale / GetUnitDistance();
@@ -2806,7 +2806,7 @@ namespace IRI.Jab.Controls
 
         #region DrawGeometries & Anot
 
-        public void Flash(List<IRI.Msh.Common.Primitives.Point> points)
+        public void Flash(List<IRI.Sta.Common.Primitives.Point> points)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2820,7 +2820,7 @@ namespace IRI.Jab.Controls
             }
         }
 
-        public void Flash(IRI.Msh.Common.Primitives.Point mapPoint)
+        public void Flash(IRI.Sta.Common.Primitives.Point mapPoint)
         {
             //ClearAnimatingItems();
             ClearLayer(LayerType.AnimatingItem, false);
@@ -2828,7 +2828,7 @@ namespace IRI.Jab.Controls
             AddFlash(mapPoint);
         }
 
-        private void AddFlash(IRI.Msh.Common.Primitives.Point mapPoint)
+        private void AddFlash(IRI.Sta.Common.Primitives.Point mapPoint)
         {
             if (mapPoint == null || mapPoint.IsNaN())
             {

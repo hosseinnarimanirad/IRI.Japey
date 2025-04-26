@@ -95,7 +95,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
 
-            DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+            DbfHeader header = IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
             List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
 
@@ -107,7 +107,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
             {
                 buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfFieldDescriptor)));
 
-                columns.Add(IRI.Msh.Common.Helpers.StreamHelper.ParseToStructure<DbfFieldDescriptor>(buffer));
+                columns.Add(IRI.Sta.Common.Helpers.StreamHelper.ParseToStructure<DbfFieldDescriptor>(buffer));
             }
 
             reader.Close();
@@ -125,7 +125,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
 
-            DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+            DbfHeader header = IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
             List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
 
@@ -206,7 +206,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
 
-            DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+            DbfHeader header = IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
             List<DbfFieldDescriptor> fields = new List<DbfFieldDescriptor>();
 
@@ -287,7 +287,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
 
-            DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+            DbfHeader header = IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
             List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
 
@@ -395,11 +395,11 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
                 DbfHeader header = new DbfHeader(values.Count(), mapping.Count, GetRecordLength(columns), encoding);
 
-                writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
+                writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(header));
 
                 foreach (var item in columns)
                 {
-                    writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
+                    writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(item));
                 }
 
                 //Terminator
@@ -486,11 +486,11 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
         //        DbfHeader header = new DbfHeader(values.Count(), columns.Count, GetRecordLength(columns), encoding);
 
-        //        writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
+        //        writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(header));
 
         //        foreach (var item in columns)
         //        {
-        //            writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
+        //            writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(item));
         //        }
 
         //        //Terminator
@@ -820,7 +820,7 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             byte[] buffer = reader.ReadBytes(Marshal.SizeOf(typeof(DbfHeader)));
 
-            DbfHeader header = IRI.Msh.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
+            DbfHeader header = IRI.Sta.Common.Helpers.StreamHelper.ByteArrayToStructure<DbfHeader>(buffer);
 
             List<DbfFieldDescriptor> columns = new List<DbfFieldDescriptor>();
 
@@ -891,11 +891,11 @@ namespace IRI.Sta.ShapefileFormat.Dbf
 
             DbfHeader header = new DbfHeader(table.Rows.Count, table.Columns.Count, GetRecordLength(columns), encoding);
 
-            writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(header));
+            writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(header));
 
             foreach (var item in columns)
             {
-                writer.Write(IRI.Msh.Common.Helpers.StreamHelper.StructureToByteArray(item));
+                writer.Write(IRI.Sta.Common.Helpers.StreamHelper.StructureToByteArray(item));
             }
 
             //Terminator
