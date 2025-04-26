@@ -4861,6 +4861,8 @@ namespace IRI.Jab.Controls
 
                     features.LayerId = layer.LayerId;
 
+                    features.Fields = layer.GetFields();
+
                     result.Add(features);
                 }
             }

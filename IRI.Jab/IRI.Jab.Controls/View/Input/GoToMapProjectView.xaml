@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid FlowDirection="LeftToRight">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="UTM Zone" Margin="4" VerticalAlignment="Center"/>
+        <TextBlock Text="ناحیه UTM" Margin="4" VerticalAlignment="Center"/>
         <mahApp:NumericUpDown Grid.Column="1" HorizontalAlignment="Left" Margin="4" Minimum="0" Maximum="60" mahApp:TextBoxHelper.SelectAllOnFocus="True"
                               Value="{Binding UtmZone, Mode=TwoWay, StringFormat={}{0:00}}" MinWidth="75"/>
         

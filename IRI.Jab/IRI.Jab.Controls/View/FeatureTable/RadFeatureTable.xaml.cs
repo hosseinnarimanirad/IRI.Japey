@@ -78,6 +78,7 @@ namespace IRI.Jab.Controls.View
                 case TypeCode.Double:
                 case TypeCode.Int16:
                 case TypeCode.Int32:
+                case TypeCode.Int64:
                 case TypeCode.Decimal:
                 case TypeCode.SByte:
                 case TypeCode.Single:

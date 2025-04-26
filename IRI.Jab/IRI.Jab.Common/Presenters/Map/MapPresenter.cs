@@ -1249,7 +1249,9 @@ namespace IRI.Jab.Common.Presenter.Map
                 if (layer == null)
                     continue;
 
-                var newLayer = new SelectedLayer<Feature<Point>>(layer)
+                var fields = (layer as VectorLayer)?.GetFields();
+
+                var newLayer = new SelectedLayer<Feature<Point>>(layer, fields)
                 {
                     ShowSelectedOnMap = true,
                     Features = new ObservableCollection<Feature<Point>>(item.Features)

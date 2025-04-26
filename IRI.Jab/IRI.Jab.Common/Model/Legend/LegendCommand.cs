@@ -6,6 +6,7 @@ using System.Windows;
 using System.Collections.Generic;
 using IRI.Extensions;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Jab.Common.Model.Map;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -169,7 +170,7 @@ namespace IRI.Jab.Common.Model.Legend
 
                 var features = layer.GetFeatures<T>();
 
-                var newLayer = new Map.SelectedLayer<T>(layer) { Fields = layer.GetFields() };
+                var newLayer = new Map.SelectedLayer<T>(layer, layer.GetFields());
 
                 //newLayer.RequestSave = l =>
                 //{
@@ -224,7 +225,7 @@ namespace IRI.Jab.Common.Model.Legend
                     return;
                 }
 
-                var newLayer = new Model.Map.SelectedLayer<T>(layer)
+                var newLayer = new SelectedLayer<T>(layer, layer.GetFields())
                 {
                     ShowSelectedOnMap = true
                 };

@@ -6,7 +6,7 @@
              
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              
-             xmlns:map="clr-namespace:IRI.Jab.Controls.View.Input" 
+             xmlns:map="clr-namespace:IRI.Jab.Controls.View.Input" FlowDirection="RightToLeft"
              WindowStyle="ToolWindow" Width="550" Height="250" ShowIconOnTitleBar="False" ShowInTaskbar="False"
         Title="بروبه مختصات"  GlowBrush="{DynamicResource MahApps.Brushes.Accent}" ShowMaxRestoreButton="False" ShowMinButton="False">
     <Grid>

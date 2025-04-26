@@ -1142,7 +1142,6 @@ namespace IRI.Jab.Common
             var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(currentPoint.X, currentPoint.Y));
 
             Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
-
         }
 
         private void DeleteCurrentPart()

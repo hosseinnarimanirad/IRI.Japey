@@ -78,11 +78,13 @@ namespace IRI.Jab.Common.Model.Map
         //}
 
 
-        public SelectedLayer(ILayer layer)
+        public SelectedLayer(ILayer layer, List<Field>? fields)
         {
             //this.Id = id;
 
             this.AssociatedLayer = layer;
+
+            this.Fields = fields;
         }
 
         public void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items)

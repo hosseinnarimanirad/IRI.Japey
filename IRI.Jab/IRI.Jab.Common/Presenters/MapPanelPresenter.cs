@@ -1,244 +1,190 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using System;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem;
 using IRI.Msh.CoordinateSystem.MapProjection;
 
-namespace IRI.Jab.Common.Presenters
+namespace IRI.Jab.Common.Presenters;
+
+public class MapPanelPresenter : Notifier
 {
-    public class MapPanelPresenter : Notifier
+    private bool _isDetailsVisible;
+
+    public bool IsDetailsVisible
     {
-        private bool _isDetailsVisible;
-
-        public bool IsDetailsVisible
+        get { return _isDetailsVisible; }
+        set
         {
-            get { return _isDetailsVisible; }
-            set
-            {
-                _isDetailsVisible = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDetailsNotVisible));
-            }
+            _isDetailsVisible = value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(IsDetailsNotVisible));
         }
+    }
 
-        public bool IsDetailsNotVisible
+    public bool IsDetailsNotVisible
+    {
+        get { return !IsDetailsVisible; }
+        set
         {
-            get { return !IsDetailsVisible; }
-            set
-            {
-                _isDetailsVisible = !value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsDetailsVisible));
-            }
+            _isDetailsVisible = !value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(IsDetailsVisible));
         }
+    }
 
-        //private bool _isManualInputAvailable = true;
+    private EditableFeatureLayerOptions _options;
 
-        //public bool IsManualInputAvailable
-        //{
-        //    get { return _isManualInputAvailable; }
-        //    set
-        //    {
-        //        _isManualInputAvailable = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //private bool _isMultiPartSupportAvailable = true;
-
-        //public bool IsMultiPartSupportAvailable
-        //{
-        //    get { return _isMultiPartSupportAvailable; }
-        //    set
-        //    {
-        //        _isMultiPartSupportAvailable = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        private EditableFeatureLayerOptions _options;
-
-        public EditableFeatureLayerOptions Options
+    public EditableFeatureLayerOptions Options
+    {
+        get { return _options; }
+        set
         {
-            get { return _options; }
-            set
-            {
-                _options = value;
-                RaisePropertyChanged();
-            }
+            _options = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-        private SpatialReferenceType _spatialReference = SpatialReferenceType.Geodetic;
+    private SpatialReferenceType _spatialReference = SpatialReferenceType.Geodetic;
 
-        public SpatialReferenceType SpatialReference
+    public SpatialReferenceType SpatialReference
+    {
+        get { return _spatialReference; }
+        set
         {
-            get { return _spatialReference; }
-            set
-            {
-                var currentPoint = CurrentWebMercatorEditingPoint;
+            var currentPoint = CurrentWebMercatorEditingPoint;
 
-                _spatialReference = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(IsUTMEditingMode));
-                RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
+            _spatialReference = value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(IsUTMEditingMode));
+            RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
 
-                UpdateCurrentEditingPoint(currentPoint);
-            }
+            UpdateCurrentEditingPoint(currentPoint);
         }
+    }
 
 
-        private bool _isUTMEditingMode;
-        public bool IsUTMEditingMode
+    private bool _isUTMEditingMode;
+    public bool IsUTMEditingMode
+    {
+        get { return _isUTMEditingMode; }
+        set
         {
-            get { return _isUTMEditingMode; }
-            set
+            if (_isUTMEditingMode == value)
             {
-                if (_isUTMEditingMode == value)
-                {
-                    return;
-                }
-
-                if (CurrentEditingPoint != null && value)
-                {
-                    this.SpatialReference = SpatialReferenceType.UTM;
-                }
-
-                _isUTMEditingMode = value;
-                RaisePropertyChanged();
-
+                return;
             }
-        }
 
-
-        private bool _isGeodeticWgs84EditingMode = true;
-        public bool IsGeodeticWgs84EditingMode
-        {
-            get { return _isGeodeticWgs84EditingMode; }
-            set
+            if (CurrentEditingPoint != null && value)
             {
-                if (_isGeodeticWgs84EditingMode == value)
-                {
-                    return;
-                }
-
-                if (CurrentEditingPoint != null && value)
-                {
-                    this.SpatialReference = SpatialReferenceType.Geodetic;
-                }
-
-                _isGeodeticWgs84EditingMode = value;
-                RaisePropertyChanged();
-
+                this.SpatialReference = SpatialReferenceType.UTM;
             }
+
+            _isUTMEditingMode = value;
+            RaisePropertyChanged();
+
         }
+    }
 
-        private bool _isWebMercatorEditingMode;
-        public bool IsWebMercatorEditingMode
+
+    private bool _isGeodeticWgs84EditingMode = true;
+    public bool IsGeodeticWgs84EditingMode
+    {
+        get { return _isGeodeticWgs84EditingMode; }
+        set
         {
-            get { return _isWebMercatorEditingMode; }
-            set
+            if (_isGeodeticWgs84EditingMode == value)
             {
-                if (_isWebMercatorEditingMode == value)
-                {
-                    return;
-                }
-
-                if (CurrentEditingPoint != null && value)
-                {
-                    this.SpatialReference = SpatialReferenceType.WebMercator;
-                }
-
-                _isWebMercatorEditingMode = value;
-                RaisePropertyChanged();
-
+                return;
             }
-        }
 
-
-        private NotifiablePoint _currentEditingPoint;
-
-        public NotifiablePoint CurrentEditingPoint
-        {
-            get { return _currentEditingPoint; }
-            set
+            if (CurrentEditingPoint != null && value)
             {
-                _currentEditingPoint = value;
-                RaisePropertyChanged();
+                this.SpatialReference = SpatialReferenceType.Geodetic;
             }
+
+            _isGeodeticWgs84EditingMode = value;
+            RaisePropertyChanged();
+
         }
+    }
 
-        private int _currentEditingZone;
-
-        public int CurrentEditingZone
+    private bool _isWebMercatorEditingMode;
+    public bool IsWebMercatorEditingMode
+    {
+        get { return _isWebMercatorEditingMode; }
+        set
         {
-            get { return _currentEditingZone; }
-            set
+            if (_isWebMercatorEditingMode == value)
             {
-                _currentEditingZone = value;
-                RaisePropertyChanged();
+                return;
             }
-        }
 
-
-        public Point CurrentWebMercatorEditingPoint
-        {
-            get
+            if (CurrentEditingPoint != null && value)
             {
-                if (this.SpatialReference == SpatialReferenceType.UTM)
-                {
-                    var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic<NotifiablePoint>(CurrentEditingPoint, CurrentEditingZone);
+                this.SpatialReference = SpatialReferenceType.WebMercator;
+            }
 
-                    var webMercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+            _isWebMercatorEditingMode = value;
+            RaisePropertyChanged();
 
-                    return new Point(webMercator.X, webMercator.Y);
-                }
-                else if (this.SpatialReference == SpatialReferenceType.Geodetic)
-                {
-                    var webMercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+        }
+    }
 
-                    return new Point(webMercator.X, webMercator.Y);
-                }
-                else if (this.SpatialReference == SpatialReferenceType.WebMercator)
-                {
-                    return new Point(CurrentEditingPoint.X, CurrentEditingPoint.Y);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
+    private NotifiablePoint _currentEditingPoint;
+
+    public NotifiablePoint CurrentEditingPoint
+    {
+        get { return _currentEditingPoint; }
+        set
+        {
+            _currentEditingPoint = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    private int _currentEditingZone;
+
+    public int CurrentEditingZone
+    {
+        get { return _currentEditingZone; }
+        set
+        {
+            _currentEditingZone = value;
+            RaisePropertyChanged();
+
+            if (CurrentEditingPoint?.IsRaiseCoordinateChangeEnabled == true)
+            {
+                CurrentEditingPoint?.RaiseCoordinateChangedAction?.Invoke(CurrentEditingPoint);
             }
 
         }
+    }
 
-        public MapPanelPresenter()
+
+    public Point CurrentWebMercatorEditingPoint
+    {
+        get
         {
-            //RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
-        }
-
-        private Point FromWebMercator(Point webMercatorPoint)
-        {
-            if (this.SpatialReference == SpatialReferenceType.WebMercator)
-            {
-                return webMercatorPoint;
-            }
-
-            var geodetic = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
-
             if (this.SpatialReference == SpatialReferenceType.UTM)
             {
-                this.CurrentEditingZone = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodetic.X);
+                var geodetic = MapProjects.UTMToGeodetic<NotifiablePoint>(CurrentEditingPoint, CurrentEditingZone);
 
-                return IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(geodetic);
+                var webMercator = MapProjects.GeodeticWgs84ToWebMercator(geodetic);
+
+                return new Point(webMercator.X, webMercator.Y);
             }
             else if (this.SpatialReference == SpatialReferenceType.Geodetic)
             {
-                return geodetic;
+                var webMercator = MapProjects.GeodeticWgs84ToWebMercator(CurrentEditingPoint);
+
+                return new Point(webMercator.X, webMercator.Y);
+            }
+            else if (this.SpatialReference == SpatialReferenceType.WebMercator)
+            {
+                return new Point(CurrentEditingPoint.X, CurrentEditingPoint.Y);
             }
             else
             {
@@ -246,36 +192,65 @@ namespace IRI.Jab.Common.Presenters
             }
         }
 
-        private RelayCommand _toggleDetailsVisibilityCommand;
+    }
 
-        public RelayCommand ToggleDetailsVisibilityCommand
+    public MapPanelPresenter()
+    {
+        //RaisePropertyChanged(nameof(IsGeodeticWgs84EditingMode));
+    }
+
+    private Point FromWebMercator(Point webMercatorPoint)
+    {
+        if (this.SpatialReference == SpatialReferenceType.WebMercator)
+            return webMercatorPoint;
+
+        var geodetic = MapProjects.WebMercatorToGeodeticWgs84(webMercatorPoint);
+
+        if (this.SpatialReference == SpatialReferenceType.UTM)
         {
-            get
-            {
-                if (_toggleDetailsVisibilityCommand == null)
-                {
-                    _toggleDetailsVisibilityCommand = new RelayCommand(param => { IsDetailsVisible = !IsDetailsVisible; });
-                }
+            this.CurrentEditingZone = MapProjects.FindZone(geodetic.X);
 
-                return _toggleDetailsVisibilityCommand;
+            return MapProjects.GeodeticToUTM(geodetic);
+        }
+        else if (this.SpatialReference == SpatialReferenceType.Geodetic)
+        {
+            return geodetic;
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    private RelayCommand _toggleDetailsVisibilityCommand;
+
+    public RelayCommand ToggleDetailsVisibilityCommand
+    {
+        get
+        {
+            if (_toggleDetailsVisibilityCommand == null)
+            {
+                _toggleDetailsVisibilityCommand = new RelayCommand(param => { IsDetailsVisible = !IsDetailsVisible; });
             }
+
+            return _toggleDetailsVisibilityCommand;
+        }
+    }
+
+    public void UpdateCurrentEditingPoint(Point webMercatorPoint)
+    {
+        lock (this.CurrentEditingPoint)
+        {
+            this.CurrentEditingPoint.IsRaiseCoordinateChangeEnabled = false;
+
+            var point = FromWebMercator(webMercatorPoint);
+
+            this.CurrentEditingPoint.X = point.X;
+
+            this.CurrentEditingPoint.Y = point.Y;
+
+            this.CurrentEditingPoint.IsRaiseCoordinateChangeEnabled = true;
         }
 
-        public void UpdateCurrentEditingPoint(Point webMercatorPoint)
-        {
-            lock (this.CurrentEditingPoint)
-            {
-                this.CurrentEditingPoint.IsRaiseCoordinateChangeEnabled = false;
-
-                var point = FromWebMercator(webMercatorPoint);
-
-                this.CurrentEditingPoint.X = point.X;
-
-                this.CurrentEditingPoint.Y = point.Y;
-
-                this.CurrentEditingPoint.IsRaiseCoordinateChangeEnabled = true;
-            }
-
-        }
     }
 }

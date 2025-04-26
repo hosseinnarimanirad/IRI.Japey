@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input" x:Name="window"
-             xmlns:model="clr-namespace:IRI.Jab.Controls.Model.GoTo" Loaded="UserControl_Loaded">
+             xmlns:model="clr-namespace:IRI.Jab.Controls.Model.GoTo" Loaded="UserControl_Loaded" >
     <UserControl.Resources>
         <DataTemplate x:Key="MenuItemTemplate" DataType="{x:Type model:HamburgerGoToMenuItem}">
             <Grid Height="48" Margin="0,4,0,0" Background="Transparent" Cursor="Hand" >
