@@ -4,25 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Common.Model
+namespace IRI.Msh.Common.Model;
+
+public class GeoReferencedImage
 {
-    public class GeoReferencedImage
+    public BoundingBox GeodeticWgs84BoundingBox { get; set; }
+     
+    public byte[] Image { get; set; }
+
+    public GeoReferencedImage(byte[] image, BoundingBox geodeticBoundingBox, bool isValid = true)
     {
-        public BoundingBox GeodeticWgs84BoundingBox { get; set; }
-         
-        public byte[] Image { get; set; }
+        this.Image = image;
 
-        public GeoReferencedImage(byte[] image, BoundingBox geodeticBoundingBox, bool isValid = true)
-        {
-            this.Image = image;
+        this.GeodeticWgs84BoundingBox = geodeticBoundingBox;
 
-            this.GeodeticWgs84BoundingBox = geodeticBoundingBox;
-
-            this.IsValid = isValid;
-        }
-        
-        public bool IsValid { get; set; }
-
-        public static GeoReferencedImage NaN { get => new GeoReferencedImage(null, BoundingBox.NaN, false); }
+        this.IsValid = isValid;
     }
+    
+    public bool IsValid { get; set; }
+
+    public static GeoReferencedImage NaN { get => new GeoReferencedImage(null, BoundingBox.NaN, false); }
 }

@@ -3,51 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Statistics
+namespace IRI.Msh.Statistics;
+
+public class ClassAttributeGroup<TAttribute, TClass>
 {
-    public class ClassAttributeGroup<TAttribute, TClass>
+    public TAttribute Key { get { return Attributes == null ? default(TAttribute) : Attributes.FirstOrDefault(); } }
+
+    public List<TAttribute> Attributes { get; set; }
+
+    public List<ClassFrequency<TClass>> Classes { get; set; }
+
+    public ClassAttributeGroup(List<TAttribute> attributes, List<ClassFrequency<TClass>> classes)
     {
-        public TAttribute Key { get { return Attributes == null ? default(TAttribute) : Attributes.FirstOrDefault(); } }
+        this.Attributes = attributes;
 
-        public List<TAttribute> Attributes { get; set; }
+        this.Classes = classes;
+    }
 
-        public List<ClassFrequency<TClass>> Classes { get; set; }
+    public ClassAttributeGroup(List<TAttribute> attributes, List<TClass> classes)
+    {
+        this.Classes = classes?.GroupBy(c => c)?.Select(c => new ClassFrequency<TClass>(c.Key, c.Count()))?.ToList();
 
-        public ClassAttributeGroup(List<TAttribute> attributes, List<ClassFrequency<TClass>> classes)
-        {
-            this.Attributes = attributes;
+        this.Attributes = attributes;
+    }
 
-            this.Classes = classes;
-        }
+    public static ClassAttributeGroup<TAttribute, TClass> Merge(ClassAttributeGroup<TAttribute, TClass> first, ClassAttributeGroup<TAttribute, TClass> second)
+    {
+        var attributes = first.Attributes?.Union(second.Attributes)?.ToList();
 
-        public ClassAttributeGroup(List<TAttribute> attributes, List<TClass> classes)
-        {
-            this.Classes = classes?.GroupBy(c => c)?.Select(c => new ClassFrequency<TClass>(c.Key, c.Count()))?.ToList();
+        var classes = first.Classes.Union(second.Classes).GroupBy(c => c.Class).Select(c => new ClassFrequency<TClass>(c.Key, c.Sum(i => i.Count)))?.ToList();
 
-            this.Attributes = attributes;
-        }
+        return new ClassAttributeGroup<TAttribute, TClass>(attributes, classes);
+    }
 
-        public static ClassAttributeGroup<TAttribute, TClass> Merge(ClassAttributeGroup<TAttribute, TClass> first, ClassAttributeGroup<TAttribute, TClass> second)
-        {
-            var attributes = first.Attributes?.Union(second.Attributes)?.ToList();
+    public static ClassAttributeGroup<TAttribute, TClass> Merge(IEnumerable<ClassAttributeGroup<TAttribute, TClass>> list)
+    {
+        var attributes = list.SelectMany(s => s.Attributes)?.ToList();
 
-            var classes = first.Classes.Union(second.Classes).GroupBy(c => c.Class).Select(c => new ClassFrequency<TClass>(c.Key, c.Sum(i => i.Count)))?.ToList();
+        var classes = list.SelectMany(s => s.Classes).GroupBy(c => c.Class).Select(c => new ClassFrequency<TClass>(c.Key, c.Sum(i => i.Count)))?.ToList();
 
-            return new ClassAttributeGroup<TAttribute, TClass>(attributes, classes);
-        }
+        return new ClassAttributeGroup<TAttribute, TClass>(attributes, classes);
+    }
 
-        public static ClassAttributeGroup<TAttribute, TClass> Merge(IEnumerable<ClassAttributeGroup<TAttribute, TClass>> list)
-        {
-            var attributes = list.SelectMany(s => s.Attributes)?.ToList();
-
-            var classes = list.SelectMany(s => s.Classes).GroupBy(c => c.Class).Select(c => new ClassFrequency<TClass>(c.Key, c.Sum(i => i.Count)))?.ToList();
-
-            return new ClassAttributeGroup<TAttribute, TClass>(attributes, classes);
-        }
-
-        public override string ToString()
-        {
-            return $"[{string.Join(",", Attributes)}]-{string.Join("-", Classes)}";
-        }
+    public override string ToString()
+    {
+        return $"[{string.Join(",", Attributes)}]-{string.Join("-", Classes)}";
     }
 }

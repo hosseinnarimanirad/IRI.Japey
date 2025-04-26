@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\IRI.Bas\IRI.Bas.SqlSpatialLoader\IRI.Bas.SqlSpatialLoader.csproj" />
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj" />
-    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.MapViewer\IRI.Jab.MapViewer.csproj" />
+    <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.WindowsBase\IRI.Ket.WindowsBase.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />

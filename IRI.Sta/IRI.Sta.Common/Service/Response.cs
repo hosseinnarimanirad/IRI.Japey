@@ -4,53 +4,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Service
+namespace IRI.Sta.Common.Service;
+
+public class Response<T>
 {
-    public class Response<T>
+    public bool? IsCanceled { get; set; }
+
+    public bool? IsFailed { get; set; }
+    
+    public bool HasNotNullResult()
     {
-        public bool? IsCanceled { get; set; }
+        //return !(IsCanceled == true) &&
+        //        !(IsFailed == true) &&
+        //        Result != null;
 
-        public bool? IsFailed { get; set; }
-        
-        public bool HasNotNullResult()
-        {
-            //return !(IsCanceled == true) &&
-            //        !(IsFailed == true) &&
-            //        Result != null;
-
-            return !FailedOrCanceled() && Result != null;
-        }
-
-        public bool IsNullOrEmpty()
-        {
-            return FailedOrCanceled() || Result == null;
-        }
-
-        public string ErrorMessage { get; set; }
-
-        public T Result { get; set; }
-
-        //public bool HasValidNotNullResult()
-        //{
-        //    return IsCanceled != true && IsFailed != true && Result != null;
-        //}
-
-        public bool FailedOrCanceled()
-        {
-            return IsCanceled == true || IsFailed == true;
-        }
+        return !FailedOrCanceled() && Result != null;
     }
 
-    public static class ResponseFactory
+    public bool IsNullOrEmpty()
     {
-        public static Response<T> Create<T>(T result)
-        {
-            return new Response<T>() { Result = result, ErrorMessage = string.Empty, IsFailed = false };
-        }
+        return FailedOrCanceled() || Result == null;
+    }
 
-        public static Response<T> CreateError<T>(string errorMessage)
-        {
-            return new Response<T> { ErrorMessage = errorMessage, IsFailed = true };
-        }
+    public string ErrorMessage { get; set; }
+
+    public T Result { get; set; }
+
+    //public bool HasValidNotNullResult()
+    //{
+    //    return IsCanceled != true && IsFailed != true && Result != null;
+    //}
+
+    public bool FailedOrCanceled()
+    {
+        return IsCanceled == true || IsFailed == true;
+    }
+}
+
+public static class ResponseFactory
+{
+    public static Response<T> Create<T>(T result)
+    {
+        return new Response<T>() { Result = result, ErrorMessage = string.Empty, IsFailed = false };
+    }
+
+    public static Response<T> CreateError<T>(string errorMessage)
+    {
+        return new Response<T> { ErrorMessage = errorMessage, IsFailed = true };
     }
 }

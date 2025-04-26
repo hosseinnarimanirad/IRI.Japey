@@ -6,6 +6,10 @@
     <Title>IRI.ShapefileFormat</Title>
   </PropertyGroup>
   <PropertyGroup>
+    <!-- or "latest", "preview", or "11.0" -->
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>1.0.1</Version>
     <Authors>Hossein Narimani Rad</Authors>

@@ -52,14 +52,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\CoordinatePanel\" />
-    <Folder Include="Model\Legend\" />
-    <Folder Include="Model\Telerik\" />
     <Folder Include="View\Map\Auxilary\" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\Images\transparentBackground.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\Map\MapViewer.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

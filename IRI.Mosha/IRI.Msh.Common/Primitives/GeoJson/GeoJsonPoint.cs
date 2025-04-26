@@ -1,5 +1,4 @@
 ﻿
-using IRI.Msh.Common.Model.Google;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using Newtonsoft.Json;

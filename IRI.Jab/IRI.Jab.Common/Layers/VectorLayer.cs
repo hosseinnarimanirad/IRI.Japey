@@ -990,7 +990,7 @@ public class VectorLayer : BaseLayer
         return GetFeatures<T>(null);
     }
 
-    public List<Field>? GetFields()
+    public List<sb.Field>? GetFields()
     {
         return DataSource?.Fields;
     }

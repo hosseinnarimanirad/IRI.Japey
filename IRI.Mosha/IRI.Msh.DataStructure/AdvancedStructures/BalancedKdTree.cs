@@ -338,11 +338,11 @@ namespace IRI.Msh.DataStructure.AdvancedStructures
             {
                 var relation = SpatialUtility.CalculateAxisAlignedRectangleRelationToCircle(PointFunc(point), radius, node.LeftChild.MinimumBoundingBox);
 
-                if (relation == IRI.Msh.Common.Model.SpatialRelation.Contained)
+                if (relation == IRI.Msh.Common.Enums.SpatialRelation.Contained)
                 {
                     result.AddRange(GetAllValues(node.LeftChild));
                 }
-                else if (relation == IRI.Msh.Common.Model.SpatialRelation.Intersects)
+                else if (relation == IRI.Msh.Common.Enums.SpatialRelation.Intersects)
                 {
                     result.AddRange(FindNeighbours(point, radius, node.LeftChild, distanceFunc));
                 }
@@ -352,11 +352,11 @@ namespace IRI.Msh.DataStructure.AdvancedStructures
             {
                 var relation = SpatialUtility.CalculateAxisAlignedRectangleRelationToCircle(PointFunc(point), radius, node.RightChild.MinimumBoundingBox);
 
-                if (relation == IRI.Msh.Common.Model.SpatialRelation.Contained)
+                if (relation == IRI.Msh.Common.Enums.SpatialRelation.Contained)
                 {
                     result.AddRange(GetAllValues(node.RightChild));
                 }
-                else if (relation == IRI.Msh.Common.Model.SpatialRelation.Intersects)
+                else if (relation == IRI.Msh.Common.Enums.SpatialRelation.Intersects)
                 {
                     result.AddRange(FindNeighbours(point, radius, node.RightChild, distanceFunc));
                 }

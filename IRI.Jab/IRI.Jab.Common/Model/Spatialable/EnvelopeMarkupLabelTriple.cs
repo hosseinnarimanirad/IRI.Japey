@@ -1,7 +1,7 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Assets.Data;
 using IRI.Jab.Common.Assets.ShapeStrings;
-using IRI.Msh.Common.Model.Enums;
+using IRI.Msh.Common.Enums;
 using IRI.Msh.Common.Primitives;
 using IRI.Msh.CoordinateSystem.MapProjection;
 using Microsoft.SqlServer.Types;

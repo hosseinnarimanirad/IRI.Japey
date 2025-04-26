@@ -7,6 +7,7 @@ using IRI.Msh.MeasurementUnit;
 using System.Net.NetworkInformation;
 using System.Drawing;
 using Newtonsoft.Json.Linq;
+using IRI.Msh.Common.Enums;
 
 namespace IRI.Sta.Common.Analysis;
 

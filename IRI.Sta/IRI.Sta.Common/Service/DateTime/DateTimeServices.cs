@@ -9,32 +9,31 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace IRI.Sta.Common.Service
+namespace IRI.Sta.Common.Service;
+
+public static class DateTimeServices
 {
-    public static class DateTimeServices
+    public static async Task<Response<DateTime>> GetNowFromServerAsync(WebProxy proxy = null)
     {
-        public static async Task<Response<DateTime>> GetNowFromServerAsync(WebProxy proxy = null)
+        WebClient client = new WebClient();
+
+        if (proxy != null)
         {
-            WebClient client = new WebClient();
+            client.Proxy = proxy;
+        }
 
-            if (proxy != null)
-            {
-                client.Proxy = proxy;
-            }
+        try
+        {
+            var response = await client.DownloadStringTaskAsync("https://nist.time.gov/actualtime.cgi?lzbc=siqm9b");
+            string time = Regex.Match(response, @"(?<=\btime="")[^""]*").Value;
+            double milliseconds = Convert.ToInt64(time) / 1000.0;
+            var result = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
 
-            try
-            {
-                var response = await client.DownloadStringTaskAsync("https://nist.time.gov/actualtime.cgi?lzbc=siqm9b");
-                string time = Regex.Match(response, @"(?<=\btime="")[^""]*").Value;
-                double milliseconds = Convert.ToInt64(time) / 1000.0;
-                var result = new DateTime(1970, 1, 1).AddMilliseconds(milliseconds).ToLocalTime();
-
-                return ResponseFactory.Create(result);
-            }
-            catch (Exception ex)
-            {
-                return ResponseFactory.CreateError<DateTime>(ex.GetMessagePlus());
-            }
+            return ResponseFactory.Create(result);
+        }
+        catch (Exception ex)
+        {
+            return ResponseFactory.CreateError<DateTime>(ex.GetMessagePlus());
         }
     }
 }

@@ -9,21 +9,21 @@
     <Import_RootNamespace>IRI.Msh.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Customization\DictionaryPropertyDescriptor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Customization\FieldAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\PropertyDescriptors\DictionaryPropertyDescriptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Attributes\FieldAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ListExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\ConfusionMatrix.cs" />
-    <Compile Include="..\..\IRI.Mosha\IRI.Msh.Common\Model\Enums\IrProvince93.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Enums\IrProvince93.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\OgcWkbMapFunctions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriConstants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\FeatureSets\FeatureSet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\FeatureSets\IFeatureSet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\IGeometry.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IGeometryAwares\INamedGeometry.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IHasM.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IHasZ.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IGeometryAwares\NamedGeometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IFeatureSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IGeometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\INamedGeometry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IHasM.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IHasZ.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\NamedGeometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\AxisType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Cartesian2D\Cartesian2DPoint.cs" />
@@ -128,9 +128,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\ClassFrequency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Model\StatisticsSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathematics\Statistics\Statistics.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exception\ZeroSizeArrayException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Bing\BingIsolineResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Enums\EnumInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Exceptions\ZeroSizeArrayException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Bing\BingIsolineResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Enums\EnumInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriFeature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriFeatureSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\EsriJson\EsriJsonGeometry.cs" />
@@ -150,20 +150,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\GeoJson\GeoJsonPolygon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\GeoJson\IGeoJsonGeometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\GeoreferencedImage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleDirectionsResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleDistanceMatrixResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleGeolocationParameters.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleGeolocationResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GoogleOAuthUserInfoResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Google\GooglePlacesResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Here\HereIsolineResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GoogleDirectionsResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GoogleDistanceMatrixResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GoogleGeolocationParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GoogleGeolocationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GoogleOAuthUserInfoResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Google\GooglePlacesResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Here\HereIsolineResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ImageSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mapping\Model\GeodeticSheet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenIsochroneResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Mapzen\MapzenRouteCostingModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Field.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\Primitives\Interval.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Model\SpatialRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Mapzen\MapzenIsochroneResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\Mapzen\MapzenRouteCostingModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Field.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\Enums\SpatialRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\TileInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\TileInfoCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ZoomScale.cs" />
@@ -171,15 +170,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Ogc\SFA\WkbGeometryType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBoxes.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\BoundingBoxHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IGeometryAwares\Feature.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\BoundingBoxHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\FeatureSets\Feature.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\Geometry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\GeometryType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IGeometryAwares\IGeometryAware.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IIdentifiable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\ILocateable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IPoint.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Primitives\IPointCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IGeometryAware.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IIdentifiable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\ILocateable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IPoint.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\IPointCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\LineSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\Point.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Primitives\Geometry\Point3D.cs" />
@@ -216,7 +215,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Units\UnitConversion.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Common\Attributes\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Common\PropertyDescriptors\" />
     <Folder Include="$(MSBuildThisFileDirectory)CoordinateSystems\CoordinateSystem\Orbital\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Exception\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Common\Exceptions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Contracts\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Primitives\Abstractions\" />
   </ItemGroup>
 </Project>

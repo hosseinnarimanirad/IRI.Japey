@@ -1,10 +1,7 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Common.Model;
-using IRI.Msh.CoordinateSystem.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace IRI.Msh.Common.Primitives
 {

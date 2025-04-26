@@ -185,16 +185,16 @@ public static class PersonalGdbInfrastructure
         return result.OrderBy(r => r.DomainName).ToList();
     }
 
-    public static async Task<List<Msh.Common.Model.Field>> GetTableSchema(OleDbConnection connection, string tableName)
+    public static async Task<List<Msh.Common.Primitives.Field>> GetTableSchema(OleDbConnection connection, string tableName)
     {
-        var fields = new List<Msh.Common.Model.Field>();
+        var fields = new List<Msh.Common.Primitives.Field>();
 
         // Get columns schema
         var columns = await connection.GetSchemaAsync("Columns", new[] { null, null, tableName });
 
         foreach (System.Data.DataRow row in columns.Rows)
         {
-            var field = new Msh.Common.Model.Field()
+            var field = new Msh.Common.Primitives.Field()
             {
                 Alias = string.Empty,
                 Length = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value ? 0 : int.Parse(row["CHARACTER_MAXIMUM_LENGTH"].ToString()!),

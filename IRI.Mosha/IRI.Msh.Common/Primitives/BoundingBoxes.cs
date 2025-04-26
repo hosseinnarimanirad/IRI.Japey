@@ -3,33 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Common.Primitives
+namespace IRI.Msh.Common.Primitives;
+
+public static class BoundingBoxes
 {
-    public static class BoundingBoxes
+    public static BoundingBox IranMercatorBoundingBox
     {
-        public static BoundingBox IranMercatorBoundingBox
+        get
         {
-            get
-            {
-                return new BoundingBox(4840000, 2800000, 7080000, 4900000);
-            }
+            return new BoundingBox(4840000, 2800000, 7080000, 4900000);
         }
+    }
 
-        //Same as Mercator
-        public static BoundingBox IranWebMercatorBoundingBox
+    //Same as Mercator
+    public static BoundingBox IranWebMercatorBoundingBox
+    {
+        get
         {
-            get
-            {
-                return new BoundingBox(xMin: 4840000, yMin: 2800000, xMax: 7080000, yMax: 4900000);
-            }
+            return new BoundingBox(xMin: 4840000, yMin: 2800000, xMax: 7080000, yMax: 4900000);
         }
+    }
 
-        public static BoundingBox IranGeodeticWgs84BoundingBox
+    public static BoundingBox IranGeodeticWgs84BoundingBox
+    {
+        get
         {
-            get
-            {
-                return new BoundingBox(44, 24.5, 63.5, 40);
-            }
+            return new BoundingBox(44, 24.5, 63.5, 40);
         }
     }
 }

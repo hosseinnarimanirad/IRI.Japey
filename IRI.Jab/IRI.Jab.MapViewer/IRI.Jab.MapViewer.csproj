@@ -18,11 +18,5 @@
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="MapViewer.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
   
 </Project>

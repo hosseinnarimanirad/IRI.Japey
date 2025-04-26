@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Statistics
+namespace IRI.Msh.Statistics;
+
+public class ClassFrequency<T>
 {
-    public class ClassFrequency<T>
+    public T @Class { get; set; }
+
+    public int Count { get; set; }
+
+    public ClassFrequency(T @class, int count)
     {
-        public T @Class { get; set; }
+        this.Class = @class;
 
-        public int Count { get; set; }
+        this.Count = count;
+    }
 
-        public ClassFrequency(T @class, int count)
-        {
-            this.Class = @class;
-
-            this.Count = count;
-        }
-
-        public override string ToString()
-        {
-            return $"{Class} ({Count})";
-        }
+    public override string ToString()
+    {
+        return $"{Class} ({Count})";
     }
 }

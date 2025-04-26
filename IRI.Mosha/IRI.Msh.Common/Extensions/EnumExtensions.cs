@@ -1,4 +1,5 @@
-﻿using IRI.Msh.Common.Model;
+﻿using IRI.Msh.Common.Enums;
+using IRI.Msh.Common.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

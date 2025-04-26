@@ -2,41 +2,40 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Statistics
+namespace IRI.Msh.Statistics;
+
+public class StatisticsSummary
 {
-    public class StatisticsSummary
+    public double Min { get; set; }
+
+    public double FirstQuartile { get; set; }
+
+    //actually this is the second quartile
+    public double Median { get; set; }
+
+    public double ThirdQuartile { get; set; }
+
+    public double Max { get; set; }
+
+    public double Mean { get; set; }
+
+    public override string ToString()
     {
-        public double Min { get; set; }
+        return $"Min: {Min:N2}, Max: {Max:N2}, Mean: {Mean:N2}, FirstQuartile: {FirstQuartile:N2}, SecondQuartile (Median): {Median:N2}, ThirdQuartile: {ThirdQuartile:N2}";
+    }
 
-        public double FirstQuartile { get; set; }
-
-        //actually this is the second quartile
-        public double Median { get; set; }
-
-        public double ThirdQuartile { get; set; }
-
-        public double Max { get; set; }
-
-        public double Mean { get; set; }
-
-        public override string ToString()
+    public string AsCsvLine(string seperator, string numberFormat)
+    {
+        var result = new List<string>()
         {
-            return $"Min: {Min:N2}, Max: {Max:N2}, Mean: {Mean:N2}, FirstQuartile: {FirstQuartile:N2}, SecondQuartile (Median): {Median:N2}, ThirdQuartile: {ThirdQuartile:N2}";
-        }
+            Min.ToString(numberFormat),
+            Max.ToString(numberFormat),
+            Mean.ToString(numberFormat),
+            FirstQuartile.ToString(numberFormat),
+            Median.ToString(numberFormat),
+            ThirdQuartile.ToString(numberFormat),            
+        };
 
-        public string AsCsvLine(string seperator, string numberFormat)
-        {
-            var result = new List<string>()
-            {
-                Min.ToString(numberFormat),
-                Max.ToString(numberFormat),
-                Mean.ToString(numberFormat),
-                FirstQuartile.ToString(numberFormat),
-                Median.ToString(numberFormat),
-                ThirdQuartile.ToString(numberFormat),            
-            };
-
-            return string.Join(seperator, result);
-        }
+        return string.Join(seperator, result);
     }
 }

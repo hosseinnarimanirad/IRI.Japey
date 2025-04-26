@@ -429,9 +429,9 @@ namespace IRI.Ket.Persistence.Infrastructure
             return result;
         }
 
-        public static async Task<List<Msh.Common.Model.Field>> GetTableSchema(string connectionString, string tableName)
+        public static async Task<List<Msh.Common.Primitives.Field>> GetTableSchema(string connectionString, string tableName)
         {
-            var fields = new List<Msh.Common.Model.Field>();
+            var fields = new List<Msh.Common.Primitives.Field>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -442,7 +442,7 @@ namespace IRI.Ket.Persistence.Infrastructure
 
                 foreach (System.Data.DataRow row in columns.Rows)
                 {
-                    fields.Add(new Msh.Common.Model.Field()
+                    fields.Add(new Msh.Common.Primitives.Field()
                     {
                         Alias = string.Empty,
                         Length = row["CHARACTER_MAXIMUM_LENGTH"] == DBNull.Value ? 0 : int.Parse(row["CHARACTER_MAXIMUM_LENGTH"].ToString()!),
