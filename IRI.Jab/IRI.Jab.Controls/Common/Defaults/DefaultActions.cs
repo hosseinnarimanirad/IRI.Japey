@@ -12,9 +12,9 @@ namespace IRI.Jab.Controls.Common.Defaults
     public static class DefaultActions
     {
 
-        public static Action GetDefaultGoToAction(Window ownerWindow, MapPresenter mapPresenter)
+        public static Action<Sta.Common.Primitives.Point> GetDefaultGoToAction(Window ownerWindow, MapPresenter mapPresenter)
         {
-            Action result = new Action(() =>
+            var result = new Action<Sta.Common.Primitives.Point>((Sta.Common.Primitives.Point webMercatorPoint) =>
             {
                 var gotoView = new IRI.Jab.Controls.View.Input.GoToMetroWindow();
 
@@ -26,6 +26,7 @@ namespace IRI.Jab.Controls.Common.Defaults
                 gotoView.Show();
 
                 gotoPresenter.SelectDefaultMenu();
+                gotoPresenter.SetWebMercatorPoint(webMercatorPoint);
             });
 
             return result;

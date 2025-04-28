@@ -104,7 +104,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         public int GetSrid(bool isNorthHemisphere)
         {
-            var zone = MapProjects.FindZone(CentralMeridian);
+            var zone = MapProjects.FindUtmZone(CentralMeridian);
 
             return GetSrid(zone, isNorthHemisphere);
         }

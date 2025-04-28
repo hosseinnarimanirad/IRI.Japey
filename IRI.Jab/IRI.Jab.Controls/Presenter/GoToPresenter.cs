@@ -1,20 +1,15 @@
 ﻿using IRI.Msh.CoordinateSystem.MapProjection;
-using IRI.Sta.Common.Primitives; 
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Extensions;
 using IRI.Jab.Controls.Model.GoTo;
 using IRI.Jab.Controls.View.Input;
-using IRI.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Msh.CoordinateSystem;
-using IRI.Extensions;
 
 namespace IRI.Jab.Controls.Presenter
 {
@@ -24,6 +19,9 @@ namespace IRI.Jab.Controls.Presenter
 
         private Action<Point> RequestPanTo;
 
+        private delegate void updateDelegate(object sender, EventArgs e);
+
+        private EventHandler<updateDelegate> OnUpdateRequired;
 
         private double _x;
 
@@ -38,7 +36,7 @@ namespace IRI.Jab.Controls.Presenter
                 _x = value;
                 RaisePropertyChanged();
 
-                UpdateLatLong();
+                UpdateXY();
             }
         }
 
@@ -55,7 +53,7 @@ namespace IRI.Jab.Controls.Presenter
                 _y = value;
                 RaisePropertyChanged();
 
-                UpdateLatLong();
+                UpdateXY();
             }
         }
 
@@ -68,6 +66,8 @@ namespace IRI.Jab.Controls.Presenter
             {
                 _utmZone = value;
                 RaisePropertyChanged();
+
+                UpdateXY();
             }
         }
 
@@ -84,28 +84,28 @@ namespace IRI.Jab.Controls.Presenter
         }
 
 
-        private Model.DegreeMinuteSecondModel _longitudeDms;
+        private readonly Model.DegreeMinuteSecondModel _longitudeDms;
 
         public Model.DegreeMinuteSecondModel LongitudeDms
         {
             get { return _longitudeDms; }
-            set
-            {
-                _longitudeDms = value;
-                RaisePropertyChanged();
-            }
+            //set
+            //{
+            //    //_longitudeDms = value;
+            //    RaisePropertyChanged();
+            //}
         }
 
-        private Model.DegreeMinuteSecondModel _latitudeDms;
+        private readonly Model.DegreeMinuteSecondModel _latitudeDms;
 
         public Model.DegreeMinuteSecondModel LatitudeDms
         {
             get { return _latitudeDms; }
-            set
-            {
-                _latitudeDms = value;
-                RaisePropertyChanged();
-            }
+            //set
+            //{
+            //    _latitudeDms = value;
+            //    RaisePropertyChanged();
+            //}
         }
 
 
@@ -137,8 +137,8 @@ namespace IRI.Jab.Controls.Presenter
                 RaisePropertyChanged();
                 //RaisePropertyChanged("SelectedItem.Content");
 
-                this.LongitudeDms.SetValue(0);
-                this.LatitudeDms.SetValue(0);
+                //this.LongitudeDms.SetValue(0);
+                //this.LatitudeDms.SetValue(0);
             }
         }
 
@@ -149,7 +149,7 @@ namespace IRI.Jab.Controls.Presenter
 
             this.RequestPanTo = requestPanTo;
 
-            if (items == null || items.Count() < 1)
+            if (items.IsNullOrEmpty())
             {
                 this.MenuItems = GetDefaultItems();
             }
@@ -157,18 +157,25 @@ namespace IRI.Jab.Controls.Presenter
             {
                 this.MenuItems = items;
             }
+             
+            this._longitudeDms = new Model.DegreeMinuteSecondModel();
 
-            //this.SelectedItem = MenuItems.First();
+            this._longitudeDms.OnValueChanged -= OnValueChangedHandler;
+            this._longitudeDms.OnValueChanged += OnValueChangedHandler;
 
-            this.LongitudeDms = new Model.DegreeMinuteSecondModel();
+            this._latitudeDms = new Model.DegreeMinuteSecondModel();
 
-            this.LongitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+            //this._latitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
 
-            this.LatitudeDms = new Model.DegreeMinuteSecondModel();
-
-            this.LatitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+            this._latitudeDms.OnValueChanged -= OnValueChangedHandler;
+            this._latitudeDms.OnValueChanged += OnValueChangedHandler;
 
             this.IsPaneOpen = false;
+        }
+
+        private void OnValueChangedHandler(object? sender, EventArgs e)
+        {
+            UpdateXY();
         }
 
         public void ZoomTo()
@@ -188,7 +195,7 @@ namespace IRI.Jab.Controls.Presenter
             switch (this.SelectedItem?.MenuType)
             {
                 case SpatialReferenceType.Geodetic:
-                    return point;//.Project( ,new IRI.Msh.CoordinateSystem.MapProjection.NoProjection());
+                    return new Point(LongitudeDms.GetDegreeValue(), LatitudeDms.GetDegreeValue());
 
                 case SpatialReferenceType.UTM:
                     return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
@@ -225,33 +232,52 @@ namespace IRI.Jab.Controls.Presenter
 
         private void UpdateXY()
         {
-            //if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
-            //{
-            this._x = this.LongitudeDms.GetDegreeValue();
+            var geodeticPoint = GetWgs84Point();
 
-            this._y = this.LatitudeDms.GetDegreeValue();
-
-            RaisePropertyChanged(nameof(X));
-            RaisePropertyChanged(nameof(Y));
-
-            RaisePropertyChanged(nameof(LongitudeDms));
-            RaisePropertyChanged(nameof(LatitudeDms));
-            //}
-        }
-
-        private void UpdateLatLong()
-        {
-            if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
+            if (this.SelectedItem?.MenuType != SpatialReferenceType.Geodetic)
             {
-                this.LongitudeDms.SetValue(this.X);
+                LongitudeDms.OnValueChanged -= OnValueChangedHandler;
+                LatitudeDms.OnValueChanged -= OnValueChangedHandler;
 
-                this.LatitudeDms.SetValue(this.Y);
+                LongitudeDms.Value = geodeticPoint.X;
+                LatitudeDms.Value = geodeticPoint.Y;
+
+                //RaisePropertyChanged(nameof(LongitudeDms));
+                //RaisePropertyChanged(nameof(LatitudeDms));
+                
+                LongitudeDms.OnValueChanged += OnValueChangedHandler;
+                LatitudeDms.OnValueChanged += OnValueChangedHandler;
+
+            }
+            else if (this.SelectedItem.MenuType != SpatialReferenceType.UTM)
+            {
+                var zone = MapProjects.FindUtmZone(geodeticPoint.X);
+
+                var utmPoint = geodeticPoint.Project(new NoProjection(), UTM.CreateForZone(UtmZone));
+
+                this._x = utmPoint.X;
+
+                this._y = utmPoint.Y;
+
+                this._utmZone = zone;
+
+                RaisePropertyChanged(nameof(X));
+                RaisePropertyChanged(nameof(Y));
+                RaisePropertyChanged(nameof(UtmZone));
             }
         }
 
+        //private void UpdateLatLong()
+        //{
+        //    //if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
+        //    //{
+
+        //    //}
+        //}
+
         public void SelectDefaultMenu()
         {
-            if (this.MenuItems?.Count > 0)
+            if (!this.MenuItems.IsNullOrEmpty())
             {
                 this.SelectedItem = this.MenuItems.First();
                 this.IsPaneOpen = false;
@@ -318,8 +344,17 @@ namespace IRI.Jab.Controls.Presenter
                        mapPresenter.FlashPoint(webMercatorPoint);
                    });
                });
-             
+
             return gotoPresenter;
+        }
+
+        internal void SetWebMercatorPoint(Point point)
+        {
+            var geodeticPoint = MapProjects.WebMercatorToGeodeticWgs84(point);
+
+            this.LongitudeDms.Value = geodeticPoint.X;
+
+            this.LatitudeDms.Value = geodeticPoint.Y;
         }
     }
 }

@@ -10,7 +10,7 @@ public static class BoundingBoxHelper
 {
     public static Geometry<Point> GeodeticWgs84MbbToUtmGeometry(BoundingBox boundingBox, int? zone = null)
     {
-        zone = zone ?? MapProjects.FindZone(boundingBox.Center.X);
+        zone = zone ?? MapProjects.FindUtmZone(boundingBox.Center.X);
         //var zone = CoordinateSystem.MapProjection.MapProjects.FindZone(boundingBox.Center.X);
 
         var isNorthHemisphere = boundingBox.Center.Y > 0;

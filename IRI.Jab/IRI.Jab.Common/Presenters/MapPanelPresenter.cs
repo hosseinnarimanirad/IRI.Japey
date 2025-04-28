@@ -208,7 +208,7 @@ public class MapPanelPresenter : Notifier
 
         if (this.SpatialReference == SpatialReferenceType.UTM)
         {
-            this.CurrentEditingZone = MapProjects.FindZone(geodetic.X);
+            this.CurrentEditingZone = MapProjects.FindUtmZone(geodetic.X);
 
             return MapProjects.GeodeticToUTM(geodetic);
         }

@@ -75,7 +75,7 @@ namespace IRI.Jab.Common.Model.CoordinatePanel
 
             this.YValue = _toString(point.Y);
 
-            this.ZoneNumber = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(geodeticPoint.X).ToString();
+            this.ZoneNumber = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindUtmZone(geodeticPoint.X).ToString();
 
             if (UILanguage == LanguageMode.Persian)
             {

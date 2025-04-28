@@ -168,7 +168,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         }
 
         //*******************************Others
-        public static byte FindZone(double lambda)
+        public static byte FindUtmZone(double lambda)
         {
             while (lambda < 0)
             {
@@ -860,7 +860,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
         /// <returns></returns>
         public static TPoint GeodeticToUTM<TPoint>(TPoint geodeticPoint, Ellipsoid<Meter, Degree> ellipsoid, bool isNorthHemisphere = true) where TPoint : IPoint, new()
         {
-            int zone = FindZone(geodeticPoint.X);
+            int zone = FindUtmZone(geodeticPoint.X);
 
             return GeodeticToUTM(geodeticPoint, ellipsoid, zone, isNorthHemisphere);
             //int centralMeredian = CalculateCentralMeridian(zone);
@@ -930,7 +930,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
         public static double[][] GeodeticToUTM(double[] longitude, double[] latitude, Ellipsoid<Meter, Degree> ellipsoid)
         {
-            int zone = FindZone(longitude[0]);
+            int zone = FindUtmZone(longitude[0]);
 
             return GeodeticToUTM(longitude, latitude, ellipsoid, zone);
         }
@@ -1359,7 +1359,7 @@ namespace IRI.Msh.CoordinateSystem.MapProjection
 
             double k0 = 0.9996;
 
-            double lambda0 = CalculateCentralMeridian(FindZone(geodeticPoint.X));
+            double lambda0 = CalculateCentralMeridian(FindUtmZone(geodeticPoint.X));
 
             double deltaLambda = (geodeticPoint.X - lambda0) * Math.PI / 180.0;
 

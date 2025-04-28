@@ -19,15 +19,15 @@
         </Grid.RowDefinitions>
         
         <TextBlock Margin="4" Grid.Row="0" Grid.Column="0" Text="{Binding ElementName=window, Path=XLabel}" VerticalAlignment="Center"/>
-        <local:DegreeMinuteSecondView Margin="4" Grid.Row="0" Grid.Column="1" DataContext="{Binding LongitudeDms, Mode=TwoWay}" HideUpDownButtons="True" 
+        <local:DegreeMinuteSecondView Margin="4" Grid.Row="0" Grid.Column="1" DataContext="{Binding LongitudeDms, Mode=OneWay}" HideUpDownButtons="True" 
                                       MinDegreeValue="0" MaxDegreeValue="359"/>
-        <TextBox Margin="4" Grid.Row="0" Grid.Column="2" Text="{Binding X, Mode=TwoWay}" MinWidth="72" VerticalAlignment="Center" FlowDirection="LeftToRight" 
+        <TextBox Margin="4" Grid.Row="0" Grid.Column="2" Text="{Binding LongitudeDms.Value, Mode=TwoWay}" MinWidth="72" VerticalAlignment="Center" FlowDirection="LeftToRight" 
                  mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
         
         <TextBlock Margin="4" Grid.Row="1" Grid.Column="0" Text="{Binding ElementName=window, Path=YLabel}" VerticalAlignment="Center"/>
-        <local:DegreeMinuteSecondView Margin="4" Grid.Row="1" Grid.Column="1" DataContext="{Binding LatitudeDms, Mode=TwoWay}" 
+        <local:DegreeMinuteSecondView Margin="4" Grid.Row="1" Grid.Column="1" DataContext="{Binding LatitudeDms, Mode=OneWay}" 
                                       MaxDegreeValue="90" MinDegreeValue="-90" HideUpDownButtons="True"/>
-        <TextBox Margin="4" Grid.Row="1" Grid.Column="2" Text="{Binding Y, Mode=TwoWay}" MinWidth="72" VerticalAlignment="Center" FlowDirection="LeftToRight"
+        <TextBox Margin="4" Grid.Row="1" Grid.Column="2" Text="{Binding LatitudeDms.Value, Mode=TwoWay}" MinWidth="72" VerticalAlignment="Center" FlowDirection="LeftToRight"
                  mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
        
     </Grid> 

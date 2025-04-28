@@ -9,6 +9,8 @@ namespace IRI.Jab.Controls.Model
 {
     public class DegreeMinuteSecondModel : Notifier
     {
+        private bool _triggerOnValueChanged = true;
+
         private double _degree;
 
         public double Degree
@@ -23,9 +25,10 @@ namespace IRI.Jab.Controls.Model
 
                 RaisePropertyChanged();
 
-                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
+                UpdateDecimalValue();
             }
         }
+
 
         private double _minute;
 
@@ -41,9 +44,10 @@ namespace IRI.Jab.Controls.Model
 
                 RaisePropertyChanged();
 
-                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
+                UpdateDecimalValue();
             }
         }
+
 
         private double _second;
 
@@ -54,13 +58,30 @@ namespace IRI.Jab.Controls.Model
             {
                 if (_second == value)
                     return;
+
                 _second = value;
 
                 RaisePropertyChanged();
 
-                this.OnValueChanged?.Invoke(this, EventArgs.Empty);
+                UpdateDecimalValue();
             }
         }
+
+
+        private double _value;
+
+        public double Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                RaisePropertyChanged();
+
+                UpdateDms();
+            }
+        }
+
 
         public DegreeMinuteSecondModel() : this(0)
         {
@@ -69,7 +90,7 @@ namespace IRI.Jab.Controls.Model
 
         public DegreeMinuteSecondModel(double deciamalDegree)
         {
-            SetValue(deciamalDegree);
+            Value = deciamalDegree;
         }
 
         public double GetDegreeValue()
@@ -79,19 +100,38 @@ namespace IRI.Jab.Controls.Model
 
         public event EventHandler OnValueChanged;
 
-        internal void SetValue(double value)
+
+        private void UpdateDms()
         {
             int degree, minute;
 
             double second;
 
-            IRI.Sta.Common.Helpers.DegreeHelper.ToDms(value, true, out degree, out minute, out second);
+            IRI.Sta.Common.Helpers.DegreeHelper.ToDms(Value, true, out degree, out minute, out second);
+
+            _triggerOnValueChanged = false;
 
             this.Degree = degree;
 
             this.Minute = minute;
 
             this.Second = second;
+
+            _triggerOnValueChanged = true;
+
+            this.OnValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void UpdateDecimalValue()
+        {
+            if (!_triggerOnValueChanged)
+                return;
+
+            _value = Degree + Minute / 60 + Second / 3600;
+
+            RaisePropertyChanged(nameof(Value));
+
+            this.OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

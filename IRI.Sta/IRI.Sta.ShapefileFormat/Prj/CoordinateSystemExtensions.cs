@@ -86,7 +86,7 @@ namespace IRI.Sta.ShapefileFormat
 
             string ns = utm.FalseNorthing == 0 ? "N" : "S";
 
-            var zone = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindZone(utm.CentralMeridian);
+            var zone = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.FindUtmZone(utm.CentralMeridian);
 
             root.Values = new List<string>() { string.IsNullOrWhiteSpace(utm.Title) ? $"WGS_1984_UTM_Zone_{zone}{ns}" : utm.Title };
 

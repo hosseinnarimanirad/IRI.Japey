@@ -840,7 +840,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action RequestCancelMeasure;
 
-        public Action RequestShowGoToView;
+        public Action<Point> RequestShowGoToView;
 
         public Action<ILayer> RequestShowSymbologyView;
 
@@ -3116,7 +3116,7 @@ namespace IRI.Jab.Common.Presenter.Map
             {
                 if (_goToCommand == null)
                 {
-                    _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke());
+                    _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke(this.CurrentExtent.Center));
                 }
 
                 return _goToCommand;
