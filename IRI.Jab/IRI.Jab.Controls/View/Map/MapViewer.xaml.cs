@@ -33,7 +33,7 @@ using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 
 using sb = IRI.Sta.Common.Primitives;
-using IRI.Ket.Persistence.RasterDataSources; 
+using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Sta.Common.Enums;
 
 //using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
@@ -215,6 +215,10 @@ namespace IRI.Jab.Controls
             }
         }
 
+        public bool IsGoogleZoomLevelsEnabled
+        {
+            get; set;
+        }
 
 
         public UIElementCollection Elements { get { return mapView.Children; } }
@@ -291,11 +295,6 @@ namespace IRI.Jab.Controls
         }
 
         public bool IsPanning { get; set; } = false;
-
-        public bool IsGoogleZoomLevelsEnabled
-        {
-            get; set;
-        }
 
         /// <summary>
         /// Based On Google Zoom Levels
@@ -1745,7 +1744,7 @@ namespace IRI.Jab.Controls
 
             Debug.WriteLine($"MapViewer; {DateTime.Now.ToShortTimeString()}; AddEditableFeatureLayer {layer.LayerName} finished");
         }
-         
+
 
         bool itemIsMoving = false;
 
@@ -1858,7 +1857,7 @@ namespace IRI.Jab.Controls
             var item = sender as Locateable;
 
             var element = item.Element;
-             
+
             var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
             var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
 
@@ -3547,17 +3546,14 @@ namespace IRI.Jab.Controls
 
             Point currMouseLocation = e.GetPosition(this.mapView);
 
-            //Rect rect = new Rect(firstZoomBound, currMouseLocation);
             Rect rect = new Rect(ScreenToMap(firstZoomBound), ScreenToMap(currMouseLocation));
 
-            //if (this.CurrentMouseAction == MapAction.ZoomOutRectangle)
-            //{
-            //    rect.Scale(1.2, 1.2);
-            //}
+            var boundingBox = sb.BoundingBox.Create(ScreenToMap(firstZoomBound).AsPoint(), ScreenToMap(currMouseLocation).AsPoint());
 
             this.mapView.ReleaseMouseCapture();
 
-            ZoomToExtent(rect, true);
+            //ZoomToExtent(rect, true);
+            ZoomToExtent(boundingBox, true);
         }
 
         private void mapView_MouseDownForZoomOut(object sender, MouseButtonEventArgs e)
@@ -3581,34 +3577,45 @@ namespace IRI.Jab.Controls
             ZoomToExtent(boundingBox, false, true);
         }
 
-        public void ZoomToExtent(sb.BoundingBox boundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
-        {
-            var layerExtent = new Rect(boundingBox.TopLeft.AsWpfPoint(), boundingBox.BottomRight.AsWpfPoint());
-            //Rect layerExtent = MapExtentToIntermediateExtent(boundingBox);
+        //public void ZoomToExtent(sb.BoundingBox boundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
+        //{
+        //    var layerExtent = new Rect(boundingBox.TopLeft.AsWpfPoint(), boundingBox.BottomRight.AsWpfPoint());
+        //    //Rect layerExtent = MapExtentToIntermediateExtent(boundingBox);
 
-            ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
-        }
+        //    ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
+        //}
 
         //It has animation
-        private async void ZoomToExtent(Rect mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
+        private async void ZoomToExtent(sb.BoundingBox mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
         {
             if (double.IsNaN(mapBoundingBox.Width + mapBoundingBox.Height))
-            {
                 return;
-            }
-            else if (mapBoundingBox.Width + mapBoundingBox.Height < minBoundingBoxSize)
+
+            var mapCenter = mapBoundingBox.Center;
+
+            if (mapBoundingBox.Width + mapBoundingBox.Height < minBoundingBoxSize)
             {
                 //PanTo(mapBoundingBox.X, mapBoundingBox.Y, callback);
 
                 int newZoomLevel = WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel);
-
-                var mapCenter = mapBoundingBox.GetCenter().AsPoint();
 
                 var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
 
                 this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
 
                 return;
+            }
+            else if (this.IsGoogleZoomLevelsEnabled)
+            {
+                //int newZoomLevel = WebMercatorUtility.EstimateZoomLevel( )
+
+                //var mapCenter = mapBoundingBox.GetCenter().AsPoint();
+
+                //var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+
+                //this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
+
+                //return;
             }
 
             //StopUnnecessaryJobs();
@@ -3623,20 +3630,26 @@ namespace IRI.Jab.Controls
 
             counter = 0;
 
-            Point lowerLeft = (mapBoundingBox.BottomLeft);
+            //Point lowerLeft = (mapBoundingBox.BottomLeft);
 
-            Point upperRight = (mapBoundingBox.TopRight);
+            //Point upperRight = (mapBoundingBox.TopRight);
 
-            if ((lowerLeft - upperRight).Length < 15 && canChangeToPointZoom)
+            //if ((lowerLeft - upperRight).Length < 15 && canChangeToPointZoom)
+            //{
+            //    ZoomToPoint(MapToScreen(mapBoundingBox.Location), 1.25);
+            //}
+
+            if (mapBoundingBox.GetDiagonalLength() < 15 && canChangeToPointZoom)
             {
-                ZoomToPoint(MapToScreen(mapBoundingBox.Location), 1.25);
+                ZoomToPoint(MapToScreen(mapBoundingBox.TopLeft.AsWpfPoint()), 1.25);
             }
             else
             {
                 counterValue = 8;
 
-                Point intermediateExtentCenter = new Point((mapBoundingBox.Left + mapBoundingBox.Right) / 2.0,
-                                                            (mapBoundingBox.Top + mapBoundingBox.Bottom) / 2.0);
+                //Point intermediateExtentCenter = new Point((mapBoundingBox.Left + mapBoundingBox.Right) / 2.0,
+                //                                            (mapBoundingBox.Top + mapBoundingBox.Bottom) / 2.0);
+                var intermediateExtentCenter = mapCenter.AsWpfPoint();
 
                 Point windowCenter = new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0);
 
@@ -3832,7 +3845,9 @@ namespace IRI.Jab.Controls
             Point mapCenter = ScreenToMap(windowCenter);
 
             sb.BoundingBox boundingBox =
-                new sb.BoundingBox(mapCenter.X - leftX, mapCenter.Y + topY, mapCenter.X + rightX, mapCenter.Y - bottomY);
+                sb.BoundingBox.Create(new sb.Point(mapCenter.X - leftX, mapCenter.Y + topY), new sb.Point(mapCenter.X + rightX, mapCenter.Y - bottomY));
+
+            //new sb.BoundingBox(mapCenter.X - leftX, mapCenter.Y + topY, mapCenter.X + rightX, mapCenter.Y - bottomY);
 
             ZoomToExtent(boundingBox, false, true, callback);
         }

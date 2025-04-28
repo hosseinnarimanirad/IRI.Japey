@@ -15,7 +15,7 @@ namespace IRI.Jab.Common.Model.Map
         {
         }
 
-
+        #region Base Maps
 
         private string _baseMapCacheDirectory = null;
 
@@ -65,7 +65,10 @@ namespace IRI.Jab.Common.Model.Map
             }
         }
 
+        #endregion
 
+
+        #region Zoom
 
         private bool _isMouseWheelZoomEnabled;
 
@@ -158,6 +161,9 @@ namespace IRI.Jab.Common.Model.Map
         }
 
         public Action<int> FireMaxGoogleZoomLevelChanged;
+
+        #endregion
+
 
 
         private EditableFeatureLayerOptions _drawingOptions = EditableFeatureLayerOptions.CreateDefaultForDrawing(true, true, true);

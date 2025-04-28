@@ -124,6 +124,16 @@ namespace IRI.Sta.Common.Primitives
             return IsValid() && this.Width * this.Height > 0;
         }
 
+        public double GetDiagonalLength()
+        {
+            double width = this.Width;
+
+            double height = this.Height;
+
+            return Math.Sqrt(width * width + height * height);
+        }
+         
+
         public BoundingBox Add(BoundingBox secondBoundingBox)
         {
             return new BoundingBox(xMin: Math.Min(this.XMin, secondBoundingBox.XMin),
