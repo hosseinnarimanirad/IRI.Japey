@@ -624,11 +624,11 @@ namespace IRI.Jab.Controls
 
             this.OnEditableFeatureLayerChanged += (sender, e) => { presenter.CurrentEditingLayer = e; };
 
-            presenter.RequestZoomToPoint = (center, mapScale) => this.Zoom(mapScale, center);
+            presenter.RequestZoomToPoint = (center, mapScale) => this.ZoomAndCenter(mapScale, center);
 
-            presenter.RequestZoomAndCenterToGoogleZoomLevel = (googleZoomLevel, mapCenter, callback) => this.ZoomAndCenterToGoogleZoomLevel(googleZoomLevel, mapCenter, callback);
+            presenter.RequestZoomAndCenterToGoogleZoomLevel = this.ZoomAndCenterToGoogleZoomLevel;
 
-            presenter.RequestZoomToGoogleZoomLevel = googleZoomLevel => this.ZoomToGoogleZoomLevel(googleZoomLevel);
+            //presenter.RequestZoomToGoogleZoomLevel = googleZoomLevel => this.ZoomToGoogleZoomLevel(googleZoomLevel);
 
             presenter.RequestRegisterMapOptions = (arg) => { this.RegisterRightClickContextOptions(arg.View, arg.DataContext); };
 
@@ -638,7 +638,7 @@ namespace IRI.Jab.Controls
 
             presenter.RequestPanTo = (point, callback) => { this.PanTo(point.X, point.Y, callback); };
 
-            presenter.RequestZoomToLevelAndCenter = (zoomLevel, centerMapPoint, callback, withAnimation) => this.ZoomToLevelAndCenter(zoomLevel, centerMapPoint, callback, withAnimation);
+            //presenter.RequestZoomToLevelAndCenter = (zoomLevel, centerMapPoint, callback, withAnimation) => this.ZoomToLevelAndCenter(zoomLevel, centerMapPoint, callback, withAnimation);
 
             presenter.RequestFlashPoints = (i) => { this.Flash(i); };
 
@@ -3432,11 +3432,6 @@ namespace IRI.Jab.Controls
             Tag = new LayerTag(-1) { IsTiled = false, LayerType = LayerType.Drawing }
         };
 
-        public void FullExtent()
-        {
-            ZoomToExtent(this._layerManager.CalculateMapExtent(), false);
-        }
-
         public void EnableZoomOnDoubleClick()
         {
             this.mapView.MouseDown -= MapView_MouseDownForDoubleClickZoom;
@@ -3448,13 +3443,21 @@ namespace IRI.Jab.Controls
             this.mapView.MouseDown -= MapView_MouseDownForDoubleClickZoom;
         }
 
-        private void MapView_MouseDownForDoubleClickZoom(object sender, MouseButtonEventArgs e)
+        public void EnableZoomingOnMouseWheel()
         {
-            if (e.ClickCount > 1)
-            {
-                Zoom(true, e.GetPosition(this.mapView));
+            this.mapView.MouseWheel -= mapView_MouseWheel;
+            this.mapView.MouseWheel += mapView_MouseWheel;
+        }
 
-            }
+        public void DisableZoomingOnMouseWheel()
+        {
+            this.mapView.MouseWheel -= mapView_MouseWheel;
+        }
+
+
+        public void FullExtent()
+        {
+            ZoomToExtent(this._layerManager.CalculateMapExtent(), false);
         }
 
         public void ZoomIn()
@@ -3467,16 +3470,6 @@ namespace IRI.Jab.Controls
             this.CurrentMouseAction = MapAction.ZoomInRectangle;
         }
 
-        //public void ZoomOut()
-        //{
-        //    ResetMapViewEvents();
-
-        //    this.mapView.MouseDown -= mapView_MouseDownForZoom;
-        //    this.mapView.MouseDown += mapView_MouseDownForZoom;
-
-        //    this.CurrentMouseAction = MapAction.ZoomOutRectangle;
-        //}
-
         public void ZoomOutPoint()
         {
             ResetMapViewEvents();
@@ -3485,6 +3478,13 @@ namespace IRI.Jab.Controls
             this.mapView.MouseUp += mapView_MouseDownForZoomOut;
 
             this.CurrentMouseAction = MapAction.ZoomOut;
+        }
+
+
+        private void MapView_MouseDownForDoubleClickZoom(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1)
+                Zoom(true, e.GetPosition(this.mapView));
         }
 
         private void mapView_MouseDownForZoom(object sender, MouseButtonEventArgs e)
@@ -3572,18 +3572,84 @@ namespace IRI.Jab.Controls
 
 
 
+        public void Zoom(double mapScale)
+        {
+            this.ZoomAndCenter(mapScale, CurrentExtent.Center);
+        }
+
+        public void ZoomAndCenterToGoogleZoomLevel(int googleZoomLevel, sb.Point mapCenter, Action callback, bool withAnimation = true)
+        {
+            var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
+
+            var mapScale = WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), wgs84Center?.Y);
+
+            ZoomAndCenter(mapScale, mapCenter, callback, withAnimation);
+        }
+
+        public void ZoomAndCenter(double mapScale, sb.Point mapCenter, Action? callback = null, bool withAnimation = true)
+        {
+            double scale = ToScreenScale(mapScale);
+
+            double width = this.mapView.ActualWidth / scale;
+
+            double height = this.mapView.ActualHeight / scale;
+
+            sb.BoundingBox boundingBox =
+                new sb.BoundingBox(mapCenter.X - width / 2.0, mapCenter.Y - height / 2.0, mapCenter.X + width / 2.0, mapCenter.Y + height / 2.0);
+
+            ZoomToExtent(boundingBox, false, true, callback, withAnimation);
+        }
+
+        private void ZoomToFeature(sb.Geometry<sb.Point> geometry)
+        {
+            if (geometry.IsNullOrEmpty())
+                return;
+
+            if (geometry.Type == sb.GeometryType.Point)
+            {
+                //98.01.18. consider using
+                this.ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(13), geometry.AsPoint());
+            }
+            else
+            {
+                this.ZoomToExtent(geometry.GetBoundingBox());
+            }
+        }
+
         public void ZoomToExtent(sb.BoundingBox boundingBox)
         {
             ZoomToExtent(boundingBox, false, true);
         }
 
-        //public void ZoomToExtent(sb.BoundingBox boundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
-        //{
-        //    var layerExtent = new Rect(boundingBox.TopLeft.AsWpfPoint(), boundingBox.BottomRight.AsWpfPoint());
-        //    //Rect layerExtent = MapExtentToIntermediateExtent(boundingBox);
+        private void Zoom(bool zoomIn, Point windowCenter)
+        {
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
+            //Debug.Print($"e.Delta: {zoomIn}");
 
-        //    ZoomToExtent(layerExtent, canChangeToPointZoom, isExactExtent, callback, withAnimation);
-        //}
+            var mapCenter = ScreenToMap(windowCenter);
+
+            if (IsGoogleZoomLevelsEnabled)
+            {
+                int newZoomLevel = zoomIn ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
+
+                newZoomLevel = CheckGoogleZoomLevel(newZoomLevel);
+
+                Debug.Print($"newZoomLevel: {newZoomLevel}");
+
+                //98.01.18. consider using
+                this.ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), mapCenter.AsPoint());
+            }
+            else
+            {
+                double delta = zoomIn ? 1.5 : 0.5;
+
+                double newMapScale = ToMapScale(this.ScreenScale * delta);
+
+                this.ZoomAndCenter(newMapScale, mapCenter.AsPoint());
+            }
+
+            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
+        }
 
         //It has animation
         private async void ZoomToExtent(sb.BoundingBox mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
@@ -3601,24 +3667,10 @@ namespace IRI.Jab.Controls
 
                 var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
 
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
+                this.ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
 
                 return;
             }
-            else if (this.IsGoogleZoomLevelsEnabled)
-            {
-                //int newZoomLevel = WebMercatorUtility.EstimateZoomLevel( )
-
-                //var mapCenter = mapBoundingBox.GetCenter().AsPoint();
-
-                //var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
-
-                //this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel, wgs84Center.Y), mapCenter, callback);
-
-                //return;
-            }
-
-            //StopUnnecessaryJobs();
 
             ClearLayer(LayerType.AnimatingItem, false);
 
@@ -3629,15 +3681,6 @@ namespace IRI.Jab.Controls
             ClearLayer(LayerType.EditableItem, false);
 
             counter = 0;
-
-            //Point lowerLeft = (mapBoundingBox.BottomLeft);
-
-            //Point upperRight = (mapBoundingBox.TopRight);
-
-            //if ((lowerLeft - upperRight).Length < 15 && canChangeToPointZoom)
-            //{
-            //    ZoomToPoint(MapToScreen(mapBoundingBox.Location), 1.25);
-            //}
 
             if (mapBoundingBox.GetDiagonalLength() < 15 && canChangeToPointZoom)
             {
@@ -3655,11 +3698,24 @@ namespace IRI.Jab.Controls
 
                 Point screenExtentCenter = MapToScreen(intermediateExtentCenter);
 
-                double xScale = (isExactExtent ? this.mapView.ActualWidth : this.mapView.ActualWidth - 20) / mapBoundingBox.Width;
+                double scale = double.NaN;
 
-                double yScale = (isExactExtent ? this.mapView.ActualHeight : this.mapView.ActualHeight - 20) / mapBoundingBox.Height;
+                if (IsGoogleZoomLevelsEnabled)
+                {
+                    var newZoomLevel = WebMercatorUtility.EstimateZoomLevel(mapBoundingBox, this.mapView.ActualWidth, this.mapView.ActualHeight);
 
-                double scale = xScale > yScale ? yScale : xScale;
+                    var mapScale = WebMercatorUtility.GetGoogleMapScale(newZoomLevel);
+
+                    scale = ToScreenScale(mapScale);
+                }
+                else
+                {
+                    double xScale = (isExactExtent ? this.mapView.ActualWidth : this.mapView.ActualWidth - 20) / mapBoundingBox.Width;
+
+                    double yScale = (isExactExtent ? this.mapView.ActualHeight : this.mapView.ActualHeight - 20) / mapBoundingBox.Height;
+
+                    scale = xScale > yScale ? yScale : xScale;
+                }
 
                 if (double.IsNaN(scale))
                 {
@@ -3738,22 +3794,8 @@ namespace IRI.Jab.Controls
             }
         }
 
-        private Task AnimateAsync(Action action, DoubleAnimation animation)
-        {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-
-            animation.Completed += (s, e) => { tcs.SetResult(true); };
-
-            action();
-
-            return tcs.Task;
-        }
-
         private void ZoomToPoint(Point windowPoint, double deltaZoom)
         {
-            //Debug.Print("ZoomToPoint(Point windowPoint, double deltaZoom)");
-
-
             Point layerPoint = this.viewTransform.Inverse.Transform(windowPoint);
 
             this.panTransform.X = this.mapView.ActualWidth / 2.0 - layerPoint.X;
@@ -3774,24 +3816,22 @@ namespace IRI.Jab.Controls
 
             this._theScreenScale = scale * baseScaleX;
 
-            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
-
-            //if (this.OnZoomChanged != null)
-            //{
-            //    this.OnZoomChanged(null, null);
-            //}
             this.OnZoomChanged.SafeInvoke(null, null);
 
             Refresh();
-
-            //RaisePropertyChanged("MapScale");
         }
 
-        public void Zoom(double mapScale)
-        {
-            //Debug.Print("Zoom(double mapScale) is called");
 
-            this.Zoom(mapScale, new Point(this.mapView.ActualWidth / 2.0, this.mapView.ActualHeight / 2.0));
+
+        private Task AnimateAsync(Action action, DoubleAnimation animation)
+        {
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+
+            animation.Completed += (s, e) => { tcs.SetResult(true); };
+
+            action();
+
+            return tcs.Task;
         }
 
         private int CheckGoogleZoomLevel(int googleZoomLevel)
@@ -3806,145 +3846,6 @@ namespace IRI.Jab.Controls
             }
 
             return googleZoomLevel;
-        }
-
-        public void ZoomToGoogleZoomLevel(int googleZoomLevel)
-        {
-            //if (googleZoomLevel < 1 || googleZoomLevel > 23)
-            //{
-            //    return;
-            //}
-
-            Zoom(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), CurrentExtentCenterInWgs84?.Y));
-        }
-
-        public void ZoomAndCenterToGoogleZoomLevel(int googleZoomLevel, sb.Point mapCenter, Action callback)
-        {
-            //if (googleZoomLevel < 1 || googleZoomLevel > 23)
-            //{
-            //    return;
-            //}
-
-            var wgs84Center = MapProjects.WebMercatorToGeodeticWgs84(mapCenter);
-
-            ZoomAndCenter(WebMercatorUtility.GetGoogleMapScale(CheckGoogleZoomLevel(googleZoomLevel), wgs84Center?.Y), mapCenter, callback);
-        }
-
-        public void Zoom(double mapScale, Point windowCenter, Action callback = null)
-        {
-            double scale = ToScreenScale(mapScale);
-
-            double leftX = windowCenter.X / scale;
-
-            double rightX = (this.mapView.ActualWidth - windowCenter.X) / scale;
-
-            double topY = windowCenter.Y / scale;
-
-            double bottomY = (this.mapView.ActualHeight - windowCenter.Y) / scale;
-
-            Point mapCenter = ScreenToMap(windowCenter);
-
-            sb.BoundingBox boundingBox =
-                sb.BoundingBox.Create(new sb.Point(mapCenter.X - leftX, mapCenter.Y + topY), new sb.Point(mapCenter.X + rightX, mapCenter.Y - bottomY));
-
-            //new sb.BoundingBox(mapCenter.X - leftX, mapCenter.Y + topY, mapCenter.X + rightX, mapCenter.Y - bottomY);
-
-            ZoomToExtent(boundingBox, false, true, callback);
-        }
-
-        private void ZoomAndCenter(double mapScale, Point windowCenter, Action callback = null, bool withAnimation = true)
-        {
-            double scale = ToScreenScale(mapScale);
-
-            double width = this.mapView.ActualWidth / scale;
-
-            double height = this.mapView.ActualHeight / scale;
-
-            Point mapCenter = ScreenToMap(windowCenter);
-
-            sb.BoundingBox boundingBox =
-                new sb.BoundingBox(mapCenter.X - width / 2.0, mapCenter.Y - height / 2.0, mapCenter.X + width / 2.0, mapCenter.Y + height / 2.0);
-
-            ZoomToExtent(boundingBox, false, true, callback, withAnimation);
-        }
-
-        public void ZoomToLevelAndCenter(int zoomLevel, sb.Point centerMapPoint, Action callback = null, bool withAnimation = true)
-        {
-            var wgs84Center = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(centerMapPoint);
-
-            var mapScale = WebMercatorUtility.GetGoogleMapScale(zoomLevel, wgs84Center?.Y);
-
-            ZoomAndCenter(mapScale, centerMapPoint, callback, withAnimation);
-        }
-
-        public void ZoomAndCenter(double mapScale, sb.Point centerMapPoint, Action callback = null, bool withAnimation = true)
-        {
-            var windowCenter = MapToScreen(new Point(centerMapPoint.X, centerMapPoint.Y));
-
-            ZoomAndCenter(mapScale, windowCenter, callback, withAnimation);
-        }
-
-        public void Zoom(double mapScale, sb.IPoint centerMapPoint, Action callback = null)
-        {
-            var windowCenter = MapToScreen(new Point(centerMapPoint.X, centerMapPoint.Y));
-
-            ZoomAndCenter(mapScale, windowCenter, callback);
-        }
-
-        private void Zoom(bool zoomIn, Point windowCenter)
-        {
-            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventEntered);
-            //Debug.Print($"e.Delta: {zoomIn}");
-
-            if (IsGoogleZoomLevelsEnabled)
-            {
-                int newZoomLevel = zoomIn ? WebMercatorUtility.GetNextZoomLevel(CurrentZoomLevel) : WebMercatorUtility.GetPreviousZoomLevel(CurrentZoomLevel);
-
-                newZoomLevel = CheckGoogleZoomLevel(newZoomLevel);
-
-                Debug.Print($"newZoomLevel: {newZoomLevel}");
-
-                //98.01.18. consider using
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(newZoomLevel), windowCenter);
-            }
-            else
-            {
-                double delta = zoomIn ? 1.5 : 0.5;
-
-                double newMapScale = ToMapScale(this.ScreenScale * delta);
-
-                this.Zoom(newMapScale, windowCenter);
-            }
-
-            //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _eventLeaved);
-        }
-
-        private void ZoomToFeature(sb.Geometry<sb.Point> geometry)
-        {
-            if (geometry.IsNullOrEmpty())
-                return;
-
-            if (geometry.Type == sb.GeometryType.Point)
-            {
-                //98.01.18. consider using
-                this.Zoom(WebMercatorUtility.GetGoogleMapScale(13), geometry.AsPoint());
-            }
-            else
-            {
-                this.ZoomToExtent(geometry.GetBoundingBox());
-            }
-
-        }
-
-        public void EnableZoomingOnMouseWheel()
-        {
-            this.mapView.MouseWheel -= mapView_MouseWheel;
-            this.mapView.MouseWheel += mapView_MouseWheel;
-        }
-
-        public void DisableZoomingOnMouseWheel()
-        {
-            this.mapView.MouseWheel -= mapView_MouseWheel;
         }
 
         #endregion

@@ -339,7 +339,7 @@ namespace IRI.Jab.Controls.Presenter
                {
                    var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
 
-                   mapPresenter.ZoomToLevelAndCenter(13, webMercatorPoint, () =>
+                   mapPresenter.ZoomAndCenterToGoogleZoomLevel(13, webMercatorPoint, () =>
                    {
                        mapPresenter.FlashPoint(webMercatorPoint);
                    });

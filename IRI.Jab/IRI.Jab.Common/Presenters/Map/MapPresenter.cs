@@ -731,9 +731,9 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<Point, double> RequestZoomToPoint;
 
-        public Action<int, Point, Action> RequestZoomAndCenterToGoogleZoomLevel;
+        public Action<int, Point, Action, bool> RequestZoomAndCenterToGoogleZoomLevel;
 
-        public Action<int> RequestZoomToGoogleZoomLevel;
+        //public Action<int> RequestZoomToGoogleZoomLevel;
 
         public Action<BoundingBox, bool, Action> RequestZoomToExtent;
 
@@ -747,7 +747,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public Action<Point, Action> RequestPanTo;
 
-        public Action<int, Point, Action, bool> RequestZoomToLevelAndCenter;
+        //public Action<int, Point, Action, bool> RequestZoomToLevelAndCenter;
 
         public Action<MapOptionsEventArgs<System.Windows.FrameworkElement>> RequestRegisterMapOptions;
 
@@ -2004,9 +2004,9 @@ namespace IRI.Jab.Common.Presenter.Map
         //*****************************************Zoom******************************************************************
         #region Zoom
 
-        public void ZoomToLevelAndCenter(int zoomLevel, Point centerMapPoint, Action callback = null, bool withAnimation = true)
+        public void ZoomAndCenterToGoogleZoomLevel(int zoomLevel, Point centerMapPoint, Action callback = null, bool withAnimation = true)
         {
-            this.RequestZoomToLevelAndCenter?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
+            this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
         }
 
         public void EnableRectangleZoomIn()
@@ -2039,15 +2039,15 @@ namespace IRI.Jab.Common.Presenter.Map
             this.RequestZoomToPoint?.Invoke(center, mapScale);
         }
 
-        public void ZoomToGoogleZoomLevel(int googleZoomLevel)
-        {
-            this.RequestZoomToGoogleZoomLevel?.Invoke(googleZoomLevel);
-        }
+        //public void ZoomToGoogleZoomLevel(int googleZoomLevel)
+        //{
+        //    this.RequestZoomToGoogleZoomLevel?.Invoke(googleZoomLevel);
+        //}
 
-        public void ZoomToGoogleScale(int googleZoomLevel, Point mapCenter, Action callback)
-        {
-            this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(googleZoomLevel, mapCenter, callback);
-        }
+        //public void ZoomToGoogleScale(int googleZoomLevel, Point mapCenter, Action callback)
+        //{
+        //    this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(googleZoomLevel, mapCenter, callback, false);
+        //}
 
         public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, Action callback = null)
         {
