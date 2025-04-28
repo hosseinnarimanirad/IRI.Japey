@@ -245,7 +245,8 @@
                                 </Button>
                                 <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 
                                 ToolTip="کپی مختصات"
-                                Command="{Binding CopyCurrentPointCommand}" >
+                                Command="{Binding CopyCurrentPointCommand}" 
+                                        CommandParameter="{Binding DataContext.MapPanel.SpatialReference, RelativeSource={RelativeSource AncestorType=UserControl, Mode=FindAncestor}}">
                                     <Path Data="{StaticResource appbarPageCopy}" FlowDirection="LeftToRight"/>
                                 </Button>
                                 <Button Style="{StaticResource circleButton}" HorizontalAlignment="Right" Margin="2" 

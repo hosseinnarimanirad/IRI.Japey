@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
-using IRI.Msh.CoordinateSystem.MapProjection; 
+using IRI.Msh.CoordinateSystem.MapProjection;
 using IRI.Sta.Common.Helpers;
 using IRI.Jab.Common.Model.DataStructure;
 using IRI.Jab.Common.Model;
@@ -19,6 +19,7 @@ using WpfPoint = System.Windows.Point;
 using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using Point = IRI.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
+using IRI.Msh.CoordinateSystem;
 
 namespace IRI.Jab.Common
 {
@@ -1132,16 +1133,42 @@ namespace IRI.Jab.Common
             this.RequestZoomToPoint?.Invoke(new Point(currentPoint.X, currentPoint.Y));
         }
 
-        private void CopyCurrentPointCoordinateToClipboard()
+        private void CopyCurrentPointCoordinateToClipboard(SpatialReferenceType spatialReferenceType)
         {
             var currentPoint = this._primaryVerticesLayer.FindSelectedLocatable();
 
             if (currentPoint == null)
                 return;
 
-            var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(currentPoint.X, currentPoint.Y));
+            Point point = new(currentPoint.X, currentPoint.Y);
 
-            Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
+            switch (spatialReferenceType)
+            {
+                case SpatialReferenceType.UTM:
+                    var geodetic = MapProjects.WebMercatorToGeodeticWgs84(point);
+                    point = MapProjects.GeodeticToUTM(geodetic, geodetic.Y < 0);
+                    break;
+
+                case SpatialReferenceType.WebMercator:
+                    break;
+
+                case SpatialReferenceType.Geodetic:
+                case SpatialReferenceType.None:
+                case SpatialReferenceType.AlbersEqualAreaConic:
+                case SpatialReferenceType.CylindricalEqualArea:
+                case SpatialReferenceType.LambertConformalConic:
+                case SpatialReferenceType.Mercator:
+                case SpatialReferenceType.TransverseMercator:
+                default:
+                    point = MapProjects.WebMercatorToGeodeticWgs84(point);
+                    break;
+            }
+
+            //var geodetic = MapProjects.WebMercatorToGeodeticWgs84(new Point(currentPoint.X, currentPoint.Y));
+
+            //Clipboard.SetDataObject($"{geodetic.X.ToString("n4")},{geodetic.Y.ToString("n4")}");
+
+            Clipboard.SetDataObject($"{point.X:n4};{point.Y:n4}");
         }
 
         private void DeleteCurrentPart()
@@ -1320,7 +1347,7 @@ namespace IRI.Jab.Common
             {
                 if (_copyCurrentPointCommand == null)
                 {
-                    _copyCurrentPointCommand = new RelayCommand(param => this.CopyCurrentPointCoordinateToClipboard());
+                    _copyCurrentPointCommand = new RelayCommand(param => this.CopyCurrentPointCoordinateToClipboard((SpatialReferenceType)param));
                 }
 
                 return _copyCurrentPointCommand;

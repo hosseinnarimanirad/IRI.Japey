@@ -131,7 +131,7 @@ public class MapPanelPresenter : Notifier
 
         }
     }
-
+     
 
     private NotifiablePoint _currentEditingPoint;
 

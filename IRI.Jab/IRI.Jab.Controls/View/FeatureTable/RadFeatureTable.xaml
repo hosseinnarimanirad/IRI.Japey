@@ -45,7 +45,7 @@
                         </Style>
                     </ToggleButton.Style>
 
-                    <Path Stretch="Uniform" Fill="{Binding Foreground,RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16" FlowDirection="LeftToRight">
+                    <Path Stretch="Uniform" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton, Mode=FindAncestor}}" Width="16" Height="16" FlowDirection="LeftToRight">
                         <Path.Style>
                             <Style TargetType="{x:Type Path}" >
                                 <Style.Triggers>

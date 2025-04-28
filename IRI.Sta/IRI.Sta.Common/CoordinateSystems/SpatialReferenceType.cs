@@ -4,20 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.CoordinateSystem
-{
-    public enum SpatialReferenceType
-    { 
-        None,
+namespace IRI.Msh.CoordinateSystem;
 
-        AlbersEqualAreaConic,
-        CylindricalEqualArea,
-        Geodetic,
-        LambertConformalConic,
-        Mercator,
-        TransverseMercator,
-        UTM,
-        WebMercator,
-    }
-     
+public enum SpatialReferenceType
+{ 
+    None,
+
+    AlbersEqualAreaConic,
+    CylindricalEqualArea,
+    Geodetic,
+    LambertConformalConic,
+    Mercator,
+    TransverseMercator,
+    UTM,
+    WebMercator,
 }
+  

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Jab.Controls.Model
+namespace IRI.Jab.Controls.Model;
+
+public enum CoordinateTypes
 {
-    public enum CoordinateTypes
-    {
-        Geodetic,
-        UTM,
-        Mercator,
-        TM,
-    }
+    Geodetic = 1,
+    UTM = 2,
+    Mercator = 3,
+    TM = 4,
 }

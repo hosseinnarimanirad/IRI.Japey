@@ -4,16 +4,15 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public enum CoordinateType
 {
-    public enum CoordinateType
-    {
-        Astronomic,
-        Cartesian2D,
-        Cartesian3D,
-        Geodetic,
-        Ellipsoidal,
-        Polar,
-        Spherical
-    }
+    Astronomic,
+    Cartesian2D,
+    Cartesian3D,
+    Geodetic,
+    Ellipsoidal,
+    Polar,
+    Spherical
 }

@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.CoordinateSystem.MapProjection
-{
-    public enum MapProjectionType
-    {
-        None = 1,
+namespace IRI.Msh.CoordinateSystem.MapProjection;
 
-        AlbersEqualAreaConic = 2,
-        AzimuthalEquidistant = 3,
-        CylindricalEqualArea = 4,
-        LambertConformalConic = 5,
-        Mercator = 6,
-        TransverseMercator = 7,
-        UTM = 8,
-        WebMercator = 9,
-    }
+public enum MapProjectionType
+{
+    None = 1,
+
+    AlbersEqualAreaConic = 2,
+    AzimuthalEquidistant = 3,
+    CylindricalEqualArea = 4,
+    LambertConformalConic = 5,
+    Mercator = 6,
+    TransverseMercator = 7,
+    UTM = 8,
+    WebMercator = 9,
 }
