@@ -116,7 +116,7 @@ namespace IRI.Sta.ShapefileFormat.EsriType
 
         public byte[] AsWkb()
         {
-            return OgcWkbMapFunctions.ToWkbPoint(this);
+            return OgcWkbMapFunctions.ToWkbPointM(this, this.Measure);
         }
 
         /// <summary>
