@@ -4,18 +4,17 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IPolarPoint
 {
-    public interface IPolarPoint
-    {
-        AngularUnit Angle { get; set; }
+    AngularUnit Angle { get; set; }
 
-        LinearUnit Radius { get; set; }
+    LinearUnit Radius { get; set; }
 
-        AngleMode AngularMode { get; }
+    AngleMode AngularMode { get; }
 
-        LinearMode LinearMode { get; }
+    LinearMode LinearMode { get; }
 
-        Cartesian2DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
-    }
+    Cartesian2DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
 }

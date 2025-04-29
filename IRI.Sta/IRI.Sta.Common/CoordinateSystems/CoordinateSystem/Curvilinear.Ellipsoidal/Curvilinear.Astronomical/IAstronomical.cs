@@ -6,27 +6,26 @@ using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 using IRI.Msh.Algebra;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IAstronomical : IEnumerable<IAstronomicalPoint>
 {
-    public interface IAstronomical : IEnumerable<IAstronomicalPoint>
-    {
-        AxisType Handedness { get; }
-        IAngularCollection HorizontalAngle { get; }
-        AngleRange HorizontalAngleRange { get; set; }
-        string Name { get; }
-        int NumberOfPoints { get; }
-        AngleMode AngularMode { get; }
+    AxisType Handedness { get; }
+    IAngularCollection HorizontalAngle { get; }
+    AngleRange HorizontalAngleRange { get; set; }
+    string Name { get; }
+    int NumberOfPoints { get; }
+    AngleMode AngularMode { get; }
 
-        int Dimension { get; }
-        IEnumerator<IAstronomicalPoint> GetEnumerator();
+    int Dimension { get; }
+    IEnumerator<IAstronomicalPoint> GetEnumerator();
 
-        IAstronomical RotateAboutX(AngularUnit value, RotateDirection direction);
-        IAstronomical RotateAboutY(AngularUnit value, RotateDirection direction);
-        IAstronomical RotateAboutZ(AngularUnit value, RotateDirection direction);
-        IAstronomicalPoint this[int index] { get; set; }
-        Cartesian3D<T> ToCartesian<T>() where T : LinearUnit, new();
-        IAstronomical Clone();
-        Matrix ToMatrix();
-        IAngularCollection VerticalAngle { get; }
-    }
+    IAstronomical RotateAboutX(AngularUnit value, RotateDirection direction);
+    IAstronomical RotateAboutY(AngularUnit value, RotateDirection direction);
+    IAstronomical RotateAboutZ(AngularUnit value, RotateDirection direction);
+    IAstronomicalPoint this[int index] { get; set; }
+    Cartesian3D<T> ToCartesian<T>() where T : LinearUnit, new();
+    IAstronomical Clone();
+    Matrix ToMatrix();
+    IAngularCollection VerticalAngle { get; }
 }

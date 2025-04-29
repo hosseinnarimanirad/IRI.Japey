@@ -4,11 +4,10 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public enum AxisType
 {
-    public enum AxisType
-    {
-        LeftHanded = -1,
-        RightHanded = 1
-    }
+    LeftHanded = -1,
+    RightHanded = 1
 }

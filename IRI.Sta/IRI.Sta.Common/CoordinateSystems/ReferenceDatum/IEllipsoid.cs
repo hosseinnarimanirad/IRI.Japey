@@ -5,43 +5,41 @@ using System;
 using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IEllipsoid
 {
-    public interface IEllipsoid
-    {
-        string Name { get; }
+    string Name { get; }
 
-        string EsriName { get; set; }
+    string EsriName { get; set; }
 
-        LinearUnit SemiMajorAxis { get; }
+    LinearUnit SemiMajorAxis { get; }
 
-        LinearUnit SemiMinorAxis { get; }
+    LinearUnit SemiMinorAxis { get; }
 
-        double FirstEccentricity { get; }
+    double FirstEccentricity { get; }
 
-        double SecondEccentricity { get; }
+    double SecondEccentricity { get; }
 
-        double Flattening { get; }
+    double Flattening { get; }
 
-        double InverseFlattening { get; }
+    double InverseFlattening { get; }
 
-        int Srid { get;  }
+    int Srid { get;  }
 
-        ICartesian3DPoint DatumTranslation { get; }
+    ICartesian3DPoint DatumTranslation { get; }
 
-        OrientationParameter DatumMisalignment { get; }
+    OrientationParameter DatumMisalignment { get; }
 
-        LinearUnit CalculateM(AngularUnit Latitude);
+    LinearUnit CalculateM(AngularUnit Latitude);
 
-        LinearUnit CalculateN(AngularUnit Latitude);
+    LinearUnit CalculateN(AngularUnit Latitude);
 
-        double CalculateN(double Latitude);
+    double CalculateN(double Latitude);
 
-        Ellipsoid<TLinear, TAngular> ChangeTo<TLinear, TAngular>()
-            where TLinear : LinearUnit, new()
-            where TAngular : AngularUnit, new();
+    Ellipsoid<TLinear, TAngular> ChangeTo<TLinear, TAngular>()
+        where TLinear : LinearUnit, new()
+        where TAngular : AngularUnit, new();
 
-        bool AreTheSame(IEllipsoid other);
-    }
-
+    bool AreTheSame(IEllipsoid other);
 }

@@ -4,13 +4,10 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public enum RotateDirection
 {
-
-    public enum RotateDirection
-    {
-        Clockwise = -1,
-        Counterclockwise = 1
-    }
-
+    Clockwise = -1,
+    Counterclockwise = 1
 }

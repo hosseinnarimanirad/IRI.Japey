@@ -4,21 +4,20 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface ICartesian2DPoint
 {
-    public interface ICartesian2DPoint
-    {
-        LinearMode LinearMode { get; }
+    LinearMode LinearMode { get; }
 
-        CoordinateRegion Region { get; }
+    CoordinateRegion Region { get; }
 
-        LinearUnit X { get; set; }
+    LinearUnit X { get; set; }
 
-        LinearUnit Y { get; set; }
+    LinearUnit Y { get; set; }
 
-        PolarPoint<TRadius, TAngle> ToPolar<TRadius, TAngle>(AngleRange range)
-            where TRadius : LinearUnit, new()
-            where TAngle : AngularUnit, new();
+    PolarPoint<TRadius, TAngle> ToPolar<TRadius, TAngle>(AngleRange range)
+        where TRadius : LinearUnit, new()
+        where TAngle : AngularUnit, new();
 
-    }
 }

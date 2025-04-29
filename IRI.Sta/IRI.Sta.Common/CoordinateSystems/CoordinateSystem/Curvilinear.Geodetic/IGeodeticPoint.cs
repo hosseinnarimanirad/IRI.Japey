@@ -4,24 +4,23 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IGeodeticPoint
 {
-    public interface IGeodeticPoint
-    {
-        AngleMode AngularMode { get; }
+    AngleMode AngularMode { get; }
 
-        IEllipsoid Datum { get; }
+    IEllipsoid Datum { get; }
 
-        LinearUnit Height { get; set; }
+    LinearUnit Height { get; set; }
 
-        AngularUnit Latitude { get; set; }
+    AngularUnit Latitude { get; set; }
 
-        LinearMode LinearMode { get; }
+    LinearMode LinearMode { get; }
 
-        AngularUnit Longitude { get; set; }
+    AngularUnit Longitude { get; set; }
 
-        AngleRange LongitudinalRange { get; set; }
+    AngleRange LongitudinalRange { get; set; }
 
-        Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
-    }
+    Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
 }

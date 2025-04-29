@@ -4,18 +4,17 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IAstronomicalPoint
 {
-    public interface IAstronomicalPoint
-    {
-        AngleMode AngularMode { get; }
+    AngleMode AngularMode { get; }
 
-        AngularUnit HorizontalAngle { get; set; }
+    AngularUnit HorizontalAngle { get; set; }
 
-        AngleRange HorizontalRange { get; set; }
+    AngleRange HorizontalRange { get; set; }
 
-        Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
+    Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
 
-        AngularUnit VerticalAngle { get; set; }
-    }
+    AngularUnit VerticalAngle { get; set; }
 }

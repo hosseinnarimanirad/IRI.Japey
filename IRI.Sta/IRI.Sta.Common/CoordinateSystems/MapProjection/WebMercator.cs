@@ -4,44 +4,43 @@ using System.Linq;
 using System.Text;
 using IRI.Sta.Common.Primitives; 
 
-namespace IRI.Msh.CoordinateSystem.MapProjection
+namespace IRI.Msh.CoordinateSystem.MapProjection;
+
+public class WebMercator : MapProjectionBase
 {
-    public class WebMercator : MapProjectionBase
+    protected double _auxiliarySphereType = 0;
+
+    public double AuxiliarySphereType
     {
-        protected double _auxiliarySphereType = 0;
+        get { return _auxiliarySphereType; }
+    }
 
-        public double AuxiliarySphereType
+    public override SpatialReferenceType Type
+    {
+        get
         {
-            get { return _auxiliarySphereType; }
+            return SpatialReferenceType.WebMercator;
         }
+    }
 
-        public override MapProjectionType Type
-        {
-            get
-            {
-                return MapProjectionType.WebMercator;
-            }
-        }
+    public WebMercator()
+    {
+        //This projection actually has no ellipsoid
+        this._ellipsoid = Ellipsoids.WGS84;
+    }
 
-        public WebMercator()
-        {
-            //This projection actually has no ellipsoid
-            this._ellipsoid = Ellipsoids.WGS84;
-        }
+    public override TPoint FromGeodetic<TPoint>(TPoint geodeticWgs84)
+    {
+        return MapProjects.GeodeticWgs84ToWebMercator(geodeticWgs84);
+    }
 
-        public override TPoint FromGeodetic<TPoint>(TPoint geodeticWgs84)
-        {
-            return MapProjects.GeodeticWgs84ToWebMercator(geodeticWgs84);
-        }
+    public override TPoint ToGeodetic<TPoint>(TPoint webMercator)
+    {
+        return MapProjects.WebMercatorToGeodeticWgs84(webMercator);
+    }
 
-        public override TPoint ToGeodetic<TPoint>(TPoint webMercator)
-        {
-            return MapProjects.WebMercatorToGeodeticWgs84(webMercator);
-        }
-
-        protected override int GetSrid()
-        {
-            return SridHelper.WebMercator;
-        }
+    protected override int GetSrid()
+    {
+        return SridHelper.WebMercator;
     }
 }

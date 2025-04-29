@@ -4,26 +4,25 @@
 using System;
 using IRI.Msh.MeasurementUnit;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface ICartesian3DPoint
 {
-    public interface ICartesian3DPoint
-    {
-        LinearMode LinearMode { get; }
+    LinearMode LinearMode { get; }
 
-        GeodeticPoint<TLinear, TAngular> ToGeodetic<TLinear, TAngular>(IEllipsoid ellipsoid, AngleRange longitudinalRange)
-            where TLinear : LinearUnit, new()
-            where TAngular : AngularUnit, new();
+    GeodeticPoint<TLinear, TAngular> ToGeodetic<TLinear, TAngular>(IEllipsoid ellipsoid, AngleRange longitudinalRange)
+        where TLinear : LinearUnit, new()
+        where TAngular : AngularUnit, new();
 
-        SphericalPoint<TLinear, TAngular> ToSpherical<TLinear, TAngular>(AngleRange horizontalRange)
-            where TLinear : LinearUnit, new()
-            where TAngular : AngularUnit, new();
+    SphericalPoint<TLinear, TAngular> ToSpherical<TLinear, TAngular>(AngleRange horizontalRange)
+        where TLinear : LinearUnit, new()
+        where TAngular : AngularUnit, new();
 
-        ICartesian3DPoint Negate();
+    ICartesian3DPoint Negate();
 
-        LinearUnit X { get; set; }
+    LinearUnit X { get; set; }
 
-        LinearUnit Y { get; set; }
+    LinearUnit Y { get; set; }
 
-        LinearUnit Z { get; set; }
-    }
+    LinearUnit Z { get; set; }
 }

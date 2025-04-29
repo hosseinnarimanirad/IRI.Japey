@@ -5,20 +5,19 @@ using System;
 using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface IEllipsoidalPoint
 {
-    public interface IEllipsoidalPoint
-    {
-        IEllipsoid Datum { get; }
+    IEllipsoid Datum { get; }
 
-        AngleMode AngularMode { get; }
+    AngleMode AngularMode { get; }
 
-        AngularUnit VerticalAngle { get; set; }
+    AngularUnit VerticalAngle { get; set; }
 
-        AngularUnit HorizontalAngle { get; set; }
+    AngularUnit HorizontalAngle { get; set; }
 
-        AngleRange HorizontalRange { get; set; }
+    AngleRange HorizontalRange { get; set; }
 
-        Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
-    }
+    Cartesian3DPoint<T> ToCartesian<T>() where T : LinearUnit, new();
 }

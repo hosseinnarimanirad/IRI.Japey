@@ -9,494 +9,501 @@ using System.Text;
 using System.Threading.Tasks;
 using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
 using IRI.Msh.MeasurementUnit;
+using IRI.Msh.CoordinateSystem;
 
-namespace IRI.Sta.ShapefileFormat.Prj
+namespace IRI.Sta.ShapefileFormat.Prj;
+
+public class EsriPrjFile
 {
-    public class EsriPrjFile
+    #region Constants
+
+    public const string _esriLambertConformalConic = "Lambert_Conformal_Conic";
+    public const string _esriTransverseMercator = "Transverse_Mercator";
+    public const string _esriMercator = "Mercator";
+    public const string _esriAzimuthalEquidistant = "Azimuthal_Equidistant";
+    public const string _esriCylindricalEqualArea = "Cylindrical_Equal_Area";
+    public const string _esriWebMercator = "Mercator_Auxiliary_Sphere";
+
+    public const string _projcs = "PROJCS";
+    public const string _geogcs = "GEOGCS";
+    public const string _spheroid = "SPHEROID";
+    public const string _datum = "DATUM";
+    public const string _projection = "PROJECTION";
+    public const string _unit = "UNIT";
+    public const string _parameter = "PARAMETER";
+    public const string _primem = "PRIMEM";
+    public const string _authority = "AUTHORITY";
+    public const string _toWgs84 = "TOWGS84";
+
+    public const string _falseEasting = "False_Easting";
+    public const string _falseNorthing = "False_Northing";
+    public const string _centralMeridian = "Central_Meridian";
+    public const string _scaleFactor = "Scale_Factor";
+    public const string _latitudeOfOrigin = "Latitude_Of_Origin";
+    public const string _standardParallel1 = "Standard_Parallel_1";
+    public const string _standardParallel2 = "Standard_Parallel_2";
+    public const string _auxiliarySphereType = "Auxiliary_Sphere_Type";
+    public const string _greenwich = "Greenwich";
+    public const string _degree = "Degree";
+    public const string _degreeValue = "0.0174532925199433";
+    public const string _epsg = "EPSG";
+
+    #endregion
+
+    private EsriPrjTreeNode _rootNode;
+
+
+    public EsriPrjFile(EsriPrjTreeNode root)
     {
-        #region Constants
+        this._rootNode = root;
 
-        public const string _esriLambertConformalConic = "Lambert_Conformal_Conic";
-        public const string _esriTransverseMercator = "Transverse_Mercator";
-        public const string _esriMercator = "Mercator";
-        public const string _esriAzimuthalEquidistant = "Azimuthal_Equidistant";
-        public const string _esriCylindricalEqualArea = "Cylindrical_Equal_Area";
-        public const string _esriWebMercator = "Mercator_Auxiliary_Sphere";
+        //sample: AUTHORITY["EPSG", "4326"]
+        //var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
 
-        public const string _projcs = "PROJCS";
-        public const string _geogcs = "GEOGCS";
-        public const string _spheroid = "SPHEROID";
-        public const string _datum = "DATUM";
-        public const string _projection = "PROJECTION";
-        public const string _unit = "UNIT";
-        public const string _parameter = "PARAMETER";
-        public const string _primem = "PRIMEM";
-        public const string _authority = "AUTHORITY";
-        public const string _toWgs84 = "TOWGS84";
+        //int srid = 0;
 
-        public const string _falseEasting = "False_Easting";
-        public const string _falseNorthing = "False_Northing";
-        public const string _centralMeridian = "Central_Meridian";
-        public const string _scaleFactor = "Scale_Factor";
-        public const string _latitudeOfOrigin = "Latitude_Of_Origin";
-        public const string _standardParallel1 = "Standard_Parallel_1";
-        public const string _standardParallel2 = "Standard_Parallel_2";
-        public const string _auxiliarySphereType = "Auxiliary_Sphere_Type";
-        public const string _greenwich = "Greenwich";
-        public const string _degree = "Degree";
-        public const string _degreeValue = "0.0174532925199433";
-        public const string _epsg = "EPSG";
+        //if (authorityInfo != null && authorityInfo.Count == 2 && authorityInfo?[0] == _epsg)
+        //{
+        //    int.TryParse(authorityInfo[1], out srid);
+        //}
 
-        #endregion
+        this._srid = GetCrsSrid();
+    }
 
-        private EsriPrjTreeNode _rootNode;
+    public EsriPrjFile(string prjFileName)
+    {
+        this._rootNode = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
 
+        this._srid = GetCrsSrid();
 
-        public EsriPrjFile(EsriPrjTreeNode root)
+    }
+
+    public static EsriPrjFile Parse(string esriWktPrj)
+    {
+        return new EsriPrjFile(EsriPrjTreeNode.Parse(esriWktPrj));
+    }
+
+    //Prj file type: GEOGCS, PROJCS
+    public EsriSrType Type
+    {
+        get
         {
-            this._rootNode = root;
-
-            //sample: AUTHORITY["EPSG", "4326"]
-            //var authorityInfo = root.Children.SingleOrDefault(i => i.Name == _authority)?.Values;
-
-            //int srid = 0;
-
-            //if (authorityInfo != null && authorityInfo.Count == 2 && authorityInfo?[0] == _epsg)
-            //{
-            //    int.TryParse(authorityInfo[1], out srid);
-            //}
-
-            this._srid = GetCrsSrid();
-        }
-
-        public EsriPrjFile(string prjFileName)
-        {
-            this._rootNode = EsriPrjTreeNode.Parse(System.IO.File.ReadAllText(prjFileName));
-
-            this._srid = GetCrsSrid();
-
-        }
-
-        public static EsriPrjFile Parse(string esriWktPrj)
-        {
-            return new EsriPrjFile(EsriPrjTreeNode.Parse(esriWktPrj));
-        }
-
-        //Prj file type: GEOGCS, PROJCS
-        public EsriSrType Type
-        {
-            get
+            switch (_rootNode?.Name)
             {
-                switch (_rootNode?.Name)
-                {
-                    case _projcs:
-                        return EsriSrType.Projcs;
+                case _projcs:
+                    return EsriSrType.Projcs;
 
-                    case _geogcs:
-                        return EsriSrType.Geogcs;
-
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-        }
-
-
-        // Projection Type
-        private string _projectionName;
-        public string ProjectionName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_projectionName))
-                    _projectionName = GetProjectionName();
-
-                return _projectionName;
-            }
-        }
-
-        public MapProjectionType ProjectionType
-        {
-            get
-            {
-                switch (ProjectionName)
-                {
-                    case _esriLambertConformalConic:
-                        return MapProjectionType.LambertConformalConic;
-                    case _esriTransverseMercator:
-                        return MapProjectionType.TransverseMercator;
-                    case _esriMercator:
-                        return MapProjectionType.Mercator;
-                    case _esriAzimuthalEquidistant:
-                        return MapProjectionType.AzimuthalEquidistant;
-                    case _esriCylindricalEqualArea:
-                        return MapProjectionType.CylindricalEqualArea;
-                    case _esriWebMercator:
-                        return MapProjectionType.WebMercator;
-                    case "None":
-                        return MapProjectionType.None;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-        }
-
-        public string Title
-        {
-            get { return _rootNode?.Values?.First(); }
-        }
-
-        private EsriPrjTreeNode _geogcsNode;
-        private EsriPrjTreeNode GeogcsNode
-        {
-            get
-            {
-                if (_geogcsNode is null)
-                    _geogcsNode = GetGeogcs();
-
-                return _geogcsNode;
-            }
-        }
-
-        private EsriPrjTreeNode _datumNode;
-        private EsriPrjTreeNode DatumNode
-        {
-            get
-            {
-                if (_datumNode is null)
-                    _datumNode = GetDatumNode();
-
-                return _datumNode;
-            }
-        }
-
-        private int _srid;
-        public int Srid
-        {
-            get { return _srid; }
-        }
-
-        // Ellipsoid
-        private string _ellipsoidName;
-        public string EllipsoidName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_ellipsoidName))
-                    _ellipsoidName = GetEllipsoidName();
-
-                return _ellipsoidName;
-            }
-        }
-
-        //TODO: TEST EPSG
-        public Ellipsoid Ellipsoid
-        {
-            get
-            {
-                var spheroidValues = DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
-
-                var toWgs84Values = DatumNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_toWgs84))?.Values;
-
-                var srid = GetEllipsoidSrid();
-                 
-                if (srid == 0)
-                {
-                    if (Type == EsriSrType.Geogcs && spheroidValues.First().ToUpper() == "WGS_1984")
-                    {
-                        srid = SridHelper.GeodeticWGS84;
-                    }
-                }
-
-                if (toWgs84Values == null)
-                {
-                    return new Ellipsoid(spheroidValues.First(),
-                                        new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
-                                        double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture), srid)
-                    {
-                        EsriName = spheroidValues.First(),
-                    };
-                }
-                else
-                {
-                    var dx = double.Parse(toWgs84Values[0], CultureInfo.InvariantCulture);
-                    var dy = double.Parse(toWgs84Values[1], CultureInfo.InvariantCulture);
-                    var dz = double.Parse(toWgs84Values[2], CultureInfo.InvariantCulture);
-
-                    var drx = double.Parse(toWgs84Values[3], CultureInfo.InvariantCulture);
-                    var dry = double.Parse(toWgs84Values[4], CultureInfo.InvariantCulture);
-                    var drz = double.Parse(toWgs84Values[5], CultureInfo.InvariantCulture);
-
-                    return new Ellipsoid(spheroidValues.First(),
-                                        new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
-                                        double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
-                                        new IRI.Msh.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
-                                        new Msh.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
-                                        srid)
-                    {
-                        EsriName = spheroidValues.First(),
-                    };
-                }
-            }
-        }
-
-
-        #region Private Methods
-
-        private string GetProjectionName()
-        {
-            switch (Type)
-            {
-                case EsriSrType.Projcs:
-                    return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_projection)).Values.First();
-
-                case EsriSrType.Geogcs:
-                    return "None";
+                case _geogcs:
+                    return EsriSrType.Geogcs;
 
                 default:
                     throw new NotImplementedException();
             }
         }
+    }
 
-        private EsriPrjTreeNode GetDatumNode()
+
+    // Projection Type
+    private string _projectionName;
+    public string ProjectionName
+    {
+        get
         {
-            return GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_datum));
+            if (string.IsNullOrEmpty(_projectionName))
+                _projectionName = GetProjectionName();
+
+            return _projectionName;
         }
+    }
 
-        private EsriPrjTreeNode GetGeogcs()
+    public SpatialReferenceType ProjectionType
+    {
+        get
         {
-            switch (Type)
+            switch (ProjectionName)
             {
-                case EsriSrType.Projcs:
-                    return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_geogcs));
+                case _esriLambertConformalConic:
+                    return SpatialReferenceType.LambertConformalConic;
 
-                case EsriSrType.Geogcs:
-                    return _rootNode;
+                case _esriTransverseMercator:
+                    return SpatialReferenceType.TransverseMercator;
+
+                case _esriMercator:
+                    return SpatialReferenceType.Mercator;
+
+                case _esriAzimuthalEquidistant:
+                    return SpatialReferenceType.AzimuthalEquidistant;
+
+                case _esriCylindricalEqualArea:
+                    return SpatialReferenceType.CylindricalEqualArea;
+
+                case _esriWebMercator:
+                    return SpatialReferenceType.WebMercator;
+
+                case "None":
+                    return SpatialReferenceType.None;
 
                 default:
                     throw new NotImplementedException();
             }
         }
+    }
 
-        private string GetEllipsoidName()
+    public string Title
+    {
+        get { return _rootNode?.Values?.First(); }
+    }
+
+    private EsriPrjTreeNode _geogcsNode;
+    private EsriPrjTreeNode GeogcsNode
+    {
+        get
         {
-            return DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values?.First();
+            if (_geogcsNode is null)
+                _geogcsNode = GetGeogcs();
+
+            return _geogcsNode;
         }
+    }
 
-        private int GetCrsSrid()
+    private EsriPrjTreeNode _datumNode;
+    private EsriPrjTreeNode DatumNode
+    {
+        get
         {
-            var crsAuthorityNode = _rootNode.Children.SingleOrDefault(i => i.Name == _authority);
+            if (_datumNode is null)
+                _datumNode = GetDatumNode();
 
-            var srid = GetSridFromAuthorityNode(crsAuthorityNode);
+            return _datumNode;
+        }
+    }
+
+    private int _srid;
+    public int Srid
+    {
+        get { return _srid; }
+    }
+
+    // Ellipsoid
+    private string _ellipsoidName;
+    public string EllipsoidName
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_ellipsoidName))
+                _ellipsoidName = GetEllipsoidName();
+
+            return _ellipsoidName;
+        }
+    }
+
+    //TODO: TEST EPSG
+    public Ellipsoid Ellipsoid
+    {
+        get
+        {
+            var spheroidValues = DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values;
+
+            var toWgs84Values = DatumNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_toWgs84))?.Values;
+
+            var srid = GetEllipsoidSrid();
              
-            ////1399.06.13
-            ////in the authority field was not available
             if (srid == 0)
             {
-                if (Type == EsriSrType.Geogcs && Ellipsoid.Name.ToUpper() == "WGS_1984")
+                if (Type == EsriSrType.Geogcs && spheroidValues.First().ToUpper() == "WGS_1984")
                 {
                     srid = SridHelper.GeodeticWGS84;
                 }
             }
 
-            return srid;
-        }
-
-        private int GetEllipsoidSrid()
-        {
-            var ellipsoidAuthorityNode = GeogcsNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_authority));
-
-            var srid = GetSridFromAuthorityNode(ellipsoidAuthorityNode);
-
-            return srid;
-        }
-
-        private int GetSridFromAuthorityNode(EsriPrjTreeNode authorityNode)
-        {
-            int srid = 0;
-
-            if (authorityNode?.Values?.Count == 2 && authorityNode?.Values?[0] == _epsg)
+            if (toWgs84Values == null)
             {
-                int.TryParse(authorityNode.Values[1], out srid);
+                return new Ellipsoid(spheroidValues.First(),
+                                    new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                    double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture), srid)
+                {
+                    EsriName = spheroidValues.First(),
+                };
             }
-
-            return srid;
-        }
-
-        public bool IsSISystem()
-        {
-            var isDegree = GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "degree";
-
-            switch (Type)
+            else
             {
-                case EsriSrType.Projcs:
-                    return isDegree && _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "meter";
+                var dx = double.Parse(toWgs84Values[0], CultureInfo.InvariantCulture);
+                var dy = double.Parse(toWgs84Values[1], CultureInfo.InvariantCulture);
+                var dz = double.Parse(toWgs84Values[2], CultureInfo.InvariantCulture);
 
-                case EsriSrType.Geogcs:
-                    return isDegree;
+                var drx = double.Parse(toWgs84Values[3], CultureInfo.InvariantCulture);
+                var dry = double.Parse(toWgs84Values[4], CultureInfo.InvariantCulture);
+                var drz = double.Parse(toWgs84Values[5], CultureInfo.InvariantCulture);
 
-                default:
-                    throw new NotImplementedException();
+                return new Ellipsoid(spheroidValues.First(),
+                                    new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
+                                    double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
+                                    new IRI.Msh.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
+                                    new Msh.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
+                                    srid)
+                {
+                    EsriName = spheroidValues.First(),
+                };
             }
         }
+    }
 
-        private bool HasParameter(EsriPrjParameterType parameter)
+
+    #region Private Methods
+
+    private string GetProjectionName()
+    {
+        switch (Type)
         {
-            switch (parameter)
-            {
-                case EsriPrjParameterType.FalseEasting:
-                    return HasParameter(_falseEasting);
+            case EsriSrType.Projcs:
+                return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_projection)).Values.First();
 
-                case EsriPrjParameterType.FalseNorthing:
-                    return HasParameter(_falseNorthing);
+            case EsriSrType.Geogcs:
+                return "None";
 
-                case EsriPrjParameterType.CentralMeridian:
-                    return HasParameter(_centralMeridian);
-
-                case EsriPrjParameterType.ScaleFactor:
-                    return HasParameter(_scaleFactor);
-
-                case EsriPrjParameterType.LatitudeOfOrigin:
-                    return HasParameter(_latitudeOfOrigin);
-
-                case EsriPrjParameterType.StandardParallel_1:
-                    return HasParameter(_standardParallel1);
-
-                case EsriPrjParameterType.StandardParallel_2:
-                    return HasParameter(_standardParallel2);
-
-                default:
-                    throw new NotImplementedException();
-            }
+            default:
+                throw new NotImplementedException();
         }
+    }
 
-        private bool HasParameter(string parameterName)
+    private EsriPrjTreeNode GetDatumNode()
+    {
+        return GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_datum));
+    }
+
+    private EsriPrjTreeNode GetGeogcs()
+    {
+        switch (Type)
         {
-            var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+            case EsriSrType.Projcs:
+                return _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_geogcs));
 
-            return parameters.Any(i => i.Values.First().EqualsIgnoreCase(parameterName));
+            case EsriSrType.Geogcs:
+                return _rootNode;
+
+            default:
+                throw new NotImplementedException();
         }
+    }
 
-        private double GetParameter(EsriPrjParameterType parameter, double defaultValue)
+    private string GetEllipsoidName()
+    {
+        return DatumNode.Children.Single(i => i.Name.EqualsIgnoreCase(_spheroid)).Values?.First();
+    }
+
+    private int GetCrsSrid()
+    {
+        var crsAuthorityNode = _rootNode.Children.SingleOrDefault(i => i.Name == _authority);
+
+        var srid = GetSridFromAuthorityNode(crsAuthorityNode);
+         
+        ////1399.06.13
+        ////in the authority field was not available
+        if (srid == 0)
         {
-            if (!HasParameter(parameter))
+            if (Type == EsriSrType.Geogcs && Ellipsoid.Name.ToUpper() == "WGS_1984")
             {
-                return defaultValue;
-            }
-
-            switch (parameter)
-            {
-                case EsriPrjParameterType.FalseEasting:
-                    return GetParameter(_falseEasting);
-
-                case EsriPrjParameterType.FalseNorthing:
-                    return GetParameter(_falseNorthing);
-
-                case EsriPrjParameterType.CentralMeridian:
-                    return GetParameter(_centralMeridian);
-
-                case EsriPrjParameterType.ScaleFactor:
-                    return GetParameter(_scaleFactor);
-
-                case EsriPrjParameterType.LatitudeOfOrigin:
-                    return GetParameter(_latitudeOfOrigin);
-
-                case EsriPrjParameterType.StandardParallel_1:
-                    return GetParameter(_standardParallel1);
-
-                case EsriPrjParameterType.StandardParallel_2:
-                    return GetParameter(_standardParallel2);
-
-                default:
-                    throw new NotImplementedException();
+                srid = SridHelper.GeodeticWGS84;
             }
         }
 
-        private double GetParameter(string parameterName)
-        {
-            var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+        return srid;
+    }
 
-            return double.Parse(parameters.Single(i => i.Values.First().EqualsIgnoreCase(parameterName)).Values.Skip(1).First());
+    private int GetEllipsoidSrid()
+    {
+        var ellipsoidAuthorityNode = GeogcsNode.Children.SingleOrDefault(i => i.Name.EqualsIgnoreCase(_authority));
+
+        var srid = GetSridFromAuthorityNode(ellipsoidAuthorityNode);
+
+        return srid;
+    }
+
+    private int GetSridFromAuthorityNode(EsriPrjTreeNode authorityNode)
+    {
+        int srid = 0;
+
+        if (authorityNode?.Values?.Count == 2 && authorityNode?.Values?[0] == _epsg)
+        {
+            int.TryParse(authorityNode.Values[1], out srid);
         }
 
-        #endregion
+        return srid;
+    }
 
+    public bool IsSISystem()
+    {
+        var isDegree = GeogcsNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "degree";
 
-        public SrsBase AsMapProjection()
+        switch (Type)
         {
-            switch (ProjectionType)
-            {
-                case MapProjectionType.None:
-                    return new NoProjection(this.Title, this.Ellipsoid) { DatumName = this.GeogcsNode.Values?.First() };
+            case EsriSrType.Projcs:
+                return isDegree && _rootNode.Children.Single(i => i.Name.EqualsIgnoreCase(_unit)).Values.First().ToLower() == "meter";
 
-                case MapProjectionType.AlbersEqualAreaConic:
-                case MapProjectionType.AzimuthalEquidistant:
-                    throw new NotImplementedException();
+            case EsriSrType.Geogcs:
+                return isDegree;
 
-                case MapProjectionType.CylindricalEqualArea:
-                    return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.GeogcsNode.Values?.First() };
+            default:
+                throw new NotImplementedException();
+        }
+    }
 
-                case MapProjectionType.LambertConformalConic:
-                    return new LambertConformalConic2P(
-                        this.Ellipsoid,
-                        GetParameter(EsriPrjParameterType.StandardParallel_1, double.NaN),
-                        GetParameter(EsriPrjParameterType.StandardParallel_2, double.NaN),
-                        GetParameter(EsriPrjParameterType.CentralMeridian, 0),
-                        GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
-                        GetParameter(EsriPrjParameterType.FalseEasting, 0),
-                        GetParameter(EsriPrjParameterType.FalseNorthing, 0),
-                        GetParameter(EsriPrjParameterType.ScaleFactor, 1),
-                        Srid)
-                    {
-                        Title = this.Title,
-                        DatumName = this.GeogcsNode.Values?.First()
-                    };
+    private bool HasParameter(EsriPrjParameterType parameter)
+    {
+        switch (parameter)
+        {
+            case EsriPrjParameterType.FalseEasting:
+                return HasParameter(_falseEasting);
 
-                case MapProjectionType.Mercator:
-                    return new Mercator(this.Ellipsoid, Srid)
-                    {
-                        Title = this.Title,
-                        DatumName = this.GeogcsNode.Values?.First()
-                    };
+            case EsriPrjParameterType.FalseNorthing:
+                return HasParameter(_falseNorthing);
 
-                case MapProjectionType.TransverseMercator:
-                case MapProjectionType.UTM:
-                    return new TransverseMercator(
-                        this.Ellipsoid,
-                        GetParameter(EsriPrjParameterType.CentralMeridian, 0),
-                        GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
-                        GetParameter(EsriPrjParameterType.FalseEasting, 0),
-                        GetParameter(EsriPrjParameterType.FalseNorthing, 0),
-                        GetParameter(EsriPrjParameterType.ScaleFactor, 1),
-                        Srid)
-                    {
-                        Title = this.Title,
-                        DatumName = this.GeogcsNode.Values?.First()
-                    };
+            case EsriPrjParameterType.CentralMeridian:
+                return HasParameter(_centralMeridian);
 
-                case MapProjectionType.WebMercator:
-                    return new WebMercator()
-                    {
-                        Title = this.Title,
-                        DatumName = this.GeogcsNode.Values?.First()
-                    };
+            case EsriPrjParameterType.ScaleFactor:
+                return HasParameter(_scaleFactor);
 
-                default:
-                    throw new NotImplementedException();
-            }
+            case EsriPrjParameterType.LatitudeOfOrigin:
+                return HasParameter(_latitudeOfOrigin);
+
+            case EsriPrjParameterType.StandardParallel_1:
+                return HasParameter(_standardParallel1);
+
+            case EsriPrjParameterType.StandardParallel_2:
+                return HasParameter(_standardParallel2);
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private bool HasParameter(string parameterName)
+    {
+        var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+
+        return parameters.Any(i => i.Values.First().EqualsIgnoreCase(parameterName));
+    }
+
+    private double GetParameter(EsriPrjParameterType parameter, double defaultValue)
+    {
+        if (!HasParameter(parameter))
+        {
+            return defaultValue;
         }
 
-        public string AsEsriCrsWkt()
+        switch (parameter)
         {
-            return _rootNode.AsEsriCrsWkt();
-        }
+            case EsriPrjParameterType.FalseEasting:
+                return GetParameter(_falseEasting);
 
-        public void Save(string prjFileName)
+            case EsriPrjParameterType.FalseNorthing:
+                return GetParameter(_falseNorthing);
+
+            case EsriPrjParameterType.CentralMeridian:
+                return GetParameter(_centralMeridian);
+
+            case EsriPrjParameterType.ScaleFactor:
+                return GetParameter(_scaleFactor);
+
+            case EsriPrjParameterType.LatitudeOfOrigin:
+                return GetParameter(_latitudeOfOrigin);
+
+            case EsriPrjParameterType.StandardParallel_1:
+                return GetParameter(_standardParallel1);
+
+            case EsriPrjParameterType.StandardParallel_2:
+                return GetParameter(_standardParallel2);
+
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private double GetParameter(string parameterName)
+    {
+        var parameters = _rootNode.Children.Where(i => i.Name.EqualsIgnoreCase(_parameter)).ToList();
+
+        return double.Parse(parameters.Single(i => i.Values.First().EqualsIgnoreCase(parameterName)).Values.Skip(1).First());
+    }
+
+    #endregion
+
+
+    public SrsBase AsMapProjection()
+    {
+        switch (ProjectionType)
         {
-            if (System.IO.Path.GetExtension(prjFileName).ToLower() != ".prj")
+            case SpatialReferenceType.None:
+                return new NoProjection(this.Title, this.Ellipsoid) { DatumName = this.GeogcsNode.Values?.First() };
+
+            case SpatialReferenceType.AlbersEqualAreaConic:
+            case SpatialReferenceType.AzimuthalEquidistant:
                 throw new NotImplementedException();
 
-            System.IO.File.WriteAllText(prjFileName, AsEsriCrsWkt());
+            case SpatialReferenceType.CylindricalEqualArea:
+                return new CylindricalEqualArea(this.Title, this.Ellipsoid, Srid) { DatumName = this.GeogcsNode.Values?.First() };
+
+            case SpatialReferenceType.LambertConformalConic:
+                return new LambertConformalConic2P(
+                    this.Ellipsoid,
+                    GetParameter(EsriPrjParameterType.StandardParallel_1, double.NaN),
+                    GetParameter(EsriPrjParameterType.StandardParallel_2, double.NaN),
+                    GetParameter(EsriPrjParameterType.CentralMeridian, 0),
+                    GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
+                    GetParameter(EsriPrjParameterType.FalseEasting, 0),
+                    GetParameter(EsriPrjParameterType.FalseNorthing, 0),
+                    GetParameter(EsriPrjParameterType.ScaleFactor, 1),
+                    Srid)
+                {
+                    Title = this.Title,
+                    DatumName = this.GeogcsNode.Values?.First()
+                };
+
+            case SpatialReferenceType.Mercator:
+                return new Mercator(this.Ellipsoid, Srid)
+                {
+                    Title = this.Title,
+                    DatumName = this.GeogcsNode.Values?.First()
+                };
+
+            case SpatialReferenceType.TransverseMercator:
+            case SpatialReferenceType.UTM:
+                return new TransverseMercator(
+                    this.Ellipsoid,
+                    GetParameter(EsriPrjParameterType.CentralMeridian, 0),
+                    GetParameter(EsriPrjParameterType.LatitudeOfOrigin, 0),
+                    GetParameter(EsriPrjParameterType.FalseEasting, 0),
+                    GetParameter(EsriPrjParameterType.FalseNorthing, 0),
+                    GetParameter(EsriPrjParameterType.ScaleFactor, 1),
+                    Srid)
+                {
+                    Title = this.Title,
+                    DatumName = this.GeogcsNode.Values?.First()
+                };
+
+            case SpatialReferenceType.WebMercator:
+                return new WebMercator()
+                {
+                    Title = this.Title,
+                    DatumName = this.GeogcsNode.Values?.First()
+                };
+
+            default:
+                throw new NotImplementedException();
         }
+    }
+
+    public string AsEsriCrsWkt()
+    {
+        return _rootNode.AsEsriCrsWkt();
+    }
+
+    public void Save(string prjFileName)
+    {
+        if (System.IO.Path.GetExtension(prjFileName).ToLower() != ".prj")
+            throw new NotImplementedException();
+
+        System.IO.File.WriteAllText(prjFileName, AsEsriCrsWkt());
     }
 }

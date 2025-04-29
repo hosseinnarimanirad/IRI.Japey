@@ -6,32 +6,31 @@ using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 using IRI.Msh.Algebra;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public interface ICartesian2D : IEnumerable<ICartesian2DPoint>
 {
-    public interface ICartesian2D : IEnumerable<ICartesian2DPoint>
-    {
-        int Dimension { get; }
-        AxisType Handedness { get; }
-        LinearMode LinearMode { get; }
-        string Name { get; }
-        int NumberOfPoints { get; }
-        ILinearCollection X { get; }
-        ILinearCollection Y { get; }
+    int Dimension { get; }
+    AxisType Handedness { get; }
+    LinearMode LinearMode { get; }
+    string Name { get; }
+    int NumberOfPoints { get; }
+    ILinearCollection X { get; }
+    ILinearCollection Y { get; }
 
-        ICartesian2DPoint this[int index] { get; set; }
+    ICartesian2DPoint this[int index] { get; set; }
 
-        IEnumerator<ICartesian2DPoint> GetEnumerator();
+    IEnumerator<ICartesian2DPoint> GetEnumerator();
 
-        ICartesian2D Rotate(AngularUnit rotateAngle, RotateDirection direction);
-        ICartesian2D Shift(ICartesian2DPoint newBase);
-        ICartesian2D Clone();
-        Matrix ToMatrix();
+    ICartesian2D Rotate(AngularUnit rotateAngle, RotateDirection direction);
+    ICartesian2D Shift(ICartesian2DPoint newBase);
+    ICartesian2D Clone();
+    Matrix ToMatrix();
 
-        Polar<TLinear, TAngular> ToPolar<TLinear, TAngular>(AngleRange range)
-            where TLinear : LinearUnit, new()
-            where TAngular : AngularUnit, new();
+    Polar<TLinear, TAngular> ToPolar<TLinear, TAngular>(AngleRange range)
+        where TLinear : LinearUnit, new()
+        where TAngular : AngularUnit, new();
 
-        Cartesian2D<TNewType> ChangeTo<TNewType>() where TNewType : LinearUnit, new();
+    Cartesian2D<TNewType> ChangeTo<TNewType>() where TNewType : LinearUnit, new();
 
-    }
 }

@@ -5,70 +5,69 @@ using System;
 using IRI.Msh.MeasurementUnit;
 using System.Collections.Generic;
 
-namespace IRI.Msh.CoordinateSystem
+namespace IRI.Msh.CoordinateSystem;
+
+public struct OrientationParameter
 {
-    public struct OrientationParameter
+    private AngularUnit m_Omega, m_Phi, m_Kappa;
+
+    public AngularUnit Omega
     {
-        private AngularUnit m_Omega, m_Phi, m_Kappa;
+        get { return this.m_Omega; }
+    }
 
-        public AngularUnit Omega
+    public AngularUnit Phi
+    {
+        get { return this.m_Omega; }
+    }
+
+    public AngularUnit Kappa
+    {
+        get { return this.m_Omega; }
+    }
+
+    public OrientationParameter(AngularUnit omega, AngularUnit phi, AngularUnit kappa)
+    {
+        this.m_Omega = omega;
+
+        this.m_Phi = phi;
+
+        this.m_Kappa = kappa;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() == typeof(OrientationParameter))
         {
-            get { return this.m_Omega; }
+            return this == (OrientationParameter)obj;
         }
 
-        public AngularUnit Phi
-        {
-            get { return this.m_Omega; }
-        }
+        return false;
+    }
 
-        public AngularUnit Kappa
-        {
-            get { return this.m_Omega; }
-        }
+    public override int GetHashCode()
+    {
+        return this.ToString().GetHashCode();
+    }
 
-        public OrientationParameter(AngularUnit omega, AngularUnit phi, AngularUnit kappa)
-        {
-            this.m_Omega = omega;
+    public override string ToString()
+    {
+        return string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                                "Omega: {0}, Phi: {1}, Kappa: {2}",
+                                this.Omega,
+                                this.Phi,
+                                this.Kappa);
+    }
 
-            this.m_Phi = phi;
+    public static bool operator ==(OrientationParameter firstValue, OrientationParameter secondValue)
+    {
+        return (firstValue.Omega == secondValue.Omega &&
+                firstValue.Phi == secondValue.Phi &&
+                firstValue.Kappa == secondValue.Kappa);
+    }
 
-            this.m_Kappa = kappa;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(OrientationParameter))
-            {
-                return this == (OrientationParameter)obj;
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                    "Omega: {0}, Phi: {1}, Kappa: {2}",
-                                    this.Omega,
-                                    this.Phi,
-                                    this.Kappa);
-        }
-
-        public static bool operator ==(OrientationParameter firstValue, OrientationParameter secondValue)
-        {
-            return (firstValue.Omega == secondValue.Omega &&
-                    firstValue.Phi == secondValue.Phi &&
-                    firstValue.Kappa == secondValue.Kappa);
-        }
-
-        public static bool operator !=(OrientationParameter firstValue, OrientationParameter secondValue)
-        {
-            return !(firstValue == secondValue);
-        }
+    public static bool operator !=(OrientationParameter firstValue, OrientationParameter secondValue)
+    {
+        return !(firstValue == secondValue);
     }
 }
