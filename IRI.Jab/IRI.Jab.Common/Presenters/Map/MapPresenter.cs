@@ -184,6 +184,12 @@ namespace IRI.Jab.Common.Presenter.Map
                 {
                     ShowSelectedFeatures(value?.GetSelectedFeatures());
                 }
+
+                if (_currentLayer is null)
+                {
+                    ClearLayer("__$selection", true);
+                    ClearLayer("__$highlight", true);
+                }
             }
         }
 
@@ -1082,10 +1088,8 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void RemoveSelectedLayer(ILayer layer)
         {
-            if (layer == null)
-            {
+            if (layer is null)
                 return;
-            }
 
             var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
 

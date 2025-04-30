@@ -35,7 +35,7 @@ using IRI.Jab.Common.Model.Spatialable;
 using sb = IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Sta.Common.Enums;
-using IRI.Jab.Common.Assets.Data; 
+using IRI.Jab.Common.Assets.Data;
 
 //using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -4915,6 +4915,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             CurrentEditingLayer = null;
 
             editingCancellationToken = null;
+        };
+
+        CurrentEditingLayer.RequestConvertToDrawingItem = (g) =>
+        {
+            _presenter.AddDrawingItem(g);
         };
 
         CurrentEditingLayer.RequestCancelEditing = (g) =>

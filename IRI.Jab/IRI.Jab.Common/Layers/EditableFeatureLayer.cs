@@ -91,6 +91,8 @@ public class EditableFeatureLayer : BaseLayer
 
     public Action<Geometry> RequestFinishEditing;
 
+    public Action<Geometry> RequestConvertToDrawingItem;
+
     public Action<EditableFeatureLayer> RequestCancelEditing;
 
     public Action<EditableFeatureLayer> RquestShowCoordinates;
@@ -671,7 +673,8 @@ public class EditableFeatureLayer : BaseLayer
 
         presenter.RightCommandAction = i =>
         {
-            RequestFinishEditing?.Invoke(this._webMercatorGeometry);
+            //RequestFinishEditing?.Invoke(this._webMercatorGeometry);
+            this.FinishEditing();
 
             this.RemoveMapOptions();
         };
@@ -1216,22 +1219,22 @@ public class EditableFeatureLayer : BaseLayer
     #region Commands
 
     private RelayCommand _finishEditingCommand;
-
     public RelayCommand FinishEditingCommand
     {
         get
         {
             if (_finishEditingCommand == null)
             {
-                _finishEditingCommand = new RelayCommand(param => this.RequestFinishEditing?.Invoke(this._webMercatorGeometry));
+                //_finishEditingCommand = new RelayCommand(param => this.RequestFinishEditing?.Invoke(this._webMercatorGeometry));
+                _finishEditingCommand = new RelayCommand(param => FinishEditing());
             }
 
             return _finishEditingCommand;
         }
     }
 
-    private RelayCommand _cancelEditingCommand;
 
+    private RelayCommand _cancelEditingCommand;
     public RelayCommand CancelEditingCommand
     {
         get
@@ -1245,8 +1248,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _deleteCommand;
 
+    private RelayCommand _deleteCommand;
     public RelayCommand DeleteCommand
     {
         get
@@ -1265,8 +1268,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _cancelDrawingCommand;
 
+    private RelayCommand _cancelDrawingCommand;
     public RelayCommand CancelDrawingCommand
     {
         get
@@ -1282,7 +1285,6 @@ public class EditableFeatureLayer : BaseLayer
 
 
     private RelayCommand _goToPreviousPointCommand;
-
     public RelayCommand GoToPreviousPointCommand
     {
         get
@@ -1296,8 +1298,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _goToNextPointCommand;
 
+    private RelayCommand _goToNextPointCommand;
     public RelayCommand GoToNextPointCommand
     {
         get
@@ -1310,11 +1312,9 @@ public class EditableFeatureLayer : BaseLayer
             return _goToNextPointCommand;
         }
     }
-
-
+     
 
     private RelayCommand _deleteCurrentPointCommand;
-
     public RelayCommand DeleteCurrentPointCommand
     {
         get
@@ -1328,8 +1328,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _zoomToCurrentPointCommand;
 
+    private RelayCommand _zoomToCurrentPointCommand;
     public RelayCommand ZoomToCurrentPointCommand
     {
         get
@@ -1343,8 +1343,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _copyCurrentPointCommand;
 
+    private RelayCommand _copyCurrentPointCommand;
     public RelayCommand CopyCurrentPointCommand
     {
         get
@@ -1360,7 +1360,6 @@ public class EditableFeatureLayer : BaseLayer
 
 
     private RelayCommand _deleteCurrentPartCommand;
-
     public RelayCommand DeleteCurrentPartCommand
     {
         get
@@ -1374,8 +1373,8 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-    private RelayCommand _zoomToCurrentPartCommand;
 
+    private RelayCommand _zoomToCurrentPartCommand;
     public RelayCommand ZoomToCurrentPartCommand
     {
         get
@@ -1389,5 +1388,21 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
+     
+
+    private RelayCommand _convertToDrawingItemCommand;
+    public RelayCommand ConvertToDrawingItemCommand
+    {
+        get
+        {
+            if (_convertToDrawingItemCommand == null)
+            {
+                _convertToDrawingItemCommand = new RelayCommand(param => this.RequestConvertToDrawingItem?.Invoke(this._webMercatorGeometry));
+            }
+
+            return _convertToDrawingItemCommand;
+        }
+    }
+     
     #endregion
 }

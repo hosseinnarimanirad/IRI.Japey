@@ -194,6 +194,12 @@
                             Command="{Binding DeleteCommand}" Visibility="{Binding Options.IsDeleteButtonVisible, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
                         <Path Data="{StaticResource appbarDelete}" FlowDirection="LeftToRight"/>
                     </Button>
+
+                    <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
+                            Command="{Binding ConvertToDrawingItemCommand}" Visibility="{Binding Options.IsMeasureButtonVisible, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}">
+                        <Path Data="{StaticResource appbarVectorPenAdd}" FlowDirection="LeftToRight"/>
+                    </Button>
+                    
                     <Button Style="{StaticResource circleButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="2" 
                             Command="{Binding CancelEditingCommand}" Visibility="{Binding Options.IsCancelButtonVisible, Converter={StaticResource boolToVisibilityConverter}, FallbackValue=Collapsed}" >
                         <Path Data="{StaticResource appbarClose}" FlowDirection="LeftToRight"/>
