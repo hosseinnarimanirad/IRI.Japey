@@ -34,7 +34,8 @@
                 <SolidColorBrush />
             </Border.Background>
         </Border>
-        <TextBlock Name="layerName" Text="LayerName" Padding="5,0,5,0" VerticalAlignment="Center" FlowDirection="LeftToRight" UseLayoutRounding="False" SnapsToDevicePixels="False"></TextBlock>
+        <TextBlock Name="layerName" Text="LayerName" Padding="5,0,5,0" VerticalAlignment="Center" FlowDirection="LeftToRight" 
+                   UseLayoutRounding="False" SnapsToDevicePixels="False"></TextBlock>
     </DockPanel>
 
 </UserControl>

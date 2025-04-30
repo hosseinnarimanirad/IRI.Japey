@@ -131,7 +131,8 @@
                         </i:Interaction.Triggers>-->
                         <iriJabControls:MapLegendItemWithOptionsView Title="{Binding LayerName, Mode=TwoWay}" Symbology="{Binding VisualParameters}"  
                                                                      IsEditable="True" Commands="{Binding Commands}" 
-                                                                     IsChecked="{Binding IsSelectedInToc}"/>
+                                                                     IsChecked="{Binding IsSelectedInToc}"
+                                                                     TitleFontSize="{Binding ElementName=root, Path=TitleFontSize}"/>
                         <!--<iriJabControls:MapLegendItemWithOptionsView Title="{Binding Title}" Symbology="{Binding VisualParameters}"  
                                                                      IsEditable="True" Commands="{Binding Commands}" 
                                                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>-->

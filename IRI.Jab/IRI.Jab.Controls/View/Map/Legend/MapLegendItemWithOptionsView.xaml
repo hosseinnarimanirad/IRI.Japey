@@ -92,45 +92,13 @@
                     <Path Data="{Binding PathMarkup}" Stretch="Uniform" Fill="White" Width="16" Height="16" FlowDirection="LeftToRight"/>
                 </Button>
             </DataTemplate>
-            <my:ILayerToLegendConverter x:Key="iLayerToLegendConverter"/>
-            <!--<model:CommandDataTemplateSelector x:Key="commandDataTemplateSelector"/>-->
+            <my:ILayerToLegendConverter x:Key="iLayerToLegendConverter"/> 
         </Grid.Resources>
-        <!--<Grid.Resources>
-            <Style TargetType="ToggleButton">
-                <Setter Property="BorderThickness" Value="0"/>
-                -->
-        <!--<Setter Property="Cursor" Value="Hand"/>-->
-        <!--
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsChecked" Value="True">
-                        <Setter Property="Background" Value="LightGray" />
-                        -->
-        <!--<Setter Property="Foreground" Value="White"/>-->
-        <!--
-                    </Trigger>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
-                        <Setter Property="Foreground" Value="Black" />
-                    </Trigger>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="Gray"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Resources>
-        <RadioButton Margin="2" Style="{StaticResource {x:Type ToggleButton}}" BorderThickness="0" HorizontalAlignment="Stretch" IsChecked="True"
-                     >-->
-        <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
-                           Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=True}"/>
+        
+        <TextBlock MinWidth="30" VerticalAlignment="Center" Margin="4" 
+                   Text="{Binding ElementName=root, Path=Title}" 
+                   FontSize="{Binding ElementName=root, Path=TitleFontSize}"
+                    Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=True}"/>
         <StackPanel HorizontalAlignment="Stretch" Margin="0" Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}">
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>
@@ -156,13 +124,19 @@
                 </Border>
                 <Slider VerticalAlignment="Center" Width="50" Minimum="0" Maximum="1" SmallChange=".1" LargeChange=".2"                         
                         TickFrequency=".2" Value="{Binding ElementName=root, Path=Symbology.Opacity, Mode=TwoWay}"/>
-                <TextBlock Text="{Binding ElementName=root, Path=Title}" MinWidth="30" VerticalAlignment="Center" Margin="4"
+                <TextBlock MinWidth="30" VerticalAlignment="Center" Margin="4" 
+                           Text="{Binding ElementName=root, Path=Title}" 
+                           FontSize="{Binding ElementName=root, Path=TitleFontSize}"
                            Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}"/>
-                <TextBlock Text="{Binding NumberOfSelectedFeatures, Converter={StaticResource latinDigitsToFarsiDigitsConverter}, StringFormat={}({0})}" VerticalAlignment="Center"
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding NumberOfSelectedFeatures, Converter={StaticResource latinDigitsToFarsiDigitsConverter}, StringFormat={}({0})}" 
+                           FontSize="{Binding ElementName=root, Path=TitleFontSize}"
                            Visibility="{Binding NumberOfSelectedFeatures, Converter={StaticResource intGreaterThanIntParameterToVisibilityConverter}, ConverterParameter=0}"/>
-                <TextBox Text="{Binding ElementName=root, Path=Title, Mode=TwoWay}" Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}}"
-                         mahApp:TextBoxHelper.Watermark="عنوان" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True" BorderThickness="1" Padding="0" VerticalAlignment="Center"
-                         MinWidth="70">
+                <TextBox BorderThickness="1" Padding="0" VerticalAlignment="Center" MinWidth="70"
+                         Text="{Binding ElementName=root, Path=Title, Mode=TwoWay}" 
+                         FontSize="{Binding ElementName=root, Path=TitleFontSize}"
+                         Visibility="{Binding ElementName=root, Path=IsEditable, Converter={StaticResource boolToVisibilityConverter}}"
+                         mahApp:TextBoxHelper.Watermark="عنوان" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True">
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="4"/>

@@ -115,6 +115,18 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
+        private double _legendFontSize;
+        public double LegendFontSize
+        {
+            get { return _legendFontSize; }
+            set
+            {
+                _legendFontSize = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         private EditableFeatureLayer _currentEditingLayer;
         public EditableFeatureLayer CurrentEditingLayer
@@ -1329,7 +1341,7 @@ namespace IRI.Jab.Common.Presenter.Map
                        layer => DrawingItemLegendCommands.CreateRemoveDrawingItemLayer(this, layer),
                        layer => DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
                        layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
-                       layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsGeoJson(this,layer),
+                       //layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsGeoJson(this,layer),
                     };
                 }
 
@@ -1338,13 +1350,13 @@ namespace IRI.Jab.Common.Presenter.Map
             set { drawingItemCommands = value; }
         }
 
-        public void AddDrawingItemCommand(Func<DrawingItemLayer, ILegendCommand> drawingItemCommandFunc)
-        {
-            if (DrawingItemCommands is null)
-                DrawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>();
+        //public void AddDrawingItemCommand(Func<DrawingItemLayer, ILegendCommand> drawingItemCommandFunc)
+        //{
+        //    if (DrawingItemCommands is null)
+        //        DrawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>();
 
-            DrawingItemCommands.Add(drawingItemCommandFunc);
-        }
+        //    DrawingItemCommands.Add(drawingItemCommandFunc);
+        //}
 
 
         private async Task DrawAsync(DrawMode mode)

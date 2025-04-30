@@ -32,15 +32,37 @@ namespace IRI.Jab.Controls.View.Map
 
         public string Title
         {
-            get { return (string)GetValue(LayerNameProperty); }
-            set { SetValue(LayerNameProperty, value); }
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for LayerName.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty LayerNameProperty =
+        public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register(nameof(Title), typeof(string), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(string.Empty));
 
 
+        public int TitleFontSize
+        {
+            get { return (int)GetValue(TitleFontSizeProperty); }
+            set { SetValue(TitleFontSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FontSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleFontSizeProperty =
+            DependencyProperty.Register(nameof(TitleFontSize), typeof(int), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(13));
+
+
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsEditable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsEditableProperty =
+            DependencyProperty.Register(nameof(IsEditable), typeof(bool), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(false));
+
+         
         public VisualParameters Symbology
         {
             get { return (VisualParameters)GetValue(SymbologyProperty); }
@@ -51,8 +73,7 @@ namespace IRI.Jab.Controls.View.Map
         public static readonly DependencyProperty SymbologyProperty =
             DependencyProperty.Register(nameof(Symbology), typeof(VisualParameters), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
 
-
-
+         
 
         public bool IsChecked
         {
@@ -77,17 +98,6 @@ namespace IRI.Jab.Controls.View.Map
             DependencyProperty.Register(nameof(Commands), typeof(IEnumerable<ILegendCommand>), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(null));
 
 
-
-
-        public bool IsEditable
-        {
-            get { return (bool)GetValue(IsEditableProperty); }
-            set { SetValue(IsEditableProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsEditable.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsEditableProperty =
-            DependencyProperty.Register(nameof(IsEditable), typeof(bool), typeof(MapLegendItemWithOptionsView), new PropertyMetadata(false));
 
 
 

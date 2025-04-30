@@ -17,13 +17,7 @@ using IRI.Jab.Common;
 
 namespace IRI.Jab.Controls.View.Map
 {
-    //public enum FeatureType
-    //{
-    //    PointFeature,
-    //    PolylineFeature,
-    //    PolygonFeature
-    //}
-
+    
     /// <summary>
     /// Interaction logic for legendItem.xaml
     /// </summary>

@@ -43,6 +43,16 @@ namespace IRI.Jab.Controls.View.Map
             DependencyProperty.Register(nameof(GroupName), typeof(string), typeof(MapDrawingLegendView), new PropertyMetadata("D"));
 
 
+        public int TitleFontSize
+        {
+            get { return (int)GetValue(TitleFontSizeProperty); }
+            set { SetValue(TitleFontSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FontSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleFontSizeProperty =
+            DependencyProperty.Register(nameof(TitleFontSize), typeof(int), typeof(MapDrawingLegendView), new PropertyMetadata(13));
+
 
         public bool ShowTools
         {

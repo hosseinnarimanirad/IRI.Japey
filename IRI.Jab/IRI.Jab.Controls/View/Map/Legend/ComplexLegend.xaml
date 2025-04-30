@@ -31,7 +31,7 @@
                                         Maximum="1" Value="{Binding Layer.VisualParameters.Opacity}" TickFrequency="0.2" TickPlacement="Both" LargeChange="0.2"/>
                         <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Layer.VisualParameters.Visibility, Converter={StaticResource visibilityToBoolConverter}}" 
                                     Margin="2" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}"/>
-                        <TextBlock MinHeight="25" Text="{Binding Caption}" VerticalAlignment="Center" FontWeight="{Binding IsGroupLayer, Converter={StaticResource boolToBoldFontConverter}}"/>
+                        <TextBlock MinHeight="24" Text="{Binding Caption}" VerticalAlignment="Center" FontWeight="{Binding IsGroupLayer, Converter={StaticResource boolToBoldFontConverter}}"/>
                     </DockPanel>
                     <StackPanel Grid.Row="1" Visibility="{Binding IsSimpleLayer, Converter={StaticResource boolToVisibilityConverter}}">
                         <!--<Button Content="Select By Drawing" Command="{Binding SelectByDrawingCommand}" HorizontalAlignment="Right" Margin="2"/>-->

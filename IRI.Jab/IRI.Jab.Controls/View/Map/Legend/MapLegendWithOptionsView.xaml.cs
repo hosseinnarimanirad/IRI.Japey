@@ -76,6 +76,18 @@ namespace IRI.Jab.Controls.View.Map
 
 
 
+        public int TitleFontSize
+        {
+            get { return (int)GetValue(TitleFontSizeProperty); }
+            set { SetValue(TitleFontSizeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for FontSize.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleFontSizeProperty =
+            DependencyProperty.Register(nameof(TitleFontSize), typeof(int), typeof(MapLegendWithOptionsView), new PropertyMetadata(13));
+
+
+
 
         //public bool ShowDrawingLayers
         //{
@@ -100,7 +112,7 @@ namespace IRI.Jab.Controls.View.Map
         //public static readonly DependencyProperty IsDrawingTocProperty =
         //    DependencyProperty.Register("IsDrawingToc", typeof(bool), typeof(MapLegendWithOptionsView), new PropertyMetadata(false, (dpO, dp) =>
         //    {
-                
+
         //    }));
 
 

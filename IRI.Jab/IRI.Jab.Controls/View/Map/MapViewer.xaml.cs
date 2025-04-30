@@ -35,6 +35,7 @@ using IRI.Jab.Common.Model.Spatialable;
 using sb = IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Sta.Common.Enums;
+using IRI.Jab.Common.Assets.Data;
 
 //using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -812,7 +813,8 @@ namespace IRI.Jab.Controls
 
             var ostanha = EnvelopeMarkupLabelTriple.GetProvinces93Wm(a =>
             {
-                this.ZoomToExtent(a.GetBoundingBox(/*SridHelper.WebMercator*/));
+                //this.ZoomToExtent( a.GetBoundingBox(/*SridHelper.WebMercator*/));
+                this.ZoomToExtent(IriProvinces93WmEnvelopes.ToBoundingBox(a.Province));
             });
 
             presenter.Ostanha = provinces is null ? ostanha : ostanha.Where(o => provinces.Contains(o.Province)).ToList();

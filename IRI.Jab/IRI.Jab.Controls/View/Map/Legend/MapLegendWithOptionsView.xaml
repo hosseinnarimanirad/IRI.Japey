@@ -53,7 +53,8 @@
                                                                  Symbology="{Binding VisualParameters}"  
                                                                  HorizontalAlignment="Stretch"
                                                                  Commands="{Binding Commands}"
-                                                                 IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+                                                                 IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=RadioButton}}"
+                                                                 TitleFontSize="{Binding ElementName=root, Path=TitleFontSize}"/>
                 </RadioButton>
             </HierarchicalDataTemplate>
         </Grid.Resources>
