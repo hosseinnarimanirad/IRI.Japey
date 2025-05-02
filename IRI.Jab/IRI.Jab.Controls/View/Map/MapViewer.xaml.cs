@@ -140,7 +140,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.Proxy = _proxy;
                 handler.UseProxy = true;
-                HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 3) };
+                HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 10) };
                 HttpClient.DefaultRequestHeaders.Add("User-Agent", "app!");
             }
             else
@@ -148,7 +148,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.Proxy = null;
                 handler.UseProxy = false;
-                HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 3) };
+                HttpClient = new System.Net.Http.HttpClient(handler) { Timeout = new TimeSpan(0, 0, seconds: 10) };
                 HttpClient.DefaultRequestHeaders.Add("User-Agent", "app!");
             }
 

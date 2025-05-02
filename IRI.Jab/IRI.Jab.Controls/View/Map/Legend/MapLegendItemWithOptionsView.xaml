@@ -98,7 +98,7 @@
         <TextBlock MinWidth="30" VerticalAlignment="Center" Margin="4" 
                    Text="{Binding ElementName=root, Path=Title}" 
                    FontSize="{Binding ElementName=root, Path=TitleFontSize}"
-                    Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=True}"/>
+                   Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=True}"/>
         <StackPanel HorizontalAlignment="Stretch" Margin="0" Visibility="{Binding IsGroupLayer, Converter={StaticResource boolToVisibilityConverter}, ConverterParameter=False}">
             <StackPanel Orientation="Horizontal" >
                 <CheckBox Margin="4" IsChecked="{Binding ElementName=root, Path=Symbology.Visibility, Mode=TwoWay, Converter={StaticResource visibilityToBoolConverter}}"/>

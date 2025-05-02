@@ -115,7 +115,7 @@ namespace IRI.Jab.Common.Presenter.Map
             }
         }
 
-        private double _legendFontSize;
+        private double _legendFontSize = 12;
         public double LegendFontSize
         {
             get { return _legendFontSize; }
