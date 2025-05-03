@@ -22,9 +22,9 @@
                               Value="{Binding UtmZone, Mode=TwoWay, StringFormat={}{0:00}}" MinWidth="75"/>
         
         <TextBlock Grid.Row="1" Text="X" Margin="4" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True" FlowDirection="LeftToRight"/>
         
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Y" Margin="4" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Y, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Y, Mode=TwoWay}" Margin="4" mahApp:TextBoxHelper.SelectAllOnFocus="True" FlowDirection="LeftToRight"/>
     </Grid>
 </UserControl>
