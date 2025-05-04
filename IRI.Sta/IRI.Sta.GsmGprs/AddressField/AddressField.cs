@@ -1,7 +1,6 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Helpers;
 using System;
 using System.Text;

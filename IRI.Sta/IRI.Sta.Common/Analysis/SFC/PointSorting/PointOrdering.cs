@@ -1,7 +1,7 @@
 ﻿using IRI.Msh.DataStructure;
 using IRI.Sta.Common.Primitives;
 
-namespace IRI.Sta.Common.Analysis.SFC.PointSorting;
+namespace IRI.Sta.Common.Analysis.SFC;
 
 public class PointOrdering
 {

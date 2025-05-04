@@ -25,6 +25,8 @@
     <Compile Update="Models\WiseWebClient.cs" />
   </ItemGroup>
 
-  <Import Project="..\..\IRI.Mosha\IRI.Msh.DataStructure\IRI.Msh.DataStructure.projitems" Label="Shared" />
+  <ItemGroup>
+    <Folder Include="DataStructures\Graph\MaximumFlow\" />
+  </ItemGroup>
 
 </Project>
