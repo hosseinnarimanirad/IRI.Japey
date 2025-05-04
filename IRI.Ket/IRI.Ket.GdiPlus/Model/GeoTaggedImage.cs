@@ -1,4 +1,4 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using Newtonsoft.Json;
 using System;

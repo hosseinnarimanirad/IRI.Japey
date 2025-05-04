@@ -7,7 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Ogc.WMS;
 using IRI.Sta.Common.Model;
 

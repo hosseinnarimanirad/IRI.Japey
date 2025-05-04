@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Sta.Mathematics;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using System;

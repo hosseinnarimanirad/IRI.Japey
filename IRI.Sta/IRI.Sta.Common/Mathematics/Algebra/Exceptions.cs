@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace IRI.Msh.Algebra;
+namespace IRI.Sta.Mathematics;
 
 [DataContract]
 public class NumberOfElementsException : Exception

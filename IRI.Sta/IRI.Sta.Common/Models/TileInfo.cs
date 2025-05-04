@@ -1,5 +1,5 @@
-﻿using IRI.Msh.CoordinateSystem;
-using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Mapping;
 using System.Globalization;
@@ -22,8 +22,8 @@ public class TileInfo
     //{
     //    get
     //    {
-    //        //var topLeft = IRI.Msh.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
-    //        //var bottomRight = IRI.Msh.CoordinateSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
+    //        //var topLeft = IRI.Sta.CoordinateSystems.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
+    //        //var bottomRight = IRI.Sta.CoordinateSystems.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
 
     //        //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
     //        return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));

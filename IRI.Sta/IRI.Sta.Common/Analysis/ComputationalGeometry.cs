@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text; 
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Msh.DataStructure;
 using IRI.Sta.Common.Analysis.Topology;
 using IRI.Sta.Common.Primitives;

@@ -122,11 +122,11 @@ namespace IRI.Jab.Common.View.MapMarkers
 
         public void UpdateCoordinates()
         {
-            var value = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
+            var value = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
 
             if (_current == coordinates.Utm)
             {
-                value = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToUTM(value);
+                value = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToUTM(value);
             }
 
             if (_current == coordinates.GeodeticDms)

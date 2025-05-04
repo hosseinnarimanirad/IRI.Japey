@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.Statistics;
+namespace IRI.Sta.Mathematics;
 
 public static class Discretization
 {

@@ -1,4 +1,4 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection; 
+﻿using IRI.Sta.CoordinateSystems.MapProjection; 
 using IRI.Jab.Common;
 using IRI.Jab.Controls.Presenter;
 using System;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using IRI.Msh.CoordinateSystem;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Controls.Model.GoTo
 {

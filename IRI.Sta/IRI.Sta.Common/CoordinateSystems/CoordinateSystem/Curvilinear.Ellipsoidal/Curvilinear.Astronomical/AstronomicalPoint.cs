@@ -2,9 +2,9 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Msh.MeasurementUnit;
+using IRI.Sta.Metrics;
 
-namespace IRI.Msh.CoordinateSystem;
+namespace IRI.Sta.CoordinateSystems;
 
 public struct AstronomicalPoint<TAngular> :  IAstronomicalPoint
     where TAngular : AngularUnit, new()

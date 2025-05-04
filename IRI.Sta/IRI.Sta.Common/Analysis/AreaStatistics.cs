@@ -44,7 +44,7 @@ public class AreaStatistics
         if (this.NumberOfPoints == 0)
             return 0;
 
-        return IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(Areas);
+        return IRI.Sta.Mathematics.Statistics.CalculateStandardDeviation(Areas);
     }
 
     public override string ToString()

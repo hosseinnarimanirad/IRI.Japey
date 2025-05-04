@@ -1,4 +1,4 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common;
@@ -9,7 +9,7 @@ using IRI.Jab.Controls.View.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IRI.Msh.CoordinateSystem;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Jab.Controls.Presenter
 {

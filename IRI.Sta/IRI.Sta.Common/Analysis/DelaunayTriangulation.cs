@@ -6,7 +6,7 @@ using IRI.Sta.Common.Analysis.Topology;
 using System;
 using System.Collections.Generic;
 using System.Text;
-//using IRI.Msh.Statistics;
+//using IRI.Sta.Mathematics;
 
 
 namespace IRI.Sta.Common.Analysis;
@@ -492,8 +492,8 @@ public class DelaunayTriangulation
             double[] secondSetAngle = new double[] { triangle3.FirstAngle, triangle3.SecondAngle, triangle3.ThirdAngle,
                                                         triangle4.FirstAngle, triangle4.SecondAngle, triangle4.ThirdAngle};
 
-            if (Msh.Statistics.Statistics.GetMax(firstSetAngle) > Msh.Statistics.Statistics.GetMax(secondSetAngle) &&
-                Msh.Statistics.Statistics.GetMin(firstSetAngle) < Msh.Statistics.Statistics.GetMin(secondSetAngle))
+            if (IRI.Sta.Mathematics.Statistics.GetMax(firstSetAngle) > IRI.Sta.Mathematics.Statistics.GetMax(secondSetAngle) &&
+                IRI.Sta.Mathematics.Statistics.GetMin(firstSetAngle) < IRI.Sta.Mathematics.Statistics.GetMin(secondSetAngle))
             {
 
                 bool condition1 = TopologyUtility.GetPointCircleRelation(secondPoint, thirdPoint, firstPoint, neighbourFarPoint) == PointCircleRelation.In;

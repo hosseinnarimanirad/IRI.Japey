@@ -1,6 +1,6 @@
 ﻿//using IRI.Extensions;
 //using IRI.Sta.Common.Model;
-//using IRI.Msh.CoordinateSystem.MapProjection;
+//using IRI.Sta.CoordinateSystems.MapProjection;
 //using Microsoft.SqlServer.Types;
 //using System;
 //using System.Collections.Generic;

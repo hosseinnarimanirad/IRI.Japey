@@ -9,14 +9,14 @@ namespace IRI.Ket.DigitalTerrainModeling;
 
 public static class DoubleBitmap
 {
-    public static Bitmap DoubleToBitmapLinear(IRI.Msh.Algebra.Matrix data)
+    public static Bitmap DoubleToBitmapLinear(IRI.Sta.Mathematics.Matrix data)
     {
 
         Bitmap result = new Bitmap(data.NumberOfColumns, data.NumberOfRows);
 
-        double Max = IRI.Msh.Statistics.Statistics.GetMax(data);
+        double Max = IRI.Sta.Mathematics.Statistics.GetMax(data);
 
-        double Min = IRI.Msh.Statistics.Statistics.GetMin(data);
+        double Min = IRI.Sta.Mathematics.Statistics.GetMin(data);
 
         for (int i = 0; i < data.NumberOfRows; i++)
         {
@@ -37,7 +37,7 @@ public static class DoubleBitmap
         return result;
     }
 
-    public static Bitmap DoubleToBitmapSimple(IRI.Msh.Algebra.Matrix data)
+    public static Bitmap DoubleToBitmapSimple(IRI.Sta.Mathematics.Matrix data)
     {
         Bitmap result = new Bitmap(data.NumberOfColumns, data.NumberOfRows);
 

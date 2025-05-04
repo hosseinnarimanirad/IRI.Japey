@@ -2,9 +2,9 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Msh.MeasurementUnit;
+using IRI.Sta.Metrics;
 
-namespace IRI.Msh.CoordinateSystem;
+namespace IRI.Sta.CoordinateSystems;
 
 public struct Cartesian3DPoint<T> : ICartesian3DPoint
     where T : LinearUnit, new()

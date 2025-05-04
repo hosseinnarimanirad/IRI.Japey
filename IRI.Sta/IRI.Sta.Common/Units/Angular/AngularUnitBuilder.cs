@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace IRI.Msh.MeasurementUnit
+namespace IRI.Sta.Metrics
 {
     public static class AngularUnitBuilder
     {

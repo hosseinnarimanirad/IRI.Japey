@@ -1,8 +1,8 @@
-﻿using IRI.Msh.MeasurementUnit;
+﻿using IRI.Sta.Metrics;
 using IRI.Sta.Common.Primitives;
 using System;
 
-namespace IRI.Msh.CoordinateSystem.MapProjection;
+namespace IRI.Sta.CoordinateSystems.MapProjection;
 
 public class LambertConformalConic2P : MapProjectionBase
 {

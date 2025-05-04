@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.SqlServer.Types;
 
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension;

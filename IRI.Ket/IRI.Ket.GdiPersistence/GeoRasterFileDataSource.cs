@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Model;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 
 namespace IRI.Ket.Persistence.DataSources
 {
@@ -17,14 +17,14 @@ namespace IRI.Ket.Persistence.DataSources
         {
             this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName, srid);
 
-            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
         public GeoRasterFileDataSource(GeoReferencedImage image)
         {
             this.geoRaster = image;
             
-            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+            this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }
 
         public static GeoRasterFileDataSource Create(string imageFileName, int srid)
@@ -54,7 +54,7 @@ namespace IRI.Ket.Persistence.DataSources
             //{
             //    var result = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(this.imageFileName);
 
-            //    this.Extent = result.GeodeticWgs84BoundingBox.Transform(i => IRI.Msh.CoordinateSystem.Projection.GeodeticToMercator(i));
+            //    this.Extent = result.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystems.Projection.GeodeticToMercator(i));
 
             //    return result;
             //}

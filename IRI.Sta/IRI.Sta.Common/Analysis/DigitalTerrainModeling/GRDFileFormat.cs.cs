@@ -20,7 +20,7 @@ public class GRDFileFormat
 
     public string Path;
 
-    public Msh.Algebra.Matrix Values;
+    public IRI.Sta.Mathematics.Matrix Values;
 
     public GRDFileFormat(string path)
     {
@@ -62,7 +62,7 @@ public class GRDFileFormat
 
         System.IO.StreamReader reader = new System.IO.StreamReader(Path);
 
-        Values = new Msh.Algebra.Matrix(NumberOfRows, NumberOfColumns);
+        Values = new IRI.Sta.Mathematics.Matrix(NumberOfRows, NumberOfColumns);
 
         for (int i = 0; i < 6; i++)
             reader.ReadLine();
@@ -126,7 +126,7 @@ public class GRDFileFormat
         return result;
     }
 
-    public Msh.Algebra.Matrix ReadQuarter(QuarterPart part)
+    public IRI.Sta.Mathematics.Matrix ReadQuarter(QuarterPart part)
     {
         int midRow = NumberOfRows % 2 == 0 ? NumberOfRows / 2 - 1 : NumberOfRows / 2;
 
@@ -151,7 +151,7 @@ public class GRDFileFormat
         }
     }
 
-    public Msh.Algebra.Matrix ReadRegion(int startRow, int startColumn, int endRow, int endColumn)
+    public IRI.Sta.Mathematics.Matrix ReadRegion(int startRow, int startColumn, int endRow, int endColumn)
     {
         return Values.SubMatrix(startRow, startColumn, endRow, endColumn);
     }
@@ -162,7 +162,7 @@ public class GRDFileFormat
 
         int midColumn = NumberOfColumns % 2 == 0 ? NumberOfColumns / 2 - 1 : NumberOfColumns / 2;
 
-        Msh.Algebra.Matrix values;
+        IRI.Sta.Mathematics.Matrix values;
 
         switch (part)
         {
@@ -256,7 +256,7 @@ public class GRDFileFormat
         writer.Close();
     }
 
-    public void SaveAsGRD(string path, Msh.Algebra.Matrix values, double lowerLeftX, double lowerLeftY, double cellSize, double noDataValue)
+    public void SaveAsGRD(string path, IRI.Sta.Mathematics.Matrix values, double lowerLeftX, double lowerLeftY, double cellSize, double noDataValue)
     {
         System.IO.StreamWriter writer = new System.IO.StreamWriter(path);
 

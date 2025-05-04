@@ -1,4 +1,4 @@
-﻿using IRI.Msh.Statistics;
+﻿using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -42,13 +42,13 @@
 
 //        public static List<SqlFeature> GetIndexSheets(SqlGeometry webMercatorGeometry, GeodeticIndexType type)
 //        { 
-//            var geographicGeometry = webMercatorGeometry.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+//            var geographicGeometry = webMercatorGeometry.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
 
 //            var geographicBoundingBox = geographicGeometry.GetBoundingBox();
             
 //            return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, type)
 //                        .Where(b => b.GeodeticExtent.Intersects(geographicGeometry))
-//                        .Select(b => new SqlFeature(b.GeodeticExtent.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
+//                        .Select(b => new SqlFeature(b.GeodeticExtent.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
 //                        {
 //                            Attributes = new Dictionary<string, object>() { { nameof(b.SheetName), b.SheetName } }
 //                        })
@@ -83,13 +83,13 @@
 
 //        public static List<SqlGeometry> GetIndexes(SqlGeometry webMercatorRegion, Func<BoundingBox, List<BoundingBox>> indexFunc)
 //        {
-//            var geographicGeometry = webMercatorRegion.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
+//            var geographicGeometry = webMercatorRegion.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, 4326);
 
 //            var geographicBoundingBox = geographicGeometry.GetBoundingBox();
 
 //            return indexFunc(geographicBoundingBox)
 //                        .Where(b => b.Intersects(geographicGeometry))
-//                        .Select(b => b.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
+//                        .Select(b => b.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator).AsSqlGeometry())
 //                        .ToList();
 //        }
          

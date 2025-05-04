@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.CoordinateSystem.MapProjection
+namespace IRI.Sta.CoordinateSystems.MapProjection
 {
     public static class SridHelper
     {

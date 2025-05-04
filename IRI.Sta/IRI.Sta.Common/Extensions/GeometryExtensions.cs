@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using IRI.Sta.Common.Model.GeoJson;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Msh.DataStructure.AdvancedStructures;
 
 
@@ -343,67 +343,56 @@ public static class Sta_GeometryExtensions
     #region Simplification
 
 
-    public static List<Geometry<Point>>? Simplify(
-      this List<Geometry<Point>> geometries
-      , SimplificationType type
-      , int zoomLevel
-      , SimplificationParamters paramters
-      , bool reduceToPoint = true)
+    public static List<Geometry<Point>> Simplify(
+      this List<Geometry<Point>> geometries,
+      SimplificationType type,
+      SimplificationParamters paramters,
+      bool reduceToPoint = true)
     {
         try
         {
-            if (geometries == null)
-                return null;
+            if (geometries.IsNullOrEmpty())
+                return new List<Geometry<Point>>();
 
-            var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, paramters.AverageLatitude ?? 0); //0 seconds!
-
-            var areaThreshold = threshold * threshold;
-
-            var result = new List<Geometry<Point>>(); //0 seconds!
-
-            Stopwatch watch = Stopwatch.StartNew();
+            var result = new List<Geometry<Point>>();
 
             for (int i = 0; i < geometries.Count; i++)
             {
-                try
-                {
-                    result.Add(geometries[i].Simplify(type, paramters));
-                    //result.Add(FilterPoints(geometries[i], filter));
-                }
-                catch (Exception ex) { throw; }
+                //try
+                //{
+                result.Add(geometries[i].Simplify(type, paramters));
+                //}
+                //catch (Exception) { throw; }
             }
 
-            result = result/*.Select(i => i.MakeValid())*/.Where(i => !i.IsNullOrEmpty()).ToList();   //0 seconds!
+            result = result.Where(i => !i.IsNullOrEmpty()).ToList();
 
             if (reduceToPoint)
             {
                 for (int g = 0; g < result.Count; g++)
                 {
-                    try
-                    {
-                        var length = result[g].CalculateEuclideanLength();//.STLength().Value;
+                    //try
+                    //{
+                    var length = result[g].CalculateEuclideanLength();
 
-                        if (length < threshold)
-                        {
-                            //result[g] = result[g].STPointOnSurface();
-                            result[g] = result[g].GetLastPoint().AsGeometry(result[g].Srid);
-                        }
-                    }
-                    catch (Exception ex)
+                    if (length < paramters.DistanceThreshold)
                     {
-                        throw;
+                        //result[g] = result[g].STPointOnSurface();
+                        result[g] = result[g].GetLastPoint().AsGeometry(result[g].Srid);
                     }
+                    //}
+                    //catch (Exception)
+                    //{
+                    //    throw;
+                    //}
                 }
-                var tMid = watch.ElapsedMilliseconds / 100;
 
-                watch.Restart();
-
-                result = result.RemoveOverlappingPoints(threshold);
+                result = result.RemoveOverlappingPoints(paramters.DistanceThreshold!.Value);
             }
 
             return result;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw;
         }

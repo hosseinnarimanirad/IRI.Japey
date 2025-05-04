@@ -1,4 +1,4 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Prj;
 using System;
@@ -7,9 +7,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ellipsoid = IRI.Msh.CoordinateSystem.Ellipsoid<IRI.Msh.MeasurementUnit.Meter, IRI.Msh.MeasurementUnit.Degree>;
-using IRI.Msh.MeasurementUnit;
-using IRI.Msh.CoordinateSystem;
+using Ellipsoid = IRI.Sta.CoordinateSystems.Ellipsoid<IRI.Sta.Metrics.Meter, IRI.Sta.Metrics.Degree>;
+using IRI.Sta.Metrics;
+using IRI.Sta.CoordinateSystems;
 
 namespace IRI.Sta.ShapefileFormat.Prj;
 
@@ -238,8 +238,8 @@ public class EsriPrjFile
                 return new Ellipsoid(spheroidValues.First(),
                                     new Meter(double.Parse(spheroidValues.Skip(1).First(), CultureInfo.InvariantCulture)),
                                     double.Parse(spheroidValues.Skip(2).First(), CultureInfo.InvariantCulture),
-                                    new IRI.Msh.CoordinateSystem.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
-                                    new Msh.CoordinateSystem.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
+                                    new IRI.Sta.CoordinateSystems.Cartesian3DPoint<Meter>(new Meter(dx), new Meter(dy), new Meter(dz)),
+                                    new IRI.Sta.CoordinateSystems.OrientationParameter(new Degree(drx), new Degree(dry), new Degree(drz)),
                                     srid)
                 {
                     EsriName = spheroidValues.First(),

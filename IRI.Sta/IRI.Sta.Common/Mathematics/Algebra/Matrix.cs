@@ -6,9 +6,9 @@ using System.Text;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 
-namespace IRI.Msh.Algebra;
+namespace IRI.Sta.Mathematics;
 
 [DataContract]
 public class Matrix

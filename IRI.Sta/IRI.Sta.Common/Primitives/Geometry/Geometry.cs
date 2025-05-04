@@ -1,11 +1,11 @@
 ﻿using IRI.Sta.Common.Analysis;
 using IRI.Extensions;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using IRI.Sta.Common.IO.OgcSFA;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 
 namespace IRI.Sta.Common.Primitives;
 
@@ -1689,7 +1689,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     public Geometry<T> GeodeticToMercator()
     {
-        return this.Transform(point => MapProjects.GeodeticToMercator(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84), SridHelper.Mercator);
+        return this.Transform(point => MapProjects.GeodeticToMercator(point, IRI.Sta.CoordinateSystems.Ellipsoids.WGS84), SridHelper.Mercator);
     }
 
     public Geometry<T> GeodeticWgs84ToWebMercator()
@@ -1699,7 +1699,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     public Geometry<T> GeodeticToCylindricalEqualArea()
     {
-        return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, IRI.Msh.CoordinateSystem.Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);
+        return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, IRI.Sta.CoordinateSystems.Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);
     }
 
 

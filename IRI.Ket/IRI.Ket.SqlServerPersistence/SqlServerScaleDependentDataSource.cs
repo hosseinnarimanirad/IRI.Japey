@@ -86,9 +86,16 @@ namespace IRI.Ket.Persistence.DataSources
             {
                 System.Diagnostics.Debug.WriteLine(string.Empty);
 
-                var geometries = originalGeometries.Simplify(SimplificationType.CumulativeAreaAngle, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+                SimplificationParamters param = new SimplificationParamters { AngleThreshold = 0.98 };
 
-                geometries = geometries.Simplify(SimplificationType.CumulativeTriangleRoutine, i, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+                var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+
+                param.DistanceThreshold = threshold;
+                param.AreaThreshold = threshold * threshold;
+
+                var geometries = originalGeometries.Simplify(SimplificationType.CumulativeAreaAngle, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
+
+                geometries = geometries.Simplify(SimplificationType.CumulativeTriangleRoutine, new SimplificationParamters() { AngleThreshold = 0.98 }, true);
 
                 CopyToSqlServer(_pyramidParameters.TableName, geometries, i - 1);
             }

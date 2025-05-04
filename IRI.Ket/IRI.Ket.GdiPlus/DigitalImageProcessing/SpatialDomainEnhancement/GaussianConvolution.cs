@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Text;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 
 namespace IRI.Ket.DigitalImageProcessing
 {

@@ -2,10 +2,10 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Msh.MeasurementUnit;
+using IRI.Sta.Metrics;
 using System.Collections.Generic;
 
-namespace IRI.Msh.CoordinateSystem;
+namespace IRI.Sta.CoordinateSystems;
  
 public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     where TLinear : LinearUnit, new()

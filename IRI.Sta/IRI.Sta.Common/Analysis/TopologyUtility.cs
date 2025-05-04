@@ -1,5 +1,5 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Analysis.Topology;
 using IRI.Sta.Common.Primitives;
 using System;

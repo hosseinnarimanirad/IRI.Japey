@@ -1,5 +1,5 @@
 ﻿using IRI.Extensions;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

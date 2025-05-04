@@ -3,7 +3,7 @@ using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Sta.Common.Model.GeoJson;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Primitives.Esri;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using Microsoft.SqlServer.Types;
 using System.Text;
 
@@ -48,7 +48,7 @@ public static class SqlGeometryExtensions
 
         try
         {
-            return geometry.Transform(i => Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
+            return geometry.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
                             .STArea()
                             .Value / 1000000.0;
         }
@@ -401,17 +401,17 @@ public static class SqlGeometryExtensions
 
     public static SqlGeography WebMercatorToGeodeticWgs84(this SqlGeometry geometry)
     {
-        return geometry.Project(Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
+        return geometry.Project(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
     }
 
     public static SqlGeography MercatorToGeographic(this SqlGeometry geometry)
     {
-        return geometry.Project(Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
+        return geometry.Project(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
     }
 
     public static SqlGeography UTMToGeographic(this SqlGeometry geometry, int utmZone)
     {
-        return geometry.Project(i => Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
+        return geometry.Project(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
     }
 
     #endregion

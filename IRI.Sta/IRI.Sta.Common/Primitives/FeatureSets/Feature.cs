@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using IRI.Extensions;
 using System.Linq;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using System.ComponentModel;
 using IRI.Sta.Common.PropertyDescriptors;
 

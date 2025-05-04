@@ -1,6 +1,6 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Sta.Mathematics;
 using IRI.Extensions;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -46,9 +46,9 @@ public static class Normalization
 
         //values.CopyTo(result, 0);
 
-        var mean = IRI.Msh.Statistics.Statistics.CalculateMean(values);
+        var mean = IRI.Sta.Mathematics.Statistics.CalculateMean(values);
 
-        var std = IRI.Msh.Statistics.Statistics.CalculateStandardDeviation(values, mode);
+        var std = IRI.Sta.Mathematics.Statistics.CalculateStandardDeviation(values, mode);
 
         // 1399.12.12
         // to prevent divide by zero

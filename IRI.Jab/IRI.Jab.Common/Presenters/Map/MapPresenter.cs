@@ -11,7 +11,7 @@ using System.Windows.Input;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Model.GeoJson;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
@@ -2093,7 +2093,7 @@ namespace IRI.Jab.Common.Presenter.Map
 
         public void PanToGeographicPoint(Point point, Action callback = null)
         {
-            var webMercatorPoint = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
+            var webMercatorPoint = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
 
             this.PanTo(webMercatorPoint, callback);
         }

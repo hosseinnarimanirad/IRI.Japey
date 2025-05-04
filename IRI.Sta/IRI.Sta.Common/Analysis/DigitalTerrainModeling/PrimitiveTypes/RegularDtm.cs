@@ -2,7 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Primitives;
 using IRI.Msh.DataStructure;
 using IRI.Sta.Common;

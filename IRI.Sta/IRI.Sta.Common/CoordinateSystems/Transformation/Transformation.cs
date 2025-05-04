@@ -2,13 +2,13 @@
 // Allahoma ajjel le-valiyek al-faraj
 
 using System;
-using IRI.Msh.Algebra;
-using IRI.Msh.MeasurementUnit;
+using IRI.Sta.Mathematics;
+using IRI.Sta.Metrics;
 using System.Collections.Generic;
-using IRI.Msh.CoordinateSystem;
+using IRI.Sta.CoordinateSystems;
 using IRI.Sta.Common.Primitives;
 
-namespace IRI.Msh.CoordinateSystem;
+namespace IRI.Sta.CoordinateSystems;
 
 public static class Transformation
 {

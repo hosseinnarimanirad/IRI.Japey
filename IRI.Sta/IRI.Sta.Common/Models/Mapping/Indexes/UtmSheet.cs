@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.Common.Primitives;
-using IRI.Msh.CoordinateSystem;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -71,7 +71,7 @@ public class UtmSheet : IGeometryAware<Point>
     //From BoundingBox
     public static UtmSheet Create(BoundingBox utmBoundingBox, UtmIndexType type, int utmZone)
     {
-        var centerLatLong = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
+        var centerLatLong = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
 
         switch (type)
         {

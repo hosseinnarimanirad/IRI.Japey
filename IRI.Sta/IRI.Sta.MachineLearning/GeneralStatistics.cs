@@ -1,5 +1,5 @@
 ﻿using IRI.Msh.DataStructure;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ public static class GeneralStatistics
 
         result.ThirdQuartile = sortedValues[length * 3 / 4];
 
-        result.Mean = Msh.Statistics.Statistics.CalculateMean(values);
+        result.Mean = IRI.Sta.Mathematics.Statistics.CalculateMean(values);
 
         return result;
     }

@@ -1,5 +1,5 @@
-﻿using IRI.Msh.CoordinateSystem;
-using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
 using System;
 using System.Collections.Generic;

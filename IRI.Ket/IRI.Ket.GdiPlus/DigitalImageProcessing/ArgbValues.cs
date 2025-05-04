@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using System;
 
 namespace IRI.Ket.DigitalImageProcessing

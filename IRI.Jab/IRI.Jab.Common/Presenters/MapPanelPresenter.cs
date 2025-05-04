@@ -2,8 +2,8 @@
 using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
-using IRI.Msh.CoordinateSystem;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems;
+using IRI.Sta.CoordinateSystems.MapProjection;
 
 namespace IRI.Jab.Common.Presenters;
 

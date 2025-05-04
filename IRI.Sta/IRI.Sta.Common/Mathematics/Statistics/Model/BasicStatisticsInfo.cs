@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Statistics;
+namespace IRI.Sta.Mathematics;
 
 public class BasicStatisticsInfo
 {
@@ -17,7 +17,7 @@ public class BasicStatisticsInfo
 
     public BasicStatisticsInfo(double[] values)
     {
-        this.Mean = IRI.Msh.Statistics.Statistics.CalculateMean(values);
+        this.Mean = IRI.Sta.Mathematics.Statistics.CalculateMean(values);
 
         this.StandardDeviation = Statistics.CalculateStandardDeviation(values);
     }

@@ -4,7 +4,7 @@ using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Common.Model;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.PersonalGdb;
 using IRI.Ket.PersonalGdbPersistence.Model;
 

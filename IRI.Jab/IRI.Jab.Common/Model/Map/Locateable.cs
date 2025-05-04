@@ -123,7 +123,7 @@ namespace IRI.Jab.Common
 
         public Locateable(Point wgs84GeodeticPosition, AncherFunctionHandler ancherFunction = null) : this(ancherFunction)
         {
-            var webMercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
+            var webMercator = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
 
             this.X = webMercator.X;
 

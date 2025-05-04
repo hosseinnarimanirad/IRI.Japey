@@ -7,7 +7,7 @@ using IRI.Sta.Common.Mapping;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 
 namespace IRI.Ket.Persistence.RasterDataSources
 {

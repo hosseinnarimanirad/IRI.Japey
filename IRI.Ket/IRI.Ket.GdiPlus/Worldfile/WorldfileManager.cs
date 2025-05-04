@@ -74,13 +74,13 @@ public static class WorldfileManager
 
             BoundingBox boundingBox;
 
-            if (srid == Msh.CoordinateSystem.MapProjection.SridHelper.GeodeticWGS84)
+            if (srid == IRI.Sta.CoordinateSystems.MapProjection.SridHelper.GeodeticWGS84)
             {
                 boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height);
             }
-            else if (srid == Msh.CoordinateSystem.MapProjection.SridHelper.WebMercator)
+            else if (srid == IRI.Sta.CoordinateSystems.MapProjection.SridHelper.WebMercator)
             {
-                boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height).Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84);
+                boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height).Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84);
             }
             else
             {

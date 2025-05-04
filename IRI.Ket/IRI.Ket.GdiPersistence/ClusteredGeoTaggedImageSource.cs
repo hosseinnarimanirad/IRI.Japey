@@ -3,7 +3,7 @@
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Helpers;
 using IRI.Msh.DataStructure.AdvancedStructures;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Ket.Common.Model; 
 
 namespace IRI.Ket.Persistence.DataSources

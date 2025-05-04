@@ -1,4 +1,4 @@
-﻿using IRI.Msh.CoordinateSystem.MapProjection;
+﻿using IRI.Sta.CoordinateSystems.MapProjection;
 using System;
 namespace IRI.Sta.Common.Primitives;
 

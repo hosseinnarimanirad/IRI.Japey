@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using System.Linq;
 using IRI.Msh.Exceptions;
 using IRI.Extensions;
 
-namespace IRI.Msh.Statistics;
+namespace IRI.Sta.Mathematics;
 
 public static class Statistics
 {

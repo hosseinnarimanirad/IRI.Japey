@@ -1,7 +1,7 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Services.Oxford;
 using System;
 using System.Collections.Generic;

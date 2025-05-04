@@ -3,7 +3,7 @@ using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Raster.Model;
 using IRI.Ket.DigitalImageProcessing;
 using IRI.Extensions;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
@@ -174,7 +174,7 @@ namespace IRI.Jab.Common.Raster
                 var ellapsedtime = stopwatch.ElapsedMilliseconds;
                 stopwatch.Restart();
 
-                return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Msh.CoordinateSystem.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
+                return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
             });
         }
 

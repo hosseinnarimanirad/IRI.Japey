@@ -1,7 +1,7 @@
 ﻿using IRI.Extensions;
 using IRI.Ket.PersonalGdbPersistence.Model;
 using IRI.Ket.PersonalGdbPersistence.Xml;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.PersonalGdb;
 using System;

@@ -1,8 +1,8 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Sta.Mathematics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
-using IRI.Msh.Statistics;
+using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.Common.Helpers;
@@ -133,7 +133,7 @@ public static class ImageHelper
     //{
     //    var wgs84 = GetWgs84Location(bitmap);
 
-    //    var mercator = IRI.Msh.CoordinateSystem.MapProjection.MapProjects.GeodeticToMercator((IRI.Sta.Common.Primitives.Point)wgs84);
+    //    var mercator = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToMercator((IRI.Sta.Common.Primitives.Point)wgs84);
 
     //    return new IRI.Sta.Common.Point3D(mercator.X, mercator.Y, wgs84.Z);
     //}
@@ -233,7 +233,7 @@ public static class ImageHelper
 
     private static byte[] DoubleToExifGpsByte(double value)
     {
-        Msh.MeasurementUnit.Degree degreeValue = new Msh.MeasurementUnit.Degree(value);
+        IRI.Sta.Metrics.Degree degreeValue = new IRI.Sta.Metrics.Degree(value);
 
         //var longitudeNumerator = new int[3] { degreeValue.DegreePart, degreeValue.MinutePart, degreeValue.SecondPart };
 

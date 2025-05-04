@@ -1,9 +1,9 @@
-﻿using IRI.Msh.Algebra;
+﻿using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.Statistics;
+namespace IRI.Sta.Mathematics;
 
 public class ConfusionMatrix
 {

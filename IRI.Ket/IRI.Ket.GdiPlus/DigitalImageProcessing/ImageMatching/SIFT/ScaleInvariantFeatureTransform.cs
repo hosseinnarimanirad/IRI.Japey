@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Msh.DataStructure;
 using System.Xml.Serialization;
 
@@ -118,9 +118,9 @@ namespace IRI.Ket.DigitalImageProcessing.ImageMatching
 
             foreach (Matrix values in doGs)
             {
-                doGMax.Add(IRI.Msh.Statistics.Statistics.GetMax(values));
+                doGMax.Add(IRI.Sta.Mathematics.Statistics.GetMax(values));
 
-                doGMin.Add(IRI.Msh.Statistics.Statistics.GetMin(values));
+                doGMin.Add(IRI.Sta.Mathematics.Statistics.GetMin(values));
             }
         }
 

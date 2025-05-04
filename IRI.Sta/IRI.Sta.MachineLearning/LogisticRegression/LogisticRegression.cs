@@ -1,5 +1,5 @@
-﻿using IRI.Msh.Algebra;
-using IRI.Msh.Statistics;
+﻿using IRI.Sta.Mathematics;
+using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

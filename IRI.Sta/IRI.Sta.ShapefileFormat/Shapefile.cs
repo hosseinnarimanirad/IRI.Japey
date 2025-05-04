@@ -5,7 +5,7 @@ using System.Text;
 using IRI.Sta.ShapefileFormat.EsriType;
 using System.Threading.Tasks;
 using IRI.Sta.ShapefileFormat.Reader;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Writer;
 using IRI.Sta.ShapefileFormat.Model;

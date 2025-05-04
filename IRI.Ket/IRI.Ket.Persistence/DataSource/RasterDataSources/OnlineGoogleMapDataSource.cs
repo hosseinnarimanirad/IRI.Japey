@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 using IRI.Sta.Common.Primitives;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Mapping;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Model;

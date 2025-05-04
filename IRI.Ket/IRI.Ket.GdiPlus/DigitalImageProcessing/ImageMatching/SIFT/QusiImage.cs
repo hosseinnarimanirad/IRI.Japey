@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 using IRI.Msh.DataStructure;
 using System.Xml.Serialization;
 
@@ -60,7 +60,7 @@ namespace IRI.Ket.DigitalImageProcessing.ImageMatching
         {
             get
             {
-                return IRI.Msh.Statistics.Statistics.GetMax(this.m_Values);
+                return IRI.Sta.Mathematics.Statistics.GetMax(this.m_Values);
             }
         }
 
@@ -68,7 +68,7 @@ namespace IRI.Ket.DigitalImageProcessing.ImageMatching
         {
             get
             {
-                return IRI.Msh.Statistics.Statistics.GetMin(this.m_Values);
+                return IRI.Sta.Mathematics.Statistics.GetMin(this.m_Values);
             }
         }
 

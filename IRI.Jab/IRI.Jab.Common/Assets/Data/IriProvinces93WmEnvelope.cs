@@ -1,6 +1,6 @@
 ﻿using IRI.Extensions;
 using IRI.Jab.Common.Assets.ShapeStrings;
-using IRI.Msh.CoordinateSystem.MapProjection;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Enums;
 using IRI.Sta.Common.Primitives;
 using System;

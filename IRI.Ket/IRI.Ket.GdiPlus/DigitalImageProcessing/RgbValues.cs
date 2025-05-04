@@ -4,7 +4,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using IRI.Msh.Algebra;
+using IRI.Sta.Mathematics;
 
 namespace IRI.Ket.DigitalImageProcessing
 {
