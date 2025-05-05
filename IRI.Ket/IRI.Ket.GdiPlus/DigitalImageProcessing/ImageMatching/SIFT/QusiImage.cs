@@ -7,85 +7,84 @@ using IRI.Sta.Mathematics;
 using IRI.Sta.DataStructures;
 using System.Xml.Serialization;
 
-namespace IRI.Ket.DigitalImageProcessing.ImageMatching
+namespace IRI.Ket.DigitalImageProcessing.ImageMatching;
+
+
+public class QusiImage
 {
+    private Matrix m_Values;
 
-    public class QusiImage
+    private int m_Scale, m_Blure;
+
+    private double m_Sigma;
+
+    public int Width
     {
-        private Matrix m_Values;
+        get { return this.m_Values.NumberOfColumns; }
+    }
 
-        private int m_Scale, m_Blure;
+    public int Height
+    {
+        get { return this.m_Values.NumberOfRows; }
+    }
 
-        private double m_Sigma;
+    public int Scale
+    {
+        get { return this.m_Scale; }
 
-        public int Width
+        set { this.m_Scale = value; }
+    }
+
+    public int Blure
+    {
+        get { return this.m_Blure; }
+
+        set { this.m_Blure = value; }
+    }
+
+    public double Sigma
+    {
+        get { return this.m_Sigma; }
+
+        set { this.m_Sigma = value; }
+    }
+
+    public double this[int column, int row]
+    {
+        get { return this.m_Values[row, column]; }
+
+        set { this.m_Values[row, column] = value; }
+    }
+
+    public double MaxGrayValue
+    {
+        get
         {
-            get { return this.m_Values.NumberOfColumns; }
+            return IRI.Sta.Mathematics.Statistics.GetMax(this.m_Values);
+        }
+    }
+
+    public double MinGrayValue
+    {
+        get
+        {
+            return IRI.Sta.Mathematics.Statistics.GetMin(this.m_Values);
+        }
+    }
+
+    public QusiImage(Matrix values, int scale, int blure, double sigma)
+    {
+        if (values == null)
+        {
+            throw new NotImplementedException();
         }
 
-        public int Height
-        {
-            get { return this.m_Values.NumberOfRows; }
-        }
+        this.m_Scale = scale;
 
-        public int Scale
-        {
-            get { return this.m_Scale; }
+        this.m_Blure = blure;
 
-            set { this.m_Scale = value; }
-        }
+        this.m_Sigma = sigma;
 
-        public int Blure
-        {
-            get { return this.m_Blure; }
-
-            set { this.m_Blure = value; }
-        }
-
-        public double Sigma
-        {
-            get { return this.m_Sigma; }
-
-            set { this.m_Sigma = value; }
-        }
-
-        public double this[int column, int row]
-        {
-            get { return this.m_Values[row, column]; }
-
-            set { this.m_Values[row, column] = value; }
-        }
-
-        public double MaxGrayValue
-        {
-            get
-            {
-                return IRI.Sta.Mathematics.Statistics.GetMax(this.m_Values);
-            }
-        }
-
-        public double MinGrayValue
-        {
-            get
-            {
-                return IRI.Sta.Mathematics.Statistics.GetMin(this.m_Values);
-            }
-        }
-
-        public QusiImage(Matrix values, int scale, int blure, double sigma)
-        {
-            if (values == null)
-            {
-                throw new NotImplementedException();
-            }
-
-            this.m_Scale = scale;
-
-            this.m_Blure = blure;
-
-            this.m_Sigma = sigma;
-
-            this.m_Values = values;
-        }
+        this.m_Values = values;
     }
 }

@@ -29,7 +29,7 @@ public static class GeneralHelper
 
         var bitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
 
-        var diff = Ket.Common.Helpers.ImageHelper.CalculateDifPlusBitmaps(originalBitmap, bitmap, true);
+        var diff = IRI.Ket.GdiPlus.Helpers.ImageHelper.CalculateDifPlusBitmaps(originalBitmap, bitmap, true);
 
         if (saveImages)
         {

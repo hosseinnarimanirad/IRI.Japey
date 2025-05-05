@@ -2,15 +2,13 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 
+using System;
 using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.DataStructures;
-using IRI.Sta.Common;
-using IRI.Sta.Common.Analysis.DigitalTerrainModeling;
-using System;
 using IRI.Sta.DataStructures.CustomStructures;
 
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 [Serializable]
 public class RegularDtm

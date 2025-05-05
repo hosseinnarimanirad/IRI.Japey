@@ -4,7 +4,7 @@
 using IRI.Sta.Common.Primitives;
 using System;
 
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 [Serializable]
 public struct AttributedPoint : IPoint

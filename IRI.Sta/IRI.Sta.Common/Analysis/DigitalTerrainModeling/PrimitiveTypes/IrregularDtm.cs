@@ -6,8 +6,9 @@ using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using IRI.Sta.DataStructures.Graph;
+using IRI.Sta.Common.Analysis;
 
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 [Serializable]
 public class IrregularDtm

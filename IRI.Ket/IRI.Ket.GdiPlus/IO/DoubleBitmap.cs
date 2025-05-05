@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Collections;
 
 
-namespace IRI.Ket.DigitalTerrainModeling;
+namespace IRI.Ket.GdiPlus;
 
 public static class DoubleBitmap
 {

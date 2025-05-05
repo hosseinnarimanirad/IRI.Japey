@@ -5,7 +5,7 @@ using System.Text;
 using IRI.Extensions;
 using IRI.Sta.Common.WorldfileFormat;
 
-namespace IRI.Ket.WorldfileFormat;
+namespace IRI.Ket.GdiPlus.WorldfileFormat;
 
 public static class WorldfileManager
 {
@@ -65,7 +65,7 @@ public static class WorldfileManager
         if (!System.IO.File.Exists(imageFileName))
             return null;
 
-        var size = IRI.Ket.Common.Helpers.ImageHelper.GetSize(imageFileName);
+        var size = IRI.Ket.GdiPlus.Helpers.ImageHelper.GetSize(imageFileName);
 
         var worldFileName = TryGetAssociatedWorldfileName(imageFileName);
          

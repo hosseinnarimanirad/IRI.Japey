@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System.Text;
 using IRI.Sta.Mathematics;
 
-namespace IRI.Ket.DigitalImageProcessing
+namespace IRI.Ket.DigitalImageProcessing;
+
+public interface IConvolution
 {
-    public interface IConvolution
-    {
-        double Sigma{get;}
+    double Sigma{get;}
 
-        Matrix Convolve(Matrix original);
+    Matrix Convolve(Matrix original);
 
-    }
 }

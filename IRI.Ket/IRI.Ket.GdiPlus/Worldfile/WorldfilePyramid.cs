@@ -7,7 +7,7 @@ using System.IO.Compression;
 using IRI.Sta.Common.Mapping;
 using IRI.Sta.Common.Model;
 
-namespace IRI.Ket.WorldfileFormat;
+namespace IRI.Ket.GdiPlus.WorldfileFormat;
 
 public static class WorldfilePyramid
 {

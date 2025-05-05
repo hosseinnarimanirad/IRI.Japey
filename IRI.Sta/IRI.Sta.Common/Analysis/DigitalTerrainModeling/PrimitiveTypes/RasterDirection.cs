@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 public enum RasterDirection
 {

@@ -6,133 +6,132 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Ket.DigitalImageProcessing
+namespace IRI.Ket.DigitalImageProcessing;
+
+public struct ByteArgbValues
 {
-    public struct ByteArgbValues
+    private ImageMatrix m_RedValues, m_GreenValues, m_BlueValues, m_AlphaValues;
+
+    private int height, width;
+
+    private int[] m_RedHistogram, m_GreenHistogram, m_BlueHistogram, m_AlphaHistogram;
+
+    public ByteArgbValues(ImageMatrix alpha, ImageMatrix red, ImageMatrix green, ImageMatrix blue)
     {
-        private ImageMatrix m_RedValues, m_GreenValues, m_BlueValues, m_AlphaValues;
-
-        private int height, width;
-
-        private int[] m_RedHistogram, m_GreenHistogram, m_BlueHistogram, m_AlphaHistogram;
-
-        public ByteArgbValues(ImageMatrix alpha, ImageMatrix red, ImageMatrix green, ImageMatrix blue)
+        if (!(ImageMatrix.AreTheSameSize(red, green) && ImageMatrix.AreTheSameSize(red, blue) && ImageMatrix.AreTheSameSize(red, alpha)))
         {
-            if (!(ImageMatrix.AreTheSameSize(red, green) && ImageMatrix.AreTheSameSize(red, blue) && ImageMatrix.AreTheSameSize(red, alpha)))
+            throw new NotImplementedException();
+        }
+
+        this.height = red.NumberOfRows;
+
+        this.width = red.NumberOfColumns;
+
+        this.m_AlphaValues = alpha;
+
+        this.m_RedValues = red;
+
+        this.m_GreenValues = green;
+
+        this.m_BlueValues = blue;
+
+        this.m_RedHistogram = RadiometricEnhancement.CalculateHistogram(red);
+
+        this.m_GreenHistogram = RadiometricEnhancement.CalculateHistogram(green);
+
+        this.m_BlueHistogram = RadiometricEnhancement.CalculateHistogram(blue);
+
+        this.m_AlphaHistogram = RadiometricEnhancement.CalculateHistogram(alpha);
+
+    }
+
+    public int Height
+    {
+        get { return this.height; }
+    }
+
+    public int Width
+    {
+        get { return this.width; }
+    }
+
+    public ImageMatrix Alpha
+    {
+        get { return this.m_AlphaValues; }
+
+        set
+        {
+            if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
             {
                 throw new NotImplementedException();
             }
 
-            this.height = red.NumberOfRows;
-
-            this.width = red.NumberOfColumns;
-
-            this.m_AlphaValues = alpha;
-
-            this.m_RedValues = red;
-
-            this.m_GreenValues = green;
-
-            this.m_BlueValues = blue;
-
-            this.m_RedHistogram = SpatialDomainEnhancement.RadiometricEnhancement.CalculateHistogram(red);
-
-            this.m_GreenHistogram = SpatialDomainEnhancement.RadiometricEnhancement.CalculateHistogram(green);
-
-            this.m_BlueHistogram = SpatialDomainEnhancement.RadiometricEnhancement.CalculateHistogram(blue);
-
-            this.m_AlphaHistogram = SpatialDomainEnhancement.RadiometricEnhancement.CalculateHistogram(alpha);
-
+            this.m_AlphaValues = value;
         }
+    }
 
-        public int Height
+    public ImageMatrix Red
+    {
+        get { return this.m_RedValues; }
+
+        set
         {
-            get { return this.height; }
-        }
-
-        public int Width
-        {
-            get { return this.width; }
-        }
-
-        public ImageMatrix Alpha
-        {
-            get { return this.m_AlphaValues; }
-
-            set
+            if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
             {
-                if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
-                {
-                    throw new NotImplementedException();
-                }
-
-                this.m_AlphaValues = value;
+                throw new NotImplementedException();
             }
+
+            this.m_RedValues = value;
         }
+    }
 
-        public ImageMatrix Red
+    public ImageMatrix Green
+    {
+        get { return this.m_GreenValues; }
+
+        set
         {
-            get { return this.m_RedValues; }
-
-            set
+            if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
             {
-                if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
-                {
-                    throw new NotImplementedException();
-                }
-
-                this.m_RedValues = value;
+                throw new NotImplementedException();
             }
+
+            this.m_GreenValues = value;
         }
+    }
 
-        public ImageMatrix Green
+    public ImageMatrix Blue
+    {
+        get { return this.m_BlueValues; }
+
+        set
         {
-            get { return this.m_GreenValues; }
-
-            set
+            if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
             {
-                if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
-                {
-                    throw new NotImplementedException();
-                }
-
-                this.m_GreenValues = value;
+                throw new NotImplementedException();
             }
+
+            this.m_BlueValues = value;
         }
+    }
 
-        public ImageMatrix Blue
-        {
-            get { return this.m_BlueValues; }
+    public int[] RedHistogram
+    {
+        get { return this.m_RedHistogram; }
+    }
 
-            set
-            {
-                if (value.NumberOfColumns != this.width || value.NumberOfRows != this.height)
-                {
-                    throw new NotImplementedException();
-                }
+    public int[] GreenHistogram
+    {
+        get { return this.m_GreenHistogram; }
+    }
 
-                this.m_BlueValues = value;
-            }
-        }
+    public int[] BlueHistogram
+    {
+        get { return this.m_BlueHistogram; }
+    }
 
-        public int[] RedHistogram
-        {
-            get { return this.m_RedHistogram; }
-        }
-
-        public int[] GreenHistogram
-        {
-            get { return this.m_GreenHistogram; }
-        }
-
-        public int[] BlueHistogram
-        {
-            get { return this.m_BlueHistogram; }
-        }
-
-        public int[] AlphaHistogram
-        {
-            get { return this.m_AlphaHistogram; }
-        }
+    public int[] AlphaHistogram
+    {
+        get { return this.m_AlphaHistogram; }
     }
 }

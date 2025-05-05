@@ -1,21 +1,20 @@
-﻿using IRI.Jab.Common.Model;
-using IRI.Jab.Common;
-using IRI.Sta.Common.Primitives;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Bibliography;
-using IRI.Sta.Common.Analysis;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model.GeoJson;
 using System.Windows.Media;
-using IRI.Sta.MachineLearning;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using IRI.Extensions;
-using DocumentFormat.OpenXml.EMMA;
-using System.IO;
-using IRI.Ket.Common.Helpers;
+using IRI.Jab.Common.Model;
+using IRI.Sta.Common.Mapping;
+using IRI.Sta.Common.Analysis;
+using IRI.Ket.GdiPlus.Helpers;
+using IRI.Sta.MachineLearning;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Model.GeoJson;
+
 
 namespace IRI.Jab.Common.Helpers;
 

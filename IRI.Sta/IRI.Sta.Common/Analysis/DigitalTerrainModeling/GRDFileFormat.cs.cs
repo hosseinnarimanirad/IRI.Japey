@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 public class GRDFileFormat
 {

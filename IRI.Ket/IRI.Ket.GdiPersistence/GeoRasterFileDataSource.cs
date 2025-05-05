@@ -15,7 +15,7 @@ namespace IRI.Ket.Persistence.DataSources
 
         private GeoRasterFileDataSource(string imageFileName, int srid)
         {
-            this.geoRaster = IRI.Ket.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName, srid);
+            this.geoRaster = IRI.Ket.GdiPlus.WorldfileFormat.WorldfileManager.ReadWorldfile(imageFileName, srid);
 
             this.WebMercatorExtent = geoRaster.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
         }

@@ -7,59 +7,57 @@ using IRI.Sta.Mathematics;
 using IRI.Sta.DataStructures;
 using System.Xml.Serialization;
 
-namespace IRI.Ket.DigitalImageProcessing.ImageMatching
+namespace IRI.Ket.DigitalImageProcessing.ImageMatching;
+
+[Serializable()]
+public class ImageDescriptors 
 {
-    [Serializable()]
-    public class ImageDescriptors 
+    [XmlArray]
+    public List<Descriptor> items;
+
+    public ImageDescriptors()
     {
-        [XmlArray]
-        public List<Descriptor> items;
+        this.items = new List<Descriptor>();
+    }
 
-        public ImageDescriptors()
-        {
-            this.items = new List<Descriptor>();
-        }
+    public ImageDescriptors(List<Descriptor> descriptors)
+    {
+        this.items = descriptors;
+    }
 
-        public ImageDescriptors(List<Descriptor> descriptors)
-        {
-            this.items = descriptors;
-        }
+    public int Count
+    {
+        get { return this.items.Count; }
+    }
 
-        public int Count
-        {
-            get { return this.items.Count; }
-        }
+    public Descriptor this[int index]
+    {
+        get { return this.items[index];}
+    }
 
-        public Descriptor this[int index]
-        {
-            get { return this.items[index];}
-        }
+    public void Serialize(string path)
+    {
+        System.Xml.Serialization.XmlSerializer serializer = new XmlSerializer(typeof(ImageDescriptors));
 
-        public void Serialize(string path)
-        {
-            System.Xml.Serialization.XmlSerializer serializer = new XmlSerializer(typeof(ImageDescriptors));
+        System.Xml.XmlTextWriter writer = new System.Xml.XmlTextWriter(path, System.Text.Encoding.UTF8);
 
-            System.Xml.XmlTextWriter writer = new System.Xml.XmlTextWriter(path, System.Text.Encoding.UTF8);
+        serializer.Serialize(writer, this);
 
-            serializer.Serialize(writer, this);
+        writer.Close();
+    }
 
-            writer.Close();
-        }
+    public static ImageDescriptors Deserialize(string path)
+    {
 
-        public static ImageDescriptors Deserialize(string path)
-        {
+        System.Xml.Serialization.XmlSerializer serializer = new XmlSerializer(typeof(ImageDescriptors));
 
-            System.Xml.Serialization.XmlSerializer serializer = new XmlSerializer(typeof(ImageDescriptors));
+        System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(path);
 
-            System.Xml.XmlTextReader reader = new System.Xml.XmlTextReader(path);
+        ImageDescriptors result = (ImageDescriptors)serializer.Deserialize(reader);
 
-            ImageDescriptors result = (ImageDescriptors)serializer.Deserialize(reader);
+        reader.Close();
 
-            reader.Close();
-
-            return result;
-
-        }
+        return result;
 
     }
 

@@ -1,14 +1,9 @@
 ﻿
-using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common;
-using IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.DigitalTerrainModeling;
 
-namespace IRI.Ket.DigitalTerrainModeling.Extensions;
+namespace IRI.Extensions;
 
 public static class IrregularDtmExtensions
 {

@@ -1,4 +1,4 @@
-﻿using IRI.Ket.WorldfileFormat;
+﻿using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Sta.Common.Model;
 using System;
 using System.Collections.Generic;
@@ -404,9 +404,9 @@ namespace IRI.Jab.Common.Helpers
             //if imageFormat not provided, then it will use png format
             outputImage.Save(outputFileName, imageFormat);
 
-            var worldFile = Ket.WorldfileFormat.WorldfileManager.Create(tiles.GetTotalImageBoundsInWebMercator(), width * 256, height * 256);
+            var worldFile = WorldfileManager.Create(tiles.GetTotalImageBoundsInWebMercator(), width * 256, height * 256);
 
-            Ket.WorldfileFormat.WorldfileManager.SaveWorldFile(Ket.WorldfileFormat.WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
+            WorldfileManager.SaveWorldFile(WorldfileManager.MakeAssociatedWorldfileName(outputFileName), worldFile);
         }
 
         public static bool HasAnyImage(List<TileInfo> tiles, Func<TileInfo, string> fileNameFunc)

@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Jab.Common.Model.Globalization;
-using IRI.Ket.Common.Helpers;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

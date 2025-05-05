@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 //This class has some security issues: Points can be changed
 //without the change in the values or visa versa
-namespace IRI.Sta.Common.Analysis.DigitalTerrainModeling.PrimitiveTypes;
+namespace IRI.Sta.Common.DigitalTerrainModeling;
 
 [Serializable]
 public class AttributedPointCollection : PointCollection, IEnumerable<AttributedPoint>

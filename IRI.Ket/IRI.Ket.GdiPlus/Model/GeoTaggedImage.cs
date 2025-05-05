@@ -3,7 +3,7 @@ using IRI.Sta.Common.Primitives;
 using Newtonsoft.Json;
 using System;
 
-namespace IRI.Ket.Common.Model;
+namespace IRI.Ket.GdiPlus.Model;
 
 public class GeoTaggedImage
 {

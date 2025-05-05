@@ -1,11 +1,9 @@
 ﻿using IRI.Sta.Mathematics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text;
-using IRI.Sta.Mathematics;
-using IRI.Sta.Common.Primitives;
+using System.Text; 
 
-namespace IRI.Ket.Common.Helpers;
+namespace IRI.Ket.GdiPlus.Helpers;
 
 public static class ImageHelper
 {
