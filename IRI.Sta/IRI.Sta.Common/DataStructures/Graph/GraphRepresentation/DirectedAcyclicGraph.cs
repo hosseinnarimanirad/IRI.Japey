@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Graph.GraphRepresentation
+namespace IRI.Sta.DataStructures.Graph;
+
+public class DirectedAcyclicGraph<TNode, TWeight> : AdjacencyList<TNode, TWeight>
+    where TWeight : IComparable
 {
-    public class DirectedAcyclicGraph<TNode, TWeight> : AdjacencyList<TNode, TWeight>
-        where TWeight : IComparable
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return base.ToString();
-        }
+        return base.ToString();
     }
 }

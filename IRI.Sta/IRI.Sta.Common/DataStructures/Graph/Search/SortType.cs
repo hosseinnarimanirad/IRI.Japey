@@ -5,13 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Graph.Search
+namespace IRI.Sta.DataStructures.Graph;
+
+
+public enum SortType
 {
-
-    public enum SortType
-    {
-        BasedOnDiscoverTime,
-        BasedOnFinishTime
-    }
-
+    BasedOnDiscoverTime,
+    BasedOnFinishTime
 }

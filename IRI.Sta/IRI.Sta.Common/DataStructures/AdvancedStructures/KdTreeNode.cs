@@ -3,69 +3,68 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.DataStructure.AdvancedStructures
+namespace IRI.Sta.DataStructures.AdvancedStructures;
+
+public class KdTreeNode<T>
 {
-    public class KdTreeNode<T>
+    public T Point { get; set; }
+
+    //public Func<T, T, int> comparer;
+    
+    protected KdTreeNode<T> leftChild, rightChild, parent;
+
+    public KdTreeNode<T> LeftChild
     {
-        public T Point { get; set; }
+        get { return this.leftChild; }
 
-        //public Func<T, T, int> comparer;
-        
-        protected KdTreeNode<T> leftChild, rightChild, parent;
-
-        public KdTreeNode<T> LeftChild
+        set
         {
-            get { return this.leftChild; }
-
-            set
+            if (value != null)
             {
-                if (value != null)
-                {
-                    this.leftChild = value;
+                this.leftChild = value;
 
-                    value.Parent = this;
-                }
+                value.Parent = this;
             }
         }
+    }
 
-        public KdTreeNode<T> RigthChild
+    public KdTreeNode<T> RigthChild
+    {
+        get { return this.rightChild; }
+
+        set
         {
-            get { return this.rightChild; }
-
-            set
+            if (value != null)
             {
-                if (value != null)
-                {
-                    this.rightChild = value;
+                this.rightChild = value;
 
-                    value.Parent = this;
-                }
+                value.Parent = this;
             }
         }
+    }
 
-        public KdTreeNode<T> Parent
+    public KdTreeNode<T> Parent
+    {
+        get { return this.parent; }
+
+        set
         {
-            get { return this.parent; }
-
-            set
-            {
-                this.parent = value;
-            }
+            this.parent = value;
         }
+    }
 
-        public KdTreeNode(T point)
-        {
-            this.Point = point;
+    public KdTreeNode(T point)
+    {
+        this.Point = point;
 
-            //this.comparer = comparer;
-        }
+        //this.comparer = comparer;
+    }
 
-        public override string ToString()
-        {
-            return string.Format("Key = '{0}', Left = '{1}', Rigth = '{2}'",
-                Point.ToString(),
-                LeftChild == null ? string.Empty : LeftChild.Point.ToString(),
-                RigthChild == null ? string.Empty : RigthChild.Point.ToString());
-        }
+    public override string ToString()
+    {
+        return string.Format("Key = '{0}', Left = '{1}', Rigth = '{2}'",
+            Point.ToString(),
+            LeftChild == null ? string.Empty : LeftChild.Point.ToString(),
+            RigthChild == null ? string.Empty : RigthChild.Point.ToString());
     }
 }

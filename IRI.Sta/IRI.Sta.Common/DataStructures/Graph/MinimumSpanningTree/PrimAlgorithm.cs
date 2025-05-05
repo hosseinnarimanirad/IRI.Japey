@@ -1,125 +1,122 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IRI.Ket.Graph.GraphRepresentation;
+using System.Linq; 
 
-namespace IRI.Ket.Graph.MinimumSpanningTree2
+namespace IRI.Sta.DataStructures.Graph;
+
+public class PrimAlgorithm<TNode, TWeight> where TWeight : IComparable
 {
-    public class PrimAlgorithm<TNode, TWeight> where TWeight : IComparable
+    AdjacencyList<TNode, TWeight> network;
+
+    List<TNode> visitedNodes = new List<TNode>();
+
+    List<TNode> newNodes;
+
+    List<Edge<TNode, TWeight>> connections = new List<Edge<TNode, TWeight>>();
+
+    Dictionary<TNode, LinkedListNode<TNode>> nodeList = new Dictionary<TNode, LinkedListNode<TNode>>();
+
+
+    public PrimAlgorithm(AdjacencyList<TNode, TWeight> network)
     {
-        AdjacencyList<TNode, TWeight> network;
+        this.network = network;
+    }
 
-        List<TNode> visitedNodes = new List<TNode>();
+    public AdjacencyList<TNode, TWeight> GetMinimumSpanningTree()
+    {
+        AdjacencyList<TNode, TWeight> result = new AdjacencyList<TNode, TWeight>(this.network.NumberOfNodes);
 
-        List<TNode> newNodes;
+        TNode currentNode = this.network[0];
+        UpdateNewEdges(currentNode);
+        this.newNodes = new List<TNode>();
+        this.newNodes.Add(this.network[0]);
 
-        List<Edge<TNode, TWeight>> connections = new List<Edge<TNode, TWeight>>();
+        Initialize();
 
-        Dictionary<TNode, LinkedListNode<TNode>> nodeList = new Dictionary<TNode, LinkedListNode<TNode>>();
-
-
-        public PrimAlgorithm(AdjacencyList<TNode, TWeight> network)
+        while (result.NumberOfNodes != network.NumberOfNodes)
         {
-            this.network = network;
-        }
+            Edge<TNode, TWeight> safeEdge = GetMinimumConnection(connections);
 
-        public AdjacencyList<TNode, TWeight> GetMinimumSpanningTree()
-        {
-            AdjacencyList<TNode, TWeight> result = new AdjacencyList<TNode, TWeight>(this.network.NumberOfNodes);
+            connections.Remove(safeEdge);
 
-            TNode currentNode = this.network[0];
-            UpdateNewEdges(currentNode);
-            this.newNodes = new List<TNode>();
-            this.newNodes.Add(this.network[0]);
+            //this.newNodes = ProceedNode(this.newNodes);
 
-            Initialize();
+            LinkedListNode<TNode> first = nodeList[safeEdge.Connection.Node];
 
-            while (result.NumberOfNodes != network.NumberOfNodes)
+            LinkedListNode<TNode> second = nodeList[safeEdge.Node];
+
+            if (first.List != second.List)
             {
-                Edge<TNode, TWeight> safeEdge = GetMinimumConnection(connections);
+                result.AddUndirectedEdge(first.Value, second.Value, safeEdge.Connection.Weight);
 
-                connections.Remove(safeEdge);
+                LinkedList<TNode> tempList = second.List;
 
-                //this.newNodes = ProceedNode(this.newNodes);
-
-                LinkedListNode<TNode> first = nodeList[safeEdge.Connection.Node];
-
-                LinkedListNode<TNode> second = nodeList[safeEdge.Node];
-
-                if (first.List != second.List)
+                do
                 {
-                    result.AddUndirectedEdge(first.Value, second.Value, safeEdge.Connection.Weight);
+                    LinkedListNode<TNode> tempNode = tempList.First;
 
-                    LinkedList<TNode> tempList = second.List;
+                    tempList.RemoveFirst();
 
-                    do
-                    {
-                        LinkedListNode<TNode> tempNode = tempList.First;
+                    first.List.AddLast(tempNode);
 
-                        tempList.RemoveFirst();
+                } while (tempList.Count > 0);
 
-                        first.List.AddLast(tempNode);
+                UpdateNewEdges(first.Value);
 
-                    } while (tempList.Count > 0);
-
-                    UpdateNewEdges(first.Value);
-
-                    UpdateNewEdges(second.Value);
-                }
-
+                UpdateNewEdges(second.Value);
             }
 
-            return result;
         }
 
-        private void Initialize()
+        return result;
+    }
+
+    private void Initialize()
+    {
+        foreach (TNode item in this.network)
         {
-            foreach (TNode item in this.network)
-            {
-                LinkedList<TNode> temp = new LinkedList<TNode>();
+            LinkedList<TNode> temp = new LinkedList<TNode>();
 
-                temp.AddFirst(item);
+            temp.AddFirst(item);
 
-                nodeList.Add(item, temp.First);
-            }
+            nodeList.Add(item, temp.First);
         }
+    }
 
-        private static Edge<TNode, TWeight> GetMinimumConnection(List<Edge<TNode, TWeight>> list)
+    private static Edge<TNode, TWeight> GetMinimumConnection(List<Edge<TNode, TWeight>> list)
+    {
+        Edge<TNode, TWeight> result = list[0];
+
+        for (int i = 0; i < list.Count; i++)
         {
-            Edge<TNode, TWeight> result = list[0];
-
-            for (int i = 0; i < list.Count; i++)
+            if (result.Connection.Weight.CompareTo(list[i].Connection.Weight) > 0)
             {
-                if (result.Connection.Weight.CompareTo(list[i].Connection.Weight) > 0)
-                {
-                    result = list[i];
-                }
+                result = list[i];
             }
-
-            return result;
         }
 
-        private void UpdateNewEdges(TNode node)
+        return result;
+    }
+
+    private void UpdateNewEdges(TNode node)
+    {
+        if (!this.visitedNodes.Contains(node))
         {
-            if (!this.visitedNodes.Contains(node))
+            LinkedListNode<Connection<TNode, TWeight>> neighbour = network.GetConnections(node).First;
+
+            while (neighbour != null)
             {
-                LinkedListNode<Connection<TNode, TWeight>> neighbour = network.GetConnections(node).First;
+                //if (!this.visitedNodes.Contains(neighbour.Value.Node))
+                //{
+                connections.Add(new Edge<TNode, TWeight>(node, neighbour.Value));
+                //}
 
-                while (neighbour != null)
-                {
-                    //if (!this.visitedNodes.Contains(neighbour.Value.Node))
-                    //{
-                    connections.Add(new Edge<TNode, TWeight>(node, neighbour.Value));
-                    //}
-
-                    neighbour = neighbour.Next;
-                }
-
-                this.visitedNodes.Add(node);
+                neighbour = neighbour.Next;
             }
 
-
+            this.visitedNodes.Add(node);
         }
+
+
     }
 }

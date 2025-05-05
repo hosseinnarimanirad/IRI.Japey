@@ -2,168 +2,164 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IRI.Ket.Graph.GraphRepresentation;
+using System.Collections.Generic; 
 
-namespace IRI.Ket.Graph.Search
+namespace IRI.Sta.DataStructures.Graph;
+
+public class FastDepthFirstSearch<TNode, TWeight> where TWeight : new()
 {
-    public class FastDepthFirstSearch<TNode, TWeight> where TWeight : new()
+    List<TNode> nodeOrderBasedOnFinishTime = new List<TNode>();
+
+    SortedList<TNode, FastDepthFirstSearchNode<TNode>> labels;
+
+    public List<LinkedList<TNode>> parts;
+
+    public List<TNode> SortedNodesBasedOnFinishTime
     {
-        List<TNode> nodeOrderBasedOnFinishTime = new List<TNode>();
+        get { return this.nodeOrderBasedOnFinishTime; }
+    }
 
-        SortedList<TNode, FastDepthFirstSearchNode<TNode>> labels;
+    private int NumberOfNodes
+    {
+        get { return this.labels.Count; }
+    }
 
-        public List<LinkedList<TNode>> parts;
+    public FastDepthFirstSearch(AdjacencyList<TNode, TWeight> graph) : this(graph, null) { }
 
-        public List<TNode> SortedNodesBasedOnFinishTime
+    public FastDepthFirstSearch(AdjacencyList<TNode, TWeight> graph, List<TNode> nodeOrder)
+    {
+        Initialize(graph);
+
+        if (nodeOrder == null)
         {
-            get { return this.nodeOrderBasedOnFinishTime; }
-        }
+            nodeOrder = new List<TNode>();
 
-        private int NumberOfNodes
-        {
-            get { return this.labels.Count; }
-        }
-
-        public FastDepthFirstSearch(AdjacencyList<TNode, TWeight> graph) : this(graph, null) { }
-
-        public FastDepthFirstSearch(AdjacencyList<TNode, TWeight> graph, List<TNode> nodeOrder)
-        {
-            Initialize(graph);
-
-            if (nodeOrder == null)
+            for (int i = 0; i < graph.NumberOfNodes; i++)
             {
-                nodeOrder = new List<TNode>();
-
-                for (int i = 0; i < graph.NumberOfNodes; i++)
-                {
-                    nodeOrder.Add(graph[i]);
-                }
-            }
-
-            DoTheDepthFirstSearch(graph, nodeOrder);
-        }
-
-        private void Initialize(AdjacencyList<TNode, TWeight> graph)
-        {
-            this.parts = new List<LinkedList<TNode>>();
-
-            this.labels = new SortedList<TNode, FastDepthFirstSearchNode<TNode>>(graph.NumberOfNodes);
-
-            foreach (TNode item in graph)
-            {
-                this.labels.Add(item, new FastDepthFirstSearchNode<TNode>(item));
+                nodeOrder.Add(graph[i]);
             }
         }
 
-        private void DoTheDepthFirstSearch(AdjacencyList<TNode, TWeight> graph, List<TNode> nodeOrder)
+        DoTheDepthFirstSearch(graph, nodeOrder);
+    }
+
+    private void Initialize(AdjacencyList<TNode, TWeight> graph)
+    {
+        this.parts = new List<LinkedList<TNode>>();
+
+        this.labels = new SortedList<TNode, FastDepthFirstSearchNode<TNode>>(graph.NumberOfNodes);
+
+        foreach (TNode item in graph)
         {
-            if (graph.NumberOfNodes != nodeOrder.Count)
+            this.labels.Add(item, new FastDepthFirstSearchNode<TNode>(item));
+        }
+    }
+
+    private void DoTheDepthFirstSearch(AdjacencyList<TNode, TWeight> graph, List<TNode> nodeOrder)
+    {
+        if (graph.NumberOfNodes != nodeOrder.Count)
+        {
+            throw new NotImplementedException();
+        }
+
+        int time = 0;
+
+        this.parts = new List<LinkedList<TNode>>();
+
+        Stack<TNode> stack = new Stack<TNode>(graph.NumberOfNodes);
+
+        for (int n = 0; n < graph.NumberOfNodes; n++)
+        {
+            if (!this.labels[nodeOrder[n]].IsWhite())
             {
-                throw new NotImplementedException();
+                continue;
             }
 
-            int time = 0;
+            this.parts.Add(new LinkedList<TNode>());
 
-            this.parts = new List<LinkedList<TNode>>();
+            stack.Push(nodeOrder[n]);
 
-            Stack<TNode> stack = new Stack<TNode>(graph.NumberOfNodes);
-
-            for (int n = 0; n < graph.NumberOfNodes; n++)
+            while (stack.Count > 0)
             {
-                if (!this.labels[nodeOrder[n]].IsWhite())
+                TNode currentNode = stack.Pop();
+
+                if (this.labels[currentNode].IsWhite())
                 {
-                    continue;
-                }
+                    //
+                    this.parts[this.parts.Count - 1].AddLast(currentNode);
 
-                this.parts.Add(new LinkedList<TNode>());
+                    this.labels[currentNode].DiscoverTime = ++time;
 
-                stack.Push(nodeOrder[n]);
+                    stack.Push(currentNode);
 
-                while (stack.Count > 0)
-                {
-                    TNode currentNode = stack.Pop();
+                    LinkedList<Connection<TNode, TWeight>> edges = graph.GetConnections(currentNode);
 
-                    if (this.labels[currentNode].IsWhite())
+                    LinkedListNode<Connection<TNode, TWeight>> tempConnection = edges.Last;
+
+                    while (tempConnection != null)
                     {
-                        //
-                        this.parts[this.parts.Count - 1].AddLast(currentNode);
-
-                        this.labels[currentNode].DiscoverTime = ++time;
-
-                        stack.Push(currentNode);
-
-                        LinkedList<Connection<TNode, TWeight>> edges = graph.GetConnections(currentNode);
-
-                        LinkedListNode<Connection<TNode, TWeight>> tempConnection = edges.Last;
-
-                        while (tempConnection != null)
+                        if (this.labels[tempConnection.Value.Node].IsWhite())
                         {
-                            if (this.labels[tempConnection.Value.Node].IsWhite())
-                            {
-                                this.labels[tempConnection.Value.Node].Predecessor = this.labels[currentNode];
+                            this.labels[tempConnection.Value.Node].Predecessor = this.labels[currentNode];
 
-                                stack.Push(tempConnection.Value.Node);
-                            }
-
-                            tempConnection = tempConnection.Previous;
+                            stack.Push(tempConnection.Value.Node);
                         }
 
+                        tempConnection = tempConnection.Previous;
                     }
-                    else if (this.labels[currentNode].IsGray())
-                    {
-                        this.labels[currentNode].FinishTime = ++time;
 
-                        this.nodeOrderBasedOnFinishTime.Add(currentNode);
-                    }
                 }
-
-            }
-        }
-
-
-        public AdjacencyList<TNode, TWeight> GetDepthFirstSearchGraph()
-        {
-            AdjacencyList<TNode, TWeight> result = new AdjacencyList<TNode, TWeight>(this.NumberOfNodes);
-
-            foreach (TNode item in this.labels.Keys)
-            {
-                result.AddNode(item);
-            }
-
-            for (int i = 0; i < this.NumberOfNodes; i++)
-            {
-                if (this.labels.Values[i].Predecessor != null)
+                else if (this.labels[currentNode].IsGray())
                 {
-                    result.AddDirectedEdge(this.labels.Values[i].Predecessor.Value, this.labels.Values[i].Value, new TWeight());
+                    this.labels[currentNode].FinishTime = ++time;
+
+                    this.nodeOrderBasedOnFinishTime.Add(currentNode);
                 }
             }
 
-            return result;
         }
-
-        public static List<LinkedList<TNode>> GetStronglyConnectedComponents(AdjacencyList<TNode, TWeight> graph)
-        {
-            DateTime t0 = DateTime.Now;
-
-            FastDepthFirstSearch<TNode, TWeight> dfs = new FastDepthFirstSearch<TNode, TWeight>(graph);
-
-            TimeSpan dt = DateTime.Now - t0;
-
-            AdjacencyList<TNode, TWeight> dfsGraph = dfs.GetDepthFirstSearchGraph();
-
-            List<TNode> order = dfs.SortedNodesBasedOnFinishTime;
-
-            order.Reverse();
-
-            AdjacencyList<TNode, TWeight> transpose = graph.Transpose();// Graph.Transpose(graph);
-
-            FastDepthFirstSearch<TNode, TWeight> secondDfs = new FastDepthFirstSearch<TNode, TWeight>(transpose, order);
-
-            return secondDfs.parts;
-        }
-
     }
+
+
+    public AdjacencyList<TNode, TWeight> GetDepthFirstSearchGraph()
+    {
+        AdjacencyList<TNode, TWeight> result = new AdjacencyList<TNode, TWeight>(this.NumberOfNodes);
+
+        foreach (TNode item in this.labels.Keys)
+        {
+            result.AddNode(item);
+        }
+
+        for (int i = 0; i < this.NumberOfNodes; i++)
+        {
+            if (this.labels.Values[i].Predecessor != null)
+            {
+                result.AddDirectedEdge(this.labels.Values[i].Predecessor.Value, this.labels.Values[i].Value, new TWeight());
+            }
+        }
+
+        return result;
+    }
+
+    public static List<LinkedList<TNode>> GetStronglyConnectedComponents(AdjacencyList<TNode, TWeight> graph)
+    {
+        DateTime t0 = DateTime.Now;
+
+        FastDepthFirstSearch<TNode, TWeight> dfs = new FastDepthFirstSearch<TNode, TWeight>(graph);
+
+        TimeSpan dt = DateTime.Now - t0;
+
+        AdjacencyList<TNode, TWeight> dfsGraph = dfs.GetDepthFirstSearchGraph();
+
+        List<TNode> order = dfs.SortedNodesBasedOnFinishTime;
+
+        order.Reverse();
+
+        AdjacencyList<TNode, TWeight> transpose = graph.Transpose();// Graph.Transpose(graph);
+
+        FastDepthFirstSearch<TNode, TWeight> secondDfs = new FastDepthFirstSearch<TNode, TWeight>(transpose, order);
+
+        return secondDfs.parts;
+    }
+
 }

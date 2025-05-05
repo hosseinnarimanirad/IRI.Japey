@@ -4,126 +4,125 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
-namespace IRI.Msh.DataStructure
+namespace IRI.Sta.DataStructures;
+
+public class BinaryHeap<T>
 {
-    public class BinaryHeap<T>
+    public T[] values;
+
+    private int pointer;
+
+    public int Length
     {
-        public T[] values;
+        get { return this.pointer; }
+    }
 
-        private int pointer;
+    Func<T, T, int> comparer;
 
-        public int Length
+    public BinaryHeap(T[] array, Func<T, T, int> comparer)
+    {
+        pointer = 0;
+
+        values = new T[array.Length];
+
+        values[pointer] = array[0];
+
+        pointer++;
+
+        this.comparer = comparer;
+
+        while (pointer < array.Length)
         {
-            get { return this.pointer; }
+            this.Add(array[pointer]);
         }
+    }
 
-        Func<T, T, int> comparer;
+    private void Add(T value)
+    {
+        values[pointer] = value;
 
-        public BinaryHeap(T[] array, Func<T, T, int> comparer)
+        int bubbleIndex = this.pointer;
+
+        while (bubbleIndex != 0)
         {
-            pointer = 0;
+            int parentIndex = (int)Math.Floor((bubbleIndex - 1) / 2.0);
 
-            values = new T[array.Length];
-
-            values[pointer] = array[0];
-
-            pointer++;
-
-            this.comparer = comparer;
-
-            while (pointer < array.Length)
+            if (comparer(values[bubbleIndex], values[parentIndex]) > 0)
             {
-                this.Add(array[pointer]);
+                T temp = values[parentIndex];
+
+                values[parentIndex] = values[bubbleIndex];
+
+                values[bubbleIndex] = temp;
+
+                bubbleIndex = parentIndex;
             }
+            else
+                break;
         }
 
-        private void Add(T value)
+        this.pointer++;
+    }
+
+    public T ReleaseValue()
+    {
+        this.pointer--;
+
+        T result = this.values[0];
+
+        this.values[0] = this.values[this.pointer];
+
+        int index, swapIndex;
+
+        swapIndex = 0;
+
+        do
         {
-            values[pointer] = value;
+            index = swapIndex;
 
-            int bubbleIndex = this.pointer;
-
-            while (bubbleIndex != 0)
+            if ((pointer - 1) >= 2 * index + 2)
             {
-                int parentIndex = (int)Math.Floor((bubbleIndex - 1) / 2.0);
-
-                if (comparer(values[bubbleIndex], values[parentIndex]) > 0)
+                if (comparer(values[index], values[2 * index + 2]) < 0 ||
+                   comparer(values[index], values[2 * index + 1]) < 0)
                 {
-                    T temp = values[parentIndex];
-
-                    values[parentIndex] = values[bubbleIndex];
-
-                    values[bubbleIndex] = temp;
-
-                    bubbleIndex = parentIndex;
-                }
-                else
-                    break;
-            }
-
-            this.pointer++;
-        }
-
-        public T ReleaseValue()
-        {
-            this.pointer--;
-
-            T result = this.values[0];
-
-            this.values[0] = this.values[this.pointer];
-
-            int index, swapIndex;
-
-            swapIndex = 0;
-
-            do
-            {
-                index = swapIndex;
-
-                if ((pointer - 1) >= 2 * index + 2)
-                {
-                    if (comparer(values[index], values[2 * index + 2]) < 0 ||
-                       comparer(values[index], values[2 * index + 1]) < 0)
+                    if (comparer(values[2 * index + 2], values[2 * index + 1]) > 0)
                     {
-                        if (comparer(values[2 * index + 2], values[2 * index + 1]) > 0)
-                        {
-                            swapIndex = 2 * index + 2;
-                        }
-                        else
-                        {
-                            swapIndex = 2 * index + 1;
-                        }
+                        swapIndex = 2 * index + 2;
                     }
-                    if (comparer(values[swapIndex], values[2 * index + 1]) < 0)
+                    else
                     {
                         swapIndex = 2 * index + 1;
                     }
                 }
-                else if ((pointer - 1) >= 2 * index + 1)
+                if (comparer(values[swapIndex], values[2 * index + 1]) < 0)
                 {
-                    if (comparer(values[index], values[2 * index + 1]) < 0)
-                    {
-                        swapIndex = 2 * index + 1;
-                    }
+                    swapIndex = 2 * index + 1;
                 }
-
-                if (index != swapIndex)
+            }
+            else if ((pointer - 1) >= 2 * index + 1)
+            {
+                if (comparer(values[index], values[2 * index + 1]) < 0)
                 {
-                    T temp = values[index];
-
-                    values[index] = values[swapIndex];
-
-                    values[swapIndex] = temp;
+                    swapIndex = 2 * index + 1;
                 }
+            }
 
-            } while (index != swapIndex);
+            if (index != swapIndex)
+            {
+                T temp = values[index];
 
-            return result;
-        }
+                values[index] = values[swapIndex];
 
-        public T SeekValue()
-        {
-            return this.values[0];
-        }
+                values[swapIndex] = temp;
+            }
+
+        } while (index != swapIndex);
+
+        return result;
+    }
+
+    public T SeekValue()
+    {
+        return this.values[0];
     }
 }

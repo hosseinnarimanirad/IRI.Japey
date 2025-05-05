@@ -1,5 +1,5 @@
 ﻿using IRI.Article.Sfc.View;
-using IRI.Msh.DataStructure;
+using IRI.Sta.DataStructures;
 using IRI.Sta.Common.Analysis.SFC;
 using System;
 using System.Diagnostics;

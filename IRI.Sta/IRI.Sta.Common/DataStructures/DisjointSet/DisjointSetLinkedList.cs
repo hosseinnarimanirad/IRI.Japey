@@ -6,69 +6,68 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace IRI.Msh.DataStructure
+namespace IRI.Sta.DataStructures;
+
+//Not implemented
+public class DisjointSet<T>
 {
-    //Not implemented
-    public class DisjointSet<T>
+    public List<LinkedList<T>> values;
+
+    public DisjointSet(T[] nodes)
     {
-        public List<LinkedList<T>> values;
+        this.values = new List<LinkedList<T>>();
 
-        public DisjointSet(T[] nodes)
+        for (int i = 0; i < nodes.Length; i++)
         {
-            this.values = new List<LinkedList<T>>();
+            LinkedList<T> temp = new LinkedList<T>();
 
-            for (int i = 0; i < nodes.Length; i++)
+            temp.AddFirst(nodes[i]);
+
+            this.values.Add(temp);
+        }
+    }
+
+    public DisjointSet(List<T> nodes)
+    {
+        this.values = new List<LinkedList<T>>();
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            LinkedList<T> temp = new LinkedList<T>();
+
+            temp.AddFirst(nodes[i]);
+
+            this.values.Add(temp);
+        }
+    }
+
+    public DisjointSet(List<List<T>> nodes)
+    {
+        this.values = new List<LinkedList<T>>();
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            LinkedList<T> temp = new LinkedList<T>();
+
+            foreach (T item in nodes[i])
             {
-                LinkedList<T> temp = new LinkedList<T>();
-
-                temp.AddFirst(nodes[i]);
-
-                this.values.Add(temp);
+                temp.AddFirst(item);
             }
+
+            this.values.Add(temp);
         }
+    }
 
-        public DisjointSet(List<T> nodes)
-        {
-            this.values = new List<LinkedList<T>>();
+    public DisjointSet(List<LinkedList<T>> nodes)
+    {
 
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                LinkedList<T> temp = new LinkedList<T>();
+    }
 
-                temp.AddFirst(nodes[i]);
+    public void Join(DisjointSet<T> firstSet, DisjointSet<T> secondSet)
+    {
+        //if (!(this.values.Contains(firstSet) && this.values.Contains(secondSet)))
+        //{
 
-                this.values.Add(temp);
-            }
-        }
-
-        public DisjointSet(List<List<T>> nodes)
-        {
-            this.values = new List<LinkedList<T>>();
-
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                LinkedList<T> temp = new LinkedList<T>();
-
-                foreach (T item in nodes[i])
-                {
-                    temp.AddFirst(item);
-                }
-
-                this.values.Add(temp);
-            }
-        }
-
-        public DisjointSet(List<LinkedList<T>> nodes)
-        {
-
-        }
-
-        public void Join(DisjointSet<T> firstSet, DisjointSet<T> secondSet)
-        {
-            //if (!(this.values.Contains(firstSet) && this.values.Contains(secondSet)))
-            //{
-
-            //}
-        }
+        //}
     }
 }

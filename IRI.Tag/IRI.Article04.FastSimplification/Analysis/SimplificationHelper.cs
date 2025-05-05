@@ -7,6 +7,8 @@ using System.Diagnostics;
 using IRI.Sta.Common.Model.GeoJson;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using System.Text;
+using System.Windows.Threading;
+using System.IO;
 
 namespace IRI.Article04.FastSimplification;
 
@@ -50,7 +52,7 @@ public static class SimplificationHelper
 
             watch.Restart();
 
-            ProcessShapefile(file, writer);
+            await ProcessShapefile(file, writer, writeFolder);
 
             File.AppendAllLines(logFile, new List<string>() { $"Finished At: {DateTime.Now.ToLongTimeString()}; Ellapsed: {watch.ElapsedMilliseconds / 1000.0:N0000} (s) - ({fileName})" });
         }
@@ -59,7 +61,7 @@ public static class SimplificationHelper
         writer.Dispose();
     }
 
-    private static void ProcessShapefile(string shpFile, StreamWriter writer)
+    private static async Task ProcessShapefile(string shpFile, StreamWriter writer, string outputDirectory)
     {
         var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
@@ -69,7 +71,7 @@ public static class SimplificationHelper
                                 .Select(g => g.AsGeometry())
                                 .SelectMany(g => g.Split(false))
                                 .Where(g => !g.IsNullOrEmpty())
-                                .Where(g => g.TotalNumberOfPoints > 100)
+                                .Where(g => g.TotalNumberOfPoints > 4)
                                 .ToList();
 
         foreach (var feature in features)
@@ -92,15 +94,26 @@ public static class SimplificationHelper
 
         Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
 
-        var boundingBox = features.GetBoundingBox();
+        var groundBoundingBox = features.GetBoundingBox();
 
-        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(boundingBox, /*34,*/ 512, 512);
+        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 512, 512);
+
+        var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
+
+        var currentScreenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, groundBoundingBox);
 
         // threshold values is set to 0.5 pixel
         var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 0.5);
 
         var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
-       
+         
+        var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
+
+        var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+        originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
+
+
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         foreach (var method in methods)
@@ -113,7 +126,7 @@ public static class SimplificationHelper
 
             if (simplifiedFeatures.IsNullOrEmpty())
                 continue;
-             
+
             writer.WriteLine(
               new SpeedLog(fileName,
                             methodNames[method],
@@ -121,12 +134,19 @@ public static class SimplificationHelper
                             simplifiedFeatures,
                             stopwatch.ElapsedMilliseconds,
                             parameters).ToTsv());
+
+            var vectorLayer = GeneralHelper.GetAsLayer("original", features);
+
+            var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+            simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}.png", System.Drawing.Imaging.ImageFormat.Tiff);
+
+            //var diff = await GeneralHelper.CreateImages(groundBoundingBox, estimatedZoomLevel, originalBitmap, vectorLayer, tempDirectory, fileName, $"{method}");
+            //builder.AppendLine(new LogStructure(fileName, totalNumberOfPoints, simplified, level, diff.percent, $"{method.GetDescription()}", stopwatch.ElapsedMilliseconds, parameters, coef).ToTsv());
+            //diff.image.Dispose();
         }
 
     }
-
-
-
 
 
     #region Test with visual output
@@ -406,7 +426,7 @@ public static class SimplificationHelper
     //}
 
     #endregion
-     
+
 
 
     //// برای یک فایل مشخص به صورت خودکار

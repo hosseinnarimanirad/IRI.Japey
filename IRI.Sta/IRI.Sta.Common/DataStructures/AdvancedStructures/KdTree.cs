@@ -3,79 +3,78 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.DataStructure.AdvancedStructures
+namespace IRI.Sta.DataStructures.AdvancedStructures;
+
+public class KdTree<T>
 {
-    public class KdTree<T>
+    public KdTreeNode<T> Root { get; set; }
+
+    List<Func<T, T, int>> comparers;
+
+    public KdTree(T[] values, List<Func<T, T, int>> comparers)
     {
-        public KdTreeNode<T> Root { get; set; }
-
-        List<Func<T, T, int>> comparers;
-
-        public KdTree(T[] values, List<Func<T, T, int>> comparers)
+        if (values.Equals(null) || comparers.Equals(null))
         {
-            if (values.Equals(null) || comparers.Equals(null))
-            {
-                return;
-            }
-
-            this.Root = new KdTreeNode<T>(values[0]);
-
-            this.comparers = comparers;
-
-            for (int i = 1; i < values.Length; i++)
-            {
-                Insert(values[i]);
-            }
+            return;
         }
 
-        private void Insert(T value)
+        this.Root = new KdTreeNode<T>(values[0]);
+
+        this.comparers = comparers;
+
+        for (int i = 1; i < values.Length; i++)
         {
-            Add(this.Root, value);
+            Insert(values[i]);
         }
+    }
 
-        private void Add(KdTreeNode<T> parent, T childValue)
+    private void Insert(T value)
+    {
+        Add(this.Root, value);
+    }
+
+    private void Add(KdTreeNode<T> parent, T childValue)
+    {
+        int functionIndex = GetNodeLevel(parent) % comparers.Count;
+
+        if (this.comparers[functionIndex](parent.Point, childValue) >= 0)
         {
-            int functionIndex = GetNodeLevel(parent) % comparers.Count;
-
-            if (this.comparers[functionIndex](parent.Point, childValue) >= 0)
+            if (parent.LeftChild != null)
             {
-                if (parent.LeftChild != null)
-                {
-                    Add(parent.LeftChild, childValue);
-                }
-                else
-                {
-                    //int nodeLevel = 1 + GetNodeLevel(parent);
-
-                    parent.LeftChild = new KdTreeNode<T>(childValue);
-                }
+                Add(parent.LeftChild, childValue);
             }
             else
             {
-                if (parent.RigthChild != null)
-                {
-                    Add(parent.RigthChild, childValue);
-                }
-                else
-                {
-                    //int nodeLevel = 1 + GetNodeLevel(parent);
+                //int nodeLevel = 1 + GetNodeLevel(parent);
 
-                    parent.RigthChild = new KdTreeNode<T>(childValue);
-                }
+                parent.LeftChild = new KdTreeNode<T>(childValue);
             }
-
         }
-
-        public int GetNodeLevel(KdTreeNode<T> node)
+        else
         {
-            if (object.Equals(null, node.Parent))
+            if (parent.RigthChild != null)
             {
-                return 0;
+                Add(parent.RigthChild, childValue);
             }
             else
             {
-                return GetNodeLevel(node.Parent) + 1;
+                //int nodeLevel = 1 + GetNodeLevel(parent);
+
+                parent.RigthChild = new KdTreeNode<T>(childValue);
             }
+        }
+
+    }
+
+    public int GetNodeLevel(KdTreeNode<T> node)
+    {
+        if (object.Equals(null, node.Parent))
+        {
+            return 0;
+        }
+        else
+        {
+            return GetNodeLevel(node.Parent) + 1;
         }
     }
 }

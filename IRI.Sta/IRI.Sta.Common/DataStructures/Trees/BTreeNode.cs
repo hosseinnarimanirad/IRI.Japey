@@ -3,45 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Msh.DataStructure.Trees
+namespace IRI.Sta.DataStructures.Trees;
+
+public class BTreeNode<T> where T : IComparable
 {
-    public class BTreeNode<T> where T : IComparable
+    private int numberOfKeys;
+
+    //public int NumberOfKeys { get; set; }
+    public int NumberOfKeys { get { return this.Keys.Count; } }
+
+    public bool IsLeaf { get; set; }
+
+    public List<T> Keys;
+
+    public List<BTreeNode<T>> pointers;
+
+    public BTreeNode()
     {
-        private int numberOfKeys;
+        this.Keys = new List<T>();
 
-        //public int NumberOfKeys { get; set; }
-        public int NumberOfKeys { get { return this.Keys.Count; } }
+        this.pointers = new List<BTreeNode<T>>();
 
-        public bool IsLeaf { get; set; }
+        this.IsLeaf = true;
+    }
 
-        public List<T> Keys;
+    public override string ToString()
+    {
+        string result = string.Empty;
 
-        public List<BTreeNode<T>> pointers;
-
-        public BTreeNode()
+        foreach (T item in Keys)
         {
-            this.Keys = new List<T>();
-
-            this.pointers = new List<BTreeNode<T>>();
-
-            this.IsLeaf = true;
+            result += string.Format("{0}, ", item.ToString());
         }
 
-        public override string ToString()
+        if (result.Length > 0)
         {
-            string result = string.Empty;
-
-            foreach (T item in Keys)
-            {
-                result += string.Format("{0}, ", item.ToString());
-            }
-
-            if (result.Length > 0)
-            {
-                result.Remove(result.Length - 2, 2);
-            }
-
-            return result;
+            result.Remove(result.Length - 2, 2);
         }
+
+        return result;
     }
 }

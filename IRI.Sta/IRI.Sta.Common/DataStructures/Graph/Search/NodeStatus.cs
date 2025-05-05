@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Graph
+namespace IRI.Sta.DataStructures.Graph;
+
+public enum NodeStatus : byte
 {
-    public enum NodeStatus : byte
-    {
-        White,
-        Gray,
-        Black
-    }
+    White,
+    Gray,
+    Black
 }

@@ -5,38 +5,37 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.Graph.GraphRepresentation
+namespace IRI.Sta.DataStructures.Graph;
+
+public struct Connection<TNode, TWeight>
 {
-    public struct Connection<TNode, TWeight>
+    private TNode m_Node;
+
+    private TWeight m_Weight;
+
+    public TNode Node
     {
-        private TNode m_Node;
+        get { return this.m_Node; }
 
-        private TWeight m_Weight;
+        set { m_Node = value; }
+    }
 
-        public TNode Node
-        {
-            get { return this.m_Node; }
+    public TWeight Weight
+    {
+        get { return this.m_Weight; }
 
-            set { m_Node = value; }
-        }
+        set { this.m_Weight = value; }
+    }
 
-        public TWeight Weight
-        {
-            get { return this.m_Weight; }
+    public Connection(TNode node, TWeight weight)
+    {
+        this.m_Node = node;
 
-            set { this.m_Weight = value; }
-        }
+        this.m_Weight = weight;
+    }
 
-        public Connection(TNode node, TWeight weight)
-        {
-            this.m_Node = node;
-
-            this.m_Weight = weight;
-        }
-
-        public override string ToString()
-        {
-            return Node.ToString();
-        }
+    public override string ToString()
+    {
+        return Node.ToString();
     }
 }

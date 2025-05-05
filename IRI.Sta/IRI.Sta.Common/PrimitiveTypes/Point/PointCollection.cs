@@ -311,11 +311,11 @@ public class PointCollection : IEnumerable<Point>
     #endregion
     
     /*Sort
-    //public void Sort(IRI.Msh.DataStructure.SortDirection direction, PointComparisonPriority priority)
+    //public void Sort(IRI.Sta.DataStructures.SortDirection direction, PointComparisonPriority priority)
     //{
     //    Point.ComparisonPriority = priority;
 
-    //    IRI.Msh.DataStructure.SortAlgorithm.Heapsort<Point>(ref this.points, direction);
+    //    IRI.Sta.DataStructures.SortAlgorithm.Heapsort<Point>(ref this.points, direction);
 
     //    //RefreshCodes();
     //}

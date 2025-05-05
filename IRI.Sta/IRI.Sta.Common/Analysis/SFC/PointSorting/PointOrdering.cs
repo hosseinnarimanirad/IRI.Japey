@@ -1,4 +1,4 @@
-﻿using IRI.Msh.DataStructure;
+﻿using IRI.Sta.DataStructures;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Common.Analysis.SFC;
@@ -68,14 +68,14 @@ public class PointOrdering
 
         var sfc = SpaceFillingCurves.Hilbert(Moves.North, Moves.East);
 
-        //IRI.Msh.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+        //IRI.Sta.DataStructures.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
         //return array;
 
         //Array.Sort(array, new Comparison<Point>((p1, p2) => sfc.ComparePoints(p1, p2, boundary)));
         //return array;
 
-        //return IRI.Msh.DataStructure.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
-        //return IRI.Msh.DataStructure.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+        //return IRI.Sta.DataStructures.SortAlgorithm.Heapsort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
+        //return IRI.Sta.DataStructures.SortAlgorithm.MergeSort<Point>(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
 
 
         SortAlgorithm.BubbleSort(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));
@@ -100,7 +100,7 @@ public class PointOrdering
 
         //return SortAlgorithm.Heapsort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
         //return SortAlgorithm.MergeSort<Point>(array, (p1, p2) => NOrderingComparer(p1, p2, boundary));
-        //IRI.Msh.DataStructure.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
+        //IRI.Sta.DataStructures.SortAlgorithm.QuickSort<Point>(array, (p1, p2) => HilbertComparer(p1, p2, boundary));
         //return array;
 
         return SortAlgorithm.MergeSort(array, (p1, p2) => sfc.ComparePoints(p1, p2, boundary));

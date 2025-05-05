@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using IRI.Sta.Common.Model.GeoJson;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Msh.DataStructure.AdvancedStructures;
+using IRI.Sta.DataStructures.AdvancedStructures;
 
 
 namespace IRI.Extensions;
@@ -422,6 +422,9 @@ public static class Sta_GeometryExtensions
                 return result;
 
             var points = source.Where(i => i.Type == GeometryType.Point).Select(i => new Point(i.Points[0].X, i.Points[0].Y)).ToList();
+
+            if (points.IsNullOrEmpty())
+                return new List<Geometry<Point>>();
 
             Stopwatch watch = Stopwatch.StartNew();
 

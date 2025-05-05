@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Msh.DataStructure
+namespace IRI.Sta.DataStructures;
+
+public enum SortDirection
 {
-    public enum SortDirection
-    {
-        Ascending,
-        Descending
-    }
+    Ascending,
+    Descending
 }

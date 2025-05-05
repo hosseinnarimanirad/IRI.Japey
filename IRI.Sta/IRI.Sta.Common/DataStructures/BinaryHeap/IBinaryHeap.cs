@@ -1,9 +1,8 @@
 ﻿using System;
-namespace IRI.Msh.DataStructure
+namespace IRI.Sta.DataStructures;
+
+public interface IBinaryHeap<T> where T : IComparable<T>
 {
-    public interface IBinaryHeap<T> where T : IComparable<T>
-    {
-        int Length { get; }
-        T ReleaseValue();
-    }
+    int Length { get; }
+    T ReleaseValue();
 }

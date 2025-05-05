@@ -1,11 +1,8 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using System;
-using System.Collections.Generic;
-using IRI.Sta.Mathematics;
-using IRI.Msh.DataStructure;
-using System.Xml.Serialization;
+using IRI.Sta.DataStructures;
+using IRI.Sta.DataStructures.CustomStructures;
 
 namespace IRI.Ket.DigitalImageProcessing.ImageMatching
 {

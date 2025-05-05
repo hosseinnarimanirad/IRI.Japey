@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Text; 
 using IRI.Sta.Mathematics;
-using IRI.Msh.DataStructure;
+using IRI.Sta.DataStructures;
 using IRI.Sta.Common.Analysis.Topology;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.DataStructures.CustomStructures;
 
 namespace IRI.Sta.Common.Analysis;
 
