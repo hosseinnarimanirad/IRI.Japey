@@ -31,7 +31,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi.Win32
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi.Win32
 {
 	internal static class NativeMethod
 	{

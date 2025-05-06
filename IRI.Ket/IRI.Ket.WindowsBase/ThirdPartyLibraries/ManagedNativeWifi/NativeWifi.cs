@@ -31,11 +31,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IRI.Ket.Common.Devices.ManagedNativeWifi.Common;
-using static IRI.Ket.Common.Devices.ManagedNativeWifi.Win32.NativeMethod;
-using Base = IRI.Ket.Common.Devices.ManagedNativeWifi.Win32.BaseMethod;
+using IRI.Ket.WindowsBase.ManagedNativeWifi.Common;
+using static IRI.Ket.WindowsBase.ManagedNativeWifi.Win32.NativeMethod;
+using Base = IRI.Ket.WindowsBase.ManagedNativeWifi.Win32.BaseMethod;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi
 {
 	/// <summary>
 	/// A managed implementation of Native Wifi API

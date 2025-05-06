@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi.Common
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi.Common
 {
 	/// <summary>
 	/// Container of disposable object

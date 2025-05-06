@@ -4,104 +4,103 @@ using IRI.Sta.Common.IO.Gpx;
 using Microsoft.SqlServer.Types;
 
 //namespace IRI.Ket.SqlServerSpatialExtension
-namespace IRI.Extensions
+namespace IRI.Extensions;
+
+public static class GpxExtensions
 {
-    public static class GpxExtensions
+    public static SqlGeography AsGeography(this GpxWaypoint point)
     {
-        public static SqlGeography AsGeography(this GpxWaypoint point)
+        SqlGeographyBuilder builder = new SqlGeographyBuilder();
+
+        builder.SetSrid(SridHelper.GeodeticWGS84);
+
+        builder.BeginGeography(OpenGisGeographyType.Point);
+
+        builder.BeginFigure(point.Latitude, point.Longitude);
+
+        builder.EndFigure();
+
+        builder.EndGeography();
+
+        return builder.ConstructedGeography;
+    }
+
+    public static SqlGeography AsGeography(this GpxTrackPoint point)
+    {
+        SqlGeographyBuilder builder = new SqlGeographyBuilder();
+
+        builder.SetSrid(SridHelper.GeodeticWGS84);
+
+        builder.BeginGeography(OpenGisGeographyType.Point);
+
+        builder.BeginFigure(point.Latitude, point.Longitude);
+
+        builder.EndFigure();
+
+        builder.EndGeography();
+
+        return builder.ConstructedGeography;
+    }
+
+    public static SqlGeography AsGeography(this GpxTrackSegment trackSegment)
+    {
+        SqlGeographyBuilder builder = new SqlGeographyBuilder();
+
+        builder.SetSrid(SridHelper.GeodeticWGS84);
+
+        //builder.BeginGeography(OpenGisGeographyType.LineString);
+        if (trackSegment.TrackPoints.Count < 2)
+            return null;
+
+        AddTrackSegment(builder, trackSegment);
+
+        //builder.EndGeography();
+
+        return builder.ConstructedGeography.STIsValid().Value ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
+    }
+
+    public static SqlGeography AsGeography(this GpxTrack track)
+    {
+        SqlGeographyBuilder builder = new SqlGeographyBuilder();
+
+        builder.SetSrid(SridHelper.GeodeticWGS84);
+
+        builder.BeginGeography(OpenGisGeographyType.MultiLineString);
+
+        foreach (var item in track.Segments)
         {
-            SqlGeographyBuilder builder = new SqlGeographyBuilder();
+            if (item.TrackPoints.Count < 2)
+                continue;
 
-            builder.SetSrid(SridHelper.GeodeticWGS84);
+            AddTrackSegment(builder, item);
+            //builder.BeginFigure(item.TrackPoints[0].Latitude, item.TrackPoints[0].Longitude);
 
-            builder.BeginGeography(OpenGisGeographyType.Point);
+            //for (int i = 1; i < item.TrackPoints.Count; i++)
+            //{
+            //    builder.AddLine(item.TrackPoints[i].Latitude, item.TrackPoints[i].Longitude);
+            //}
 
-            builder.BeginFigure(point.Latitude, point.Longitude);
-
-            builder.EndFigure();
-
-            builder.EndGeography();
-
-            return builder.ConstructedGeography;
+            //builder.EndFigure();
         }
 
-        public static SqlGeography AsGeography(this GpxTrackPoint point)
+        builder.EndGeography();
+
+        return builder.ConstructedGeography.STIsValid().Value ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
+    }
+
+    private static void AddTrackSegment(SqlGeographyBuilder builder, GpxTrackSegment segment)
+    {
+        builder.BeginGeography(OpenGisGeographyType.LineString);
+
+        builder.BeginFigure(segment.TrackPoints[0].Latitude, segment.TrackPoints[0].Longitude);
+
+        for (int i = 1; i < segment.TrackPoints.Count; i++)
         {
-            SqlGeographyBuilder builder = new SqlGeographyBuilder();
-
-            builder.SetSrid(SridHelper.GeodeticWGS84);
-
-            builder.BeginGeography(OpenGisGeographyType.Point);
-
-            builder.BeginFigure(point.Latitude, point.Longitude);
-
-            builder.EndFigure();
-
-            builder.EndGeography();
-
-            return builder.ConstructedGeography;
+            builder.AddLine(segment.TrackPoints[i].Latitude, segment.TrackPoints[i].Longitude);
         }
 
-        public static SqlGeography AsGeography(this GpxTrackSegment trackSegment)
-        {
-            SqlGeographyBuilder builder = new SqlGeographyBuilder();
+        builder.EndFigure();
 
-            builder.SetSrid(SridHelper.GeodeticWGS84);
-
-            //builder.BeginGeography(OpenGisGeographyType.LineString);
-            if (trackSegment.TrackPoints.Count < 2)
-                return null;
-
-            AddTrackSegment(builder, trackSegment);
-
-            //builder.EndGeography();
-
-            return builder.ConstructedGeography.STIsValid().Value ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
-        }
-
-        public static SqlGeography AsGeography(this GpxTrack track)
-        {
-            SqlGeographyBuilder builder = new SqlGeographyBuilder();
-
-            builder.SetSrid(SridHelper.GeodeticWGS84);
-
-            builder.BeginGeography(OpenGisGeographyType.MultiLineString);
-
-            foreach (var item in track.Segments)
-            {
-                if (item.TrackPoints.Count < 2)
-                    continue;
-
-                AddTrackSegment(builder, item);
-                //builder.BeginFigure(item.TrackPoints[0].Latitude, item.TrackPoints[0].Longitude);
-
-                //for (int i = 1; i < item.TrackPoints.Count; i++)
-                //{
-                //    builder.AddLine(item.TrackPoints[i].Latitude, item.TrackPoints[i].Longitude);
-                //}
-
-                //builder.EndFigure();
-            }
-
-            builder.EndGeography();
-
-            return builder.ConstructedGeography.STIsValid().Value ? builder.ConstructedGeography : builder.ConstructedGeography.MakeValid();
-        }
-
-        private static void AddTrackSegment(SqlGeographyBuilder builder, GpxTrackSegment segment)
-        {
-            builder.BeginGeography(OpenGisGeographyType.LineString);
-
-            builder.BeginFigure(segment.TrackPoints[0].Latitude, segment.TrackPoints[0].Longitude);
-
-            for (int i = 1; i < segment.TrackPoints.Count; i++)
-            {
-                builder.AddLine(segment.TrackPoints[i].Latitude, segment.TrackPoints[i].Longitude);
-            }
-
-            builder.EndFigure();
-
-            builder.EndGeography();
-        }
+        builder.EndGeography();
     }
 }

@@ -31,7 +31,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi
 {
 	/// <summary>
 	/// Container of wireless profile document

@@ -28,7 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi
 {
 	/// <summary>
 	/// Data encryption type to be used to connect to wireless LAN

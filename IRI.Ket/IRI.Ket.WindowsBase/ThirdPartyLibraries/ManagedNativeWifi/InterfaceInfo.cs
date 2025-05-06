@@ -28,9 +28,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static IRI.Ket.Common.Devices.ManagedNativeWifi.Win32.NativeMethod;
+using static IRI.Ket.WindowsBase.ManagedNativeWifi.Win32.NativeMethod;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi
 {
 	/// <summary>
 	/// Wireless interface information

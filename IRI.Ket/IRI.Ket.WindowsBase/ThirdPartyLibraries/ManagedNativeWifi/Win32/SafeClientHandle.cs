@@ -30,9 +30,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-using static IRI.Ket.Common.Devices.ManagedNativeWifi.Win32.NativeMethod;
+using static IRI.Ket.WindowsBase.ManagedNativeWifi.Win32.NativeMethod;
 
-namespace IRI.Ket.Common.Devices.ManagedNativeWifi.Win32
+namespace IRI.Ket.WindowsBase.ManagedNativeWifi.Win32
 {
 	/// <summary>
 	/// Wrapper class only for handle taken by WlanOpenHandle function in Native Wifi API
