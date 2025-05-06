@@ -12,6 +12,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;
+using IRI.Ket.SqlServerPersistence;
 
 namespace IRI.Jab.Common
 {

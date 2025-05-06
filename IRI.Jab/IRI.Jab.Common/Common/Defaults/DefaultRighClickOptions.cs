@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Common.Defaults
+namespace IRI.Jab.Common.Defaults
 {
     public static class DefaultRighClickOptions
     {

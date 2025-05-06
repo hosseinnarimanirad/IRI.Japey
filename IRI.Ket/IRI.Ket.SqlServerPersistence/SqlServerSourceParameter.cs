@@ -4,31 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Ket.Persistence.Model
+namespace IRI.Ket.SqlServerPersistence;
+
+public class SqlServerSourceParameter
 {
-    public class SqlServerSourceParameter
+    public string ConnectionString { get; set; }
+    
+    public string TableName { get; set; }
+
+    public string SpatialColumnName { get; set; }
+
+    public string LabelColumn { get; set; }
+
+    public string QueryString { get; set; }
+
+    public SqlServerSourceParameter(string connectionString, string tableName, string spatialColumnName, string labelColumn, string queryString)
     {
-        public string ConnectionString { get; set; }
-        
-        public string TableName { get; set; }
+        ConnectionString = connectionString;
 
-        public string SpatialColumnName { get; set; }
+        TableName = tableName;
 
-        public string LabelColumn { get; set; }
+        SpatialColumnName = spatialColumnName;
 
-        public string QueryString { get; set; }
+        LabelColumn = labelColumn;
 
-        public SqlServerSourceParameter(string connectionString, string tableName, string spatialColumnName, string labelColumn, string queryString)
-        {
-            ConnectionString = connectionString;
-
-            TableName = tableName;
-
-            SpatialColumnName = spatialColumnName;
-
-            LabelColumn = labelColumn;
-
-            QueryString = queryString;
-        }
+        QueryString = queryString;
     }
 }
