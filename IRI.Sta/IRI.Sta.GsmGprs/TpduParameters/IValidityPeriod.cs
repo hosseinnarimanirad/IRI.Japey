@@ -1,13 +1,12 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Ket.GsmGprsCommunication.TpduParameters
+namespace IRI.Sta.GsmGprs.TpduParameters;
+
+internal interface IValidityPeriod
 {
-    internal interface IValidityPeriod
+     string OctetRepresentation
     {
-         string OctetRepresentation
-        {
-            get;
-        }
+        get;
     }
 }

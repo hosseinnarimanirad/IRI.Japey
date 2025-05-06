@@ -5,9 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Ket.GsmGprsCommunication
+namespace IRI.Sta.GsmGprs;
+
+class PduDecoder
 {
-    class PduDecoder
-    {
-    }
 }
