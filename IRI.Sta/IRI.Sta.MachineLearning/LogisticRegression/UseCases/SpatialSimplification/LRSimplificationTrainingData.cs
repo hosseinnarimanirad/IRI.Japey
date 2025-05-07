@@ -1,5 +1,6 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
         {
             string.Join(",", this.Features.Select(f => f.ToString()).Concat([decisionFieldName]))
         };
-         
+
         foreach (var record in this.Records)
         {
             lines.Add(string.Join(",", record.FeatureValues.Concat([record.IsRetained ? 1 : 0])));
@@ -98,7 +99,7 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
 
             for (int originalIndex = simplifiedIndex; originalIndex < originalPoints.Count; originalIndex++)
             {
-                if (Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(currentPoint, originalPoints[originalIndex]) < Sta.Common.Analysis.SpatialUtility.EpsilonDistance)
+                if (IRI.Sta.Spatial.Analysis.SpatialUtility.GetEuclideanDistance(currentPoint, originalPoints[originalIndex]) < IRI.Sta.Spatial.Analysis.SpatialUtility.EpsilonDistance)
                 {
                     indexMap.Add(simplifiedIndex, originalIndex);
 

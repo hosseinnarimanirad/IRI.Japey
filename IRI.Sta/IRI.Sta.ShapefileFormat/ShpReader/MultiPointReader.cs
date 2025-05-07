@@ -1,71 +1,69 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using System;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShpReader;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace IRI.Sta.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader;
+
+public class MultiPointReader : PointsReader<EsriMultiPoint>
 {
-    public class MultiPointReader : PointsReader<EsriMultiPoint>
+    public MultiPointReader(string fileName, int srid)
+        : base(fileName, EsriShapeType.EsriMultiPoint, srid)
     {
-        public MultiPointReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriMultiPoint, srid)
-        {
 
+    }
+
+    protected override EsriMultiPoint ReadElement()
+    {
+        int shapeType = shpReader.ReadInt32();
+
+        if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPoint)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override EsriMultiPoint ReadElement()
-        {
-            int shapeType = shpReader.ReadInt32();
+        BoundingBox boundingBox = this.ReadBoundingBox();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPoint)
-            {
-                throw new NotImplementedException();
-            }
+        int numPoints = shpReader.ReadInt32();
 
-            IRI.Sta.Common.Primitives.BoundingBox boundingBox = this.ReadBoundingBox();
+        EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
 
-            int numPoints = shpReader.ReadInt32();
+        return new EsriMultiPoint(boundingBox, points);
+    }
 
-            EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
+    public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
+    {
+        //+8: pass the record header; +4 pass the shapeType
+        reader.BaseStream.Position = offset * 2 + 8 + 4;
 
-            return new EsriMultiPoint(boundingBox, points);
-        }
+        //var byteArray = reader.ReadBytes(contentLength * 2 - 8);
 
-        public static EsriMultiPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
-        {
-            //+8: pass the record header; +4 pass the shapeType
-            reader.BaseStream.Position = offset * 2 + 8 + 4;
+        var boundingBox = ShpBinaryReader.ReadBoundingBox(reader);
 
-            //var byteArray = reader.ReadBytes(contentLength * 2 - 8);
+        var numPoints = reader.ReadInt32();
 
-            var boundingBox = ShpBinaryReader.ReadBoundingBox(reader);
+        var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
 
-            var numPoints = reader.ReadInt32();
+        return new EsriMultiPoint(boundingBox, points);
+    }
+     
+    public static EsriMultiPoint ParseGdbRecord(byte[] bytes, int srid)
+    {
+        // 4: shape type
+        var offset = 4;
 
-            var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
+        var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+        offset += 4 * ShapeConstants.DoubleSize;
 
-            return new EsriMultiPoint(boundingBox, points);
-        }
+        var numPoints = BitConverter.ToInt32(bytes, offset);
+        offset += ShapeConstants.IntegerSize;
+
+        var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+        offset += numPoints * 2 * ShapeConstants.DoubleSize;
          
-        public static EsriMultiPoint ParseGdbRecord(byte[] bytes, int srid)
-        {
-            // 4: shape type
-            var offset = 4;
-
-            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
-            offset += 4 * ShapeConstants.DoubleSize;
-
-            var numPoints = BitConverter.ToInt32(bytes, offset);
-            offset += ShapeConstants.IntegerSize;
-
-            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
-            offset += numPoints * 2 * ShapeConstants.DoubleSize;
-             
-            return new EsriMultiPoint(boundingBox, points);
-        }
+        return new EsriMultiPoint(boundingBox, points);
     }
 }

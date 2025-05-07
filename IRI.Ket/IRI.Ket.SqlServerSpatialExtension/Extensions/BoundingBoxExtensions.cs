@@ -1,6 +1,7 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;
 

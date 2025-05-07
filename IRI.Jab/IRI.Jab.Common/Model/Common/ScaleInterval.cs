@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Sta.Spatial.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,9 +69,9 @@ namespace IRI.Jab.Common
                 throw new NotImplementedException();
             }
 
-            var minInverse = (1.0 / IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel) + .5);
+            var minInverse = (1.0 / WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel) + .5);
 
-            var maxInverse = (1.0 / IRI.Sta.Common.Mapping.WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel) - .5);
+            var maxInverse = (1.0 / WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel) - .5);
 
             return new ScaleInterval(maxInverse, minInverse);
         }

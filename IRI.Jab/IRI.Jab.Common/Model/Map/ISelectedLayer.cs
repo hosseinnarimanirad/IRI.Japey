@@ -1,6 +1,6 @@
 ﻿
 using IRI.Sta.Common.Model;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
-using IRI.Sta.Common.Primitives; 
-using IRI.Sta.ShapefileFormat; 
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.ShapefileFormat;
 
 namespace IRI.Ket.Persistence.DataSources;
 

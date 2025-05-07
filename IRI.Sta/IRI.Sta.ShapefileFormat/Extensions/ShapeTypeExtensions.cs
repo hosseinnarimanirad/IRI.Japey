@@ -1,11 +1,7 @@
-﻿using IRI.Sta.Common.Contracts.Bing;
-using IRI.Sta.Common.Contracts.Google;
-using IRI.Sta.Common.Primitives;
+﻿using System;
 using IRI.Sta.PersonalGdb;
-using IRI.Sta.ShapefileFormat.EsriType; 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using IRI.Sta.ShapefileFormat.EsriType;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;
 

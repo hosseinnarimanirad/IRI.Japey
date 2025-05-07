@@ -1,11 +1,13 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Sta.Common.Model.GeoJson;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Primitives.Esri;
+using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using Microsoft.SqlServer.Types;
 using System.Text;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives.Esri;
+using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Extensions;
 
@@ -1433,12 +1435,12 @@ public static class SqlGeometryExtensions
 
     #region Model
 
-    public static SqlGeometry AsSqlGeometry(this IRI.Sta.Common.Model.TileInfo tile)
+    public static SqlGeometry AsSqlGeometry(this IRI.Sta.Spatial.Model.TileInfo tile)
     {
         return tile.WebMercatorExtent.AsSqlGeometry();
     }
 
-    public static Geometry<Point> AsGeometry(this IRI.Sta.Common.Model.TileInfo tile)
+    public static Geometry<Point> AsGeometry(this IRI.Sta.Spatial.Model.TileInfo tile)
     {
         return tile.WebMercatorExtent.AsGeometry<Point>(0);
     }

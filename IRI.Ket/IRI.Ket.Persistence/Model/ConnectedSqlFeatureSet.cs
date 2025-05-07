@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Spatial.Primitives;
 
 
 namespace IRI.Ket.Persistence.Model;

@@ -7,11 +7,12 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Spatial.Model;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Jab.Common.Helpers;
 
@@ -79,7 +80,7 @@ public static class WorldfilePyramidFactory
 
         ZipFile.CreateFromDirectory(outputDirectory, Path.ChangeExtension(imageFileName, "pyrmd"));
 
-        Sta.Common.Helpers.IOHelper.DeleteDirectory(outputDirectory);
+        IOHelper.DeleteDirectory(outputDirectory);
     }
 
     private static void WriteBoundingBox(BoundingBox webMercatorBoundingBox, string outputDirectory)

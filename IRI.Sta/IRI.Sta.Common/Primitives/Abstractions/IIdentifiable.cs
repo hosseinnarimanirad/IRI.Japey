@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Common.Primitives
+namespace IRI.Sta.Common.Primitives;
+
+public interface IIdentifiable
 {
-    public interface IIdentifiable
-    {
-        int Id { get; set; }
-    }
+    int Id { get; set; }
 }

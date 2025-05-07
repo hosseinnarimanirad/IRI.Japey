@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Extensions;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Controls.View

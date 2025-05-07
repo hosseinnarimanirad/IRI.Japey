@@ -21,7 +21,7 @@ public partial class RTreeWindow : Window
         brushes = new Brush[] { Brushes.Black, Brushes.Brown, Brushes.Blue, Brushes.Orange, Brushes.Red, Brushes.Green, Brushes.YellowGreen };
     }
 
-    List<IRI.Sta.Common.Analysis.SFC.Rectangle> rectangles = new List<IRI.Sta.Common.Analysis.SFC.Rectangle>();
+    List<IRI.Sta.Spatial.Analysis.SFC.Rectangle> rectangles = new List<IRI.Sta.Spatial.Analysis.SFC.Rectangle>();
 
     Point old;
     bool isDragging;
@@ -66,14 +66,14 @@ public partial class RTreeWindow : Window
 
         Rect rect = this.geo.Bounds;
 
-        this.rectangles.Add(new IRI.Sta.Common.Analysis.SFC.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom));
+        this.rectangles.Add(new IRI.Sta.Spatial.Analysis.SFC.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom));
 
         Referesh();
     }
 
     private void Referesh()
     {
-        IRI.Sta.Common.Analysis.SFC.RTree tree01 = new IRI.Sta.Common.Analysis.SFC.RTree(this.rectangles.ToArray(), 3);
+        IRI.Sta.Spatial.Analysis.SFC.RTree tree01 = new IRI.Sta.Spatial.Analysis.SFC.RTree(this.rectangles.ToArray(), 3);
 
         int height = 0;
         DrawNode(tree01.Root, 0, canvas1, ref height);
@@ -81,63 +81,63 @@ public partial class RTreeWindow : Window
 
 
         //************************************ 02
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree02 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree02 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.GrayComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.GrayComparer,
                                                             3);
         DoTheJob(this.canvas2, tree02, this.title2, "Gray");
 
         //************************************ 03
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree03 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree03 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.NOrderingComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.NOrderingComparer,
                                                             3);
         DoTheJob(this.canvas3, tree03, this.title3, "NOrdering");
 
         //************************************ 04
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree04 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree04 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.ZOrderingComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.ZOrderingComparer,
                                                             3);
         DoTheJob(this.canvas4, tree04, this.title4, "ZOrdering");
 
         //************************************ 05
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree05 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree05 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.HilbertComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.HilbertComparer,
                                                             3);
         DoTheJob(this.canvas5, tree05, this.title5, "Hilbert");
 
         //************************************ 06
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree06 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree06 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.DiagonalLebesgueComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.DiagonalLebesgueComparer,
                                                             3);
         DoTheJob(this.canvas6, tree06, this.title6, "DiagonalLebesgue");
 
         //************************************ 07
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree07 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree07 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.PeanoComparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.PeanoComparer,
                                                             3);
         DoTheJob(this.canvas7, tree07, this.title7, "Variant of Peano");
 
         //************************************ 08
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree08 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree08 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.Peano02Comparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.Peano02Comparer,
                                                             3);
         DoTheJob(this.canvas8, tree08, this.title8, "Variant of Peano");
 
         //************************************ 09
-        IRI.Sta.Common.Analysis.SFC.SFCRTree tree09 = new IRI.Sta.Common.Analysis.SFC.SFCRTree(
+        IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree09 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
                                                             this.rectangles.ToArray(),
-                                                            IRI.Sta.Common.Analysis.SFC.SFCRTree.Peano03Comparer,
+                                                            IRI.Sta.Spatial.Analysis.SFC.SFCRTree.Peano03Comparer,
                                                             3);
         DoTheJob(this.canvas9, tree09, this.title9, "Variant of Peano");
     }
 
-    private void DoTheJob(Canvas canvas, IRI.Sta.Common.Analysis.SFC.SFCRTree tree, Label label, string labelString)
+    private void DoTheJob(Canvas canvas, IRI.Sta.Spatial.Analysis.SFC.SFCRTree tree, Label label, string labelString)
     {
         canvas.Children.Clear();
 
@@ -148,7 +148,7 @@ public partial class RTreeWindow : Window
         label.Content = string.Format("R-Tree ({0}); Height={1}", labelString, height);
     }
 
-    private void DrawNode(IRI.Sta.Common.Analysis.SFC.RTreeNode rTreeNode, int level, Canvas canvas, ref int height)
+    private void DrawNode(IRI.Sta.Spatial.Analysis.SFC.RTreeNode rTreeNode, int level, Canvas canvas, ref int height)
     {
         height = Math.Max(height, level);
 
@@ -156,7 +156,7 @@ public partial class RTreeWindow : Window
         {
             DrawRectangle(rTreeNode.Boundary, brushes[level], canvas);
 
-            foreach (IRI.Sta.Common.Analysis.SFC.Rectangle item in rTreeNode.GetSubRectangles())
+            foreach (IRI.Sta.Spatial.Analysis.SFC.Rectangle item in rTreeNode.GetSubRectangles())
             {
                 DrawRectangle(item, brushes[level + 1], canvas);
             }
@@ -173,7 +173,7 @@ public partial class RTreeWindow : Window
 
     }
 
-    private void DrawRectangle(IRI.Sta.Common.Analysis.SFC.Rectangle rectangle, Brush brush, Canvas canvas)
+    private void DrawRectangle(IRI.Sta.Spatial.Analysis.SFC.Rectangle rectangle, Brush brush, Canvas canvas)
     {
         RectangleGeometry geometry = new RectangleGeometry(new Rect(rectangle.minX, rectangle.minY, rectangle.Width, rectangle.Height));
 

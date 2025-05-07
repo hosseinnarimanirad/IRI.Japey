@@ -1,15 +1,6 @@
-﻿using IRI.Sta.Common.Primitives;
-
-using IRI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Ogc.WMS;
-using IRI.Sta.Common.Model;
+﻿using System.Data;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Ket.Persistence.DataSources;
 

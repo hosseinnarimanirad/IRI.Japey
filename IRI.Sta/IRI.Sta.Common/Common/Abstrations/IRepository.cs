@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Common.Abstrations;
+namespace IRI.Sta.Common.Abstrations;
 
 public interface IRepository<T> where T : class
 {

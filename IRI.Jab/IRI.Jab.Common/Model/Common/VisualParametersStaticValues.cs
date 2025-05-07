@@ -9,6 +9,7 @@ using System.Windows.Media;
 using IRI.Extensions;
 using System.Windows.Input;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common
 {
@@ -73,7 +74,7 @@ namespace IRI.Jab.Common
         }
 
 
-        public static VisualParameters GetDefaultForHighlight(sb.IGeometryAware<sb.Point> sqlGeometryAware)
+        public static VisualParameters GetDefaultForHighlight(IGeometryAware<sb.Point> sqlGeometryAware)
         {
             VisualParameters result;
 

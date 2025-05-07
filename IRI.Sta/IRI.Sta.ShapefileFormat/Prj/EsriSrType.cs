@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.ShapefileFormat.Prj
+namespace IRI.Sta.ShapefileFormat.Prj;
+
+public enum EsriSrType
 {
-    public enum EsriSrType
-    {
-        Projcs,
-        Geogcs
-    }
+    Projcs,
+    Geogcs
 }

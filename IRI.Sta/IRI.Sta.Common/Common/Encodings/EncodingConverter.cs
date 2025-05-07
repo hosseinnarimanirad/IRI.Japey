@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.Common.Common.Encodings;
+namespace IRI.Sta.Common.Encodings;
 
 public static class EncodingConverter
 {

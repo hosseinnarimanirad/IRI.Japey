@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Assets.Commands;

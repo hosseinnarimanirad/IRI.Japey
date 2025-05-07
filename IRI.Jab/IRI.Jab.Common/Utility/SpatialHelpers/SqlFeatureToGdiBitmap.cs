@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common.Convertor
 {
@@ -43,11 +44,11 @@ namespace IRI.Jab.Common.Convertor
         //}
 
         internal static drawing.Bitmap ParseSqlGeometry(
-           List<sb.Feature<sb.Point>> features,
+           List<Feature<sb.Point>> features,
            double width,
            double height,
            Func<Point, Point> mapToScreen,
-           Func<sb.Feature<sb.Point>, VisualParameters> symbologyRule)
+           Func<Feature<sb.Point>, VisualParameters> symbologyRule)
         {
             var result = new drawing.Bitmap((int)width, (int)height);
 

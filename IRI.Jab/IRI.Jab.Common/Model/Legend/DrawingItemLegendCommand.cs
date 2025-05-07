@@ -1,16 +1,18 @@
 ﻿using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Extensions;
-using IRI.Sta.Common.Analysis;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
-using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJson;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using System.Windows.Media;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Sta.Common.Mapping;
+using IRI.Sta.Spatial.Mapping;
 using System.Windows.Media.Imaging;
+using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Jab.Common.Model.Legend;
 
@@ -116,7 +118,7 @@ public static class DrawingItemLegendCommands
 
                 var esriShape = layer.Geometry.AsSqlGeometry().AsEsriShape();
 
-                IRI.Sta.ShapefileFormat.Shapefile.Save(file, new List<IRI.Sta.ShapefileFormat.EsriType.IEsriShape>() { esriShape }, true, true);
+                IRI.Sta.ShapefileFormat.Shapefile.Save(file, new List<IEsriShape>() { esriShape }, true, true);
             }
             catch (Exception ex)
             {

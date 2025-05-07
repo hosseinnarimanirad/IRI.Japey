@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common
 {
@@ -112,9 +113,9 @@ namespace IRI.Jab.Common
             return VisibleRange.IsInRange(inverseMapScale) && this.IsOn;
         }
 
-        public Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> PositionFunc { get; set; }
+        public Func<Geometry<sb.Point>, Geometry<sb.Point>> PositionFunc { get; set; }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc)
         {
             this.VisibleRange = visibleRange;
 
@@ -127,7 +128,7 @@ namespace IRI.Jab.Common
             this.PositionFunc = positionFunc;
         }
 
-        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc)
+        public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc)
             : this(visibleRange, fontSize, new SolidColorBrush(foreground), fontFamily, positionFunc)
         {
 

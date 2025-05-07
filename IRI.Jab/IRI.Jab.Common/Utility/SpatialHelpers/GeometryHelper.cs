@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +17,7 @@ namespace IRI.Jab.Common.Convertor
     {
         static int pointSize = 4;
        
-        internal static void Transform(drawing.Graphics graphics, sb.Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        internal static void Transform(drawing.Graphics graphics, Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.Geometries != null)
             {
@@ -31,7 +33,7 @@ namespace IRI.Jab.Common.Convertor
 
                 var firstPoint = original.Points[0];
 
-                if (original.Type == sb.GeometryType.Point)
+                if (original.Type == GeometryType.Point)
                 {
                     graphics.DrawEllipse(pen, (float)(firstPoint.X + location.X), (float)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
@@ -42,7 +44,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddLineString(drawing.Graphics graphics, sb.Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
+        private static void AddLineString(drawing.Graphics graphics, Geometry<sb.Point> original, sb.Point location, drawing.Pen pen, drawing.Brush brush)
         {
             if (original.NumberOfPoints < 1)
                 return;
@@ -58,7 +60,7 @@ namespace IRI.Jab.Common.Convertor
         }
 
 
-        internal static void Transform(WriteableBitmap context, sb.Geometry<sb.Point> original, sb.Point location, int border, int fill)
+        internal static void Transform(WriteableBitmap context, Geometry<sb.Point> original, sb.Point location, int border, int fill)
         {
             if (original.Geometries != null)
             {
@@ -74,7 +76,7 @@ namespace IRI.Jab.Common.Convertor
 
                 var firstPoint = original.Points[0];
 
-                if (original.Type == sb.GeometryType.Point)
+                if (original.Type == GeometryType.Point)
                 {
                     context.DrawEllipseCentered(border, (int)(firstPoint.X + location.X), (int)(firstPoint.Y + location.Y), pointSize, pointSize);
                 }
@@ -85,7 +87,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddLineString(WriteableBitmap context, sb.Geometry<sb.Point> original, sb.Point location, int border, int fill)
+        private static void AddLineString(WriteableBitmap context, Geometry<sb.Point> original, sb.Point location, int border, int fill)
         {
             if (original.NumberOfPoints < 1)
                 return;
@@ -108,7 +110,7 @@ namespace IRI.Jab.Common.Convertor
 
             foreach (var figure in geometry.Figures)
             {
-                Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
+                System.Windows.Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
 
                 var firstPoint = new System.Drawing.PointF((float)(firstLocalPoint.X + location.X), (float)(firstLocalPoint.Y + location.Y));
 
@@ -145,15 +147,15 @@ namespace IRI.Jab.Common.Convertor
 
             foreach (var figure in geometry.Figures)
             {
-                Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
+                System.Windows.Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
 
-                var firstPoint = new Point(firstLocalPoint.X + location.X, firstLocalPoint.Y + location.Y);
+                var firstPoint = new sb.Point(firstLocalPoint.X + location.X, firstLocalPoint.Y + location.Y);
 
                 foreach (var segment in figure.Segments)
                 {
                     if (segment is PolyLineSegment)
                     {
-                        var points = ((PolyLineSegment)segment).Points.Select(i => new Point(i.X + location.X, i.Y + location.Y)).ToList();
+                        var points = ((PolyLineSegment)segment).Points.Select(i => new sb.Point(i.X + location.X, i.Y + location.Y)).ToList();
 
                         points.Insert(0, firstPoint);
 
@@ -177,7 +179,7 @@ namespace IRI.Jab.Common.Convertor
 
         }
 
-        private static void AddLineString(WriteableBitmap context, List<Point> points, int border, int fill)
+        private static void AddLineString(WriteableBitmap context, List<sb.Point> points, int border, int fill)
         {
             if (points.Count < 1)
                 return;

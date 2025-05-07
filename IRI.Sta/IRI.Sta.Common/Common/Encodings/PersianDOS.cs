@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.Common.Common.Encodings;
+namespace IRI.Sta.Common.Encodings;
 
 public class PersianDOS : Encoding
 {

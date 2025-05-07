@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.ShapefileFormat.Prj
+namespace IRI.Sta.ShapefileFormat.Prj;
+
+public enum EsriPrjParameterType
 {
-    public enum EsriPrjParameterType
-    {
-        FalseEasting,
-        FalseNorthing,
-        CentralMeridian,
-        ScaleFactor,
-        LatitudeOfOrigin,
-        StandardParallel_1,
-        StandardParallel_2
-    }
+    FalseEasting,
+    FalseNorthing,
+    CentralMeridian,
+    ScaleFactor,
+    LatitudeOfOrigin,
+    StandardParallel_1,
+    StandardParallel_2
 }

@@ -1,5 +1,4 @@
-﻿using IRI.Sta.CoordinateSystems.MapProjection;
-using System;
+﻿using System;
 namespace IRI.Sta.Common.Primitives;
 
 public interface IPoint
@@ -12,6 +11,7 @@ public interface IPoint
     //double DistanceTo(IPoint point);
 
     byte[] AsWkb();
+
     bool IsNaN();
 
     byte[] AsByteArray();

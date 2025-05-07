@@ -11,350 +11,349 @@ using System.Collections.Generic;
 using System.Linq;
 using IRI.Sta.CoordinateSystems;
 
-namespace IRI.Jab.Controls.Presenter
+namespace IRI.Jab.Controls.Presenter;
+
+public class GoToPresenter : Notifier
 {
-    public class GoToPresenter : Notifier
+    private Action<Point> RequestZoomTo;
+
+    private Action<Point> RequestPanTo;
+
+    private delegate void updateDelegate(object sender, EventArgs e);
+
+    private EventHandler<updateDelegate> OnUpdateRequired;
+
+    private double _x;
+
+    public double X
     {
-        private Action<Point> RequestZoomTo;
-
-        private Action<Point> RequestPanTo;
-
-        private delegate void updateDelegate(object sender, EventArgs e);
-
-        private EventHandler<updateDelegate> OnUpdateRequired;
-
-        private double _x;
-
-        public double X
+        get { return _x; }
+        set
         {
-            get { return _x; }
-            set
-            {
-                if (_x == value)
-                    return;
+            if (_x == value)
+                return;
 
-                _x = value;
-                RaisePropertyChanged();
+            _x = value;
+            RaisePropertyChanged();
 
-                UpdateXY();
-            }
+            UpdateXY();
         }
+    }
 
-        private double _y;
+    private double _y;
 
-        public double Y
+    public double Y
+    {
+        get { return _y; }
+        set
         {
-            get { return _y; }
-            set
-            {
-                if (_y == value)
-                    return;
+            if (_y == value)
+                return;
 
-                _y = value;
-                RaisePropertyChanged();
+            _y = value;
+            RaisePropertyChanged();
 
-                UpdateXY();
-            }
+            UpdateXY();
         }
+    }
 
-        private int _utmZone = 39;
+    private int _utmZone = 39;
 
-        public int UtmZone
+    public int UtmZone
+    {
+        get { return _utmZone; }
+        set
         {
-            get { return _utmZone; }
-            set
-            {
-                _utmZone = value;
-                RaisePropertyChanged();
+            _utmZone = value;
+            RaisePropertyChanged();
 
-                UpdateXY();
-            }
+            UpdateXY();
         }
+    }
 
-        private bool _isPaneOpen;
+    private bool _isPaneOpen;
 
-        public bool IsPaneOpen
+    public bool IsPaneOpen
+    {
+        get { return _isPaneOpen; }
+        set
         {
-            get { return _isPaneOpen; }
-            set
-            {
-                _isPaneOpen = value;
-                RaisePropertyChanged();
-            }
+            _isPaneOpen = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-        private readonly Model.DegreeMinuteSecondModel _longitudeDms;
+    private readonly Model.DegreeMinuteSecondModel _longitudeDms;
 
-        public Model.DegreeMinuteSecondModel LongitudeDms
+    public Model.DegreeMinuteSecondModel LongitudeDms
+    {
+        get { return _longitudeDms; }
+        //set
+        //{
+        //    //_longitudeDms = value;
+        //    RaisePropertyChanged();
+        //}
+    }
+
+    private readonly Model.DegreeMinuteSecondModel _latitudeDms;
+
+    public Model.DegreeMinuteSecondModel LatitudeDms
+    {
+        get { return _latitudeDms; }
+        //set
+        //{
+        //    _latitudeDms = value;
+        //    RaisePropertyChanged();
+        //}
+    }
+
+
+    private List<HamburgerGoToMenuItem> _menuItems;
+
+    public List<HamburgerGoToMenuItem> MenuItems
+    {
+        get { return _menuItems; }
+        set
         {
-            get { return _longitudeDms; }
-            //set
-            //{
-            //    //_longitudeDms = value;
-            //    RaisePropertyChanged();
-            //}
+            _menuItems = value;
+            RaisePropertyChanged();
         }
+    }
 
-        private readonly Model.DegreeMinuteSecondModel _latitudeDms;
+    private HamburgerGoToMenuItem _selectedItem;
 
-        public Model.DegreeMinuteSecondModel LatitudeDms
+    public HamburgerGoToMenuItem SelectedItem
+    {
+        get { return _selectedItem; }
+        set
         {
-            get { return _latitudeDms; }
-            //set
-            //{
-            //    _latitudeDms = value;
-            //    RaisePropertyChanged();
-            //}
+            if (_selectedItem == value)
+            {
+                return;
+            }
+
+            _selectedItem = value;
+            RaisePropertyChanged();
+            //RaisePropertyChanged("SelectedItem.Content");
+
+            //this.LongitudeDms.SetValue(0);
+            //this.LatitudeDms.SetValue(0);
         }
+    }
 
 
-        private List<HamburgerGoToMenuItem> _menuItems;
+    public GoToPresenter(Action<Point> requestPanTo, Action<Point> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
+    {
+        this.RequestZoomTo = requestZoomTo;
 
-        public List<HamburgerGoToMenuItem> MenuItems
+        this.RequestPanTo = requestPanTo;
+
+        if (items.IsNullOrEmpty())
         {
-            get { return _menuItems; }
-            set
-            {
-                _menuItems = value;
-                RaisePropertyChanged();
-            }
+            this.MenuItems = GetDefaultItems();
         }
-
-        private HamburgerGoToMenuItem _selectedItem;
-
-        public HamburgerGoToMenuItem SelectedItem
+        else
         {
-            get { return _selectedItem; }
-            set
-            {
-                if (_selectedItem == value)
-                {
-                    return;
-                }
-
-                _selectedItem = value;
-                RaisePropertyChanged();
-                //RaisePropertyChanged("SelectedItem.Content");
-
-                //this.LongitudeDms.SetValue(0);
-                //this.LatitudeDms.SetValue(0);
-            }
+            this.MenuItems = items;
         }
+         
+        this._longitudeDms = new Model.DegreeMinuteSecondModel();
 
+        this._longitudeDms.OnValueChanged -= OnValueChangedHandler;
+        this._longitudeDms.OnValueChanged += OnValueChangedHandler;
 
-        public GoToPresenter(Action<Point> requestPanTo, Action<Point> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
+        this._latitudeDms = new Model.DegreeMinuteSecondModel();
+
+        //this._latitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+
+        this._latitudeDms.OnValueChanged -= OnValueChangedHandler;
+        this._latitudeDms.OnValueChanged += OnValueChangedHandler;
+
+        this.IsPaneOpen = false;
+    }
+
+    private void OnValueChangedHandler(object? sender, EventArgs e)
+    {
+        UpdateXY();
+    }
+
+    public void ZoomTo()
+    {
+        this.RequestZoomTo?.Invoke(GetWgs84Point());
+    }
+
+    public void PanTo()
+    {
+        this.RequestPanTo?.Invoke(GetWgs84Point());
+    }
+
+    public Point GetWgs84Point()
+    {
+        var point = new Point(X, Y);
+
+        switch (this.SelectedItem?.MenuType)
         {
-            this.RequestZoomTo = requestZoomTo;
+            case SpatialReferenceType.Geodetic:
+                return new Point(LongitudeDms.GetDegreeValue(), LatitudeDms.GetDegreeValue());
 
-            this.RequestPanTo = requestPanTo;
+            case SpatialReferenceType.UTM:
+                return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
 
-            if (items.IsNullOrEmpty())
-            {
-                this.MenuItems = GetDefaultItems();
+            case SpatialReferenceType.Mercator:
+            case SpatialReferenceType.TransverseMercator:
+            case SpatialReferenceType.CylindricalEqualArea:
+            case SpatialReferenceType.LambertConformalConic:
+            case SpatialReferenceType.WebMercator:
+            case SpatialReferenceType.AlbersEqualAreaConic:
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    private List<HamburgerGoToMenuItem> GetDefaultItems()
+    {
+        return new List<HamburgerGoToMenuItem>()
+        {
+            new HamburgerGoToMenuItem(new GoToGeodeticView(), SpatialReferenceType.Geodetic){
+                Title = "Geodetic",
+                SubTitle ="WGS84",
+                Tooltip ="Geodetic",
+                Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarGlobe,
+            },
+            new HamburgerGoToMenuItem(new GoToMapProjectView(), SpatialReferenceType.UTM){
+                Title = "Uiversal Transverse Mercator",
+                SubTitle ="UTM",
+                Tooltip ="UTM",
+                Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure,
             }
-            else
-            {
-                this.MenuItems = items;
-            }
-             
-            this._longitudeDms = new Model.DegreeMinuteSecondModel();
+        };
+    }
 
-            this._longitudeDms.OnValueChanged -= OnValueChangedHandler;
-            this._longitudeDms.OnValueChanged += OnValueChangedHandler;
+    private void UpdateXY()
+    {
+        var geodeticPoint = GetWgs84Point();
 
-            this._latitudeDms = new Model.DegreeMinuteSecondModel();
+        if (this.SelectedItem?.MenuType != SpatialReferenceType.Geodetic)
+        {
+            LongitudeDms.OnValueChanged -= OnValueChangedHandler;
+            LatitudeDms.OnValueChanged -= OnValueChangedHandler;
 
-            //this._latitudeDms.OnValueChanged += (sender, e) => { UpdateXY(); };
+            LongitudeDms.Value = geodeticPoint.X;
+            LatitudeDms.Value = geodeticPoint.Y;
 
-            this._latitudeDms.OnValueChanged -= OnValueChangedHandler;
-            this._latitudeDms.OnValueChanged += OnValueChangedHandler;
+            //RaisePropertyChanged(nameof(LongitudeDms));
+            //RaisePropertyChanged(nameof(LatitudeDms));
+            
+            LongitudeDms.OnValueChanged += OnValueChangedHandler;
+            LatitudeDms.OnValueChanged += OnValueChangedHandler;
 
+        }
+        else if (this.SelectedItem.MenuType != SpatialReferenceType.UTM)
+        {
+            var zone = MapProjects.FindUtmZone(geodeticPoint.X);
+
+            var utmPoint = geodeticPoint.Project(new NoProjection(), UTM.CreateForZone(UtmZone));
+
+            this._x = utmPoint.X;
+
+            this._y = utmPoint.Y;
+
+            this._utmZone = zone;
+
+            RaisePropertyChanged(nameof(X));
+            RaisePropertyChanged(nameof(Y));
+            RaisePropertyChanged(nameof(UtmZone));
+        }
+    }
+
+    //private void UpdateLatLong()
+    //{
+    //    //if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
+    //    //{
+
+    //    //}
+    //}
+
+    public void SelectDefaultMenu()
+    {
+        if (!this.MenuItems.IsNullOrEmpty())
+        {
+            this.SelectedItem = this.MenuItems.First();
             this.IsPaneOpen = false;
         }
 
-        private void OnValueChangedHandler(object? sender, EventArgs e)
-        {
-            UpdateXY();
-        }
+    }
 
-        public void ZoomTo()
-        {
-            this.RequestZoomTo?.Invoke(GetWgs84Point());
-        }
+    #region Commands
 
-        public void PanTo()
-        {
-            this.RequestPanTo?.Invoke(GetWgs84Point());
-        }
 
-        public Point GetWgs84Point()
-        {
-            var point = new Point(X, Y);
+    private RelayCommand _zoomToCommand;
 
-            switch (this.SelectedItem?.MenuType)
+    public RelayCommand ZoomToCommand
+    {
+        get
+        {
+            if (_zoomToCommand == null)
             {
-                case SpatialReferenceType.Geodetic:
-                    return new Point(LongitudeDms.GetDegreeValue(), LatitudeDms.GetDegreeValue());
-
-                case SpatialReferenceType.UTM:
-                    return point.Project(UTM.CreateForZone(UtmZone), new NoProjection());
-
-                case SpatialReferenceType.Mercator:
-                case SpatialReferenceType.TransverseMercator:
-                case SpatialReferenceType.CylindricalEqualArea:
-                case SpatialReferenceType.LambertConformalConic:
-                case SpatialReferenceType.WebMercator:
-                case SpatialReferenceType.AlbersEqualAreaConic:
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        private List<HamburgerGoToMenuItem> GetDefaultItems()
-        {
-            return new List<HamburgerGoToMenuItem>()
-            {
-                new HamburgerGoToMenuItem(new GoToGeodeticView(), SpatialReferenceType.Geodetic){
-                    Title = "Geodetic",
-                    SubTitle ="WGS84",
-                    Tooltip ="Geodetic",
-                    Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarGlobe,
-                },
-                new HamburgerGoToMenuItem(new GoToMapProjectView(), SpatialReferenceType.UTM){
-                    Title = "Uiversal Transverse Mercator",
-                    SubTitle ="UTM",
-                    Tooltip ="UTM",
-                    Icon = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMapTreasure,
-                }
-            };
-        }
-
-        private void UpdateXY()
-        {
-            var geodeticPoint = GetWgs84Point();
-
-            if (this.SelectedItem?.MenuType != SpatialReferenceType.Geodetic)
-            {
-                LongitudeDms.OnValueChanged -= OnValueChangedHandler;
-                LatitudeDms.OnValueChanged -= OnValueChangedHandler;
-
-                LongitudeDms.Value = geodeticPoint.X;
-                LatitudeDms.Value = geodeticPoint.Y;
-
-                //RaisePropertyChanged(nameof(LongitudeDms));
-                //RaisePropertyChanged(nameof(LatitudeDms));
-                
-                LongitudeDms.OnValueChanged += OnValueChangedHandler;
-                LatitudeDms.OnValueChanged += OnValueChangedHandler;
-
-            }
-            else if (this.SelectedItem.MenuType != SpatialReferenceType.UTM)
-            {
-                var zone = MapProjects.FindUtmZone(geodeticPoint.X);
-
-                var utmPoint = geodeticPoint.Project(new NoProjection(), UTM.CreateForZone(UtmZone));
-
-                this._x = utmPoint.X;
-
-                this._y = utmPoint.Y;
-
-                this._utmZone = zone;
-
-                RaisePropertyChanged(nameof(X));
-                RaisePropertyChanged(nameof(Y));
-                RaisePropertyChanged(nameof(UtmZone));
-            }
-        }
-
-        //private void UpdateLatLong()
-        //{
-        //    //if (this.SelectedItem?.MenuType == SpatialReferenceType.Geodetic)
-        //    //{
-
-        //    //}
-        //}
-
-        public void SelectDefaultMenu()
-        {
-            if (!this.MenuItems.IsNullOrEmpty())
-            {
-                this.SelectedItem = this.MenuItems.First();
-                this.IsPaneOpen = false;
+                _zoomToCommand = new RelayCommand(param => { this.ZoomTo(); });
             }
 
+            return _zoomToCommand;
         }
+    }
 
-        #region Commands
 
+    private RelayCommand _panToCommand;
 
-        private RelayCommand _zoomToCommand;
-
-        public RelayCommand ZoomToCommand
+    public RelayCommand PanToCommand
+    {
+        get
         {
-            get
+            if (_panToCommand == null)
             {
-                if (_zoomToCommand == null)
-                {
-                    _zoomToCommand = new RelayCommand(param => { this.ZoomTo(); });
-                }
-
-                return _zoomToCommand;
+                _panToCommand = new RelayCommand(param => { this.PanTo(); });
             }
+
+            return _panToCommand;
         }
+    }
 
 
-        private RelayCommand _panToCommand;
+    #endregion
 
-        public RelayCommand PanToCommand
-        {
-            get
-            {
-                if (_panToCommand == null)
-                {
-                    _panToCommand = new RelayCommand(param => { this.PanTo(); });
-                }
+    public static GoToPresenter Create(MapPresenter mapPresenter)
+    {
+        var gotoPresenter = new GoToPresenter(
+           p =>
+           {
+               var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
 
-                return _panToCommand;
-            }
-        }
-
-
-        #endregion
-
-        public static GoToPresenter Create(MapPresenter mapPresenter)
-        {
-            var gotoPresenter = new GoToPresenter(
-               p =>
+               mapPresenter.PanTo(webMercatorPoint, () =>
                {
-                   var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
-
-                   mapPresenter.PanTo(webMercatorPoint, () =>
-                   {
-                       mapPresenter.FlashPoint(webMercatorPoint);
-                   });
-
-               },
-               p =>
-               {
-                   var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
-
-                   mapPresenter.ZoomAndCenterToGoogleZoomLevel(13, webMercatorPoint, () =>
-                   {
-                       mapPresenter.FlashPoint(webMercatorPoint);
-                   });
+                   mapPresenter.FlashPoint(webMercatorPoint);
                });
 
-            return gotoPresenter;
-        }
+           },
+           p =>
+           {
+               var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(p);
 
-        internal void SetWebMercatorPoint(Point point)
-        {
-            var geodeticPoint = MapProjects.WebMercatorToGeodeticWgs84(point);
+               mapPresenter.ZoomAndCenterToGoogleZoomLevel(13, webMercatorPoint, () =>
+               {
+                   mapPresenter.FlashPoint(webMercatorPoint);
+               });
+           });
 
-            this.LongitudeDms.Value = geodeticPoint.X;
+        return gotoPresenter;
+    }
 
-            this.LatitudeDms.Value = geodeticPoint.Y;
-        }
+    internal void SetWebMercatorPoint(Point point)
+    {
+        var geodeticPoint = MapProjects.WebMercatorToGeodeticWgs84(point);
+
+        this.LongitudeDms.Value = geodeticPoint.X;
+
+        this.LatitudeDms.Value = geodeticPoint.Y;
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using IRI.Extensions;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Assets.Commands;

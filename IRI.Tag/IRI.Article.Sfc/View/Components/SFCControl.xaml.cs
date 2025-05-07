@@ -1,5 +1,6 @@
-﻿using IRI.Sta.Common.Analysis.SFC;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Analysis.SFC;
+using IRI.Sta.Spatial.Primitives;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;

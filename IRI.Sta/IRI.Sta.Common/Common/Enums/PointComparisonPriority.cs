@@ -1,7 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-namespace IRI.Sta.Common.Common.Enums;
+namespace IRI.Sta.Common.Enums;
 
 public enum PointComparisonPriority
 {

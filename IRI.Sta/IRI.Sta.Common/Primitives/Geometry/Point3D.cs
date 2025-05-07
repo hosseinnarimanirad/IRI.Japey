@@ -1,6 +1,6 @@
-﻿using IRI.Sta.Common.Helpers;
-using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.IO.OgcSFA;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using IRI.Sta.Common.Enums;
+using IRI.Sta.Common.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,7 +108,8 @@ public class Point3D : IPoint, IHasZ
         }
         else
         {
-            return IRI.Sta.Common.Analysis.SpatialUtility.GetEuclideanDistance(new Point(this.X, this.Y), new Point(point.X, point.Y));
+            return Math.Sqrt((this.X - point.X) * (this.X - point.X) +
+                                (this.Y - point.Y) * (this.Y - point.Y));
         }
     }
 

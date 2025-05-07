@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using IRI.Extensions;
 using sb = IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model.Map;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common.Model.Legend
 {
@@ -150,11 +151,11 @@ namespace IRI.Jab.Common.Model.Legend
 
         #region Defaults for VectorLayer
 
-        public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, sb.IGeometryAware<sb.Point>
+        public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, IGeometryAware<sb.Point>
         {
             return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer as VectorLayer);
         }
-        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, sb.IGeometryAware<sb.Point>
+        public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, IGeometryAware<sb.Point>
         {
             var result = new LegendCommand()
             {
@@ -194,11 +195,11 @@ namespace IRI.Jab.Common.Model.Legend
         }
 
 
-        public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, sb.IGeometryAware<sb.Point>
+        public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, IGeometryAware<sb.Point>
         {
             return (presenter, layer) => CreateSelectByDrawing<T>(presenter, layer as VectorLayer);
         }
-        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, sb.IGeometryAware<sb.Point>
+        public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, IGeometryAware<sb.Point>
         {
             var result = new LegendCommand()
             {
@@ -358,7 +359,7 @@ namespace IRI.Jab.Common.Model.Legend
             return result;
         }
 
-        internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, sb.IGeometryAware<sb.Point>
+        internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<sb.Point>
         {
             return new List<Func<MapPresenter, ILayer, ILegendCommand>>()
             {

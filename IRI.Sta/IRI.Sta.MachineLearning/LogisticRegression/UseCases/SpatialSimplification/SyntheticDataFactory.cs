@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Sta.MachineLearning;
 
@@ -137,9 +138,9 @@ public static class SyntheticDataFactory
 
                 bool retained = isRetainedFunc((dx1, dx2, dy));
 
-                sb.Geometry<sb.Point> original = sb.Geometry<sb.Point>.CreatePointOrLineString(0, startPoint, middlePoint, endPoint);
+                Geometry<sb.Point> original = Geometry<sb.Point>.CreatePointOrLineString(0, startPoint, middlePoint, endPoint);
 
-                sb.Geometry<sb.Point> simplified = retained ? original : sb.Geometry<sb.Point>.CreatePointOrLineString(0, startPoint, endPoint);
+                Geometry<sb.Point> simplified = retained ? original : Geometry<sb.Point>.CreatePointOrLineString(0, startPoint, endPoint);
 
                 var rowNumber = (int)((y - minY) / step);
 

@@ -1,10 +1,10 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Common.Analysis;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Spatial.Mapping;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.ShapefileFormat;
 using System.Diagnostics;
-using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJson;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using System.Text;
 using System.Windows.Threading;

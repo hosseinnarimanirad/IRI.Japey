@@ -1,15 +1,9 @@
 ﻿using IRI.Extensions;
 using IRI.Ket.PersonalGdbPersistence.Model;
 using IRI.Ket.PersonalGdbPersistence.Xml;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.PersonalGdb;
-using System;
-using System.Collections.Generic;
+using IRI.Sta.CoordinateSystems.MapProjection;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 

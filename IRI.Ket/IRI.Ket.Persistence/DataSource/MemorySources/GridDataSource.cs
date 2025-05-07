@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Extensions;
+﻿using IRI.Extensions;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Mapping;
+using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using System.Data;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Ket.Persistence.DataSources;
 

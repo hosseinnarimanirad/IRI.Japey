@@ -5,9 +5,9 @@ using drawing = System.Drawing;
 using System.Linq;
 using Microsoft.SqlServer.Types;
 using IRI.Extensions;
-using IRI.Extensions;
 using IRI.Jab.Common.Model.Symbology;
 using sb = IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common.Convertor
 {
@@ -325,7 +325,7 @@ namespace IRI.Jab.Common.Convertor
 
 
         // GEOMETRY<T>
-        public static void WriteToImage(drawing.Bitmap image, List<sb.Geometry<sb.Point>> geometries, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        public static void WriteToImage(drawing.Bitmap image, List<Geometry<sb.Point>> geometries, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             drawing.Graphics graphics = drawing.Graphics.FromImage(image);
 
@@ -333,7 +333,7 @@ namespace IRI.Jab.Common.Convertor
 
             if (geometries != null)
             {
-                foreach (sb.Geometry<sb.Point> item in geometries)
+                foreach (Geometry<sb.Point> item in geometries)
                 {
                     p += AddGeometry(graphics, item, transform, pen, brush, pointSymbol);
                 }
@@ -342,7 +342,7 @@ namespace IRI.Jab.Common.Convertor
             //return image;
         }
 
-        internal static void WriteToImage(drawing.Graphics graphics, sb.Geometry<sb.Point> geometry, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        internal static void WriteToImage(drawing.Graphics graphics, Geometry<sb.Point> geometry, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             if (geometry != null)
             {
@@ -350,7 +350,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        public static drawing.Bitmap ParseSqlGeometry(List<sb.Geometry<sb.Point>> geometries, double width, double height, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        public static drawing.Bitmap ParseSqlGeometry(List<Geometry<sb.Point>> geometries, double width, double height, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             var result = new drawing.Bitmap((int)width, (int)height);
 
@@ -360,7 +360,7 @@ namespace IRI.Jab.Common.Convertor
 
             if (geometries != null)
             {
-                foreach (sb.Geometry<sb.Point> item in geometries)
+                foreach (Geometry<sb.Point> item in geometries)
                 {
                     p += AddGeometry(graphics, item, transform, pen, brush, pointSymbol);
                 }
@@ -370,7 +370,7 @@ namespace IRI.Jab.Common.Convertor
         }
 
 
-        private static int AddGeometry(drawing.Graphics graphics, sb.Geometry<sb.Point> geometry, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        private static int AddGeometry(drawing.Graphics graphics, Geometry<sb.Point> geometry, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             if (geometry.IsNotValidOrEmpty())
                 return 1;
@@ -413,7 +413,7 @@ namespace IRI.Jab.Common.Convertor
             return 0;
         }
 
-        private static void AddPoint(drawing.Graphics graphics, sb.Geometry<sb.Point> point, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        private static void AddPoint(drawing.Graphics graphics, Geometry<sb.Point> point, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             var parsedPoint = transform(point.AsWpfPoint()).AsPoint();
 
@@ -440,7 +440,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddMultiPoint(drawing.Graphics graphics, sb.Geometry<sb.Point> multiPoint, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+        private static void AddMultiPoint(drawing.Graphics graphics, Geometry<sb.Point> multiPoint, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
         {
             int numberOfPoints = multiPoint.NumberOfGeometries;
 
@@ -455,7 +455,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddLineString(drawing.Graphics graphics, sb.Geometry<sb.Point> lineString, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
+        private static void AddLineString(drawing.Graphics graphics, Geometry<sb.Point> lineString, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
         {
             int numberOfPoints = lineString.NumberOfPoints;
 
@@ -472,7 +472,7 @@ namespace IRI.Jab.Common.Convertor
             graphics.DrawLines(pen, points);
         }
 
-        private static void AddMultiLineString(drawing.Graphics graphics, sb.Geometry<sb.Point> multiLineString, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
+        private static void AddMultiLineString(drawing.Graphics graphics, Geometry<sb.Point> multiLineString, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
         {
             int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -487,7 +487,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddPolygonRing(drawing.Graphics graphics, sb.Geometry<sb.Point> ring, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
+        private static void AddPolygonRing(drawing.Graphics graphics, Geometry<sb.Point> ring, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
         {
             int numberOfPoints = ring.NumberOfPoints;
 
@@ -512,7 +512,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddPolygon(drawing.Graphics graphics, sb.Geometry<sb.Point> polygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
+        private static void AddPolygon(drawing.Graphics graphics, Geometry<sb.Point> polygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
         {
             //var exteriorRing = polygon.STExteriorRing();
 
@@ -537,7 +537,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddMultiPolygon(drawing.Graphics graphics, sb.Geometry<sb.Point> multiPolygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
+        private static void AddMultiPolygon(drawing.Graphics graphics, Geometry<sb.Point> multiPolygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush)
         {
             int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -552,7 +552,7 @@ namespace IRI.Jab.Common.Convertor
             }
         }
 
-        private static void AddGeometryCollection(drawing.Graphics graphics, sb.Geometry<sb.Point> multiPolygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+        private static void AddGeometryCollection(drawing.Graphics graphics, Geometry<sb.Point> multiPolygon, Func<Point, Point> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
         {
             int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -568,7 +568,7 @@ namespace IRI.Jab.Common.Convertor
         }
 
         //Labeling
-        public static void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
+        public static void DrawLabels(List<string> labels, List<Geometry<sb.Point>> geometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
         {
             if (labels.Count != geometries.Count)
                 return;
@@ -621,7 +621,7 @@ namespace IRI.Jab.Common.Convertor
             brush.Dispose();
         }
 
-        public static void DrawLabels(List<sb.NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
+        public static void DrawLabels(List<NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
         {
             var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
 

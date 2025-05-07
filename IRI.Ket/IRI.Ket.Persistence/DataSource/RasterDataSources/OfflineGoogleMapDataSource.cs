@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data;
-using IRI.Sta.Common.Mapping;
+using System.Data; 
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.Spatial.Mapping;
 
 namespace IRI.Ket.Persistence.RasterDataSources;
 
@@ -43,7 +43,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
     {
         //94.12.17
         //int zoomLevel = GetZoomLevel(mapScale);
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale);
 
         var result = new List<GeoReferencedImage>();
 
@@ -85,7 +85,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
     {
         //94.12.17
         //int zoomLevel = GetZoomLevel(mapScale);
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale);
 
         var result = new List<GeoReferencedImage>();
 

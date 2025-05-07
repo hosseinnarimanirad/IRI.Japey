@@ -5,75 +5,74 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader;
+
+internal class ShxReader
 {
-    internal class ShxReader
+    MainFileHeader mainHeader;
+
+    List<int> Offsets, ContentLengthes;
+
+    public MainFileHeader MainHeader
     {
-        MainFileHeader mainHeader;
+        get { return this.mainHeader; }
+    }
 
-        List<int> Offsets, ContentLengthes;
+    public int NumberOfRecords
+    {
+        get { return this.Offsets.Count; }
+    }
 
-        public MainFileHeader MainHeader
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="recordNumber">record number is zero based</param>
+    /// <param name="offset"></param>
+    /// <param name="contentLength"></param>
+    public void GetRecord(int recordNumber, out int offset, out int contentLength)
+    {
+        if (recordNumber > this.NumberOfRecords - 1 || recordNumber < 0)
         {
-            get { return this.mainHeader; }
+            throw new NotImplementedException();
         }
 
-        public int NumberOfRecords
+        offset = Offsets[recordNumber];
+
+        contentLength = ContentLengthes[recordNumber];
+    }
+
+    public ShxReader(string shxFileName)
+    {
+        if (!System.IO.File.Exists(shxFileName))
         {
-            get { return this.Offsets.Count; }
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="recordNumber">record number is zero based</param>
-        /// <param name="offset"></param>
-        /// <param name="contentLength"></param>
-        public void GetRecord(int recordNumber, out int offset, out int contentLength)
+        this.Offsets = new List<int>();
+
+        this.ContentLengthes = new List<int>();
+
+        System.IO.FileStream stream = new System.IO.FileStream(shxFileName, System.IO.FileMode.Open);
+
+        System.IO.BinaryReader reader = new System.IO.BinaryReader(stream);
+
+        this.mainHeader = new MainFileHeader(reader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
+
+        double numberOfRecords = (mainHeader.FileLength - 50) / 4.0;
+
+        for (int i = 0; i < numberOfRecords; i++)
         {
-            if (recordNumber > this.NumberOfRecords - 1 || recordNumber < 0)
-            {
-                throw new NotImplementedException();
-            }
+            byte[] temp = reader.ReadBytes(ShapeConstants.IntegerSize); Array.Reverse(temp);
 
-            offset = Offsets[recordNumber];
+            this.Offsets.Add(System.BitConverter.ToInt32(temp, 0));
 
-            contentLength = ContentLengthes[recordNumber];
+            temp = reader.ReadBytes(ShapeConstants.IntegerSize); Array.Reverse(temp);
+
+            this.ContentLengthes.Add(System.BitConverter.ToInt32(temp, 0));
         }
 
-        public ShxReader(string shxFileName)
-        {
-            if (!System.IO.File.Exists(shxFileName))
-            {
-                throw new NotImplementedException();
-            }
+        reader.Close();
 
-            this.Offsets = new List<int>();
-
-            this.ContentLengthes = new List<int>();
-
-            System.IO.FileStream stream = new System.IO.FileStream(shxFileName, System.IO.FileMode.Open);
-
-            System.IO.BinaryReader reader = new System.IO.BinaryReader(stream);
-
-            this.mainHeader = new MainFileHeader(reader.ReadBytes(ShapeConstants.MainHeaderLengthInBytes));
-
-            double numberOfRecords = (mainHeader.FileLength - 50) / 4.0;
-
-            for (int i = 0; i < numberOfRecords; i++)
-            {
-                byte[] temp = reader.ReadBytes(ShapeConstants.IntegerSize); Array.Reverse(temp);
-
-                this.Offsets.Add(System.BitConverter.ToInt32(temp, 0));
-
-                temp = reader.ReadBytes(ShapeConstants.IntegerSize); Array.Reverse(temp);
-
-                this.ContentLengthes.Add(System.BitConverter.ToInt32(temp, 0));
-            }
-
-            reader.Close();
-
-            stream.Close();
-        }
+        stream.Close();
     }
 }

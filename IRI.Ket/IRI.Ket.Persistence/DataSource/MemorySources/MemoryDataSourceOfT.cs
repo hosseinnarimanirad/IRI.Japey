@@ -1,11 +1,7 @@
-﻿using IRI.Sta.Common.Primitives;
-using System.Data;
+﻿using System.Data;
 using IRI.Extensions;
-using IRI.Sta.CoordinateSystems.MapProjection;
-using System.Text;
-using IRI.Sta.ShapefileFormat;
-using IRI.Sta.Common.Mapping;
-using System;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Ket.Persistence.DataSources;
 

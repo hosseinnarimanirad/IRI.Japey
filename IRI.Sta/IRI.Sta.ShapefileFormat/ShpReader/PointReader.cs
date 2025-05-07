@@ -6,57 +6,56 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader;
+
+public class PointReader : ShpReader<EsriPoint>
 {
-    public class PointReader : ShpReader<EsriPoint>
+    public PointReader(string fileName, int srid)
+        : base(fileName, EsriShapeType.EsriPoint, srid)
     {
-        public PointReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriPoint, srid)
-        {
 
+    }
+
+    protected override EsriPoint ReadElement()
+    {
+        int shapeType = shpReader.ReadInt32();
+
+        if ((EsriShapeType)shapeType != EsriShapeType.EsriPoint)
+        {
+            throw new NotImplementedException();
         }
 
-        protected override EsriPoint ReadElement()
-        {
-            int shapeType = shpReader.ReadInt32();
+        double x = shpReader.ReadDouble();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriPoint)
-            {
-                throw new NotImplementedException();
-            }
+        double y = shpReader.ReadDouble();
 
-            double x = shpReader.ReadDouble();
-
-            double y = shpReader.ReadDouble();
-
-            return new EsriPoint(x, y, this._srid);
-        }
+        return new EsriPoint(x, y, this._srid);
+    }
 
 
-        public static EsriPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
-        {
-            //+8: pass the record header; +4 pass the shapeType
-            reader.BaseStream.Position = offset * 2 + 8 + 4;
+    public static EsriPoint Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
+    {
+        //+8: pass the record header; +4 pass the shapeType
+        reader.BaseStream.Position = offset * 2 + 8 + 4;
 
-            //var byteArray = reader.ReadBytes(contentLength * 2 - 8);
+        //var byteArray = reader.ReadBytes(contentLength * 2 - 8);
 
-            double x = reader.ReadDouble();
+        double x = reader.ReadDouble();
 
-            double y = reader.ReadDouble();
+        double y = reader.ReadDouble();
 
-            return new EsriPoint(x, y, srid);
-        }
+        return new EsriPoint(x, y, srid);
+    }
 
-        public static EsriPoint ParseGdbRecord(byte[] bytes, int srid)
-        {
-            // 4: shape type
-            var offset = 4;
+    public static EsriPoint ParseGdbRecord(byte[] bytes, int srid)
+    {
+        // 4: shape type
+        var offset = 4;
 
-            double x = BitConverter.ToDouble(bytes, offset);
+        double x = BitConverter.ToDouble(bytes, offset);
 
-            double y = BitConverter.ToDouble(bytes, offset + ShapeConstants.DoubleSize);
+        double y = BitConverter.ToDouble(bytes, offset + ShapeConstants.DoubleSize);
 
-            return new EsriPoint(x, y, srid);
-        }
+        return new EsriPoint(x, y, srid);
     }
 }

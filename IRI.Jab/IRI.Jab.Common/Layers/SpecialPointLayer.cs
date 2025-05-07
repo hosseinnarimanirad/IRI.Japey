@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
 
 namespace IRI.Jab.Common

@@ -1,5 +1,6 @@
-﻿using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.Spatial.Primitives;
 using Newtonsoft.Json;
 using System;
 

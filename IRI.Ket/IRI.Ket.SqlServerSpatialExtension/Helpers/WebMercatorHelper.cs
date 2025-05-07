@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Mapping;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Model;
 using IRI.Sta.ShapefileFormat.Dbf;
 using IRI.Sta.ShapefileFormat.EsriType;
@@ -10,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.Spatial.Model;
+using IRI.Sta.Spatial.Mapping;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers;
 

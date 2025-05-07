@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.Mapping;
+﻿using IRI.Sta.Spatial.Mapping;
 using IRI.Jab.Common.Model;
 using System;
 using System.Collections.Generic;

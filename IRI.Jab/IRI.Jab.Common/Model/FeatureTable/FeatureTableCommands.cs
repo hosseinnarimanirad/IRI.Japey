@@ -2,189 +2,189 @@
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Extensions;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using sb = IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.IO.OfficeFormats;
+using IRI.Sta.Common.OfficeFormats;
 
-namespace IRI.Jab.Common.Model
+namespace IRI.Jab.Common.Model;
+
+public static class FeatureTableCommands
 {
-    public static class FeatureTableCommands
+    #region Defaults
+
+    public static FeatureTableCommand Create(Action action, string markup, string tooltip)
     {
-        #region Defaults
-
-        public static FeatureTableCommand Create(Action action, string markup, string tooltip)
+        var result = new FeatureTableCommand()
         {
-            var result = new FeatureTableCommand()
-            {
-                PathMarkup = markup,
-                Command = new RelayCommand(param => action()),
-                ToolTip = tooltip,
-            };
+            PathMarkup = markup,
+            Command = new RelayCommand(param => action()),
+            ToolTip = tooltip,
+        };
 
-            result.Command = new RelayCommand(param => action());
+        result.Command = new RelayCommand(param => action());
 
-            return result;
+        return result;
+    }
+
+
+    //public static Func<MapPresenter, FeatureTableCommand> CreateZoomToExtentCommandFunc = (presenter) => CreateZoomToExtentCommand(presenter);
+    public static FeatureTableCommand CreateZoomToExtentCommand(MapPresenter map)
+    {
+        var result = new FeatureTableCommand()
+        {
+            PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMagnify,
+            //Layer = layer.AssociatedLayer,
+            ToolTip = "محدودهٔ عوارض"
+        };
+
+        result.Command = new RelayCommand((param) =>
+        {
+            var layer = param as ISelectedLayer;
+
+            if (layer == null || map == null)
+                return;
+
+            var features = layer.GetHighlightedFeatures();
+
+            var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
+
+            map.ZoomToExtent(extent, false, () => { TryFlashPoint(map, features); });
+        });
+
+        return result;
+    }
+
+    private static void TryFlashPoint(MapPresenter map, IEnumerable<IGeometryAware<Point>> point)
+    {
+        if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point)
+        {
+            map.FlashHighlightedFeatures(point.First());
         }
+    }
 
+    #endregion
 
-        //public static Func<MapPresenter, FeatureTableCommand> CreateZoomToExtentCommandFunc = (presenter) => CreateZoomToExtentCommand(presenter);
-        public static FeatureTableCommand CreateZoomToExtentCommand(MapPresenter map)
+    #region Export Excel
+
+    public static FeatureTableCommand CreateExportToExcelCommand(MapPresenter map)
+    {
+        var result = new FeatureTableCommand()
         {
-            var result = new FeatureTableCommand()
-            {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarMagnify,
-                //Layer = layer.AssociatedLayer,
-                ToolTip = "محدودهٔ عوارض"
-            };
+            PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageExcel,
+            //Layer = layer.AssociatedLayer,
+            ToolTip = "خروجی اکسل"
+        };
 
-            result.Command = new RelayCommand((param) =>
-            {
-                var layer = param as ISelectedLayer;
-
-                if (layer == null || map == null)
-                    return;
-
-                var features = layer.GetHighlightedFeatures();
-
-                var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
-
-                map.ZoomToExtent(extent, false, () => { TryFlashPoint(map, features); });
-            });
-
-            return result;
-        }
-
-        private static void TryFlashPoint(MapPresenter map, IEnumerable<IGeometryAware<Point>> point)
+        result.Command = new RelayCommand((param) =>
         {
-            if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point)
+            var layer = param as ISelectedLayer;
+
+            if (layer == null || map == null)
+                return;
+
+            var features = layer.GetSelectedFeatures();
+
+            //
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+
+            foreach (var item in features)
             {
-                map.FlashHighlightedFeatures(point.First());
+                if (item is Feature<Point> feature)
+                {
+                    rows.Add(feature.Attributes);
+                }
+                
+                // todo: consider solving the general case
+                else if (item is IGeometryAware<Point> geometryAware)
+                {
+                    rows.Add(new Dictionary<string, object>() { { "Id", item.Id } });
+                }
             }
-        }
 
-        #endregion
+            //گرفتن مسیر فایل
+            var fileName = map.DialogService.ShowSaveFileDialog("*.xlsx|*.xlsx", null, layer.LayerName);
 
-        #region Export Excel
+            if (string.IsNullOrWhiteSpace(fileName))
+                return;
 
-        public static FeatureTableCommand CreateExportToExcelCommand(MapPresenter map)
+            ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
+
+        });
+
+        return result;
+    }
+
+    #endregion
+
+    #region Export As Drawing Item
+
+    public static FeatureTableCommand CreateExportAsDrawingLayersCommand(MapPresenter map)
+    {
+        var result = new FeatureTableCommand()
         {
-            var result = new FeatureTableCommand()
-            {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageExcel,
-                //Layer = layer.AssociatedLayer,
-                ToolTip = "خروجی اکسل"
-            };
+            PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenAdd,
+            //Layer = layer.AssociatedLayer,
+            ToolTip = "انتقال به ترسیم‌ها"
+        };
 
-            result.Command = new RelayCommand((param) =>
-            {
-                var layer = param as ISelectedLayer;
-
-                if (layer == null || map == null)
-                    return;
-
-                var features = layer.GetSelectedFeatures();
-
-                //
-                List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
-
-                foreach (var item in features)
-                {
-                    if (item is Feature<Point> feature)
-                    {
-                        rows.Add(feature.Attributes);
-                    }
-                    
-                    // todo: consider solving the general case
-                    else if (item is IGeometryAware<Point> geometryAware)
-                    {
-                        rows.Add(new Dictionary<string, object>() { { "Id", item.Id } });
-                    }
-                }
-
-                //گرفتن مسیر فایل
-                var fileName = map.DialogService.ShowSaveFileDialog("*.xlsx|*.xlsx", null, layer.LayerName);
-
-                if (string.IsNullOrWhiteSpace(fileName))
-                    return;
-
-                ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
-
-            });
-
-            return result;
-        }
-
-        #endregion
-
-        #region Export As Drawing Item
-
-        public static FeatureTableCommand CreateExportAsDrawingLayersCommand(MapPresenter map)
+        result.Command = new RelayCommand((param) =>
         {
-            var result = new FeatureTableCommand()
+            var layer = param as ISelectedLayer;
+
+            if (layer == null || map == null)
+                return;
+
+            var features = layer.GetHighlightedFeatures();
+
+            if (features.IsNullOrEmpty())
             {
-                PathMarkup = IRI.Jab.Common.Assets.ShapeStrings.Appbar.appbarVectorPenAdd,
-                //Layer = layer.AssociatedLayer,
-                ToolTip = "انتقال به ترسیم‌ها"
-            };
+                return;
+            }
 
-            result.Command = new RelayCommand((param) =>
+            foreach (var feature in features)
             {
-                var layer = param as ISelectedLayer;
+                map.AddDrawingItem(feature.TheGeometry);
+            }
 
-                if (layer == null || map == null)
-                    return;
+            //
+            //List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
 
-                var features = layer.GetHighlightedFeatures();
+            //foreach (var item in features)
+            //{
+            //    if (item is SqlFeature feature)
+            //    {
+            //        rows.Add(feature.Attributes);
+            //    }
+            //}
 
-                if (features.IsNullOrEmpty())
-                {
-                    return;
-                }
+            ////گرفتن مسیر فایل
+            //var fileName = map.SaveFile("*.xlsx|*.xlsx");
 
-                foreach (var feature in features)
-                {
-                    map.AddDrawingItem(feature.TheGeometry);
-                }
+            //if (string.IsNullOrWhiteSpace(fileName))
+            //    return;
 
-                //
-                //List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            //Ket.OfficeFormat.ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
 
-                //foreach (var item in features)
-                //{
-                //    if (item is SqlFeature feature)
-                //    {
-                //        rows.Add(feature.Attributes);
-                //    }
-                //}
+        });
 
-                ////گرفتن مسیر فایل
-                //var fileName = map.SaveFile("*.xlsx|*.xlsx");
+        return result;
+    }
 
-                //if (string.IsNullOrWhiteSpace(fileName))
-                //    return;
-
-                //Ket.OfficeFormat.ExcelHelper.WriteDictionary(rows, fileName, "Sheet1", null, null);
-
-            });
-
-            return result;
-        }
-
-        #endregion
+    #endregion
 
 
 
-        internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, sb.IGeometryAware<sb.Point>
+    internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<sb.Point>
+    {
+        return new List<Func<MapPresenter, IFeatureTableCommand>>()
         {
-            return new List<Func<MapPresenter, IFeatureTableCommand>>()
-            {
-                CreateZoomToExtentCommand,
-                CreateExportToExcelCommand,
-                CreateExportAsDrawingLayersCommand
-            };
-        }
+            CreateZoomToExtentCommand,
+            CreateExportToExcelCommand,
+            CreateExportAsDrawingLayersCommand
+        };
     }
 }

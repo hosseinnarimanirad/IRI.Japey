@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Common.Abstrations;
+namespace IRI.Sta.Common.Abstrations;
 
 public interface ISecurityRepository
 {

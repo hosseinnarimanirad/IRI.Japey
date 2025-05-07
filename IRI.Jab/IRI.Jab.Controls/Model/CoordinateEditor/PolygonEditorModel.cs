@@ -3,72 +3,69 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
+using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
-namespace IRI.Jab.Controls.Model
+namespace IRI.Jab.Controls.Model;
+
+public class PolygonEditorModel : CoordinateEditor
 {
-    public class PolygonEditorModel : CoordinateEditor
+    private LineStringEditorModel _outterRing;
+
+    public LineStringEditorModel OutterRing
     {
-        private LineStringEditorModel _outterRing;
-
-        public LineStringEditorModel OutterRing
+        get { return _outterRing; }
+        set
         {
-            get { return _outterRing; }
-            set
-            {
-                _outterRing = value;
-                RaisePropertyChanged();
-            }
+            _outterRing = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    private ObservableCollection<LineStringEditorModel> _innerRings;
+
+    public ObservableCollection<LineStringEditorModel> InnerRings
+    {
+        get { return _innerRings; }
+        set
+        {
+            _innerRings = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public PolygonEditorModel()
+    {
+        this.OutterRing = new LineStringEditorModel();
+
+        this.InnerRings = new ObservableCollection<LineStringEditorModel>();
+    }
+
+    public PolygonEditorModel(Geometry polygon)
+    {
+        if (polygon.Type != GeometryType.Polygon)
+        {
+            throw new NotImplementedException();
         }
 
-        private ObservableCollection<LineStringEditorModel> _innerRings;
+        OutterRing = new LineStringEditorModel(polygon.Geometries.First());
 
-        public ObservableCollection<LineStringEditorModel> InnerRings
+        InnerRings = new ObservableCollection<LineStringEditorModel>(polygon.Geometries.Skip(1).Select(g => new LineStringEditorModel(g)));
+
+        this.Srid = polygon.Srid;
+    }
+
+
+    public override Geometry GetGeometry()
+    {
+        List<Geometry> rings = new List<Geometry>();
+
+        rings.Add(OutterRing.GetGeometry());
+
+        foreach (var ring in InnerRings)
         {
-            get { return _innerRings; }
-            set
-            {
-                _innerRings = value;
-                RaisePropertyChanged();
-            }
+            rings.Add(ring.GetGeometry());
         }
 
-        public PolygonEditorModel()
-        {
-            this.OutterRing = new LineStringEditorModel();
-
-            this.InnerRings = new ObservableCollection<LineStringEditorModel>();
-        }
-
-        public PolygonEditorModel(Geometry polygon)
-        {
-            if (polygon.Type != GeometryType.Polygon)
-            {
-                throw new NotImplementedException();
-            }
-
-            OutterRing = new LineStringEditorModel(polygon.Geometries.First());
-
-            InnerRings = new ObservableCollection<LineStringEditorModel>(polygon.Geometries.Skip(1).Select(g => new LineStringEditorModel(g)));
-
-            this.Srid = polygon.Srid;
-        }
-
-
-        public override Geometry GetGeometry()
-        {
-            List<Geometry> rings = new List<Geometry>();
-
-            rings.Add(OutterRing.GetGeometry());
-
-            foreach (var ring in InnerRings)
-            {
-                rings.Add(ring.GetGeometry());
-            }
-
-            return new Geometry(rings, GeometryType.Polygon, Srid);
-        }
+        return new Geometry(rings, GeometryType.Polygon, Srid);
     }
 }

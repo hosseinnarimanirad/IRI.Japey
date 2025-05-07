@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Common.IO.OgcSFA;
+﻿using IRI.Sta.Common.Enums;
 using System;
 
 namespace IRI.Sta.Ogc.SFA;

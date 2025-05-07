@@ -286,40 +286,6 @@ namespace IRI.Sta.Common.Primitives
             return new BoundingBox(newTopLeft.X, newButtomRight.Y, newButtomRight.X, newTopLeft.Y);
         }
 
-        public Geometry<Point> TransofrmBy4Point(Func<Point, Point> func)
-        {
-            var p1 = func(this.BottomLeft);
-
-            var p3 = func(this.TopLeft);
-
-            var p5 = func(this.TopRight);
-
-            var p7 = func(this.BottomRight);
-
-            return Geometry<Point>.Create(new List<Point>() { p1, p3, p5, p7 }, GeometryType.Polygon, 0);
-        }
-
-        public Geometry<Point> TransofrmBy8Point(Func<Point, Point> func)
-        {
-            var p1 = func(this.BottomLeft);
-
-            var p2 = func(this.MiddleLeft);
-
-            var p3 = func(this.TopLeft);
-
-            var p4 = func(this.MiddleTop);
-
-            var p5 = func(this.TopRight);
-
-            var p6 = func(this.MiddleRight);
-
-            var p7 = func(this.BottomRight);
-
-            var p8 = func(this.MiddleBottom);
-
-            return Geometry<Point>.Create(new List<Point>() { p1, p2, p3, p4, p5, p6, p7, p8 }, GeometryType.Polygon, 0);
-        }
-
         public override string ToString()
         {
             return string.Format("XMin: {0}, YMin: {1}, XMax: {2}, YMax: {3}", this.XMin, this.YMin, this.XMax, this.YMax);
@@ -390,10 +356,6 @@ namespace IRI.Sta.Common.Primitives
         }
 
 
-        public Geometry<T> AsGeometry<T>(int srid) where T : IPoint, new()
-        {
-            return Geometry<T>.Create(GetClockWiseOrderOfEsriPoints<T>()/*.ToArray()*/, GeometryType.Polygon, srid);
-        }
 
         public bool Covers<T>(T point) where T : IPoint
         {

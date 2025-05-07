@@ -5,11 +5,12 @@ using System.Text;
 using IRI.Jab.Common;
 using Microsoft.SqlServer.Types;
 using System.Windows;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.TileServices;
 using System.Diagnostics;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Controls;
 

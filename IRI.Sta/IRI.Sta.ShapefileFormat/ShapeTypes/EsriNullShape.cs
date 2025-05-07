@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+namespace IRI.Sta.ShapefileFormat.ShapeTypes;
 
-namespace IRI.Sta.ShapefileFormat.ShapeTypes
+//repair geometry
+public class EsriNullShape
 {
-    //repair geometry
-    public class EsriNullShape
-    {
-    }
 }

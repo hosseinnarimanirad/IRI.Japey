@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
-using IRI.Sta.Common.Analysis;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.SqlServerSpatialExtension;
 

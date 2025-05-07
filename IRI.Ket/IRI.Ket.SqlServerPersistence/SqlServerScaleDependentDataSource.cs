@@ -3,10 +3,12 @@
 using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Analysis;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Analysis;
 using IRI.Ket.Persistence.Model;
 using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Mapping;
 
 namespace IRI.Ket.SqlServerPersistence;
 
@@ -89,7 +91,7 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
 
             SimplificationParamters param = new SimplificationParamters { AngleThreshold = 0.98 };
 
-            var threshold = IRI.Sta.Common.Mapping.WebMercatorUtility.CalculateGroundResolution(i, 0);
+            var threshold = WebMercatorUtility.CalculateGroundResolution(i, 0);
 
             param.DistanceThreshold = threshold;
             param.AreaThreshold = threshold * threshold;
@@ -158,7 +160,7 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
 
     public List<Geometry<Point>> GetGeometries(double mapScale, string whereClause)
     {
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
         if (zoomLevel > _levels.Max())
         {
@@ -192,7 +194,7 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
         //var whereClause = $" (GEO.STIntersects(GEOMETRY::STPolyFromText('{boundingBox.AsWkt()}',{srid})) = 1) ";
         var whereClause = GetWhereClause(_pyramidTableSpatialColumn, boundingBox, srid);
 
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
         if (!(_levels?.Count < 1) && zoomLevel > _levels.Max())
         {
@@ -208,7 +210,7 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
 
     public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
     {
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale, 35);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
         if (zoomLevel > _levels.Max())
         {

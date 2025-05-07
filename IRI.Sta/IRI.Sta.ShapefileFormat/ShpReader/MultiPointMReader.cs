@@ -1,87 +1,85 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using System;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShpReader;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace IRI.Sta.ShapefileFormat.Reader
+namespace IRI.Sta.ShapefileFormat.Reader;
+
+public class MultiPointMReader : MeasuresReader<EsriMultiPointM>
 {
-    public class MultiPointMReader : MeasuresReader<EsriMultiPointM>
+    public MultiPointMReader(string fileName, int srid)
+        : base(fileName, EsriShapeType.EsriMultiPointM, srid)
     {
-        public MultiPointMReader(string fileName, int srid)
-            : base(fileName, EsriShapeType.EsriMultiPointM, srid)
+    }
+
+    protected override EsriMultiPointM ReadElement()
+    {
+        int shapeType = shpReader.ReadInt32();
+
+        if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPointM)
         {
+            throw new NotImplementedException();
         }
 
-        protected override EsriMultiPointM ReadElement()
-        {
-            int shapeType = shpReader.ReadInt32();
+        BoundingBox boundingBox = this.ReadBoundingBox();
 
-            if ((EsriShapeType)shapeType != EsriShapeType.EsriMultiPointM)
-            {
-                throw new NotImplementedException();
-            }
+        int numPoints = shpReader.ReadInt32();
 
-            IRI.Sta.Common.Primitives.BoundingBox boundingBox = this.ReadBoundingBox();
+        EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
 
-            int numPoints = shpReader.ReadInt32();
+        double minMeasure, maxMeasure;
 
-            EsriPoint[] points = this.ReadPoints(numPoints, this._srid);
+        double[] measures;
 
-            double minMeasure, maxMeasure;
+        this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
 
-            double[] measures;
-
-            this.ReadMeasures(numPoints, out minMeasure, out maxMeasure, out measures);
-
-            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
-        }
+        return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
+    }
 
 
-        public static EsriMultiPointM Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
-        {
-            //+8: pass the record header; +4 pass the shapeType
-            reader.BaseStream.Position = offset * 2 + 8 + 4;
+    public static EsriMultiPointM Read(System.IO.BinaryReader reader, int offset, int contentLength, int srid)
+    {
+        //+8: pass the record header; +4 pass the shapeType
+        reader.BaseStream.Position = offset * 2 + 8 + 4;
 
-            var boundingBox = ShpBinaryReader.ReadBoundingBox(reader);
+        var boundingBox = ShpBinaryReader.ReadBoundingBox(reader);
 
-            var numPoints = reader.ReadInt32();
+        var numPoints = reader.ReadInt32();
 
-            var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
+        var points = ShpBinaryReader.ReadPoints(reader, numPoints, srid);
 
-            double minMeasure, maxMeasure;
+        double minMeasure, maxMeasure;
 
-            double[] measures;
+        double[] measures;
 
-            ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
+        ShpBinaryReader.ReadValues(reader, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
-        }
+        return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
+    }
 
-        public static EsriMultiPointM ParseGdbRecord(byte[] bytes, int srid)
-        {
-            // 4: shape type
-            var offset = 4;
+    public static EsriMultiPointM ParseGdbRecord(byte[] bytes, int srid)
+    {
+        // 4: shape type
+        var offset = 4;
 
-            var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
-            offset += 4 * ShapeConstants.DoubleSize;
+        var boundingBox = ShpBinaryReader.ReadBoundingBox(bytes, offset);
+        offset += 4 * ShapeConstants.DoubleSize;
 
-            var numPoints = BitConverter.ToInt32(bytes, offset);
-            offset += ShapeConstants.IntegerSize;
+        var numPoints = BitConverter.ToInt32(bytes, offset);
+        offset += ShapeConstants.IntegerSize;
 
-            var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
-            offset += numPoints * 2 * ShapeConstants.DoubleSize;
+        var points = ShpBinaryReader.ReadPoints(bytes, offset, numPoints, srid);
+        offset += numPoints * 2 * ShapeConstants.DoubleSize;
 
-            double minMeasure, maxMeasure;
+        double minMeasure, maxMeasure;
 
-            double[] measures;
+        double[] measures;
 
-            ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
+        ShpBinaryReader.ReadValues(bytes, offset, numPoints, out minMeasure, out maxMeasure, out measures);
 
-            return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
-        }
+        return new EsriMultiPointM(boundingBox, points, minMeasure, maxMeasure, measures);
     }
 }

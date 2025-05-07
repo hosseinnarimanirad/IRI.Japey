@@ -1,11 +1,14 @@
 ﻿using System.Linq;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Compression;
-using IRI.Sta.Common.Mapping;
+using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Spatial.Model;
 
 namespace IRI.Ket.GdiPlus.WorldfileFormat;
 
@@ -59,7 +62,7 @@ public static class WorldfilePyramid
 
             ZipFile.CreateFromDirectory(outputDirectory, System.IO.Path.ChangeExtension(imageFileName, "pyrmd"));
 
-            Sta.Common.Helpers.IOHelper.DeleteDirectory(outputDirectory);
+            IOHelper.DeleteDirectory(outputDirectory);
         }
     }
 

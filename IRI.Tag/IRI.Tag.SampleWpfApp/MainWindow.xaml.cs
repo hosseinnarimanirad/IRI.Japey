@@ -1,5 +1,5 @@
 ﻿using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Helpers;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Tag.SampleWpfApp
 {

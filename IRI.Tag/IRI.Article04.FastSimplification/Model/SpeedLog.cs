@@ -1,5 +1,6 @@
-﻿using IRI.Sta.Common.Analysis;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Article04.FastSimplification;
 

@@ -1,5 +1,5 @@
 ﻿using IRI.Article.Sfc.View.Components;
-using IRI.Sta.Common.Analysis.SFC;
+using IRI.Sta.Spatial.Analysis.SFC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes; 
 using spatial = IRI.Sta.Common.Primitives;
-using sfc = IRI.Sta.Common.Analysis.SFC;
-using Transform = IRI.Sta.Common.Analysis.SFC.Transform;
+using sfc = IRI.Sta.Spatial.Analysis.SFC;
+using Transform = IRI.Sta.Spatial.Analysis.SFC.Transform;
 
 namespace IRI.Article.Sfc.View;
 

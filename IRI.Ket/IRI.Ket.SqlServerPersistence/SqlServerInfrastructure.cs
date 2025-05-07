@@ -7,8 +7,9 @@ using Microsoft.Data.SqlClient;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Types;
 using IRI.Extensions;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Ket.Persistence.Infrastructure;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.SqlServerPersistence;
 

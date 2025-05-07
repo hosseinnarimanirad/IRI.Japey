@@ -1,9 +1,12 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Model;
 using System;
 using System.Text;
 using IRI.Extensions;
-using IRI.Sta.Common.WorldfileFormat;
+using IRI.Sta.Common.IO.Worldfile;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Spatial.Model;
 
 namespace IRI.Ket.GdiPlus.WorldfileFormat;
 
@@ -156,7 +159,7 @@ public static class WorldfileManager
 
     public static string MakeAssociatedWorldfileName(string imageFileName)
     {
-        var extension = Sta.Common.Helpers.IOHelper.GetExtensionWithoutDot(imageFileName);
+        var extension = IOHelper.GetExtensionWithoutDot(imageFileName);
 
         return System.IO.Path.ChangeExtension(imageFileName, $"{extension}w");
     }
@@ -170,12 +173,12 @@ public static class WorldfileManager
         return new Worldfile(xPixelSize, yPixelSize, new Point(mapBoundingBox.XMin + xPixelSize / 2.0, mapBoundingBox.YMax - yPixelSize / 2.0));
     }
 
-    public static Worldfile CreateByGeodeticValues(IRI.Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+    public static Worldfile CreateByGeodeticValues(TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
     {
         return Create(tile.GeodeticExtent, imagePixelWidth, imagePixelHeight);
     }
 
-    public static Worldfile CreateByWebMercatorValues(IRI.Sta.Common.Model.TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
+    public static Worldfile CreateByWebMercatorValues(TileInfo tile, int imagePixelWidth = 256, int imagePixelHeight = 256)
     {
         return Create(tile.WebMercatorExtent, imagePixelWidth, imagePixelHeight);
     }

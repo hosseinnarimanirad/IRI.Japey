@@ -21,6 +21,8 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.MachineLearning\IRI.Sta.MachineLearning.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
   </ItemGroup>
 
   <ItemGroup>

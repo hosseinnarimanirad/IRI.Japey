@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IRI.Sta.Common.Primitives; 
 
-namespace IRI.Sta.ShapefileFormat.Indexing
+namespace IRI.Sta.ShapefileFormat.Indexing;
+
+public struct ShpIndex
 {
-    public struct ShpIndex
-    {
-        //public int Offset { get; set; }
+    //public int Offset { get; set; }
 
-        //public int ContentLength { get; set; }
-        public int RecordNumber { get; set; }
+    //public int ContentLength { get; set; }
+    public int RecordNumber { get; set; }
 
-        public IRI.Sta.Common.Primitives.BoundingBox MinimumBoundingBox { get; set; }
-    }
+    public BoundingBox MinimumBoundingBox { get; set; }
 }

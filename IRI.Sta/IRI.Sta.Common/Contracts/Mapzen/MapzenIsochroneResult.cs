@@ -81,20 +81,20 @@ public class MapzenGeometry
         }
     }
 
-    public IRI.Sta.Common.Primitives.Geometry<Point> ParseToGeometry()
-    {
-        if (type.ToLower().Trim() == "linestring")
-        {
-            return IRI.Sta.Common.Primitives.Geometry<Point>.ParseLineStringToGeometry(Points, IRI.Sta.Common.Primitives.GeometryType.LineString, true);
-        }
-        else if (type.ToLower().Trim() == "polygon")
-        {
-            return IRI.Sta.Common.Primitives.Geometry<Point>.ParsePolygonToGeometry(Rings, IRI.Sta.Common.Primitives.GeometryType.Polygon, true);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+    //public IRI.Sta.Common.Primitives.Geometry<Point> ParseToGeometry()
+    //{
+    //    if (type.ToLower().Trim() == "linestring")
+    //    {
+    //        return IRI.Sta.Common.Primitives.Geometry<Point>.ParseLineStringToGeometry(Points, IRI.Sta.Common.Primitives.GeometryType.LineString, true);
+    //    }
+    //    else if (type.ToLower().Trim() == "polygon")
+    //    {
+    //        return IRI.Sta.Common.Primitives.Geometry<Point>.ParsePolygonToGeometry(Rings, IRI.Sta.Common.Primitives.GeometryType.Polygon, true);
+    //    }
+    //    else
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-    }
+    //}
 }

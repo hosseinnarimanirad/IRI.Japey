@@ -10,7 +10,7 @@ public class DictionaryPropertyDescriptor : PropertyDescriptor
     System.Collections.IDictionary _dictionary;
     object _key;
 
-    internal DictionaryPropertyDescriptor(System.Collections.IDictionary d, object key)
+    public DictionaryPropertyDescriptor(System.Collections.IDictionary d, object key)
         : base(key.ToString(), null)
     {
         _dictionary = d;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Common.Encodings;
+namespace IRI.Sta.Common.Encodings;
 
 public static class Base64UrlEncoding
 {

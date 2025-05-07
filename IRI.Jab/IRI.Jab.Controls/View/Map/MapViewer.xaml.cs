@@ -21,10 +21,10 @@ using System.Net.Http;
 
 using IRI.Extensions;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Mapping;
-using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Controls.Model;
 using IRI.Jab.Common;
@@ -36,8 +36,10 @@ using sb = IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Sta.Common.Enums;
 using IRI.Jab.Common.Assets.Data;
+using IRI.Sta.Spatial.Model;
+using IRI.Sta.Spatial.Helpers;
 
-//using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
+//using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 namespace IRI.Jab.Controls;
 
@@ -768,9 +770,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
 
-        presenter.RequestIdentify = point => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(point));
+        presenter.RequestIdentify = point => new ObservableCollection<FeatureSet<sb.Point>>(this.GetFeatures(point));
 
-        presenter.RequestSearch = searchText => new ObservableCollection<sb.FeatureSet<sb.Point>>(this.GetFeatures(searchText));
+        presenter.RequestSearch = searchText => new ObservableCollection<FeatureSet<sb.Point>>(this.GetFeatures(searchText));
 
         presenter.RequestGetPoint = SelectPointAsync;
 
@@ -981,7 +983,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         var layer = new TileServiceLayer(mapProvider, opacity, getFileName) { VisibleRange = ScaleInterval.All };
 
-        if (isCachEnabled && Sta.Common.Helpers.IOHelper.TryCreateDirectory(cacheDirectory))
+        if (isCachEnabled && IOHelper.TryCreateDirectory(cacheDirectory))
         {
             layer.EnableCaching(cacheDirectory);
         }
@@ -1017,7 +1019,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     public void SetVectorLayer(
         ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
-        bool isLabeled = false, Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
+        bool isLabeled = false, Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
     {
         LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
@@ -2884,11 +2886,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     //Get the FontFamily in method parameters
     public async Task DrawGeometriesAsync(
-        List<sb.Geometry<sb.Point>> geometries,
+        List<Geometry<sb.Point>> geometries,
         string layerName,
         VisualParameters visualElements,
         List<object> labels = null,
-        Func<sb.Geometry<sb.Point>, sb.Geometry<sb.Point>> positionFunc = null,
+        Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc = null,
         int fontSize = 0,
         Brush labelBackground = null,
         FontFamily font = null,
@@ -2912,7 +2914,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         }
         else
         {
-            var features = geometries.Zip(labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList();
+            var features = geometries.Zip(labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList();
 
             source = new MemoryDataSource(features, f => f.Label, null);
         }
@@ -2941,7 +2943,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         if (geometries == null)
             return;
 
-        var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new sb.Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null);
+        var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null);
 
         var layer = new VectorLayer(
             layerName,
@@ -2961,7 +2963,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await AddNonTiledLayer(layer);
     }
 
-    public async Task DrawGeometries(List<sb.Geometry<sb.Point>> geometries, string layerName,
+    public async Task DrawGeometries(List<Geometry<sb.Point>> geometries, string layerName,
                                     VisualParameters visualParameters, Geometry pointSymbol)
     {
         if (geometries == null || geometries.Count < 1)
@@ -2982,7 +2984,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await AddNonTiledLayer(layer);
     }
 
-    public async Task SelectGeometriesAsync(List<sb.Geometry<sb.Point>> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
+    public async Task SelectGeometriesAsync(List<Geometry<sb.Point>> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
     {
         ClearLayer(LayerType.Selection, true);
 
@@ -3596,7 +3598,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         ZoomToExtent(boundingBox, false, true, callback, withAnimation);
     }
 
-    private void ZoomToFeature(sb.Geometry<sb.Point> geometry)
+    private void ZoomToFeature(Geometry<sb.Point> geometry)
     {
         if (geometry.IsNullOrEmpty())
             return;
@@ -3867,7 +3869,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     CancellationTokenSource drawingCancellationToken;
 
-    TaskCompletionSource<Response<sb.Geometry<sb.Point>>> drawingTcs;
+    TaskCompletionSource<Response<Geometry<sb.Point>>> drawingTcs;
 
     private void MapView_MouseDownForPanWhileStartDrawing(object sender, MouseButtonEventArgs e)
     {
@@ -4394,9 +4396,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         return view;
     }
 
-    private Task<Response<sb.Geometry<sb.Point>>> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
+    private Task<Response<Geometry<sb.Point>>> GetDrawing(DrawMode mode, EditableFeatureLayerOptions options, bool display = false)
     {
-        drawingTcs = new TaskCompletionSource<Response<sb.Geometry<sb.Point>>>();
+        drawingTcs = new TaskCompletionSource<Response<Geometry<sb.Point>>>();
 
         drawingCancellationToken = new CancellationTokenSource();
 
@@ -4469,7 +4471,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     }
 
-    public async Task<Response<sb.Geometry<sb.Point>>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
+    public async Task<Response<Geometry<sb.Point>>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
     {
         try
         {
@@ -4489,7 +4491,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             }
             else
             {
-                return new Response<sb.Geometry<sb.Point>>();
+                return new Response<Geometry<sb.Point>>();
             }
         }
         catch (TaskCanceledException)
@@ -4501,7 +4503,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 this.Pan();
             }
 
-            return new Response<sb.Geometry<sb.Point>>() { IsCanceled = true };
+            return new Response<Geometry<sb.Point>>() { IsCanceled = true };
         }
         catch (Exception ex)
         {
@@ -4730,9 +4732,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     #region Search
 
 
-    public List<sb.FeatureSet<sb.Point>>? GetFeatures(string searchText)
+    public List<FeatureSet<sb.Point>>? GetFeatures(string searchText)
     {
-        List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
+        List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
 
         foreach (var layer in GetAllVectorLayers(this.Layers))
         {
@@ -4763,11 +4765,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     #region Identify
 
 
-    public List<sb.FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
+    public List<FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
     {
-        List<sb.FeatureSet<sb.Point>> result = new List<sb.FeatureSet<sb.Point>>();
+        List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
 
-        sb.Geometry<sb.Point> geometryBoundary;
+        Geometry<sb.Point> geometryBoundary;
 
         var offset = ScreenToMap(7);
 
@@ -4847,11 +4849,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         }
     }
 
-    private Task<Response<sb.Geometry<sb.Point>>> EditGeometry(sb.Geometry<sb.Point> geometry, EditableFeatureLayerOptions options)
+    private Task<Response<Geometry<sb.Point>>> EditGeometry(Geometry<sb.Point> geometry, EditableFeatureLayerOptions options)
     {
         editingCancellationToken = new CancellationTokenSource();
 
-        var tcs = new TaskCompletionSource<Response<sb.Geometry<sb.Point>>>();
+        var tcs = new TaskCompletionSource<Response<Geometry<sb.Point>>>();
 
         if (CurrentEditingLayer != null)
         {
@@ -4953,9 +4955,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         return tcs.Task;
     }
 
-    public async Task<Response<sb.Geometry<sb.Point>>> EditGeometryAsync(sb.Geometry<sb.Point> originalGeometry, EditableFeatureLayerOptions options)
+    public async Task<Response<Geometry<sb.Point>>> EditGeometryAsync(Geometry<sb.Point> originalGeometry, EditableFeatureLayerOptions options)
     {
-        sb.Geometry<sb.Point> originalClone = null;
+        Geometry<sb.Point> originalClone = null;
 
         try
         {
@@ -4984,7 +4986,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             //97 04 27
             //return originalGeometry;
-            return new Response<sb.Geometry<sb.Point>>() { Result = originalGeometry, IsCanceled = true };
+            return new Response<Geometry<sb.Point>>() { Result = originalGeometry, IsCanceled = true };
         }
         catch (Exception ex)
         {
@@ -5193,7 +5195,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     Guid _measureId;
 
     //private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
-    private async Task<Response<sb.Geometry<sb.Point>>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
+    private async Task<Response<Geometry<sb.Point>>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
     {
         this._measureCancellationToken = new CancellationTokenSource();
 
@@ -5275,7 +5277,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     }
 
     //public async Task<sb.Geometry> MeasureAsync(DrawMode mode, bool isEdgeLabelVisible, Action action)
-    public async Task<Response<sb.Geometry<sb.Point>>> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
+    public async Task<Response<Geometry<sb.Point>>> MeasureAsync(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action)
     {
         _measureId = Guid.NewGuid();
 
@@ -5291,7 +5293,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             this.Status = MapStatus.Idle;
 
-            return new Response<sb.Geometry<sb.Point>>() { Result = null, IsCanceled = true };
+            return new Response<Geometry<sb.Point>>() { Result = null, IsCanceled = true };
         }
         catch (Exception ex)
         {

@@ -8,6 +8,8 @@ using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.ShapefileFormat.Model;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Ket.Persistence.DataSources;
 

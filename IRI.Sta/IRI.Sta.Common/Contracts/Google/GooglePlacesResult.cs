@@ -123,28 +123,28 @@ public class GooglePlaces
         return new Point(this.Geometry.Location.Longitude, this.Geometry.Location.Latitude);
     }
 
-    public Point AsWebMercatorPoint()
-    {
-        return IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
-    }
+    //public Point AsWebMercatorPoint()
+    //{
+    //    return IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
+    //}
 
-    public BoundingBox AsGeodeticBoundingBox()
-    {
-        if (this.Geometry?.Viewport == null)
-        {
-            return BoundingBox.NaN;
-        }
+    //public BoundingBox AsGeodeticBoundingBox()
+    //{
+    //    if (this.Geometry?.Viewport == null)
+    //    {
+    //        return BoundingBox.NaN;
+    //    }
 
-        return new BoundingBox(xMin: this.Geometry.Viewport.Southwest.Longitude,
-            yMin: this.Geometry.Viewport.Southwest.Latitude,
-            xMax: this.Geometry.Viewport.Northeast.Longitude,
-            yMax: this.Geometry.Viewport.Northeast.Latitude);
-    }
+    //    return new BoundingBox(xMin: this.Geometry.Viewport.Southwest.Longitude,
+    //        yMin: this.Geometry.Viewport.Southwest.Latitude,
+    //        xMax: this.Geometry.Viewport.Northeast.Longitude,
+    //        yMax: this.Geometry.Viewport.Northeast.Latitude);
+    //}
 
-    public BoundingBox AsWebMercatorBoundingBox()
-    {
-        return (AsGeodeticBoundingBox().Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
-    }
+    //public BoundingBox AsWebMercatorBoundingBox()
+    //{
+    //    return (AsGeodeticBoundingBox().Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
+    //}
 }
 
 public class GooglePlacesResult

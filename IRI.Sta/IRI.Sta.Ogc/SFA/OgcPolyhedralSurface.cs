@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
-using IRI.Sta.Common.IO.OgcSFA;
+using IRI.Sta.Common.Enums;
 
 namespace IRI.Sta.Ogc.SFA;
 

@@ -5,6 +5,7 @@ using IRI.Sta.Common.Services;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
 using IRI.Jab.Common.Service.Dialog;
+using IRI.Sta.Spatial.Services.Google;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs;
 
@@ -361,7 +362,7 @@ public class AccountDialogViewModel : DialogViewModelBase
             {
                 _loginWithGoogleOAuthCommand = new RelayCommand(async param =>
                 {
-                    var result = await IRI.Sta.Common.Services.Google.GoogleOAuthService.RunOAuth2();
+                    var result = await GoogleOAuthService.RunOAuth2();
 
                     this.RequestLoginWithGoogleOAuth?.Invoke(result);
 

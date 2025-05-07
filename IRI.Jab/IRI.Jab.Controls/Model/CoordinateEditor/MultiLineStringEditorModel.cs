@@ -1,11 +1,12 @@
 ﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Geometry = IRI.Sta.Common.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
+using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 
 namespace IRI.Jab.Controls.Model

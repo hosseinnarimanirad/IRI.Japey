@@ -2,7 +2,7 @@
 using IRI.Jab.Common.Assets.ShapeStrings;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Enums;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

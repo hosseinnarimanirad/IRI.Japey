@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Sta.Common.Mapping;
+using IRI.Sta.Spatial.Mapping;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
@@ -18,7 +18,8 @@ using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Helpers;
 
 using sb = IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Model;
 
 namespace IRI.Jab.Common;
 
@@ -88,13 +89,13 @@ public class VectorLayer : BaseLayer
 
     }
 
-    public VectorLayer(string name, List<sb.Geometry<sb.Point>> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
+    public VectorLayer(string name, List<Geometry<sb.Point>> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
         : this(name, features, new VisualParameters(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, 1, Visibility.Visible), type, rendering, toRasterTechnique)
     {
 
     }
 
-    public VectorLayer(string layerName, List<sb.Geometry<sb.Point>> features, VisualParameters parameters, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
+    public VectorLayer(string layerName, List<Geometry<sb.Point>> features, VisualParameters parameters, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
     {
         if (features == null || features.Count == 0)
             throw new NotImplementedException();
@@ -166,7 +167,7 @@ public class VectorLayer : BaseLayer
 
     #region Default Rendering
     //StreamGeometry Approach
-    public Path AsShape(List<sb.Geometry<sb.Point>> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
+    public Path AsShape(List<Geometry<sb.Point>> geometries, double mapScale, sb.BoundingBox exactCurrentExtent, double width,
         double height, TransformGroup viewTransform, TranslateTransform viewTransformForPoints, Func<Point, Point> mapToScreen)
     {
         StreamGeometry geo;
@@ -204,7 +205,7 @@ public class VectorLayer : BaseLayer
     }
 
     //DrawingVisual Approach
-    public Path AsDrawingVisual(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+    public Path AsDrawingVisual(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox exactCurrentExtent, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
     {
         if (geometries == null)
             return null;
@@ -245,7 +246,7 @@ public class VectorLayer : BaseLayer
     }
 
     //Gdi+
-    public Path AsBitmapUsingGdiPlus(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+    public Path AsBitmapUsingGdiPlus(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
     {
         if (geometries == null)
             return null;
@@ -291,7 +292,7 @@ public class VectorLayer : BaseLayer
     }
 
     //Consider Labels
-    public Path AsBitmapUsingWriteableBitmap(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+    public Path AsBitmapUsingWriteableBitmap(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
     {
         if (geometries == null)
             return null;
@@ -329,7 +330,7 @@ public class VectorLayer : BaseLayer
     }
 
     //OpenTK
-    //public Path AsBitmapUsingOpenTK(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
+    //public Path AsBitmapUsingOpenTK(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, sb.BoundingBox boundingBox, double width, double height, Func<Point, Point> mapToScreen, RectangleGeometry area)
     //{
     //    if (geometries == null)
     //        return null;
@@ -388,7 +389,7 @@ public class VectorLayer : BaseLayer
     #region Tile Rendering
 
     //DrawingVisual Approach
-    public Path AsTileUsingDrawingVisual(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+    public Path AsTileUsingDrawingVisual(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
     {
         if (geometries == null)
             return null;
@@ -441,7 +442,7 @@ public class VectorLayer : BaseLayer
     }
 
     //Gdi+ Approach
-    public Path AsTileUsingGdiPlusAsync(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+    public Path AsTileUsingGdiPlusAsync(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
     {
         if (geometries == null)
             return null;
@@ -502,7 +503,7 @@ public class VectorLayer : BaseLayer
 
     //Writeable Bitmap Approach
     //Consider Labeling
-    public Path AsTileUsingWriteableBitmap(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+    public Path AsTileUsingWriteableBitmap(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
     {
         if (geometries == null)
         {
@@ -547,7 +548,7 @@ public class VectorLayer : BaseLayer
     }
 
     ////OpenTK Approach
-    //public Path AsTileUsinOpenTK(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
+    //public Path AsTileUsinOpenTK(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area, Func<Point, Point> viewTransform, sb.BoundingBox totalExtent)
     //{
     //    if (geometries == null)
     //        return null;
@@ -658,7 +659,7 @@ public class VectorLayer : BaseLayer
         element.SetBinding(Path.OpacityProperty, binding5);
     }
 
-    private LayerType GetGeometryType(sb.Geometry<sb.Point> geometry)
+    private LayerType GetGeometryType(Geometry<sb.Point> geometry)
     {
         switch (geometry.Type)
         {
@@ -711,7 +712,7 @@ public class VectorLayer : BaseLayer
             {
                 var geometries = await GetGeometriesForDisplayAsync(scale, tile.WebMercatorExtent);
 
-                var transform = IRI.Sta.Common.Mapping.MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+                var transform = MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
                 Func<Point, Point> mapToScreen = p =>
                 {
@@ -902,7 +903,7 @@ public class VectorLayer : BaseLayer
 
     public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, sb.BoundingBox mapExtent)
     {
-        List<sb.Geometry<sb.Point>>? geometries;
+        List<Geometry<sb.Point>>? geometries;
 
         List<string>? labels = null;
 
@@ -924,7 +925,7 @@ public class VectorLayer : BaseLayer
 
     //public async GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, sb.BoundingBox mapExtent)
     //{
-    //    List<sb.Geometry<sb.Point>> geometries; List<string> labels = null;
+    //    List<Geometry<sb.Point>> geometries; List<string> labels = null;
 
     //    if (this.IsLabeled(mapScale))
     //    {
@@ -942,9 +943,9 @@ public class VectorLayer : BaseLayer
     //    return new GeometryLabelPairs(geometries, labels);
     //}
 
-    public async Task<List<sb.Geometry<sb.Point>>>? GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
+    public async Task<List<Geometry<sb.Point>>>? GetGeometriesForDisplayAsync(double mapScale, sb.BoundingBox boundingBox)
     {
-        List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
+        List<Geometry<sb.Point>> geometries = new List<Geometry<sb.Point>>();
 
         if (this.DataSource is MemoryScaleDependentDataSource)
         {
@@ -961,9 +962,9 @@ public class VectorLayer : BaseLayer
         return geometries;
     }
 
-    //public List<sb.Geometry<sb.Point>> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
+    //public List<Geometry<sb.Point>> GetGeometriesForDisplay(double mapScale, sb.BoundingBox boundingBox)
     //{
-    //    List<sb.Geometry<sb.Point>> geometries = new List<sb.Geometry<sb.Point>>();
+    //    List<Geometry<sb.Point>> geometries = new List<Geometry<sb.Point>>();
 
     //    if (this.DataSource is IScaleDependentDataSource)
     //    {
@@ -985,7 +986,7 @@ public class VectorLayer : BaseLayer
     //    return DataSource?.GetEntireFeatures();
     //}
 
-    public List<T>? GetFeatures<T>() where T : class, sb.IGeometryAware<sb.Point>
+    public List<T>? GetFeatures<T>() where T : class, IGeometryAware<sb.Point>
     {
         return GetFeatures<T>(null);
     }
@@ -995,7 +996,7 @@ public class VectorLayer : BaseLayer
         return DataSource?.Fields;
     }
 
-    public List<TGeometryAware>? GetFeatures<TGeometryAware>(sb.Geometry<sb.Point> geometry) where TGeometryAware : class, sb.IGeometryAware<sb.Point>
+    public List<TGeometryAware>? GetFeatures<TGeometryAware>(Geometry<sb.Point> geometry) where TGeometryAware : class, IGeometryAware<sb.Point>
     {
         if (DataSource as VectorDataSource<TGeometryAware, sb.Point> != null)
         {
@@ -1012,7 +1013,7 @@ public class VectorLayer : BaseLayer
 
 
     //POTENTIALLY ERROR PROUNE; formattedText is always RTL
-    public void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
+    public void DrawLabels(List<string> labels, List<Geometry<sb.Point>> geometries, RenderTargetBitmap bmp, Func<Point, Point> mapToScreen)
     {
         if (labels.Count != geometries.Count)
             return;
@@ -1051,7 +1052,7 @@ public class VectorLayer : BaseLayer
 
 
 
-    private Image DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, double width, double height, Func<Point, Point> mapToScreen)
+    private Image DrawLabels(List<string> labels, List<Geometry<sb.Point>> geometries, double width, double height, Func<Point, Point> mapToScreen)
     {
         if (labels.Count != geometries.Count)
             return null;
@@ -1094,7 +1095,7 @@ public class VectorLayer : BaseLayer
         return image;
     }
 
-    private void DrawLabels(List<string> labels, List<sb.Geometry<sb.Point>> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
+    private void DrawLabels(List<string> labels, List<Geometry<sb.Point>> geometries, System.Drawing.Bitmap image, Func<sb.IPoint, sb.IPoint> mapToScreen)
     {
         if (labels.Count != geometries.Count)
             return;
@@ -1127,7 +1128,7 @@ public class VectorLayer : BaseLayer
         graphic.Flush();
     }
 
-    private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<sb.Geometry<sb.Point>> positions, Func<sb.IPoint, sb.IPoint> transform)
+    private System.Drawing.Bitmap DrawLabel(int width, int height, List<string> labels, List<Geometry<sb.Point>> positions, Func<sb.IPoint, sb.IPoint> transform)
     {
         System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
 
@@ -1170,7 +1171,7 @@ public class VectorLayer : BaseLayer
     #region Old Codes
 
 
-    //public async Task<Path> AsTileUsingGdiPlus(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double width, double height, Func<sb.Point, sb.Point> mapToScreen, RectangleGeometry area)
+    //public async Task<Path> AsTileUsingGdiPlus(List<Geometry<sb.Point>> geometries, List<string> labels, double mapScale, TileInfo region, double width, double height, Func<sb.Point, sb.Point> mapToScreen, RectangleGeometry area)
     //{
     //    Brush brush = this.VisualParameters.Fill;
 
@@ -1228,7 +1229,7 @@ public class VectorLayer : BaseLayer
     //}
 
 
-    //public async Task<Path> AsSingleImage(List<sb.Geometry<sb.Point>> geometries, List<string> labels, double width, double height, Func<sb.Point, sb.Point> mapToScreen)
+    //public async Task<Path> AsSingleImage(List<Geometry<sb.Point>> geometries, List<string> labels, double width, double height, Func<sb.Point, sb.Point> mapToScreen)
     //{
     //    Path result = new Path();
 

@@ -1,6 +1,6 @@
 ﻿using IRI.Article.Sfc.View;
 using IRI.Sta.DataStructures;
-using IRI.Sta.Common.Analysis.SFC;
+using IRI.Sta.Spatial.Analysis.SFC;
 using System;
 using System.Diagnostics;
 using System.Linq;

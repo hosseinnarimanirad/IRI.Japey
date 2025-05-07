@@ -2,9 +2,10 @@
 using Microsoft.SqlServer.Types;
 
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;
 
@@ -681,7 +682,7 @@ public static class GeometryExtensions
 
         var end = toGeodeticWgs84Func(line.End);
 
-        var geodeticLine = SqlSpatialUtility.MakeGeography(new System.Collections.Generic.List<T>() { start, end }, false);
+        var geodeticLine = SqlSpatialUtility.MakeGeography(new List<T>() { start, end }, false);
 
         return geodeticLine.STLength().Value;
     }

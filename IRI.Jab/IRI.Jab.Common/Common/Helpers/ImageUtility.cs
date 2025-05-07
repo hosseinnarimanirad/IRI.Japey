@@ -1,5 +1,6 @@
 ﻿using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;

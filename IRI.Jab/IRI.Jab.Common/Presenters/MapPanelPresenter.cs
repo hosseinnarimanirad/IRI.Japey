@@ -1,5 +1,5 @@
 ﻿using System;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
 using IRI.Sta.CoordinateSystems;

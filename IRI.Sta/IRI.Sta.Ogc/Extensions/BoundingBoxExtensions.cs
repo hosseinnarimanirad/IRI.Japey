@@ -1,10 +1,10 @@
-﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Ogc.WMS;
+﻿using IRI.Sta.Ogc.WMS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions
 {

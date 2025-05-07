@@ -1,5 +1,5 @@
-﻿using IRI.Sta.DataStructures.AdvancedStructures;
-using IRI.Sta.Common.Analysis.SFC;
+﻿using IRI.Sta.Spatial.AdvancedStructures;
+using IRI.Sta.Spatial.Analysis.SFC;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,8 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Spatial.Primitives;
 using Microsoft.SqlServer.Types;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Common.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;
 

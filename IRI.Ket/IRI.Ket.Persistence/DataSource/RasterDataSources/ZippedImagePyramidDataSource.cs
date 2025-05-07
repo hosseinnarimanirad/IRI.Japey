@@ -1,10 +1,11 @@
 ﻿using System.Data;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Mapping;
 using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Model;
 using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.Spatial.Mapping;
 
 namespace IRI.Ket.Persistence.RasterDataSources;
 
@@ -112,7 +113,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
     {
         //94.12.17
         //int zoomLevel = GetZoomLevel(mapScale);
-        int zoomLevel = IRI.Sta.Common.Mapping.WebMercatorUtility.GetZoomLevel(mapScale);
+        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale);
 
         var result = new List<GeoReferencedImage>();
 
