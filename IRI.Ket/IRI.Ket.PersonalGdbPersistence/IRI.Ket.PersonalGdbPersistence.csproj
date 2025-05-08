@@ -11,8 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
     <ProjectReference Include="..\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" />
   </ItemGroup>
   

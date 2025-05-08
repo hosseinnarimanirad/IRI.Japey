@@ -95,7 +95,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
                             _archive.Entries.Where(e => e.FullName.StartsWith(lastPyramid.ToString()))
                                             .Select(e => _inverseFunction(e.FullName).WebMercatorExtent), true);
 
-            ZipFileHelper.WriteString(_archive, Newtonsoft.Json.JsonConvert.SerializeObject(WebMercatorExtent), _extentFileName);
+            ZipFileHelper.WriteString(_archive, JsonHelper.Serialize(WebMercatorExtent), _extentFileName);
 
             _archive.Dispose();
 

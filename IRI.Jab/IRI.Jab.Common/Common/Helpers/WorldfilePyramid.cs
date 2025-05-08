@@ -13,6 +13,7 @@ using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Ket.Persistence.RasterDataSources;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Jab.Common.Helpers;
 
@@ -85,7 +86,7 @@ public static class WorldfilePyramidFactory
 
     private static void WriteBoundingBox(BoundingBox webMercatorBoundingBox, string outputDirectory)
     {
-        System.IO.File.WriteAllText(System.IO.Path.Combine(outputDirectory, _extentFileName), Newtonsoft.Json.JsonConvert.SerializeObject(webMercatorBoundingBox));
+        System.IO.File.WriteAllText(System.IO.Path.Combine(outputDirectory, _extentFileName), JsonHelper.Serialize(webMercatorBoundingBox));
     }
 
 

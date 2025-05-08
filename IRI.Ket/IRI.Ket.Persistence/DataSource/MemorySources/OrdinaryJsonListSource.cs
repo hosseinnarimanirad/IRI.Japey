@@ -1,4 +1,5 @@
 ﻿using IRI.Extensions;
+using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
@@ -37,7 +38,7 @@ public class OrdinaryJsonListSource<TGeometryAware> : MemoryDataSource<TGeometry
 
     public static OrdinaryJsonListSource<TGeometryAware> CreateFromJsonString(string jsonString, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string> labelFunc = null)
     {
-        var values = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TGeometryAware>>(jsonString);
+        var values = JsonHelper.Deserialize<List<TGeometryAware>>(jsonString);
 
         return new OrdinaryJsonListSource<TGeometryAware>(values, mapToFeatureFunc, labelFunc);
     }

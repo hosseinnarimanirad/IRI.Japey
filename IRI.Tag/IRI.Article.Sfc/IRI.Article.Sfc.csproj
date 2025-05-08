@@ -12,8 +12,6 @@
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Common\IRI.Jab.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Jab\IRI.Jab.Controls\IRI.Jab.Controls.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
   </ItemGroup>
 
 </Project>

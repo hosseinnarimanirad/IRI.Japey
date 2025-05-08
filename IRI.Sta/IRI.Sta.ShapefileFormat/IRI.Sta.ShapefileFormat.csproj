@@ -31,9 +31,9 @@
     <Content Include="README.txt" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
