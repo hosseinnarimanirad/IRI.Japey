@@ -3,7 +3,7 @@ using IRI.Sta.Spatial.Primitives;
 using System.Diagnostics;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Spatial.AdvancedStructures;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 
 
@@ -209,11 +209,11 @@ public static class Sta_GeometryExtensions
     {
         //This check is required
         if (multiPoint.IsNullOrEmpty())
-            return new GeoJsonMultiPoint()
-            {
-                Type = GeoJson.MultiPoint,
-                Coordinates = new double[0][],
-            };
+            return GeoJsonMultiPoint.Empty;
+        //return new GeoJsonMultiPoint()
+        //{                
+        //    Coordinates = [],
+        //};
 
         var numberOfGeometries = multiPoint.NumberOfGeometries;
 
@@ -227,7 +227,7 @@ public static class Sta_GeometryExtensions
         return new GeoJsonMultiPoint()
         {
             Coordinates = points,
-            Type = GeoJson.MultiPoint,
+            //Type = GeoJson.MultiPoint,
         };
     }
 

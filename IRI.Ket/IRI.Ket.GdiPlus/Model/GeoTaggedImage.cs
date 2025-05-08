@@ -1,8 +1,6 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Spatial.Primitives;
-using Newtonsoft.Json;
-using System;
 
 namespace IRI.Ket.GdiPlus.Model;
 
@@ -24,7 +22,7 @@ public class GeoTaggedImage
 
             if (System.IO.File.Exists(location))
             {
-                this.GeographicLocation = JsonConvert.DeserializeObject<Point3D>(System.IO.File.ReadAllText(location));
+                this.GeographicLocation = JsonHelper.Deserialize<Point3D>(System.IO.File.ReadAllText(location));
 
                 var webMercator = MapProjects.GeodeticWgs84ToWebMercator((Point)GeographicLocation);
 
@@ -40,7 +38,7 @@ public class GeoTaggedImage
 
                     this.WebMercatorLocation = new Point3D(webMercator.X, webMercator.Y, GeographicLocation.Z);
 
-                    System.IO.File.WriteAllText(location, JsonConvert.SerializeObject(this.GeographicLocation));
+                    System.IO.File.WriteAllText(location, JsonHelper.Serialize(this.GeographicLocation));
                 }
             }
         }

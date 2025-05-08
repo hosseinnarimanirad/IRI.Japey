@@ -1,30 +1,24 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace IRI.Sta.Spatial.Primitives.Esri;
 
 //[DataContract]
-[JsonObject]
+//[JsonObject]
 public class EsriJsonSpatialreference
 {
     //[DataMember(Name = "wkid")]
-    [JsonProperty("wkid")]
+    [JsonPropertyName("wkid")]
     public int Wkid { get; set; }
 
     //[DataMember(Name = "latestWkid")]
-    [JsonProperty("latestWkid")]
+    [JsonPropertyName("latestWkid")]
     public int? LatestWkid { get; set; }
 
     //[DataMember(Name = "vcsWkid")]
-    [JsonProperty("vcsWkid")]
+    [JsonPropertyName("vcsWkid")]
     public int? VcsWkid { get; set; }
 
     //[DataMember(Name = "latestVcsWkid")]
-    [JsonProperty("latestVcsWkid")]
+    [JsonPropertyName("latestVcsWkid")]
     public int? LatestVcsWkid { get; set; }
 }

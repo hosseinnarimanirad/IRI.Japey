@@ -1,8 +1,4 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IRI.Sta.Spatial.Mapping;
 

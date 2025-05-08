@@ -1,12 +1,8 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Spatial.Primitives;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using IRI.Sta.Common.Primitives;
+using System.Text.Json.Serialization;
 
 namespace IRI.Sta.Spatial.Mapping;
 
@@ -14,19 +10,19 @@ public abstract class IndexBase : IGeometryAware<Point>
 {
     public int Id { get; set; }
 
-    [JsonProperty("shne")]
+    [JsonPropertyName("shne")]
     public virtual string SheetNameEn { get; set; }
 
-    [JsonProperty("shnf")]
+    [JsonPropertyName("shnf")]
     public virtual string SheetNameFa { get; set; }
 
-    [JsonProperty("shno")]
+    [JsonPropertyName("shno")]
     public virtual string SheetNumber { get; set; }
 
-    [JsonProperty("minlat")]
+    [JsonPropertyName("minlat")]
     public virtual double MinLatitude { get; set; }
 
-    [JsonProperty("minlng")]
+    [JsonPropertyName("minlng")]
     public virtual double MinLongitude { get; set; }
 
     [JsonIgnore]

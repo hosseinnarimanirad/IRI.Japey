@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IRI.Sta.Common.Services.Oxford;
@@ -32,7 +30,7 @@ public static class OxfordDictionaryService
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<OdResult>(result);
+                    return JsonSerializer.Deserialize<OdResult>(result);
                 }
             }
         }

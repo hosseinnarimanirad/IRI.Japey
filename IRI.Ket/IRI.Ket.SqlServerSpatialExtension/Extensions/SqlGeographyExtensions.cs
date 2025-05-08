@@ -1,7 +1,6 @@
-﻿using IRI.Sta.Spatial.Primitives;
-using Microsoft.SqlServer.Types;
+﻿using Microsoft.SqlServer.Types;
 using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;
@@ -317,11 +316,13 @@ public static class SqlGeographyExtensions
     {
         //This check is required
         if (geometry.IsNullOrEmpty())
-            return new GeoJsonMultiPoint()
-            {
-                Type = GeoJson.MultiPoint,
-                Coordinates = new double[0][],
-            };
+            return GeoJsonMultiPoint.Empty;
+            //return new GeoJsonMultiPoint()
+            //{
+            //    //Type = GeoJson.MultiPoint,
+            //    //Coordinates = new double[0][],
+            //    Coordinates = [],
+            //};
 
         var numberOfGeometries = geometry.STNumGeometries().Value;
 
@@ -335,7 +336,7 @@ public static class SqlGeographyExtensions
         return new GeoJsonMultiPoint()
         {
             Coordinates = points,
-            Type = GeoJson.MultiPoint,
+            //Type = GeoJson.MultiPoint,
         };
     }
 

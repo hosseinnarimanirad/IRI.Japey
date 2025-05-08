@@ -103,7 +103,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
         }
         else
         {
-            this.WebMercatorExtent = JsonHelper.ParseFromJson<BoundingBox>(extentString);
+            this.WebMercatorExtent = JsonHelper.Deserialize<BoundingBox>(extentString);
         }
 
 

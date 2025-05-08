@@ -1,13 +1,11 @@
-﻿using IRI.Sta.Spatial.Analysis;
-using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Collections.ObjectModel;
-using IRI.Sta.Common.Primitives;
+using System.Text.Json.Serialization;
 
+using IRI.Extensions;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.MachineLearning;
 
@@ -20,44 +18,44 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
     /// </summary>
     //public const double MinVerticalSquareDistanceThreshold = 0.1;
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? DistanceToPrevious { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? DistanceToNext { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? Area { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? SquareCosineOfAngle { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? CosineOfAngle { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? VerticalDistance { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? BaseLength { get; private set; }
 
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? dX12 { get; private set; }
-    [JsonProperty]
+    //[JsonProperty]
     public double? dX13 { get; private set; }
-    [JsonProperty]
+    //[JsonProperty]
     public double? dX23 { get; private set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public double? dY12 { get; private set; }
-    [JsonProperty]
+    //[JsonProperty]
     public double? dY13 { get; private set; }
-    [JsonProperty]
+    //[JsonProperty]
     public double? dY23 { get; private set; }
 
 
-    [JsonProperty]
+    //[JsonProperty]
     public List<LRSimplificationFeatures> Features { get; set; }
 
     [JsonIgnore]
@@ -129,7 +127,7 @@ public class LRSimplificationParameters<T> where T : IPoint, new()
         _featureValues = result;
     }
 
-    [JsonProperty]
+    //[JsonProperty]
     public bool IsRetained { get; set; }
 
     public LRSimplificationParameters()

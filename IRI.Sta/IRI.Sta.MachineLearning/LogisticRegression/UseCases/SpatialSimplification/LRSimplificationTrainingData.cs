@@ -1,4 +1,5 @@
 ﻿using IRI.Extensions;
+using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using System;
@@ -51,10 +52,11 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
 
     public void SaveAsJson(string fileName)
     {
-        var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings()
-        {
-            NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-        });
+        //var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(this, new Newtonsoft.Json.JsonSerializerSettings()
+        //{
+        //    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+        //});
+        var jsonString = JsonHelper.SerializeWithIgnoreNullOption(this);
 
         System.IO.File.WriteAllText(fileName, jsonString);
     }
@@ -163,7 +165,8 @@ public class LRSimplificationTrainingData<T> where T : IPoint, new()
         {
             var jsonString = System.IO.File.ReadAllText(fileName);
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<LRSimplificationTrainingData<Point>>(jsonString);
+            //return Newtonsoft.Json.JsonConvert.DeserializeObject<LRSimplificationTrainingData<Point>>(jsonString);
+            return JsonHelper.Deserialize<LRSimplificationTrainingData<Point>>(jsonString);
         }
         catch (Exception)
         {

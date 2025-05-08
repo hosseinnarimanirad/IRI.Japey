@@ -38,7 +38,6 @@
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
-    <ProjectReference Include="..\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
     <ProjectReference Include="..\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
   </ItemGroup>
 

@@ -1,10 +1,5 @@
-﻿
-using IRI.Sta.MachineLearning;
-using System;
+﻿using IRI.Sta.Common.Helpers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Sta.MachineLearning;
 
@@ -16,7 +11,7 @@ public class SyntheticDataFile
 
     public void Save(string fileName)
     {
-        System.IO.File.WriteAllText(fileName, Newtonsoft.Json.JsonConvert.SerializeObject(this));
+        System.IO.File.WriteAllText(fileName, JsonHelper.Serialize(this));
     }
 
     public static SyntheticDataFile Load(string fileName)
@@ -29,6 +24,6 @@ public class SyntheticDataFile
         if (string.IsNullOrWhiteSpace(jsonString))
             return null;
 
-        return Newtonsoft.Json.JsonConvert.DeserializeObject<SyntheticDataFile>(jsonString);
+        return JsonHelper.Deserialize<SyntheticDataFile>(jsonString);
     }
 }

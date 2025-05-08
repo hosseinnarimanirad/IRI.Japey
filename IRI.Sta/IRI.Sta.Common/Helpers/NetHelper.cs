@@ -1,6 +1,5 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Common.Services;
-using IRI.Sta.Common.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,9 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IRI.Sta.Common.Helpers;
@@ -28,6 +29,7 @@ public static class NetHelper
     public static bool PingHost(string nameOrAddress, int timeout = 3000)
     {
         bool pingable = false;
+
 
         Ping pinger = new Ping();
 
@@ -277,8 +279,8 @@ public static class NetHelper
             var client = CreateWebClient(contentType, encoding, proxy, bearer);
 
             var stringResult = await client.DownloadStringTaskAsync(address);
-
-            return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+            
+            return ResponseFactory.Create(JsonHelper.Deserialize<T>(stringResult));
         }
         catch (Exception ex)
         {
@@ -305,7 +307,7 @@ public static class NetHelper
 
             var stringResult = client.DownloadString(address);
 
-            return ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+            return ResponseFactory.Create(JsonHelper.Deserialize<T>(stringResult));
         }
         catch (Exception ex)
         {
@@ -445,7 +447,7 @@ public static class NetHelper
         {
             var result = HttpPostString(parameters);
 
-            return ResponseFactory.Create<T>(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(result.Result));
+            return ResponseFactory.Create<T>(JsonHelper.Deserialize<T>(result.Result));
         }
         catch (Exception ex)
         {
@@ -496,14 +498,17 @@ public static class NetHelper
         {
             var client = CreateWebClient(parameters.ContentType, parameters.Encoding, parameters.Proxy, parameters.Bearer, parameters.Headers);
 
-            var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
-            {
-                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-            });
+            
+            var stringData = JsonHelper.SerializeWithIgnoreNullOption(parameters.Data);
+
+            //var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
+            //{
+            //    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            //});
 
             var stringResult = await client.UploadStringTaskAsync(parameters.Address, httpMethod, stringData);
 
-            var result = ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
+            var result = ResponseFactory.Create(JsonHelper.Deserialize<T>(stringResult));
 
             return result;
         }
@@ -519,10 +524,11 @@ public static class NetHelper
         {
             var client = CreateWebClient(parameters.ContentType, parameters.Encoding, parameters.Proxy, parameters.Bearer, parameters.Headers);
 
-            var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
-            {
-                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-            });
+            var stringData = JsonHelper.SerializeWithIgnoreNullOption(parameters.Data);
+            //var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(parameters.Data, new Newtonsoft.Json.JsonSerializerSettings()
+            //{
+            //    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            //});
 
             var stringResult = client.UploadString(parameters.Address, httpMethod, stringData);
 
@@ -591,10 +597,11 @@ public static class NetHelper
             //}
             var client = CreateWebClient(contentType, encoding, proxy, bearer);
 
-            var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
-            {
-                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-            });
+            var stringData = JsonHelper.SerializeWithIgnoreNullOption(data);
+            //var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
+            //{
+            //    NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
+            //});
 
             var result = client.UploadData(address, Encoding.UTF8.GetBytes(stringData));
 
@@ -605,52 +612,6 @@ public static class NetHelper
             return ResponseFactory.CreateError<byte[]>(ex.Message);
         }
 
-    }
-
-    // 1400.02.14
-    // send encrypted message and get encrypted message
-    public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey, string decPriKey) where TResponse : class
-    {
-        try
-        {
-            var message = EncryptedMessage.Create(parameter, encPubKey);
-
-            //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
-            var response = await NetHelper.HttpPostAsync<EncryptedMessage>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
-
-            if (response.HasNotNullResult())
-            {
-                return ResponseFactory.Create<TResponse>(response.Result.Decrypt<TResponse>(decPriKey));
-            }
-            else
-            {
-                return ResponseFactory.CreateError<TResponse>(response.ErrorMessage);
-            }
-        }
-        catch (Exception ex)
-        {
-            return ResponseFactory.CreateError<TResponse>(ex.Message);
-        }
-    }
-
-
-    // 1400.02.14
-    // send encrypted message and get simple message
-    public async static Task<Response<TResponse>> EncryptedHttpPostAsync<TResponse>(string url, object parameter, WebProxy proxy, string encPubKey) where TResponse : class
-    {
-        try
-        {
-            var message = EncryptedMessage.Create(parameter, encPubKey);
-
-            //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
-            var response = await NetHelper.HttpPostAsync<TResponse>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
-
-            return response;
-        }
-        catch (Exception ex)
-        {
-            return ResponseFactory.CreateError<TResponse>(ex.Message);
-        }
     }
 
 

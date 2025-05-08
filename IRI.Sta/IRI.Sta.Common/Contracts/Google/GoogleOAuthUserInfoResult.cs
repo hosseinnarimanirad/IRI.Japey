@@ -1,40 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace IRI.Sta.Common.Contracts.Google;
 
-[JsonObject]
+//[JsonObject]
 public class GoogleOAuthUserInfoResult
 {
-    [JsonProperty]
+    //[JsonProperty]
     public string sub { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string name { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string given_name { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string family_name { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string profile { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string picture { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string email { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public bool email_verified { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string gender { get; set; }
 
-    [JsonProperty]
+    //[JsonProperty]
     public string locale { get; set; }
 }

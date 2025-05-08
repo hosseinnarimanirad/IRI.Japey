@@ -2,7 +2,7 @@
 using IRI.Sta.CoordinateSystems.MapProjection;
 using System.ComponentModel;
 using IRI.Sta.Common.PropertyDescriptors;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.Primitives;

@@ -1,17 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using IRI.Sta.Common.Helpers;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace IRI.Sta.Spatial.Primitives.Esri;
 
 //[DataContract]
 
-[JsonObject]
+//[JsonObject]
 public class EsriJsonGeometry
 {
     const string pointType = "POINT";
@@ -19,7 +14,8 @@ public class EsriJsonGeometry
     const string polylineType = "POLYLINE";
     const string polygonType = "POLYGON";
 
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    //[JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public EsriJsonGeometryType Type { get; set; }
 
     public double? X { get; set; }
@@ -49,7 +45,8 @@ public class EsriJsonGeometry
     {
         try
         {
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<EsriJsonGeometry>(esriGeometryJsonString);
+            //var result = Newtonsoft.Json.JsonConvert.DeserializeObject<EsriJsonGeometry>(esriGeometryJsonString);
+            var result = JsonHelper.Deserialize<EsriJsonGeometry>(esriGeometryJsonString);
 
             result.Type = type;
 

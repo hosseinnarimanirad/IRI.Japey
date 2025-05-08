@@ -13,7 +13,7 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Ket.GdiPlus.Helpers;
 using IRI.Sta.MachineLearning;
 using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 
 
 namespace IRI.Jab.Common.Helpers;

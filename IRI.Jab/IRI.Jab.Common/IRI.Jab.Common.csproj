@@ -57,6 +57,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Assets\Images\Logos\google.png" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
@@ -79,9 +83,8 @@
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.MachineLearning\IRI.Sta.MachineLearning.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Security\IRI.Sta.Security.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
-    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
   </ItemGroup>
 
   <ItemGroup>

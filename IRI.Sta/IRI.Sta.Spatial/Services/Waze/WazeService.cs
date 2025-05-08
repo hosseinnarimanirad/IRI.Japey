@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Sta.Common.Services;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Sta.Spatial.Services.Waze;
 
@@ -19,7 +20,7 @@ public static class WazeService
     {
 
         //https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=100&mu=100&left=51.263646841049194&right=51.328981161117554&bottom=35.72281242757668&top=35.74842331753895&_=1520571802973
-        
+
         var time = DateTime.UtcNow - IRI.Extensions.DateTimeExtensions.JulianDate;
 
         long epoc = ((long)time.TotalSeconds) * (long)1000;
@@ -46,7 +47,7 @@ public static class WazeService
 
             var stringResult = new StreamReader(new GZipStream(client.OpenRead(url), CompressionMode.Decompress)).ReadToEnd();
 
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<WazeGeoRssResult>(stringResult);
+            var result = JsonHelper.Deserialize<WazeGeoRssResult>(stringResult);
 
             return ResponseFactory.Create(result);
         }

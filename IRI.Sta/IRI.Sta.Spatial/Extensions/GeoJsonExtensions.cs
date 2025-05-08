@@ -1,5 +1,5 @@
-﻿using IRI.Sta.Spatial.Model.GeoJson;
-using IRI.Sta.Spatial.Model.GeoJson;
+﻿using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using System;
 using System.Collections.Generic;
 using System.Text;

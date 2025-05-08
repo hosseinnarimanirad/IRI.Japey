@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;

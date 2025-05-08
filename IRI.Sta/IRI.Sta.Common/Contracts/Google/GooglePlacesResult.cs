@@ -1,45 +1,46 @@
 ﻿using IRI.Sta.Common.Primitives;
-using Newtonsoft.Json; 
+using System.Text.Json.Serialization;
+
 
 namespace IRI.Sta.Common.Contracts.Google;
 
 public class GoogleLocation
 {
 
-    [JsonProperty("lat")]
+    [JsonPropertyName("lat")]
     public double Latitude { get; set; }
 
-    [JsonProperty("lng")]
+    [JsonPropertyName("lng")]
     public double Longitude { get; set; }
 }
 
 //public class Northeast
 //{
 
-//    [JsonProperty("lat")]
+//    [JsonPropertyName("lat")]
 //    public double Lat { get; set; }
 
-//    [JsonProperty("lng")]
+//    [JsonPropertyName("lng")]
 //    public double Lng { get; set; }
 //}
 
 //public class Southwest
 //{
 
-//    [JsonProperty("lat")]
+//    [JsonPropertyName("lat")]
 //    public double Lat { get; set; }
 
-//    [JsonProperty("lng")]
+//    [JsonPropertyName("lng")]
 //    public double Lng { get; set; }
 //}
 
 public class Viewport
 {
 
-    [JsonProperty("northeast")]
+    [JsonPropertyName("northeast")]
     public GoogleLocation Northeast { get; set; }
 
-    [JsonProperty("southwest")]
+    [JsonPropertyName("southwest")]
     public GoogleLocation Southwest { get; set; }
 }
 
@@ -47,70 +48,70 @@ public class Viewport
 public class GoogleGeometry
 {
 
-    [JsonProperty("location")]
+    [JsonPropertyName("location")]
     public GoogleLocation Location { get; set; }
 
-    [JsonProperty("viewport")]
+    [JsonPropertyName("viewport")]
     public Viewport Viewport { get; set; }
 }
 
 public class Photo
 {
 
-    [JsonProperty("height")]
+    [JsonPropertyName("height")]
     public int Height { get; set; }
 
-    [JsonProperty("html_attributions")]
+    [JsonPropertyName("html_attributions")]
     public string[] HtmlAttributions { get; set; }
 
-    [JsonProperty("photo_reference")]
+    [JsonPropertyName("photo_reference")]
     public string PhotoReference { get; set; }
 
-    [JsonProperty("width")]
+    [JsonPropertyName("width")]
     public int Width { get; set; }
 }
 
 public class OpeningHours
 {
 
-    [JsonProperty("open_now")]
+    [JsonPropertyName("open_now")]
     public bool OpenNow { get; set; }
 
-    [JsonProperty("weekday_text")]
+    [JsonPropertyName("weekday_text")]
     public object[] WeekdayText { get; set; }
 }
 
 public class GooglePlaces
 {
 
-    [JsonProperty("formatted_address")]
+    [JsonPropertyName("formatted_address")]
     public string FormattedAddress { get; set; }
 
-    [JsonProperty("geometry")]
+    [JsonPropertyName("geometry")]
     public GoogleGeometry Geometry { get; set; }
 
-    [JsonProperty("icon")]
+    [JsonPropertyName("icon")]
     public string Icon { get; set; }
 
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public string Id { get; set; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; }
 
-    [JsonProperty("place_id")]
+    [JsonPropertyName("place_id")]
     public string PlaceId { get; set; }
 
-    [JsonProperty("reference")]
+    [JsonPropertyName("reference")]
     public string Reference { get; set; }
 
-    [JsonProperty("types")]
+    [JsonPropertyName("types")]
     public string[] Types { get; set; }
 
-    [JsonProperty("photos")]
+    [JsonPropertyName("photos")]
     public Photo[] Photos { get; set; }
 
-    [JsonProperty("opening_hours")]
+    [JsonPropertyName("opening_hours")]
     public OpeningHours OpeningHours { get; set; }
 
     public Point AsGeodeticPoint()
@@ -150,15 +151,15 @@ public class GooglePlaces
 public class GooglePlacesResult
 {
 
-    [JsonProperty("html_attributions")]
+    [JsonPropertyName("html_attributions")]
     public object[] HtmlAttributions { get; set; }
 
-    [JsonProperty("next_page_token")]
+    [JsonPropertyName("next_page_token")]
     public string NextPageToken { get; set; }
 
-    [JsonProperty("results")]
+    [JsonPropertyName("results")]
     public GooglePlaces[] Results { get; set; }
 
-    [JsonProperty("status")]
+    [JsonPropertyName("status")]
     public string Status { get; set; }
 }

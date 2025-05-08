@@ -4,6 +4,7 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.IO.OgcSFA;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 
 namespace IRI.Sta.Spatial.Primitives;
 
@@ -1771,12 +1772,12 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
-    public IRI.Sta.Spatial.Model.GeoJson.GeoJsonFeatureSet AsGeoJsonFeatureSet()
+    public IRI.Sta.Spatial.Model.GeoJsonFormat.GeoJsonFeatureSet AsGeoJsonFeatureSet()
     {
-        return new Model.GeoJson.GeoJsonFeatureSet()
+        return new GeoJsonFeatureSet()
         {
             TotalFeatures = 1,
-            Features = new List<Model.GeoJson.GeoJsonFeature>()
+            Features = new List<GeoJsonFeature>()
             {
                 this.AsFeature().AsGeoJsonFeature()
             }

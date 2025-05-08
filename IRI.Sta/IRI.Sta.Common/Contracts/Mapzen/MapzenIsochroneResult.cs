@@ -1,9 +1,5 @@
-﻿using IRI.Sta.Common.Primitives;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using System.Text.Json;
 
 namespace IRI.Sta.Common.Contracts.Mapzen;
 
@@ -61,7 +57,7 @@ public class MapzenGeometry
         {
             if (Type == IRI.Sta.Common.Primitives.GeometryType.LineString)
             {
-                return JsonConvert.DeserializeObject<double[][]>(coordinates.ToString());
+                return JsonSerializer.Deserialize<double[][]>(coordinates.ToString());
             }
 
             return null;
@@ -74,7 +70,7 @@ public class MapzenGeometry
         {
             if (Type == IRI.Sta.Common.Primitives.GeometryType.Polygon)
             {
-                return JsonConvert.DeserializeObject<double[][][]>(coordinates.ToString());
+                return JsonSerializer.Deserialize<double[][][]>(coordinates.ToString());
             }
 
             return null;

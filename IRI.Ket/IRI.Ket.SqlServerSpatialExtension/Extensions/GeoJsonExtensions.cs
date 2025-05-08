@@ -1,5 +1,5 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;

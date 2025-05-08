@@ -12,7 +12,7 @@ using IRI.Sta.ShapefileFormat.Model;
 using IRI.Sta.ShapefileFormat.Dbf;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.ShapefileFormat.Prj;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 

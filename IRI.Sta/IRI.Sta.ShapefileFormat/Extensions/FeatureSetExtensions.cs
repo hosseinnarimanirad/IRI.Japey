@@ -6,7 +6,7 @@ using System.Text;
 using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Dbf;
 using System.Linq;
-using IRI.Sta.Spatial.Model.GeoJson;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 
