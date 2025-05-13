@@ -608,7 +608,11 @@ namespace IRI.Jab.Common.Convertor
 
                 drawing.PointF locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
 
-                graphic.FillRectangle(_labelBackground, new drawing.RectangleF((float)(location.X - 3.0 / 2.0 * stringSize.Width), (float)(location.Y - stringSize.Height / 2.0), stringSize.Width, stringSize.Height));
+                var rectangleF = labelParameters.IsRtl ?
+                     new drawing.RectangleF(locationF.X - stringSize.Width, locationF.Y, stringSize.Width, stringSize.Height) :
+                     new drawing.RectangleF(locationF.X, locationF.Y, stringSize.Width, stringSize.Height);
+
+                graphic.FillRectangle(_labelBackground, rectangleF);
 
                 graphic.DrawString(labels[i] ?? string.Empty, font, brush, locationF, format);
 
@@ -621,47 +625,47 @@ namespace IRI.Jab.Common.Convertor
             brush.Dispose();
         }
 
-        public static void DrawLabels(List<NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
-        {
-            var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
+        //public static void DrawLabels(List<NamedGeometry> namedGeometries, drawing.Bitmap image, Func<Point, Point> mapToScreen, LabelParameters labelParameters)
+        //{
+        //    var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
 
-            var graphic = drawing.Graphics.FromImage(image);
+        //    var graphic = drawing.Graphics.FromImage(image);
 
-            graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
+        //    graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //    graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-            graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        //    graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-            graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+        //    graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
-            var brush = labelParameters.Foreground.AsGdiBrush();
+        //    var brush = labelParameters.Foreground.AsGdiBrush();
 
-            System.Drawing.StringFormat format = new drawing.StringFormat();
+        //    System.Drawing.StringFormat format = new drawing.StringFormat();
 
-            if (labelParameters.IsRtl)
-            {
-                format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
-            }
+        //    if (labelParameters.IsRtl)
+        //    {
+        //        format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+        //    }
 
-            for (int i = 0; i < namedGeometries.Count; i++)
-            {
-                var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheGeometry).AsWpfPoint());
+        //    for (int i = 0; i < namedGeometries.Count; i++)
+        //    {
+        //        var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheGeometry).AsWpfPoint());
 
-                var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
+        //        var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
 
-                var locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
+        //        var locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
 
-                graphic.FillRectangle(_labelBackground, new drawing.RectangleF((float)(location.X - 3.0 / 2.0 * stringSize.Width), (float)(location.Y - stringSize.Height / 2.0), stringSize.Width, stringSize.Height));
+        //        graphic.FillRectangle(_labelBackground, new drawing.RectangleF((float)(location.X - 3.0 / 2.0 * stringSize.Width), (float)(location.Y - stringSize.Height / 2.0), stringSize.Width, stringSize.Height));
 
-                graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, brush, locationF, format);
-            }
+        //        graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, brush, locationF, format);
+        //    }
 
-            graphic.Flush();
+        //    graphic.Flush();
 
-            graphic.Dispose();
-            brush.Dispose();
-        }
+        //    graphic.Dispose();
+        //    brush.Dispose();
+        //}
 
     }
 }
