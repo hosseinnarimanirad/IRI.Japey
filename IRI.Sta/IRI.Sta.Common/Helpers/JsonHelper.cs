@@ -36,10 +36,18 @@ public static class JsonHelper
                 });
     }
 
+    public static string SerializeWithIgnoreNullOption<T>(T value)
+    {
+        return System.Text.Json.JsonSerializer.Serialize(value, _ignoreNullValue);
+    }
+
     public static T Deserialize<T>(string jsonString)
     {
         //return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(jsonString);
-        return System.Text.Json.JsonSerializer.Deserialize<T>(jsonString);
+        return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
     }
 
     public static T Deserialize<T>(string jsonString, System.Text.Json.Serialization.JsonConverter converter)
@@ -52,8 +60,4 @@ public static class JsonHelper
         });
     }
 
-    public static string SerializeWithIgnoreNullOption<T>(T value)
-    {
-        return System.Text.Json.JsonSerializer.Serialize(value, _ignoreNullValue);
-    }
 }

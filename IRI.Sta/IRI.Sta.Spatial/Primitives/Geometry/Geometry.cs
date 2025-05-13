@@ -855,7 +855,18 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return boundingBox.Covers(this.Points[0]);
 
             case GeometryType.LineString:
-                return this.Points.Any(boundingBox.Covers);
+                if (this.Points.Any(boundingBox.Covers))
+                    return true;
+
+                var currentBoundingBox = this.GetBoundingBox();
+
+                if (!currentBoundingBox.Intersects(boundingBox))
+                    return false;
+
+                if (GetLineSegments().Any(s => boundingBox.IntersectsLineSegment(s.Start, s.End)))
+                    return true;
+                 
+                return false;
 
             case GeometryType.Polygon:
 

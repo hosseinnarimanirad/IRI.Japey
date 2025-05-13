@@ -5,6 +5,8 @@ using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Spatial.Analysis.Topology;
 
 namespace IRI.Extensions;
 
@@ -74,5 +76,44 @@ public static class BoundingBoxExtensions
     public static Geometry<T> AsGeometry<T>(this BoundingBox boundingBox, int srid) where T : IPoint, new()
     {
         return Geometry<T>.Create(boundingBox.GetClockWiseOrderOfEsriPoints<T>()/*.ToArray()*/, GeometryType.Polygon, srid);
+    }
+
+
+    public static bool IntersectsLineSegment<T>(this BoundingBox boundingBox, T p1, T p2) where T : IPoint, new()
+    {
+        if (boundingBox.Covers(p1) || boundingBox.Covers(p2))
+            return true;
+
+        var lineSegmentBoundingBox = BoundingBox.Create(p1, p2);
+
+        if (!boundingBox.Intersects(lineSegmentBoundingBox))
+            return false;
+
+        Point intersection;
+
+        Point tempP1 = new Point(p1.X, p1.Y);
+        Point tempP2 = new Point(p2.X, p2.Y);
+
+        var i1 = TopologyUtility.LineSegmentsIntersects(tempP1, tempP2, boundingBox.BottomLeft, boundingBox.BottomRight, out intersection);
+
+        if (i1 == LineLineSegmentRelation.Intersect)
+            return true;
+
+        var i2 = TopologyUtility.LineSegmentsIntersects(tempP1, tempP2, boundingBox.BottomRight, boundingBox.TopRight, out intersection);
+
+        if (i2 == LineLineSegmentRelation.Intersect)
+            return true;
+
+        var i3 = TopologyUtility.LineSegmentsIntersects(tempP1, tempP2, boundingBox.TopRight, boundingBox.TopLeft, out intersection);
+
+        if (i3 == LineLineSegmentRelation.Intersect)
+            return true;
+
+        var i4 = TopologyUtility.LineSegmentsIntersects(tempP1, tempP2, boundingBox.TopLeft, boundingBox.BottomLeft, out intersection);
+
+        if (i4 == LineLineSegmentRelation.Intersect)
+            return true;
+
+        return false;
     }
 }
