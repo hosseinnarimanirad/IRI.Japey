@@ -21,12 +21,14 @@ IRI.Japey is a **.NET-based geospatial library** designed for efficient spatial 
 
 ## 🏗 Repository Structure  
 
+```
 IRI.Japey/
-├── IRI.Sta/  # Core spatial data structures
-├── IRI.Ket/  # Utilities (data sources, file I/O)
-├── IRI.Jab/  # WPF components (MapViewer, dialogs, ...)
-├── IRI.Test/ # Unit Test
-└── Examples/ # Usage samples
+├── IRI.Sta/                     # Core spatial data structures & algorithms
+├── IRI.Ket/                     # Utilities (data sources, file I/O)
+├── IRI.Jab/                     # WPF components (MapViewer, dialogs, etc.)
+├── IRI.Test/                    # Unit tests
+└── Examples/                    # Usage samples
+```
 
 
 ---
