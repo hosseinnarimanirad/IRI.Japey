@@ -1,10 +1,11 @@
-﻿using System;
+﻿using IRI.Sta.Common.Abstrations;
+using System;
 
 namespace IRI.Extensions;
 
 public static class PointExtensions
 {
-    public static System.Windows.Point AsWpfPoint<T>(this T value) where T : IRI.Sta.Common.Primitives.IPoint, new()
+    public static System.Windows.Point AsWpfPoint<T>(this T value) where T : IPoint, new()
     {
         return new System.Windows.Point(value.X, value.Y);
     }

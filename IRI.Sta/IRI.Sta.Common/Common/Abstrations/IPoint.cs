@@ -1,5 +1,5 @@
 ﻿using System;
-namespace IRI.Sta.Common.Primitives;
+namespace IRI.Sta.Common.Abstrations;
 
 public interface IPoint
 {

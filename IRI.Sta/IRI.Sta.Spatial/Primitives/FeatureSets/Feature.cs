@@ -5,6 +5,7 @@ using IRI.Sta.Common.PropertyDescriptors;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.Spatial.Primitives;
 

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.InteropServices; 
 using IRI.Sta.Common.Enums;
 
 namespace IRI.Sta.Ogc.SFA;

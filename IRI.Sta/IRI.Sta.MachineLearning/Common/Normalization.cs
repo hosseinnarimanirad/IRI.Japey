@@ -1,5 +1,4 @@
-﻿using IRI.Sta.Mathematics;
-using IRI.Extensions;
+﻿using IRI.Extensions;
 using IRI.Sta.Mathematics;
 using System;
 using System.Collections.Generic;

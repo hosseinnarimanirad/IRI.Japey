@@ -1,6 +1,4 @@
-
-using IRI.Sta.Common.Primitives;
-using System.Collections.Generic;
+using IRI.Sta.Common.Abstrations;
 
 public class VertexRelation<T> where T : IPoint
 {

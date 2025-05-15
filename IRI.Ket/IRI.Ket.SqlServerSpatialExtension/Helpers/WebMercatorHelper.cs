@@ -1,18 +1,12 @@
-﻿using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Common.Model;
-using IRI.Sta.ShapefileFormat.Dbf;
-using IRI.Sta.ShapefileFormat.EsriType;
+﻿using System.Text;
+
 using IRI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IRI.Sta.Spatial.Model;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.ShapefileFormat.Dbf;
+using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers;
 

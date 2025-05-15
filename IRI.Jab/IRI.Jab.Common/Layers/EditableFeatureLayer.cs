@@ -19,6 +19,7 @@ using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common;
 

@@ -1,14 +1,14 @@
-﻿using IRI.Sta.ShapefileFormat.Dbf;
-using IRI.Sta.ShapefileFormat.EsriType;
-using System.Text;
-using IRI.Sta.Common.Primitives;
-using System.Data;
+﻿using System.Text;
 
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
-using IRI.Sta.ShapefileFormat.Model;
+using IRI.Sta.Common.Primitives; 
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Abstrations;
+using IRI.Sta.ShapefileFormat.Dbf;
+using IRI.Sta.ShapefileFormat.Model;
+using IRI.Sta.ShapefileFormat.EsriType;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Ket.Persistence.DataSources;

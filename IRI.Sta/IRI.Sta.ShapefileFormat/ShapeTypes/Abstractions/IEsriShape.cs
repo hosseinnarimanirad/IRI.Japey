@@ -4,6 +4,7 @@
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Abstrations;
 using System;
 
 namespace IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;

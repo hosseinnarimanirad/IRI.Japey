@@ -3,6 +3,7 @@ using IRI.Sta.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Extensions;

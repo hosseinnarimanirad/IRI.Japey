@@ -3,6 +3,7 @@ using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Analysis.Topology;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Extensions;
 

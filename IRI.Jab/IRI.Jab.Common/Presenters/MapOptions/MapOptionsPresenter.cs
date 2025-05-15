@@ -2,6 +2,7 @@
 
 using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common.Presenters.MapOptions;
 

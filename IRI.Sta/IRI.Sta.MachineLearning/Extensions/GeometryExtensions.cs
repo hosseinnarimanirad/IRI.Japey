@@ -1,12 +1,9 @@
-﻿using IRI.Sta.Spatial.Analysis;
-using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using IRI.Sta.MachineLearning;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Extensions;
 

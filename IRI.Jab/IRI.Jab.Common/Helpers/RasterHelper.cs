@@ -20,7 +20,7 @@ using Point = IRI.Sta.Common.Primitives.Point;
 
 namespace IRI.Jab.Common.Raster;
 
-public static class RasterUtility
+public static class RasterHelper
 {
     public static void Create(List<IGeometryAware<Point>> points, Func<IGeometryAware<Point>, double> valueFunc, int width, int height, Color minColor, Color maxColor, Color midColor, double? maxDistance)
     {

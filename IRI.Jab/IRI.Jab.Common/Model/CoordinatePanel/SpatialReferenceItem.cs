@@ -4,6 +4,7 @@ using IRI.Extensions;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model.Globalization;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common.Model.CoordinatePanel;
 

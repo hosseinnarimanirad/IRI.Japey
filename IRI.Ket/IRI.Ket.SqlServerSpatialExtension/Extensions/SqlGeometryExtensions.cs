@@ -1,14 +1,16 @@
-﻿using IRI.Sta.ShapefileFormat.EsriType;
-using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
+﻿using System.Text;
 using Microsoft.SqlServer.Types;
-using System.Text;
+
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives.Esri;
-using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.Primitives.Esri;
+using IRI.Sta.ShapefileFormat.EsriType;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Ket.SqlServerSpatialExtension.Helpers;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Extensions;
 

@@ -2,6 +2,7 @@
 using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.Spatial.Analysis;
 

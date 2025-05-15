@@ -7,6 +7,7 @@ using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.AdvancedStructures;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Sta.Common.Abstrations;
 
 
 namespace IRI.Extensions;

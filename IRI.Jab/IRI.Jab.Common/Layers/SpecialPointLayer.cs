@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 using IRI.Jab.Common.Model;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common;

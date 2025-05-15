@@ -1,12 +1,13 @@
-﻿using static System.Math;
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
 
-using IRI.Sta.Common.Primitives;
 using IRI.Extensions;
-using IRI.Sta.Spatial.Analysis;
-using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+
+using static System.Math;
 
 namespace IRI.Ket.Persistence.DataSources;
 

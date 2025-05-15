@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.SqlServer.Types;
-using System.Diagnostics;
-using IRI.Sta.Spatial.Primitives;
+﻿using Microsoft.SqlServer.Types;
+using IRI.Sta.Common.Abstrations;
 using IRI.Extensions;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;

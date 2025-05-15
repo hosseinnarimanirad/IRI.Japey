@@ -9,6 +9,7 @@ using IRI.Jab.Common.Model.Legend;
 using IRI.Ket.Persistence.DataSources;
 
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common;
 

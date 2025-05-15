@@ -1,6 +1,7 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.DigitalTerrainModeling;

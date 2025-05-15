@@ -2,6 +2,7 @@
 using IRI.Sta.Common.Enums;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.Spatial.Analysis;
 

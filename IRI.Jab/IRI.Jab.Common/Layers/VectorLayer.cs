@@ -22,6 +22,7 @@ using IRI.Ket.Persistence.DataSources;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common;
 

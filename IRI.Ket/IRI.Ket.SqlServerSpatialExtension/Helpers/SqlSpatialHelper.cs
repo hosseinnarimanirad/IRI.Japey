@@ -1,9 +1,10 @@
-﻿using IRI.Extensions;
+﻿using Microsoft.SqlServer.Types;
+
+using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Spatial.Primitives.Esri;
-using Microsoft.SqlServer.Types;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers;
 

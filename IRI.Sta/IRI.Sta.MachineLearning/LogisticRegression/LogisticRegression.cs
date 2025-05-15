@@ -1,9 +1,7 @@
-﻿using IRI.Sta.Mathematics;
-using IRI.Sta.Mathematics;
-using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
+using IRI.Sta.Mathematics;
 
 namespace IRI.Sta.MachineLearning;
 

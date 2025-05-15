@@ -4,8 +4,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Analysis;
-using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Analysis; 
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.MachineLearning;
 

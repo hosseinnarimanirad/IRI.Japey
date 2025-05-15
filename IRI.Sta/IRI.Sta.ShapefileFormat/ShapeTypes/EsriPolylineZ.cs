@@ -11,6 +11,7 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.IO.OgcSFA;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.ShapefileFormat.EsriType;
 

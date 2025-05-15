@@ -8,7 +8,7 @@ using IRI.Ket.Persistence.RasterDataSources;
 
 namespace IRI.Jab.Common.Utility.Legend;
 
-public class TocManager
+public class TocHelper
 {
     public static ObservableCollection<LegendItem> LoadFiles(string rootDirectory, Func<string, ILayer> vectorLayerLoader, Func<string, RasterLayer> rasterLayerLoader)
     {

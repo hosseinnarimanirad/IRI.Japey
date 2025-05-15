@@ -7,6 +7,7 @@ using System.Linq;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.IO.OgcSFA;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Sta.ShapefileFormat.EsriType;

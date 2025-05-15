@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Common.Primitives;
+namespace IRI.Sta.Common.Abstrations;
 
 public interface IHasM
 {

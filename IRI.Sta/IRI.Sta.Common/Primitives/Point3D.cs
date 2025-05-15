@@ -1,9 +1,8 @@
-﻿using IRI.Sta.Common.Enums;
+﻿using System;
+
+using IRI.Sta.Common.Enums;
 using IRI.Sta.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.Common.Primitives;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.ShapefileFormat.EsriType;
 
 namespace IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;

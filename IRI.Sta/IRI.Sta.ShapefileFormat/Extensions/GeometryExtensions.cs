@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Extensions;

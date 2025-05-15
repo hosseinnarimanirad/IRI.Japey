@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.Common.Primitives
+namespace IRI.Sta.Common.Abstrations;
+
+public interface ILocateable
 {
-    public class IPointCollection : List<IPoint>
-    {
-    }
+    Point Location { get; set; }
 }

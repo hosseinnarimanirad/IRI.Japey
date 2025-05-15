@@ -37,6 +37,7 @@ using IRI.Jab.Common.Assets.Data;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Common.Abstrations;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -2640,7 +2641,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     FrameworkElement rightClickOptions;
 
-    sb.ILocateable rightClickDataContext;
+    ILocateable rightClickDataContext;
 
     public void RemoveRightClickOptions()
     {
@@ -2658,7 +2659,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
     }
 
-    public void RegisterRightClickContextOptions<T>(sb.ILocateable context) where T : FrameworkElement, new()
+    public void RegisterRightClickContextOptions<T>(ILocateable context) where T : FrameworkElement, new()
     {
         this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
         this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
@@ -2670,7 +2671,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         this.rightClickOptions.DataContext = context;
     }
 
-    public void RegisterRightClickContextOptions(FrameworkElement view, sb.ILocateable context)
+    public void RegisterRightClickContextOptions(FrameworkElement view, ILocateable context)
     {
         this.mapView.MouseUp -= mapView_MouseUpForRightClickOptions;
         this.mapView.MouseUp += mapView_MouseUpForRightClickOptions;
@@ -2713,7 +2714,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             view = GetRightClickOptionsForDraw();
 
-            var context = (sb.ILocateable)view.DataContext;
+            var context = (ILocateable)view.DataContext;
 
             context.Location = ScreenToMap(screenLocation).AsPoint();
 
@@ -2756,7 +2757,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     }
 
-    public void AddRightClickOptions(FrameworkElement options, MouseButtonEventArgs e, sb.ILocateable context)
+    public void AddRightClickOptions(FrameworkElement options, MouseButtonEventArgs e, ILocateable context)
     {
         RemoveRightClickOptions();
 

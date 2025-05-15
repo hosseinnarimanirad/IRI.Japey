@@ -14,6 +14,7 @@ using IRI.Jab.Common.View.MapMarkers;
 
 using LineSegment = System.Windows.Media.LineSegment;
 using WpfPoint = System.Windows.Point;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common;
 

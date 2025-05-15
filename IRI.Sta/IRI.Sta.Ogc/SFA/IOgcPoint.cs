@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace IRI.Sta.Ogc.SFA
+namespace IRI.Sta.Ogc.SFA;
+
+public interface IOgcPoint
 {
-    public interface IOgcPoint
-    {
-        double X { get; }
+    double X { get; }
 
-        double Y { get; }
+    double Y { get; }
 
 
-    }
 }

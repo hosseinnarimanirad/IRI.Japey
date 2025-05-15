@@ -21,7 +21,7 @@ namespace IRI.Jab.Common.Helpers;
 
 public static class SimplificationHelper
 {
-    private static VectorLayer GetAsLayer(string layerName, List<Geometry<Sta.Common.Primitives.Point>> geometries)
+    private static VectorLayer GetAsLayer(string layerName, List<Geometry<Point>> geometries)
     {
         var vectorLayer = new VectorLayer(layerName,
                                             geometries,
