@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Sta.Spatial.Analysis.SFC;
+namespace IRI.Sta.Spatial.DataStructures;
 
 public struct Rectangle
 {

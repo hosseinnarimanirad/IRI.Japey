@@ -4,8 +4,9 @@ using IRI.Sta.Spatial.Analysis.Topology;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Spatial.Analysis;
 
-namespace IRI.Sta.Spatial.Analysis;
+namespace IRI.Sta.Spatial.Helpers;
 
 public class TopologyUtility
 {
@@ -31,9 +32,9 @@ public class TopologyUtility
     public static PointCircleRelation GetPointCircleRelation<T>(T sightlyPoint, T point1, T point2, T point3) where T : IPoint, new()
     {
         // check if point1, point2, point3 are in ccw form
-        double tempValue = ((point1.X - point3.X) * (point2.Y - point3.Y) - (point2.X - point3.X) * (point1.Y - point3.Y));
+        double tempValue = (point1.X - point3.X) * (point2.Y - point3.Y) - (point2.X - point3.X) * (point1.Y - point3.Y);
 
-        bool isCounterClockWise = (tempValue > 0);
+        bool isCounterClockWise = tempValue > 0;
 
         double x0, x1, x2, x3, y0, y1, y2, y3;
 
@@ -71,7 +72,7 @@ public class TopologyUtility
                                                     x3 * x3 - x0 * x0 + y3 * y3 - y0 * y0 } });
         double result = tempMatrix.Determinant;
 
-        return (result > 0 ? PointCircleRelation.In : (result == 0 ? PointCircleRelation.On : PointCircleRelation.Out));
+        return result > 0 ? PointCircleRelation.In : result == 0 ? PointCircleRelation.On : PointCircleRelation.Out;
     }
 
     /// <summary>
@@ -107,10 +108,10 @@ public class TopologyUtility
     {
         if (GetPointVectorRelation(sightlyPoint, startVertex, endVertex) == PointVectorRelation.LiesOnTheLine)
         {
-            if ((sightlyPoint.X > startVertex.X && sightlyPoint.X > endVertex.X) ||
-               (sightlyPoint.Y > startVertex.Y && sightlyPoint.Y > endVertex.Y) ||
-               (sightlyPoint.X < startVertex.X && sightlyPoint.X < endVertex.X) ||
-               (sightlyPoint.Y < startVertex.Y && sightlyPoint.Y < endVertex.Y))
+            if (sightlyPoint.X > startVertex.X && sightlyPoint.X > endVertex.X ||
+               sightlyPoint.Y > startVertex.Y && sightlyPoint.Y > endVertex.Y ||
+               sightlyPoint.X < startVertex.X && sightlyPoint.X < endVertex.X ||
+               sightlyPoint.Y < startVertex.Y && sightlyPoint.Y < endVertex.Y)
             {
                 return false;
             }
@@ -145,7 +146,7 @@ public class TopologyUtility
 
         double secondSlope = SpatialUtility.CalculateSlope(secondLineFirstPoint, secondLineSecondPoint);
 
-        if ((firstSlope - secondSlope) == 0 || (double.IsInfinity(firstSlope) && double.IsInfinity(secondSlope)))
+        if (firstSlope - secondSlope == 0 || double.IsInfinity(firstSlope) && double.IsInfinity(secondSlope))
         {
             if (GetPointVectorRelation(firstLineFirstPoint, secondLineFirstPoint, secondLineSecondPoint) == PointVectorRelation.LiesOnTheLine)
             {

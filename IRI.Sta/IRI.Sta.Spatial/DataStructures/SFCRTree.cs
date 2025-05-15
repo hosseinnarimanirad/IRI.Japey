@@ -1,6 +1,7 @@
 ﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Analysis.SFC;
 
-namespace IRI.Sta.Spatial.Analysis.SFC;
+namespace IRI.Sta.Spatial.DataStructures;
 
 public class SFCRTree
 {

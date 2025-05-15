@@ -2,8 +2,8 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Analysis.Topology;
+using IRI.Sta.Spatial.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;

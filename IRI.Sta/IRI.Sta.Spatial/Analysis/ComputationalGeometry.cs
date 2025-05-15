@@ -5,6 +5,7 @@ using IRI.Sta.DataStructures;
 using IRI.Sta.Spatial.Analysis.Topology;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.DataStructures.CustomStructures;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Sta.Spatial.Analysis;
 

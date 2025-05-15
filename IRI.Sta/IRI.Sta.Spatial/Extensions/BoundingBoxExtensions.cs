@@ -1,9 +1,9 @@
 ﻿using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Analysis.Topology;
 using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Extensions;
 
