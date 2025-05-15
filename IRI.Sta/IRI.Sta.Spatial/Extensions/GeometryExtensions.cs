@@ -1,11 +1,12 @@
-﻿using IRI.Sta.Spatial.Analysis;
+﻿using System.Diagnostics;
+
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using System.Diagnostics;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.AdvancedStructures;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 
 namespace IRI.Extensions;

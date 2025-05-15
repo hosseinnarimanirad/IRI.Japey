@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IRI.Sta.Common.Primitives; 
+﻿using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.Analysis.SFC;
 

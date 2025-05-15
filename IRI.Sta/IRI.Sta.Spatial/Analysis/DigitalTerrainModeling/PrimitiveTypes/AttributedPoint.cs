@@ -2,7 +2,6 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.Common.Primitives;
-using System;
 
 namespace IRI.Sta.Spatial.DigitalTerrainModeling;
 

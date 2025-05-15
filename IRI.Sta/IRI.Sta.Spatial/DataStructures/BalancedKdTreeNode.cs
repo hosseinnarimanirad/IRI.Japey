@@ -1,10 +1,5 @@
-﻿
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Sta.DataStructures.Trees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IRI.Sta.Spatial.AdvancedStructures;
 

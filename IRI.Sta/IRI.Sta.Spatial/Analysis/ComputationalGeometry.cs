@@ -1,10 +1,6 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
-using System;
-using System.Collections.Generic;
-using System.Text; 
-using IRI.Sta.Mathematics;
 using IRI.Sta.DataStructures;
 using IRI.Sta.Spatial.Analysis.Topology;
 using IRI.Sta.Common.Primitives;

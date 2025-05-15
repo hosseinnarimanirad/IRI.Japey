@@ -2,11 +2,6 @@
 using IRI.Sta.Common.Enums;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace IRI.Sta.Spatial.IO.OgcSFA;
 

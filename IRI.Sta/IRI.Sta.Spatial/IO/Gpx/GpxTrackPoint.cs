@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace IRI.Sta.Common.IO.Gpx;
+﻿namespace IRI.Sta.Common.IO.Gpx;
 
 [Serializable]
 public class GpxTrackPoint

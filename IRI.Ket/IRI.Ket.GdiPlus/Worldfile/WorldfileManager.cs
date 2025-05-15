@@ -3,7 +3,7 @@ using IRI.Sta.Common.Model;
 using System;
 using System.Text;
 using IRI.Extensions;
-using IRI.Sta.Common.IO.Worldfile;
+using IRI.Sta.Spatial.IO;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Model;

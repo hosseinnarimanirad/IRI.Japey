@@ -8,6 +8,7 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.DataStructures;
 using IRI.Sta.DataStructures.CustomStructures;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.IO;
 
 namespace IRI.Sta.Spatial.DigitalTerrainModeling;
 
@@ -447,29 +448,4 @@ public class RegularDtm
 
     #endregion
 
-    //public RegularDtm MakeCourser(ushort Scale)
-    //{
-    //    int numberOfColumns = Math.Ceiling(this.NumberOfColumns / Scale);
-
-    //    int numberOfRows = Math.Ceiling(this.numberOfRows / Scale);
-
-    //    Matrix result = new Matrix(numberOfRows, numberOfColumns);
-
-    //    int endRow = numberOfRows - numberOfRows % Scale;
-
-    //    int endColumn = numberOfRows - numberOfColumns % Scale;
-
-    //    for (int i = 0; i < numberOfRows - endRow; i++)
-    //    {
-    //        for (int j = 0; j < numberOfColumns - endColumn; j++)
-    //        {
-
-    //            for (int k = 0; k < Scale; k++)
-    //            {
-
-    //            }
-    //        }
-    //    }
-
-    //}
 }

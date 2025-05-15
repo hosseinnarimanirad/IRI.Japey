@@ -1,11 +1,8 @@
-﻿using IRI.Extensions;
+﻿using System.Text;
+
+using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IRI.Sta.Spatial.IO.OgcSFA;
 

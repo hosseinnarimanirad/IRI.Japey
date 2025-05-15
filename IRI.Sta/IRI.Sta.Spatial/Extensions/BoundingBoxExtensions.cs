@@ -1,9 +1,6 @@
 ﻿using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Analysis.Topology;
 

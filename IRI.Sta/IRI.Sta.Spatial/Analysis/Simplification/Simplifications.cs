@@ -1,11 +1,6 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Common.Helpers;
-using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Mathematics;
-using IRI.Sta.Common.Services.Oxford;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.Analysis;

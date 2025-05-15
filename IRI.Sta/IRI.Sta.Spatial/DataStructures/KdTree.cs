@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace IRI.Sta.Spatial.AdvancedStructures;
+﻿namespace IRI.Sta.Spatial.AdvancedStructures;
 
 public class KdTree<T>
 {

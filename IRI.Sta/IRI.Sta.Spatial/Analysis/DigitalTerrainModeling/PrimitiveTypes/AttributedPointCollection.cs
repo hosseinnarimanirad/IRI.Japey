@@ -3,9 +3,6 @@
 
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common;
-using System;
-using System.Collections.Generic;
 
 //This class has some security issues: Points can be changed
 //without the change in the values or visa versa

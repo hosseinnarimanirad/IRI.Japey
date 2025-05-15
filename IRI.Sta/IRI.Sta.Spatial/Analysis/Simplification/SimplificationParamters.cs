@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IRI.Sta.Spatial.Analysis;
+﻿namespace IRI.Sta.Spatial.Analysis;
 
 public class SimplificationParamters
 {

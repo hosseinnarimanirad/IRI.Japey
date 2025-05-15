@@ -1,12 +1,8 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace IRI.Sta.Spatial.Analysis.Simplification;
+namespace IRI.Sta.Spatial.Analysis;
 
 // 1401.02.31
 public static class SimplificationMetrics

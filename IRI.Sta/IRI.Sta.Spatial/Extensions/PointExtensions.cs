@@ -1,8 +1,8 @@
-﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
-using System.Globalization;
-using IRI.Sta.Common.Helpers;
+﻿using System.Globalization;
+
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Enums;
 

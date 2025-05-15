@@ -2,10 +2,6 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-//using IRI.Sta.Graph;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
 

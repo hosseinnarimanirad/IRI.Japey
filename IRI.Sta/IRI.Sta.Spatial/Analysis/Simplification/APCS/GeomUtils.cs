@@ -1,9 +1,6 @@
 using IRI.Sta.Common.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace IRI.Sta.Spatial.Analysis; 
+namespace IRI.Sta.Spatial.Analysis;
 
 public class GeomUtils<T> where T : IPoint, new()
 {

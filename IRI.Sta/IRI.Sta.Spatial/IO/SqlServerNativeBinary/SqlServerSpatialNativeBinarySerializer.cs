@@ -1,12 +1,12 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives.SqlServerNativeBinary;
+using IRI.Sta.Spatial.IO;
 using IRI.Sta.Spatial.IO.OgcSFA;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Enums;
 
-namespace IRI.Sta.Spatial.Helpers;
+namespace IRI.Sta.Spatial.IO;
 
 public static partial class SqlServerSpatialNativeBinary
 {

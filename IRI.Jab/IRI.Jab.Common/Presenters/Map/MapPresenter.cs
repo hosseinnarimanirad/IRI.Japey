@@ -2519,7 +2519,7 @@ public abstract class MapPresenter : BasePresenter
                 return;
             }
 
-            GeoJsonFeatureSet featureSet = IOHelper.CsvToPointGeoJson(fileName, false);
+            GeoJsonFeatureSet featureSet = GeoJsonFeatureSet.CsvToPointGeoJson(fileName, false);
 
             if (featureSet.Features.IsNullOrEmpty())
                 return;
@@ -2564,7 +2564,7 @@ public abstract class MapPresenter : BasePresenter
                 return;
             }
 
-            GeoJsonFeatureSet featureSet = IOHelper.TsvToPointGeoJson(fileName, false);
+            GeoJsonFeatureSet featureSet = GeoJsonFeatureSet.TsvToPointGeoJson(fileName, false);
 
             if (featureSet.Features.IsNullOrEmpty())
                 return;

@@ -1,9 +1,4 @@
-﻿using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.Analysis;
 
@@ -21,7 +16,7 @@ public static class Idw
 
         foreach (var item in points)
         {
-            double distance = IRI.Sta.Spatial.Analysis.SpatialUtility.GetEuclideanDistance(measurePoint, item);
+            double distance = SpatialUtility.GetEuclideanDistance(measurePoint, item);
 
             if (distance < maxDistance)
             {
