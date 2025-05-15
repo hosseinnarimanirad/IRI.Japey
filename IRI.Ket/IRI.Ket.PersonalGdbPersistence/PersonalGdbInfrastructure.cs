@@ -2,7 +2,7 @@
 using IRI.Ket.PersonalGdbPersistence.Model;
 using IRI.Ket.PersonalGdbPersistence.Xml;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.Data.OleDb;
 
 namespace IRI.Ket.PersonalGdbPersistence;

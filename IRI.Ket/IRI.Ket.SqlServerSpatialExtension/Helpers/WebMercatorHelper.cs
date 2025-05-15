@@ -1,4 +1,4 @@
-﻿using IRI.Sta.CoordinateSystems.MapProjection;
+﻿using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Model;
 using IRI.Sta.ShapefileFormat.Dbf;
@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers;
 

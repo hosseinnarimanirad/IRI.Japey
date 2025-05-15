@@ -4,7 +4,7 @@ using System.Text;
 using IRI.Sta.Common.Primitives;
 using System.Data;
 
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.ShapefileFormat.Model;

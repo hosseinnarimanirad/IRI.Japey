@@ -1,5 +1,5 @@
 ﻿using IRI.Sta.ShapefileFormat;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +9,7 @@ using System.Linq;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Extensions;
 

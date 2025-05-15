@@ -60,7 +60,7 @@ public class EsriPrjTreeNode
         this.Values = values.ToList();
     }
 
-    public EsriPrjTreeNode(IRI.Sta.CoordinateSystems.IEllipsoid ellipsoid, string title, int srid)
+    public EsriPrjTreeNode(IRI.Sta.SpatialReferenceSystem.IEllipsoid ellipsoid, string title, int srid)
     {
         this.Name = EsriPrjFile._geogcs;
 

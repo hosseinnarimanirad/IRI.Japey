@@ -2,11 +2,11 @@
 using System.Diagnostics;
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Model;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.Persistence.RasterDataSources;
 

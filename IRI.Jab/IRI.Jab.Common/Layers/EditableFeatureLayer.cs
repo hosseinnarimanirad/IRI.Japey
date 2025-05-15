@@ -7,8 +7,8 @@ using System.Windows;
 using System.Windows.Input;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Helpers;
 using IRI.Jab.Common.Model.DataStructure;
 using IRI.Jab.Common.Model;
@@ -19,7 +19,7 @@ using WpfPoint = System.Windows.Point;
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using Point = IRI.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
-using IRI.Sta.CoordinateSystems;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common;
 

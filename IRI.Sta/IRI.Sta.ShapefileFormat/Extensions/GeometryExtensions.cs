@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System;
 using System.Collections.Generic;
 using System.Linq;

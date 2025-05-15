@@ -1,11 +1,10 @@
 ﻿using System.Diagnostics;
 using Microsoft.SqlServer.Types;
-
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Helpers;
 using IRI.Ket.SqlServerSpatialExtension;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Extensions;
 

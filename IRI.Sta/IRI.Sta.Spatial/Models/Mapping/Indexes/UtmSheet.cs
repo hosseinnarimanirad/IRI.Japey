@@ -1,7 +1,6 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -73,7 +72,7 @@ public class UtmSheet : IGeometryAware<Point>
     //From BoundingBox
     public static UtmSheet Create(BoundingBox utmBoundingBox, UtmIndexType type, int utmZone)
     {
-        var centerLatLong = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
+        var centerLatLong = MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
 
         switch (type)
         {

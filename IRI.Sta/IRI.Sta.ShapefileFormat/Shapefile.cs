@@ -5,7 +5,7 @@ using System.Text;
 using IRI.Sta.ShapefileFormat.EsriType;
 using System.Threading.Tasks;
 using IRI.Sta.ShapefileFormat.Reader;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Extensions;
 using IRI.Sta.ShapefileFormat.Writer;
 using IRI.Sta.ShapefileFormat.Model;
@@ -15,6 +15,7 @@ using IRI.Sta.ShapefileFormat.Prj;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.ShapefileFormat;
 

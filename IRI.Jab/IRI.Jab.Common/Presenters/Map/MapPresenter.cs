@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives; 
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
@@ -36,6 +36,7 @@ using IRI.Jab.Common.View.MapMarkers;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Presenter.Map;
 
@@ -2097,7 +2098,7 @@ public abstract class MapPresenter : BasePresenter
 
     public void PanToGeographicPoint(Point point, Action callback = null)
     {
-        var webMercatorPoint = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point);
+        var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(point);
 
         this.PanTo(webMercatorPoint, callback);
     }

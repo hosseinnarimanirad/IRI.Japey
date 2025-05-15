@@ -126,7 +126,7 @@ public class GooglePlaces
 
     //public Point AsWebMercatorPoint()
     //{
-    //    return IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
+    //    return IRI.Sta.SpatialReferenceSystem.MapProjections.MapProjects.GeodeticWgs84ToWebMercator(AsGeodeticPoint());
     //}
 
     //public BoundingBox AsGeodeticBoundingBox()
@@ -144,7 +144,7 @@ public class GooglePlaces
 
     //public BoundingBox AsWebMercatorBoundingBox()
     //{
-    //    return (AsGeodeticBoundingBox().Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator));
+    //    return (AsGeodeticBoundingBox().Transform(IRI.Sta.SpatialReferenceSystem.MapProjections.MapProjects.GeodeticWgs84ToWebMercator));
     //}
 }
 

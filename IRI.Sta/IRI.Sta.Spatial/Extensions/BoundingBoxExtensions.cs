@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;

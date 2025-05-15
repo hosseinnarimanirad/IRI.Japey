@@ -5,7 +5,7 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.ShapefileFormat;
 using System.Diagnostics;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.Text;
 using System.Windows.Threading;
 using System.IO;

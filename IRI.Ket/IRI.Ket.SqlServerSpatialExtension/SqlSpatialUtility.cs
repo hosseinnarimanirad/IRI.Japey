@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.SqlServer.Types;
 using System.Diagnostics;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Extensions;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.SqlServerSpatialExtension;
 

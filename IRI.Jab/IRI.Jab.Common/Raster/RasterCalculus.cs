@@ -11,9 +11,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Primitives;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Raster
 {
@@ -174,7 +176,7 @@ namespace IRI.Jab.Common.Raster
                 var ellapsedtime = stopwatch.ElapsedMilliseconds;
                 stopwatch.Restart();
 
-                return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84));
+                return new GeoReferencedImage(ImageUtility.AsByteArray(result), boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84));
             });
         }
 

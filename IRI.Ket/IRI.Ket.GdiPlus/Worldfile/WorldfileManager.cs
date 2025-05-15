@@ -7,6 +7,7 @@ using IRI.Sta.Common.IO.Worldfile;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.GdiPlus.WorldfileFormat;
 
@@ -77,13 +78,13 @@ public static class WorldfileManager
 
             BoundingBox boundingBox;
 
-            if (srid == IRI.Sta.CoordinateSystems.MapProjection.SridHelper.GeodeticWGS84)
+            if (srid == SridHelper.GeodeticWGS84)
             {
                 boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height);
             }
-            else if (srid == IRI.Sta.CoordinateSystems.MapProjection.SridHelper.WebMercator)
+            else if (srid == SridHelper.WebMercator)
             {
-                boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height).Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84);
+                boundingBox = ReadImageBoundingBox(worldFileName, size.Width, size.Height).Transform(MapProjects.WebMercatorToGeodeticWgs84);
             }
             else
             {

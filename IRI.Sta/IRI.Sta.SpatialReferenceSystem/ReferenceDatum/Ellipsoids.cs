@@ -1,12 +1,10 @@
 ﻿// besmellahe rahmane rahim
 // Allahoma ajjel le-valiyek al-faraj
 
-using System;
 using IRI.Sta.Metrics;
-using System.Collections.Generic;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.Models;
 
-namespace IRI.Sta.CoordinateSystems;
+namespace IRI.Sta.SpatialReferenceSystem;
 
 public static class Ellipsoids
 {

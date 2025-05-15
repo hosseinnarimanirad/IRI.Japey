@@ -1,11 +1,11 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Spatial.Mapping;
 

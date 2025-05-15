@@ -8,7 +8,7 @@ using IRI.Jab.Common.Model.Legend;
 
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using System.Linq;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Jab.Common
 {

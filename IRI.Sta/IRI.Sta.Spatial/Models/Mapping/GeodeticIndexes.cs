@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Spatial.Mapping;
 

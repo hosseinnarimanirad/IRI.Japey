@@ -1,5 +1,4 @@
-﻿using IRI.Sta.CoordinateSystems;
-using IRI.Sta.CoordinateSystems.MapProjection;
+﻿using IRI.Sta.SpatialReferenceSystem;
 using System.Globalization;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Mapping;
@@ -22,8 +21,8 @@ public class TileInfo
     //{
     //    get
     //    {
-    //        //var topLeft = IRI.Sta.CoordinateSystems.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
-    //        //var bottomRight = IRI.Sta.CoordinateSystems.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
+    //        //var topLeft = IRI.Sta.SpatialReferenceSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
+    //        //var bottomRight = IRI.Sta.SpatialReferenceSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
 
     //        //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
     //        return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));
@@ -45,7 +44,7 @@ public class TileInfo
     {
         get
         {
-            return GeodeticExtent.Transform(i => Transformation.ChangeDatum(i, Ellipsoids.WGS84, Ellipsoids.Sphere));
+            return GeodeticExtent.Transform(i => Transformations.ChangeDatum(i, Ellipsoids.WGS84, Ellipsoids.Sphere));
         }
     }
 

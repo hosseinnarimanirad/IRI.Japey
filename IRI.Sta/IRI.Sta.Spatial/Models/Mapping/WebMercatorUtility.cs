@@ -1,5 +1,4 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Model;
 using System;
 using System.Collections;
@@ -8,6 +7,7 @@ using System.Linq;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.SpatialReferenceSystem;
 
 
 namespace IRI.Sta.Spatial.Mapping;

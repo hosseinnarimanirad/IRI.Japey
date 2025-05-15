@@ -1,6 +1,5 @@
-﻿using IRI.Extensions; 
+﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.Persistence.DataSources;
 

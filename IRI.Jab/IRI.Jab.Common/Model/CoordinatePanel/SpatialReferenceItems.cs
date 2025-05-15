@@ -1,5 +1,4 @@
-﻿using IRI.Sta.CoordinateSystems.MapProjection;
-using IRI.Jab.Common.Model.Globalization;
+﻿using IRI.Jab.Common.Model.Globalization;
 
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Sta.Common.Helpers;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Model.CoordinatePanel
 {

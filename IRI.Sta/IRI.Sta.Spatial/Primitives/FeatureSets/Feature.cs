@@ -1,9 +1,10 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.ComponentModel;
 using IRI.Sta.Common.PropertyDescriptors;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Spatial.Primitives;
 

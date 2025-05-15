@@ -7,7 +7,7 @@ using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.Windows.Media;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Spatial.Mapping;

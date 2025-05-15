@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.ShapefileFormat.EsriType;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Extensions;

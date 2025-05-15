@@ -1,9 +1,9 @@
 ﻿using System;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model;
-using IRI.Sta.CoordinateSystems;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Presenters;
 

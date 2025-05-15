@@ -2,12 +2,13 @@
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using Microsoft.SqlServer.Types;
 using System.Text;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives.Esri;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Extensions;
 
@@ -50,7 +51,7 @@ public static class SqlGeometryExtensions
 
         try
         {
-            return geometry.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
+            return geometry.Transform(i => MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
                             .STArea()
                             .Value / 1000000.0;
         }
@@ -403,17 +404,17 @@ public static class SqlGeometryExtensions
 
     public static SqlGeography WebMercatorToGeodeticWgs84(this SqlGeometry geometry)
     {
-        return geometry.Project(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
+        return geometry.Project(MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
     }
 
     public static SqlGeography MercatorToGeographic(this SqlGeometry geometry)
     {
-        return geometry.Project(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
+        return geometry.Project(MapProjects.WebMercatorToGeodeticWgs84, SridHelper.GeodeticWGS84);
     }
 
     public static SqlGeography UTMToGeographic(this SqlGeometry geometry, int utmZone)
     {
-        return geometry.Project(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
+        return geometry.Project(i => MapProjects.UTMToGeodetic(i, utmZone), SridHelper.GeodeticWGS84);
     }
 
     #endregion

@@ -1,12 +1,11 @@
 ﻿// besmellahe rahmane rahim
 // Allahoma ajjel le-valiyek al-faraj
 
-using System;
 using IRI.Sta.Metrics;
-using System.Collections.Generic;
+using IRI.Sta.SpatialReferenceSystem.Models;
 
-namespace IRI.Sta.CoordinateSystems;
- 
+namespace IRI.Sta.SpatialReferenceSystem;
+
 public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     where TLinear : LinearUnit, new()
     where TAngular : AngularUnit, new()

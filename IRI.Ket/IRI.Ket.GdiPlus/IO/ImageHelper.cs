@@ -131,7 +131,7 @@ public static class ImageHelper
     //{
     //    var wgs84 = GetWgs84Location(bitmap);
 
-    //    var mercator = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToMercator((IRI.Sta.Common.Primitives.Point)wgs84);
+    //    var mercator = IRI.Sta.SpatialReferenceSystem.MapProjections.MapProjects.GeodeticToMercator((IRI.Sta.Common.Primitives.Point)wgs84);
 
     //    return new IRI.Sta.Common.Point3D(mercator.X, mercator.Y, wgs84.Z);
     //}

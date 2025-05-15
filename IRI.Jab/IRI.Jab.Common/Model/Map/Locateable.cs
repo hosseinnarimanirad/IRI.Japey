@@ -1,14 +1,16 @@
-﻿using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common;
 using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 using WpfPoint = System.Windows.Point;
+using IRI.Sta.SpatialReferenceSystem;
 
 
 namespace IRI.Jab.Common
@@ -123,7 +125,7 @@ namespace IRI.Jab.Common
 
         public Locateable(Point wgs84GeodeticPosition, AncherFunctionHandler ancherFunction = null) : this(ancherFunction)
         {
-            var webMercator = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
+            var webMercator = MapProjects.GeodeticWgs84ToWebMercator(wgs84GeodeticPosition);
 
             this.X = webMercator.X;
 

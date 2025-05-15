@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Primitives;
 using System.Text.Json.Serialization;
+using IRI.Sta.SpatialReferenceSystem;
 //using IRI.Sta.Spatial.Primitives.GeoJson.Converters;
 
 namespace IRI.Sta.Spatial.Model.GeoJsonFormat;

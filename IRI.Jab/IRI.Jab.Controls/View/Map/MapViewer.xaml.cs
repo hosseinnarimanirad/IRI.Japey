@@ -20,7 +20,6 @@ using System.Threading;
 using System.Net.Http;
 
 using IRI.Extensions;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
@@ -38,6 +37,7 @@ using IRI.Sta.Common.Enums;
 using IRI.Jab.Common.Assets.Data;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.SpatialReferenceSystem;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -650,7 +650,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestAddPointToNewDrawing = p =>
         {
-            //AddPointToNewDrawing(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(p));
+            //AddPointToNewDrawing(IRI.Sta.SpatialReferenceSystem.MapProjections.MapProjects.GeodeticWgs84ToWebMercator(p));
             AddPointToNewDrawing((sb.Point)p);
         };
 
@@ -878,7 +878,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     public Point GeodeticToMap(Point point)
     {
-        return IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
+        return MapProjects.GeodeticWgs84ToWebMercator(point.AsPoint()).AsWpfPoint();
     }
 
     public Point ScreenToGeodetic(Point point)
@@ -915,7 +915,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         try
         {
-            return IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
+            return MapProjects.WebMercatorToGeodeticWgs84(point.AsPoint()).AsWpfPoint();
         }
         catch (Exception)
         {
@@ -2112,7 +2112,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                  (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
                 return;
 
-            var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticWgs84ToWebMercator(i));
+            var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => MapProjects.GeodeticWgs84ToWebMercator(i));
 
             Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
 

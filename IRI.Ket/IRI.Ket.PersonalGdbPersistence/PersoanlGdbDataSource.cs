@@ -6,7 +6,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.PersonalGdbPersistence.Model;
-using IRI.Sta.CoordinateSystems.MapProjection;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 

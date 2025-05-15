@@ -1,13 +1,14 @@
 ﻿using IRI.Extensions;
 using IRI.Jab.Common.Assets.ShapeStrings;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Common.Enums;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Assets.Data
 {

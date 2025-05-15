@@ -6,9 +6,9 @@ using IRI.Jab.Common.Assets.Commands;
 using System.Threading.Tasks;
 using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.CoordinateSystems;
 using IRI.Jab.Controls.Model;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Controls.Presenter;
 
@@ -75,7 +75,7 @@ public class InputCoordinatePresenter : Notifier
                     MapFunction = p => p;
                     break;
                 case SpatialReferenceType.UTM:
-                    MapFunction = p => (Point)IRI.Sta.CoordinateSystems.MapProjection.MapProjects.UTMToGeodetic(p, Zone);
+                    MapFunction = p => (Point)MapProjects.UTMToGeodetic(p, Zone);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -160,7 +160,7 @@ public class InputCoordinatePresenter : Notifier
 
         this.Coordinates = geometry.AsCoordinateEditor();
 
-        //FeedGeographicPoints(geometry.Transform(IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<Point>().ToList());
+        //FeedGeographicPoints(geometry.Transform(IRI.Sta.SpatialReferenceSystem.MapProjections.MapProjects.WebMercatorToGeodeticWgs84).GetAllPoints().Cast<Point>().ToList());
     }
 
 

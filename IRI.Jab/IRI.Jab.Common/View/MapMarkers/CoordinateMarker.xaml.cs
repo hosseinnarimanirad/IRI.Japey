@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using IRI.Jab.Common.Model.MapMarkers;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.View.MapMarkers;
 
@@ -111,11 +112,11 @@ public partial class CoordinateMarker : UserControl, INotifyPropertyChanged, IMa
 
     public void UpdateCoordinates()
     {
-        var value = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
+        var value = MapProjects.WebMercatorToGeodeticWgs84(MercatorLocation);
 
         if (_current == coordinates.Utm)
         {
-            value = IRI.Sta.CoordinateSystems.MapProjection.MapProjects.GeodeticToUTM(value);
+            value = MapProjects.GeodeticToUTM(value);
         }
 
         if (_current == coordinates.GeodeticDms)

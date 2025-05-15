@@ -1,7 +1,7 @@
 ﻿using Microsoft.SqlServer.Types;
-using IRI.Sta.CoordinateSystems.MapProjection;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Extensions;
 
@@ -209,7 +209,7 @@ public static class SqlGeographyExtensions
 
     public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToMercator(point, IRI.Sta.CoordinateSystems.Ellipsoids.WGS84));
+        return Project(geometry, point => MapProjects.GeodeticToMercator(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84));
     }
 
     public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
@@ -219,7 +219,7 @@ public static class SqlGeographyExtensions
 
     public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, IRI.Sta.CoordinateSystems.Ellipsoids.WGS84));
+        return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84));
     }
 
     #endregion
