@@ -1,28 +1,24 @@
-﻿using IRI.Extensions;
-using IRI.Jab.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Globalization;
 
-namespace IRI.Jab.Common.Assets.Converters
+using IRI.Extensions;
+using IRI.Jab.Common.Helpers;
+
+namespace IRI.Jab.Common.Assets.Converters;
+
+public class StringToColorConverter : IValueConverter
 {
-    public class StringToColorConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ColorHelper.ToWpfColor(value?.ToString());
-        }
+        return ColorHelper.ToWpfColor(value?.ToString());
+    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            //return ColorHelper.ToHexString((Color)value);
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        //return ColorHelper.ToHexString((Color)value);
 
-            return ((Color)value).ToHexString();
-        }
+        return ((Color)value).ToHexString();
     }
 }

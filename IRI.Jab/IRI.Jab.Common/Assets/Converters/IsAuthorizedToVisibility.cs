@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Windows;
 using System.Windows.Data;
+using System.Security.Principal;
 
-namespace IRI.Jab.Common.Assets.Converters
+namespace IRI.Jab.Common.Assets.Converters;
+
+public class IsAuthorizedToVisibility : IValueConverter
 {
-    public class IsAuthorizedToVisibility : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        IPrincipal principal = value as IPrincipal;
+
+        if (value == null || parameter == null)
         {
-            IPrincipal principal = value as IPrincipal;
-
-            if (value == null || parameter == null)
-            {
-                return Visibility.Collapsed;
-            }
-
-            return principal.IsInRole(parameter.ToString()) ? Visibility.Visible : Visibility.Collapsed;
+            return Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        return principal.IsInRole(parameter.ToString()) ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,34 +1,30 @@
-﻿using IRI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using System.Windows.Data; 
+using System.Windows.Data;
+using System.Globalization;
 
-namespace IRI.Jab.Common.Assets.Converters
+using IRI.Extensions;
+
+namespace IRI.Jab.Common.Assets.Converters;
+
+class EnumToDescriptionConverter : IValueConverter
 {
-    class EnumToDescriptionConverter : IValueConverter
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null) return DependencyProperty.UnsetValue;
+        if (value == null) return DependencyProperty.UnsetValue;
 
-            try
-            {
-                return ((Enum)value).GetDescription();
-            }
-            catch (Exception ex)
-            {
-                return DependencyProperty.UnsetValue;
-            }            
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        try
         {
-            return Enum.ToObject(targetType, value);
+            return ((Enum)value).GetDescription();
         }
+        catch (Exception ex)
+        {
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return Enum.ToObject(targetType, value);
     }
 }
