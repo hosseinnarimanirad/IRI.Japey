@@ -1,76 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using drawing = System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using sb = IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Jab.Common.Convertor
+using WpfPoint = System.Windows.Point;
+using Point = IRI.Sta.Common.Primitives.Point;
+
+namespace IRI.Jab.Common.Convertor;
+
+public static class SqlFeatureToGdiBitmap
 {
-    public static class SqlFeatureToGdiBitmap
+    internal static drawing.Bitmap ParseSqlGeometry(
+       List<Feature<Point>> features,
+       double width,
+       double height,
+       Func<WpfPoint, WpfPoint> mapToScreen,
+       Func<Feature<Point>, VisualParameters> symbologyRule)
     {
+        var result = new drawing.Bitmap((int)width, (int)height);
 
-        //internal static drawing.Bitmap ParseSqlGeometry(
-        //    List<SqlFeature> features,
-        //    double width,
-        //    double height,
-        //    Func<Point, Point> mapToScreen,
-        //    Func<SqlFeature, VisualParameters> symbologyRule)
-        //{
-        //    var result = new drawing.Bitmap((int)width, (int)height);
+        drawing.Graphics graphics = drawing.Graphics.FromImage(result);
 
-        //    drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+        int p = 0;
 
-        //    int p = 0;
-
-        //    if (features != null)
-        //    {
-        //        foreach (SqlFeature item in features)
-        //        {
-        //            var symbology = symbologyRule(item);
-
-        //            var pen = symbology.GetGdiPlusPen(symbology.Opacity);
-
-        //            var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
-
-        //            SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheSqlGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        internal static drawing.Bitmap ParseSqlGeometry(
-           List<Feature<sb.Point>> features,
-           double width,
-           double height,
-           Func<Point, Point> mapToScreen,
-           Func<Feature<sb.Point>, VisualParameters> symbologyRule)
+        if (features != null)
         {
-            var result = new drawing.Bitmap((int)width, (int)height);
-
-            drawing.Graphics graphics = drawing.Graphics.FromImage(result);
-
-            int p = 0;
-
-            if (features != null)
+            foreach (var item in features)
             {
-                foreach (var item in features)
-                {
-                    var symbology = symbologyRule(item);
+                var symbology = symbologyRule(item);
 
-                    var pen = symbology.GetGdiPlusPen(symbology.Opacity);
+                var pen = symbology.GetGdiPlusPen(symbology.Opacity);
 
-                    var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
+                var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
 
-                    SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
-                }
+                SqlSpatialToGdiBitmap.WriteToImage(graphics, item.TheGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
             }
-
-            return result;
         }
+
+        return result;
     }
 }

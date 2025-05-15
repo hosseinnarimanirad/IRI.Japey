@@ -1,14 +1,14 @@
-﻿using IRI.Jab.Common.Assets.Commands;
-using IRI.Jab.Common.Model.Map;
-using IRI.Jab.Common.Presenter.Map;
-using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Common.Primitives;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using sb = IRI.Sta.Common.Primitives;
+using System.Collections.Generic;
+
+using IRI.Extensions;
+using IRI.Jab.Common.Model.Map;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.OfficeFormats;
+using IRI.Jab.Common.Presenter.Map;
+using IRI.Jab.Common.Assets.Commands;
 
 namespace IRI.Jab.Common.Model;
 
@@ -178,7 +178,7 @@ public static class FeatureTableCommands
 
 
 
-    internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<sb.Point>
+    internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<Point>
     {
         return new List<Func<MapPresenter, IFeatureTableCommand>>()
         {

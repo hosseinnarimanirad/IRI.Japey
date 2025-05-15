@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Legend
-{
-    public class LegendItemEventArgs : EventArgs
-    {
-        public LegendItem Item { get; private set; }
+namespace IRI.Jab.Common.Model.Legend;
 
-        public LegendItemEventArgs(LegendItem item)
-        {
-            this.Item = item;
-        }
+public class LegendItemEventArgs : EventArgs
+{
+    public LegendItem Item { get; private set; }
+
+    public LegendItemEventArgs(LegendItem item)
+    {
+        this.Item = item;
     }
 }

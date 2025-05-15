@@ -1,5 +1,5 @@
-﻿using IRI.Jab.Common.Model.Security;
-using IRI.Jab.Common.Service.Dialog;
+﻿using IRI.Jab.Common.Abstractions;
+using IRI.Jab.Common.Model.Security;
 using IRI.Jab.Common.ViewModel.Dialogs;
 using IRI.Jab.Controls.ViewModel.Dialogs;
 using Microsoft.Win32;

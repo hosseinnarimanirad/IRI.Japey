@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security;
 
-namespace IRI.Jab.Common.Model.Security
+namespace IRI.Jab.Common.Model.Security;
+
+public interface INewPassword : ISecurityBase
 {
-    public interface INewPassword : ISecurityBase
-    {
-        SecureString NewPassword { get; }
+    SecureString NewPassword { get; }
 
-        SecureString ConfirmPassword { get; }
+    SecureString ConfirmPassword { get; }
 
-        bool IsNewPasswordValid();
+    bool IsNewPasswordValid();
 
-        string GetNewPasswordText();
-    }
+    string GetNewPasswordText();
 }

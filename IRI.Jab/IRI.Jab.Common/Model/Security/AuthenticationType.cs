@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Security
+namespace IRI.Jab.Common.Model.Security;
+
+public enum AuthenticationType
 {
-    public enum AuthenticationType
-    {
-        UserPassword,
-        EmailPassword
-    }
+    UserPassword,
+    EmailPassword
 }

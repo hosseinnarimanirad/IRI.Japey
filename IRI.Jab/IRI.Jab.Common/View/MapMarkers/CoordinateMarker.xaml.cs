@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
-using IRI.Jab.Common.Model.MapMarkers;
+using IRI.Jab.Common.Abstractions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
 

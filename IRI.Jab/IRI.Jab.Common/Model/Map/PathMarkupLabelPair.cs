@@ -5,42 +5,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model
+namespace IRI.Jab.Common.Model;
+
+public class PathMarkupLabelPair : Notifier
 {
+    private string _pathMarkup;
 
-    public class PathMarkupLabelPair : Notifier
+    public string PathMarkup
     {
-        private string _pathMarkup;
-
-        public string PathMarkup
+        get { return _pathMarkup; }
+        set
         {
-            get { return _pathMarkup; }
-            set
-            {
-                _pathMarkup = value;
-                RaisePropertyChanged();
-            }
+            _pathMarkup = value;
+            RaisePropertyChanged();
         }
+    }
 
-        private string _title;
+    private string _title;
 
-        public string Title
+    public string Title
+    {
+        get { return _title; }
+        set
         {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
+            _title = value;
+            RaisePropertyChanged();
         }
+    }
 
-        public PathMarkupLabelPair(string title, string pathMarkup)
-        {
-            this.Title = title;
+    public PathMarkupLabelPair(string title, string pathMarkup)
+    {
+        this.Title = title;
 
-            this.PathMarkup = pathMarkup;
-        }
-
+        this.PathMarkup = pathMarkup;
     }
 
 }

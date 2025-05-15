@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Security
+namespace IRI.Jab.Common.Model.Security;
+
+public interface ISecurityBase
 {
-    public interface ISecurityBase
-    {
-        void ClearInputValues();
-    }
+    void ClearInputValues();
 }

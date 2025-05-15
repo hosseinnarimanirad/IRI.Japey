@@ -7,19 +7,18 @@ using System.Windows;
 using System.Windows.Input;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Helpers;
-using IRI.Jab.Common.Model.DataStructure;
 using IRI.Jab.Common.Model;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Jab.Common.Model.MapMarkers;
+using IRI.Jab.Common.Abstractions;
+using IRI.Jab.Common.Model.DataStructure;
 
 using WpfPoint = System.Windows.Point;
-using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using Point = IRI.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
-using IRI.Sta.SpatialReferenceSystem;
+using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
 namespace IRI.Jab.Common;
 

@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.TileServices
+namespace IRI.Jab.Common.TileServices;
+
+public enum MapProviderType
 {
-    public enum MapProviderType
-    {
-        Google,
-        Bing,
-        Yahoo,
-        Nokia,
-        OpenStreetMap,
-        Waze,
-        Custom
-    }
+    Google,
+    Bing,
+    Yahoo,
+    Nokia,
+    OpenStreetMap,
+    Waze,
+    Custom
 }

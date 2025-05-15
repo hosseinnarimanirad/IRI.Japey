@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model
+namespace IRI.Jab.Common.Model;
+
+public enum MapAction
 {
-    public enum MapAction
-    {
-        Pan,
-        ZoomIn,
-        ZoomOut,
-        ZoomInRectangle,
-        ZoomOutRectangle,
-        None,
-    }
+    Pan,
+    ZoomIn,
+    ZoomOut,
+    ZoomInRectangle,
+    ZoomOutRectangle,
+    None,
 }

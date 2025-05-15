@@ -1,5 +1,6 @@
-﻿using IRI.Sta.Spatial.Model;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+
+using IRI.Sta.Spatial.Model;
 
 namespace IRI.Jab.Common.Model;
 

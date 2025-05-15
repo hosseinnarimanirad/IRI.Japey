@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.TileServices
+namespace IRI.Jab.Common.TileServices;
+
+internal enum TileType
 {
-    internal enum TileType
-    {
-        Satellite,
-        RoadMap,
-        Terrain,
-        Hybrid,
-        None
-    }
+    Satellite,
+    RoadMap,
+    Terrain,
+    Hybrid,
+    None
 }

@@ -1,106 +1,102 @@
-﻿using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace IRI.Jab.Common.Model
+using IRI.Sta.Common.Primitives;
+
+namespace IRI.Jab.Common.Model;
+
+public class NotifiablePoint : Notifier, IPoint
 {
-    public class NotifiablePoint : Notifier, IPoint
+    private double _x;
+
+    public double X
     {
-        private double _x;
-
-        public double X
+        get { return _x; }
+        set
         {
-            get { return _x; }
-            set
+            _x = value;
+            RaisePropertyChanged();
+
+            if (IsRaiseCoordinateChangeEnabled)
             {
-                _x = value;
-                RaisePropertyChanged();
-
-                if (IsRaiseCoordinateChangeEnabled)
-                {
-                    RaiseCoordinateChangedAction?.Invoke(this);
-                }
-
+                RaiseCoordinateChangedAction?.Invoke(this);
             }
+
         }
+    }
 
 
-        private double _y;
+    private double _y;
 
-        public double Y
+    public double Y
+    {
+        get { return _y; }
+        set
         {
-            get { return _y; }
-            set
+            _y = value;
+            RaisePropertyChanged();
+
+            if (IsRaiseCoordinateChangeEnabled)
             {
-                _y = value;
-                RaisePropertyChanged();
-
-                if (IsRaiseCoordinateChangeEnabled)
-                {
-                    RaiseCoordinateChangedAction?.Invoke(this);
-                }
-
+                RaiseCoordinateChangedAction?.Invoke(this);
             }
-        }
-
-        public NotifiablePoint()
-        {
 
         }
+    }
 
-        public NotifiablePoint(double x, double y, Action<NotifiablePoint> changeAction)
-        {
-            this.X = x;
+    public NotifiablePoint()
+    {
 
-            this.Y = y;
+    }
 
-            this.RaiseCoordinateChangedAction = changeAction;
-        }
+    public NotifiablePoint(double x, double y, Action<NotifiablePoint> changeAction)
+    {
+        this.X = x;
 
-        public bool AreExactlyTheSame(object obj)
-        {
-            throw new NotImplementedException();
-        }
+        this.Y = y;
 
-        public double DistanceTo(IPoint point)
-        {
-            throw new NotImplementedException();
-        }
+        this.RaiseCoordinateChangedAction = changeAction;
+    }
 
-        public byte[] AsWkb()
-        {
-            throw new NotImplementedException();
-        }
+    public bool AreExactlyTheSame(object obj)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Action<NotifiablePoint> RaiseCoordinateChangedAction { get; set; }
+    public double DistanceTo(IPoint point)
+    {
+        throw new NotImplementedException();
+    }
 
-        private bool _isRaiseCoordinateChangeEnabled = true;
+    public byte[] AsWkb()
+    {
+        throw new NotImplementedException();
+    }
 
-        public bool IsRaiseCoordinateChangeEnabled
-        {
-            get { return _isRaiseCoordinateChangeEnabled; }
-            set { _isRaiseCoordinateChangeEnabled = value; }
-        }
+    public Action<NotifiablePoint> RaiseCoordinateChangedAction { get; set; }
+
+    private bool _isRaiseCoordinateChangeEnabled = true;
+
+    public bool IsRaiseCoordinateChangeEnabled
+    {
+        get { return _isRaiseCoordinateChangeEnabled; }
+        set { _isRaiseCoordinateChangeEnabled = value; }
+    }
 
 
-        public bool IsNaN()
-        {
-            return double.IsNaN(X) || double.IsNaN(Y);
-        }
+    public bool IsNaN()
+    {
+        return double.IsNaN(X) || double.IsNaN(Y);
+    }
 
-        public byte[] AsByteArray()
-        {
-            // Option #3
-            Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
+    public byte[] AsByteArray()
+    {
+        // Option #3
+        Span<byte> buffer = stackalloc byte[16];  // Stack-allocated, no heap allocation
 
-            BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
+        BitConverter.TryWriteBytes(buffer.Slice(0, 8), X);
 
-            BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
+        BitConverter.TryWriteBytes(buffer.Slice(8, 8), Y);
 
-            return buffer.ToArray();  // Only allocates when creating final array
-        }
+        return buffer.ToArray();  // Only allocates when creating final array
     }
 }

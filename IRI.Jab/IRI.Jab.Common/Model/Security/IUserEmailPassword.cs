@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Security
-{
-    public interface IUserEmailPassword : IHavePassword
-    {
-        string UserNameOrEmail { get; set; }
+namespace IRI.Jab.Common.Model.Security;
 
-        bool IsValidEmail();
-    }
+public interface IUserEmailPassword : IHavePassword
+{
+    string UserNameOrEmail { get; set; }
+
+    bool IsValidEmail();
 }

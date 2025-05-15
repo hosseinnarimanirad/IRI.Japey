@@ -5,12 +5,11 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Security
-{
-    public interface IChangePassword : INewPassword, IHavePassword
-    { 
-        //SecureString Password { get; }
-         
-        //void ClearInputValues();
-    }
+namespace IRI.Jab.Common.Model.Security;
+
+public interface IChangePassword : INewPassword, IHavePassword
+{ 
+    //SecureString Password { get; }
+     
+    //void ClearInputValues();
 }

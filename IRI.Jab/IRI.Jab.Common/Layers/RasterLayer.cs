@@ -8,13 +8,12 @@ using System.Windows.Shapes;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
+using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Ket.Persistence.RasterDataSources;
-using IRI.Jab.Common.Model;
 using IRI.Ket.SqlServerPersistence;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Ket.Persistence.RasterDataSources;
 
 namespace IRI.Jab.Common
 {

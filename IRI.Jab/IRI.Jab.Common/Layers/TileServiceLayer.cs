@@ -5,11 +5,12 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Windows.Data;
 using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
+
 using IRI.Sta.Common.Model;
 using IRI.Jab.Common.Model;
-using IRI.Jab.Common.TileServices;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Jab.Common.TileServices;
 
 
 namespace IRI.Jab.Common;

@@ -1,45 +1,38 @@
-﻿
-using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security;
 
-namespace IRI.Jab.Common.Model.Security
+using IRI.Sta.Common.Helpers;
+
+namespace IRI.Jab.Common.Model.Security;
+
+public class SimpleUserEmailPasswordModel : IUserEmailPassword
 {
-    public class SimpleUserEmailPasswordModel : IUserEmailPassword
+    //public string UserName { get; set; }
+
+    //public string Password { get; set; }
+
+    public SimpleUserEmailPasswordModel(SecureString password)
     {
-        //public string UserName { get; set; }
+        this.Password = password;
+    }
 
-        //public string Password { get; set; }
+    public string UserNameOrEmail { get; set; }
 
-        public SimpleUserEmailPasswordModel(SecureString password)
-        {
-            this.Password = password;
-        }
+    public SecureString Password { get; private set; }
 
-        public string UserNameOrEmail { get; set; }
+    public void ClearInputValues()
+    {
+        Password.Clear();
 
-        public SecureString Password { get; private set; }
+        UserNameOrEmail = string.Empty;
+    }
 
-        public void ClearInputValues()
-        {
-            Password.Clear();
+    public string GetPasswordText()
+    {
+        return SecureStringHelper.GetString(Password);
+    }
 
-            UserNameOrEmail = string.Empty;
-        }
-
-        public string GetPasswordText()
-        {
-            return SecureStringHelper.GetString(Password);
-        }
-
-        public bool IsValidEmail()
-        {
-            return NetHelper.IsValidEmail(UserNameOrEmail);
-        }
+    public bool IsValidEmail()
+    {
+        return NetHelper.IsValidEmail(UserNameOrEmail);
     }
 }

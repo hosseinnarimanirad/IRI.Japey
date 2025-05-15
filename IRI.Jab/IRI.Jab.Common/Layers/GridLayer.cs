@@ -1,33 +1,34 @@
 ﻿using System.Collections.Generic;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
-using IRI.Ket.Persistence.DataSources;
+
 using IRI.Jab.Common.Model;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives; 
+using IRI.Ket.Persistence.DataSources;
 
-namespace IRI.Jab.Common
+namespace IRI.Jab.Common;
+
+public class GridLayer : BaseLayer
 {
-    public class GridLayer : BaseLayer
+    public override LayerType Type { get; protected set; } = LayerType.VectorLayer;
+
+    public override BoundingBox Extent { get; protected set; }
+
+    public override RenderingApproach Rendering { get; protected set; }
+
+    public GridDataSource DataSource { get; set; }
+
+    public GridLayer(GridDataSource source)
     {
-        public override LayerType Type { get; protected set; } = LayerType.VectorLayer;
+        DataSource = source;
+    }
 
-        public override BoundingBox Extent { get; protected set; }
-
-        public override RenderingApproach Rendering { get; protected set; }
-
-        public GridDataSource DataSource { get; set; }
-
-        public GridLayer(GridDataSource source)
+    public List<Geometry<Point>> GetLines(BoundingBox boundingBox)
+    {
+        if (DataSource == null)
         {
-            DataSource = source;
+            return null;
         }
 
-        public List<Geometry<Point>> GetLines(BoundingBox boundingBox)
-        {
-            if (DataSource == null)
-            {
-                return null;
-            }
-
-            return DataSource.GetGeometries(boundingBox);
-        }
+        return DataSource.GetGeometries(boundingBox);
     }
 }

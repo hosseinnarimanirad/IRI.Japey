@@ -4,8 +4,8 @@ using IRI.Sta.Common.Contracts.Google;
 using IRI.Sta.Common.Services;
 using IRI.Jab.Common.Assets.Commands;
 using IRI.Jab.Common.Model.Security;
-using IRI.Jab.Common.Service.Dialog;
 using IRI.Sta.Spatial.Services.Google;
+using IRI.Jab.Common.Abstractions;
 
 namespace IRI.Jab.Common.ViewModel.Dialogs;
 

@@ -1,307 +1,259 @@
-﻿using IRI.Jab.Common.Assets.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using IRI.Sta.Spatial.Primitives; using IRI.Sta.Common.Primitives;
+﻿using System;
 
-namespace IRI.Jab.Common.Presenters.MapOptions
+using IRI.Sta.Common.Primitives;
+using IRI.Jab.Common.Assets.Commands;
+
+namespace IRI.Jab.Common.Presenters.MapOptions;
+
+public class MapOptionsPresenter : Notifier, ILocateable
 {
-    public class MapOptionsPresenter : Notifier, IRI.Sta.Common.Primitives.ILocateable
+    private Point _point;
+
+    public Point Location
     {
-        private Point _point;
-
-        public Point Location
+        get
         {
-            get
-            {
-                return _point;
-            }
-
-            set
-            {
-                _point = value;
-                RaisePropertyChanged();
-            }
+            return _point;
         }
 
-        public Action<object> RightCommandAction;
-        public Action<object> LeftCommandAction;
-        public Action<object> MiddleCommandAction;
-        public Action<object> UpperRightCommandAction;
-        public Action<object> UpperLeftCommandAction;
-
-        #region Symbols
-
-        //
-        private string _rightSymbol;
-
-        public string RightSymbol
+        set
         {
-            get { return _rightSymbol; }
-            set
-            {
-                _rightSymbol = value;
-                RaisePropertyChanged();
-            }
+            _point = value;
+            RaisePropertyChanged();
         }
+    }
 
+    public Action<object> RightCommandAction;
+    public Action<object> LeftCommandAction;
+    public Action<object> MiddleCommandAction;
+    public Action<object> UpperRightCommandAction;
+    public Action<object> UpperLeftCommandAction;
 
-        //
-        private string _leftSymbol;
-
-        public string LeftSymbol
+    #region Symbols
+     
+    private string _rightSymbol;
+    public string RightSymbol
+    {
+        get { return _rightSymbol; }
+        set
         {
-            get { return _leftSymbol; }
-            set
-            {
-                _leftSymbol = value;
-                RaisePropertyChanged();
-            }
+            _rightSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
-
-        //
-        private string _middleSymbol;
-
-        public string MiddleSymbol
+     
+    private string _leftSymbol;
+    public string LeftSymbol
+    {
+        get { return _leftSymbol; }
+        set
         {
-            get { return _middleSymbol; }
-            set
-            {
-                _middleSymbol = value;
-                RaisePropertyChanged();
-            }
+            _leftSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
-
-        //
-        private string _upperRightSymbol;
-
-        public string UpperRightSymbol
+     
+    private string _middleSymbol;
+    public string MiddleSymbol
+    {
+        get { return _middleSymbol; }
+        set
         {
-            get { return _upperRightSymbol; }
-            set
-            {
-                _upperRightSymbol = value;
-                RaisePropertyChanged();
-            }
+            _middleSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
-
-        //
-        private string _upperLeftSymbol;
-
-        public string UpperLeftSymbol
+     
+    private string _upperRightSymbol;
+    public string UpperRightSymbol
+    {
+        get { return _upperRightSymbol; }
+        set
         {
-            get { return _upperLeftSymbol; }
-            set
-            {
-                _upperLeftSymbol = value;
-                RaisePropertyChanged();
-            }
+            _upperRightSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
-        #endregion
-
-        #region Tooltips
-
-        private string _rightToolTip;
-
-        public string RightToolTip
+     
+    private string _upperLeftSymbol;
+    public string UpperLeftSymbol
+    {
+        get { return _upperLeftSymbol; }
+        set
         {
-            get { return _rightToolTip; }
-            set
-            {
-                _rightToolTip = value;
-                RaisePropertyChanged();
-            }
+            _upperLeftSymbol = value;
+            RaisePropertyChanged();
         }
+    }
+
+    #endregion
 
 
+    #region Tooltips
 
-        private string _leftToolTip;
-
-        public string LeftToolTip
+    private string _rightToolTip;
+    public string RightToolTip
+    {
+        get { return _rightToolTip; }
+        set
         {
-            get { return _leftToolTip; }
-            set
-            {
-                _leftToolTip = value;
-                RaisePropertyChanged();
-            }
+            _rightToolTip = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-
-        private string _middleToolTip;
-
-        public string MiddleToolTip
+    private string _leftToolTip;
+    public string LeftToolTip
+    {
+        get { return _leftToolTip; }
+        set
         {
-            get { return _middleToolTip; }
-            set
-            {
-                _middleToolTip = value;
-                RaisePropertyChanged();
-            }
+            _leftToolTip = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-
-        private string _upperRightTooltip;
-
-        public string UpperRightToolTip
+    private string _middleToolTip;
+    public string MiddleToolTip
+    {
+        get { return _middleToolTip; }
+        set
         {
-            get { return _upperRightTooltip; }
-            set
-            {
-                _upperRightTooltip = value;
-                RaisePropertyChanged();
-            }
+            _middleToolTip = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-
-        private string _upperLeftToolTip;
-
-        public string UpperLeftToolTip
+    private string _upperRightTooltip;
+    public string UpperRightToolTip
+    {
+        get { return _upperRightTooltip; }
+        set
         {
-            get { return _upperLeftToolTip; }
-            set
-            {
-                _upperLeftToolTip = value;
-                RaisePropertyChanged();
-            }
+            _upperRightTooltip = value;
+            RaisePropertyChanged();
         }
+    }
 
-        #endregion
 
-        #region Commands
-
-        private RelayCommand _rightCommand;
-
-        public RelayCommand RightCommand
+    private string _upperLeftToolTip;
+    public string UpperLeftToolTip
+    {
+        get { return _upperLeftToolTip; }
+        set
         {
-            get
+            _upperLeftToolTip = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    #endregion
+
+
+    #region Commands
+
+    private RelayCommand _rightCommand;
+    public RelayCommand RightCommand
+    {
+        get
+        {
+            if (_rightCommand == null)
             {
-                if (_rightCommand == null)
+                _rightCommand = new RelayCommand(param =>
                 {
-                    _rightCommand = new RelayCommand(param =>
-                    {
-                        this.RightCommandAction?.Invoke(param);
-                    });
-                }
-                return _rightCommand;
+                    this.RightCommandAction?.Invoke(param);
+                });
             }
+            return _rightCommand;
         }
+    }
 
 
-
-        private RelayCommand _leftCommand;
-
-        public RelayCommand LeftCommand
+    private RelayCommand _leftCommand;
+    public RelayCommand LeftCommand
+    {
+        get
         {
-            get
+            if (_leftCommand == null)
             {
-                if (_leftCommand == null)
+                _leftCommand = new RelayCommand(param =>
                 {
-                    _leftCommand = new RelayCommand(param =>
-                    {
-                        this.LeftCommandAction?.Invoke(param);
-                    });
-                }
-                return _leftCommand;
+                    this.LeftCommandAction?.Invoke(param);
+                });
             }
+            return _leftCommand;
         }
+    }
 
 
-
-        private RelayCommand _middleCommand;
-
-        public RelayCommand MiddleCommand
+    private RelayCommand _middleCommand;
+    public RelayCommand MiddleCommand
+    {
+        get
         {
-            get
+            if (_middleCommand == null)
             {
-                if (_middleCommand == null)
+                _middleCommand = new RelayCommand(param =>
                 {
-                    _middleCommand = new RelayCommand(param =>
-                    {
-                        this.MiddleCommandAction?.Invoke(param);
-                    });
-                }
-                return _middleCommand;
+                    this.MiddleCommandAction?.Invoke(param);
+                });
             }
+            return _middleCommand;
         }
+    }
 
 
-
-        private RelayCommand _upperRightCommand;
-
-        public RelayCommand UpperRightCommand
+    private RelayCommand _upperRightCommand;
+    public RelayCommand UpperRightCommand
+    {
+        get
         {
-            get
+            if (_upperRightCommand == null)
             {
-                if (_upperRightCommand == null)
+                _upperRightCommand = new RelayCommand(param =>
                 {
-                    _upperRightCommand = new RelayCommand(param =>
-                    {
-                        this.UpperRightCommandAction?.Invoke(param);
-                    });
-                }
-                return _upperRightCommand;
+                    this.UpperRightCommandAction?.Invoke(param);
+                });
             }
+            return _upperRightCommand;
         }
+    }
 
 
-
-        private RelayCommand _upperLeftCommand;
-
-        public RelayCommand UpperLeftCommand
+    private RelayCommand _upperLeftCommand;
+    public RelayCommand UpperLeftCommand
+    {
+        get
         {
-            get
+            if (_upperLeftCommand == null)
             {
-                if (_upperLeftCommand == null)
+                _upperLeftCommand = new RelayCommand(param =>
                 {
-                    _upperLeftCommand = new RelayCommand(param =>
-                    {
-                        UpperLeftCommandAction?.Invoke(param);
-                    });
-                }
-                return _upperLeftCommand;
+                    UpperLeftCommandAction?.Invoke(param);
+                });
             }
+            return _upperLeftCommand;
         }
+    }
 
-        #endregion
+    #endregion
+     
+    public MapOptionsPresenter(string rightToolTip, string leftToolTip, string middleToolTip,
+                                string rightSymbol, string leftSymbol, string middleSymbol)
+    {
+        this.RightToolTip = rightToolTip;
+        this.LeftToolTip = leftToolTip;
+        this.MiddleToolTip = middleToolTip;
 
-        //public MapOptionsPresenter(Action<object> rightAction, Action<object> leftAction, Action<object> middleAction,
-        //                                            string leftToolTip, string rightToolTip, string middleToolTip,
-        //                                            string rightSymbol, string leftSymbol, string middleSymbol)
-        //{
-        //    this.RightCommandAction = rightAction;
-        //    this.LeftCommandAction = leftAction;
-        //    this.MiddleCommandAction = middleAction;
-
-        //    this.LeftToolTip = leftToolTip;
-        //    this.RightToolTip = rightToolTip;
-        //    this.MiddleToolTip = middleToolTip;
-
-        //    this.RightSymbol = rightSymbol;
-        //    this.LeftSymbol = leftSymbol;
-        //    this.MiddleSymbol = middleSymbol;
-        //}
-
-        public MapOptionsPresenter(string rightToolTip, string leftToolTip, string middleToolTip,
-                                    string rightSymbol, string leftSymbol, string middleSymbol)
-        {
-            this.RightToolTip = rightToolTip;
-            this.LeftToolTip = leftToolTip;
-            this.MiddleToolTip = middleToolTip;
-
-            this.RightSymbol = rightSymbol;
-            this.LeftSymbol = leftSymbol;
-            this.MiddleSymbol = middleSymbol;
-        }
+        this.RightSymbol = rightSymbol;
+        this.LeftSymbol = leftSymbol;
+        this.MiddleSymbol = middleSymbol;
     }
 }

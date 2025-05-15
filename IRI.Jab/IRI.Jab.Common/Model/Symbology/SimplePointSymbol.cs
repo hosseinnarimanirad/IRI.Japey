@@ -1,89 +1,81 @@
-﻿using IRI.Jab.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using media = System.Windows.Media;
+﻿using System.Windows.Media;
 
-namespace IRI.Jab.Common.Model.Symbology
+namespace IRI.Jab.Common.Model.Symbology;
+
+public class SimplePointSymbol : Notifier
 {
-    public class SimplePointSymbol : Notifier
+    private double _symbolWidth = 16;
+
+    public double SymbolWidth
     {
-        private double _symbolWidth = 16;
-
-        public double SymbolWidth
+        get { return _symbolWidth; }
+        set
         {
-            get { return _symbolWidth; }
-            set
-            {
-                _symbolWidth = value;
-                RaisePropertyChanged();
-            }
+            _symbolWidth = value;
+            RaisePropertyChanged();
         }
+    }
 
-        private double _symbolHeight = 16;
+    private double _symbolHeight = 16;
 
-        public double SymbolHeight
+    public double SymbolHeight
+    {
+        get { return _symbolWidth; }
+        set
         {
-            get { return _symbolWidth; }
-            set
-            {
-                _symbolWidth = value;
-                RaisePropertyChanged();
-            }
+            _symbolWidth = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-        private Geometry _geometryPointSymbol;
+    private Geometry _geometryPointSymbol;
 
-        public Geometry GeometryPointSymbol
+    public Geometry GeometryPointSymbol
+    {
+        get { return _geometryPointSymbol; }
+        set
         {
-            get { return _geometryPointSymbol; }
-            set
-            {
-                _geometryPointSymbol = value;
-                RaisePropertyChanged();
-            }
+            _geometryPointSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-        private media.ImageSource _imagePointSymbol;
+    private ImageSource _imagePointSymbol;
 
-        public media.ImageSource ImagePointSymbol
+    public ImageSource ImagePointSymbol
+    {
+        get { return _imagePointSymbol; }
+        set
         {
-            get { return _imagePointSymbol; }
-            set
-            {
-                _imagePointSymbol = value;
-                RaisePropertyChanged();
-            }
+            _imagePointSymbol = value;
+            RaisePropertyChanged();
         }
+    }
 
 
-        private System.Drawing.Image _imagePointSymbolGdiPlus;
+    private System.Drawing.Image _imagePointSymbolGdiPlus;
 
-        public System.Drawing.Image ImagePointSymbolGdiPlus
+    public System.Drawing.Image ImagePointSymbolGdiPlus
+    {
+        get { return _imagePointSymbolGdiPlus; }
+        set
         {
-            get { return _imagePointSymbolGdiPlus; }
-            set
-            {
-                _imagePointSymbolGdiPlus = value;
-                RaisePropertyChanged();
-            }
+            _imagePointSymbolGdiPlus = value;
+            RaisePropertyChanged();
         }
+    }
 
-        public SimplePointSymbol()
-        {
+    public SimplePointSymbol()
+    {
 
-        }
+    }
 
-        public SimplePointSymbol(double pointSize)
-        {
-            this.SymbolHeight = pointSize;
+    public SimplePointSymbol(double pointSize)
+    {
+        this.SymbolHeight = pointSize;
 
-            this.SymbolWidth = pointSize;
-        }
+        this.SymbolWidth = pointSize;
     }
 }

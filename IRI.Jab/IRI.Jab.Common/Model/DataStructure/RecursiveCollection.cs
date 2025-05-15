@@ -4,36 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.DataStructure
+namespace IRI.Jab.Common.Model.DataStructure;
+
+public class RecursiveCollection<T>
 {
-    public class RecursiveCollection<T>
+    private List<T> _values;
+
+    public List<T> Values
     {
-        private List<T> _values;
+        get { return _values; }
+        set { _values = value; }
+    }
 
-        public List<T> Values
+    private List<RecursiveCollection<T>> _collections;
+
+    public List<RecursiveCollection<T>> Collections
+    {
+        get { return _collections; }
+        set { _collections = value; }
+    }
+
+    public List<T> GetFlattenCollection()
+    {
+        if (this.Collections == null)
         {
-            get { return _values; }
-            set { _values = value; }
+            return Values;
         }
-
-        private List<RecursiveCollection<T>> _collections;
-
-        public List<RecursiveCollection<T>> Collections
+        else
         {
-            get { return _collections; }
-            set { _collections = value; }
-        }
-
-        public List<T> GetFlattenCollection()
-        {
-            if (this.Collections == null)
-            {
-                return Values;
-            }
-            else
-            {
-                return Collections.SelectMany(i => i.GetFlattenCollection()).ToList();
-            }
+            return Collections.SelectMany(i => i.GetFlattenCollection()).ToList();
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using IRI.Jab.Common.Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Media;
-using sb = IRI.Sta.Common.Primitives;
+using System.Collections.Generic;
+
+using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
 using IRI.Sta.Spatial.Primitives;
+ 
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Jab.Common;
 
@@ -14,7 +16,7 @@ public class DrawingLayer : BaseLayer
 
     //Path drawingPath;
 
-    //List<sb.Point> geoPoints;
+    //List<Point> geoPoints;
 
     //CancellationTokenSource drawingCancellationToken;
 
@@ -42,7 +44,7 @@ public class DrawingLayer : BaseLayer
         }
     }
 
-    public override sb.BoundingBox Extent
+    public override BoundingBox Extent
     {
         get
         {
@@ -68,22 +70,22 @@ public class DrawingLayer : BaseLayer
         }
     }
 
-    public DrawingLayer(DrawMode mode, Transform toScreen, Func<double, double> screenToMap, sb.Point startMercatorPoint, EditableFeatureLayerOptions options)
+    public DrawingLayer(DrawMode mode, Transform toScreen, Func<double, double> screenToMap, Point startMercatorPoint, EditableFeatureLayerOptions options)
     {
         this._mode = mode;
 
-        sb.GeometryType type;
+        GeometryType type;
 
         switch (mode)
         {
             case DrawMode.Point:
-                type = sb.GeometryType.Point;
+                type = GeometryType.Point;
                 break;
             case DrawMode.Polyline:
-                type = sb.GeometryType.LineString;
+                type = GeometryType.LineString;
                 break;
             case DrawMode.Polygon:
-                type = sb.GeometryType.Polygon;
+                type = GeometryType.Polygon;
                 break;
             case DrawMode.Rectangle:
             case DrawMode.Freehand:
@@ -93,7 +95,7 @@ public class DrawingLayer : BaseLayer
 
         //var options = new EditableFeatureLayerOptions() { IsVerticesLabelVisible = isEdgeLengthVisible };
 
-        this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<sb.Point>() { startMercatorPoint }, toScreen, screenToMap, type, options) { ZIndex = int.MaxValue };
+        this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<Point>() { startMercatorPoint }, toScreen, screenToMap, type, options) { ZIndex = int.MaxValue };
 
         this._editableFeatureLayer.OnRequestFinishDrawing += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
 
@@ -110,7 +112,7 @@ public class DrawingLayer : BaseLayer
 
     }
 
-    public Action<Geometry<sb.Point>> RequestFinishEditing;
+    public Action<Geometry<Point>> RequestFinishEditing;
 
     public Action RequestCancelDrawing { get; set; }
 
@@ -121,22 +123,22 @@ public class DrawingLayer : BaseLayer
         return this._editableFeatureLayer;
     }
 
-    public void AddVertex(sb.Point webMercatorPoint)
+    public void AddVertex(Point webMercatorPoint)
     {
         this._editableFeatureLayer.AddVertex(webMercatorPoint);
     }
 
-    public void UpdateLastVertexLocation(sb.Point point)
+    public void UpdateLastVertexLocation(Point point)
     {
         this._editableFeatureLayer.UpdateLastSemiVertexLocation(point);
     }
 
-    public void AddSemiVertex(sb.Point webMercatorPoint)
+    public void AddSemiVertex(Point webMercatorPoint)
     {
         this._editableFeatureLayer.AddSemiVertex(webMercatorPoint);
     }
 
-    public Geometry<sb.Point> GetFinalGeometry()
+    public Geometry<Point> GetFinalGeometry()
     {
         return this._editableFeatureLayer.GetFinalGeometry();
     }
@@ -151,12 +153,12 @@ public class DrawingLayer : BaseLayer
         return this._editableFeatureLayer.TryFinishDrawingPart();
     }
 
-    public void StartNewPart(sb.Point webMercatorPoint)
+    public void StartNewPart(Point webMercatorPoint)
     {
         this._editableFeatureLayer.StartNewPart(webMercatorPoint);
     }
 
-    public DrawingVisual? AsDrawingVisual(sb.BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public DrawingVisual? AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
         var geometry = _editableFeatureLayer.GetFinalGeometry();
 
@@ -177,7 +179,7 @@ public class DrawingLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(new List<Geometry<sb.Point>>() { geometry }, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(new List<Geometry<Point>>() { geometry }, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
 
         drawingVisual.Opacity = this.VisualParameters.Opacity;
 

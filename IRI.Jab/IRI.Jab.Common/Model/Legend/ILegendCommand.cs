@@ -1,25 +1,18 @@
-﻿using IRI.Jab.Common;
-using IRI.Jab.Common.Assets.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IRI.Jab.Common.Assets.Commands;
 
-namespace IRI.Jab.Common.Model.Legend
+namespace IRI.Jab.Common.Model.Legend;
+
+public interface ILegendCommand
 {
-    public interface ILegendCommand
-    {
-        RelayCommand Command { get; set; }
+    RelayCommand Command { get; set; }
 
-        string PathMarkup { get; set; }
+    string PathMarkup { get; set; }
 
-        bool IsEnabled { get; set; }
+    bool IsEnabled { get; set; }
 
-        string ToolTip { get; set; }
+    string ToolTip { get; set; }
 
-        ILayer Layer { get; set; }
+    ILayer Layer { get; set; }
 
-        bool IsCommandVisible { get; set; }
-    }
+    bool IsCommandVisible { get; set; }
 }

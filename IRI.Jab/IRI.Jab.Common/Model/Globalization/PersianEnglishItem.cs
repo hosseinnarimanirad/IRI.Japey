@@ -5,97 +5,96 @@ using System.Text;
 using System.Threading.Tasks;
 using IRI.Extensions;
 
-namespace IRI.Jab.Common.Model.Globalization
+namespace IRI.Jab.Common.Model.Globalization;
+
+public class PersianEnglishItem : ValueObjectNotifier
 {
-    public class PersianEnglishItem : ValueObjectNotifier
+    private readonly string _persianTitle;
+
+    public string PersianTitle
     {
-        private readonly string _persianTitle;
+        get { return _persianTitle; }
+        //private set
+        //{
+        //    if (_persianTitle == value)
+        //        return;
 
-        public string PersianTitle
+        //    _persianTitle = value;
+        //    RaisePropertyChanged();
+        //    RaisePropertyChanged(nameof(Title));
+        //}
+    }
+
+    private readonly string _englishTitle;
+
+    public string EnglishTitle
+    {
+        get { return _englishTitle; }
+        //private set
+        //{
+        //    if (_englishTitle == value)
+        //        return;
+
+        //    _englishTitle = value;
+        //    RaisePropertyChanged();
+        //    RaisePropertyChanged(nameof(Title));
+        //}
+    }
+
+    public string Title
+    {
+        get { return UILanguage == LanguageMode.Persian ? PersianTitle : EnglishTitle; }
+    }
+
+    private LanguageMode _uiLanguage;
+
+    public LanguageMode UILanguage
+    {
+        get { return _uiLanguage; }
+        set
         {
-            get { return _persianTitle; }
-            //private set
-            //{
-            //    if (_persianTitle == value)
-            //        return;
+            if (_uiLanguage == value)
+                return;
 
-            //    _persianTitle = value;
-            //    RaisePropertyChanged();
-            //    RaisePropertyChanged(nameof(Title));
-            //}
+            _uiLanguage = value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(Title));
         }
+    }
 
-        private readonly string _englishTitle;
+    public PersianEnglishItem(string persianTitle, string englishTitle, LanguageMode uiLanguage = LanguageMode.Persian)
+    {
+        this._persianTitle = persianTitle?.ArabicToFarsi()?.Trim();
 
-        public string EnglishTitle
-        {
-            get { return _englishTitle; }
-            //private set
-            //{
-            //    if (_englishTitle == value)
-            //        return;
+        this._englishTitle = englishTitle?.Trim();
 
-            //    _englishTitle = value;
-            //    RaisePropertyChanged();
-            //    RaisePropertyChanged(nameof(Title));
-            //}
-        }
+        this.UILanguage = uiLanguage;
+    }
 
-        public string Title
-        {
-            get { return UILanguage == LanguageMode.Persian ? PersianTitle : EnglishTitle; }
-        }
+    public override string ToString()
+    {
+        return Title;
+    }
 
-        private LanguageMode _uiLanguage;
+    public static PersianEnglishItem CreateEnglish(string persianTitle, string englishTitle)
+    {
+        return new PersianEnglishItem(persianTitle, englishTitle, LanguageMode.English);
+    }
 
-        public LanguageMode UILanguage
-        {
-            get { return _uiLanguage; }
-            set
-            {
-                if (_uiLanguage == value)
-                    return;
-
-                _uiLanguage = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(Title));
-            }
-        }
-
-        public PersianEnglishItem(string persianTitle, string englishTitle, LanguageMode uiLanguage = LanguageMode.Persian)
-        {
-            this._persianTitle = persianTitle?.ArabicToFarsi()?.Trim();
-
-            this._englishTitle = englishTitle?.Trim();
-
-            this.UILanguage = uiLanguage;
-        }
-
-        public override string ToString()
-        {
-            return Title;
-        }
-
-        public static PersianEnglishItem CreateEnglish(string persianTitle, string englishTitle)
-        {
-            return new PersianEnglishItem(persianTitle, englishTitle, LanguageMode.English);
-        }
-
-        public static PersianEnglishItem CreateUpperCasedEnglish(string persianTitle, string englishTitle)
-        {
-            return new PersianEnglishItem(persianTitle, englishTitle?.ToUpperInvariant(), LanguageMode.English);
-        }
+    public static PersianEnglishItem CreateUpperCasedEnglish(string persianTitle, string englishTitle)
+    {
+        return new PersianEnglishItem(persianTitle, englishTitle?.ToUpperInvariant(), LanguageMode.English);
+    }
 
 
-        public static PersianEnglishItem CreateFarsi(string persianTitle, string englishTitle)
-        {
-            return new PersianEnglishItem(persianTitle, englishTitle, LanguageMode.Persian);
-        }
+    public static PersianEnglishItem CreateFarsi(string persianTitle, string englishTitle)
+    {
+        return new PersianEnglishItem(persianTitle, englishTitle, LanguageMode.Persian);
+    }
 
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return PersianTitle;
-            yield return EnglishTitle?.ToUpperInvariant();
-        }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return PersianTitle;
+        yield return EnglishTitle?.ToUpperInvariant();
     }
 }

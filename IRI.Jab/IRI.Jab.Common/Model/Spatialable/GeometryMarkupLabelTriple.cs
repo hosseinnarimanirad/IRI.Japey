@@ -1,58 +1,51 @@
-﻿using IRI.Jab.Common;
-using Microsoft.SqlServer.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.SqlServer.Types;
 
-namespace IRI.Jab.Common.Model
+namespace IRI.Jab.Common.Model;
+
+public class GeometryMarkupLabelTriple : Notifier
 {
-    public class GeometryMarkupLabelTriple : Notifier
+    private SqlGeometry _geometryWm;
+
+    public SqlGeometry GeometryWm
     {
-        private SqlGeometry _geometryWm;
-
-        public SqlGeometry GeometryWm
+        get { return _geometryWm; }
+        set
         {
-            get { return _geometryWm; }
-            set
-            {
-                _geometryWm = value;
-                RaisePropertyChanged();
-            }
+            _geometryWm = value;
+            RaisePropertyChanged();
         }
+    }
 
-        private string _pathMarkup;
+    private string _pathMarkup;
 
-        public string PathMarkup
+    public string PathMarkup
+    {
+        get { return _pathMarkup; }
+        set
         {
-            get { return _pathMarkup; }
-            set
-            {
-                _pathMarkup = value;
-                RaisePropertyChanged();
-            }
+            _pathMarkup = value;
+            RaisePropertyChanged();
         }
+    }
 
-        private string _label;
+    private string _label;
 
-        public string Label
+    public string Label
+    {
+        get { return _label; }
+        set
         {
-            get { return _label; }
-            set
-            {
-                _label = value;
-                RaisePropertyChanged();
-            }
+            _label = value;
+            RaisePropertyChanged();
         }
+    }
 
-        public GeometryMarkupLabelTriple(string label, string markup, SqlGeometry geometryWm)
-        {
-            this.Label = label;
+    public GeometryMarkupLabelTriple(string label, string markup, SqlGeometry geometryWm)
+    {
+        this.Label = label;
 
-            this.PathMarkup = markup;
+        this.PathMarkup = markup;
 
-            this.GeometryWm = geometryWm;
-        }
+        this.GeometryWm = geometryWm;
     }
 }

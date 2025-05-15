@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model
+namespace IRI.Jab.Common.Model;
+
+public enum MapStatus
 {
-    public enum MapStatus
-    {
-        Idle,
-        Drawing,
-        Editing,
-        //Measuring,
-        //Rendering,
-        //Paning,
-        //Zooming,
-    }
+    Idle,
+    Drawing,
+    Editing,
+    //Measuring,
+    //Rendering,
+    //Paning,
+    //Zooming,
 }

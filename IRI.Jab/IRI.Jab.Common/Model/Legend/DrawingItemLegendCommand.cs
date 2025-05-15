@@ -1,18 +1,19 @@
-﻿using IRI.Jab.Common.Assets.Commands;
-using IRI.Jab.Common.Presenter.Map;
-using IRI.Extensions;
-using IRI.Sta.Spatial.Analysis;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Common.Primitives;
-using System;
+﻿using System;
+using System.Windows.Media;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
+
+using IRI.Extensions;
+using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Spatial.Analysis;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Jab.Common.Presenter.Map;
+using IRI.Jab.Common.Assets.Commands;
+using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using System.Windows.Media;
-using IRI.Ket.Persistence.DataSources;
-using System.Windows.Media.Imaging;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
-using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Jab.Common.Model.Legend;
 
