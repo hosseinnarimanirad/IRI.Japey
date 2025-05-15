@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Extensions
-{
-    public static class IEnumerableExtension
-    { 
-        //public static bool IsNotNullNorEmpty<T>(this IEnumerable<T> enumerable)
-        //{
-        //    return enumerable?.Any() == true;
-        //}
+namespace IRI.Extensions;
 
-        //public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
-        //{
-        //    return enumerable?.Any() != true;
-        //}
+public static class IEnumerableExtension
+{ 
+    //public static bool IsNotNullNorEmpty<T>(this IEnumerable<T> enumerable)
+    //{
+    //    return enumerable?.Any() == true;
+    //}
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
-        {
-            return enumerable is null || !enumerable.Any();
-        }
+    //public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+    //{
+    //    return enumerable?.Any() != true;
+    //}
+
+    public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+    {
+        return enumerable is null || !enumerable.Any();
     }
 }

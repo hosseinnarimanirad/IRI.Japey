@@ -25,6 +25,8 @@ public static class NetHelper
     const string _defaultUri = "https://google.com";
 
     public const string ContentTypeApplicationJson = contentTypeJson;
+  
+    public const string AccessControlAllowOrigin = "Access-Control-Allow-Origin";
 
     public static bool PingHost(string nameOrAddress, int timeout = 3000)
     {

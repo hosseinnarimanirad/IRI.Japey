@@ -778,13 +778,13 @@ public static class TileMapProviderFactory
     public static string GetServer(int min = 0, int max = 3)
     {
         //first bound is inclusive second bound is exclusive
-        return Sta.Common.Helpers.RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
     }
 
     public static char GetServerCharacter(int min = 0, int max = 2)
     {
         //first bound is inclusive second bound is exclusive
-        var random = Sta.Common.Helpers.RandomHelper.Get(min, max + 1);
+        var random = IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1);
 
         return _serverChar[random];
     }

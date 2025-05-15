@@ -153,7 +153,7 @@ public static class PersonalGdbInfrastructure
             try
             {
 
-                var info = Sta.Common.Helpers.XmlHelper.ParseFromXml<GdbXml_CodedValueDomain>(item.Definition);
+                var info = IRI.Sta.Common.Helpers.XmlHelper.ParseFromXml<GdbXml_CodedValueDomain>(item.Definition);
 
                 if (info is null || info.CodedValues.Items.IsNullOrEmpty())
                     continue;

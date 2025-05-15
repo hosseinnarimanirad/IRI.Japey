@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace IRI.Sta.Spatial.Services;
+namespace IRI.Sta.Common.Services;
 
 public static class DateTimeServices
 {

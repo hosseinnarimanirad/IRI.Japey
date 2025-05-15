@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Services.Oxford;
+namespace IRI.Sta.Common.Services;
 
 public class OdResult
 {

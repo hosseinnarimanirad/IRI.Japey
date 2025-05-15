@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Common.Services.Oxford;
+namespace IRI.Sta.Common.Services;
 
 public static class OxfordDictionaryService
 {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using IRI.Extensions;
-using System.Collections.Generic;
-using System.Linq;
+﻿using IRI.Extensions;
 using System.Globalization;
 using IRI.Sta.Common.Model;
 using System.Net;
-using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Contracts.Google;
 using IRI.Sta.Common.Services;
 using IRI.Sta.Common.Primitives;
