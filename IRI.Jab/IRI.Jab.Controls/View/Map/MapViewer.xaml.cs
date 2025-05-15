@@ -20,7 +20,6 @@ using System.Threading;
 using System.Net.Http;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
 using IRI.Sta.Spatial.Primitives;

@@ -6,9 +6,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.Spatial.MapIndexes;
 
 namespace IRI.Ket.Persistence.DataSources;
 

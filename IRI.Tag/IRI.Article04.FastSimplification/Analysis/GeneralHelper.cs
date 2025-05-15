@@ -5,7 +5,7 @@ using System.Windows.Media;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Mapping;
+using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Primitives;
 
 

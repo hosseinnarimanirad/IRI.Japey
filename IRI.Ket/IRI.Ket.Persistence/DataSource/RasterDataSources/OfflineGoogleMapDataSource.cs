@@ -6,8 +6,8 @@ using System.Data;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Ket.Persistence.RasterDataSources;
 

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Compression;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;

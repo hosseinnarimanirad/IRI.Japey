@@ -1,9 +1,11 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using System.Data;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.Spatial.MapIndexes;
 
 namespace IRI.Ket.Persistence.DataSources;
 

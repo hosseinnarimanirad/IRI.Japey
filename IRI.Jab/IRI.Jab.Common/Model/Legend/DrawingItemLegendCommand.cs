@@ -10,9 +10,9 @@ using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.Windows.Media;
 using IRI.Ket.Persistence.DataSources;
-using IRI.Sta.Spatial.Mapping;
 using System.Windows.Media.Imaging;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Jab.Common.Model.Legend;
 

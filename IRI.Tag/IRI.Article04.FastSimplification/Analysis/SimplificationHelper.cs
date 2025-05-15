@@ -1,6 +1,5 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Analysis;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.ShapefileFormat;
 using System.Diagnostics;
@@ -9,6 +8,7 @@ using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using System.Text;
 using System.Windows.Threading;
 using System.IO;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Article04.FastSimplification;
 

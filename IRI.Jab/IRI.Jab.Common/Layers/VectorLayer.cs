@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
@@ -20,6 +19,7 @@ using IRI.Jab.Common.Helpers;
 using sb = IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Jab.Common;
 

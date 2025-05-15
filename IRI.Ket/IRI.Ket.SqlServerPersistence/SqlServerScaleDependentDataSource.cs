@@ -8,7 +8,7 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Ket.Persistence.Model;
 using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Mapping;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Ket.SqlServerPersistence;
 

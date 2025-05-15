@@ -34,7 +34,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using IRI.Jab.Common.View.MapMarkers;
 using IRI.Sta.Spatial.Model;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 

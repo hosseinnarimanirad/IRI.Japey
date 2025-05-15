@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.SpatialReferenceSystem;
 using System.Globalization;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Mapping;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Sta.Spatial.Model;
 

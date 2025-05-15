@@ -6,8 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Ket.Persistence.RasterDataSources;

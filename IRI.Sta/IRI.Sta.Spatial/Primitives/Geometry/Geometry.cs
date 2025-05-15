@@ -6,6 +6,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Sta.Spatial.Primitives;
 
@@ -571,7 +572,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     public Geometry<T> Simplify(SimplificationType type, int zoomLevel, SimplificationParamters paramters)
     {
-        var threshold = IRI.Sta.Spatial.Mapping.WebMercatorUtility.CalculateGroundResolution(zoomLevel, paramters.AverageLatitude ?? 0); //0 seconds!
+        var threshold = WebMercatorUtility.CalculateGroundResolution(zoomLevel, paramters.AverageLatitude ?? 0); //0 seconds!
 
         paramters.AreaThreshold = threshold * threshold;
 

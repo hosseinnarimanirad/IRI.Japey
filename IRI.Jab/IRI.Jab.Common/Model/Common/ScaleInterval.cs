@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Spatial.Mapping;
+﻿using IRI.Sta.Spatial.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

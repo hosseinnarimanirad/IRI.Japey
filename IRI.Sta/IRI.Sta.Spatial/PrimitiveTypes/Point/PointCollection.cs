@@ -3,9 +3,6 @@
 
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IRI.Sta.Spatial;
 

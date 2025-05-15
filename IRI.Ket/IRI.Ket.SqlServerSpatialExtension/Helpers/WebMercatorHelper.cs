@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Sta.Spatial.Model;
-using IRI.Sta.Spatial.Mapping;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Ket.SqlServerSpatialExtension.Helpers;
 

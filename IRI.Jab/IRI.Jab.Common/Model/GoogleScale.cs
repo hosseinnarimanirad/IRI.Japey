@@ -1,10 +1,10 @@
-﻿using IRI.Sta.Spatial.Mapping;
-using IRI.Jab.Common;
+﻿using IRI.Jab.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IRI.Sta.Spatial.Helpers;
 
 namespace IRI.Jab.Common.Model
 {
