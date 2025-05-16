@@ -39,4 +39,44 @@ Transformation between different spatial reference systems are available includi
 - IT <-> AP
 - OR <-> AP
 
-  
+## 🚀 Getting Started
+
+### Basic Usage
+
+Convert WGS84 to AT:
+
+``` C#
+// Arrange
+var wgs84Ellipsoid = Ellipsoids.WGS84;
+double latitudeInDegrees = 35.123456;
+double longitudeInDegrees = 51.123456;
+    
+var originalGeodeticPoint = new IRI.Sta.Common.Primitives.Point(longitudeInDegrees, latitudeInDegrees);
+
+// Act - Test geodetic to Cartesian conversion
+var cartesianFromTransform = Transformations.ToCartesian(originalGeodeticPoint, wgs84Ellipsoid);
+
+var cartesianFromGeodeticPoint = new GeodeticPoint<Meter, Degree>(
+    wgs84Ellipsoid, 
+    new Meter(0),
+    new Degree(longitudeInDegrees),
+    new Degree(latitudeInDegrees))
+    .ToCartesian<Meter>();
+
+// Assert - Both Cartesian conversion methods should produce same result
+Assert.Equal(cartesianFromGeodeticPoint.X.Value, cartesianFromTransform.X, 9);
+Assert.Equal(cartesianFromGeodeticPoint.Y.Value, cartesianFromTransform.Y, 9);
+Assert.Equal(cartesianFromGeodeticPoint.Z.Value, cartesianFromTransform.Z, 9);
+```
+
+## 🌐 Related Components
+
+- ![IRI.Sta.Common](https://github.com/hosseinnarimanirad/IRI.Japey/tree/master/IRI.Sta/IRI.Sta.Common) - Core Japey (Maptor) standard class library.
+
+## 🛠 Building from Source
+
+```
+git clone https://github.com/hosseinnarimanirad/IRI.Japey.git
+cd IRI.Japey/IRI.Sta/IRI.Sta.SpatialReferenceSystem
+dotnet build -c Release
+```
