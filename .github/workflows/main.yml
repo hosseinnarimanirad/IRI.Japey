@@ -25,7 +25,7 @@ jobs:
     - name: Pack
       run: |
         # Get all .csproj files that should be packaged
-        $projects = Get-ChildItem -Path . -Recurse -Include *.csproj | Where-Object {
+        $projects = Get-ChildItem -Path . -Recurse -Include IRI.Sta.*.csproj | Where-Object {
           # Exclude test projects (adjust as needed)
           $_.FullName -notlike '*Test*' -and $_.FullName -notlike '*Tests*'
         }
