@@ -36,8 +36,7 @@ IRI.Japey/
 ## 🚀 Quick Start  
 ### 1. Clone & Build  
 ```sh
-git clone https://github.com/hosseinnarimanirad/IRI.Japey.git  
-cd IRI.Japey  
+git clone https://github.com/hosseinnarimanirad/Maptor.git  
 dotnet build  
 ```
 ---
