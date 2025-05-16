@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/hosseinnarimanirad/IRI.Japey/blob/master/LICENSE)  
  
 
-IRI.Japey is a **.NET-based geospatial library** designed for efficient spatial data manipulation, coordinate transformations, and geodetic computations.  
+Maptor is a **.NET-based geospatial library** designed for efficient spatial data manipulation, coordinate transformations, and geodetic computations.  
 
 ---
 
@@ -22,7 +22,7 @@ IRI.Japey is a **.NET-based geospatial library** designed for efficient spatial 
 ## 🏗 Repository Structure  
 
 ```
-IRI.Japey/
+Maptor /
 ├── IRI.Sta/                     # Core spatial data structures & algorithms
 ├── IRI.Ket/                     # Utilities (data sources, file I/O)
 ├── IRI.Jab/                     # WPF components (MapViewer, dialogs, etc.)
