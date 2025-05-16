@@ -1702,7 +1702,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     public Geometry<T> GeodeticToMercator()
     {
-        return this.Transform(point => MapProjects.GeodeticToMercator(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84), SridHelper.Mercator);
+        return this.Transform(point => MapProjects.GeodeticToMercator(point, Ellipsoids.WGS84), SridHelper.Mercator);
     }
 
     public Geometry<T> GeodeticWgs84ToWebMercator()
@@ -1712,7 +1712,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     public Geometry<T> GeodeticToCylindricalEqualArea()
     {
-        return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);
+        return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);
     }
 
 

@@ -209,7 +209,7 @@ public static class SqlGeographyExtensions
 
     public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToMercator(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84));
+        return Project(geometry, point => MapProjects.GeodeticToMercator(point, Ellipsoids.WGS84));
     }
 
     public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
@@ -219,7 +219,7 @@ public static class SqlGeographyExtensions
 
     public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84));
+        return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, Ellipsoids.WGS84));
     }
 
     #endregion

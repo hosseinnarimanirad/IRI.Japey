@@ -5,7 +5,6 @@ using IRI.Sta.Metrics;
 using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem.Models;
-using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Sta.SpatialReferenceSystem;

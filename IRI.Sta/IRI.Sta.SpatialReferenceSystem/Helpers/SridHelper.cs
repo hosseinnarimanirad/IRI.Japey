@@ -53,21 +53,5 @@ public static class SridHelper
             default:
                 return null;
         }
-
-        //public static CrsBase GetCrs(int srid)
-        //{
-        //    switch (srid)
-        //    {
-        //        case GeodeticWGS84:
-        //            return DefaultMapProjections.
-        //            break;
-
-        //        case WebMercator:
-        //            return new WebMercator();
-
-        //        default:
-        //            break;
-        //    }
-        //}
     }
 }

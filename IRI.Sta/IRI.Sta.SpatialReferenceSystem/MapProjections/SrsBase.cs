@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
 using Ellipsoid = IRI.Sta.SpatialReferenceSystem.Ellipsoid<IRI.Sta.Metrics.Meter, IRI.Sta.Metrics.Degree>;
 
 namespace IRI.Sta.SpatialReferenceSystem.MapProjections;
@@ -135,37 +134,4 @@ public abstract class SrsBase
         return SridHelper.AsSrsBase(srid);
     }
 
-    //private int GetSrid()
-    //{
-    //    switch (this.Type)
-    //    {
-    //        case MapProjectionType.None:
-    //            return Ellipsoid.Srid;
-
-    //        case MapProjectionType.AlbersEqualAreaConic:
-    //            break;
-    //        case MapProjectionType.AzimuthalEquidistant:
-    //            break;
-    //        case MapProjectionType.CylindricalEqualArea:
-    //            break;
-    //        case MapProjectionType.LambertConformalConic:
-    //            break;
-    //        case MapProjectionType.Mercator:
-    //            break;
-
-    //        case MapProjectionType.TransverseMercator:
-    //            break;
-
-    //        case MapProjectionType.UTM:
-    //            return (this as UTM).GetSrid(true);
-
-    //        case MapProjectionType.WebMercator:
-    //            return SridHelper.WebMercator;
-
-    //        default:
-    //            break;
-    //    }
-
-    //    return 0;
-    //}
 }

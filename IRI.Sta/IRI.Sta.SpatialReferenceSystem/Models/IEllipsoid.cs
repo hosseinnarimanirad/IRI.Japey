@@ -24,7 +24,7 @@ public interface IEllipsoid
 
     double InverseFlattening { get; }
 
-    int Srid { get;  }
+    int Srid { get; }
 
     ICartesian3DPoint DatumTranslation { get; }
 

@@ -11,8 +11,4 @@
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Transformation\" />
-  </ItemGroup>
-
 </Project>

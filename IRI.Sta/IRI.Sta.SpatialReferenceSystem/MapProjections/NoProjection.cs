@@ -1,5 +1,4 @@
-﻿using IRI.Sta.SpatialReferenceSystem;
-using Ellipsoid = IRI.Sta.SpatialReferenceSystem.Ellipsoid<IRI.Sta.Metrics.Meter, IRI.Sta.Metrics.Degree>;
+﻿using Ellipsoid = IRI.Sta.SpatialReferenceSystem.Ellipsoid<IRI.Sta.Metrics.Meter, IRI.Sta.Metrics.Degree>;
 
 namespace IRI.Sta.SpatialReferenceSystem.MapProjections;
 

@@ -36,12 +36,12 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
 
     public ICartesian3DPoint DatumTranslation
     {
-        get { return this._datumTranslation; }
+        get { return _datumTranslation; }
     }
 
     public OrientationParameter DatumMisalignment
     {
-        get { return this._datumMisalignment; }
+        get { return _datumMisalignment; }
     }
 
     public LinearUnit SemiMajorAxis
@@ -75,7 +75,7 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     {
         get
         {
-            return ((this.SemiMajorAxis.Value - this.SemiMinorAxis.Value) / this.SemiMajorAxis.Value);
+            return (SemiMajorAxis.Value - SemiMinorAxis.Value) / SemiMajorAxis.Value;
         }
     }
 
@@ -83,7 +83,7 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     {
         get
         {
-            return (this.SemiMajorAxis.Value / (this.SemiMajorAxis.Value - this.SemiMinorAxis.Value));
+            return SemiMajorAxis.Value / (SemiMajorAxis.Value - SemiMinorAxis.Value);
         }
     }
 
@@ -112,7 +112,7 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
                         ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment, int srid)
         : this(name,
                 semiMajorAxis,
-                1.0 / ((semiMajorAxis.Subtract(semiMinorAxis)).Divide(semiMajorAxis)).Value,
+                1.0 / semiMajorAxis.Subtract(semiMinorAxis).Divide(semiMajorAxis).Value,
                 datumTranslation,
                 datumMisalignment,
                 srid)
@@ -121,40 +121,40 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     public Ellipsoid(string name, LinearUnit semiMajorAxis, double inverseFlattening,
                         ICartesian3DPoint datumTranslation, OrientationParameter datumMisalignment, int srid)
     {
-        this._datumTranslation = new Cartesian3DPoint<TLinear>(datumTranslation.X, datumTranslation.Y, datumTranslation.Z);
+        _datumTranslation = new Cartesian3DPoint<TLinear>(datumTranslation.X, datumTranslation.Y, datumTranslation.Z);
 
-        this._datumMisalignment = new OrientationParameter(datumMisalignment.Omega.ChangeTo<TAngular>(),
+        _datumMisalignment = new OrientationParameter(datumMisalignment.Omega.ChangeTo<TAngular>(),
                                                             datumMisalignment.Phi.ChangeTo<TAngular>(),
                                                             datumMisalignment.Kappa.ChangeTo<TAngular>());
 
-        this._name = name;
+        _name = name;
 
-        this._srid = srid;
+        _srid = srid;
 
-        this._semiMajorAxis = semiMajorAxis.ChangeTo<TLinear>();
+        _semiMajorAxis = semiMajorAxis.ChangeTo<TLinear>();
 
-        double tempSemiMajor = this._semiMajorAxis.Value;
+        double tempSemiMajor = _semiMajorAxis.Value;
 
         if (inverseFlattening == 0)
         {
-            this._semiMinorAxis = new TLinear() { Value = tempSemiMajor };
+            _semiMinorAxis = new TLinear() { Value = tempSemiMajor };
         }
         else
         {
-            this._semiMinorAxis = new TLinear() { Value = tempSemiMajor - tempSemiMajor / inverseFlattening };
+            _semiMinorAxis = new TLinear() { Value = tempSemiMajor - tempSemiMajor / inverseFlattening };
         }
 
-        double tempSemiMinor = this._semiMinorAxis.Value;
+        double tempSemiMinor = _semiMinorAxis.Value;
 
-        this._firstEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
+        _firstEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
                                                /
                                             (tempSemiMajor * tempSemiMajor));
 
-        this._secondEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
+        _secondEccentricity = Math.Sqrt((tempSemiMajor * tempSemiMajor - tempSemiMinor * tempSemiMinor)
                                                /
                                              (tempSemiMinor * tempSemiMinor));
 
-        this.EsriName = string.Empty;
+        EsriName = string.Empty;
     }
 
     #endregion
@@ -179,18 +179,18 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     {
         double sin = Math.Sin(Latitude * Math.PI / 180);
 
-        return (this._semiMajorAxis.Value
+        return _semiMajorAxis.Value
                        /
-                       Math.Sqrt(1 - this.FirstEccentricity * this.FirstEccentricity * sin * sin));
+                       Math.Sqrt(1 - FirstEccentricity * FirstEccentricity * sin * sin);
     }
 
     public LinearUnit CalculateN(AngularUnit Latitude)
     {
         TLinear result = new TLinear();
 
-        result.Value = (this._semiMajorAxis.Value
+        result.Value = _semiMajorAxis.Value
                         /
-                        Math.Sqrt(1 - this.FirstEccentricity * this.FirstEccentricity * Latitude.Sin * Latitude.Sin));
+                        Math.Sqrt(1 - FirstEccentricity * FirstEccentricity * Latitude.Sin * Latitude.Sin);
 
         return result;
     }
@@ -199,9 +199,9 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     {
         TLinear result = new TLinear();
 
-        result.Value = (this._semiMajorAxis.Value * (1 - this.FirstEccentricity * this.FirstEccentricity)
+        result.Value = _semiMajorAxis.Value * (1 - FirstEccentricity * FirstEccentricity)
                         /
-                        Math.Pow((1 - this.FirstEccentricity * this.FirstEccentricity * Latitude.Sin * Latitude.Sin), 3.0 / 2.0));
+                        Math.Pow(1 - FirstEccentricity * FirstEccentricity * Latitude.Sin * Latitude.Sin, 3.0 / 2.0);
 
         return result;
     }
@@ -209,9 +209,9 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
     public bool AreTheSame(IEllipsoid other)
     {
         return
-            other.SemiMajorAxis.GetType() == this.SemiMajorAxis.GetType() &&
-            this.SemiMajorAxis.Value == other.SemiMajorAxis.Value &&
-                this.FirstEccentricity == other.FirstEccentricity;
+            other.SemiMajorAxis.GetType() == SemiMajorAxis.GetType() &&
+            SemiMajorAxis.Value == other.SemiMajorAxis.Value &&
+                FirstEccentricity == other.FirstEccentricity;
     }
 
     public override bool Equals(object obj)
@@ -226,12 +226,12 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
 
     public override int GetHashCode()
     {
-        return this.ToString().GetHashCode();
+        return ToString().GetHashCode();
     }
 
     public override string ToString()
     {
-        return this.Name;
+        return Name;
     }
 
     public Ellipsoid<TNewLinearType, TNewAngularType> ChangeTo<TNewLinearType, TNewAngularType>()
@@ -239,27 +239,27 @@ public struct Ellipsoid<TLinear, TAngular> : IEllipsoid
         where TNewAngularType : AngularUnit, new()
     {
         return new Ellipsoid<TNewLinearType, TNewAngularType>(string.Empty,
-                                                            this.SemiMajorAxis,
-                                                            this.SemiMinorAxis,
-                                                            this.DatumTranslation,
-                                                            this.DatumMisalignment,
-                                                            this.Srid);
+                                                            SemiMajorAxis,
+                                                            SemiMinorAxis,
+                                                            DatumTranslation,
+                                                            DatumMisalignment,
+                                                            Srid);
     }
 
     public Ellipsoid<TLinear, TAngular> GetGeocentricVersion(int newSrid)
     {
-        return new Ellipsoid<TLinear, TAngular>(this.Name + "_Geocentric", this.SemiMajorAxis, this.InverseFlattening, newSrid);
+        return new Ellipsoid<TLinear, TAngular>(Name + "_Geocentric", SemiMajorAxis, InverseFlattening, newSrid);
     }
 
     #endregion
 
     public static bool operator ==(Ellipsoid<TLinear, TAngular> firstEllipsoid, IEllipsoid secondEllipsoid)
     {
-        return (firstEllipsoid.DatumTranslation == secondEllipsoid.DatumTranslation &&
+        return firstEllipsoid.DatumTranslation == secondEllipsoid.DatumTranslation &&
                 firstEllipsoid.DatumMisalignment == secondEllipsoid.DatumMisalignment &&
                 firstEllipsoid.Name == secondEllipsoid.Name &&
                 firstEllipsoid.SemiMajorAxis == secondEllipsoid.SemiMajorAxis &&
-                firstEllipsoid.SemiMinorAxis == secondEllipsoid.SemiMinorAxis);
+                firstEllipsoid.SemiMinorAxis == secondEllipsoid.SemiMinorAxis;
     }
 
     public static bool operator !=(Ellipsoid<TLinear, TAngular> firstEllipsoid, IEllipsoid secondEllipsoid)

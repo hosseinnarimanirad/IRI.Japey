@@ -104,7 +104,7 @@ namespace IRI.Jab.Controls.View
             try
             {
                 var result =
-                    MapProjects.GeodeticToUTM(new IRI.Sta.Common.Primitives.Point(point.X, point.Y), IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84);
+                    MapProjects.GeodeticToUTM(new IRI.Sta.Common.Primitives.Point(point.X, point.Y), Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result.X, result.Y);
             }
@@ -122,7 +122,7 @@ namespace IRI.Jab.Controls.View
                 double[][] result =
                     MapProjects.GeodeticToCylindricalEqualArea(
                         new double[] { point.X },
-                        new double[] { point.Y }, IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84,
+                        new double[] { point.Y }, Ellipsoids.WGS84,
                         0, 0);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
@@ -141,7 +141,7 @@ namespace IRI.Jab.Controls.View
                 double[][] result = MapProjects.MercatorToGeodetic(
                                                                     new double[] { point.X },
                                                                     new double[] { point.Y },
-                                                                    IRI.Sta.SpatialReferenceSystem.Ellipsoids.WGS84);
+                                                                    Ellipsoids.WGS84);
 
                 return new System.Windows.Point(result[0][0], result[1][0]);
             }

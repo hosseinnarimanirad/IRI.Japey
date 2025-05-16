@@ -1,4 +1,5 @@
 ﻿using IRI.Extensions;
+using IRI.Sta.SpatialReferenceSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,7 @@ public class EsriPrjTreeNode
         this.Values = values.ToList();
     }
 
-    public EsriPrjTreeNode(IRI.Sta.SpatialReferenceSystem.IEllipsoid ellipsoid, string title, int srid)
+    public EsriPrjTreeNode(IEllipsoid ellipsoid, string title, int srid)
     {
         this.Name = EsriPrjFile._geogcs;
 

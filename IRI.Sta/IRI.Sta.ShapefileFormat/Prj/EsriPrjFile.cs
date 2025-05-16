@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Ellipsoid = IRI.Sta.SpatialReferenceSystem.Ellipsoid<IRI.Sta.Metrics.Meter, IRI.Sta.Metrics.Degree>;
 using IRI.Sta.Metrics;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.SpatialReferenceSystem.Models;
 
 namespace IRI.Sta.ShapefileFormat.Prj;

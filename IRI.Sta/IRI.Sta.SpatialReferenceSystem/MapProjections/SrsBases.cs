@@ -89,8 +89,7 @@ public static class SrsBases
     }
 
     public static LambertConformalConic2P LccNiocWithWgs84 { get; private set; }
-
-
+     
     public static LambertConformalConic2P LccNiocWithClarcke1880Rgs { get; private set; }
 
     public static LambertConformalConic2P LccNahrawan { get; private set; }

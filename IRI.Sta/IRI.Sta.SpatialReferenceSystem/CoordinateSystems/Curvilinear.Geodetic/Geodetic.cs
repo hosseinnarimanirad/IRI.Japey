@@ -6,7 +6,6 @@ using IRI.Sta.Metrics;
 using System.Collections.Generic;
 using IRI.Sta.Mathematics;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.SpatialReferenceSystem;
 
