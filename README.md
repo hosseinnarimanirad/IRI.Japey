@@ -1,4 +1,4 @@
-# 🌍 IRI.Japey  
+# 🌍 Maptor Spatial Library
 **A .NET Library for Spatial Data Processing and Geospatial Analysis**  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/hosseinnarimanirad/IRI.Japey/blob/master/LICENSE)  
