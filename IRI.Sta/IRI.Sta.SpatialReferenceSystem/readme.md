@@ -2,19 +2,19 @@
 
 **A .NET library for advanced spatial reference systems (SRS), geodetic transformations, and map projections**
 
-Provided SRSs are based on horizontal spatial reference systems introduced in geodesy. Including main category of terresterial, celestial and orbital coordinate systems including
+This library provides implementations of horizontal spatial reference systems as defined in geodesy, supporting three primary categories:
 
-- Terrestrial Coordinate Systems
+- **Terrestrial Coordinate Systems**
   - Conventional Terrestrial (CT or AT)
   - Instantaneous Terrestrial (IT)
   - Geodetic (G)
   - Local Geodetic (LG)
   - Local Astronomic
-- Celestial Coordinate Systems
+- **Celestial Coordinate Systems**
   - Apparent Places (AP)
   - Right Ascension (RA)
   - Horizontal Angle (HA)
-- Orbital Coordinate Systems
+- **Orbital Coordinate Systems**
   - Orbital (OR)
     
 ![Screenshot 2025-05-16 132143](https://github.com/user-attachments/assets/c6666d03-2f31-4247-9d6b-43d88838e04c)
@@ -23,10 +23,20 @@ Provided SRSs are based on horizontal spatial reference systems introduced in ge
 
 ## 📌 Core Features
 
-### 1. Support different Map projections and horizontal datums
-Map projections such as TM, UTM, Mercator, WebMercator, Cylindrical Equal-area, Albers Equal Area Conic and Lambert Conformal Conic with 1 parallel and 2 parallel are supported. Also many ellipsoids have been defined as horizontal spatial datum.
+### 1. Supported Map Projections & Horizontal Datums
+This library implements standard map projections and geodetic datums, including:
+- **Projections:**
+  - Transverse Mercator (TM)
+  - Universal Transverse Mercator (UTM)
+  - Web Mercator (Auxiliary Sphere)
+  - Cylindrical Equal-Area
+  - Albers Equal-Area Conic (1- and 2-parallel variants)
+  - Lambert Conformal Conic (1- and 2-parallel variants)
+- **Horizontal Datums:**
+  - 30+ predefined ellipsoids (WGS84, GRS80, Clarke 1866, etc.)
+  - Custom ellipsoid support via semi-major/minor axis parameters
 
-### 2. Comprehensive Coordinate System Transformation Support
+### 2. Coordinate System Transformations
 Transformation between different spatial reference systems are available including:
 - CT <-> IT
 - CT <-> G
