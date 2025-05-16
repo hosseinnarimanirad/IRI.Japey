@@ -1,0 +1,42 @@
+name: NuGet Package Publisher
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      
+    - name: Pack
+      run: |
+        # Get all .csproj files that should be packaged
+        $projects = Get-ChildItem -Path . -Recurse -Include *.csproj | Where-Object {
+          # Exclude test projects (adjust as needed)
+          $_.FullName -notlike '*Test*' -and $_.FullName -notlike '*Tests*'
+        }
+        
+        foreach ($project in $projects) {
+          dotnet pack $project.FullName --configuration Release --no-build --output nupkgs
+        }
+        
+    - name: Push to NuGet
+      run: |
+        $pkgs = Get-ChildItem -Path ./nupkgs -Filter *.nupkg
+        foreach ($pkg in $pkgs) {
+          dotnet nuget push $pkg.FullName --api-key ${{ secrets.NUGET_API_KEY }} --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} --skip-duplicate
+        }
