@@ -73,3 +73,13 @@ jobs:
             --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} `
             --skip-duplicate
         }
+        
+    - name: Push to GitHub Packages
+      run: |
+        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
+            dotnet nuget push $_.FullName `
+              --api-key ${{ secrets.GITHUB_TOKEN }} `
+              --source "github" `
+              --skip-duplicate
+          }
+       
