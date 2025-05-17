@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <PackageIcon>images/package-icon.png</PackageIcon>
+    <PackageIcon>package-icon.png</PackageIcon>
     <PackageIconUrl/> 
   </PropertyGroup>
 
