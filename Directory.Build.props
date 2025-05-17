@@ -1,8 +1,7 @@
 <Project>
   <PropertyGroup>
-    <PackageIcon>images\package-icon.png</PackageIcon>
-    <PackageIconUrl/>
-    <PackageIconFullPath>$(MSBuildThisFileDirectory)images\package-icon.png</PackageIconFullPath>
+    <PackageIcon>..\..\images\package-icon.png</PackageIcon>
+    <PackageIconUrl/> 
   </PropertyGroup>
 
   <ItemGroup>
