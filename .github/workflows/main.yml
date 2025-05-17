@@ -65,7 +65,7 @@ jobs:
         }
         
         Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet pack $_.FullName 
+          dotnet pack $_.FullName `
             --configuration Release `
             --no-build `
             --output ./nupkgs `
