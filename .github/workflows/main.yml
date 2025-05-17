@@ -69,7 +69,7 @@ jobs:
       run: |
         Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
           dotnet nuget push $_.FullName `
-            --api-key ${{ secrets.NUGET_API_KEY }} 
-            --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} 
+            --api-key ${{ secrets.NUGET_API_KEY }} `
+            --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} `
             --skip-duplicate
         }
