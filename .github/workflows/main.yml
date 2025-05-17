@@ -1,0 +1,62 @@
+name: NuGet Package Publisher (IRI.Sta Projects)
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_PREFIX: 'IRI.Sta'
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    # Cache .NET installation for faster builds
+    - name: Cache .NET
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.dotnet
+          ~/.nuget/packages
+        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/global.json') }}
+        restore-keys: |
+          ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
+    
+    # Only setup .NET if not cached
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore IRI.Sta projects
+      run: |
+        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
+          dotnet restore $_.FullName
+        }
+    
+    - name: Build IRI.Sta projects
+      run: |
+        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
+          dotnet build $_.FullName --configuration Release --no-restore
+        }
+      
+    - name: Pack IRI.Sta projects
+      run: |
+        # Create nupkgs directory if it doesn't exist
+        if (!(Test-Path -Path "./nupkgs")) {
+          New-Item -ItemType Directory -Path "./nupkgs"
+        }
+        
+        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
+          dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs /p:PackageIcon=images\package-icon.png
+        }
+        
+    - name: Push to NuGet
+      run: |
+        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
+          dotnet nuget push $_.FullName --api-key ${{ secrets.NUGET_API_KEY }} --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} --skip-duplicate
+        }
