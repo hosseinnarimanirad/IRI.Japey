@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using IRI.Sta.Spatial.DataStructures;
+using Rectangle = IRI.Sta.Spatial.DataStructures.Rectangle;
 
 namespace IRI.Article.Sfc.View;
 
@@ -67,14 +68,14 @@ public partial class RTreeWindow : Window
 
         Rect rect = this.geo.Bounds;
 
-        this.rectangles.Add(new IRI.Sta.Spatial.Analysis.SFC.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom));
+        this.rectangles.Add(new Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom));
 
         Referesh();
     }
 
     private void Referesh()
     {
-        RTree tree01 = new IRI.Sta.Spatial.Analysis.SFC.RTree(this.rectangles.ToArray(), 3);
+        RTree tree01 = new RTree(this.rectangles.ToArray(), 3);
 
         int height = 0;
         DrawNode(tree01.Root, 0, canvas1, ref height);
@@ -82,56 +83,56 @@ public partial class RTreeWindow : Window
 
 
         //************************************ 02
-        SFCRTree tree02 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree02 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.GrayComparer,
                                                             3);
         DoTheJob(this.canvas2, tree02, this.title2, "Gray");
 
         //************************************ 03
-        SFCRTree tree03 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree03 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.NOrderingComparer,
                                                             3);
         DoTheJob(this.canvas3, tree03, this.title3, "NOrdering");
 
         //************************************ 04
-        SFCRTree tree04 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree04 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.ZOrderingComparer,
                                                             3);
         DoTheJob(this.canvas4, tree04, this.title4, "ZOrdering");
 
         //************************************ 05
-        SFCRTree tree05 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree05 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.HilbertComparer,
                                                             3);
         DoTheJob(this.canvas5, tree05, this.title5, "Hilbert");
 
         //************************************ 06
-        SFCRTree tree06 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree06 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.DiagonalLebesgueComparer,
                                                             3);
         DoTheJob(this.canvas6, tree06, this.title6, "DiagonalLebesgue");
 
         //************************************ 07
-        SFCRTree tree07 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree07 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.PeanoComparer,
                                                             3);
         DoTheJob(this.canvas7, tree07, this.title7, "Variant of Peano");
 
         //************************************ 08
-        SFCRTree tree08 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree08 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.Peano02Comparer,
                                                             3);
         DoTheJob(this.canvas8, tree08, this.title8, "Variant of Peano");
 
         //************************************ 09
-        SFCRTree tree09 = new IRI.Sta.Spatial.Analysis.SFC.SFCRTree(
+        SFCRTree tree09 = new SFCRTree(
                                                             this.rectangles.ToArray(),
                                                             SFCRTree.Peano03Comparer,
                                                             3);

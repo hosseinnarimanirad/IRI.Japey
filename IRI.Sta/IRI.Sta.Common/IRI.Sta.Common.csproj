@@ -16,11 +16,7 @@
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>-->
-
+ 
   <ItemGroup>
     <Compile Update="Models\WiseWebClient.cs" />
   </ItemGroup>

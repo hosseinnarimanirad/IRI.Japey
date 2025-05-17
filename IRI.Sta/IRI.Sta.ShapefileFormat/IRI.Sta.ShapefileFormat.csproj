@@ -17,23 +17,14 @@
     <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.ShapefileFormat</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>shapefile;GIS;spatial;dbf</PackageTags>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Info\Info.txt" />
-    <None Remove="License.txt" />
-    <None Remove="README.txt" />
-  </ItemGroup>
+  </PropertyGroup> 
 
   <ItemGroup>
     <Content Include="Info\Info.txt" />
     <Content Include="License.txt" />
     <Content Include="README.txt" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>-->
-
+ 
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\IRI.Sta.Ogc\IRI.Sta.Ogc.csproj" />
