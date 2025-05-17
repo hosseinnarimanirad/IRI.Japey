@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <PackageIcon>images\package-icon.png</PackageIcon>
+    <PackageIconUrl/>
+    <PackageIconFullPath>$(MSBuildThisFileDirectory)images\package-icon.png</PackageIconFullPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)images\package-icon.png" Pack="true" PackagePath="\" Visible="false" />
+  </ItemGroup>
+</Project>
