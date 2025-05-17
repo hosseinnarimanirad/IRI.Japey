@@ -79,7 +79,7 @@ jobs:
         Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
             dotnet nuget push $_.FullName `
               --api-key ${{ secrets.GITHUB_TOKEN }} `
-              --source "github" `
+              --source "https://nuget.pkg.github.com/hosseinnarimanirad/index.json" `
               --skip-duplicate
           }
        
