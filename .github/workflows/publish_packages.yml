@@ -58,9 +58,7 @@ jobs:
           dotnet pack $_.FullName `
             --configuration Release `
             --no-build `
-            --output ./nupkgs `
-            /p:VersionPrefix=1.0.0 `
-            /p:VersionSuffix=$versionSuffix `
+            --output ./nupkgs `            
             /p:PackageIcon="package-icon.png" `
             /p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
         }
