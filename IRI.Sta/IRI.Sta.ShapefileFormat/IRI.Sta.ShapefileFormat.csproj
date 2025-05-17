@@ -11,11 +11,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.1</Version>
     <Authors>Hossein Narimani Rad</Authors>
-    <Company>MakanNegar</Company>
+    <Company>Maptor</Company>
     <Description>A .NET standard library to read/write shapefile (*.shp, *.shx, *.dbf, *.prj)</Description>
-    <RepositoryUrl>https://github.com/hosseinnarimanirad/IRI.Japey/tree/master/IRI.Sta/IRI.Sta.ShapefileFormat</RepositoryUrl>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.ShapefileFormat</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>shapefile;GIS;spatial;dbf</PackageTags>
   </PropertyGroup>
