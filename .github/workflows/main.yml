@@ -14,6 +14,19 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 
+        
+    - name: Verify icon file exists
+      run: |
+        # Debugging: List all files to verify paths
+        ls -R
+        # Verify the exact path
+        if (!(Test-Path -Path "images/package-icon.png")) {
+          Write-Error "Icon file not found at images/package-icon.png"
+          exit 1
+        }
+        
     
     # Cache .NET installation for faster builds
     - name: Cache .NET
@@ -52,7 +65,12 @@ jobs:
         }
         
         Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs /p:PackageIcon=images\package-icon.png
+          dotnet pack $_.FullName 
+            --configuration Release `
+            --no-build `
+            --output ./nupkgs `
+            /p:PackageIcon="package-icon.png" `
+            /p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
         }
         
     - name: Push to NuGet
