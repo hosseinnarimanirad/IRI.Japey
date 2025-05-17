@@ -59,8 +59,8 @@ jobs:
             --configuration Release `
             --no-build `
             --output ./nupkgs `            
-            -p:PackageIcon="package-icon.png" `
-            -p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
+            /p:PackageIcon="package-icon.png" `
+            /p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
         }
         
     - name: Push to NuGet
