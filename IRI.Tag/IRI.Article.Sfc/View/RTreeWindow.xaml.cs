@@ -84,58 +84,58 @@ public partial class RTreeWindow : Window
 
         //************************************ 02
         SFCRTree tree02 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.GrayComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.GrayComparer,
+                                3);
         DoTheJob(this.canvas2, tree02, this.title2, "Gray");
 
         //************************************ 03
         SFCRTree tree03 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.NOrderingComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.NOrderingComparer,
+                                3);
         DoTheJob(this.canvas3, tree03, this.title3, "NOrdering");
 
         //************************************ 04
         SFCRTree tree04 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.ZOrderingComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.ZOrderingComparer,
+                                3);
         DoTheJob(this.canvas4, tree04, this.title4, "ZOrdering");
 
         //************************************ 05
         SFCRTree tree05 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.HilbertComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.HilbertComparer,
+                                3);
         DoTheJob(this.canvas5, tree05, this.title5, "Hilbert");
 
         //************************************ 06
         SFCRTree tree06 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.DiagonalLebesgueComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.DiagonalLebesgueComparer,
+                                3);
         DoTheJob(this.canvas6, tree06, this.title6, "DiagonalLebesgue");
 
         //************************************ 07
         SFCRTree tree07 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.PeanoComparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.PeanoComparer,
+                                3);
         DoTheJob(this.canvas7, tree07, this.title7, "Variant of Peano");
 
         //************************************ 08
         SFCRTree tree08 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.Peano02Comparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.Peano02Comparer,
+                                3);
         DoTheJob(this.canvas8, tree08, this.title8, "Variant of Peano");
 
         //************************************ 09
         SFCRTree tree09 = new SFCRTree(
-                                                            this.rectangles.ToArray(),
-                                                            SFCRTree.Peano03Comparer,
-                                                            3);
+                                this.rectangles.ToArray(),
+                                SFCRTree.Peano03Comparer,
+                                3);
         DoTheJob(this.canvas9, tree09, this.title9, "Variant of Peano");
     }
 

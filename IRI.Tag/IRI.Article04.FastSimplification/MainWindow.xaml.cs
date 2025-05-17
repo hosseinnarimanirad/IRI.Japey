@@ -13,6 +13,6 @@ public partial class MainWindow : Window
 
     private async void Button_Click(object sender, RoutedEventArgs e)
     {
-        await SimplificationHelper.GeneralTest(); ;
+        await SimplificationHelper.GeneralTest();
     }
 }
