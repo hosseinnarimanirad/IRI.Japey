@@ -7,7 +7,7 @@ namespace IRI.Sta.DataStructures.Trees;
 
 public class BTreeNode<T> where T : IComparable
 {
-    private int numberOfKeys;
+    //private int numberOfKeys;
 
     //public int NumberOfKeys { get; set; }
     public int NumberOfKeys { get { return this.Keys.Count; } }

@@ -34,14 +34,13 @@ public static class NetHelper
 
 
         Ping pinger = new Ping();
-
         try
         {
             PingReply reply = pinger.Send(nameOrAddress, timeout);
 
             pingable = reply.Status == IPStatus.Success;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Discard PingExceptions and return false;
             return false;
@@ -63,7 +62,7 @@ public static class NetHelper
 
                 pingable = reply?.Status == IPStatus.Success;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -72,7 +71,7 @@ public static class NetHelper
         return pingable;
     }
 
-    public static async Task<bool> IsConnectedToInternet(WebProxy proxy, string address = null)
+    public static async Task<bool> IsConnectedToInternet(WebProxy? proxy, string? address = null)
     {
         var networkAvailable = NetworkInterface.GetIsNetworkAvailable();
 
@@ -95,7 +94,7 @@ public static class NetHelper
         }
     }
 
-    private static async Task<bool> OpenRead(WebProxy proxy, string address)
+    private static async Task<bool> OpenRead(WebProxy? proxy, string address)
     {
         try
         {
@@ -177,7 +176,7 @@ public static class NetHelper
         return port;
     }
 
-    private static WebClient CreateWebClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null, Dictionary<string, string> headers = null)
+    private static WebClient CreateWebClient(string contentType, Encoding? encoding, WebProxy? proxy = null, string? bearer = null, Dictionary<string, string>? headers = null)
     {
         WebClient client = new WebClient();
 
@@ -216,7 +215,7 @@ public static class NetHelper
         return client;
     }
 
-    private static System.Net.Http.HttpClient CreateHttpClient(string contentType, Encoding encoding, WebProxy proxy = null, string bearer = null, Dictionary<string, string> headers = null)
+    private static System.Net.Http.HttpClient CreateHttpClient(string contentType, Encoding encoding, WebProxy? proxy = null, string? bearer = null, Dictionary<string, string>? headers = null)
     {
         System.Net.Http.HttpClient client;
 
@@ -263,7 +262,7 @@ public static class NetHelper
         return await HttpGetAsync<T>(address, Encoding.UTF8, null);
     }
 
-    public static async Task<Response<T>> HttpGetAsync<T>(string address, Encoding encoding = null, WebProxy proxy = null, string bearer = null, string contentType = contentTypeJson) where T : class
+    public static async Task<Response<T>> HttpGetAsync<T>(string address, Encoding? encoding = null, WebProxy? proxy = null, string? bearer = null, string contentType = contentTypeJson) where T : class
     {
         try
         {
@@ -290,7 +289,7 @@ public static class NetHelper
         }
     }
 
-    public static Response<T> HttpGet<T>(string address, Encoding encoding = null, WebProxy proxy = null, string bearer = null, string contentType = contentTypeJson) where T : class
+    public static Response<T> HttpGet<T>(string address, Encoding? encoding = null, WebProxy? proxy = null, string? bearer = null, string contentType = contentTypeJson) where T : class
     {
         try
         {
@@ -317,7 +316,7 @@ public static class NetHelper
         }
     }
 
-    public static Response<byte[]> HttpGetDownloadData(string address, string contentType, WebProxy proxy = null)
+    public static Response<byte[]> HttpGetDownloadData(string address, string contentType, WebProxy? proxy = null)
     {
         try
         {
@@ -342,7 +341,7 @@ public static class NetHelper
         }
     }
 
-    public static Response<string> HttpGetString(string address, string contentType = contentTypeJson, WebProxy proxy = null)
+    public static Response<string> HttpGetString(string address, string contentType = contentTypeJson, WebProxy? proxy = null)
     {
         try
         {
@@ -415,8 +414,8 @@ public static class NetHelper
     //string address,
     //object data,
     //Encoding encoding = null,
-    //WebProxy proxy = null,
-    //string bearer = null,
+    //WebProxy? proxy = null,
+    //string? bearer = null,
     //string contentType = contentTypeJson,
     //Dictionary<string, string> headers = null)
     {
@@ -544,7 +543,7 @@ public static class NetHelper
 
 
     // ***** XML ***** 
-    public static Response<string> HttpPostXml(string address, string xmlData, Encoding encoding, WebProxy proxy = null)
+    public static Response<string> HttpPostXml(string address, string xmlData, Encoding encoding, WebProxy? proxy = null)
     {
         try
         {
@@ -560,7 +559,7 @@ public static class NetHelper
         }
     }
 
-    public static async Task<Response<string>> HttpPostXmlAsync(string address, string xmlData, Encoding encoding, WebProxy proxy = null)
+    public static async Task<Response<string>> HttpPostXmlAsync(string address, string xmlData, Encoding encoding, WebProxy? proxy = null)
     {
         try
         {
@@ -577,7 +576,7 @@ public static class NetHelper
     }
 
 
-    public static Response<byte[]> HttpPostDownloadData(string address, object data, Encoding encoding, string contentType = contentTypeJson, WebProxy proxy = null, string bearer = null)
+    public static Response<byte[]> HttpPostDownloadData(string address, object data, Encoding encoding, string contentType = contentTypeJson, WebProxy? proxy = null, string? bearer = null)
     {
         try
         {
@@ -617,7 +616,7 @@ public static class NetHelper
     }
 
 
-    public static Response<bool> HttpDelete(string address, string contentType = contentTypeJson, WebProxy proxy = null, string bearerToken = null)
+    public static Response<bool> HttpDelete(string address, string contentType = contentTypeJson, WebProxy? proxy = null, string? bearerToken = null)
     {
         try
         {

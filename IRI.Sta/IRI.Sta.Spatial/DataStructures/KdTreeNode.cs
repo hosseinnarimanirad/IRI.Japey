@@ -6,17 +6,17 @@ public class KdTreeNode<T>
 
     //public Func<T, T, int> comparer;
     
-    protected KdTreeNode<T> leftChild, rightChild, parent;
+    protected KdTreeNode<T>? _leftChild, _rightChild, _parent;
 
     public KdTreeNode<T> LeftChild
     {
-        get { return this.leftChild; }
+        get { return this._leftChild; }
 
         set
         {
             if (value != null)
             {
-                this.leftChild = value;
+                this._leftChild = value;
 
                 value.Parent = this;
             }
@@ -25,13 +25,13 @@ public class KdTreeNode<T>
 
     public KdTreeNode<T> RigthChild
     {
-        get { return this.rightChild; }
+        get { return this._rightChild; }
 
         set
         {
             if (value != null)
             {
-                this.rightChild = value;
+                this._rightChild = value;
 
                 value.Parent = this;
             }
@@ -40,11 +40,11 @@ public class KdTreeNode<T>
 
     public KdTreeNode<T> Parent
     {
-        get { return this.parent; }
+        get { return this._parent; }
 
         set
         {
-            this.parent = value;
+            this._parent = value;
         }
     }
 

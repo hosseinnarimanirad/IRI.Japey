@@ -25,14 +25,15 @@ public class MapzenProperties
     public string fillColor { get; set; }
     public int contour { get; set; }
     public float opacity { get; set; }
-    public float fillopacity { get; set; }
+    //public float fillopacity { get; set; }
 }
 
 public class MapzenGeometry
 {
     public object coordinates { get; set; }
     public string type { get; set; }
-    public IRI.Sta.Common.Primitives.GeometryType Type
+
+    public IRI.Sta.Common.Primitives.GeometryType GeometryType
     {
         get
         {
@@ -55,7 +56,7 @@ public class MapzenGeometry
     {
         get
         {
-            if (Type == IRI.Sta.Common.Primitives.GeometryType.LineString)
+            if (GeometryType == IRI.Sta.Common.Primitives.GeometryType.LineString)
             {
                 return JsonSerializer.Deserialize<double[][]>(coordinates.ToString());
             }
@@ -68,7 +69,7 @@ public class MapzenGeometry
     {
         get
         {
-            if (Type == IRI.Sta.Common.Primitives.GeometryType.Polygon)
+            if (GeometryType == IRI.Sta.Common.Primitives.GeometryType.Polygon)
             {
                 return JsonSerializer.Deserialize<double[][][]>(coordinates.ToString());
             }

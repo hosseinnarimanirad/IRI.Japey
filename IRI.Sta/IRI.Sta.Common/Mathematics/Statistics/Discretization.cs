@@ -26,11 +26,11 @@ public static class Discretization
         return ChiMergeDiscretize(intervals, maxClasses);
     }
 
-    public static List<ClassAttributeGroup<T1, T2>> ChiMergeDiscretize<T1, T2>(List<ClassAttributeGroup<T1, T2>> input, int maxClasses)
+    public static List<ClassAttributeGroup<T1, T2>>? ChiMergeDiscretize<T1, T2>(List<ClassAttributeGroup<T1, T2>>? input, int maxClasses)
     {
-        var numberOfTuples = input.Count;
+        var numberOfTuples = input?.Count ?? 0;
 
-        if (input.Count == 1)
+        if (numberOfTuples == 1)
         {
             return input;
         }
@@ -40,12 +40,12 @@ public static class Discretization
         for (int i = 0; i < numberOfTuples - 1; i++)
         {
             //calculate ChiSquare for adjacent intervals
-            var temporaryInput = new List<ClassAttributeGroup<T1, T2>>() { input[i], input[i + 1] };
+            var temporaryInput = new List<ClassAttributeGroup<T1, T2>>() { input![i], input[i + 1] };
 
             chiValues.Add(ChiSquare.NominalCorrelation(temporaryInput));
         }
 
-        if (input.Count <= maxClasses)
+        if (numberOfTuples <= maxClasses)
         {
             return input;
         }
@@ -78,7 +78,7 @@ public static class Discretization
             }
             else
             {
-                result.Add(input[index]);
+                result.Add(input![index]);
 
                 index++;
             }

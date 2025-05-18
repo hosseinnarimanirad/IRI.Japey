@@ -8,17 +8,17 @@ public class BinarySearchNode<T> where T : IComparable
 {
     public T Key { get; set; }
 
-    protected BinarySearchNode<T> leftChild, rightChild, parent;
+    private BinarySearchNode<T> _leftChild, _rightChild, _parent;
 
     public BinarySearchNode<T> LeftChild
     {
-        get { return this.leftChild; }
+        get { return this._leftChild; }
 
         set
         {
             if (value != null)
             {
-                this.leftChild = value;
+                this._leftChild = value;
 
                 value.Parent = this;
             }
@@ -27,13 +27,13 @@ public class BinarySearchNode<T> where T : IComparable
 
     public BinarySearchNode<T> RigthChild
     {
-        get { return this.rightChild; }
+        get { return this._rightChild; }
 
         set
         {
             if (value != null)
             {
-                this.rightChild = value;
+                this._rightChild = value;
 
                 value.Parent = this;
             }
@@ -42,11 +42,11 @@ public class BinarySearchNode<T> where T : IComparable
 
     public  BinarySearchNode<T> Parent
     {
-        get { return this.parent; }
+        get { return this._parent; }
 
         set
         {
-            this.parent = value;
+            this._parent = value;
         }
     }
 

@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <NoWarn>CS8602,CS8618,CS8625</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

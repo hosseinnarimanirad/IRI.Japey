@@ -10,7 +10,7 @@ public static class OxfordDictionaryService
 {
     const string baseUrl = "https://od-api.oxforddictionaries.com/api/v1/";
      
-    public static async Task<OdResult> GetExamples(string word, string appId, string appKey)
+    public static async Task<OdResult?> GetExamples(string word, string appId, string appKey)
     {
         try
         {
@@ -34,7 +34,7 @@ public static class OxfordDictionaryService
                 }
             }
         }
-        catch (WebException ex)
+        catch (WebException)
         {
             return null;
         }

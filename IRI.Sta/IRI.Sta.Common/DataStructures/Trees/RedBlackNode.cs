@@ -12,17 +12,17 @@ public class RedBlackNode<T> where T : IComparable
 
     public T Key { get; set; }
 
-    protected RedBlackNode<T> leftChild, rigthChild;
+    private RedBlackNode<T> _leftChild, _rigthChild;
 
     public RedBlackNode<T> LeftChild
     {
-        get { return this.leftChild; }
+        get { return this._leftChild; }
 
         set
         {
             if (value != null)
             {
-                this.leftChild = value;
+                this._leftChild = value;
 
                 value.Parent = this;
             }
@@ -31,13 +31,13 @@ public class RedBlackNode<T> where T : IComparable
 
     public RedBlackNode<T> RigthChild
     {
-        get { return this.rigthChild; }
+        get { return this._rigthChild; }
 
         set
         {
             if (value != null)
             {
-                this.rigthChild = value;
+                this._rigthChild = value;
 
                 value.Parent = this;
             }

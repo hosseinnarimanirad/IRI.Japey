@@ -7,20 +7,20 @@ namespace IRI.Sta.Mathematics;
 
 public class ClassAttributeGroup<TAttribute, TClass>
 {
-    public TAttribute Key { get { return Attributes == null ? default(TAttribute) : Attributes.FirstOrDefault(); } }
+    public TAttribute? Key { get { return Attributes is null ? default : Attributes.FirstOrDefault(); } }
 
-    public List<TAttribute> Attributes { get; set; }
+    public List<TAttribute>? Attributes { get; set; }
 
-    public List<ClassFrequency<TClass>> Classes { get; set; }
+    public List<ClassFrequency<TClass>>? Classes { get; set; }
 
-    public ClassAttributeGroup(List<TAttribute> attributes, List<ClassFrequency<TClass>> classes)
+    public ClassAttributeGroup(List<TAttribute>? attributes, List<ClassFrequency<TClass>>? classes)
     {
         this.Attributes = attributes;
 
         this.Classes = classes;
     }
 
-    public ClassAttributeGroup(List<TAttribute> attributes, List<TClass> classes)
+    public ClassAttributeGroup(List<TAttribute>? attributes, List<TClass>? classes)
     {
         this.Classes = classes?.GroupBy(c => c)?.Select(c => new ClassFrequency<TClass>(c.Key, c.Count()))?.ToList();
 

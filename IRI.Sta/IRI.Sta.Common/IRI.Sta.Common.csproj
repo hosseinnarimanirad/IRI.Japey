@@ -5,14 +5,10 @@
     <!-- or "latest", "preview", or "11.0" -->
     <LangVersion>latest</LangVersion>
     <!--<LangVersion>latestMajor</LangVersion>-->
+    <Nullable>enable</Nullable>
+    <NoWarn>CS8602,CS8618,CS8625</NoWarn>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Security\**" />
-    <EmbeddedResource Remove="Security\**" />
-    <None Remove="Security\**" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>

@@ -21,7 +21,7 @@ public class OrderStatisticNode<T> where T : IComparable
 
     public T Key { get; set; }
 
-    protected OrderStatisticNode<T> leftChild, rigthChild;
+    private OrderStatisticNode<T> leftChild, rigthChild;
 
     public OrderStatisticNode<T> LeftChild
     {

@@ -5,35 +5,34 @@ using System;
 using System.Collections.Generic;
 using IRI.Sta.Mathematics;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public interface IAngularCollection : IEnumerable<AngularUnit>
 {
-    public interface IAngularCollection : IEnumerable<AngularUnit>
-    {
-        int Length { get; }
-        AngleMode Mode { get; }
-        AngleRange Range { get; set; }
-        AngularUnit this[int index] { get; set; }
+    int Length { get; }
+    AngleMode Mode { get; }
+    AngleRange Range { get; set; }
+    AngularUnit this[int index] { get; set; }
 
-        IAngularCollection Add(IAngularCollection array);
-        IAngularCollection AddAllValuesWith(double value);
-        IAngularCollection Subtract(IAngularCollection array);
-        IAngularCollection SubtractAllValuesFrom(double value);
-        IAngularCollection SubtractAllValuesWith(double value);
-        IAngularCollection DivideAllValuesAsDenominator(double numerator);
-        IAngularCollection DivideAllValuesAsNumerator(double denominator);
-        IAngularCollection MultiplyAllValuesWith(double value);
-        IAngularCollection Negate();
+    IAngularCollection Add(IAngularCollection array);
+    IAngularCollection AddAllValuesWith(double value);
+    IAngularCollection Subtract(IAngularCollection array);
+    IAngularCollection SubtractAllValuesFrom(double value);
+    IAngularCollection SubtractAllValuesWith(double value);
+    IAngularCollection DivideAllValuesAsDenominator(double numerator);
+    IAngularCollection DivideAllValuesAsNumerator(double denominator);
+    IAngularCollection MultiplyAllValuesWith(double value);
+    IAngularCollection Negate();
 
-        IEnumerator<AngularUnit> GetEnumerator();
+    //IEnumerator<AngularUnit> GetEnumerator();
 
-        double GetTheValue(int index);
-        AngularUnit GetValue(int index);
-        void SetValue(int index, AngularUnit value);
-        double[] ToArray();
-        Vector ToVector();
+    double GetTheValue(int index);
+    AngularUnit GetValue(int index);
+    void SetValue(int index, AngularUnit value);
+    double[] ToArray();
+    Vector ToVector();
 
-        AngularCollection<TNewAngleArrayType> ChangeTo<TNewAngleArrayType>() where TNewAngleArrayType : AngularUnit, new();
-        IAngularCollection Clone();
+    AngularCollection<TNewAngleArrayType> ChangeTo<TNewAngleArrayType>() where TNewAngleArrayType : AngularUnit, new();
+    IAngularCollection Clone();
 
-    }
 }

@@ -16,7 +16,7 @@ public class IntervalTreeNode<T> where T : IComparable
 
     public T Max { get; set; }
 
-    protected IntervalTreeNode<T> leftChild, rigthChild;
+    private IntervalTreeNode<T> leftChild, rigthChild;
 
     public IntervalTreeNode<T> LeftChild
     {

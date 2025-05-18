@@ -10,9 +10,9 @@ public class GeoReferencedImage
 {
     public BoundingBox GeodeticWgs84BoundingBox { get; set; }
      
-    public byte[] Image { get; set; }
+    public byte[]? Image { get; set; }
 
-    public GeoReferencedImage(byte[] image, BoundingBox geodeticBoundingBox, bool isValid = true)
+    public GeoReferencedImage(byte[]? image, BoundingBox geodeticBoundingBox, bool isValid = true)
     {
         this.Image = image;
 
