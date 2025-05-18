@@ -26,7 +26,7 @@ Maptor /
 ├── IRI.Sta/                     # Core spatial data structures & algorithms
 ├── IRI.Ket/                     # Utilities (data sources, file I/O)
 ├── IRI.Jab/                     # WPF components (MapViewer, dialogs, etc.)
-├── IRI.Test/                    # Unit tests
+├── IRI.Tst/                    # Unit tests
 └── Examples/                    # Usage samples
 ```
 
