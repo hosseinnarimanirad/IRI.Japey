@@ -40,6 +40,22 @@ jobs:
           dotnet restore $_.FullName
         }
     
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.x'
+
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0
+
+    - name: Display Version
+      run: |
+        echo "Major: ${{ steps.gitversion.outputs.major }}"
+        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+        echo "NuGet Version: ${{ steps.gitversion.outputs.nuGetVersion }}"
+    
     - name: Build IRI.Sta projects
       run: |
         Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
@@ -64,6 +80,7 @@ jobs:
         }
         
     - name: Push to NuGet
+      if: github.ref == 'refs/heads/master'  # Only push releases from master
       run: |
         Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
           dotnet nuget push $_.FullName `
@@ -73,6 +90,7 @@ jobs:
         }
         
     - name: Push to GitHub Packages
+      if: github.ref == 'refs/heads/master'  # Only push releases from master
       run: |
         Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
             dotnet nuget push $_.FullName `
