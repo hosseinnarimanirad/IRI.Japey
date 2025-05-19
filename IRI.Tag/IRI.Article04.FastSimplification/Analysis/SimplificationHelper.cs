@@ -1,14 +1,12 @@
-﻿using IRI.Extensions;
+﻿using System.IO;
+using IRI.Extensions;
+using System.Diagnostics;
+using IRI.Sta.ShapefileFormat;
+using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.ShapefileFormat;
-using System.Diagnostics;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using System.Text;
-using System.Windows.Threading;
-using System.IO;
-using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Article04.FastSimplification;
 
@@ -20,6 +18,7 @@ public static class SimplificationHelper
     {
         // OSM dataset directory should be addressed here
         var dataFolder = @"E:\University.Ph.D\Sample Data\OSM-1401-03-03-WebMercator";
+        //var dataFolder = @"E:\University.Ph.D\Sample Data\OSM-1404-02-29-WebMercator-Lake";
 
         var files = Directory.EnumerateFiles(dataFolder, "*.shp", SearchOption.AllDirectories);
 
@@ -50,8 +49,6 @@ public static class SimplificationHelper
 
             fileNames.Add(fileName);
 
-            watch.Restart();
-
             await ProcessShapefile(file, writer, writeFolder);
 
             File.AppendAllLines(logFile, new List<string>() { $"Finished At: {DateTime.Now.ToLongTimeString()}; Ellapsed: {watch.ElapsedMilliseconds / 1000.0:N0000} (s) - ({fileName})" });
@@ -71,7 +68,7 @@ public static class SimplificationHelper
                                 .Select(g => g.AsGeometry())
                                 .SelectMany(g => g.Split(false))
                                 .Where(g => !g.IsNullOrEmpty())
-                                .Where(g => g.TotalNumberOfPoints > 4)
+                                .Where(g => g.TotalNumberOfPoints > 10)
                                 .ToList();
 
         foreach (var feature in features)
@@ -96,7 +93,7 @@ public static class SimplificationHelper
 
         var groundBoundingBox = features.GetBoundingBox();
 
-        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 512, 512);
+        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 4096, 4096);
 
         var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
 
@@ -106,44 +103,54 @@ public static class SimplificationHelper
         var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 0.5);
 
         var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
-         
-        var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
 
-        var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+        //var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
 
-        originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
+        //var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+        //originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
 
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
+        List<int> featureCount = [1000, 10_000, 50_000, 100_000, 200_000, 300_000];
+
+        //List<int> pointCount = [1000, 10_000, 15_000, 20_000, 25_000, 30_000, 35_000, 40_000];
+
         foreach (var method in methods)
         {
-            stopwatch.Restart();
+            foreach (var count in featureCount)
+            {
+                if (count > features.Count)
+                    break;
 
-            var simplifiedFeatures = features.Simplify(method, parameters);
+                var theFeatures = features.Take(count).ToList();
 
-            stopwatch.Stop();
+                stopwatch.Restart();
 
-            if (simplifiedFeatures.IsNullOrEmpty())
-                continue;
+                var simplifiedFeatures = theFeatures.Simplify(method, parameters, reduceToPoint: false);
 
-            writer.WriteLine(
-              new SpeedLog(fileName,
-                            methodNames[method],
-                            features,
-                            simplifiedFeatures,
-                            stopwatch.ElapsedMilliseconds,
-                            parameters).ToTsv());
+                stopwatch.Stop();
 
-            var vectorLayer = GeneralHelper.GetAsLayer("original", features);
+                if (simplifiedFeatures.IsNullOrEmpty())
+                    continue;
 
-            var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+                writer.WriteLine(
+                  new SpeedLog(fileName,
+                                methodNames[method],
+                                theFeatures,
+                                simplifiedFeatures,
+                                stopwatch.ElapsedMilliseconds,
+                                parameters).ToTsv());
 
-            simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}.png", System.Drawing.Imaging.ImageFormat.Tiff);
+                //var vectorLayer = GeneralHelper.GetAsLayer("original", [theFeatures]);
 
-            //var diff = await GeneralHelper.CreateImages(groundBoundingBox, estimatedZoomLevel, originalBitmap, vectorLayer, tempDirectory, fileName, $"{method}");
-            //builder.AppendLine(new LogStructure(fileName, totalNumberOfPoints, simplified, level, diff.percent, $"{method.GetDescription()}", stopwatch.ElapsedMilliseconds, parameters, coef).ToTsv());
-            //diff.image.Dispose();
+                //var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+                //simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}-[{count}].png", System.Drawing.Imaging.ImageFormat.Tiff);
+            }
+
+            writer.Flush();
         }
 
     }

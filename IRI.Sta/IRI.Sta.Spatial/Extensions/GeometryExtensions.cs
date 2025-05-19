@@ -345,7 +345,7 @@ public static class Sta_GeometryExtensions
 
 
     public static List<Geometry<Point>> Simplify(
-      this List<Geometry<Point>> geometries,
+      this IEnumerable<Geometry<Point>> geometries,
       SimplificationType type,
       SimplificationParamters paramters,
       bool reduceToPoint = true)
@@ -357,17 +357,16 @@ public static class Sta_GeometryExtensions
 
             var result = new List<Geometry<Point>>();
 
-            for (int i = 0; i < geometries.Count; i++)
+            foreach (var geometry in geometries)
             {
-                //try
-                //{
-                result.Add(geometries[i].Simplify(type, paramters));
-                //}
-                //catch (Exception) { throw; }
+                var simplified = geometry.Simplify(type, paramters);
+
+                if (!simplified.IsNullOrEmpty())
+                {
+                    result.Add(geometry.Simplify(type, paramters));
+                }
             }
-
-            result = result.Where(i => !i.IsNullOrEmpty()).ToList();
-
+             
             if (reduceToPoint)
             {
                 for (int g = 0; g < result.Count; g++)

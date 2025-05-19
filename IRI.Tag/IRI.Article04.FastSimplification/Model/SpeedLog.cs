@@ -21,7 +21,9 @@ public class SpeedLog
     public int NumberOfPoints_Simplified { get; set; }
 
     public long ElapsedMilliseconds { get; set; }
-     
+
+    public double Compression { get; set; }
+
     public SpeedLog(
         string fileName,
         string methodName,
@@ -31,7 +33,7 @@ public class SpeedLog
         SimplificationParamters parameters)
     {
         this.FileName = fileName;
-        
+
         this.MethodName = methodName;
 
         this.DistanceThreshold = parameters.DistanceThreshold ?? 0;
@@ -43,8 +45,10 @@ public class SpeedLog
         this.NumberOfPoints_Original = originalGeometries.Sum(f => f.TotalNumberOfPoints);
 
         this.NumberOfPoints_Simplified = simplifiedGeometries.Sum(f => f.TotalNumberOfPoints);
-          
+
         this.ElapsedMilliseconds = elapsedMilliseconds;
+
+        this.Compression = 1.0 - NumberOfPoints_Simplified / (double)this.NumberOfPoints_Original;
     }
 
     public static string GetHeader()
@@ -59,6 +63,7 @@ public class SpeedLog
             nameof(NumberOfPoints_Original),
             nameof(NumberOfPoints_Simplified),
             nameof(ElapsedMilliseconds),
+            nameof(Compression),
         };
 
         return string.Join("\t", headers);
@@ -76,6 +81,7 @@ public class SpeedLog
             NumberOfPoints_Original.ToString(),
             NumberOfPoints_Simplified.ToString(),
             ElapsedMilliseconds.ToString(),
+            Compression.ToString()
         };
 
         return string.Join("\t", headers);

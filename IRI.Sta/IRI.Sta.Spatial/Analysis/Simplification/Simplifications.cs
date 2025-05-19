@@ -492,12 +492,12 @@ public static class Simplifications
 
         for (int i = 1; i < numberOfPoints - 1; i++)
         {
-            var semiPerpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
+            var perpendicularDistance = SpatialUtility.GetPointToLineSegmentDistance(pointList[0], pointList[numberOfPoints - 1], pointList[i]);
 
-            if (semiPerpendicularDistance > maxPerpendicularDistance)
+            if (perpendicularDistance > maxPerpendicularDistance)
             {
                 maxIndex = i;
-                maxPerpendicularDistance = semiPerpendicularDistance;
+                maxPerpendicularDistance = perpendicularDistance;
             }
         }
 
