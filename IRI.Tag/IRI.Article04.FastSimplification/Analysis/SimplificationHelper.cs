@@ -7,6 +7,9 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using IRI.Sta.Spatial.Model.GeoJsonFormat;
 
 namespace IRI.Article04.FastSimplification;
 
@@ -31,12 +34,12 @@ public static class SimplificationHelper
         StreamWriter writer = new StreamWriter($"{writeFolder}\\summary.txt", false);
         writer.WriteLine(SpeedLog.GetHeader());
 
-        List<string> fileNames = new List<string>();
+        List<string> fileNames = ["AdminArea_WM", "Building_WM", "Landuse_WM", "Railway_WM"];
 
         var oldfiles = Directory.EnumerateFiles(writeFolder, "*.txt", SearchOption.AllDirectories)
                                 .Select(s => System.IO.Path.GetFileNameWithoutExtension(s).Replace("-summary", string.Empty));
 
-        string logFile = $"{writeFolder}\\Log-{DateTime.Now:yyyy-MM-dd HH-mm-ss}.txt";
+        string logFile = $"{writeFolder}\\Log-Visual-{DateTime.Now:yyyy-MM-dd HH-mm-ss}.txt";
 
         Stopwatch watch = Stopwatch.StartNew();
 
@@ -46,10 +49,10 @@ public static class SimplificationHelper
 
             if (fileNames.Contains(fileName) || oldfiles.Contains(fileName))
                 continue;
-
+             
             fileNames.Add(fileName);
 
-            await ProcessShapefile(file, writer, writeFolder);
+            await ProcessVisualQuality(file, writer, writeFolder);
 
             File.AppendAllLines(logFile, new List<string>() { $"Finished At: {DateTime.Now.ToLongTimeString()}; Ellapsed: {watch.ElapsedMilliseconds / 1000.0:N0000} (s) - ({fileName})" });
         }
@@ -58,7 +61,7 @@ public static class SimplificationHelper
         writer.Dispose();
     }
 
-    private static async Task ProcessShapefile(string shpFile, StreamWriter writer, string outputDirectory)
+    private static void ProcessSpeed(string shpFile, StreamWriter writer, string outputDirectory)
     {
         var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
@@ -77,24 +80,27 @@ public static class SimplificationHelper
         features = features.Where(f => !f.HasDuplicatePoints()).ToList();
 
         List<SimplificationType> methods = new List<SimplificationType>()
-            {
-                SimplificationType.RamerDouglasPeucker,
-                SimplificationType.ReumannWitkam,
+        {
+            SimplificationType.RamerDouglasPeucker,
 
-                SimplificationType.VisvalingamWhyatt,
+            SimplificationType.VisvalingamWhyatt,
 
-                SimplificationType.NormalOpeningWindow,
-                SimplificationType.BeforeOpeningWindow,
+            SimplificationType.NormalOpeningWindow,
+            SimplificationType.BeforeOpeningWindow,
 
-                SimplificationType.CumulativeTriangleRoutine,
-            };
+            SimplificationType.CumulativeTriangleRoutine,
+        };
 
         Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
 
         var groundBoundingBox = features.GetBoundingBox();
 
-        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 4096, 4096);
+        // screen size: 4096x4096
+        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 8000, 8000);
 
+        // screen size      scale
+        // 8k           =>  1:1,155,581
+        // 4096         =>  1:2,300,000
         var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
 
         var currentScreenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, groundBoundingBox);
@@ -105,17 +111,13 @@ public static class SimplificationHelper
         var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
 
         //var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
-
         //var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
-
         //originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
 
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         List<int> featureCount = [1000, 10_000, 50_000, 100_000, 200_000, 300_000];
-
-        //List<int> pointCount = [1000, 10_000, 15_000, 20_000, 25_000, 30_000, 35_000, 40_000];
 
         foreach (var method in methods)
         {
@@ -144,9 +146,7 @@ public static class SimplificationHelper
                                 parameters).ToTsv());
 
                 //var vectorLayer = GeneralHelper.GetAsLayer("original", [theFeatures]);
-
                 //var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
-
                 //simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}-[{count}].png", System.Drawing.Imaging.ImageFormat.Tiff);
             }
 
@@ -155,8 +155,86 @@ public static class SimplificationHelper
 
     }
 
+    private static async Task ProcessVisualQuality(string shpFile, StreamWriter writer, string outputDirectory)
+    {
+        var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
-    #region Test with visual output
+        //******************************************************
+        //***************** read features **********************
+        var features = Shapefile.ReadShapes(shpFile)
+                                .Select(g => g.AsGeometry())
+                                .SelectMany(g => g.Split(false))
+                                .Where(g => !g.IsNullOrEmpty())
+                                .Where(g => g.TotalNumberOfPoints > 30)
+                                .ToList();
+
+        foreach (var feature in features)
+            feature.RemoveConsecutiveDuplicatePoints();
+
+        features = features.Where(f => !f.HasDuplicatePoints()).ToList();
+
+        List<SimplificationType> methods = new List<SimplificationType>()
+        {
+            SimplificationType.RamerDouglasPeucker,
+
+            SimplificationType.VisvalingamWhyatt,
+
+            SimplificationType.NormalOpeningWindow,
+            SimplificationType.BeforeOpeningWindow,
+
+            SimplificationType.CumulativeTriangleRoutine,
+        };
+
+        Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
+
+        var groundBoundingBox = features.GetBoundingBox();
+
+        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 4096, 4096);
+
+        var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
+
+        var currentScreenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, groundBoundingBox);
+
+        // threshold values is set to 0.5 pixel
+        var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 0.5);
+
+        var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
+
+        var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
+
+        var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+        originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
+
+         
+        foreach (var feature in features)
+        {
+            foreach (var method in methods)
+            { 
+                var simplifiedFeatures = feature.Simplify(method, parameters);
+
+               // writer.WriteLine(
+               //new SpeedLog(fileName,
+               //              methodNames[method],
+               //              theFeatures,
+               //              simplifiedFeatures,
+               //              stopwatch.ElapsedMilliseconds,
+               //              parameters).ToTsv());
+
+                //var vectorLayer = GeneralHelper.GetAsLayer("original", [theFeatures]);
+
+                //var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+                //simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}-[{count}].png", System.Drawing.Imaging.ImageFormat.Tiff);
+            }
+
+            writer.Flush();
+        }
+         
+
+    }
+
+    //#region Test with visual output
 
     //public static async Task TestWithOutput(string shpFile, StreamWriter writer, bool includeHeader, string outputDirectory)
     //{
@@ -335,56 +413,6 @@ public static class SimplificationHelper
     //    }
     //}
 
-    //private static bool CheckZoom2(int featureIndex, string fileName)
-    //{
-    //    var type = fileName.Split('_').First();
-
-    //    switch (type)
-    //    {
-    //        case "AdminArea":
-    //            return featureIndex == 1507 || featureIndex == 995 || featureIndex == 1117 || featureIndex == 1219
-    //                    || featureIndex == 1184 || featureIndex == 1219 || featureIndex == 1529;
-
-    //        case "Building":
-    //            // SF is better (less TLVD per length) -Z2
-    //            return featureIndex == 1322 || featureIndex == 2181 ||
-    //                // RDP is better (less TLVD per length)
-    //                featureIndex == 902 || featureIndex == 8760 || featureIndex == 3815 || featureIndex == 8760 ||
-
-    //                // SF is better (less TLVD per length) - Z1
-    //                featureIndex == 22523;
-
-    //        case "LandUse":
-    //        case "Water":
-    //            return featureIndex == 36;
-
-    //        case "Railway":
-    //            // SF is better (less TLVD per length) -Z2
-    //            return featureIndex == 149 || featureIndex == 359 ||
-    //                // RDP is better (less TLVD per length)
-    //                featureIndex == 747 || featureIndex == 192;
-
-    //        case "Road":
-    //            return new List<int>()
-    //            {
-    //                // SF is better (less TLVD per length)
-    //                 136284, 7727, 108622, 134791, 8593,51092, 115606,
-
-    //                 // RDP is better (less TLVD per length)
-    //                 80721, 119726, 33390, 91799, 103402, 112277, 43487, 7823, 127214
-    //            }.Contains(featureIndex);
-
-    //        case "Waterways":
-    //            // SF is better (less TLVD per length)
-    //            return featureIndex == 17658 ||
-
-    //                // RDP is better (less TLVD per length)
-    //                featureIndex == 5054;
-
-    //        default:
-    //            return false;
-    //    }
-    //}
 
     //private static async Task<DrawingVisual> GetAsFrame(
     //    string layerName,
@@ -432,7 +460,7 @@ public static class SimplificationHelper
     //    }
     //}
 
-    #endregion
+    //#endregion
 
 
 
