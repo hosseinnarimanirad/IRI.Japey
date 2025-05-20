@@ -1,8 +1,15 @@
-﻿using System.Windows.Media;
+﻿using IRI.Jab.Common.Convertor;
+using IRI.Jab.Common;
+using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Spatial.Primitives;
+using System;
+using System.Windows.Media;
+using WpfPoint = System.Windows.Point;
+//using System.Windows.Media;
 
 namespace IRI.Extensions;
 
-public static class StreamGeometryExtensions
+public static class GeometryExtensions
 {
     public static void DrawGeometry(this StreamGeometryContext ctx, Geometry geo)
     {
@@ -78,5 +85,29 @@ public static class StreamGeometryExtensions
 
 
         }
+    }
+
+    public static DrawingVisual ParseToDrawingVisual<T>(this Geometry<T> geometry, int imageWidth, int imageHeight, VisualParameters visualParameters) where T : IPoint, new()
+    {
+        var mapExtent = geometry.GetBoundingBox();
+
+        double xScale = imageWidth / mapExtent.Width;
+        double yScale = imageHeight / mapExtent.Height;
+        double scale = xScale > yScale ? yScale : xScale;
+
+        Func<WpfPoint, WpfPoint> mapToScreen = new Func<WpfPoint, WpfPoint>(p => new WpfPoint((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+
+        var pen = visualParameters.GetWpfPen();
+        pen.LineJoin = PenLineJoin.Round;
+        pen.EndLineCap = PenLineCap.Round;
+        pen.StartLineCap = PenLineCap.Round;
+
+        Brush brush = visualParameters.Fill;
+
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
+
+        drawingVisual.Opacity = visualParameters.Opacity;
+
+        return drawingVisual;
     }
 }

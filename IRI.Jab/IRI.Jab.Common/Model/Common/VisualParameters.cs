@@ -251,36 +251,28 @@ namespace IRI.Jab.Common
 
         public event EventHandler<CustomEventArgs<VisualParameters>> OnChanged;
 
-        public Pen GetWpfPen()
+        public Pen? GetWpfPen()
         {
             var result = Stroke != null ? new Pen(Stroke, StrokeThickness) : null;
 
-            if (DashStyle != null && result != null)
-            {
+            if (result != null && DashStyle != null)
                 result.DashStyle = DashStyle;
-            }
 
             if (result != null)
-            {
                 result.LineJoin = PenLineJoin.Round;
-            }
 
             return result;
         }
 
-        public System.Drawing.Pen GetGdiPlusPen(double? opacity = null)
+        public System.Drawing.Pen? GetGdiPlusPen(double? opacity = null)
         {
             var result = Stroke != null ? new System.Drawing.Pen(Stroke.AsGdiBrush(opacity), (int)StrokeThickness) : null;
 
-            if (DashStyle != null && result != null)
-            {
+            if (result != null && DashStyle != null)
                 result.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            }
 
             if (result != null)
-            {
                 result.LineJoin = System.Drawing.Drawing2D.LineJoin.Round;
-            }
 
             return result;
         }

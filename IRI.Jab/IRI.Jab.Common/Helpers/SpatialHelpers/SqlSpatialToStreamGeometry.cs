@@ -12,6 +12,7 @@ using IRI.Sta.Spatial.Primitives;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -236,8 +237,10 @@ public static class SqlSpatialToStreamGeometry
     }
 
 
-    // GEOMETRY<T>
-    public static StreamGeometry ParseSqlGeometry(List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Geometry? pointSymbol = null)
+
+    // ******************************************************** GEOMETRY<T> ********************************************************************
+    public static StreamGeometry ParseSqlGeometry<T>(List<Geometry<T>> geometries, Func<WpfPoint, WpfPoint> transform, Geometry? pointSymbol = null)
+        where T : IPoint, new()
     {
         StreamGeometry result = new StreamGeometry();
 
@@ -249,7 +252,7 @@ public static class SqlSpatialToStreamGeometry
         {
             using (StreamGeometryContext context = result.Open())
             {
-                foreach (Geometry<Point> item in geometries)
+                foreach (Geometry<T> item in geometries)
                 {
                     p += AddGeometry(context, item, transform, pointSymbol);
                 }
@@ -261,14 +264,15 @@ public static class SqlSpatialToStreamGeometry
         return result;
     }
 
-    private static int AddGeometry(StreamGeometryContext context, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Geometry pointSymbol)
+    private static int AddGeometry<T>(StreamGeometryContext context, Geometry<T> geometry, Func<WpfPoint, WpfPoint> transform, Geometry? pointSymbol)
+        where T : IPoint, new()
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
-         
+
         switch (geometry.Type)
         {
-            case  GeometryType.Point:
+            case GeometryType.Point:
                 if (pointSymbol != null)
                 {
                     AddPoint(context, geometry, pointSymbol, transform);
@@ -311,15 +315,16 @@ public static class SqlSpatialToStreamGeometry
         return 0;
     }
 
-    private static void AddLineString(StreamGeometryContext context, Geometry<Point> lineString, Func<WpfPoint, WpfPoint> transform, bool isClosed)
+    private static void AddLineString<T>(StreamGeometryContext context, Geometry<T> lineString, Func<WpfPoint, WpfPoint> transform, bool isClosed)
+        where T : IPoint, new()
     {
         if (lineString.IsNullOrEmpty())
             return;
 
         int numberOfPoints = lineString.NumberOfPoints;
-         
+
         context.BeginFigure(transform(lineString.Points[0].AsWpfPoint()), isFilled: true, isClosed: isClosed);
-         
+
         for (int i = 1; i < numberOfPoints; i++)
         {
             var point = transform(lineString.Points[i].AsWpfPoint());
@@ -329,7 +334,8 @@ public static class SqlSpatialToStreamGeometry
 
     }
 
-    private static void AddMultiLineString(StreamGeometryContext context, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform)
+    private static void AddMultiLineString<T>(StreamGeometryContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -341,7 +347,8 @@ public static class SqlSpatialToStreamGeometry
         }
     }
 
-    private static void AddPolygon(StreamGeometryContext context, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform)
+    private static void AddPolygon<T>(StreamGeometryContext context, Geometry<T> polygon, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         //int numberOfInteriorRings = polygon.STNumInteriorRing().Value;
         //AddLineString(context, polygon.STExteriorRing(), transform, true);
@@ -349,7 +356,7 @@ public static class SqlSpatialToStreamGeometry
         //{
         //    AddLineString(context, polygon.STInteriorRingN(i), transform, true);
         //}
-         
+
         for (int i = 0; i < polygon.NumberOfGeometries; i++)
         {
             AddLineString(context, polygon.Geometries[i], transform, true);
@@ -357,19 +364,21 @@ public static class SqlSpatialToStreamGeometry
 
     }
 
-    private static void AddMultiPolygon(StreamGeometryContext context, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform)
+    private static void AddMultiPolygon<T>(StreamGeometryContext context, Geometry<T> multiPolygon, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
         for (int i = 0; i < numberOfPolygons; i++)
         {
-            Geometry<Point> polygon = multiPolygon.Geometries[i];
+            Geometry<T> polygon = multiPolygon.Geometries[i];
 
             AddPolygon(context, polygon, transform);
         }
     }
 
-    private static void AddPoint(StreamGeometryContext context, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform)
+    private static void AddPoint<T>(StreamGeometryContext context, Geometry<T> point, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         var center = transform(point.AsWpfPoint());
 
@@ -377,11 +386,16 @@ public static class SqlSpatialToStreamGeometry
         //context.DrawGeometry(new EllipseGeometry(transform(new Point(point.STX.Value, point.STY.Value)), pointSize, pointSize));
     }
 
-    private static void AddPoint(StreamGeometryContext context, Geometry<Point> point, Geometry pointSymbol, Func<WpfPoint, WpfPoint> transform)
+    // todo: why not using DrawGeometry or passing PathGeometry
+    // in every call pointSymbol.GetFlattenedPathGeometry() is called
+    private static void AddPoint<T>(StreamGeometryContext context, Geometry<T> point, Geometry pointSymbol, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         var location = transform(point.AsWpfPoint());
 
         var geometry = pointSymbol.GetFlattenedPathGeometry();
+        
+        //context.DrawGeometry(pointSymbol);
 
         foreach (var figure in geometry.Figures)
         {
@@ -396,13 +410,14 @@ public static class SqlSpatialToStreamGeometry
         }
     }
 
-    private static void AddMultiPoint(StreamGeometryContext context, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform)
+    private static void AddMultiPoint<T>(StreamGeometryContext context, Geometry<T> multiPoint, Func<WpfPoint, WpfPoint> transform)
+        where T : IPoint, new()
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            Geometry<Point> point = multiPoint.Geometries[i];
+            Geometry<T> point = multiPoint.Geometries[i];
 
             AddPoint(context, point, transform);
         }

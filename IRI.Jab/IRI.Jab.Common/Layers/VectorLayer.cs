@@ -18,7 +18,7 @@ using IRI.Jab.Common.Convertor;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Model.Symbology;
 using IRI.Ket.Persistence.DataSources;
-  
+
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Primitives;
@@ -874,7 +874,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, mapToScreen, pen, brush, VisualParameters.PointSymbol);
 
         drawingVisual.Opacity = this.VisualParameters.Opacity;
 

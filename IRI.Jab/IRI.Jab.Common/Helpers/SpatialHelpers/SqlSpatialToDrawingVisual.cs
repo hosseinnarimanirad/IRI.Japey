@@ -7,10 +7,10 @@ using Microsoft.SqlServer.Types;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Jab.Common.Model.Symbology; 
- 
+using IRI.Jab.Common.Model.Symbology;
+
 using WpfPoint = System.Windows.Point;
-using Point = IRI.Sta.Common.Primitives.Point;
+using IRI.Sta.Common.Abstrations;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -20,17 +20,16 @@ public class SqlSpatialToDrawingVisual
 
     double pointSymbolMinX, pointSymbolMinY;
 
-    public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen pen, Brush brush, SimplePointSymbol pointSymbol)
+    private readonly Pen _defaultPen = new Pen(Brushes.Black, 1);
+    private readonly Brush _defaultBrush = Brushes.Gray;
+
+    public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbol? pointSymbol)
     {
         if (pen != null)
-        {
             pen.Freeze();
-        }
 
         if (brush != null)
-        {
             brush.Freeze();
-        }
 
         if (pointSymbol?.GeometryPointSymbol != null)
         {
@@ -47,15 +46,13 @@ public class SqlSpatialToDrawingVisual
 
         DrawingVisual result = new DrawingVisual();
 
-        int p = 0;
-
         if (geometries != null)
         {
             using (DrawingContext context = result.RenderOpen())
             {
                 foreach (SqlGeometry item in geometries)
                 {
-                    p += AddGeometry(context, item, transform, brush, pen, pointSymbol);
+                    AddGeometry(context, item, transform, brush, pen, pointSymbol);
                 }
             }
         }
@@ -63,12 +60,10 @@ public class SqlSpatialToDrawingVisual
         return result;
     }
 
-    private int AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
-        {
-            return 1;
-        }
+            return;
 
         var type = geometry.GetOpenGisType();
 
@@ -79,7 +74,7 @@ public class SqlSpatialToDrawingVisual
                 break;
 
             case OpenGisGeometryType.LineString:
-                AddLineString(context, geometry, transform, pen);
+                AddLineString(context, geometry, transform, pen ?? _defaultPen);
                 break;
 
             case OpenGisGeometryType.Polygon:
@@ -91,7 +86,7 @@ public class SqlSpatialToDrawingVisual
                 break;
 
             case OpenGisGeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, pen);
+                AddMultiLineString(context, geometry, transform, pen ?? _defaultPen);
                 break;
 
             case OpenGisGeometryType.MultiPolygon:
@@ -106,7 +101,7 @@ public class SqlSpatialToDrawingVisual
                 break;
         }
 
-        return 0;
+        return;
     }
 
     private void AddLineString(DrawingContext context, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
@@ -137,7 +132,7 @@ public class SqlSpatialToDrawingVisual
     }
 
     //todo: performance can be enhanced, using DrawLine method for polygon drawing
-    private void AddPolygon(DrawingContext context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen)
+    private void AddPolygon(DrawingContext context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
         var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<SqlGeometry>() { polygon }, transform);
@@ -145,7 +140,7 @@ public class SqlSpatialToDrawingVisual
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddMultiPolygon(DrawingContext context, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen)
+    private void AddMultiPolygon(DrawingContext context, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
         var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<SqlGeometry>() { multiPolygon }, transform);
@@ -153,31 +148,32 @@ public class SqlSpatialToDrawingVisual
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
     {
-        if (pointSymbol?.GeometryPointSymbol != null)
-        {
-            var temp = transform(point.AsWpfPoint());
+        var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
+        var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
 
+        var location = transform(point.AsWpfPoint());
+
+        if (pointSymbol?.GeometryPointSymbol != null)
+        { 
             var geometry = SqlSpatialToStreamGeometry.Transform(
                                 pointSymbol.GeometryPointSymbol,
-                                new WpfPoint(temp.X - pointSymbolMinX - pointSymbolWidth / 2.0, temp.Y - pointSymbolMinY + pointSymbolHeight / 2.0));
+                                new WpfPoint(location.X - pointSymbolMinX - symbolWidth / 2.0, location.Y - pointSymbolMinY + symbolHeight / 2.0));
 
             context.DrawGeometry(brush, pen, geometry);
         }
         else if (pointSymbol?.ImagePointSymbol != null)
-        {
-            WpfPoint location = transform(point.AsWpfPoint());
-
-            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, pointSymbol.SymbolWidth, pointSymbol.SymbolHeight));
+        { 
+            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, symbolWidth, symbolHeight));
         }
         else
         {
-            context.DrawEllipse(brush, pen, transform(point.AsWpfPoint()), pointSymbol.SymbolWidth, pointSymbol.SymbolHeight);
+            context.DrawEllipse(brush, pen, location, symbolWidth, symbolHeight);
         }
     }
 
-    private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
     {
         int numberOfPoints = multiPoint.STNumGeometries().Value;
 
@@ -190,19 +186,26 @@ public class SqlSpatialToDrawingVisual
     }
 
 
-    // GEOMETRY<T>
+    // ******************************************************** GEOMETRY<T> ********************************************************************
 
-    public DrawingVisual ParseSqlGeometry(List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Pen pen, Brush brush, SimplePointSymbol pointSymbol)
+    public DrawingVisual ParseSqlGeometry<T>(
+        List<Geometry<T>> geometries,
+        Func<WpfPoint, WpfPoint> transform,
+        Pen? pen,
+        Brush? brush,
+        SimplePointSymbol? pointSymbol)
+        where T : IPoint, new()
     {
+        DrawingVisual result = new DrawingVisual();
+
+        if (geometries.IsNullOrEmpty())
+            return result;
+
         if (pen != null)
-        {
             pen.Freeze();
-        }
 
         if (brush != null)
-        {
             brush.Freeze();
-        }
 
         if (pointSymbol?.GeometryPointSymbol != null)
         {
@@ -217,30 +220,28 @@ public class SqlSpatialToDrawingVisual
             pointSymbolMinY = rect.BottomLeft.Y;
         }
 
-        DrawingVisual result = new DrawingVisual();
-
-        int p = 0;
-
-        if (geometries != null)
+        using (DrawingContext context = result.RenderOpen())
         {
-            using (DrawingContext context = result.RenderOpen())
+            foreach (Geometry<T> item in geometries)
             {
-                foreach (Geometry<Point> item in geometries)
-                {
-                    p += AddGeometry(context, item, transform, brush, pen, pointSymbol);
-                }
+                AddGeometry(context, item, transform, brush, pen, pointSymbol);
             }
         }
 
         return result;
     }
 
-    private int AddGeometry(DrawingContext context, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddGeometry<T>(
+        DrawingContext context,
+        Geometry<T> geometry,
+        Func<WpfPoint, WpfPoint> transform,
+        Brush? brush,
+        Pen? pen,
+        SimplePointSymbol? pointSymbol)
+        where T : IPoint, new()
     {
         if (geometry.IsNotValidOrEmpty())
-        {
-            return 1;
-        }
+            return;
 
         switch (geometry.Type)
         {
@@ -249,7 +250,7 @@ public class SqlSpatialToDrawingVisual
                 break;
 
             case GeometryType.LineString:
-                AddLineString(context, geometry, transform, pen);
+                AddLineString(context, geometry, transform, pen ?? _defaultPen);
                 break;
 
             case GeometryType.Polygon:
@@ -261,7 +262,7 @@ public class SqlSpatialToDrawingVisual
                 break;
 
             case GeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, pen);
+                AddMultiLineString(context, geometry, transform, pen ?? _defaultPen);
                 break;
 
             case GeometryType.MultiPolygon:
@@ -279,10 +280,11 @@ public class SqlSpatialToDrawingVisual
                 break;
         }
 
-        return 0;
+        return;
     }
 
-    private void AddLineString(DrawingContext context, Geometry<Point> lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    private void AddLineString<T>(DrawingContext context, Geometry<T> lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+        where T : IPoint, new()
     {
         int numberOfPoints = lineString.NumberOfPoints;
 
@@ -296,7 +298,8 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
-    private void AddMultiLineString(DrawingContext context, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    private void AddMultiLineString<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+        where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -309,23 +312,26 @@ public class SqlSpatialToDrawingVisual
     }
 
     //todo: performance can be enhanced, using DrawLine method for polygon drawing
-    private void AddPolygon(DrawingContext context, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen)
+    private void AddPolygon<T>(DrawingContext context, Geometry<T> polygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+        where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<Geometry<Point>>() { polygon }, transform);
+        var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<Geometry<T>>() { polygon }, transform);
 
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddMultiPolygon(DrawingContext context, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen)
+    private void AddMultiPolygon<T>(DrawingContext context, Geometry<T> multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+        where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<Geometry<Point>>() { multiPolygon }, transform);
+        var geometry = SqlSpatialToStreamGeometry.ParseSqlGeometry(new List<Geometry<T>>() { multiPolygon }, transform);
 
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddGeometryCollection(DrawingContext context, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddGeometryCollection<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+        where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -337,31 +343,34 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
-    private void AddPoint(DrawingContext context, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddPoint<T>(DrawingContext context, Geometry<T> point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+        where T : IPoint, new()
     {
-        if (pointSymbol?.GeometryPointSymbol != null)
-        {
-            var temp = transform(point.AsWpfPoint());
+        var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
+        var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
 
+        var location = transform(point.AsWpfPoint());
+
+        if (pointSymbol?.GeometryPointSymbol != null)
+        { 
             var geometry = SqlSpatialToStreamGeometry.Transform(
                                 pointSymbol.GeometryPointSymbol,
-                                new WpfPoint(temp.X - pointSymbolMinX - pointSymbolWidth / 2.0, temp.Y - pointSymbolMinY + pointSymbolHeight / 2.0));
+                                new WpfPoint(location.X - pointSymbolMinX - symbolWidth / 2.0, location.Y - pointSymbolMinY + symbolHeight / 2.0));
 
             context.DrawGeometry(brush, pen, geometry);
         }
         else if (pointSymbol?.ImagePointSymbol != null)
-        {
-            WpfPoint location = transform(point.AsWpfPoint());
-
-            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, pointSymbol.SymbolWidth, pointSymbol.SymbolHeight));
+        { 
+            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, symbolWidth, symbolHeight));
         }
         else
         {
-            context.DrawEllipse(brush, pen, transform(point.AsWpfPoint()), pointSymbol.SymbolWidth, pointSymbol.SymbolHeight);
+            context.DrawEllipse(brush, pen, location, symbolWidth, symbolHeight);
         }
     }
 
-    private void AddMultiPoint(DrawingContext context, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, Brush brush, Pen pen, SimplePointSymbol pointSymbol)
+    private void AddMultiPoint<T>(DrawingContext context, Geometry<T> multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+        where T : IPoint, new()
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 

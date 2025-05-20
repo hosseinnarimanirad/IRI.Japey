@@ -20,10 +20,10 @@ public class SimplePointSymbol : Notifier
 
     public double SymbolHeight
     {
-        get { return _symbolWidth; }
+        get { return _symbolHeight; }
         set
         {
-            _symbolWidth = value;
+            _symbolHeight = value;
             RaisePropertyChanged();
         }
     }

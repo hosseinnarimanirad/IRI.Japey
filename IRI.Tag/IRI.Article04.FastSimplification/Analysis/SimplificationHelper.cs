@@ -234,7 +234,7 @@ public static class SimplificationHelper
 
     }
 
-    //#region Test with visual output
+    #region Test with visual output
 
     //public static async Task TestWithOutput(string shpFile, StreamWriter writer, bool includeHeader, string outputDirectory)
     //{
@@ -460,7 +460,7 @@ public static class SimplificationHelper
     //    }
     //}
 
-    //#endregion
+    #endregion
 
 
 
