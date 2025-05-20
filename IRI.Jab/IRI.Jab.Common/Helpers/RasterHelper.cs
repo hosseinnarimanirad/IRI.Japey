@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq; 
+using System.Linq;
 using System.Threading.Tasks;
 
 using IRI.Extensions;
@@ -11,12 +11,11 @@ using IRI.Jab.Common.Helpers;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Jab.Common.Raster.Model;
-using IRI.Jab.Common.Model.Symbology;
 using IRI.Ket.DigitalImageProcessing;
 using IRI.Sta.SpatialReferenceSystem;
 
 using Point = IRI.Sta.Common.Primitives.Point;
+using IRI.Jab.Common.Symbology;
 
 namespace IRI.Jab.Common.Raster;
 

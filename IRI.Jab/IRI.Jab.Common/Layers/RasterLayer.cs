@@ -14,6 +14,7 @@ using IRI.Ket.Persistence.DataSources;
 using IRI.Ket.SqlServerPersistence;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common
 {

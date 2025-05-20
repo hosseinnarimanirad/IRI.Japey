@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Model.Common
+namespace IRI.Jab.Common.Model;
+
+public interface IProxySettings
 {
-    public interface IProxySettings
-    {
-        bool IsProxyMode { get; set; }
-        string Address { get; set; }
-        int Port { get; set; }
-        string UserId { get; set; }
-        string UserPass { get; set; }
-    }
+    bool IsProxyMode { get; set; }
+    string Address { get; set; }
+    int Port { get; set; }
+    string UserId { get; set; }
+    string UserPass { get; set; }
 }

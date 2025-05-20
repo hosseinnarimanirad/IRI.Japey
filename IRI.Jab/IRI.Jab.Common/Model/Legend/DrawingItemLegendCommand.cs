@@ -191,20 +191,22 @@ public static class DrawingItemLegendCommands
 
                 var drawingVisual = await layer.AsDrawingVisual(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
 
-                RenderTargetBitmap image = new RenderTargetBitmap(currentScreenSize.Width, currentScreenSize.Height, 96, 96, PixelFormats.Pbgra32);
+                IRI.Jab.Common.Helpers.ImageUtility.Save(fileName, drawingVisual, currentScreenSize.Width, currentScreenSize.Height);
 
-                image.Render(drawingVisual);
+                //RenderTargetBitmap image = new RenderTargetBitmap(currentScreenSize.Width, currentScreenSize.Height, 96, 96, PixelFormats.Pbgra32);
 
-                var frame = BitmapFrame.Create(image);
+                //image.Render(drawingVisual);
 
-                PngBitmapEncoder pngImage = new PngBitmapEncoder();
+                //var frame = BitmapFrame.Create(image);
 
-                pngImage.Frames.Add(frame);
+                //PngBitmapEncoder pngImage = new PngBitmapEncoder();
 
-                using (System.IO.Stream stream = System.IO.File.Create(fileName))
-                {
-                    pngImage.Save(stream);
-                }
+                //pngImage.Frames.Add(frame);
+
+                //using (System.IO.Stream stream = System.IO.File.Create(fileName))
+                //{
+                //    pngImage.Save(stream);
+                //}
             }
             catch (Exception ex)
             {

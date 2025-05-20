@@ -6,11 +6,11 @@ using Microsoft.SqlServer.Types;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Jab.Common.Model.Symbology;
 
 using drawing = System.Drawing;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
+using IRI.Jab.Common.Symbology;
 
 namespace IRI.Jab.Common.Convertor;
 

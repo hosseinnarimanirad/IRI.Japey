@@ -38,6 +38,8 @@ using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Enums;
+using IRI.Jab.Common.Symbology;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -439,7 +441,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         this.mapView.MouseMove += (sender, e) =>
         {
             this.CurrentPoint = ScreenToGeodetic(e.GetPosition(this.mapView));
-            
+
             if (this.CurrentPoint != null && !double.IsNaN(this.CurrentPoint.Y))
             {
                 this.CurrentPointScale = WebMercatorUtility.CalculateMapScale(this.CurrentZoomLevel, CurrentPoint.Y);
@@ -641,7 +643,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         presenter.RequestUnregisterMapOptions = this.UnregisterRightClickContextOptions;
 
         presenter.RequestPanTo = (point, callback) => { this.PanTo(point.X, point.Y, callback); };
-         
+
         presenter.RequestFlashPoints = Flash;
 
         presenter.RequestFlashPoint = Flash;
@@ -1023,7 +1025,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
@@ -1037,7 +1039,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             throw new NotImplementedException();
         }
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
@@ -1634,34 +1636,36 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             var area = ParseToRectangleGeometry(extent);
 
-            Path path;
+            Path? path;
 
             switch (layer.ToRasterTechnique)
             {
                 case RasterizationApproach.GdiPlus:
-                    path = layer.AsBitmapUsingGdiPlus(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    path = layer.AsBitmapUsingGdiPlus(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
-                //case RasterizationApproach.OpenTk:
+                
+                    //case RasterizationApproach.OpenTk:
                 //    path = layer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                 //    break;
+                
                 case RasterizationApproach.DrawingVisual:
-                    path = layer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    path = layer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
+                
                 case RasterizationApproach.WriteableBitmap:
-                    path = layer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+                    path = layer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
+                
                 case RasterizationApproach.StreamGeometry:
-                    path = layer.AsShape(geoLabledPairs.Geometries, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight,
-                        this.viewTransform,
-                        this.panTransformForPoints,
-                        this.MapToScreen);
+                    path = layer.AsShape(geoLabledPairs.Geometries, this.viewTransform, this.panTransformForPoints, this.MapToScreen);
                     break;
+
                 case RasterizationApproach.None:
                 default:
                     throw new NotImplementedException();
             }
 
-            if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
+            if (path is null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
 
             if (layer.IsValid)
@@ -2977,7 +2981,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
+            new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
 
@@ -2999,7 +3003,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new IRI.Jab.Common.Model.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol })
+            new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol })
         {
             ZIndex = int.MaxValue
         };
@@ -4224,7 +4228,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             this.mapView.MouseUp -= MapView_MouseUpForPanWhileStartNewPart;
 
             this.mapView.MouseMove -= MapView_MouseMoveForDrawing;
-             
+
             ResetMapViewEvents();
 
             this.ClearLayer(drawingLayer, remove: true, forceRemove: true);

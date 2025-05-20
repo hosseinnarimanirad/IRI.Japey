@@ -2,35 +2,20 @@
 using System.Windows.Media;
 using System.Collections.Generic;
 
-using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Convertor;
-using IRI.Sta.Spatial.Primitives;
- 
+using IRI.Extensions;
+using IRI.Jab.Common.Model; 
+using IRI.Jab.Common.Enums;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common;
 
 public class DrawingLayer : BaseLayer
 {
     DrawMode _mode;
-
-    //Path drawingPath;
-
-    //List<Point> geoPoints;
-
-    //CancellationTokenSource drawingCancellationToken;
-
-    //TaskCompletionSource<PointArrayEventArgs> taskCompletionSource;
-
-    //bool displayDrawingPath = false;
-
+     
     EditableFeatureLayer _editableFeatureLayer;
-
-    //public EditableFeatureLayer TemporaryLayer
-    //{
-    //    get { return _editableFeatureLayer; }
-    //}
-
+     
     public override LayerType Type
     {
         get
@@ -158,31 +143,33 @@ public class DrawingLayer : BaseLayer
         this._editableFeatureLayer.StartNewPart(webMercatorPoint);
     }
 
-    public DrawingVisual? AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public DrawingVisual? AsDrawingVisual(BoundingBox mapExtent, int imageWidth, int imageHeight, double mapScale)
     {
         var geometry = _editableFeatureLayer.GetFinalGeometry();
 
         if (geometry == null)
             return null;
 
-        double xScale = imageWidth / mapExtent.Width;
-        double yScale = imageHeight / mapExtent.Height;
-        double scale = xScale > yScale ? yScale : xScale;
+        return geometry.AsDrawingVisual(this.VisualParameters, imageWidth, imageHeight, mapExtent);
 
-        Func<System.Windows.Point, System.Windows.Point> mapToScreen =
-            new Func<System.Windows.Point, System.Windows.Point>(p => new System.Windows.Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        //double xScale = imageWidth / mapExtent.Width;
+        //double yScale = imageHeight / mapExtent.Height;
+        //double scale = xScale > yScale ? yScale : xScale;
 
-        var pen = this.VisualParameters.GetWpfPen();
-        pen.LineJoin = PenLineJoin.Round;
-        pen.EndLineCap = PenLineCap.Round;
-        pen.StartLineCap = PenLineCap.Round;
+        //Func<System.Windows.Point, System.Windows.Point> mapToScreen =
+        //    new Func<System.Windows.Point, System.Windows.Point>(p => new System.Windows.Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
 
-        Brush brush = this.VisualParameters.Fill;
+        //var pen = this.VisualParameters.GetWpfPen();
+        //pen.LineJoin = PenLineJoin.Round;
+        //pen.EndLineCap = PenLineCap.Round;
+        //pen.StartLineCap = PenLineCap.Round;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(new List<Geometry<Point>>() { geometry }, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+        //Brush brush = this.VisualParameters.Fill;
 
-        drawingVisual.Opacity = this.VisualParameters.Opacity;
+        //DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(new List<Geometry<Point>>() { geometry }, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
 
-        return drawingVisual;
+        //drawingVisual.Opacity = this.VisualParameters.Opacity;
+
+        //return drawingVisual;
     }
 }

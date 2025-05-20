@@ -16,13 +16,14 @@ using IRI.Jab.Common.Helpers;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Jab.Common.Convertor;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Jab.Common.Model.Symbology;
 using IRI.Ket.Persistence.DataSources;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common;
 
@@ -170,8 +171,7 @@ public class VectorLayer : BaseLayer
 
     #region Default Rendering
     //StreamGeometry Approach
-    public Path AsShape(List<Geometry<Point>> geometries, double mapScale, BoundingBox exactCurrentExtent, double width,
-        double height, TransformGroup viewTransform, TranslateTransform viewTransformForPoints, Func<WpfPoint, WpfPoint> mapToScreen)
+    public Path AsShape(List<Geometry<Point>> geometries, TransformGroup viewTransform, TranslateTransform viewTransformForPoints, Func<WpfPoint, WpfPoint> mapToScreen)
     {
         StreamGeometry geo;
 
@@ -208,21 +208,16 @@ public class VectorLayer : BaseLayer
     }
 
     //DrawingVisual Approach
-    public Path AsDrawingVisual(List<Geometry<Point>> geometries, List<string> labels, double mapScale, BoundingBox exactCurrentExtent, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
+    public Path? AsDrawingVisual(List<Geometry<Point>> geometries, List<string> labels, double mapScale, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
     {
-        if (geometries == null)
+        if (geometries.IsNullOrEmpty())
             return null;
-
-        //Pen pen = new Pen(this.VisualParameters.Stroke, this.VisualParameters.StrokeThickness);
-
-        //pen.DashStyle = this.VisualParameters.DashStyle;
-
+         
         var pen = this.VisualParameters.GetWpfPen();
 
         Brush brush = this.VisualParameters.Fill;
 
-        //DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geometries, mapToScreen, pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geometries, mapToScreen, pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
 
@@ -249,7 +244,7 @@ public class VectorLayer : BaseLayer
     }
 
     //Gdi+
-    public Path AsBitmapUsingGdiPlus(List<Geometry<Point>> geometries, List<string> labels, double mapScale, BoundingBox boundingBox, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
+    public Path AsBitmapUsingGdiPlus(List<Geometry<Point>> geometries, List<string> labels, double mapScale, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
     {
         if (geometries == null)
             return null;
@@ -295,7 +290,7 @@ public class VectorLayer : BaseLayer
     }
 
     //Consider Labels
-    public Path AsBitmapUsingWriteableBitmap(List<Geometry<Point>> geometries, List<string> labels, double mapScale, BoundingBox boundingBox, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
+    public Path AsBitmapUsingWriteableBitmap(List<Geometry<Point>> geometries, List<string> labels, double mapScale, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
     {
         if (geometries == null)
             return null;
@@ -412,7 +407,7 @@ public class VectorLayer : BaseLayer
 
         //var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-        var drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(
+        var drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(
                                 geometries,
                                 p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
                                 pen,
@@ -830,7 +825,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -874,7 +869,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry(geoLabledPairs.Geometries, mapToScreen, pen, brush, VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geoLabledPairs.Geometries, mapToScreen, pen, brush, VisualParameters.PointSymbol);
 
         drawingVisual.Opacity = this.VisualParameters.Opacity;
 

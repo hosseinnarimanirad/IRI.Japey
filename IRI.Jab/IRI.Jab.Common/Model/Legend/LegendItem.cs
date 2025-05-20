@@ -2,25 +2,24 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using IRI.Jab.Common.Model.Symbology;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Symbology;
 
 namespace IRI.Jab.Common.Model.Legend;
 
 public class LegendItem : Notifier
 {
-    private ISymbol _symbol;
+    //private ISymbol _symbol;
 
-    public ISymbol Symbol
-    {
-        get { return _symbol; }
-        set
-        {
-            _symbol = value;
-            RaisePropertyChanged();
-        }
-    }
+    //public ISymbol Symbol
+    //{
+    //    get { return _symbol; }
+    //    set
+    //    {
+    //        _symbol = value;
+    //        RaisePropertyChanged();
+    //    }
+    //}
 
 
     private LegendItem _parent;

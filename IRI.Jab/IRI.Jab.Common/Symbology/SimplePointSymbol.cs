@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace IRI.Jab.Common.Model.Symbology;
+namespace IRI.Jab.Common.Symbology;
 
 public class SimplePointSymbol : Notifier
 {
@@ -74,8 +74,8 @@ public class SimplePointSymbol : Notifier
 
     public SimplePointSymbol(double pointSize)
     {
-        this.SymbolHeight = pointSize;
+        SymbolHeight = pointSize;
 
-        this.SymbolWidth = pointSize;
+        SymbolWidth = pointSize;
     }
 }

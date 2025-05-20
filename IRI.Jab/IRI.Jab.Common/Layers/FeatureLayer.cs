@@ -9,11 +9,12 @@ using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives; 
+using IRI.Sta.Spatial.Primitives;
 using IRI.Ket.Persistence.DataSources;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common;
 

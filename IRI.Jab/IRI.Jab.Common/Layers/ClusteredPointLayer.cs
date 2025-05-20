@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.Persistence.DataSources;
+using IRI.Jab.Common.Enums;
 
 
 namespace IRI.Jab.Common;

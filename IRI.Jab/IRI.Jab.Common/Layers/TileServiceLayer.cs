@@ -11,6 +11,7 @@ using IRI.Jab.Common.Model;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.TileServices;
+using IRI.Jab.Common.Enums;
 
 
 namespace IRI.Jab.Common;

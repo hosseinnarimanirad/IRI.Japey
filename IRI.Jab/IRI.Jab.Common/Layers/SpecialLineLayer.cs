@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common;
 

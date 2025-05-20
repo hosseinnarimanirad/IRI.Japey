@@ -1,12 +1,11 @@
-﻿using IRI.Jab.Common.Model.Symbology;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Raster.Model;
+namespace IRI.Jab.Common.Symbology;
 
 
 public class ContinousRangeColor

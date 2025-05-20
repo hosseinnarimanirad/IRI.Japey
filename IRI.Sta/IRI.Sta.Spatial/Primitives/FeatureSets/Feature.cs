@@ -1,11 +1,12 @@
-﻿using IRI.Extensions;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+
+using IRI.Extensions;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
+using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.PropertyDescriptors;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Common.Abstrations;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Sta.Spatial.Primitives;
 
@@ -25,15 +26,13 @@ public class Feature<T> : IGeometryAware<T>, ICustomTypeDescriptor where T : IPo
     {
         get
         {
-            if (Attributes?.Keys.Any(k => k == LabelAttribute) == true)
-            {
-                return Attributes[LabelAttribute]?.ToString();
-            }
+            if (Attributes?.ContainsKey(LabelAttribute) == true)
+                return Attributes[LabelAttribute]?.ToString() ?? string.Empty;
 
             return string.Empty;
         }
-    }    
-
+    }
+     
     public Feature(Geometry<T> geometry) : this(geometry, new Dictionary<string, object>())
     {
 
@@ -132,8 +131,7 @@ public class Feature<T> : IGeometryAware<T>, ICustomTypeDescriptor where T : IPo
         return null;
     }
 
-    PropertyDescriptorCollection
-        System.ComponentModel.ICustomTypeDescriptor.GetProperties()
+    PropertyDescriptorCollection System.ComponentModel.ICustomTypeDescriptor.GetProperties()
     {
         return ((ICustomTypeDescriptor)this).GetProperties(new Attribute[0]);
     }

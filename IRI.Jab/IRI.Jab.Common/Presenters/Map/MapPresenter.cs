@@ -37,6 +37,7 @@ using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common.Presenter.Map;
 
@@ -2300,23 +2301,21 @@ public abstract class MapPresenter : BasePresenter
 
         var visuals = await RequestGetLayersAsDrawingVisual(boundingBox, width, height);
 
-        RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+        IRI.Jab.Common.Helpers.ImageUtility.MergeAndSave(fileName, visuals, width, height, new TiffBitmapEncoder());
 
-        foreach (var drawingVisual in visuals)
-        {
-            image.Render(drawingVisual);
-        }
-
-        var frame = BitmapFrame.Create(image);
-
-        //PngBitmapEncoder pngImage = new PngBitmapEncoder();
-        TiffBitmapEncoder tiffImage = new TiffBitmapEncoder();
-        tiffImage.Frames.Add(frame);
-
-        using (System.IO.Stream stream = System.IO.File.Create(fileName))
-        {
-            tiffImage.Save(stream);
-        }
+        //RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+        //foreach (var drawingVisual in visuals)
+        //{
+        //    image.Render(drawingVisual);
+        //}
+        //var frame = BitmapFrame.Create(image);
+        ////PngBitmapEncoder pngImage = new PngBitmapEncoder();
+        //TiffBitmapEncoder tiffImage = new TiffBitmapEncoder();
+        //tiffImage.Frames.Add(frame);
+        //using (System.IO.Stream stream = System.IO.File.Create(fileName))
+        //{
+        //    tiffImage.Save(stream);
+        //}
     }
 
     public async Task SetPrintAreaAsync()

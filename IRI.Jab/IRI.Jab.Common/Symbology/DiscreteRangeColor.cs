@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Raster.Model;
+namespace IRI.Jab.Common.Symbology;
 
 
 public class DiscreteRangeColor
@@ -25,13 +25,13 @@ public class DiscreteRangeColor
             throw new NotImplementedException();
         }
 
-        this.MinValue = values.Min();
+        MinValue = values.Min();
 
-        this.MaxValue = values.Max();
+        MaxValue = values.Max();
 
         MidValues = values;
 
-        this.Colors = colors;
+        Colors = colors;
     }
 
     public Color Interpolate(double value)
@@ -56,18 +56,18 @@ public class DiscreteRangeColor
 
         stepValues.Add(maxValue);
 
-        List<System.Drawing.Color> stepColors = new List<System.Drawing.Color>()
+        List<Color> stepColors = new List<Color>()
                         {
-                          System.Drawing.Color.FromArgb(40, 145, 198),
-                          System.Drawing.Color.FromArgb(103, 165, 178),
-                          System.Drawing.Color.FromArgb(149, 190, 160),
-                          System.Drawing.Color.FromArgb(191, 211, 139),
-                          System.Drawing.Color.FromArgb(231, 237, 115),
-                          System.Drawing.Color.FromArgb(252, 228, 91),
-                          System.Drawing.Color.FromArgb(252, 179, 68),
-                          System.Drawing.Color.FromArgb(249, 134, 51),
-                          System.Drawing.Color.FromArgb(242, 84, 36),
-                          System.Drawing.Color.FromArgb(232, 16, 21),
+                          Color.FromArgb(40, 145, 198),
+                          Color.FromArgb(103, 165, 178),
+                          Color.FromArgb(149, 190, 160),
+                          Color.FromArgb(191, 211, 139),
+                          Color.FromArgb(231, 237, 115),
+                          Color.FromArgb(252, 228, 91),
+                          Color.FromArgb(252, 179, 68),
+                          Color.FromArgb(249, 134, 51),
+                          Color.FromArgb(242, 84, 36),
+                          Color.FromArgb(232, 16, 21),
                         };
 
         return new DiscreteRangeColor(stepValues, stepColors);

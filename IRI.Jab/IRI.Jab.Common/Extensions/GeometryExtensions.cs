@@ -5,6 +5,8 @@ using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Windows.Media;
 using WpfPoint = System.Windows.Point;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Helpers;
 //using System.Windows.Media;
 
 namespace IRI.Extensions;
@@ -87,9 +89,12 @@ public static class GeometryExtensions
         }
     }
 
-    public static DrawingVisual ParseToDrawingVisual<T>(this Geometry<T> geometry, int imageWidth, int imageHeight, VisualParameters visualParameters) where T : IPoint, new()
+    public static DrawingVisual? AsDrawingVisual<T>(this Geometry<T> geometry, VisualParameters visualParameters, int imageWidth, int imageHeight, BoundingBox? mapBoundary = null) where T : IPoint, new()
     {
-        var mapExtent = geometry.GetBoundingBox();
+        if (geometry.IsNullOrEmpty())
+            return null;
+
+        BoundingBox mapExtent = mapBoundary ?? geometry.GetBoundingBox();
 
         double xScale = imageWidth / mapExtent.Width;
         double yScale = imageHeight / mapExtent.Height;
@@ -98,16 +103,41 @@ public static class GeometryExtensions
         Func<WpfPoint, WpfPoint> mapToScreen = new Func<WpfPoint, WpfPoint>(p => new WpfPoint((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
 
         var pen = visualParameters.GetWpfPen();
-        pen.LineJoin = PenLineJoin.Round;
-        pen.EndLineCap = PenLineCap.Round;
-        pen.StartLineCap = PenLineCap.Round;
+
+        if (pen is not null)
+        {
+            pen.LineJoin = PenLineJoin.Round;
+            pen.EndLineCap = PenLineCap.Round;
+            pen.StartLineCap = PenLineCap.Round;
+        }
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseSqlGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 
         return drawingVisual;
+    }
+
+    /// <summary>
+    /// Convert to drawing visual based on Google Zoom Level
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="geometry"></param>
+    /// <param name="visualParameters"></param>
+    /// <param name="googleZoomLevel"></param>
+    /// <param name="mapBoundary"></param>
+    /// <returns></returns>
+    public static DrawingVisual? AsDrawingVisual<T>(this Geometry<T> geometry, VisualParameters visualParameters, int googleZoomLevel, BoundingBox? mapBoundary = null) where T : IPoint, new()
+    {
+        if (geometry.IsNullOrEmpty())
+            return null;
+
+        BoundingBox mapExtent = mapBoundary ?? geometry.GetBoundingBox();
+
+        var screenSize = WebMercatorUtility.ToScreenSize(googleZoomLevel, mapExtent);
+
+        return AsDrawingVisual(geometry, visualParameters, screenSize.Width, screenSize.Height, mapExtent);
     }
 }

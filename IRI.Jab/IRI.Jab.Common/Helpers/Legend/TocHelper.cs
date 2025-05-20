@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 
 using IRI.Jab.Common.Model.Legend;
 using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Jab.Common.Model;
 
 
 namespace IRI.Jab.Common.Utility.Legend;

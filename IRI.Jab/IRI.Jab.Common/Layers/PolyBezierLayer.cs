@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Collections.Generic;
- 
+
 using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Helpers;
@@ -15,6 +15,7 @@ using IRI.Jab.Common.View.MapMarkers;
 using LineSegment = System.Windows.Media.LineSegment;
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common;
 

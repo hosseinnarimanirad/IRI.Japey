@@ -7,10 +7,10 @@ using Microsoft.SqlServer.Types;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Jab.Common.Model.Symbology;
 
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Symbology;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -188,7 +188,7 @@ public class SqlSpatialToDrawingVisual
 
     // ******************************************************** GEOMETRY<T> ********************************************************************
 
-    public DrawingVisual ParseSqlGeometry<T>(
+    public DrawingVisual ParseGeometry<T>(
         List<Geometry<T>> geometries,
         Func<WpfPoint, WpfPoint> transform,
         Pen? pen,

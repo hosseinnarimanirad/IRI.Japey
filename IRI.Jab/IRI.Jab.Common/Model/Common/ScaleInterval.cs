@@ -4,87 +4,86 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Jab.Common
+namespace IRI.Jab.Common.Model;
+
+public class ScaleInterval
 {
-    public class ScaleInterval
+    private double _lower;
+
+    public double Lower
     {
-        private double _lower;
+        get { return _lower; }
+        set { _lower = value; }
+    }
 
-        public double Lower
+    private double _upper;
+
+    public double Upper
+    {
+        get { return _upper; }
+        set { _upper = value; }
+    }
+
+
+    public ScaleInterval(double lower, double upper)
+    {
+        if (lower > upper)
         {
-            get { return _lower; }
-            set { _lower = value; }
+            throw new NotImplementedException();
         }
 
-        private double _upper;
+        Lower = lower;
+        Upper = upper;
+    }
 
-        public double Upper
+    public override bool Equals(object obj)
+    {
+        if (obj is double) return (double)obj > Lower && (double)obj < Upper;
+
+        else if (obj is ScaleInterval)
         {
-            get { return _upper; }
-            set { _upper = value; }
+            ScaleInterval temp = obj as ScaleInterval;
+
+            return temp.Lower.Equals(Lower) && temp.Upper.Equals(Upper);
         }
 
+        return false;
+    }
 
-        public ScaleInterval(double lower, double upper)
+    public override int GetHashCode()
+    {
+        return ToString().GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return string.Format("Lower = {0}, Upper = {1}", Lower, Upper);
+    }
+
+    public static readonly ScaleInterval All = new ScaleInterval(double.NegativeInfinity, double.PositiveInfinity);
+
+    public static ScaleInterval Create(int minGoogleZoomLevel, int maxGoogleZoomLevel = 19)
+    {
+        if (maxGoogleZoomLevel < minGoogleZoomLevel)
         {
-            if (lower > upper)
-            {
-                throw new NotImplementedException();
-            }
-
-            this.Lower = lower;
-            this.Upper = upper;
+            throw new NotImplementedException();
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is double) return ((double)obj) > Lower && ((double)obj) < Upper;
+        var minInverse = 1.0 / WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel) + .5;
 
-            else if (obj is ScaleInterval)
-            {
-                ScaleInterval temp = obj as ScaleInterval;
+        var maxInverse = 1.0 / WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel) - .5;
 
-                return temp.Lower.Equals(this.Lower) && temp.Upper.Equals(this.Upper);
-            }
+        return new ScaleInterval(maxInverse, minInverse);
+    }
 
-            return false;
-        }
+    public bool IsInRange(double inverseMapScale)
+    {
+        ////9244649.2265625; Lower: 1128.49722003937
+        //if (Upper < 9300000)
+        //{
+        //    System.Diagnostics.Debug.WriteLine($"Upper: {Upper}; Lower: {Lower}; InverseMapscale: {inverseMapScale}");
+        //}
 
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return string.Format("Lower = {0}, Upper = {1}", Lower, Upper);
-        }
-
-        public static readonly ScaleInterval All = new ScaleInterval(double.NegativeInfinity, double.PositiveInfinity);
-
-        public static ScaleInterval Create(int minGoogleZoomLevel, int maxGoogleZoomLevel = 19)
-        {
-            if (maxGoogleZoomLevel < minGoogleZoomLevel)
-            {
-                throw new NotImplementedException();
-            }
-
-            var minInverse = (1.0 / WebMercatorUtility.GetGoogleMapScale(minGoogleZoomLevel) + .5);
-
-            var maxInverse = (1.0 / WebMercatorUtility.GetGoogleMapScale(maxGoogleZoomLevel) - .5);
-
-            return new ScaleInterval(maxInverse, minInverse);
-        }
-
-        public bool IsInRange(double inverseMapScale)
-        {
-            ////9244649.2265625; Lower: 1128.49722003937
-            //if (Upper < 9300000)
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"Upper: {Upper}; Lower: {Lower}; InverseMapscale: {inverseMapScale}");
-            //}
-
-            return (this.Upper >= inverseMapScale && this.Lower < inverseMapScale);
-        }
+        return Upper >= inverseMapScale && Lower < inverseMapScale;
     }
 }

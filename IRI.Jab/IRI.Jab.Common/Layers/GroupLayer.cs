@@ -1,4 +1,5 @@
 ﻿using System;
+using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
 

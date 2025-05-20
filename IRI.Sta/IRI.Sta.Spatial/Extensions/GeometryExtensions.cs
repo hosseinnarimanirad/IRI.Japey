@@ -71,7 +71,9 @@ public static class Sta_GeometryExtensions
     public static bool IsNullOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
     {
         return geometry is null ||
-                (geometry.Points.IsNullOrEmpty() && geometry.Geometries.IsNullOrEmpty() || geometry.TotalNumberOfPoints == 0);
+                (geometry.Points.IsNullOrEmpty() &&
+                    geometry.Geometries.IsNullOrEmpty()) ||
+                    geometry.TotalNumberOfPoints == 0;
     }
 
     public static bool IsNotValidOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
@@ -366,7 +368,7 @@ public static class Sta_GeometryExtensions
                     result.Add(geometry.Simplify(type, paramters));
                 }
             }
-             
+
             if (reduceToPoint)
             {
                 for (int g = 0; g < result.Count; g++)

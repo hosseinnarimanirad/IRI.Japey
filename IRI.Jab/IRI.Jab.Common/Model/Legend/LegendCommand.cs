@@ -6,6 +6,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Assets.Commands;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common.Model.Legend;
 
@@ -212,7 +213,7 @@ public class LegendCommand : Notifier, ILegendCommand
 
             options.IsOptionsAvailable = false;
 
-            var drawingResult = await map.GetDrawingAsync(Model.DrawMode.Polygon, options);
+            var drawingResult = await map.GetDrawingAsync(DrawMode.Polygon, options);
 
             if (!drawingResult.HasNotNullResult())
                 return;

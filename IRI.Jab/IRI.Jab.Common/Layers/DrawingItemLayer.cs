@@ -10,6 +10,7 @@ using IRI.Ket.Persistence.DataSources;
 
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using IRI.Sta.Common.Abstrations;
+using IRI.Jab.Common.Enums;
 
 namespace IRI.Jab.Common;
 

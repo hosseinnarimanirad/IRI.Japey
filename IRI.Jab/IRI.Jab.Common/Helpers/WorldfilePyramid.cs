@@ -6,12 +6,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
+using IRI.Sta.Spatial.Model;
+using IRI.Sta.Common.Helpers;
+using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.GdiPlus.WorldfileFormat;
 using IRI.Ket.Persistence.RasterDataSources;
-using IRI.Sta.Spatial.Model;
-using IRI.Sta.Spatial.Helpers;
-using IRI.Sta.Common.Helpers;
 
 namespace IRI.Jab.Common.Helpers;
 
