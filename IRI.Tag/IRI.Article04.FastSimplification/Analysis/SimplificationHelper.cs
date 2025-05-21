@@ -1,23 +1,36 @@
 ﻿using System.IO;
-using IRI.Extensions;
 using System.Diagnostics;
+using System.Windows.Media;
+
+using IRI.Extensions;
+using IRI.Jab.Common;
 using IRI.Sta.ShapefileFormat;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
-using IRI.Jab.Common;
-using System.Windows.Media.Media3D;
+using IRI.Jab.Common.Helpers;
 
 namespace IRI.Article04.FastSimplification;
 
 public static class SimplificationHelper
 {
     private static bool retain3Points = false;
+
+    private static List<SimplificationType> methods = new List<SimplificationType>()
+        {
+            SimplificationType.RamerDouglasPeucker,
+
+            SimplificationType.VisvalingamWhyatt,
+
+            SimplificationType.NormalOpeningWindow,
+            //SimplificationType.BeforeOpeningWindow,
+
+            SimplificationType.CumulativeTriangleRoutine,
+            //SimplificationType.TriangleRoutine
+        };
 
     public async static Task GeneralTest()
     {
@@ -54,7 +67,7 @@ public static class SimplificationHelper
 
             fileNames.Add(fileName);
 
-            await ProcessVisualQuality(file, writer, writeFolder);
+            ProcessVisualQuality(file, writer, writeFolder);
 
             File.AppendAllLines(logFile, new List<string>() { $"Finished At: {DateTime.Now.ToLongTimeString()}; Ellapsed: {watch.ElapsedMilliseconds / 1000.0:N0000} (s) - ({fileName})" });
         }
@@ -80,18 +93,6 @@ public static class SimplificationHelper
             feature.RemoveConsecutiveDuplicatePoints();
 
         features = features.Where(f => !f.HasDuplicatePoints()).ToList();
-
-        List<SimplificationType> methods = new List<SimplificationType>()
-        {
-            SimplificationType.RamerDouglasPeucker,
-
-            SimplificationType.VisvalingamWhyatt,
-
-            SimplificationType.NormalOpeningWindow,
-            SimplificationType.BeforeOpeningWindow,
-
-            SimplificationType.CumulativeTriangleRoutine,
-        };
 
         Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
 
@@ -157,169 +158,134 @@ public static class SimplificationHelper
 
     }
 
-    private static async Task ProcessVisualQuality(string shpFile, StreamWriter writer, string outputDirectory)
-    {
-        var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
+    //private static async Task ProcessVisualQuality(string shpFile, StreamWriter writer, string outputDirectory)
+    //{
+    //    var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
-        //******************************************************
-        //***************** read features **********************
-        var features = Shapefile.ReadShapes(shpFile)
-                                .Select(g => g.AsGeometry())
-                                .SelectMany(g => g.Split(false))
-                                .Where(g => !g.IsNullOrEmpty())
-                                .Where(g => g.TotalNumberOfPoints > 30)
-                                .ToList();
+    //    //******************************************************
+    //    //***************** read features **********************
+    //    var features = Shapefile.ReadShapes(shpFile)
+    //                            .Select(g => g.AsGeometry())
+    //                            .SelectMany(g => g.Split(false))
+    //                            .Where(g => !g.IsNullOrEmpty())
+    //                            .Where(g => g.TotalNumberOfPoints > 30)
+    //                            .ToList();
 
-        foreach (var feature in features)
-            feature.RemoveConsecutiveDuplicatePoints();
+    //    foreach (var feature in features)
+    //        feature.RemoveConsecutiveDuplicatePoints();
 
-        features = features.Where(f => !f.HasDuplicatePoints()).ToList();
+    //    features = features.Where(f => !f.HasDuplicatePoints()).ToList();
 
-        List<SimplificationType> methods = new List<SimplificationType>()
-        {
-            SimplificationType.RamerDouglasPeucker,
+    //    List<SimplificationType> methods = new List<SimplificationType>()
+    //    {
+    //        SimplificationType.RamerDouglasPeucker,
 
-            SimplificationType.VisvalingamWhyatt,
+    //        SimplificationType.VisvalingamWhyatt,
 
-            SimplificationType.NormalOpeningWindow,
-            SimplificationType.BeforeOpeningWindow,
+    //        SimplificationType.NormalOpeningWindow,
+    //        SimplificationType.BeforeOpeningWindow,
 
-            SimplificationType.CumulativeTriangleRoutine,
-        };
+    //        SimplificationType.CumulativeTriangleRoutine,
+    //    };
 
-        Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
+    //    Dictionary<SimplificationType, string> methodNames = methods.ToDictionary(m => m, m => m.GetDescription());
 
-        var groundBoundingBox = features.GetBoundingBox();
+    //    var groundBoundingBox = features.GetBoundingBox();
 
-        var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 4096, 4096);
+    //    var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(groundBoundingBox, /*34,*/ 4096, 4096);
 
-        var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
+    //    var scale = WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel);
 
-        var currentScreenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, groundBoundingBox);
+    //    var currentScreenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, groundBoundingBox);
 
-        // threshold values is set to 0.5 pixel
-        var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 0.5);
+    //    // threshold values is set to 0.5 pixel
+    //    var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 0.5);
 
-        var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
+    //    var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
 
-        var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
+    //    var originalVectorLayer = GeneralHelper.GetAsLayer("original", features);
 
-        var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+    //    var originalBitmap = await originalVectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
 
-        originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
-
-
-        foreach (var feature in features)
-        {
-            foreach (var method in methods)
-            {
-                var simplifiedFeatures = feature.Simplify(method, parameters);
-
-                // writer.WriteLine(
-                //new SpeedLog(fileName,
-                //              methodNames[method],
-                //              theFeatures,
-                //              simplifiedFeatures,
-                //              stopwatch.ElapsedMilliseconds,
-                //              parameters).ToTsv());
-
-                //var vectorLayer = GeneralHelper.GetAsLayer("original", [theFeatures]);
-
-                //var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
-
-                //simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}-[{count}].png", System.Drawing.Imaging.ImageFormat.Tiff);
-            }
-
-            writer.Flush();
-        }
+    //    originalBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-original.png", System.Drawing.Imaging.ImageFormat.Tiff);
 
 
-    }
+    //    foreach (var feature in features)
+    //    {
+    //        foreach (var method in methods)
+    //        {
+    //            var simplifiedFeatures = feature.Simplify(method, parameters);
+
+    //            // writer.WriteLine(
+    //            //new SpeedLog(fileName,
+    //            //              methodNames[method],
+    //            //              theFeatures,
+    //            //              simplifiedFeatures,
+    //            //              stopwatch.ElapsedMilliseconds,
+    //            //              parameters).ToTsv());
+
+    //            //var vectorLayer = GeneralHelper.GetAsLayer("original", [theFeatures]);
+
+    //            //var simplifiedBitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+    //            //simplifiedBitmap.Save($"{outputDirectory}\\{fileName}-{estimatedZoomLevel}-{method}-[{count}].png", System.Drawing.Imaging.ImageFormat.Tiff);
+    //        }
+
+    //        writer.Flush();
+    //    }
+
+
+    //}
+
 
     #region Test with visual output
 
-    public static async Task TestWithOutput(string shpFile, StreamWriter writer, bool includeHeader, string outputDirectory)
+    public static void ProcessVisualQuality(string shpFile, StreamWriter writer, string outputDirectory)
     {
         var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
-        var groundResolutionCoefs = new List<double>()
-        {
-            //1.0 / 6,
-            1.0 / 5,
-            1.0 / 4,
-            //1.0 / 3,
-            1.0 / 2,
-            1,
-            2,
-            //3,
-            4,
-            5,
-            //6
-        };
-
-        var groundResolutionCoefs_Range = groundResolutionCoefs.Max() - groundResolutionCoefs.Min();
-        var groundResolutionCoefs_Min = groundResolutionCoefs.Min();
+        List<int> renderSizes = [64, 128, 256, 512];
 
         //******************************************************
         //***************** read features **********************
         var shapes = Shapefile.ReadShapes(shpFile);
 
         var features = shapes
-                                .Select(g => g.AsGeometry())
-                                .SelectMany(g => g.NumberOfGeometries > 1 ? g.Split(false) : new List<Geometry<Point>>() { g })
-                                .Where(g => !g.IsNullOrEmpty())
-                                .Where(g => g.TotalNumberOfPoints > 15 && g.TotalNumberOfPoints < 500)
-                                .ToList();
+                        .Select(g => g.AsGeometry())
+                        .SelectMany(g => g.NumberOfGeometries > 1 ? g.Split(false) : [g])
+                        .Where(g => !g.IsNullOrEmpty())
+                        .Where(g => g.TotalNumberOfPoints > 40 && g.TotalNumberOfPoints < 500)
+                        .ToList();
 
         //var isRingbase = shapes[0].IsRingBase();
 
+        if (features.IsNullOrEmpty())
+        {
+            return;
+        }
+
         foreach (var feature in features)
         {
-            //if (isRingbase)
-            //{
-            //    feature.CloseLineString();
-            //}
-
             feature.Srid = SridHelper.WebMercator;
             feature.RemoveConsecutiveDuplicatePoints();
         }
 
         features = features.Where(f => !f.HasDuplicatePoints()).ToList();
 
-        List<SimplificationType> methods = new List<SimplificationType>()
-        {
-            //SimplificationType.EuclideanDistance,
-
-            SimplificationType.RamerDouglasPeucker,
-            //SimplificationType.ReumannWitkam,
-
-            //SimplificationType.PerpendicularDistance,
-
-            //SimplificationType.VisvalingamWhyatt,
-            SimplificationType.SleeveFitting,
-
-            //SimplificationType.NormalOpeningWindow,
-            //SimplificationType.BeforeOpeningWindow,
-
-            //SimplificationType.TriangleRoutine,
-        };
-
         var colros = new Dictionary<SimplificationType, System.Windows.Media.Color>()
         {
-            {SimplificationType.EuclideanDistance, System.Windows.Media.Colors.DarkGray},
-            {SimplificationType.RamerDouglasPeucker, Jab.Common.Helpers.ColorHelper.ToWpfColor("#E051AD")},
-            {SimplificationType.ReumannWitkam, System.Windows.Media.Colors.Navy},
-            {SimplificationType.PerpendicularDistance, System.Windows.Media.Colors.Blue},
-            {SimplificationType.VisvalingamWhyatt, System.Windows.Media.Colors.Yellow},
-            {SimplificationType.SleeveFitting, Jab.Common.Helpers.ColorHelper.ToWpfColor("#3B878C")},
-            {SimplificationType.NormalOpeningWindow, System.Windows.Media.Colors.Brown},
-            {SimplificationType.BeforeOpeningWindow, System.Windows.Media.Colors.Orange},
-            {SimplificationType.TriangleRoutine, System.Windows.Media.Colors.Gray}
+            {SimplificationType.RamerDouglasPeucker, Jab.Common.Helpers.ColorHelper.ToWpfColor("#6B007B")}, //light blue
+            {SimplificationType.CumulativeTriangleRoutine, Jab.Common.Helpers.ColorHelper.ToWpfColor("#12239E")}, //light blue
+            {SimplificationType.VisvalingamWhyatt, Jab.Common.Helpers.ColorHelper.ToWpfColor("#E645AB")}, //light blue
+            {SimplificationType.NormalOpeningWindow, Jab.Common.Helpers.ColorHelper.ToWpfColor("#E66C37")}, //light blue
+            {SimplificationType.BeforeOpeningWindow, Jab.Common.Helpers.ColorHelper.ToWpfColor("#118DFF")}, //light blue
+            {SimplificationType.TriangleRoutine, System.Windows.Media.Colors.Green}, //light blue
         };
 
-        int featureIndex = 0;
+        var redColor = ColorHelper.ToWpfColor("#DE36A1");
+        var grayColor = ColorHelper.ToWpfColor("#ADADAD");
 
-        bool addHeaderLine = includeHeader;
+        int featureIndex = 0;
 
         foreach (var feature in features)
         {
@@ -334,56 +300,39 @@ public static class SimplificationHelper
 
             var boundingBox = feature.GetBoundingBox().Expand(1.1);
 
-            var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(boundingBox, /*34,*/ 256, 256);
-
-            var webMercatorResolution = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 10);
-
-            var originalFrame = feature.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, Jab.Common.Helpers.ColorHelper.ToWpfColor("#C0C0C0"), 4, 1), estimatedZoomLevel, boundingBox);
-
-            //var originalFrame = await GetAsFrame(
-            //    "original",
-            //    estimatedZoomLevel,
-            //    boundingBox,
-            //    feature,
-            //    Jab.Common.Helpers.ColorHelper.ToWpfColor("#C0C0C0"),
-            //    4,
-            //    1);
-
-            GeoJsonFeatureSet originalFeatureSet = feature.AsGeoJsonFeatureSet();
-
-            originalFeatureSet.Save($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-original.json", false, true);
-
-
-            foreach (var coef in groundResolutionCoefs)
+            if (boundingBox.Width == 0 && boundingBox.Height == 0)
             {
-                var threshold = webMercatorResolution * coef;
+
+            }
+
+            foreach (var renderSize in renderSizes)
+            {
+                var estimatedZoomLevel = WebMercatorUtility.EstimateZoomLevel(boundingBox, /*34,*/ renderSize, renderSize);
+
+                if (estimatedZoomLevel == 0)
+                {
+
+                }
+
+                var threshold = WebMercatorUtility.ToWebMercatorLength(estimatedZoomLevel, 4);
+
+                var screenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, boundingBox);
+
+                var scale = Math.Floor((1.0 / WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel)) / 1000.0) * 1000;
+
+                var originalFrame = feature.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, grayColor /*ColorHelper.ToWpfColor("#C0C0C0")*/, 2, 1), screenSize.Width, screenSize.Height, boundingBox);
+
+                GeoJsonFeatureSet originalFeatureSet = feature.AsGeoJsonFeatureSet();
+
+                //originalFeatureSet.Save($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-original.json", false, true);
 
                 var parameters = new SimplificationParamters() { AreaThreshold = threshold * threshold, DistanceThreshold = threshold, Retain3Points = retain3Points };
 
-                //var temp = new NineAlgoSixMeasureLog
-                //            (fileName,
-                //                        boundingBox,
-                //                        featureIndex,
-                //                        feature,
-                //                        estimatedZoomLevel,
-                //                        //methodNames[method],
-                //                        //stopwatch.ElapsedMilliseconds,
-                //                        parameters,
-                //                        coef);
-
-                //List<System.Drawing.Bitmap> images = new List<System.Drawing.Bitmap>();
-                List<DrawingVisual> drawingVisuals = new List<DrawingVisual>
-                {
-                    originalFrame
-                };
+                List<DrawingVisual> drawingVisuals = [originalFrame!];
 
                 foreach (var method in methods)
                 {
-                    //stopwatch.Restart();
-
                     var simplified = feature.Simplify(method, parameters);
-
-                    //stopwatch.Stop();
 
                     if (simplified.IsNullOrEmpty())
                         continue;
@@ -391,37 +340,29 @@ public static class SimplificationHelper
                     if (simplified.Type == GeometryType.Point)
                         continue;
 
-                    //temp.AddAlgoResult(method, feature, simplified);
+                    var simplifiedFrame = simplified.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, redColor/*colros[method]*/, 2, 0.8), screenSize.Width, screenSize.Height, boundingBox);
 
-                    //var simplifiedFrame = await GetAsFrame(method.ToString(), estimatedZoomLevel, boundingBox, simplified, colros[method], 2, 0.9);
-                    var simplifiedFrame = simplified.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, colros[method], 2, 0.9), estimatedZoomLevel, boundingBox);
-
-                    drawingVisuals.Add(simplifiedFrame);
+                    drawingVisuals.Add(simplifiedFrame!);
 
                     GeoJsonFeatureSet featureSet = simplified.AsGeoJsonFeatureSet();
 
-                    featureSet.Save($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{coef}-{method}.json", false, true);
+                    var compression = Math.Round(feature.Compression(simplified) * 100);
+
+                    var fullFileName = $"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{renderSize}-{method.GetDescription()}-{scale:N0}-{compression}%.png";
+
+                    ImageUtility.MergeAndSave(fullFileName, [originalFrame!, simplifiedFrame!], screenSize.Width, screenSize.Height);
+
+                    //featureSet.Save($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{renderSize}-{method}.json", false, true);
                 }
 
                 //Save($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{coef}.png", drawingVisuals, estimatedZoomLevel, boundingBox);
-                var screenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, boundingBox);
 
-                IRI.Jab.Common.Helpers.ImageUtility.MergeAndSave($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{coef}.png", drawingVisuals, screenSize.Width, screenSize.Height);
-
-                //temp.UpdateAllRanks();
-
-                //if (addHeaderLine == true)
-                //{
-                //    writer.WriteLine(temp.GetHeader());
-                //    addHeaderLine = false;
-                //}
-
-                //writer.WriteLine(temp.ToTsv());
+                //IRI.Jab.Common.Helpers.ImageUtility.MergeAndSave($"{outputDirectoryForFeature}\\{fileName}-{featureIndex}-{estimatedZoomLevel}-{renderSize}-{scale:N}.png", drawingVisuals, screenSize.Width, screenSize.Height);
             }
         }
     }
 
-     
+
 
     #endregion
 
