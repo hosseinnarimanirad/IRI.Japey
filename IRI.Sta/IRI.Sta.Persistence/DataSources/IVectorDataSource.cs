@@ -1,13 +1,10 @@
-﻿using IRI.Sta.Common.Model;
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public interface IVectorDataSource : IDataSource
 {

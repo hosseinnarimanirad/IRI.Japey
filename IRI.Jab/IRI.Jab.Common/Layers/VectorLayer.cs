@@ -16,7 +16,7 @@ using IRI.Jab.Common.Helpers;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Jab.Common.Convertor;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Persistence.DataSources;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;

@@ -7,8 +7,9 @@ using IRI.Ket.GdiPlus.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Persistence.DataSources;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Ket.GdiPersistence;
 
 public class ClusteredGeoTaggedImageSource : IDataSource
 {

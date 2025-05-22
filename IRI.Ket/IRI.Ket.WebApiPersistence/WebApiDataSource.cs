@@ -1,4 +1,4 @@
-﻿//using IRI.Ket.Persistence.DataSources;
+﻿//using IRI.Sta.Persistence.DataSources;
 //using IRI.Sta.Spatial.Primitives;
 //using IRI.Sta.Common.Helpers;
 //using System;

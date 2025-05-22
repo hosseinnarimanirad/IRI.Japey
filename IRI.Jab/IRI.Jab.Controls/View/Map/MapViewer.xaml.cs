@@ -23,7 +23,7 @@ using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Persistence.DataSources;
 using IRI.Jab.Controls.Model;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
@@ -31,7 +31,7 @@ using IRI.Jab.Common.TileServices;
 using IRI.Jab.Common.Model.Spatialable;
 
 using sb = IRI.Sta.Common.Primitives;
-using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Persistence.RasterDataSources;
 using IRI.Sta.Common.Enums;
 using IRI.Jab.Common.Assets.Data;
 using IRI.Sta.Spatial.Model;

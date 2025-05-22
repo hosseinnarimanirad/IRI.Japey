@@ -1,12 +1,10 @@
 ﻿using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IRI.Ket.Persistence.DataSources;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace IRI.Sta.Persistence.DataSources;
 
 public interface IScaleDependentDataSource : IDataSource
 {
@@ -17,5 +15,5 @@ public interface IScaleDependentDataSource : IDataSource
     Task<List<Geometry<Point>>> GetGeometriesAsync(double mapScale);
 
     Task<List<Geometry<Point>>> GetGeometriesAsync(double mapScale, BoundingBox boundingBox);
-     
+
 }

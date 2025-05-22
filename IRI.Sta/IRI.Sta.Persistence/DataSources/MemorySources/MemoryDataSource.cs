@@ -1,12 +1,16 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using IRI.Sta.ShapefileFormat;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 
 public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
@@ -31,18 +35,18 @@ public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
     }
 
     private void Initialize(List<Feature<Point>> features, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc)
-    { 
+    {
         foreach (var item in features)
             item.Id = GetNewId();
 
-        this._features = features;
-        this._labelFunc = labelFunc;
-        this._idFunc = idFunc;
+        _features = features;
+        _labelFunc = labelFunc;
+        _idFunc = idFunc;
         //this.WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
-        this._mapToFeatureFunc = f => f;
-        this.GeometryType = features.First().TheGeometry.Type;
+        _mapToFeatureFunc = f => f;
+        GeometryType = features.First().TheGeometry.Type;
 
-        this.UpdateExtent();
+        UpdateExtent();
     }
 
     public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
@@ -58,7 +62,7 @@ public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
                 .Select(ToFeatureMappingFunc)
                 .ToList());
     }
-     
+
     public static MemoryDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
     {
         //var features = ShapefileHelper.ReadAsSqlFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);

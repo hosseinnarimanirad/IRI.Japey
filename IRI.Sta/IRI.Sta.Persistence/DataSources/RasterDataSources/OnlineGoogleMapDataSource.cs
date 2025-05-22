@@ -1,14 +1,17 @@
-﻿using System.Data;
-using System.Diagnostics;
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
-using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Model;
-using IRI.Ket.Persistence.DataSources;
 using IRI.Sta.Spatial.Model;
-using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Persistence.DataSources;
 
-namespace IRI.Ket.Persistence.RasterDataSources;
+namespace IRI.Sta.Persistence.RasterDataSources;
 
 public class OnlineGoogleMapDataSource<T> : IRasterDataSource
 {
@@ -74,7 +77,7 @@ public class OnlineGoogleMapDataSource<T> : IRasterDataSource
 
         var tilesBoundary = WebMercatorUtility.WebMercatorBoundingBoxToGoogleTileRegions(mbb, zoom);
 
-        Debug.Print($"#GetTiles: {string.Join(" # ", tilesBoundary.Select(i => i.ToShortString()))}");
+        //Debug.Print($"#GetTiles: {string.Join(" # ", tilesBoundary.Select(i => i.ToShortString()))}");
 
         var result = new List<Tuple<TileInfo, GeoReferencedImage>>();
 

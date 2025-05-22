@@ -1,13 +1,15 @@
-﻿using IRI.Extensions;
-using IRI.Sta.Common.Primitives;
+﻿using System;
 using System.Data;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.MapIndexes;
-using IRI.Sta.Spatial.MapIndexes;
-using IRI.Sta.Spatial.MapIndexes;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace IRI.Ket.Persistence.DataSources;
+using IRI.Extensions;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.SpatialReferenceSystem;
+
+namespace IRI.Sta.Persistence.DataSources;
 
 public class GridDataSource : VectorDataSource<GeodeticSheet, Point>
 {
@@ -25,13 +27,13 @@ public class GridDataSource : VectorDataSource<GeodeticSheet, Point>
 
     public override GeometryType? GeometryType
     {
-        get => IRI.Sta.Common.Primitives.GeometryType.Polygon;
+        get => Common.Primitives.GeometryType.Polygon;
         protected set => _ = value;
     }
 
     private GridDataSource()
     {
-        this.GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
+        GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
     }
 
     public override string ToString()
@@ -45,14 +47,14 @@ public class GridDataSource : VectorDataSource<GeodeticSheet, Point>
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type);
+        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type);
     }
 
     public override List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
     {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
+        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
+        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .ToList();
     }
@@ -62,16 +64,16 @@ public class GridDataSource : VectorDataSource<GeodeticSheet, Point>
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
+        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
                                 .Select(ToFeatureMappingFunc)
                                 .ToList());
     }
 
     public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
     {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
+        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, this.Type)
+        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .Select(ToFeatureMappingFunc)
                                 .ToList());

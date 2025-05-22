@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
-using Microsoft.Data.SqlClient;
+﻿using System.Data;
 using System.Data.SqlTypes;
+using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Types;
+
 using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Ket.Persistence.Infrastructure;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Persistence.Infrastructure;
 
 namespace IRI.Ket.SqlServerPersistence;
 

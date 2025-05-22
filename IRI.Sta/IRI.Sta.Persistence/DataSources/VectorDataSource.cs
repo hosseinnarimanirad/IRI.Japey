@@ -1,9 +1,13 @@
-﻿using System.Data;
-using IRI.Sta.Common.Abstrations;
+﻿using System.Linq;
+using System.Data;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSource
     where TGeometryAware : class, IGeometryAware<TPoint>
@@ -165,7 +169,7 @@ public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSour
 
     public virtual FeatureSet<TPoint> GetAsFeatureSet(Geometry<TPoint>? geometry)
     {
-        return new FeatureSet<TPoint>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList()); 
+        return new FeatureSet<TPoint>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList());
     }
 
     #endregion
@@ -201,9 +205,9 @@ public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSour
     //public abstract void Remove(TGeometryAware? value);
 
     //public abstract void Update(TGeometryAware? newValue);
-     
+
     //public abstract void SaveChanges();
-     
+
     //#endregion
 }
 

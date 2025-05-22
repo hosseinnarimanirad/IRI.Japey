@@ -1,10 +1,8 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data; 
 
-namespace IRI.Ket.Persistence.Infrastructure;
+namespace IRI.Sta.Persistence.Infrastructure;
 
 //Remember; 
 //What about e.g. decimal(5,2)
@@ -15,7 +13,7 @@ public abstract class DataSourceInfrastructure
 
     public DataSourceInfrastructure()
     {
-        this._typeMapping = new Dictionary<Type, string>();
+        _typeMapping = new Dictionary<Type, string>();
     }
 
     protected virtual string GetColumnDefinition(DataColumn column)

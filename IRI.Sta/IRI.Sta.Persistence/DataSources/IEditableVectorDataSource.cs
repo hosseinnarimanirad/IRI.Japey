@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public interface IEditableVectorDataSource<TGeometryAware, TPoint>
     where TGeometryAware : IGeometryAware<TPoint>

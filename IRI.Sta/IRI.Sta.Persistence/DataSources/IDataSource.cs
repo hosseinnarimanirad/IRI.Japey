@@ -1,6 +1,6 @@
 ﻿using IRI.Sta.Common.Primitives;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public interface IDataSource
 {

@@ -74,11 +74,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.GdiPersistence\IRI.Ket.GdiPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.GdiPlus\IRI.Ket.GdiPlus.csproj" />
-    <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerPersistence\IRI.Ket.SqlServerPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Ket\IRI.Ket.SqlServerSpatialExtension\IRI.Ket.SqlServerSpatialExtension.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.MachineLearning\IRI.Sta.MachineLearning.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Persistence\IRI.Sta.Persistence.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Security\IRI.Sta.Security.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
   </ItemGroup>

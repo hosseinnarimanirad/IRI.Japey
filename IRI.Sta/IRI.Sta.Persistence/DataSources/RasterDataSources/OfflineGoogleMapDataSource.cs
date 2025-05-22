@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Data;
-using IRI.Sta.Common.Model;
-using IRI.Sta.Common.Primitives;
-using IRI.Ket.Persistence.DataSources;
-using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.Helpers;
+using System.Collections.Generic;
 
-namespace IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Common.Model;
+using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Persistence.DataSources;
+
+namespace IRI.Sta.Persistence.RasterDataSources;
 
 public class OfflineGoogleMapDataSource<T> : IRasterDataSource
 {
@@ -36,7 +35,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
         //    throw new NotImplementedException();
         //}
 
-        this._imageSources = imageSources;
+        _imageSources = imageSources;
     }
 
     public List<GeoReferencedImage> GetTiles(BoundingBox geographicBoundingBox, double mapScale)
@@ -48,7 +47,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
         var result = new List<GeoReferencedImage>();
 
         //What if there were no imagesource for this zoom level
-        if (!this.ImageSources.Any(i => i.ZoomLevel == zoomLevel))
+        if (!ImageSources.Any(i => i.ZoomLevel == zoomLevel))
         {
             return result;
         }
@@ -57,7 +56,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
 
         var upperRight = WebMercatorUtility.LatLonToImageNumber(geographicBoundingBox.YMax, geographicBoundingBox.XMax, zoomLevel);
 
-        var imageSource = this.ImageSources.Single(i => i.ZoomLevel == zoomLevel);
+        var imageSource = ImageSources.Single(i => i.ZoomLevel == zoomLevel);
 
         for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
         {
@@ -68,7 +67,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
                 if (File.Exists(fileName))
                 {
                     result.Add(new GeoReferencedImage(
-                        System.IO.File.ReadAllBytes(fileName),
+                        File.ReadAllBytes(fileName),
                         WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
                 }
             }
@@ -90,7 +89,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
         var result = new List<GeoReferencedImage>();
 
         //What if there were no imagesource for this zoom level
-        if (!this.ImageSources.Any(i => i.ZoomLevel == zoomLevel))
+        if (!ImageSources.Any(i => i.ZoomLevel == zoomLevel))
         {
             return result;
         }
@@ -99,7 +98,7 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
 
         var upperRight = WebMercatorUtility.LatLonToImageNumber(geographicBoundingBox.YMax, geographicBoundingBox.XMax, zoomLevel);
 
-        var imageSource = this.ImageSources.Single(i => i.ZoomLevel == zoomLevel);
+        var imageSource = ImageSources.Single(i => i.ZoomLevel == zoomLevel);
 
         for (int i = (int)lowerLeft.X; i <= upperRight.X; i++)
         {
@@ -107,10 +106,10 @@ public class OfflineGoogleMapDataSource<T> : IRasterDataSource
             {
                 string fileName = imageSource.GetFileName(j, i);
 
-                if (System.IO.File.Exists(fileName))
+                if (File.Exists(fileName))
                 {
                     result.Add(new GeoReferencedImage(
-                        System.IO.File.ReadAllBytes(fileName),
+                        File.ReadAllBytes(fileName),
                         WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
                 }
             }

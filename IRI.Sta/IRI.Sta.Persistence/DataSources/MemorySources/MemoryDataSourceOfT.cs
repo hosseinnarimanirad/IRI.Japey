@@ -1,11 +1,14 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Collections.Generic;
 
 using IRI.Extensions;
-using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Common.Abstrations;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeometryAware, TPoint>, IEditableVectorDataSource<TGeometryAware, TPoint>
     where TGeometryAware : class, IGeometryAware<TPoint>
@@ -34,17 +37,17 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
         Func<int, TGeometryAware> idFunc,
         Func<TGeometryAware, Feature<TPoint>> mapToFeatureFunc)
     {
-        this._features = features;
-        this._labelFunc = labelingFunc;
-        this._idFunc = idFunc;
+        _features = features;
+        _labelFunc = labelingFunc;
+        _idFunc = idFunc;
         _mapToFeatureFunc = mapToFeatureFunc;
-        this.GeometryType = features.First().TheGeometry.Type;
+        GeometryType = features.First().TheGeometry.Type;
     }
 
     // todo: remove this method
     public int GetSrid()
     {
-        return this._features?.SkipWhile(g => g is null || g.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
+        return _features?.SkipWhile(g => g is null || g.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
     }
 
     public override string ToString()
@@ -59,24 +62,24 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
 
     protected void UpdateExtent()
     {
-        this.WebMercatorExtent = _features.Select(f => f.TheGeometry).GetBoundingBox();
+        WebMercatorExtent = _features.Select(f => f.TheGeometry).GetBoundingBox();
     }
 
     // Get GeometryAwares [GENERIC]
     public override List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox)
     {
-        return this._features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
+        return _features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
     }
 
     public override List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry)
     {
         if (geometry.IsNotValidOrEmpty())
         {
-            return this._features.ToList();
+            return _features.ToList();
         }
         else
         {
-            return this._features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
+            return _features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
         }
     }
 
@@ -146,14 +149,14 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
 
     public virtual void Add(TGeometryAware newGeometry)
     {
-        this._features.Add(newGeometry);
+        _features.Add(newGeometry);
 
         UpdateExtent();
     }
 
     public virtual void Remove(TGeometryAware geometry)
     {
-        this._features.Remove(geometry);
+        _features.Remove(geometry);
 
         UpdateExtent();
     }
@@ -165,7 +168,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
 
         var geometry = _idFunc(newGeometry.Id);
 
-        var index = this._features.IndexOf(geometry);
+        var index = _features.IndexOf(geometry);
 
         //var index = newGeometry.Id;
 
@@ -174,7 +177,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
         //    return;
         //}
 
-        this._features[index] = newGeometry;
+        _features[index] = newGeometry;
 
         UpdateExtent();
     }

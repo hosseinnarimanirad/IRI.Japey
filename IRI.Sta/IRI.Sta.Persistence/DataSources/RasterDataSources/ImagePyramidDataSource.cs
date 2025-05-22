@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives; 
+using System.Collections.Generic;
+
 using IRI.Sta.Common.Model;
 
-namespace IRI.Ket.Persistence.RasterDataSources;
+namespace IRI.Sta.Persistence.RasterDataSources;
 
 //Note: Extent is NaN for this class
 public class ImagePyramidDataSource : OfflineGoogleMapDataSource<object>
@@ -31,9 +28,9 @@ public class ImagePyramidDataSource : OfflineGoogleMapDataSource<object>
 
             int.TryParse(folderName, out zoom);
 
-            this.ImageSources.Add(new ImageSource(zoom, makeFileName));
+            ImageSources.Add(new ImageSource(zoom, makeFileName));
         }
     }
 
-    
+
 }

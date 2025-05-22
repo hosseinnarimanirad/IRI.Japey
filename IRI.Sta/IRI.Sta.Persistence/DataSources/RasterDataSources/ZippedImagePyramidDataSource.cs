@@ -1,13 +1,18 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Collections.Generic;
+
+
 using IRI.Sta.Common.Model;
 using IRI.Sta.Spatial.Model;
 using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Primitives;
-using IRI.Ket.Persistence.DataSources;
-using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Persistence.DataSources;
 
-namespace IRI.Ket.Persistence.RasterDataSources;
+namespace IRI.Sta.Persistence.RasterDataSources;
 
 public class ZippedImagePyramidDataSource : IRasterDataSource
 {
@@ -91,7 +96,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
                 }
             );
 
-            this.WebMercatorExtent = BoundingBox.GetMergedBoundingBox(
+            WebMercatorExtent = BoundingBox.GetMergedBoundingBox(
                             _archive.Entries.Where(e => e.FullName.StartsWith(lastPyramid.ToString()))
                                             .Select(e => _inverseFunction(e.FullName).WebMercatorExtent), true);
 
@@ -103,7 +108,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
         }
         else
         {
-            this.WebMercatorExtent = JsonHelper.Deserialize<BoundingBox>(extentString);
+            WebMercatorExtent = JsonHelper.Deserialize<BoundingBox>(extentString);
         }
 
 
@@ -141,7 +146,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
                 {
                     var stream = _archive.Entries.Single(e => e.FullName.Equals(_fileNameRule(zoomLevel, j, i)/*.Replace("\\", "/")*/, StringComparison.OrdinalIgnoreCase)).Open();
 
-                    byte[] bytes = IRI.Sta.Common.Helpers.StreamHelper.ToByteArray(stream);
+                    byte[] bytes = StreamHelper.ToByteArray(stream);
 
                     result.Add(new GeoReferencedImage(bytes, WebMercatorUtility.GetWgs84ImageBoundingBox(j, i, zoomLevel)));
                 }

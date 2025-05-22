@@ -10,7 +10,7 @@ using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Convertor;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Persistence.DataSources;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;

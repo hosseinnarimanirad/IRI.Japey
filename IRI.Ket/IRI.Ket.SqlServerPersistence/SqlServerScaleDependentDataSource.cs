@@ -4,9 +4,8 @@ using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Analysis;
-using IRI.Ket.Persistence.Model;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Spatial.Analysis; 
+using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
 

@@ -1,8 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
-using IRI.Sta.Common.Primitives; 
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Abstrations;
 using IRI.Sta.ShapefileFormat.Dbf;
@@ -11,7 +15,7 @@ using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
 {
@@ -23,7 +27,7 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
 
     //public List<ShapefileFormat.Model.ObjectToDbfTypeMap<T>> AttributeMap { get; set; }
 
-     
+
     // 1400.02.03
     //ObjectToDfbFields<T> _fields;
     List<ObjectToDbfTypeMap<Feature<Point>>> _fields;
@@ -44,9 +48,9 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
             throw new NotImplementedException();
         }
 
-        this._shapefileName = shapefileName;
+        _shapefileName = shapefileName;
 
-        _sourceSrs = IRI.Sta.ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
+        _sourceSrs = ShapefileFormat.Shapefile.TryGetSrs(shapefileName);
 
         _targetSrs = targetSrs;
 
@@ -59,25 +63,25 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
 
         //string title = System.IO.Path.GetFileNameWithoutExtension(shapefileName);
 
-        this.WebMercatorExtent = geometries.MainHeader.MinimumBoundingBox;
+        WebMercatorExtent = geometries.MainHeader.MinimumBoundingBox;
 
         // 1401.11.28
-        this.GeometryType = geometries.MainHeader.ShapeType.AsGeometryType();
+        GeometryType = geometries.MainHeader.ShapeType.AsGeometryType();
 
         if (transformFunc != null)
         {
-            this.WebMercatorExtent = this.WebMercatorExtent.Transform(p => transformFunc(p));
+            WebMercatorExtent = WebMercatorExtent.Transform(p => transformFunc(p));
         }
 
         // 1400.02.03-comment
         //this._fields = new ObjectToDfbFields<T>() { ExtractAttributesFunc = inverseAttributeMap, Fields = attributes.Fields };
 
         // 1400.02.19
-        this._fields = new List<ObjectToDbfTypeMap<Feature<Point>>>();
+        _fields = new List<ObjectToDbfTypeMap<Feature<Point>>>();
 
         for (int i = 0; i < attributes.Fields.Count; i++)
         {
-            this._fields.Add(new ObjectToDbfTypeMap<Feature<Point>>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
+            _fields.Add(new ObjectToDbfTypeMap<Feature<Point>>(attributes.Fields[i], t => inverseAttributeMap(t)[i]));
         }
 
 
@@ -86,7 +90,7 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
             throw new NotImplementedException();
         }
 
-        this._features = new List<Feature<Point>>();
+        _features = new List<Feature<Point>>();
 
         for (int i = 0; i < geometries.Count; i++)
         {
@@ -106,29 +110,29 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
 
             feature.Id = GetNewId();
 
-            this._features.Add(feature);
+            _features.Add(feature);
         }
 
-        this._idFunc = id => this._features.Single(f => f.Id == id);
+        _idFunc = id => _features.Single(f => f.Id == id);
 
-        this._mapToFeatureFunc = f => f;
+        _mapToFeatureFunc = f => f;
     }
 
 
     public static ShapefileDataSource Create(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
     {
-        var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+        var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
-        var geometries = IRI.Sta.ShapefileFormat.Shapefile.ReadShapes(shapefileName);
+        var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
 
         return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
     }
 
-    public static async Task<ShapefileDataSource> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<Object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
+    public static async Task<ShapefileDataSource> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
     {
-        var attributes = DbfFile.Read(IRI.Sta.ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
+        var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
 
-        var geometries = await IRI.Sta.ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
+        var geometries = await ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
 
         return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
     }
@@ -150,6 +154,6 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
             geometryMap = t => t.TheGeometry.AsEsriShape(_sourceSrs.Srid);
         }
 
-        IRI.Sta.ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
+        ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
     }
 }

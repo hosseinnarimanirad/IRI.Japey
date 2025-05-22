@@ -4,7 +4,7 @@ using IRI.Extensions;
 using IRI.Sta.PersonalGdb;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Persistence.DataSources;
 using IRI.Ket.PersonalGdbPersistence.Model;
 using IRI.Sta.SpatialReferenceSystem;
 

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 
 using IRI.Jab.Common.Model.Legend;
-using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;
 
 

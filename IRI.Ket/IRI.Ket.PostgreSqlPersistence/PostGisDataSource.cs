@@ -4,8 +4,9 @@ using System.Data;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Persistence.DataSources;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Ket.PostgreSqlPersistence;
 
 // todo: implement methods
 public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
@@ -30,7 +31,7 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
         string tableName,
         string spatialColumnName = null,
         string schema = "public")
-        : this(Infrastructure.PostgreSqlInfrastructure.GetConnectionString(server, user, password, database, port), tableName, spatialColumnName, schema)
+        : this(PostgreSqlInfrastructure.GetConnectionString(server, user, password, database, port), tableName, spatialColumnName, schema)
     {
     }
 
@@ -87,7 +88,7 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
 
     public DataTable GetAttributeColumns(string whereClause)
     {
-        List<string> columns = Infrastructure.PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema ?? "public", _tableName);
+        List<string> columns = PostgreSqlInfrastructure.GetColumnNames(_connectionString, _schema ?? "public", _tableName);
 
         if (!columns.Contains(_spatialColumnName))
             throw new NotImplementedException();

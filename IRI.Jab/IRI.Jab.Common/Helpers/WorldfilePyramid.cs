@@ -12,7 +12,7 @@ using IRI.Sta.Common.Helpers;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Ket.GdiPlus.WorldfileFormat;
-using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Persistence.RasterDataSources;
 
 namespace IRI.Jab.Common.Helpers;
 

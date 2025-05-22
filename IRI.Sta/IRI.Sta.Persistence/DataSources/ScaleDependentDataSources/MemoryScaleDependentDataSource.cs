@@ -1,5 +1,8 @@
 ﻿using System.Data;
+using System.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using IRI.Extensions;
 using IRI.Sta.Spatial.Helpers;
@@ -9,7 +12,7 @@ using IRI.Sta.Spatial.Primitives;
 
 using static System.Math;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point>, IScaleDependentDataSource where TGeometryAware : class, IGeometryAware<Point>
 {
@@ -26,7 +29,7 @@ public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<T
 
         var fitLevel = WebMercatorUtility.EstimateZoomLevel(Max(boundingBox.Width, boundingBox.Height), /*averageLatitude,*/ 900);
 
-        this.GeometryType = geometries.First().Type;
+        GeometryType = geometries.First().Type;
 
         var simplifiedByAngleGeometries = geometries
                                             .Select(g => g.Simplify(SimplificationType.CumulativeAngle, new SimplificationParamters()
@@ -102,7 +105,7 @@ public class MemoryScaleDependentDataSource : MemoryDataSource, IScaleDependentD
     {
         source = new Dictionary<double, List<Geometry<Point>>>();
 
-        this.GeometryType = geometries.First().Type;
+        GeometryType = geometries.First().Type;
 
         var boundingBox = geometries.GetBoundingBox();
 

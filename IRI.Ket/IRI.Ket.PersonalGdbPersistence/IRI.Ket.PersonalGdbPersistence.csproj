@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Persistence\IRI.Sta.Persistence.csproj" />
   </ItemGroup>
   
 </Project>

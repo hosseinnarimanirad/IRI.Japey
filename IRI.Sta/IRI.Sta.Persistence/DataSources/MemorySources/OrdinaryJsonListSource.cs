@@ -1,9 +1,14 @@
-﻿using IRI.Extensions;
+﻿using System;
+using System.Data;
+using System.Linq;
+using System.Collections.Generic;
+
+using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Ket.Persistence.DataSources;
+namespace IRI.Sta.Persistence.DataSources;
 
 public class OrdinaryJsonListSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point> where TGeometryAware : class, IGeometryAware<Point>
 {
@@ -19,16 +24,16 @@ public class OrdinaryJsonListSource<TGeometryAware> : MemoryDataSource<TGeometry
 
     private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string>? labelFunc)
     {
-        this._labelFunc = labelFunc;
+        _labelFunc = labelFunc;
 
-        this._features = features;
+        _features = features;
 
-        this.WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
+        WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
 
-        this._mapToFeatureFunc = mapToFeatureFunc;
+        _mapToFeatureFunc = mapToFeatureFunc;
 
         // 1401.11.29
-        this.GeometryType = features.First().TheGeometry.Type;
+        GeometryType = features.First().TheGeometry.Type;
     }
 
     public override string ToString()

@@ -1,7 +1,8 @@
-﻿using Npgsql;
+﻿using IRI.Sta.Persistence.Infrastructure;
+using Npgsql;
 using System.Data;
 
-namespace IRI.Ket.Persistence.Infrastructure;
+namespace IRI.Ket.PostgreSqlPersistence;
 
 public class PostgreSqlInfrastructure : DataSourceInfrastructure
 {

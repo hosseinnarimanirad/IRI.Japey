@@ -1,18 +1,15 @@
-﻿using IRI.Extensions;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.MapIndexes;
-using IRI.Sta.Spatial.MapIndexes;
-using IRI.Sta.Spatial.MapIndexes;
+using System.Collections.Generic;
 
-namespace IRI.Ket.Persistence.DataSources;
+using IRI.Extensions;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.MapIndexes;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.SpatialReferenceSystem;
+
+namespace IRI.Sta.Persistence.DataSources;
 
 public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
 {
@@ -32,13 +29,13 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
 
     public override GeometryType? GeometryType
     {
-        get => IRI.Sta.Common.Primitives.GeometryType.Polygon;
+        get => Common.Primitives.GeometryType.Polygon;
         protected set => _ = value;
     }
 
     private UtmGridDataSource()
     {
-        this.GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
+        GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
     }
 
     public override string ToString()
@@ -52,14 +49,14 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone);
+        return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone);
     }
 
     public override List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
     {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
+        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+        return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone)
                             .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                             .ToList();
     }
@@ -70,7 +67,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToMercatorWgs84);
 
-        var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+        var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone)
                             //.Where(s => s.TheGeometry?.Intersects(boundingBox) == true)
                             .Select(ToFeatureMappingFunc)
                             .ToList();
@@ -80,9 +77,9 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
 
     public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
     {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? this.GeodeticWgs84Extent;
+        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, this.Type, UtmZone)
+        var features = UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone)
                             .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                             .Select(ToFeatureMappingFunc)
                             .ToList();

@@ -16,8 +16,8 @@ using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Services;
-using IRI.Ket.Persistence.DataSources;
-using IRI.Ket.Persistence.RasterDataSources;
+using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.RasterDataSources;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Model.Map;
 using IRI.Jab.Common.TileServices;
@@ -38,6 +38,7 @@ using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Enums;
+using IRI.Ket.GdiPersistence;
 
 namespace IRI.Jab.Common.Presenter.Map;
 

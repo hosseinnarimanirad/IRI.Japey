@@ -4,7 +4,7 @@ using IRI.Sta.Spatial.Primitives;
 using System.Data;
 using IRI.Extensions;
 using IRI.Sta.Common.Model;
-using IRI.Ket.Persistence.DataSources;
+using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Ket.SqlServerPersistence;

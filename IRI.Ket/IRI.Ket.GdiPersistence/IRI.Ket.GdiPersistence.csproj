@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Common\IRI.Sta.Common.csproj" />
-    <ProjectReference Include="..\IRI.Ket.GdiPlus\IRI.Ket.GdiPlus.csproj" />
-    <ProjectReference Include="..\IRI.Ket.Persistence\IRI.Ket.Persistence.csproj" /> 
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Persistence\IRI.Sta.Persistence.csproj" />
+    <ProjectReference Include="..\IRI.Ket.GdiPlus\IRI.Ket.GdiPlus.csproj" /> 
   </ItemGroup>
 
   <ItemGroup>
