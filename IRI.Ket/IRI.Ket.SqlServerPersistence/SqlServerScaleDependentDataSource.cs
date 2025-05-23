@@ -4,10 +4,10 @@ using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Analysis; 
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.SqlServerPersistence;
 

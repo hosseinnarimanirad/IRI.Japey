@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 

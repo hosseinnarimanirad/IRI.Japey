@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using IRI.Sta.ShapefileFormat;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.Persistence.DataSources;
 

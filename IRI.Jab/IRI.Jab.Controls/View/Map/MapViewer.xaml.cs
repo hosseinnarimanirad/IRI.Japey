@@ -40,6 +40,7 @@ using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Symbology;
+using IRI.Sta.Persistence.Abstractions;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 

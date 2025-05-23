@@ -2,7 +2,7 @@
 using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.GdiPersistence;
 

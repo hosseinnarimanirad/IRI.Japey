@@ -9,7 +9,7 @@ using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.RasterDataSources;
 

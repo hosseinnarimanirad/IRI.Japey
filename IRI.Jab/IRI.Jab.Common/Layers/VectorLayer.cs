@@ -24,6 +24,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Symbology;
 using IRI.Jab.Common.Enums;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common;
 

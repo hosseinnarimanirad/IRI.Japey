@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Sta.Persistence.DataSources;
+namespace IRI.Sta.Persistence.Abstractions;
 
 public interface IVectorDataSource : IDataSource
 {

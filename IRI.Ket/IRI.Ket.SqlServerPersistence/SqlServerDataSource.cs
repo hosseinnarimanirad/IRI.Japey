@@ -6,6 +6,7 @@ using IRI.Extensions;
 using IRI.Sta.Common.Model;
 using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.SqlServerPersistence;
 

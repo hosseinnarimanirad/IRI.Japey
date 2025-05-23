@@ -4,7 +4,7 @@ using IRI.Sta.Spatial.Primitives;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace IRI.Sta.Persistence.DataSources;
+namespace IRI.Sta.Persistence.Abstractions;
 
 public interface IScaleDependentDataSource : IDataSource
 {

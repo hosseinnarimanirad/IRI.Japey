@@ -10,10 +10,10 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Spatial.Model.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common.Model.Legend;
 

@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.Abstractions;
 
 
 namespace IRI.Jab.Common.Model.Map;

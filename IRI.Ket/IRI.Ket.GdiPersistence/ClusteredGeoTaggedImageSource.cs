@@ -7,7 +7,7 @@ using IRI.Ket.GdiPlus.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Persistence.DataSources;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.GdiPersistence;
 

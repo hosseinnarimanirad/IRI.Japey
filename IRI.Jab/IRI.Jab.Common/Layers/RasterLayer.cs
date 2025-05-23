@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Persistence.DataSources;
 using IRI.Ket.SqlServerPersistence;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Persistence.RasterDataSources;
 using IRI.Jab.Common.Enums;
 using IRI.Ket.GdiPersistence;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common
 {

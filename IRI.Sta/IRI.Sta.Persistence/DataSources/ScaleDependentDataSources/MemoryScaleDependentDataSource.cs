@@ -11,6 +11,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
 using static System.Math;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 

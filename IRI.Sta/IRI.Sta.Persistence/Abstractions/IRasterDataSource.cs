@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Sta.Persistence.DataSources;
+namespace IRI.Sta.Persistence.Abstractions;
 
 public interface IRasterDataSource : IDataSource
 {
