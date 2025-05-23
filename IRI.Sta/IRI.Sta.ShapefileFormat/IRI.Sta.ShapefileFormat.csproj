@@ -23,7 +23,6 @@
   <ItemGroup>
     <Content Include="Info\Info.txt" />
     <Content Include="License.txt" />
-    <Content Include="README.txt" />
   </ItemGroup>
  
   <ItemGroup>
