@@ -11,12 +11,22 @@ namespace IRI.Test.NetFrameworkTest.Common.Mapping;
 
 public class MapIndexesTest
 {
+    /// <summary>
+    /// Tests that GeodeticIndexes.Get100kIndexSheet returns the correct GeodeticExtent for sheet "5261".
+    /// </summary>
     [Fact]
-    public void TestMapIndexes()
+    public void Get100kIndexSheet_WithValidSheetCode_ReturnsExpectedGeodeticExtent()
     {
-        var sheet = GeodeticIndexes.Get100kIndexSheet("5261");
+        // Arrange
+        var sheetCode = "5261";
+        var expectedXMin = 46;
+        var expectedYMin = 35.5;
 
-        Assert.Equal(46, sheet.GeodeticExtent.XMin);
-        Assert.Equal(35.5, sheet.GeodeticExtent.YMin);            
+        // Act
+        var sheet = GeodeticIndexes.Get100kIndexSheet(sheetCode);
+
+        // Assert
+        Assert.Equal(expectedXMin, sheet.GeodeticExtent.XMin);
+        Assert.Equal(expectedYMin, sheet.GeodeticExtent.YMin);
     }
 }
