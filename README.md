@@ -43,7 +43,7 @@ dotnet build
 
 ## 📜 License
 
-MIT License.
+[MIT License](https://github.com/hosseinnarimanirad/Maptor/blob/master/LICENSE.txt)
 
 ---
 
