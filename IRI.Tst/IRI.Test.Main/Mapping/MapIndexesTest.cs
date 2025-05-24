@@ -6,27 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Test.NetFrameworkTest.Common.Mapping;
-
-
-public class MapIndexesTest
+namespace IRI.Test.NetFrameworkTest.Common.Mapping
 {
-    /// <summary>
-    /// Tests that GeodeticIndexes.Get100kIndexSheet returns the correct GeodeticExtent for sheet "5261".
-    /// </summary>
-    [Fact]
-    public void Get100kIndexSheet_WithValidSheetCode_ReturnsExpectedGeodeticExtent()
+    public class MapIndexesTest
     {
-        // Arrange
-        var sheetCode = "5261";
-        var expectedXMin = 46;
-        var expectedYMin = 35.5;
+        [Theory]
+        [InlineData("5261", 46.0, 35.5, 46.5, 36.0)]
+        [InlineData("5372", 46.5, 36.0, 47.0, 36.5)]
+        [InlineData("5483", 47.0, 36.5, 47.5, 37.0)]
+        public void Get100kGeodeticExtent_ValidIndex_ReturnsCorrectExtent(string index100k, double expectedXMin, double expectedYMin, double expectedXMax, double expectedYMax)
+        {
+            // Act
+            var sheet = GeodeticIndexes.Get100kIndexSheet(index100k);
+            Assert.NotNull(sheet);
 
-        // Act
-        var sheet = GeodeticIndexes.Get100kIndexSheet(sheetCode);
+            var extent = sheet.GeodeticExtent;
+            Assert.True(extent.HasValue, "GeodeticExtent is null");
 
-        // Assert
-        Assert.Equal(expectedXMin, sheet.GeodeticExtent.XMin);
-        Assert.Equal(expectedYMin, sheet.GeodeticExtent.YMin);
+            // Assert
+            Assert.Equal(expectedXMin, extent!.Value.XMin);
+            Assert.Equal(expectedYMin, extent.Value.YMin);
+            Assert.Equal(expectedXMax, extent.Value.XMax);
+            Assert.Equal(expectedYMax, extent.Value.YMax);
+        }
     }
-}
+    }
