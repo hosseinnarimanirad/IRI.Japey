@@ -94,6 +94,9 @@ public static class GeometryExtensions
         if (geometry.IsNullOrEmpty())
             return null;
 
+        if (imageWidth <= 0 || imageHeight <= 0)
+            return null;
+
         BoundingBox mapExtent = mapBoundary ?? geometry.GetBoundingBox();
 
         double xScale = imageWidth / mapExtent.Width;
