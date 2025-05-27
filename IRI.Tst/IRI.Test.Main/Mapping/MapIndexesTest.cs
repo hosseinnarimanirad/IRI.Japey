@@ -11,6 +11,7 @@ namespace IRI.Test.NetFrameworkTest.Common.Mapping
     public class MapIndexesTest
     {
         [Theory]
+        // Arrange
         [InlineData("5261", 46.0, 35.5, 46.5, 36.0)]
         [InlineData("5372", 46.5, 41.0, 47.0, 41.5)]
         [InlineData("5483", 47.0, 46.5, 47.5, 47.0)]
