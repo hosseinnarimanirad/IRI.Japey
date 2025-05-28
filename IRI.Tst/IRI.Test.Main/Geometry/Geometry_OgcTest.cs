@@ -3,14 +3,8 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
 using IRI.Sta.Spatial.IO.OgcSFA;
-
-
 using System.Collections.Generic;
 using System.Data.SqlTypes; // For SqlBytes
-using IRI.Sta.Spatial.Primitives;
-// Assuming WktParser and AsWkt/AsWkb are part of IRI.Sta.Spatial.IO.OgcSFA or Primitives
-using IRI.Sta.Spatial.IO.OgcSFA;
-using Microsoft.SqlServer.Types;
 using Xunit;
 
 namespace IRI.Test.Main.TheGeometry
