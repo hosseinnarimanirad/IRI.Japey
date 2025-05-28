@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using IRI.Sta.Common.Common.JsonConverters;
+using System.Text.Json.Serialization;
 
 namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
 
@@ -17,6 +18,7 @@ public class GeoJsonFeature
     public string Geometry_name { get; set; }
 
     [JsonPropertyName("properties")]
+    [JsonConverter(typeof(DictionaryStringObjectConverter))]
     public Dictionary<string, object> Properties { get; set; }
 
     public static GeoJsonFeature Create(IGeoJsonGeometry geometry, Dictionary<string, object> attributes = null)
