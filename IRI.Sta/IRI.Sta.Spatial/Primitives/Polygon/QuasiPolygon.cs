@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 //Assumed to be CCW
 public class QuasiPolygon
@@ -16,9 +16,9 @@ public class QuasiPolygon
 
     public QuasiPolygon(List<int> vertexes)
     {
-        this.Vertexes = vertexes;
+        Vertexes = vertexes;
 
-        this.neighbours = new List<int>(vertexes.Count);
+        neighbours = new List<int>(vertexes.Count);
 
         for (int i = 0; i < neighbours.Count; i++)
         {
@@ -33,19 +33,19 @@ public class QuasiPolygon
             throw new NotImplementedException();
         }
 
-        this.Vertexes = vertexes;
+        Vertexes = vertexes;
 
         this.neighbours = neighbours;
     }
 
     public int Count
     {
-        get { return this.Vertexes.Count; }
+        get { return Vertexes.Count; }
     }
 
     public override string ToString()
     {
-        if (this.Count < 0)
+        if (Count < 0)
         {
             return string.Empty;
         }
@@ -66,14 +66,14 @@ public class QuasiPolygon
 
     public override int GetHashCode()
     {
-        return this.ToString().GetHashCode();
+        return ToString().GetHashCode();
     }
 
     public override bool Equals(object obj)
     {
         if (obj.GetType() == typeof(QuasiPolygon))
         {
-            return obj.GetHashCode() == this.GetHashCode();
+            return obj.GetHashCode() == GetHashCode();
         }
 
         return false;

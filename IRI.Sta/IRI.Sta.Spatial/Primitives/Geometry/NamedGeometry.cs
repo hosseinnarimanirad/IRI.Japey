@@ -1,9 +1,5 @@
 ﻿using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Abstrations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IRI.Sta.Spatial.Primitives;
 

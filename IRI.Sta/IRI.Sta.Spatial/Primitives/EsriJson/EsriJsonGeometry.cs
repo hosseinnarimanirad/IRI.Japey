@@ -1,6 +1,7 @@
-﻿using IRI.Sta.Common.Helpers;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text.Json.Serialization;
+
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Sta.Spatial.Primitives.Esri;
 

@@ -2,12 +2,11 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 
 public class VoronoiPoint
@@ -25,18 +24,18 @@ public class VoronoiPoint
 
     public int TriangleCode
     {
-        get { return this.m_TriangleCode; }
+        get { return m_TriangleCode; }
     }
 
     public VoronoiPoint(int triangleCode, Point position)
     {
-        this.m_TriangleCode = triangleCode;
+        m_TriangleCode = triangleCode;
 
-        this.X = position.X;
+        X = position.X;
 
-        this.Y = position.Y;
+        Y = position.Y;
 
-        this.NeigboursCode = new List<int>();
+        NeigboursCode = new List<int>();
     }
 
     public List<int> NeigboursCode;
@@ -61,7 +60,7 @@ public class VoronoiPoint
     // ba tagire hamsayeha hascode nogata ham avaz mishavad!
     public override int GetHashCode()
     {
-        return this.ToString().GetHashCode();
+        return ToString().GetHashCode();
     }
 
     public override bool Equals(object obj)
@@ -71,6 +70,6 @@ public class VoronoiPoint
             return false;
         }
 
-        return this.ToString().Equals(obj.ToString());
+        return ToString().Equals(obj.ToString());
     }
 }

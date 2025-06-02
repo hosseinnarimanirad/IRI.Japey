@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
-using IRI.Sta.Mathematics;
-using System.Linq;
 using IRI.Msh.Exceptions;
 using IRI.Extensions;
 

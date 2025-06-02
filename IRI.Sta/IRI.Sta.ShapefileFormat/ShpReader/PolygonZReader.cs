@@ -5,7 +5,7 @@ using System;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShpReader;
-using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Primitives.Esri;
 
 
 namespace IRI.Sta.ShapefileFormat.Reader;

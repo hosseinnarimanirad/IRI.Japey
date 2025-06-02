@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class ConvexPolygon
 {
@@ -19,9 +19,9 @@ public class ConvexPolygon
 
     public ConvexPolygon(PointCollection vertexes)
     {
-        this.Vertexes = vertexes;
+        Vertexes = vertexes;
 
-        this.Neighbours = new List<int>(vertexes.Count);
+        Neighbours = new List<int>(vertexes.Count);
 
         for (int i = 0; i < Neighbours.Count; i++)
         {
@@ -36,14 +36,14 @@ public class ConvexPolygon
             throw new NotImplementedException();
         }
 
-        this.Vertexes = vertexes;
+        Vertexes = vertexes;
 
-        this.Neighbours = neighbours;
+        Neighbours = neighbours;
     }
 
     public int Count
     {
-        get { return this.Vertexes.Count; }
+        get { return Vertexes.Count; }
     }
 
     //private void VertexAdded()
@@ -53,7 +53,7 @@ public class ConvexPolygon
 
     public override string ToString()
     {
-        if (this.Count < 0)
+        if (Count < 0)
         {
             return string.Empty;
         }
@@ -72,14 +72,14 @@ public class ConvexPolygon
 
     public override int GetHashCode()
     {
-        return this.ToString().GetHashCode();
+        return ToString().GetHashCode();
     }
 
     public override bool Equals(object obj)
     {
         if (obj.GetType() == typeof(QuasiPolygon))
         {
-            return obj.GetHashCode() == this.GetHashCode();
+            return obj.GetHashCode() == GetHashCode();
         }
 
         return false;
@@ -87,14 +87,14 @@ public class ConvexPolygon
 
     public double Perimeter
     {
-        get { return this.CalculatePerimeter(); }
+        get { return CalculatePerimeter(); }
     }
 
     private double CalculatePerimeter()
     {
         double tempValue = 0;
 
-        int count = this.Count;
+        int count = Count;
 
         for (int i = 0; i < count; i++)
         {
@@ -109,7 +109,7 @@ public class ConvexPolygon
 
     public PointPolygonRelation GetRelationTo(Point point)
     {
-        int count = this.Count;
+        int count = Count;
 
         int tempValue = 0;
 
@@ -123,14 +123,14 @@ public class ConvexPolygon
 
             tempValue += (int)relation[i];
 
-            if ((i > 0 && (int)relation[i] * (int)relation[i - 1] < 1))
+            if (i > 0 && (int)relation[i] * (int)relation[i - 1] < 1)
             {
                 return PointPolygonRelation.Out;
             }
 
         }
 
-        if (tempValue == count || tempValue == (-1 * count))
+        if (tempValue == count || tempValue == -1 * count)
         {
             return PointPolygonRelation.In;
         }
@@ -181,7 +181,7 @@ public class ConvexPolygon
 
         edgeIndexes = new List<int>();
 
-        int count = this.Vertexes.Count;
+        int count = Vertexes.Count;
 
         for (int i = 0; i < count; i++)
         {

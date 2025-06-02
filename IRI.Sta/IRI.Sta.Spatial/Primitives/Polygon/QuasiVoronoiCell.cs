@@ -2,12 +2,11 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class QuasiVoronoiCell : QuasiPolygon
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using IRI.Sta.ShapefileFormat.EsriType;
-using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Primitives.Esri;
 
 namespace IRI.Sta.ShapefileFormat;
 

@@ -1044,7 +1044,7 @@ public abstract class MapPresenter : BasePresenter
                 this.ZoomToExtent(extent, false, callback);
             };
 
-            selectedLayer.RequestRemove = () => { this.SelectedLayers.Remove(selectedLayer); };
+            selectedLayer.RequestRemove = () => { RemoveSelectedLayer(selectedLayer);/*this.SelectedLayers.Remove(selectedLayer);*/ };
 
             selectedLayer.RequestEdit = async g =>
             {
@@ -1099,6 +1099,24 @@ public abstract class MapPresenter : BasePresenter
             return;
 
         var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
+
+        layer.NumberOfSelectedFeatures = 0;
+
+        if (selectedLayer != null)
+        {
+            this.SelectedLayers.Remove(selectedLayer);
+
+            ClearLayer("__$selection", true);
+            ClearLayer("__$highlight", true);
+        }
+    }
+
+    private void RemoveSelectedLayer(ISelectedLayer selectedLayer)
+    {
+        if (selectedLayer is null)
+            return;
+
+        var layer = selectedLayer.AssociatedLayer;
 
         layer.NumberOfSelectedFeatures = 0;
 

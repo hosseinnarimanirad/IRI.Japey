@@ -2,7 +2,7 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.ShapefileFormat.EsriType;
-using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Primitives.Esri;
 using System;
 using System.Collections.Generic;
 using System.Text;
