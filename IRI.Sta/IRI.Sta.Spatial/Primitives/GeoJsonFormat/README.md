@@ -1,8 +1,11 @@
 # GeoJson Support in Maptor
 
-![geo](https://github.com/user-attachments/assets/21ea02ee-f3a9-4fc7-bfe7-1f9c15977fd6)
+![GeoJson](https://img.shields.io/badge/GeoJson-RFC_7946_compliant-blue) 
+![.NET](https://img.shields.io/badge/.NET-Standard_2.0-green)
 
 A robust .NET Standard implementation of GeoJson (RFC 7946) for spatial data interchange, supporting read/write operations, conversion to/from geometry types, and validation.
+
+![geo](https://github.com/user-attachments/assets/21ea02ee-f3a9-4fc7-bfe7-1f9c15977fd6)
 
 ## Features
 
@@ -23,4 +26,19 @@ A robust .NET Standard implementation of GeoJson (RFC 7946) for spatial data int
 Via NuGet Package Manager:
 ```bash
 dotnet add package IRI.Sta.Spatial
+```
+
+## 🚀 Quick Start
+Basic Parsing
+
+```C#
+using IRI.Sta.Spatial.GeoJsonFormat;
+
+// Read file and Parse from string
+var features = GeoJson.ReadFeatures(geoJsonfile);
+
+foreach (var feature in features)
+{
+    Console.WriteLine($"Feature: {feature.Type}");
+}
 ```
