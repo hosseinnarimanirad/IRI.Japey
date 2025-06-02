@@ -2,7 +2,7 @@
 using IRI.Sta.Spatial.Primitives; 
 using System.Text.Json.Serialization;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 //[JsonConverter(typeof(GeoJsonGeometryConverter))]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]

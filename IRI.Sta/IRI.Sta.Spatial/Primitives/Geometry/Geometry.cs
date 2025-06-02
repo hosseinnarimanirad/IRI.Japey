@@ -6,7 +6,7 @@ using IRI.Sta.Spatial.IO.OgcSFA;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Sta.Spatial.Primitives;
@@ -1786,7 +1786,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
-    public IRI.Sta.Spatial.Model.GeoJsonFormat.GeoJsonFeatureSet AsGeoJsonFeatureSet()
+    public IRI.Sta.Spatial.GeoJsonFormat.GeoJsonFeatureSet AsGeoJsonFeatureSet()
     {
         return new GeoJsonFeatureSet()
         {

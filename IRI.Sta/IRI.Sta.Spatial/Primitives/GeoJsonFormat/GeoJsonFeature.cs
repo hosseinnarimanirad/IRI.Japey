@@ -1,7 +1,7 @@
 ﻿using IRI.Sta.Common.Common.JsonConverters;
 using System.Text.Json.Serialization;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 public class GeoJsonFeature
 {

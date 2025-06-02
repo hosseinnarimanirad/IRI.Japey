@@ -2,7 +2,7 @@
 //using System.Text.Json.Serialization;
 
 //using IRI.Sta.Common.Primitives;
-//using IRI.Sta.Spatial.Model.GeoJsonFormat;
+//using IRI.Sta.Spatial.GeoJsonFormat;
 
 //namespace IRI.Sta.Spatial.Primitives.GeoJsonFormat;
 

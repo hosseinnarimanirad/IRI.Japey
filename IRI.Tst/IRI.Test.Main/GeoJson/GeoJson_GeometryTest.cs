@@ -1,7 +1,7 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Test.GeoJson;

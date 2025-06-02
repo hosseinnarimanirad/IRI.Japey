@@ -2,9 +2,10 @@
 using IRI.Sta.Common.Primitives;
 using System.Text.Json.Serialization;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.GeoJsonFormat;
 //using IRI.Sta.Spatial.Primitives.GeoJson.Converters;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 //[JsonConverter(typeof(GeoJsonGeometryConverter))]
 public class GeoJsonLineString : IGeoJsonGeometry

@@ -3,8 +3,9 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using System.Text.Json.Serialization;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.Spatial.GeoJsonFormat;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 //[JsonConverter(typeof(GeoJsonGeometryConverter))]
 public class GeoJsonMultiPoint : IGeoJsonGeometry

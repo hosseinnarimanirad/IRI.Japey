@@ -1,4 +1,4 @@
-﻿using IRI.Sta.Spatial.Model.GeoJsonFormat;
+﻿using IRI.Sta.Spatial.GeoJsonFormat;
 
 namespace IRI.Extensions;
 

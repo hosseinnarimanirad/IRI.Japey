@@ -10,7 +10,7 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Jab.Common.Helpers;
 
 namespace IRI.Article04.FastSimplification;

@@ -1,5 +1,5 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.Spatial.Primitives;
 using System.IO;
 using System.Linq;
@@ -61,7 +61,7 @@ public class TestGeoJson
     [Fact]
     public void TestGeoJsonToWkt()
     {
-        var networkblocks = IRI.Sta.Spatial.Model.GeoJsonFormat.GeoJson.ParseToGeoJsonFeatures(ReadFile("networkblock.json"));
+        var networkblocks = Sta.Spatial.GeoJsonFormat.GeoJson.ParseToGeoJsonFeatures(ReadFile("networkblock.json"));
 
         var checkSqlGeometryAndGeometryConversions = networkblocks.Select(f => f.Geometry.AsSqlGeometry().AsWkt() == f.Geometry.Parse().AsSqlGeometry().AsWkt());
 
@@ -77,7 +77,7 @@ public class TestGeoJson
             throw new NotImplementedException();
         }
          
-        var stations = IRI.Sta.Spatial.Model.GeoJsonFormat.GeoJson.ParseToGeoJsonFeatures(ReadFile("stations.json"));
+        var stations = Sta.Spatial.GeoJsonFormat.GeoJson.ParseToGeoJsonFeatures(ReadFile("stations.json"));
 
         var checkSqlGeometryAndGeometryConversions2 = stations.Select(f => f.Geometry.AsSqlGeometry().AsWkt() == f.Geometry.Parse().AsSqlGeometry().AsWkt());
 

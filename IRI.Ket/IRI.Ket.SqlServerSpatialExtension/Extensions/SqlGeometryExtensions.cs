@@ -7,10 +7,11 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.Primitives.Esri;
 using IRI.Sta.ShapefileFormat.EsriType;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Sta.Spatial.GeoJsonFormat;
 
 namespace IRI.Extensions;
 

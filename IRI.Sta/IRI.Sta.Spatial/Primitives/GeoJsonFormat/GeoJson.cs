@@ -1,14 +1,15 @@
 ﻿using IRI.Sta.Common.Helpers;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 public static class GeoJson
 {
     public static IEnumerable<GeoJsonFeature> ReadFeatures(string fileName)
     {
-        var geoJsonString = System.IO.File.ReadAllText(fileName);
+        var geoJsonString = File.ReadAllText(fileName);
 
         //var parsedObject = Newtonsoft.Json.Linq.JObject.Parse(geoJsonString);
         //return parsedObject["features"].Select(f => JsonConvert.DeserializeObject<GeoJsonFeature>(f.ToString()));
@@ -17,7 +18,7 @@ public static class GeoJson
 
         return parsedObject?["features"]?.AsArray().Select(f => JsonHelper.Deserialize<GeoJsonFeature>(f.ToString())) ?? Enumerable.Empty<GeoJsonFeature>();
     }
-     
+
 
     public static IEnumerable<GeoJsonFeature> ParseToGeoJsonFeatures(string geoJsonFeatureSet)
     {
