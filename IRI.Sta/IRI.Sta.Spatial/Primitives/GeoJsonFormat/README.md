@@ -1,29 +1,25 @@
-# GeoJson Support in Maptor
+# 🌍 GeoJson Support in Maptor
 
 ![GeoJson](https://img.shields.io/badge/GeoJson-RFC_7946_compliant-blue) 
 ![.NET](https://img.shields.io/badge/.NET-Standard_2.0-green)
 
-A robust .NET Standard implementation of GeoJson (RFC 7946) for spatial data interchange, supporting read/write operations, conversion to/from geometry types, and validation.
+A .NET Standard implementation of GeoJson (RFC 7946) for spatial data interchange, supporting read/write operations, conversion to/from geometry types, and validation.
 
 ![geo](https://github.com/user-attachments/assets/21ea02ee-f3a9-4fc7-bfe7-1f9c15977fd6)
 
-## Features
+## 📌 Features
 
-- **Full RFC 7946 Compliance**:
-  - Parsing & serialization of all GeoJson types (Point, LineString, Polygon, etc.)
-  - Support for Feature Collections and Geometry Collections
-    
-- **Advanced Conversion**:
-  - Bidirectional conversion between GeoJson and native geometry types (WKT, WKB, ESRI Shapefile)
+- **Full GeoJSON Support**  
+  ✅ RFC 7946 compliant  
+  ✅ Geometry types: `Point`, `MultiPoint`, `LineString`, `MultiLineString`, `Polygon`, `MultiPolygon`  
+  ✅ Feature collections with properties
   
-- **Validation**:
-  - Coordinate system (CRS) awareness
-  - Anti-meridian crossing detection
+- **Conversion Tools**  
+  🔄 GeoJSON ↔ Geometry  
+  🔄 GeoJSON ↔ ESRI Shapefile
   
 
-## Installation
-
-Via NuGet Package Manager:
+## 📦 Installation
 ```bash
 dotnet add package IRI.Sta.Spatial
 ```
@@ -58,3 +54,13 @@ Convert Geometry to GeoJson
 var point = Geometry<Point>.Create(30, 10);
 var geoJsonPoint = point.AsGeoJson();
 ```
+
+
+## 📚 Documentation
+- [GeoJSON RFC 7946](https://tools.ietf.org/html/rfc7946)   
+
+## 🤝 Contributing
+Pull requests welcome! Please:
+1. Fork the repository  
+2. Create your feature branch  
+3. Submit a PR with tests  
