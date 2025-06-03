@@ -1,12 +1,12 @@
-﻿ //besmellahe rahmane rahim
- //Allahomma ajjel le-valiyek al-faraj
+﻿//besmellahe rahmane rahim
+//Allahomma ajjel le-valiyek al-faraj
 
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
- 
+namespace IRI.Sta.Spatial.Primitives;
+
 public struct QuasiEdge
 {
     private int first, second;
@@ -54,9 +54,9 @@ public struct QuasiEdge
 
     public QuasiEdge(int firstVertex, int secondVertex)
     {
-        this.first = firstVertex;
+        first = firstVertex;
 
-        this.second = secondVertex;
+        second = secondVertex;
     }
 
     //public QuasiEdge(int firstVertex, int secondVertex, int leftPolygon, int rightPolygon)

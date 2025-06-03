@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial.Primitives;
+namespace IRI.Sta.Spatial.Primitives.Esri;
 
 public class EsriConstants
 {

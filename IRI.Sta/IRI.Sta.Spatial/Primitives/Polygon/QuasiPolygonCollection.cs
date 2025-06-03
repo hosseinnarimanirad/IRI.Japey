@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
-public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
+public class QuasiPolygonCollection : IEnumerable<QuasiPolygon>
 {
     List<QuasiPolygon> polygons;
 
@@ -17,21 +17,21 @@ public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
     {
         polygons = new List<QuasiPolygon>();
 
-        this.codes = new List<int>();
+        codes = new List<int>();
     }
 
     public QuasiPolygonCollection(int length)
     {
-        this.polygons = new List<QuasiPolygon>(length);
+        polygons = new List<QuasiPolygon>(length);
 
-        this.codes = new List<int>(length);
+        codes = new List<int>(length);
     }
 
     public QuasiPolygonCollection(List<QuasiPolygon> polygons)
     {
         this.polygons = polygons;
 
-        this.codes = new List<int>();
+        codes = new List<int>();
 
         RefreshCodes(polygons);
     }
@@ -48,24 +48,24 @@ public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
 
     private void RefreshCodes(List<QuasiPolygon> polygons)
     {
-        this.codes.Clear();
+        codes.Clear();
 
         foreach (QuasiPolygon item in polygons)
         {
             int tempCode = item.GetHashCode();
 
-            if (!this.codes.Contains(tempCode))
+            if (!codes.Contains(tempCode))
             {
                 this.polygons.Add(item);
 
-                this.codes.Add(tempCode);
+                codes.Add(tempCode);
             }
         }
     }
 
     public bool ContainsCode(int polygonCode)
     {
-        return this.codes.Contains(polygonCode);
+        return codes.Contains(polygonCode);
     }
 
     public void Add(QuasiPolygon newPolygon)
@@ -90,9 +90,9 @@ public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
             throw new NotImplementedException();
         }
 
-        this.codes.RemoveAt(index);
+        codes.RemoveAt(index);
 
-        this.polygons.RemoveAt(index);
+        polygons.RemoveAt(index);
     }
 
     public void RemoveByCode(int polygonCode)
@@ -111,14 +111,14 @@ public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
     {
         int index = codes.IndexOf(polygonCode);
 
-        return (index == -1 ? null : polygons[codes.IndexOf(polygonCode)]);
+        return index == -1 ? null : polygons[codes.IndexOf(polygonCode)];
     }
 
     #region IEnumerable<QuasiTriangle> Members
 
     public IEnumerator<QuasiPolygon> GetEnumerator()
     {
-        return this.polygons.GetEnumerator();
+        return polygons.GetEnumerator();
     }
 
     #endregion
@@ -127,7 +127,7 @@ public  class QuasiPolygonCollection: IEnumerable<QuasiPolygon>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 
     #endregion

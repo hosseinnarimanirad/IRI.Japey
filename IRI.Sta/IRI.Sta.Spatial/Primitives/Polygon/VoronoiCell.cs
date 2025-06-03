@@ -2,12 +2,11 @@
 // Allahomma ajjel le-valiyek al-faraj
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class VoronoiCell : ConvexPolygon
 {
@@ -16,25 +15,25 @@ public class VoronoiCell : ConvexPolygon
     public VoronoiCell()
         : base(new PointCollection())
     {
-        this.PrimaryPoint = new Point();
+        PrimaryPoint = new Point();
     }
 
     public VoronoiCell(Point primaryPoint)
         : base(new PointCollection())
     {
-        this.PrimaryPoint = primaryPoint;
+        PrimaryPoint = primaryPoint;
     }
 
     public VoronoiCell(Point primaryPoint, PointCollection vertexes)
         : base(vertexes)
     {
-        this.PrimaryPoint = primaryPoint;
+        PrimaryPoint = primaryPoint;
     }
 
     public VoronoiCell(Point primaryPoint, PointCollection vertexes, List<int> neighbours)
         : base(vertexes, neighbours)
     {
-        this.PrimaryPoint = primaryPoint;
+        PrimaryPoint = primaryPoint;
     }
 
     public override string ToString()
@@ -44,12 +43,12 @@ public class VoronoiCell : ConvexPolygon
 
     public override int GetHashCode()
     {
-        return this.PrimaryPoint.GetHashCode();
+        return PrimaryPoint.GetHashCode();
     }
 
     public override bool Equals(object obj)
     {
-        return obj.GetType() == typeof(VoronoiCell) && (obj.ToString().Equals(this.ToString()));
+        return obj.GetType() == typeof(VoronoiCell) && obj.ToString().Equals(ToString());
     }
 
     public void Clip(Point firstPointLine, Point secondPointLine)

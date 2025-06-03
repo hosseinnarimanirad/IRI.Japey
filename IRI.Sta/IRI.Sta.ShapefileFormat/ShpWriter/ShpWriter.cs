@@ -4,7 +4,7 @@
 using System;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
-using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Spatial.Primitives.Esri;
 
 namespace IRI.Sta.ShapefileFormat.Writer;
 

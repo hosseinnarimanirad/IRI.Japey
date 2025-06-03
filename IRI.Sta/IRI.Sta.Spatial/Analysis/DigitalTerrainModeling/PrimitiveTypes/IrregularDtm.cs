@@ -4,6 +4,7 @@
 
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Sta.Spatial.DigitalTerrainModeling;
 

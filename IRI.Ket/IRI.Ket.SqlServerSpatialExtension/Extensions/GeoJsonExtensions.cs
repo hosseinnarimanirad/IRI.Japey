@@ -3,7 +3,7 @@
 using Microsoft.SqlServer.Types;
 
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
 
 namespace IRI.Extensions;

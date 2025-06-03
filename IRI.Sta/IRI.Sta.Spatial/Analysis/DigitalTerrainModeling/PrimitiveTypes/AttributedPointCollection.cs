@@ -3,6 +3,7 @@
 
 
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 //This class has some security issues: Points can be changed
 //without the change in the values or visa versa

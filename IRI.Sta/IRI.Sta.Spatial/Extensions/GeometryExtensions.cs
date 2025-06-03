@@ -5,9 +5,10 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Spatial.AdvancedStructures;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Spatial.GeoJsonFormat;
 
 
 namespace IRI.Extensions;
@@ -23,8 +24,7 @@ public static class Sta_GeometryExtensions
 
         return BoundingBox.GetMergedBoundingBox(envelopes, true);
     }
-
-
+     
     public static T Project<T>(this T point, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
     {
         if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
@@ -66,8 +66,7 @@ public static class Sta_GeometryExtensions
 
         return result;
     }
-
-
+     
     public static bool IsNullOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
     {
         return geometry is null ||
@@ -80,6 +79,7 @@ public static class Sta_GeometryExtensions
     {
         return geometry.IsNullOrEmpty() || !geometry.IsValid();
     }
+
 
     #region Geometry To GeoJson
 

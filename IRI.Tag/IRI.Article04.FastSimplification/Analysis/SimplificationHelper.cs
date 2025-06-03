@@ -10,7 +10,7 @@ using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Jab.Common.Helpers;
 
 namespace IRI.Article04.FastSimplification;
@@ -244,7 +244,7 @@ public static class SimplificationHelper
     {
         var fileName = $"{Path.GetFileNameWithoutExtension(shpFile)}";
 
-        List<int> renderSizes = [64, 128, 256, 512];
+        List<int> renderSizes = [64, 128, 256];
 
         //******************************************************
         //***************** read features **********************
@@ -272,7 +272,7 @@ public static class SimplificationHelper
 
         features = features.Where(f => !f.HasDuplicatePoints()).ToList();
 
-        var colros = new Dictionary<SimplificationType, System.Windows.Media.Color>()
+        var colors = new Dictionary<SimplificationType, System.Windows.Media.Color>()
         {
             {SimplificationType.RamerDouglasPeucker, Jab.Common.Helpers.ColorHelper.ToWpfColor("#6B007B")}, //light blue
             {SimplificationType.CumulativeTriangleRoutine, Jab.Common.Helpers.ColorHelper.ToWpfColor("#12239E")}, //light blue
@@ -282,8 +282,10 @@ public static class SimplificationHelper
             {SimplificationType.TriangleRoutine, System.Windows.Media.Colors.Green}, //light blue
         };
 
+
         var redColor = ColorHelper.ToWpfColor("#DE36A1");
         var grayColor = ColorHelper.ToWpfColor("#ADADAD");
+        var greenColor = ColorHelper.ToWpfColor("#08686E");
 
         int featureIndex = 0;
 
@@ -318,9 +320,12 @@ public static class SimplificationHelper
 
                 var screenSize = WebMercatorUtility.ToScreenSize(estimatedZoomLevel, boundingBox);
 
+                if (screenSize.Width * screenSize.Height <= 0)
+                    continue;
+
                 var scale = Math.Floor((1.0 / WebMercatorUtility.GetGoogleMapScale(estimatedZoomLevel)) / 1000.0) * 1000;
 
-                var originalFrame = feature.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, grayColor /*ColorHelper.ToWpfColor("#C0C0C0")*/, 2, 1), screenSize.Width, screenSize.Height, boundingBox);
+                var originalFrame = feature.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, redColor /*ColorHelper.ToWpfColor("#C0C0C0")*/, 2, 1), screenSize.Width, screenSize.Height, boundingBox);
 
                 GeoJsonFeatureSet originalFeatureSet = feature.AsGeoJsonFeatureSet();
 
@@ -340,7 +345,7 @@ public static class SimplificationHelper
                     if (simplified.Type == GeometryType.Point)
                         continue;
 
-                    var simplifiedFrame = simplified.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, redColor/*colros[method]*/, 2, 0.8), screenSize.Width, screenSize.Height, boundingBox);
+                    var simplifiedFrame = simplified.AsDrawingVisual(VisualParameters.Get(Colors.Transparent, greenColor /*colros[method]*/, 2, 1), screenSize.Width, screenSize.Height, boundingBox);
 
                     drawingVisuals.Add(simplifiedFrame!);
 

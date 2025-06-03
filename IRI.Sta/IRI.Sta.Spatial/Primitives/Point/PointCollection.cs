@@ -4,7 +4,7 @@
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Enums;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 [Serializable]
 public class PointCollection : IEnumerable<Point>
@@ -27,7 +27,7 @@ public class PointCollection : IEnumerable<Point>
     public PointCollection()
         : this(new List<Point>())
     {
-        this.queue.Enqueue(0);
+        queue.Enqueue(0);
     }
 
     public PointCollection(List<Point> points)
@@ -49,7 +49,7 @@ public class PointCollection : IEnumerable<Point>
         {
             Point tempValue = new Point(x[i], y[i]);
 
-            if (!this.points.Contains(tempValue))
+            if (!points.Contains(tempValue))
             {
                 Add(tempValue);
             }
@@ -72,7 +72,7 @@ public class PointCollection : IEnumerable<Point>
 
     public int Count
     {
-        get { return this.points.Count; }
+        get { return points.Count; }
     }
 
     public int LowerBoundIndex
@@ -85,25 +85,25 @@ public class PointCollection : IEnumerable<Point>
 
             double y = points[index].Y;
 
-            for (int i = 1; i < this.Count; i++)
+            for (int i = 1; i < Count; i++)
             {
-                if (this.points[i].Y < y)
+                if (points[i].Y < y)
                 {
                     index = i;
 
-                    x = this.points[i].X;
+                    x = points[i].X;
 
-                    y = this.points[i].Y;
+                    y = points[i].Y;
                 }
-                else if (this.points[i].Y == y)
+                else if (points[i].Y == y)
                 {
-                    if (this.points[i].X < x)
+                    if (points[i].X < x)
                     {
                         index = i;
 
-                        x = this.points[i].X;
+                        x = points[i].X;
 
-                        y = this.points[i].Y;
+                        y = points[i].Y;
                     }
                 }
             }
@@ -122,25 +122,25 @@ public class PointCollection : IEnumerable<Point>
 
             double y = points[index].Y;
 
-            for (int i = 1; i < this.Count; i++)
+            for (int i = 1; i < Count; i++)
             {
-                if (this.points[i].Y > y)
+                if (points[i].Y > y)
                 {
                     index = i;
 
-                    x = this.points[i].X;
+                    x = points[i].X;
 
-                    y = this.points[i].Y;
+                    y = points[i].Y;
                 }
-                else if (this.points[i].Y == y)
+                else if (points[i].Y == y)
                 {
-                    if (this.points[i].X > x)
+                    if (points[i].X > x)
                     {
                         index = i;
 
-                        x = this.points[i].X;
+                        x = points[i].X;
 
-                        y = this.points[i].Y;
+                        y = points[i].Y;
                     }
                 }
             }
@@ -224,31 +224,31 @@ public class PointCollection : IEnumerable<Point>
 
     public virtual void Add(Point newPoint)
     {
-        if (this.points.Contains(newPoint))
+        if (points.Contains(newPoint))
         {
             throw new NotImplementedException();
             //return;
         }
 
-        int newCode = this.GetNewCode();
+        int newCode = GetNewCode();
 
         Point temp = new Point(newPoint.X, newPoint.Y/*, newCode*/);
 
-        this.points.Add(temp);
+        points.Add(temp);
 
-        if (this.codes.Contains(newCode))
+        if (codes.Contains(newCode))
         {
             throw new NotImplementedException();
         }
 
-        this.codes.Add(newCode);
+        codes.Add(newCode);
     }
 
     public void Remove(Point point)
     {
-        int index = this.points.IndexOf(point);
+        int index = points.IndexOf(point);
 
-        this.RemoveAt(index);
+        RemoveAt(index);
     }
 
     public virtual void RemoveAt(int index)
@@ -258,11 +258,11 @@ public class PointCollection : IEnumerable<Point>
             throw new NotImplementedException();
         }
 
-        this.queue.Enqueue(this.codes[index]);
+        queue.Enqueue(codes[index]);
 
-        this.points.RemoveAt(index);
+        points.RemoveAt(index);
 
-        this.codes.RemoveAt(index);
+        codes.RemoveAt(index);
 
     }
 
@@ -275,38 +275,38 @@ public class PointCollection : IEnumerable<Point>
 
     public bool Contains(Point point)
     {
-        return this.points.Contains(point);
+        return points.Contains(point);
     }
 
     public int IndexOf(Point point)
     {
-        return this.points.LastIndexOf(point);
+        return points.LastIndexOf(point);
     }
 
     public int IndexOf(int pointCode)
     {
-        return this.codes.IndexOf(pointCode);
+        return codes.IndexOf(pointCode);
     }
 
     public Point GetPoint(int pointCode)
     {
-        return this.points[this.IndexOf(pointCode)];
+        return points[IndexOf(pointCode)];
     }
 
     public int GetNewCode()
     {
-        if (this.queue.Count < 1)
+        if (queue.Count < 1)
         {
-            return this.Count;
+            return Count;
         }
         else
         {
-            return this.queue.Dequeue();
+            return queue.Dequeue();
         }
     }
 
     #endregion
-    
+
     /*Sort
     //public void Sort(IRI.Sta.DataStructures.SortDirection direction, PointComparisonPriority priority)
     //{
@@ -317,7 +317,7 @@ public class PointCollection : IEnumerable<Point>
     //    //RefreshCodes();
     //}
     */
-     
+
     #region IEnumerable<Point> Members
 
     public IEnumerator<Point> GetEnumerator()
@@ -331,7 +331,7 @@ public class PointCollection : IEnumerable<Point>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 
     #endregion

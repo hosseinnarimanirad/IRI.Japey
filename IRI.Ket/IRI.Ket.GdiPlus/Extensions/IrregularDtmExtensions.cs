@@ -1,8 +1,7 @@
 ﻿
 using IRI.Sta.Common;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.DigitalTerrainModeling; 
-using IRI.Sta.Spatial;
+using IRI.Sta.Spatial.DigitalTerrainModeling;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Extensions;

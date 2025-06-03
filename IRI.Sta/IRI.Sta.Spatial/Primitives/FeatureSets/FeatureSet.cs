@@ -1,10 +1,6 @@
 ﻿using IRI.Extensions;
-using IRI.Sta.Common.Abstrations;
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using IRI.Sta.Common.Primitives; 
+using IRI.Sta.Common.Abstrations; 
 
 namespace IRI.Sta.Spatial.Primitives;
 

@@ -15,7 +15,7 @@ using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Analysis;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Spatial.Model.GeoJsonFormat;
+using IRI.Sta.Spatial.GeoJsonFormat;
 
 
 namespace IRI.Jab.Common.Helpers;

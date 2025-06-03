@@ -2,7 +2,7 @@
 using IRI.Sta.Spatial.Primitives; 
 using System.Text.Json.Serialization;
 
-namespace IRI.Sta.Spatial.Model.GeoJsonFormat;
+namespace IRI.Sta.Spatial.GeoJsonFormat;
 
 //[JsonConverter(typeof(GeoJsonGeometryConverter))]
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
@@ -22,12 +22,15 @@ public interface IGeoJsonGeometry
 
     bool IsNullOrEmpty();
 
-    string Serialize(bool indented, bool removeSpaces = false);
-
     int NumberOfGeometries();
 
     int NumberOfPoints();
 
+    string Serialize(bool indented, bool removeSpaces = false);
+
     Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true);
-     
+
+    GeoJsonFeature AsFeature();
+
+    GeoJsonFeatureSet AsFeatureSet();
 }

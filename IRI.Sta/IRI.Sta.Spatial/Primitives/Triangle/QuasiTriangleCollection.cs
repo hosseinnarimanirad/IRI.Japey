@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
 {
@@ -19,18 +19,18 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
     {
         triangles = new List<QuasiTriangle>();
 
-        this.codes = new List<int>();
+        codes = new List<int>();
 
-        this.queue = new Queue<int>();
+        queue = new Queue<int>();
 
         queue.Enqueue(0);
     }
 
     public QuasiTriangleCollection(int length)
     {
-        this.triangles = new List<QuasiTriangle>(length);
+        triangles = new List<QuasiTriangle>(length);
 
-        this.codes = new List<int>(length);
+        codes = new List<int>(length);
 
         queue.Enqueue(0);
     }
@@ -39,7 +39,7 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
     {
         this.triangles = new List<QuasiTriangle>();
 
-        this.codes = new List<int>();
+        codes = new List<int>();
 
         RefreshCodes(triangles);
     }
@@ -56,29 +56,29 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
 
     private void RefreshCodes(List<QuasiTriangle> triangles)
     {
-        this.codes.Clear();
+        codes.Clear();
 
         foreach (QuasiTriangle item in triangles)
         {
             int tempCode = item.GetHashCode();
 
-            if (!this.codes.Contains(tempCode))
+            if (!codes.Contains(tempCode))
             {
                 this.triangles.Add(item);
 
-                this.codes.Add(tempCode);
+                codes.Add(tempCode);
             }
         }
     }
 
     public bool ContainsCode(int triangleCode)
     {
-        return this.codes.Contains(triangleCode);
+        return codes.Contains(triangleCode);
     }
 
     public bool Contains(QuasiTriangle triangle)
     {
-        return this.triangles.Contains(triangle);
+        return triangles.Contains(triangle);
     }
 
     public void Add(QuasiTriangle newTriangle)
@@ -108,11 +108,11 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
             throw new NotImplementedException();
         }
 
-        this.queue.Enqueue(codes[index]);
+        queue.Enqueue(codes[index]);
 
-        this.codes.RemoveAt(index);
+        codes.RemoveAt(index);
 
-        this.triangles.RemoveAt(index);
+        triangles.RemoveAt(index);
     }
 
     public void RemoveByCode(int triangleCode)
@@ -126,19 +126,19 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
     {
         int index = codes.IndexOf(triangleCode);
 
-        return (index == -1 ? null : triangles[index]);
+        return index == -1 ? null : triangles[index];
     }
 
     public int GetNewCode()
     {
         //this.queue.Enqueue(
-        if (this.queue.Count < 1)
+        if (queue.Count < 1)
         {
-            return this.Count;
+            return Count;
         }
         else
         {
-            return this.queue.Dequeue();
+            return queue.Dequeue();
         }
     }
 
@@ -146,7 +146,7 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
 
     public IEnumerator<QuasiTriangle> GetEnumerator()
     {
-        return this.triangles.GetEnumerator();
+        return triangles.GetEnumerator();
     }
 
     #endregion
@@ -155,7 +155,7 @@ public class QuasiTriangleCollection : IEnumerable<QuasiTriangle>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 
     #endregion

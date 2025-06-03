@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class Triangle
 {
@@ -115,44 +115,44 @@ public class Triangle
 
     public int FirstSecondNeighbour
     {
-        get { return this.firstSecondNeighbour; }
-        set { this.firstSecondNeighbour = value; }
+        get { return firstSecondNeighbour; }
+        set { firstSecondNeighbour = value; }
     }
 
     public int SecondThirdNeighbour
     {
-        get { return this.secondThirdNeighbour; }
-        set { this.secondThirdNeighbour = value; }
+        get { return secondThirdNeighbour; }
+        set { secondThirdNeighbour = value; }
     }
 
     public int ThirdFirstNeighbour
     {
-        get { return this.thirdFirstNeighbour; }
-        set { this.thirdFirstNeighbour = value; }
+        get { return thirdFirstNeighbour; }
+        set { thirdFirstNeighbour = value; }
     }
 
     public Triangle()
     {
-        this.firstSecondNeighbour = -1;
+        firstSecondNeighbour = -1;
 
-        this.secondThirdNeighbour = -1;
+        secondThirdNeighbour = -1;
 
-        this.thirdFirstNeighbour = -1;
+        thirdFirstNeighbour = -1;
     }
 
     public Triangle(Point first, Point second, Point third)
     {
-        this.firstPoint = first;
+        firstPoint = first;
 
-        this.secondPoint = second;
+        secondPoint = second;
 
-        this.thirdPoint = third;
+        thirdPoint = third;
 
-        this.firstSecondNeighbour = -1;
+        firstSecondNeighbour = -1;
 
-        this.secondThirdNeighbour = -1;
+        secondThirdNeighbour = -1;
 
-        this.thirdFirstNeighbour = -1;
+        thirdFirstNeighbour = -1;
     }
 
     public override string ToString()
@@ -162,7 +162,7 @@ public class Triangle
 
     public override int GetHashCode()
     {
-        return this.ToString().GetHashCode();
+        return ToString().GetHashCode();
     }
 
     public override bool Equals(object obj)
@@ -171,9 +171,9 @@ public class Triangle
         {
             Triangle tempTriangle = (Triangle)obj;
 
-            return tempTriangle.FirstPoint.Equals(this.FirstPoint) &&
-                    tempTriangle.SecondPoint.Equals(this.SecondPoint) &&
-                    tempTriangle.ThirdPoint.Equals(this.ThirdPoint);
+            return tempTriangle.FirstPoint.Equals(FirstPoint) &&
+                    tempTriangle.SecondPoint.Equals(SecondPoint) &&
+                    tempTriangle.ThirdPoint.Equals(ThirdPoint);
         }
 
         return false;
@@ -181,11 +181,11 @@ public class Triangle
 
     public double CalculateArea()
     {
-        double firstSecondLength = this.FirstPoint.DistanceTo(this.SecondPoint);
+        double firstSecondLength = FirstPoint.DistanceTo(SecondPoint);
 
-        double secondThirdLength = this.SecondPoint.DistanceTo(this.ThirdPoint);
+        double secondThirdLength = SecondPoint.DistanceTo(ThirdPoint);
 
-        double thirdFirstLength = this.ThirdPoint.DistanceTo(this.FirstPoint);
+        double thirdFirstLength = ThirdPoint.DistanceTo(FirstPoint);
 
         double semiPerimeter = (firstSecondLength + secondThirdLength + thirdFirstLength) / 2;
 
@@ -203,7 +203,7 @@ public class Triangle
 
         //double thirdFirstLength = this.ThirdPoint.CalculateDistance(this.FirstPoint);
 
-        return (this.FirstSecondSide + this.SecondThirdSide + this.ThirdFirstSide);
+        return FirstSecondSide + SecondThirdSide + ThirdFirstSide;
     }
 
     //public bool HasThePoint(int pointCode)
@@ -306,9 +306,9 @@ public class Triangle
     /// <returns></returns>
     public Point CalculateCentroid()
     {
-        double x = (this.FirstPoint.X + this.SecondPoint.X + this.ThirdPoint.X) / 3;
+        double x = (FirstPoint.X + SecondPoint.X + ThirdPoint.X) / 3;
 
-        double y = (this.FirstPoint.Y + this.SecondPoint.Y + this.ThirdPoint.Y) / 3;
+        double y = (FirstPoint.Y + SecondPoint.Y + ThirdPoint.Y) / 3;
 
         return new Point(x, y);
     }
@@ -319,11 +319,11 @@ public class Triangle
     /// <returns></returns>
     public Point CalculateCircumcenter()
     {
-        double x1 = this.FirstPoint.X; double y1 = this.FirstPoint.Y;
+        double x1 = FirstPoint.X; double y1 = FirstPoint.Y;
 
-        double x2 = this.SecondPoint.X; double y2 = this.SecondPoint.Y;
+        double x2 = SecondPoint.X; double y2 = SecondPoint.Y;
 
-        double x3 = this.ThirdPoint.X; double y3 = this.ThirdPoint.Y;
+        double x3 = ThirdPoint.X; double y3 = ThirdPoint.Y;
 
         double temp = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
 
@@ -340,16 +340,16 @@ public class Triangle
     /// <returns></returns>
     public Point CalculateIncenter()
     {
-        double a = this.SecondThirdSide;
+        double a = SecondThirdSide;
 
-        double b = this.ThirdFirstSide;
+        double b = ThirdFirstSide;
 
-        double c = this.FirstSecondSide;
+        double c = FirstSecondSide;
 
         double primeter = a + b + c;
 
-        return new Point((a * this.FirstPoint.X + b * this.SecondPoint.X + c * this.ThirdPoint.X) / primeter,
-                            (a * this.FirstPoint.Y + b * this.SecondPoint.Y + c * this.ThirdPoint.Y) / primeter);
+        return new Point((a * FirstPoint.X + b * SecondPoint.X + c * ThirdPoint.X) / primeter,
+                            (a * FirstPoint.Y + b * SecondPoint.Y + c * ThirdPoint.Y) / primeter);
     }
     //((a2 + b2 − c2)(a2  − b2 + c2):(a2 + b2  − c2)( − a2 + b2 + c2):(a2 − b2 + c2)( − a2 + b2 + c2)).
 

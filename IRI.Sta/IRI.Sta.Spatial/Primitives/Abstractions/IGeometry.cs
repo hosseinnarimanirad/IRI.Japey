@@ -1,6 +1,4 @@
-﻿using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using System.Collections.Generic;
+﻿using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.Primitives;

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Spatial;
+namespace IRI.Sta.Spatial.Primitives;
 
 public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
 {
@@ -15,23 +15,23 @@ public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
 
     public VoronoiPointCollection()
     {
-        this.points = new List<VoronoiPoint>();
+        points = new List<VoronoiPoint>();
 
-        this.codes = new List<int>();
+        codes = new List<int>();
     }
 
     public VoronoiPointCollection(int length)
     {
-        this.points = new List<VoronoiPoint>(length);
+        points = new List<VoronoiPoint>(length);
 
-        this.codes = new List<int>(length);
+        codes = new List<int>(length);
     }
 
     public VoronoiPointCollection(List<VoronoiPoint> points)
     {
         this.points = points;
 
-        this.codes = new List<int>();
+        codes = new List<int>();
 
         RefreshCodes();
     }
@@ -48,34 +48,34 @@ public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
 
     private void RefreshCodes()
     {
-        this.codes.RemoveRange(0, this.codes.Count);
+        codes.RemoveRange(0, codes.Count);
 
         foreach (VoronoiPoint item in points)
         {
             int tempCode = item.GetHashCode();
 
-            if (!this.codes.Contains(tempCode))
+            if (!codes.Contains(tempCode))
             {
-                this.points.Add(item);
+                points.Add(item);
 
-                this.codes.Add(tempCode);
+                codes.Add(tempCode);
             }
         }
     }
 
     public bool ContainsCode(int pointCode)
     {
-        return this.codes.Contains(pointCode);
+        return codes.Contains(pointCode);
     }
 
     public void Add(VoronoiPoint newVoronoiPoint)
     {
         int tempHashCode = newVoronoiPoint.GetHashCode();
-        
+
         if (codes.Contains(tempHashCode))
         {
             throw new NotImplementedException();
-           
+
         }
 
         points.Add(newVoronoiPoint);
@@ -90,9 +90,9 @@ public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
             throw new NotImplementedException();
         }
 
-        this.codes.RemoveAt(index);
+        codes.RemoveAt(index);
 
-        this.points.RemoveAt(index);
+        points.RemoveAt(index);
     }
 
     public void RemoveByCode(int pointCode)
@@ -114,11 +114,11 @@ public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
 
     public VoronoiPoint GetPointByTriangleCode(int triangleCode)
     {
-        for (int i = 0; i < this.points.Count; i++)
+        for (int i = 0; i < points.Count; i++)
         {
-            if (this.points[i].TriangleCode==triangleCode)
+            if (points[i].TriangleCode == triangleCode)
             {
-                return this.points[i];
+                return points[i];
             }
         }
 
@@ -138,7 +138,7 @@ public class VoronoiPointCollection : IEnumerable<VoronoiPoint>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
-        return this.GetEnumerator();
+        return GetEnumerator();
     }
 
     #endregion

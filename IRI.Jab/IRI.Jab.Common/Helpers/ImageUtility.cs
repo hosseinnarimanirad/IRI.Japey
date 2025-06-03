@@ -183,6 +183,9 @@ public static class ImageUtility
 
     public static void MergeAndSave(string fileName, List<DrawingVisual> drawingVisuals, int width, int height, BitmapEncoder? preferedEncoder = null)
     {
+        if (width == 0 || height == 0)
+            return;
+
         RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
 
         foreach (var drawingVisual in drawingVisuals)
