@@ -22,12 +22,15 @@ public interface IGeoJsonGeometry
 
     bool IsNullOrEmpty();
 
-    string Serialize(bool indented, bool removeSpaces = false);
-
     int NumberOfGeometries();
 
     int NumberOfPoints();
 
+    string Serialize(bool indented, bool removeSpaces = false);
+
     Geometry<Point> TransformToWeMercator(bool isLongitudeFirst = true);
-     
+
+    GeoJsonFeature AsFeature();
+
+    GeoJsonFeatureSet AsFeatureSet();
 }

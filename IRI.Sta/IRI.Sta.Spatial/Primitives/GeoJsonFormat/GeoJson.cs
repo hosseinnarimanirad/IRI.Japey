@@ -1,7 +1,5 @@
-﻿using IRI.Sta.Common.Helpers;
-using IRI.Sta.Spatial.GeoJsonFormat;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Nodes;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Sta.Spatial.GeoJsonFormat;
 
@@ -39,5 +37,19 @@ public static class GeoJson
         return removeSpaces ? result.Replace(" ", string.Empty) : result;
     }
 
+    public static IGeoJsonGeometry Deserialize(string geoJsonString)
+    {
+        return JsonHelper.Deserialize<IGeoJsonGeometry>(geoJsonString);
+    }
+
+    internal static GeoJsonFeature AsFeature(IGeoJsonGeometry geometry)
+    {
+        return GeoJsonFeature.Create(geometry);
+    }
+
+    internal static GeoJsonFeatureSet AsFeatureSet(IGeoJsonGeometry geometry)
+    {
+        return new GeoJsonFeatureSet() { Features = new List<GeoJsonFeature>() { AsFeature(geometry) }, TotalFeatures = 1 };
+    }
 
 }

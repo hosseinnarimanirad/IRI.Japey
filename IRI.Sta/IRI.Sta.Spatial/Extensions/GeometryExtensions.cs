@@ -24,8 +24,7 @@ public static class Sta_GeometryExtensions
 
         return BoundingBox.GetMergedBoundingBox(envelopes, true);
     }
-
-
+     
     public static T Project<T>(this T point, SrsBase sourceSrs, SrsBase targetSrs) where T : IPoint, new()
     {
         if (sourceSrs.Ellipsoid.AreTheSame(targetSrs.Ellipsoid))
@@ -67,8 +66,7 @@ public static class Sta_GeometryExtensions
 
         return result;
     }
-
-
+     
     public static bool IsNullOrEmpty<T>(this Geometry<T> geometry) where T : IPoint, new()
     {
         return geometry is null ||
@@ -81,6 +79,7 @@ public static class Sta_GeometryExtensions
     {
         return geometry.IsNullOrEmpty() || !geometry.IsValid();
     }
+
 
     #region Geometry To GeoJson
 

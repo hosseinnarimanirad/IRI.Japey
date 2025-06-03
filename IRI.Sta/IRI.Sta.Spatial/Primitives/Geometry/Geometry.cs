@@ -13,7 +13,7 @@ namespace IRI.Sta.Spatial.Primitives;
 
 public class Geometry<T> : IGeometry where T : IPoint, new()
 {
-    static readonly T NullPoint = default(T);
+    static readonly T? NullPoint = default;
 
     private static readonly Geometry<T> _empty = new Geometry<T>();
 
@@ -141,6 +141,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Simple Methods
 
     public override string ToString()
@@ -249,6 +250,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Find
 
     public bool TryFindPoint(T point, out int pointIndex, out int geometryIndex, out int subGeometryIndex)
@@ -345,6 +347,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Analysis
 
@@ -953,6 +956,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Simplification Measures
     // ref: McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
 
@@ -1112,6 +1116,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Geometry Manipulation
 
@@ -1665,6 +1670,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Project & Srs
 
     public SrsBase GetSrs()
@@ -1718,6 +1724,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Ogc Wkb & Wkt
 
     public static Geometry<Point> FromWkt(string wktString, int srid)
@@ -1746,6 +1753,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Sql Server Native Binary
 
@@ -1786,7 +1794,15 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
-    public IRI.Sta.Spatial.GeoJsonFormat.GeoJsonFeatureSet AsGeoJsonFeatureSet()
+
+    #region Conversions
+
+    public Feature<T> AsFeature()
+    {
+        return new Feature<T>(this);
+    }
+
+    public GeoJsonFeatureSet AsGeoJsonFeatureSet()
     {
         return new GeoJsonFeatureSet()
         {
@@ -1797,6 +1813,8 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             }
         };
     }
+
+    #endregion
 
     #region Static Create
 
@@ -1976,6 +1994,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Static Methods
 
 
@@ -2038,12 +2057,15 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     public static Geometry<T> ParseLineStringToGeometry(
-        double[][] geoCoordinates,
+        double[][]? geoCoordinates,
         GeometryType geometryType,
         bool isRing,
         bool isLongitudeFirst = true,
         int srid = SridHelper.GeodeticWGS84)
     {
+        if (geoCoordinates.IsNullOrEmpty())
+            return Geometry<T>.CreateEmpty(geometryType, srid);
+        
         if (isRing)
         {
             var numberOfPoints = geoCoordinates.Length;
@@ -2064,6 +2086,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
 
     #endregion
+
 
     #region Area
 
@@ -2171,6 +2194,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Length
 
     public double CalculateEuclideanLength()
@@ -2228,6 +2252,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Density
 
@@ -2305,6 +2330,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Angularity
 
     /// <summary>
@@ -2374,6 +2400,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Curvilinearity
 
@@ -2453,6 +2480,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
+
 
     #region Cleansing
 
@@ -2592,8 +2620,4 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     #endregion
 
 
-    public Feature<T> AsFeature()
-    {
-        return new Feature<T>(this);
-    }
 }
