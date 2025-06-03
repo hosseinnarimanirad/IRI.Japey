@@ -29,7 +29,7 @@ dotnet add package IRI.Sta.Spatial
 ```
 
 ## 🚀 Quick Start
-Basic Parsing
+Basic Parsing from file
 
 ```C#
 using IRI.Sta.Spatial.GeoJsonFormat;
@@ -41,4 +41,20 @@ foreach (var feature in features)
 {
     Console.WriteLine($"Feature: {feature.Type}");
 }
+```
+
+Deserialize GeoJson geometry
+
+```C#
+var multiPointString = "{\"type\": \"MultiPoint\", \"coordinates\": [[10.1, 40.1], [40.1, 30.1], [20.1, 20.1], [30.1, 10.1]]}";
+IGeoJsonGeometry geoJsonMultiPoint = GeoJson.Deserialize(multiPointString);
+
+var lineStringString = "{\"type\": \"LineString\", \"coordinates\": [[30.1, 10.1], [10.1, 30.1], [40.1, 40.1]]}";
+IGeoJsonGeometry lineString = GeoJson.Deserialize(lineStringString);
+```
+
+Convert Geometry to GeoJson
+```C#
+var point = Geometry<Point>.Create(30, 10);
+var geoJsonPoint = point.AsGeoJson();
 ```
