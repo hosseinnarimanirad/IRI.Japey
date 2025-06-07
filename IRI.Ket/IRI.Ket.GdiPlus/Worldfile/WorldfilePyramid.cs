@@ -8,6 +8,7 @@ using IRI.Sta.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.Spatial.Model;
+using IRI.Sta.Common.Helpers;
 
 namespace IRI.Ket.GdiPlus.WorldfileFormat;
 

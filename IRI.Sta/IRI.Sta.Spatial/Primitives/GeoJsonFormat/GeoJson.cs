@@ -14,9 +14,15 @@ public static class GeoJson
 
         var parsedObject = JsonNode.Parse(geoJsonString);
 
-        return parsedObject?["features"]?.AsArray().Select(f => JsonHelper.Deserialize<GeoJsonFeature>(f.ToString())) ?? Enumerable.Empty<GeoJsonFeature>();
+        return parsedObject?["features"]?.AsArray().Select(f => JsonHelper.Deserialize<GeoJsonFeature>(f.ToString())).ToList() ?? Enumerable.Empty<GeoJsonFeature>().ToList();
     }
 
+    public static void SaveFeatures(string fileName, IEnumerable<GeoJsonFeature> features)
+    {
+        var content = JsonHelper.Serialize(features);
+
+        File.WriteAllText(fileName, content);
+    }
 
     public static IEnumerable<GeoJsonFeature> ParseToGeoJsonFeatures(string geoJsonFeatureSet)
     {

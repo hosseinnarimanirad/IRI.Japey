@@ -1,6 +1,5 @@
 ﻿using IRI.Sta.Common.Helpers;
 using IRI.Sta.Spatial.GeoJsonFormat;
-using IRI.Sta.Spatial.Helpers;
 using System.Text.Json.Serialization;
 
 namespace IRI.Sta.Spatial.GeoJsonFormat;
