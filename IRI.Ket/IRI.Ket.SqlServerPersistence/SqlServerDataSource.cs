@@ -1,11 +1,11 @@
-﻿using Microsoft.SqlServer.Types;
+﻿using System.Data;
 using System.Data.SqlClient;
-using IRI.Sta.Spatial.Primitives;
-using System.Data;
+using Microsoft.SqlServer.Types;
+
 using IRI.Extensions;
-using IRI.Sta.Common.Model;
-using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.Persistence.DataSources;
 using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.SqlServerPersistence;
@@ -299,25 +299,25 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
 
     #region Get Geometries
 
-    //3857: web mercator; 102100: web mercator
-    public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
-    {
-        var srid = GetSrid();
+    ////3857: web mercator; 102100: web mercator
+    //public override List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
+    //{
+    //    var srid = GetSrid();
 
-        var whereClause = GetWhereClause(_spatialColumnName, boundingBox, srid);
+    //    var whereClause = GetWhereClause(_spatialColumnName, boundingBox, srid);
 
-        return this.GetGeometries(whereClause);
-    }
+    //    return this.GetGeometries(whereClause);
+    //}
 
-    public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
-    {
-        if (geometry == null)
-        {
-            return GetGeometries();
-        }
+    //public override List<Geometry<Point>> GetGeometries(Geometry<Point> geometry)
+    //{
+    //    if (geometry == null)
+    //    {
+    //        return GetGeometries();
+    //    }
 
-        return GetGeometriesWhereIntersects(geometry.AsWkt());
-    }
+    //    return GetGeometriesWhereIntersects(geometry.AsWkt());
+    //}
 
     /// <summary>
     /// 
@@ -378,10 +378,10 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
 
     public List<Geometry<Point>> GetGeometriesWhereIntersects(byte[] wkbGeometryFilter)
     {
-        if (wkbGeometryFilter == null)
-        {
-            return GetGeometries();
-        }
+        //if (wkbGeometryFilter == null)
+        //{
+        //    return GetGeometries();
+        //}
 
         return SelectGeometries(MakeSelectCommandWithWkb(wkbGeometryFilter, true));
     }
@@ -389,97 +389,97 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
     #endregion
 
 
-    #region Get Geometry Label Pair
+    //#region Get Geometry Label Pair
 
-    public List<NamedGeometry> GetGeometryLabelPairs(string whereClause)
-    {
-        SqlConnection connection = new SqlConnection(_connectionString);
+    //public List<NamedGeometry> GetGeometryLabelPairs(string whereClause)
+    //{
+    //    SqlConnection connection = new SqlConnection(_connectionString);
 
-        //SqlCommand command =
-        //    new SqlCommand(
-        //        string.Format(CultureInfo.InvariantCulture, "SELECT {0}, {1} FROM {2} {3} ", _spatialColumnName, _labelColumnName, GetTable(), whereClause ?? string.Empty),
-        //        connection);
+    //    //SqlCommand command =
+    //    //    new SqlCommand(
+    //    //        string.Format(CultureInfo.InvariantCulture, "SELECT {0}, {1} FROM {2} {3} ", _spatialColumnName, _labelColumnName, GetTable(), whereClause ?? string.Empty),
+    //    //        connection);
 
-        var commandText = string.IsNullOrWhiteSpace(_labelColumnName) ?
-            MakeSelectCommand(whereClause, true) :
-            FormattableString.Invariant($"SELECT {_spatialColumnName}, {_labelColumnName} FROM {GetTable()} {MakeWhereClause(whereClause)} ");
+    //    var commandText = string.IsNullOrWhiteSpace(_labelColumnName) ?
+    //        MakeSelectCommand(whereClause, true) :
+    //        FormattableString.Invariant($"SELECT {_spatialColumnName}, {_labelColumnName} FROM {GetTable()} {MakeWhereClause(whereClause)} ");
 
-        SqlCommand command = new SqlCommand(commandText, connection);
+    //    SqlCommand command = new SqlCommand(commandText, connection);
 
-        connection.Open();
+    //    connection.Open();
 
-        var result = new List<NamedGeometry>();
+    //    var result = new List<NamedGeometry>();
 
-        using (SqlDataReader reader = command.ExecuteReader())
-        {
+    //    using (SqlDataReader reader = command.ExecuteReader())
+    //    {
 
-            if (!reader.HasRows)
-            {
-                return new List<NamedGeometry>();
-            }
+    //        if (!reader.HasRows)
+    //        {
+    //            return new List<NamedGeometry>();
+    //        }
 
-            if (string.IsNullOrWhiteSpace(_labelColumnName))
-            {
-                while (reader.Read())
-                {
-                    result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));
-                }
-            }
-            else
-            {
-                while (reader.Read())
-                {
-                    result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), reader[1]?.ToString()));
-                }
-            }
-        }
+    //        if (string.IsNullOrWhiteSpace(_labelColumnName))
+    //        {
+    //            while (reader.Read())
+    //            {
+    //                result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));
+    //            }
+    //        }
+    //        else
+    //        {
+    //            while (reader.Read())
+    //            {
+    //                result.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), reader[1]?.ToString()));
+    //            }
+    //        }
+    //    }
 
-        connection.Close();
+    //    connection.Close();
 
-        return result;
-    }
+    //    return result;
+    //}
 
-    protected List<NamedGeometry> SelectGeometryLabelPairs(string selectQuery, string connectionString = null)
-    {
-        if (connectionString == null)
-        {
-            connectionString = _connectionString;
-        }
+    //protected List<NamedGeometry> SelectGeometryLabelPairs(string selectQuery, string connectionString = null)
+    //{
+    //    if (connectionString == null)
+    //    {
+    //        connectionString = _connectionString;
+    //    }
 
-        SqlConnection connection = new SqlConnection(connectionString);
+    //    SqlConnection connection = new SqlConnection(connectionString);
 
-        connection.Open();
+    //    connection.Open();
 
-        var command = new SqlCommand(selectQuery, connection);
+    //    var command = new SqlCommand(selectQuery, connection);
 
-        List<NamedGeometry> geometries = new List<NamedGeometry>();
+    //    List<NamedGeometry> geometries = new List<NamedGeometry>();
 
-        using (var reader = command.ExecuteReader())
-        {
-            if (!reader.HasRows)
-            {
-                return new List<NamedGeometry>();
-            }
+    //    using (var reader = command.ExecuteReader())
+    //    {
+    //        if (!reader.HasRows)
+    //        {
+    //            return new List<NamedGeometry>();
+    //        }
 
-            while (reader.Read())
-            {
-                //approach 1
-                //geometries.Add(SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes((byte[])reader[0]), srid).MakeValid()); //4100-4200 ms
-                //approach 2
-                //geometries.Add(SqlGeometry.Deserialize(reader.GetSqlBytes(0))); //3220 ms
+    //        while (reader.Read())
+    //        {
+    //            //approach 1
+    //            //geometries.Add(SqlGeometry.STGeomFromWKB(new System.Data.SqlTypes.SqlBytes((byte[])reader[0]), srid).MakeValid()); //4100-4200 ms
+    //            //approach 2
+    //            //geometries.Add(SqlGeometry.Deserialize(reader.GetSqlBytes(0))); //3220 ms
 
-                //approach 3 
-                geometries.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));//2565 ms
+    //            //approach 3 
+    //            geometries.Add(new NamedGeometry(((SqlGeometry)reader[0]).AsGeometry(), string.Empty));//2565 ms
 
-            }
-        }
+    //        }
+    //    }
 
-        connection.Close();
+    //    connection.Close();
 
-        return geometries;
-    }
+    //    return geometries;
+    //}
 
-    #endregion
+    //#endregion
 
 
     //#region Get Entire Feature
@@ -683,7 +683,7 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
 
     //
 
-    protected string MakeWhereClause(string whereClause)
+    protected string MakeWhereClause(string? whereClause)
     {
         return string.IsNullOrWhiteSpace(whereClause) ? string.Empty : FormattableString.Invariant($" WHERE ({whereClause}) ");
     }

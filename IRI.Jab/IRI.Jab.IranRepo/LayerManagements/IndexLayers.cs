@@ -21,15 +21,9 @@ public static class IndexLayers
 {
     public static VectorLayer GetLayerFromShapefile(string layerName, string filePath, string color)
     {
-        Func<Point, Point> mapFunc = MapProjects.GeodeticWgs84ToWebMercator;
-
         var features = ShapefileDataSourceFactory.Create(filePath, new WebMercator());
 
-        var geo = features.GetGeometries();
-
-        //ShapefileDataSource<SqlFeature> shapes = new ShapefileDataSource<SqlFeature>(filePath, "Geo", SridHelper.GeodeticWGS84, Encoding.UTF8, true, null);
-
-        //var geo = features.GetGeometries().Select(g => g.Transform(mapFunc, SridHelper.WebMercator)).ToList();
+        var geo = features.GetAsFeatureSet().Features.Select(f => f.TheGeometry).ToList();
 
         return new VectorLayer(layerName, geo, new VisualParameters(null, color, 1, 1), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
     }
@@ -39,7 +33,7 @@ public static class IndexLayers
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex250k");
 
         var source = OrdinaryJsonListSource<Index250k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn);
-         
+
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 5, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
         return new VectorLayer("اندکس ۲۵۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual, ScaleInterval.Create(4))
@@ -55,7 +49,7 @@ public static class IndexLayers
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex100k");
 
         var source = OrdinaryJsonListSource<Index100k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn);
-         
+
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 3, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
         return new VectorLayer("اندکس ۱۰۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.Create(5))
@@ -71,7 +65,7 @@ public static class IndexLayers
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex50k");
 
         var source = OrdinaryJsonListSource<Index50k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNumber);
-         
+
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
         return new VectorLayer("اندکس ۵۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.Create(9))
@@ -87,7 +81,7 @@ public static class IndexLayers
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex25k");
 
         var source = OrdinaryJsonListSource<Index25k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNumber);
-         
+
         VisualParameters parameters = new VisualParameters(null, "#88FF8130", 2, .8) { Visibility = System.Windows.Visibility.Collapsed, DashStyle = DashStyles.Dot };
 
         return new VectorLayer("اندکس ۲۵ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.Create(10))
@@ -101,7 +95,7 @@ public static class IndexLayers
     public static List<ILayer> GetLayers(MapPresenter map)
     {
         var index250k = IndexLayers.GetIndex250kLayer();
-         
+
         var fontFamily = new FontFamily("Times New Roman");
 
         var index250kLabels = new LabelParameters(ScaleInterval.Create(7), 12, index250k.VisualParameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
@@ -118,7 +112,7 @@ public static class IndexLayers
         index100k.Commands = GetCommands<Index100k>(map, index100k, index100kLabels);
 
         return new List<ILayer>() { index250k, index100k };
-         
+
     }
 
     private static List<ILegendCommand> GetCommands<T>(MapPresenter map, VectorLayer layer, LabelParameters label)

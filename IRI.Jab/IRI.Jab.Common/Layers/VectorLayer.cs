@@ -876,7 +876,7 @@ public class VectorLayer : BaseLayer
 
     #region GetGeometry & GetFeature Methods
 
-    public async Task<GeometryLabelPairs?> GetGeometryLabelPairForDisplayAsync(double mapScale, BoundingBox mapExtent)
+    public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, BoundingBox mapExtent)
     {
         List<Geometry<Point>>? geometries;
 
@@ -884,11 +884,11 @@ public class VectorLayer : BaseLayer
 
         if (this.CanRenderLabels(mapScale))
         {
-            var geoLabelPairs = await this.DataSource.GetNamedGeometriesAsync(mapExtent);
+            var geoLabelPairs = await this.DataSource.GetAsFeatureSetAsync(mapExtent);
 
-            geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
+            geometries = geoLabelPairs.Features.Select(i => i.TheGeometry).ToList();
 
-            labels = geoLabelPairs.Select(i => i.Label).ToList();
+            labels = geoLabelPairs.Features.Select(i => i.Label).ToList();
         }
         else
         {

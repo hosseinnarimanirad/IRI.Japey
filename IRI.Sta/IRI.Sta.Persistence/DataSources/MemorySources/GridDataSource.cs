@@ -43,21 +43,21 @@ public class GridDataSource : VectorDataSource<GeodeticSheet>
 
 
     // Get GeometryAwares [GENERIC]
-    public List<GeodeticSheet> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
+    //public List<GeodeticSheet> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type);
-    }
+    //    return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type);
+    //}
 
-    public List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
+    //public List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
-                                .Where(s => s.TheGeometry?.Intersects(geometry) == true)
-                                .ToList();
-    }
+    //    return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
+    //                            .Where(s => s.TheGeometry?.Intersects(geometry) == true)
+    //                            .ToList();
+    //}
 
     // Get as FeatureSet of Point
     public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
