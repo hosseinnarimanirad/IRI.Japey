@@ -387,10 +387,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>>// Relation
         }
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        return GetAsFeatureSet(geometry).Features;
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    return GetAsFeatureSet(geometry).Features;
+    //}
 
     //public override void Add(Feature<Point> newValue)
     //{
@@ -427,8 +427,8 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>>// Relation
         throw new NotImplementedException();
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        throw new NotImplementedException();
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

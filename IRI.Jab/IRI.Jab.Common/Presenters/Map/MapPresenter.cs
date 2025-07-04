@@ -1872,7 +1872,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 var commands = new List<ILegendCommand>();
 
-                foreach (var item in LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>())
+                foreach (var item in LegendCommand.GetDefaultVectorLayerCommands/*<Feature<Point>>*/())
                 {
                     commands.Add(item(this, layer));
                 }

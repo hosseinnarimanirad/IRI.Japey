@@ -81,7 +81,7 @@ public class ZippedImagePyramidDataSource : IRasterDataSource
 
         var extentString = ZipFileHelper.ReadAsString(_archive, _extentFileName);
 
-        if (extentString == null || extentString.Contains("NaN"))
+        if (extentString is null || extentString.Contains("NaN"))
         {
             _archive.Dispose();
 

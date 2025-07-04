@@ -213,7 +213,7 @@ public class VectorLayer : BaseLayer
     {
         if (geometries.IsNullOrEmpty())
             return null;
-         
+
         var pen = this.VisualParameters.GetWpfPen();
 
         Brush brush = this.VisualParameters.Fill;
@@ -658,30 +658,6 @@ public class VectorLayer : BaseLayer
         element.SetBinding(Path.OpacityProperty, binding5);
     }
 
-    //private LayerType GetGeometryType(Geometry<Point> geometry)
-    //{
-    //    switch (geometry.Type)
-    //    {
-    //        case GeometryType.Point:
-    //        case GeometryType.MultiPoint:
-    //            return LayerType.Point;
-
-    //        case GeometryType.LineString:
-    //        case GeometryType.MultiLineString:
-    //            return LayerType.Polyline;
-
-    //        case GeometryType.Polygon:
-    //        case GeometryType.MultiPolygon:
-    //            return LayerType.Polygon;
-
-    //        case GeometryType.GeometryCollection:
-    //        case GeometryType.CircularString:
-    //        case GeometryType.CompoundCurve:
-    //        case GeometryType.CurvePolygon:
-    //        default:
-    //            throw new NotImplementedException();
-    //    }
-    //}
 
     #region Raster Save And Export Methods
 
@@ -900,7 +876,7 @@ public class VectorLayer : BaseLayer
 
     #region GetGeometry & GetFeature Methods
 
-    public async Task<GeometryLabelPairs> GetGeometryLabelPairForDisplayAsync(double mapScale, BoundingBox mapExtent)
+    public async Task<GeometryLabelPairs?> GetGeometryLabelPairForDisplayAsync(double mapScale, BoundingBox mapExtent)
     {
         List<Geometry<Point>>? geometries;
 
@@ -922,27 +898,7 @@ public class VectorLayer : BaseLayer
         return new GeometryLabelPairs(geometries, labels);
     }
 
-    //public async GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, BoundingBox mapExtent)
-    //{
-    //    List<Geometry<Point>> geometries; List<string> labels = null;
-
-    //    if (this.IsLabeled(mapScale))
-    //    {
-    //        var geoLabelPairs =await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
-
-    //        geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
-
-    //        labels = geoLabelPairs.Select(i => i.Label).ToList();
-    //    }
-    //    else
-    //    {
-    //        geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
-    //    }
-
-    //    return new GeometryLabelPairs(geometries, labels);
-    //}
-
-    public async Task<List<Geometry<Point>>>? GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
+    public async Task<List<Geometry<Point>>?> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
     {
         List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
@@ -985,9 +941,9 @@ public class VectorLayer : BaseLayer
     //    return DataSource?.GetEntireFeatures();
     //}
 
-    public List<T>? GetFeatures<T>() where T : class, IGeometryAware<Point>
+    public FeatureSet<Point>? GetFeatures/*<T>*/()// where T : class, IGeometryAware<Point>
     {
-        return GetFeatures<T>(null);
+        return GetFeatures/*<T>*/(null);
     }
 
     public List<Field>? GetFields()
@@ -995,12 +951,15 @@ public class VectorLayer : BaseLayer
         return DataSource?.Fields;
     }
 
-    public List<TGeometryAware>? GetFeatures<TGeometryAware>(Geometry<Point> geometry) where TGeometryAware : class, IGeometryAware<Point>
+    public FeatureSet<Point>? GetFeatures/*<TGeometryAware>*/(Geometry<Point>? geometry) //where TGeometryAware : class, IGeometryAware<Point>
     {
-        if (DataSource as VectorDataSource<TGeometryAware> != null)
-        {
-            return (DataSource as VectorDataSource<TGeometryAware>)!.GetGeometryAwares(geometry);
-        }
+        return DataSource.GetAsFeatureSet(geometry);
+
+        //if (DataSource as VectorDataSource<TGeometryAware> != null)
+        //{
+        //    //return (DataSource as VectorDataSource<TGeometryAware>)!.GetGeometryAwares(geometry);
+        //    return (DataSource as VectorDataSource<TGeometryAware>)!.GetAsFeatureSet(geometry);
+        //}
 
         return null;
     }

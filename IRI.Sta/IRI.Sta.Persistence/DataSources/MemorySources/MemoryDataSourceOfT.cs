@@ -67,12 +67,12 @@ public class MemoryDataSource<TGeometryAware> : VectorDataSource<TGeometryAware>
     }
 
     // Get GeometryAwares [GENERIC]
-    public override List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox)
+    public List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox)
     {
         return _features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
     }
 
-    public override List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry)
+    public List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry)
     {
         if (geometry.IsNotValidOrEmpty())
         {

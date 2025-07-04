@@ -150,11 +150,12 @@ public class LegendCommand : Notifier, ILegendCommand
 
     #region Defaults for VectorLayer
 
-    public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc<T>() where T : class, IGeometryAware<Point>
+    public static Func<MapPresenter, ILayer, LegendCommand> CreateShowAttributeTableFunc/*<T>*/()// where T : class, IGeometryAware<Point>
     {
-        return (presenter, layer) => CreateShowAttributeTable<T>(presenter, layer as VectorLayer);
+        return (presenter, layer) => CreateShowAttributeTable/*<T>*/(presenter, layer as VectorLayer);
     }
-    public static LegendCommand CreateShowAttributeTable<T>(MapPresenter map, VectorLayer layer) where T : class, IGeometryAware<Point>
+
+    public static LegendCommand CreateShowAttributeTable/*<T>*/(MapPresenter map, VectorLayer layer) //where T : class, IGeometryAware<Point>
     {
         var result = new LegendCommand()
         {
@@ -168,9 +169,9 @@ public class LegendCommand : Notifier, ILegendCommand
             if (layer == null || map == null)
                 return;
 
-            var features = layer.GetFeatures<T>();
+            var features = layer.GetFeatures/*<T>*/();
 
-            var newLayer = new Map.SelectedLayer<T>(layer, layer.GetFields());
+            var newLayer = new Map.SelectedLayer<Feature<Point>>(layer, layer.GetFields());
 
             //newLayer.RequestSave = l =>
             //{
@@ -179,11 +180,11 @@ public class LegendCommand : Notifier, ILegendCommand
 
             if (features == null)
             {
-                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>();
+                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<Feature<Point>>();
             }
             else
             {
-                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>(features);
+                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<Feature<Point>>(features.Features);
             }
 
 
@@ -194,11 +195,11 @@ public class LegendCommand : Notifier, ILegendCommand
     }
 
 
-    public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc<T>() where T : class, IGeometryAware<Point>
+    public static Func<MapPresenter, ILayer, ILegendCommand> CreateSelectByDrawingFunc/*<T>*/() //where T : class, IGeometryAware<Point>
     {
-        return (presenter, layer) => CreateSelectByDrawing<T>(presenter, layer as VectorLayer);
+        return (presenter, layer) => CreateSelectByDrawing/*<T>*/(presenter, layer as VectorLayer);
     }
-    public static ILegendCommand CreateSelectByDrawing<T>(MapPresenter map, VectorLayer layer) where T : class, IGeometryAware<Point>
+    public static ILegendCommand CreateSelectByDrawing/*<T>*/(MapPresenter map, VectorLayer layer) //where T : class, IGeometryAware<Point>
     {
         var result = new LegendCommand()
         {
@@ -218,21 +219,21 @@ public class LegendCommand : Notifier, ILegendCommand
             if (!drawingResult.HasNotNullResult())
                 return;
 
-            var features = layer.GetFeatures<T>(drawingResult.Result);
+            var features = layer.GetFeatures/*<T>*/(drawingResult.Result);
 
             if (features == null)
             {
                 return;
             }
 
-            var newLayer = new SelectedLayer<T>(layer, layer.GetFields())
+            var newLayer = new SelectedLayer<Feature<Point>>(layer, layer.GetFields())
             {
                 ShowSelectedOnMap = true
             };
 
             if (features != null)
             {
-                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<T>(features);
+                newLayer.Features = new System.Collections.ObjectModel.ObservableCollection<Feature<Point>>(features.Features);
             }
 
             map.AddSelectedLayer(newLayer);
@@ -358,12 +359,12 @@ public class LegendCommand : Notifier, ILegendCommand
         return result;
     }
 
-    internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<Point>
+    internal static List<Func<MapPresenter, ILayer, ILegendCommand>> GetDefaultVectorLayerCommands/*<T>*/() //where T : class, IGeometryAware<Point>
     {
         return new List<Func<MapPresenter, ILayer, ILegendCommand>>()
         {
-            CreateSelectByDrawingFunc<T>(),
-            CreateShowAttributeTableFunc<T>(),
+            CreateSelectByDrawingFunc/*<T>*/(),
+            CreateShowAttributeTableFunc/*<T>*/(),
             CreateClearSelectedFunc,
             CreateRemoveLayerFunc,
             CreateExportAsPngFunc,
@@ -371,7 +372,7 @@ public class LegendCommand : Notifier, ILegendCommand
         };
     }
 
-   
+
 
     #endregion
 

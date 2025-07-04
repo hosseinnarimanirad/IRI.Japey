@@ -696,10 +696,10 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
         return geometryAware;
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        return GetAsFeatureSet(geometry).Features;
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    return GetAsFeatureSet(geometry).Features;
+    //}
 
     #region CRUD
     
@@ -757,10 +757,10 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
         throw new NotImplementedException();
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        throw new NotImplementedException();
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
 
     //public override FeatureSet<Point> GetAsFeatureSet(string searchText)

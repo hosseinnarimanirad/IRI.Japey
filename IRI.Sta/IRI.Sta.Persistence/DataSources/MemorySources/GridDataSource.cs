@@ -43,14 +43,14 @@ public class GridDataSource : VectorDataSource<GeodeticSheet>
 
 
     // Get GeometryAwares [GENERIC]
-    public override List<GeodeticSheet> GetGeometryAwares(BoundingBox boundingBox)
+    public List<GeodeticSheet> GetGeometryAwares(BoundingBox boundingBox)
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
         return GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type);
     }
 
-    public override List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
+    public List<GeodeticSheet> GetGeometryAwares(Geometry<Point>? geometry)
     {
         var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 

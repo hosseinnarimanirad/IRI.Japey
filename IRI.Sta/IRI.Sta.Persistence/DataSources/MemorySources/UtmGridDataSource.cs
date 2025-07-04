@@ -45,14 +45,14 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet>
 
 
     // Get GeometryAwares [GENERIC]
-    public override List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
+    public List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
         return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone);
     }
 
-    public override List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
+    public List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
     {
         var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 

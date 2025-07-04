@@ -127,24 +127,24 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
 
     #region Get GeometryAwares [GENERIC]
 
-    public virtual List<TGeometryAware> GetGeometryAwares() => GetGeometryAwares(Geometry<Point>.Empty);
+    //public virtual List<TGeometryAware> GetGeometryAwares() => GetGeometryAwares(Geometry<Point>.Empty);
 
-    public abstract List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox);
+    //public abstract List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox);
 
-    public abstract List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry);
+    //public abstract List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry);
 
 
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync() => Task.Run(GetGeometryAwares);
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync() => Task.Run(GetGeometryAwares);
 
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetGeometryAwares(boundingBox));
-    }
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(BoundingBox boundingBox)
+    //{
+    //    return Task.Run(() => GetGeometryAwares(boundingBox));
+    //}
 
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(Geometry<Point>? geometry)
-    {
-        return Task.Run(() => GetGeometryAwares(geometry));
-    }
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(Geometry<Point>? geometry)
+    //{
+    //    return Task.Run(() => GetGeometryAwares(geometry));
+    //}
 
     #endregion
 

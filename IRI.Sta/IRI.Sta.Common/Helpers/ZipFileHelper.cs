@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.IO.Compression;
 
 namespace IRI.Sta.Common.Helpers;
 
 public static class ZipFileHelper
 {
-    public static string ReadAsString(ZipArchive archive, string fileName)
+    public static string? ReadAsString(ZipArchive archive, string fileName)
     {
         var file = archive.Entries.Where(i => i.FullName.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
@@ -21,12 +19,12 @@ public static class ZipFileHelper
 
         var stream = file.First().Open();
 
-        return IRI.Sta.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
+        return StreamHelper.ToString(stream, Encoding.UTF8);
     }
 
-    public static string OpenAndReadAsString(string zippedArchiveFile, string fileName)
+    public static string? OpenAndReadAsString(string zippedArchiveFile, string fileName)
     {
-        var archive = System.IO.Compression.ZipFile.OpenRead(zippedArchiveFile);
+        var archive = ZipFile.OpenRead(zippedArchiveFile);
 
         var file = archive.Entries.Where(i => i.FullName.Equals(fileName, StringComparison.OrdinalIgnoreCase));
 
@@ -37,17 +35,17 @@ public static class ZipFileHelper
 
         var stream = file.First().Open();
 
-        return IRI.Sta.Common.Helpers.StreamHelper.ToString(stream, Encoding.UTF8);
+        return StreamHelper.ToString(stream, Encoding.UTF8);
 
     }
 
     public static byte[] OpenAndReadAsBinary(string zippedArchiveFile, string fileName)
     {
-        var archive = System.IO.Compression.ZipFile.OpenRead(zippedArchiveFile);
+        var archive = ZipFile.OpenRead(zippedArchiveFile);
 
         using (var stream = archive.Entries.Single(e => e.FullName.Equals(fileName, StringComparison.OrdinalIgnoreCase)).Open())
         {
-            return IRI.Sta.Common.Helpers.StreamHelper.ToByteArray(stream);
+            return StreamHelper.ToByteArray(stream);
         }
     }
 

@@ -266,10 +266,10 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>>
         throw new NotImplementedException();
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        throw new NotImplementedException();
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     //public override void Add(Feature<Point> newValue)
     //{
@@ -296,8 +296,8 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>>
         throw new NotImplementedException();
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        throw new NotImplementedException();
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }
