@@ -91,7 +91,7 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
     #endregion
 
 
-    #region Get as FeatureSet of Point
+    #region Get as FeatureSet
 
     public virtual FeatureSet<Point> GetAsFeatureSet() => GetAsFeatureSet(Geometry<Point>.Empty);
 

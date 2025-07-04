@@ -8,7 +8,7 @@ public class Index5k : IndexBase
 
     public override double Width { get => GeodeticIndexes._5kWidth; }
 
-    public string ShortSheetNumber { get { return SheetNumber?.Split(' ').Last(); } }
+    public string ShortSheetNumber { get { return SheetNumber?.Split(' ').LastOrDefault() ?? string.Empty; } }
 
 
     public override Feature AsFeature()

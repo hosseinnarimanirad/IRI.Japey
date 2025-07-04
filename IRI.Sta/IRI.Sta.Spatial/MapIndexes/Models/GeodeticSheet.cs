@@ -15,7 +15,8 @@ public class GeodeticSheet : IGeometryAware<Point>
 
     public string SheetName { get; set; }
 
-    public string SubTitle { get { return SheetName?.Contains(" ") == true ? SheetName.Split(' ')?.Last() : string.Empty; } }
+    //public string SubTitle { get { return SheetName?.Contains(" ") == true ? SheetName.Split(' ')?.LastOrDefault() : string.Empty; } }
+    public string SubTitle { get { return SheetName?.Split(' ')?.LastOrDefault() ?? string.Empty; } }
 
     public string Note { get; set; }
 
