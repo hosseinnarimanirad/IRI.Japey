@@ -1415,7 +1415,7 @@ public abstract class MapPresenter : BasePresenter
         string name = null,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>, Point> source = null)
+        VectorDataSource<Feature<Point>> source = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
@@ -1476,7 +1476,7 @@ public abstract class MapPresenter : BasePresenter
         string name,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>, Point> source = null)
+        VectorDataSource<Feature<Point>> source = null)
     {
         var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
 

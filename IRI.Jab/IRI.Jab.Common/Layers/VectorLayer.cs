@@ -884,14 +884,14 @@ public class VectorLayer : BaseLayer
     public void ExportAsShapefile(string shpFileName)
     {
         //var features = GetFeatures<T>();
-        var features = this.DataSource.GetAsFeatureSetOfPoint();
+        var features = this.DataSource.GetAsFeatureSet();
 
         features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
     }
 
     public void ExportAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
     {
-        var features = this.DataSource.GetAsFeatureSetOfPoint();
+        var features = this.DataSource.GetAsFeatureSet();
 
         features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
     }
@@ -952,7 +952,7 @@ public class VectorLayer : BaseLayer
         }
         else
         {
-            geometries = (await this.DataSource.GetAsFeatureSetOfPointAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
+            geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
         }
 
         if (geometries.Count == 0)
@@ -997,9 +997,9 @@ public class VectorLayer : BaseLayer
 
     public List<TGeometryAware>? GetFeatures<TGeometryAware>(Geometry<Point> geometry) where TGeometryAware : class, IGeometryAware<Point>
     {
-        if (DataSource as VectorDataSource<TGeometryAware, Point> != null)
+        if (DataSource as VectorDataSource<TGeometryAware> != null)
         {
-            return (DataSource as VectorDataSource<TGeometryAware, Point>)!.GetGeometryAwares(geometry);
+            return (DataSource as VectorDataSource<TGeometryAware>)!.GetGeometryAwares(geometry);
         }
 
         return null;

@@ -10,19 +10,14 @@ using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class OrdinaryJsonListSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point> where TGeometryAware : class, IGeometryAware<Point>
+public class OrdinaryJsonListSource<TGeometryAware> : MemoryDataSource<TGeometryAware> where TGeometryAware : class, IGeometryAware<Point>
 {
     public override GeometryType? GeometryType
     {
         get; protected set;
     }
-
-    private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc) : this(features, mapToFeatureFunc, null)
-    {
-
-    }
-
-    private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string>? labelFunc)
+     
+    private OrdinaryJsonListSource(List<TGeometryAware> features, Func<TGeometryAware, Feature<Point>> mapToFeatureFunc, Func<TGeometryAware, string>? labelFunc = null)
     {
         _labelFunc = labelFunc;
 

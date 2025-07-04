@@ -40,15 +40,15 @@ public interface IVectorDataSource : IDataSource
 
     // Get as FeatureSet of Point *********************************************
 
-    FeatureSet<Point> GetAsFeatureSetOfPoint();
-    FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundary);
-    FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry);
-    FeatureSet<Point> GetAsFeatureSetOfPoint(double mapScale, BoundingBox boundingBox);
+    FeatureSet<Point> GetAsFeatureSet();
+    FeatureSet<Point> GetAsFeatureSet(BoundingBox boundary);
+    FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
+    FeatureSet<Point> GetAsFeatureSet(double mapScale, BoundingBox boundingBox);
 
-    Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync();
-    Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(BoundingBox boundary);
-    Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(Geometry<Point>? geometry);
-    Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(double mapScale, BoundingBox boundingBox);
+    Task<FeatureSet<Point>> GetAsFeatureSetAsync();
+    Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundary);
+    Task<FeatureSet<Point>> GetAsFeatureSetAsync(Geometry<Point>? geometry);
+    Task<FeatureSet<Point>> GetAsFeatureSetAsync(double mapScale, BoundingBox boundingBox);
 
 
 

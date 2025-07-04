@@ -9,7 +9,7 @@ using IRI.Sta.Persistence.DataSources;
 namespace IRI.Ket.PostgreSqlPersistence;
 
 // todo: implement methods
-public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
+public class PostGisDataSource : VectorDataSource<Feature<Point>>
 {
     public override BoundingBox WebMercatorExtent { get; protected set; }
     public override int Srid { get => throw new NotImplementedException(); protected set => throw new NotImplementedException(); }
@@ -261,7 +261,7 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
         throw new NotImplementedException();
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
         throw new NotImplementedException();
     }
@@ -291,7 +291,7 @@ public class PostGisDataSource : VectorDataSource<Feature<Point>, Point>
         throw new NotImplementedException();
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         throw new NotImplementedException();
     }

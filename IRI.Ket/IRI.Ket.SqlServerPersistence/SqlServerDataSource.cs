@@ -10,7 +10,7 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.SqlServerPersistence;
 
-public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>, IEditableVectorDataSource<Feature<Point>, Point>
+public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVectorDataSource<Feature<Point>, Point>
 {
     const string _outputSpatialAttribute = "_shape";
 
@@ -521,7 +521,7 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>, IEdi
 
     #region GetAsFeatureSet
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
         if (geometry is not null)
         {
@@ -535,7 +535,7 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>, IEdi
         }
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         var whereClause = GetWhereClause(_spatialColumnName, boundingBox, GetSrid());
 
@@ -698,7 +698,7 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>, Point>, IEdi
 
     public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
     {
-        return GetAsFeatureSetOfPoint(geometry).Features;
+        return GetAsFeatureSet(geometry).Features;
     }
 
     #region CRUD

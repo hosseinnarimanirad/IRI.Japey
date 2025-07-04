@@ -4799,7 +4799,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             if (layer.VisualParameters.Visibility != Visibility.Visible)
                 continue;
 
-            var features = layer.DataSource.GetAsFeatureSetOfPoint(geometryBoundary);
+            var features = layer.DataSource.GetAsFeatureSet(geometryBoundary);
 
             if (features is not null && !features.Features.IsNullOrEmpty())
             {

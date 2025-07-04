@@ -11,9 +11,9 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeometryAware, TPoint>, IEditableVectorDataSource<TGeometryAware, TPoint>
-    where TGeometryAware : class, IGeometryAware<TPoint>
-    where TPoint : IPoint, new()
+public class MemoryDataSource<TGeometryAware> : VectorDataSource<TGeometryAware>, IEditableVectorDataSource<TGeometryAware, Point>
+    where TGeometryAware : class, IGeometryAware<Point>
+    //where TPoint : IPoint, new()
 {
     protected List<TGeometryAware> _features;
 
@@ -23,7 +23,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
 
     protected Func<int, TGeometryAware>? _idFunc;
 
-    protected Func<TGeometryAware, Feature<TPoint>> _mapToFeatureFunc;
+    protected Func<TGeometryAware, Feature<Point>> _mapToFeatureFunc;
 
     public override int Srid { get => GetSrid(); protected set => _ = value; }
 
@@ -36,7 +36,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
         List<TGeometryAware> features,
         Func<TGeometryAware, string> labelingFunc,
         Func<int, TGeometryAware> idFunc,
-        Func<TGeometryAware, Feature<TPoint>> mapToFeatureFunc)
+        Func<TGeometryAware, Feature<Point>> mapToFeatureFunc)
     {
         _features = features;
         _labelFunc = labelingFunc;
@@ -72,7 +72,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
         return _features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
     }
 
-    public override List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry)
+    public override List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry)
     {
         if (geometry.IsNotValidOrEmpty())
         {
@@ -85,9 +85,9 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
     }
 
     // Get as FeatureSet of Point
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
-        return new FeatureSet<Point>(GetGeometryAwares(geometry == null ? null : geometry.NeutralizeGenericPoint<TPoint>())
+        return new FeatureSet<Point>(GetGeometryAwares(geometry == null ? null : geometry.NeutralizeGenericPoint<Point>())
                 .Select(ToFeatureMappingFunc)
                 .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
                 {
@@ -98,7 +98,7 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
                 .ToList());
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         return new FeatureSet<Point>(GetGeometryAwares(boundingBox)
                 .Select(ToFeatureMappingFunc)
@@ -196,6 +196,6 @@ public class MemoryDataSource<TGeometryAware, TPoint> : VectorDataSource<TGeomet
         throw new NotImplementedException();
     }
 
-    protected override Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware) => _mapToFeatureFunc(geometryAware);
+    protected override Feature<Point> ToFeatureMappingFunc(TGeometryAware geometryAware) => _mapToFeatureFunc(geometryAware);
 
 }
