@@ -32,18 +32,18 @@ public class MemoryDataSource<TGeometryAware> : VectorDataSource<TGeometryAware>
 
     }
 
-    public MemoryDataSource(
-        List<TGeometryAware> features,
-        Func<TGeometryAware, string> labelingFunc,
-        Func<int, TGeometryAware> idFunc,
-        Func<TGeometryAware, Feature<Point>> mapToFeatureFunc)
-    {
-        _features = features;
-        _labelFunc = labelingFunc;
-        _idFunc = idFunc;
-        _mapToFeatureFunc = mapToFeatureFunc;
-        GeometryType = features.First().TheGeometry.Type;
-    }
+    //public MemoryDataSource(
+    //    List<TGeometryAware> features,
+    //    Func<TGeometryAware, string> labelingFunc,
+    //    Func<int, TGeometryAware> idFunc,
+    //    Func<TGeometryAware, Feature<Point>> mapToFeatureFunc)
+    //{
+    //    _features = features;
+    //    _labelFunc = labelingFunc;
+    //    _idFunc = idFunc;
+    //    _mapToFeatureFunc = mapToFeatureFunc;
+    //    GeometryType = features.First().TheGeometry.Type;
+    //}
 
     // todo: remove this method
     public int GetSrid()

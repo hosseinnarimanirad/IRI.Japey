@@ -902,14 +902,14 @@ public class VectorLayer : BaseLayer
     {
         List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
-        if (this.DataSource is MemoryScaleDependentDataSource)
-        {
-            geometries = await ((MemoryScaleDependentDataSource)this.DataSource).GetGeometriesAsync(mapScale, boundingBox);
-        }
-        else
-        {
+        //if (this.DataSource is MemoryScaleDependentDataSource)
+        //{
+        //    geometries = await ((MemoryScaleDependentDataSource)this.DataSource).GetGeometriesAsync(mapScale, boundingBox);
+        //}
+        //else
+        //{
             geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
-        }
+        //}
 
         if (geometries.Count == 0)
             return null;
