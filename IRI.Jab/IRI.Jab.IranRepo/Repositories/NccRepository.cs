@@ -18,7 +18,7 @@ public static class NccRepository
             return null;
         }
 
-        var features = OrdinaryJsonListSource<NccPoint>.CreateFromJsonString(jsonString, i => i.AsFeature(), p => p.Name);
+        var features = OrdinaryJsonListSource.CreateFromJsonString<NccPoint>(jsonString, i => i.AsFeature()/*, p => p.Name*/);
          
         return new VectorLayer(layerTitle, features, visualParameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All)
         {

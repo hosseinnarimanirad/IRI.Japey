@@ -17,7 +17,7 @@ using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class ShapefileDataSource : MemoryDataSource<Feature<Point>>
+public class ShapefileDataSource : MemoryDataSource//<Feature<Point>>
 {
     string _shapefileName;
 
@@ -90,7 +90,7 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>>
             throw new NotImplementedException();
         }
 
-        _features = new List<Feature<Point>>();
+        var features = new List<Feature<Point>>();
 
         for (int i = 0; i < geometries.Count; i++)
         {
@@ -110,12 +110,14 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>>
 
             feature.Id = GetNewId();
 
-            _features.Add(feature);
+            features.Add(feature);
         }
 
-        _idFunc = id => _features.Single(f => f.Id == id);
+        _features = FeatureSet<Point>.Create(string.Empty, features);
 
-        _mapToFeatureFunc = f => f;
+        //_idFunc = id => _features.Single(f => f.Id == id);
+
+        //_mapToFeatureFunc = f => f;
     }
 
 
@@ -154,6 +156,6 @@ public class ShapefileDataSource : MemoryDataSource<Feature<Point>>
             geometryMap = t => t.TheGeometry.AsEsriShape(_sourceSrs.Srid);
         }
 
-        ShapefileFormat.Shapefile.Save(_shapefileName, _features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
+        ShapefileFormat.Shapefile.Save(_shapefileName, _features.Features, geometryMap, _fields, EncodingHelper.ArabicEncoding, _sourceSrs, true);
     }
 }

@@ -39,7 +39,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
         }
     }
 
-    public VectorDataSource<Feature<Point>>? OriginalSource { get; set; }
+    public VectorDataSource/*<Feature<Point>>*/? OriginalSource { get; set; }
 
     public SpecialPointLayer? SpecialPointLayer { get; set; }
 
@@ -110,7 +110,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
         Geometry geometry,
         VisualParameters? visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>>? source = null)
+        VectorDataSource/*<Feature<Point>>*/? source = null)
     {
         DrawingItemLayer result = new DrawingItemLayer(layerName, id, RasterizationApproach.DrawingVisual);
 

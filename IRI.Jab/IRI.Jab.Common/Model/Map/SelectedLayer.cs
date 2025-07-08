@@ -128,11 +128,11 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
         }
     }
 
-    public void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry)
+    public void Update(IGeometryAware<Point> oldGeometry, Feature<Point> newGeometry)
     {
-        var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource<TGeometryAware, Point>;
+        var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource/*<Feature<Point>, Point>*/;
 
-        dataSource.Update(newGeometry as TGeometryAware);
+        dataSource.Update(newGeometry /*as TGeometryAware*/);
 
         var feature = this.Features.Single(f => f.Id == oldGeometry.Id);
 
@@ -144,9 +144,9 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
     public void UpdateFeature(object item)
     {
-        var itemValue = item as TGeometryAware;
+        var itemValue = item as Feature<Point>;
 
-        var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource<TGeometryAware, Point>;
+        var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource/*<TGeometryAware, Point>*/;
 
         //dataSource.UpdateFeature(itemValue);
         dataSource.Update(itemValue);
@@ -165,7 +165,7 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
     public void SaveChanges()
     {
-        ((AssociatedLayer as VectorLayer).DataSource as IEditableVectorDataSource<TGeometryAware, Point>).SaveChanges();
+        ((AssociatedLayer as VectorLayer).DataSource as IEditableVectorDataSource/*<TGeometryAware, Point>*/).SaveChanges();
     }
 
 

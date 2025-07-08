@@ -10,7 +10,7 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Ket.SqlServerPersistence;
 
-public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVectorDataSource<Feature<Point>, Point>
+public class SqlServerDataSource : VectorDataSource/*<Feature<Point>>*/, IEditableVectorDataSource/*<Feature<Point>, Point>*/
 {
     const string _outputSpatialAttribute = "_shape";
 
@@ -691,10 +691,10 @@ public class SqlServerDataSource : VectorDataSource<Feature<Point>>, IEditableVe
 
 
 
-    protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
-    {
-        return geometryAware;
-    }
+    //protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
+    //{
+    //    return geometryAware;
+    //}
 
     //public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
     //{

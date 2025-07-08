@@ -129,7 +129,7 @@ public class FeatureLayer : BaseLayer
         if (features == null || features.Count == 0)
             throw new NotImplementedException();
 
-        Initialize(name, new MemoryDataSource(features, null, null), rendering, toRasterTechnique, visibleRange, symbologyRule);
+        Initialize(name, new MemoryDataSource(features/*, null, null*/), rendering, toRasterTechnique, visibleRange, symbologyRule);
     }
 
     public FeatureLayer(string layerName, MemoryDataSource dataSource, RenderingApproach rendering,

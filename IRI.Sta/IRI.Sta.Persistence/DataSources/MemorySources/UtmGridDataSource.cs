@@ -11,7 +11,7 @@ using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class UtmGridDataSource : VectorDataSource<UtmSheet>
+public class UtmGridDataSource : VectorDataSource/*<UtmSheet>*/
 {
     public int UtmZone { get; set; }
 
@@ -45,21 +45,21 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet>
 
 
     // Get GeometryAwares [GENERIC]
-    public List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
+    //public List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone);
-    }
+    //    return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone);
+    //}
 
-    public List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
+    //public List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone)
-                            .Where(s => s.TheGeometry?.Intersects(geometry) == true)
-                            .ToList();
-    }
+    //    return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone)
+    //                        .Where(s => s.TheGeometry?.Intersects(geometry) == true)
+    //                        .ToList();
+    //}
 
 
     // Get as FeatureSet of Point
@@ -72,7 +72,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet>
                             .Select(ToFeatureMappingFunc)
                             .ToList();
 
-        return new FeatureSet<Point>(features);
+        return FeatureSet<Point>.Create(string.Empty, features);
     }
 
     public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
@@ -84,7 +84,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet>
                             .Select(ToFeatureMappingFunc)
                             .ToList();
 
-        return new FeatureSet<Point>(features);
+        return FeatureSet<Point>.Create(string.Empty, features);
     }
 
 
@@ -93,7 +93,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet>
         throw new NotImplementedException();
     }
 
-    protected override Feature<Point> ToFeatureMappingFunc(UtmSheet geometryAware)
+    private Feature<Point> ToFeatureMappingFunc(UtmSheet geometryAware)
     {
         return new Feature<Point>()
         {

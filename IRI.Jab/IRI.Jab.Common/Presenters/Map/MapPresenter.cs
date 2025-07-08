@@ -1415,7 +1415,7 @@ public abstract class MapPresenter : BasePresenter
         string name = null,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>> source = null)
+        VectorDataSource/*<Feature<Point>>*/ source = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
@@ -1476,7 +1476,7 @@ public abstract class MapPresenter : BasePresenter
         string name,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>> source = null)
+        VectorDataSource/*<Feature<Point>>*/ source = null)
     {
         var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
 
@@ -2545,7 +2545,7 @@ public abstract class MapPresenter : BasePresenter
             var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
             //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-            var dataSource = new MemoryDataSource(features, f => f.Label, null);
+            var dataSource = new MemoryDataSource(features/*, f => f.Label*//*, null*/);
 
             AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
 
@@ -2591,9 +2591,7 @@ public abstract class MapPresenter : BasePresenter
 
             // todo: provide parameter instead of `null`
             var dataSource = new MemoryDataSource(
-                features,
-                f => f.Label,
-                null);
+                features/*,f => f.Label,null*/);
 
             AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
 
@@ -2620,7 +2618,7 @@ public abstract class MapPresenter : BasePresenter
         {
             //Msh.Common.Model.GeoJson.GeoJsonFeatureSet.Load(geoJsonFeatureSetFileName);
 
-            var dataSource = OrdinaryJsonListSource<Feature<Point>>.CreateFromFile(geoJsonFeatureSetFileName, f => f);
+            var dataSource = OrdinaryJsonListSource.CreateFromFile<Feature<Point>>(geoJsonFeatureSetFileName, f => f);
 
             var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(geoJsonFeatureSetFileName), dataSource,
                 new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
@@ -3205,9 +3203,7 @@ public abstract class MapPresenter : BasePresenter
 
                     //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
                     var dataSource = new MemoryDataSource(
-                        features,
-                        f => f.Label,
-                        null);
+                        features/*,f => f.Label,null*/);
 
                     var geometries = dataSource.GetAsFeatureSet()?.Features;
 

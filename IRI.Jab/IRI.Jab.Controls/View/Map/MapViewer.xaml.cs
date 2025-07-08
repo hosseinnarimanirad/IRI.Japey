@@ -1644,19 +1644,19 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 case RasterizationApproach.GdiPlus:
                     path = layer.AsBitmapUsingGdiPlus(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
-                
-                    //case RasterizationApproach.OpenTk:
+
+                //case RasterizationApproach.OpenTk:
                 //    path = layer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                 //    break;
-                
+
                 case RasterizationApproach.DrawingVisual:
                     path = layer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
-                
+
                 case RasterizationApproach.WriteableBitmap:
                     path = layer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
                     break;
-                
+
                 case RasterizationApproach.StreamGeometry:
                     path = layer.AsShape(geoLabledPairs.Geometries, this.viewTransform, this.panTransformForPoints, this.MapToScreen);
                     break;
@@ -2921,7 +2921,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             var features = geometries.Zip(labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList();
 
-            source = new MemoryDataSource(features, f => f.Label, null);
+            source = new MemoryDataSource(features/*, f => f.Label, null*/);
         }
 
 
@@ -2948,7 +2948,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         if (geometries == null)
             return;
 
-        var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList(), f => f.Label, null);
+        var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList()/*, f => f.Label, null*/);
 
         var layer = new VectorLayer(
             layerName,

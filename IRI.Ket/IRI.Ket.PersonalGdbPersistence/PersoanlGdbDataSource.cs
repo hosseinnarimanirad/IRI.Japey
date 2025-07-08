@@ -10,7 +10,7 @@ using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 
-public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>>// RelationalDbSource<Feature<Point>>
+public class PersoanlGdbDataSource : VectorDataSource//<Feature<Point>>// RelationalDbSource<Feature<Point>>
 {
     protected BoundingBox _extent = BoundingBox.NaN;
 
@@ -367,10 +367,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>>// Relation
         return result;
     }
 
-    protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
-    {
-        return geometryAware;
-    }
+    //protected override Feature<Point> ToFeatureMappingFunc(Feature<Point> geometryAware)
+    //{
+    //    return geometryAware;
+    //}
 
 
     public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)

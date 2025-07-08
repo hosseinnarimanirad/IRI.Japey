@@ -44,7 +44,7 @@ public interface ISelectedLayer
 
     Action RequestRemove { get; set; }
 
-    void Update(IGeometryAware<Point> oldGeometry, IGeometryAware<Point> newGeometry);
+    void Update(IGeometryAware<Point> oldGeometry, Feature<Point> newGeometry);
 
     void UpdateFeature(object item);
 }

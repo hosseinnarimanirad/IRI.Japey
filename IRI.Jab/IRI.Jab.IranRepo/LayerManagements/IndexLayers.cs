@@ -32,7 +32,7 @@ public static class IndexLayers
     {
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex250k");
 
-        var source = OrdinaryJsonListSource<Index250k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn);
+        var source = OrdinaryJsonListSource.CreateFromJsonString<Index250k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/);
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 5, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -48,7 +48,7 @@ public static class IndexLayers
     {
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex100k");
 
-        var source = OrdinaryJsonListSource<Index100k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn);
+        var source = OrdinaryJsonListSource.CreateFromJsonString<Index100k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/);
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 3, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -64,7 +64,7 @@ public static class IndexLayers
     {
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex50k");
 
-        var source = OrdinaryJsonListSource<Index50k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNumber);
+        var source = OrdinaryJsonListSource.CreateFromJsonString<Index50k>(jsonString, i => i.AsFeature()/*, i => i.SheetNumber*/);
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -80,7 +80,7 @@ public static class IndexLayers
     {
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex25k");
 
-        var source = OrdinaryJsonListSource<Index25k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNumber);
+        var source = OrdinaryJsonListSource.CreateFromJsonString<Index25k>(jsonString, i => i.AsFeature()/*, i => i.SheetNumber*/);
 
         VisualParameters parameters = new VisualParameters(null, "#88FF8130", 2, .8) { Visibility = System.Windows.Visibility.Collapsed, DashStyle = DashStyles.Dot };
 
@@ -130,31 +130,35 @@ public static class IndexLayers
 
 
 
-    public static List<Index250k> GetIndex250kSource(Point geodeticPoint)
+    public static FeatureSet<Point> GetIndex250kSource(Point geodeticPoint)
     {
         var geometry = MapProjects.GeodeticWgs84ToWebMercator(geodeticPoint).AsGeometry(SridHelper.WebMercator);
 
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex250k");
 
-        return OrdinaryJsonListSource<Index250k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn).GetGeometryAwares(geometry);
+        //return OrdinaryJsonListSource.CreateFromJsonString<Index250k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/).GetGeometryAwares(geometry);
+        return OrdinaryJsonListSource.CreateFromJsonString<Index250k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/).GetAsFeatureSet(geometry);
     }
 
-    public static List<Index100k> GetIndex100kSource(Point geodeticPoint)
+    public static FeatureSet<Point> GetIndex100kSource(Point geodeticPoint)
     {
         var geometry = MapProjects.GeodeticWgs84ToWebMercator(geodeticPoint).AsGeometry(SridHelper.WebMercator);
 
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex100k");
 
-        return OrdinaryJsonListSource<Index100k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn).GetGeometryAwares(geometry);
+        //return OrdinaryJsonListSource.CreateFromJsonString<Index100k>(jsonString, i => i.AsFeature(), i => i.SheetNameEn).GetGeometryAwares(geometry);
+
+        return OrdinaryJsonListSource.CreateFromJsonString<Index100k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/).GetAsFeatureSet(geometry);
     }
 
-    public static List<Index50k> GetIndex50kSource(Point geodeticPoint)
+    public static FeatureSet<Point> GetIndex50kSource(Point geodeticPoint)
     {
         var geometry = MapProjects.GeodeticWgs84ToWebMercator(geodeticPoint).AsGeometry(SridHelper.WebMercator);
 
         var jsonString = ZipFileHelper.OpenAndReadAsString("iriRepo.dll", "IriIndex50k");
 
-        return OrdinaryJsonListSource<Index50k>.CreateFromJsonString(jsonString, i => i.AsFeature(), i => i.SheetNameEn).GetGeometryAwares(geometry);
+        //return OrdinaryJsonListSource.CreateFromJsonString<Index50k>(jsonString, i => i.AsFeature(), i => i.SheetNameEn).GetGeometryAwares(geometry);
+        return OrdinaryJsonListSource.CreateFromJsonString<Index50k>(jsonString, i => i.AsFeature()/*, i => i.SheetNameEn*/).GetAsFeatureSet(geometry);
     }
 
 

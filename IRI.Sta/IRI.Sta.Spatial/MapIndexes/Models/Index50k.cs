@@ -16,7 +16,7 @@ public class Index50k : IndexBase
         return new Feature()
         {
             TheGeometry = TheGeometry,
-            LabelAttribute = nameof(SheetNameEn),
+            LabelAttribute = nameof(SheetNumber),
             Attributes = new Dictionary<string, object>()
             {
                 {nameof(Height), Height },

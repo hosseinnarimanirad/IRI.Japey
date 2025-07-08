@@ -1494,7 +1494,7 @@ public static class SqlGeometryExtensions
     //    };
     //}
 
-    public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase targetSrs = null)
+    public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase? targetSrs = null)
     {
         targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
 
@@ -1506,5 +1506,6 @@ public static class SqlGeometryExtensions
                                                 .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator).AsGeometry()
         };
     }
+
     #endregion
 }

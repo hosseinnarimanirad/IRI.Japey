@@ -11,7 +11,7 @@ using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class GridDataSource : VectorDataSource<GeodeticSheet>
+public class GridDataSource : VectorDataSource/*<GeodeticSheet>*/
 {
     public GeodeticIndexType Type { get; protected set; }
 
@@ -64,7 +64,7 @@ public class GridDataSource : VectorDataSource<GeodeticSheet>
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
-        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
+        return FeatureSet<Point>.Create(string.Empty, GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
                                 .Select(ToFeatureMappingFunc)
                                 .ToList());
     }
@@ -73,7 +73,7 @@ public class GridDataSource : VectorDataSource<GeodeticSheet>
     {
         var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
-        return new FeatureSet<Point>(GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
+        return FeatureSet<Point>.Create(string.Empty, GeodeticIndexes.FindIndexSheets(geographicBoundingBox, Type)
                                 .Where(s => s.TheGeometry?.Intersects(geometry) == true)
                                 .Select(ToFeatureMappingFunc)
                                 .ToList());
@@ -85,7 +85,7 @@ public class GridDataSource : VectorDataSource<GeodeticSheet>
         throw new NotImplementedException();
     }
 
-    protected override Feature<Point> ToFeatureMappingFunc(GeodeticSheet geometryAware)
+    private Feature<Point> ToFeatureMappingFunc(GeodeticSheet geometryAware)
     {
         return new Feature<Point>()
         {

@@ -9,10 +9,10 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
-    where TGeometryAware : class, IGeometryAware<Point>
+public abstract class VectorDataSource/*<TGeometryAware>*/ : IVectorDataSource
+    //where TGeometryAware : class, IGeometryAware<Point>
 {
-    protected abstract Feature<Point> ToFeatureMappingFunc(TGeometryAware geometryAware);
+    //protected abstract Feature<Point> ToFeatureMappingFunc(TGeometryAware geometryAware);
 
     public virtual BoundingBox WebMercatorExtent { get; protected set; }
 
@@ -22,7 +22,29 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
 
     public List<Field>? Fields { get; set; }
 
-    #region Get Geometries
+    #region Get as FeatureSet
+
+    public virtual FeatureSet<Point> GetAsFeatureSet() => GetAsFeatureSet(Geometry<Point>.Empty);
+
+    public abstract FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox);
+
+    public abstract FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
+
+    public virtual FeatureSet<Point> GetAsFeatureSet(double mapScale, BoundingBox boundingBox) => GetAsFeatureSet(boundingBox);
+
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync() => Task.Run(GetAsFeatureSet);
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(boundingBox));
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(Geometry<Point>? geometry) => Task.Run(() => GetAsFeatureSet(geometry));
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(double mapScale, BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(mapScale, boundingBox));
+
+    #endregion
+
+
+    //#region Get Geometries
 
     //public virtual List<Geometry<Point>> GetGeometries() => GetGeometries(null);
 
@@ -43,7 +65,7 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
 
     //public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(Geometry<Point>? geometry) => Task.Run(() => GetGeometries(geometry));
 
-    #endregion
+    //#endregion
 
 
     //#region Get Named-Geometries
@@ -87,28 +109,6 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
     //}
 
     //#endregion
-
-
-    #region Get as FeatureSet
-
-    public virtual FeatureSet<Point> GetAsFeatureSet() => GetAsFeatureSet(Geometry<Point>.Empty);
-
-    public abstract FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox);
-
-    public abstract FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
-
-    public virtual FeatureSet<Point> GetAsFeatureSet(double mapScale, BoundingBox boundingBox) => GetAsFeatureSet(boundingBox);
-
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync() => Task.Run(GetAsFeatureSet);
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(boundingBox));
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(Geometry<Point>? geometry) => Task.Run(() => GetAsFeatureSet(geometry));
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(double mapScale, BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(mapScale, boundingBox));
-
-    #endregion
 
 
     //#region Get GeometryAwares [GENERIC]
@@ -156,11 +156,11 @@ public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
     //#endregion
 
 
-    #region Other
+    //#region Other
 
     public abstract FeatureSet<Point> Search(string searchText);
 
-    #endregion
+    //#endregion
 
 
     //#region CRUD

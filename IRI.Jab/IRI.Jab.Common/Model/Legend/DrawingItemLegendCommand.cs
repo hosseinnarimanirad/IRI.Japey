@@ -89,7 +89,7 @@ public static class DrawingItemLegendCommands
 
                 if (layer.OriginalSource != null)
                 {
-                    (layer.OriginalSource as IEditableVectorDataSource<Feature<Point>, Point>).Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
+                    (layer.OriginalSource as IEditableVectorDataSource/*<Feature<Point>, Point>*/)?.Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
                 }
             }
         });
