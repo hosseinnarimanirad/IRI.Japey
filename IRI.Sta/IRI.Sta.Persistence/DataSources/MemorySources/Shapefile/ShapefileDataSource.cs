@@ -36,7 +36,7 @@ public class ShapefileDataSource : MemoryDataSource//<Feature<Point>>
     {
     }
 
-    private ShapefileDataSource(string shapefileName,
+    internal ShapefileDataSource(string shapefileName,
                                 IEsriShapeCollection geometries,
                                 EsriAttributeDictionary attributes,
                                 Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map,
@@ -120,24 +120,6 @@ public class ShapefileDataSource : MemoryDataSource//<Feature<Point>>
         //_mapToFeatureFunc = f => f;
     }
 
-
-    public static ShapefileDataSource Create(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
-    {
-        var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
-
-        var geometries = ShapefileFormat.Shapefile.ReadShapes(shapefileName);
-
-        return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
-    }
-
-    public static async Task<ShapefileDataSource> CreateAsync(string shapefileName, Func<Geometry<Point>, Dictionary<string, object>, Feature<Point>> map, Func<Feature<Point>, List<object>> inverseAttributeMap, SrsBase targetSrs = null, Encoding encoding = null)
-    {
-        var attributes = DbfFile.Read(ShapefileFormat.Shapefile.GetDbfFileName(shapefileName), true, encoding);
-
-        var geometries = await ShapefileFormat.Shapefile.ReadShapesAsync(shapefileName);
-
-        return new ShapefileDataSource(shapefileName, geometries, attributes, map, inverseAttributeMap, targetSrs);
-    }
 
     public override void SaveChanges()
     {
