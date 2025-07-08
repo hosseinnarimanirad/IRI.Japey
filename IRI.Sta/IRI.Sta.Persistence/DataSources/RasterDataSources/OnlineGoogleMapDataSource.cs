@@ -13,7 +13,7 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.RasterDataSources;
 
-public class OnlineGoogleMapDataSource<T> : IRasterDataSource
+public class OnlineGoogleMapDataSource/*<T>*/ : IRasterDataSource
 {
     public BoundingBox WebMercatorExtent
     {

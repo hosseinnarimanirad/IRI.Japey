@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using System.Data;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using IRI.Sta.Common.Primitives; 
+using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Persistence.Abstractions;
 

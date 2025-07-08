@@ -154,9 +154,9 @@ namespace IRI.Jab.Common
         {
             List<RasterLayer> result = new List<RasterLayer>();
 
-            if (this.DataSource.GetType() == typeof(OfflineGoogleMapDataSource<object>))
+            if (this.DataSource.GetType() == typeof(OfflineGoogleMapDataSource/*<object>*/))
             {
-                var googleDataSource = this.DataSource as OfflineGoogleMapDataSource<object>;
+                var googleDataSource = this.DataSource as OfflineGoogleMapDataSource/*<object>*/;
 
                 var tiles = googleDataSource.GetTiles(region.Transform(MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
@@ -193,9 +193,9 @@ namespace IRI.Jab.Common
                     result.Add(layer);
                 }
             }
-            else if (this.DataSource.GetType() == typeof(OnlineGoogleMapDataSource<object>))
+            else if (this.DataSource.GetType() == typeof(OnlineGoogleMapDataSource/*<object>*/))
             {
-                var googleDataSource = this.DataSource as OnlineGoogleMapDataSource<object>;
+                var googleDataSource = this.DataSource as OnlineGoogleMapDataSource/*<object>*/;
 
                 var tiles = await googleDataSource.GetTiles(region, mapScale);
 

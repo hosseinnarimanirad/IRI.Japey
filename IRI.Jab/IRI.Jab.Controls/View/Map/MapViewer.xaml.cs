@@ -1279,7 +1279,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                         return;
                     }
 
-                    if (!layer.Extent.Intersects(this.CurrentExtent) && !layer.Type.HasFlag(LayerType.BaseMap) && !(rasterLayer.DataSource is OfflineGoogleMapDataSource<object>))
+                    if (!layer.Extent.Intersects(this.CurrentExtent) && !layer.Type.HasFlag(LayerType.BaseMap) && !(rasterLayer.DataSource is OfflineGoogleMapDataSource))
                     {
                         System.Diagnostics.Debug.WriteLine($"raster layer escaped!");
                         return;
