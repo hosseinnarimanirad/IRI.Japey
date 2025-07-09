@@ -14,6 +14,7 @@ using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 using IRI.Sta.Persistence.Abstractions;
+using IRI.Sta.Persistence.DataSources;
 
 namespace IRI.Jab.Common.Model.Legend;
 
@@ -73,7 +74,7 @@ public static class DrawingItemLegendCommands
 
             if (editResult.HasNotNullResult())
             {
-                layer.Geometry = editResult.Result;
+                layer.Feature = new Feature<Point>(editResult.Result, layer.LayerName);
 
                 //shapeItem.AssociatedLayer = new VectorLayer(shapeItem.Title, new List<SqlGeometry>() { editResult.Result.AsSqlGeometry() }, VisualParameters.GetRandomVisualParameters(), LayerType.Drawing, RenderingApproach.Default, RasterizationApproach.DrawingVisual);
 
@@ -87,10 +88,10 @@ public static class DrawingItemLegendCommands
 
                 //map.Refresh();
 
-                if (layer.OriginalSource != null)
-                {
-                    (layer.OriginalSource as IEditableVectorDataSource/*<Feature<Point>, Point>*/)?.Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
-                }
+                //if (layer.DataSource != null)
+                //{
+                //    (layer.DataSource as IEditableVectorDataSource/*<Feature<Point>, Point>*/)?.Update(new Feature<Point>(editResult.Result) { Id = layer.Id });
+                //}
             }
         });
 

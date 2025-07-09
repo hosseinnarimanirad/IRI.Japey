@@ -307,6 +307,8 @@ public abstract class BaseLayer : Notifier, ILayer
         {
             _layerName = value;
             RaisePropertyChanged();
+
+            this._onLayerNameChanged?.Invoke(this, new CustomEventArgs<string>(value));
         }
     }
 
@@ -349,6 +351,21 @@ public abstract class BaseLayer : Notifier, ILayer
     }
 
     public event EventHandler<CustomEventArgs<BaseLayer>> OnSelectedFeaturesChanged;
+
+
+    private event EventHandler<CustomEventArgs<string>> _onLayerNameChanged;
+
+    public event EventHandler<CustomEventArgs<string>> OnLayerNameChanged
+    {
+        remove { this._onLayerNameChanged -= value; }
+        add
+        {
+            if (this._onLayerNameChanged == null)
+            {
+                this._onLayerNameChanged += value;
+            }
+        }
+    }
 
     private void RaiseVisibilityChanged(object sender, CustomEventArgs<Visibility> e)
     {

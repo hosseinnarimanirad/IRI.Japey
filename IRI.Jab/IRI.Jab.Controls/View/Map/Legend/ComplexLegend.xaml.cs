@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Map
+namespace IRI.Jab.Controls.View.Map;
+
+/// <summary>
+/// Interaction logic for ComplexLegend.xaml
+/// </summary>
+public partial class ComplexLegend : UserControl
 {
-    /// <summary>
-    /// Interaction logic for ComplexLegend.xaml
-    /// </summary>
-    public partial class ComplexLegend : UserControl
+    public ComplexLegend()
     {
-        public ComplexLegend()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -39,6 +39,7 @@ using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Enums;
 using IRI.Ket.GdiPersistence;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common.Presenter.Map;
 
@@ -1401,27 +1402,26 @@ public abstract class MapPresenter : BasePresenter
             return;
         }
 
-        var shapeItem = MakeShapeItem(drawingResult.Result, $"DRAWING {DrawingItems?.Count}");
+        var featureName = $"DRAWING {DrawingItems?.Count}";
 
-        if (shapeItem != null)
-        {
-            //this.SetLayer(shapeItem.AssociatedLayer);
-            AddDrawingItem(shapeItem);
-            //this.Refresh();
-        }
+        AddDrawingItem(drawingResult.Result, featureName);
     }
 
     public void AddDrawingItem(
         Geometry<Point> drawing,
         string? name = null,
         VisualParameters? visualParameters = null,
-        int id = int.MinValue,
-        VectorDataSource?/*<Feature<Point>>*/ source = null)
+        int id = int.MinValue)//,
+                              //VectorDataSource?/*<Feature<Point>>*/ source = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
 
-        var shapeItem = MakeShapeItem(drawing, name ?? $"DRAWING {DrawingItems?.Count}", visualParameters, id, source);
+        var featureName = name ?? $"Drawing {DrawingItems?.Count}";
+
+        var feature = new Feature<Point>(drawing, featureName);
+
+        var shapeItem = MakeShapeItem(feature, featureName, visualParameters, id/*, source*/);
 
         if (shapeItem != null)
         {
@@ -1473,14 +1473,16 @@ public abstract class MapPresenter : BasePresenter
     }
 
     protected DrawingItemLayer MakeShapeItem(
-        Geometry<Point> drawing,
+        Feature<Point> drawing,
         string name,
         VisualParameters? visualParameters = null,
-        int id = int.MinValue,
-        VectorDataSource?/*<Feature<Point>>*/ source = null)
+        int id = int.MinValue)//,
+                              //IVectorDataSource?/*<Feature<Point>>*/ source = null)
     {
-        var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
-        
+        //var feature = new Feature<Point>(drawing, name);
+
+        var shapeItem = DrawingItemLayer.Create(name, drawing, visualParameters, id/*, source*/);
+
         shapeItem.OnIsSelectedInTocChanged += (sender, e) =>
         {
             if (shapeItem.IsSelectedInToc)
@@ -1495,7 +1497,7 @@ public abstract class MapPresenter : BasePresenter
 
         TrySetCommandsForDrawingItemLayer(shapeItem);
 
-        shapeItem.Labels = new LabelParameters(ScaleInterval.All, 11, shapeItem.VisualParameters.Stroke, new FontFamily("Times New Roman"), i => i.GetCentroidPlus());
+        shapeItem.Labels = new LabelParameters(ScaleInterval.All, 13, shapeItem.VisualParameters.Stroke, new FontFamily("Times New Roman"), i => i.GetCentroidPlus());
 
         this.IsPanMode = true;
 
@@ -1554,9 +1556,9 @@ public abstract class MapPresenter : BasePresenter
 
         this.RemoveDrawingItem(second);
 
-        var newFirstLayer = MakeShapeItem(first.Geometry, first.LayerName, first.VisualParameters, first.Id, first.OriginalSource);
+        var newFirstLayer = MakeShapeItem(first.Feature, first.LayerName, first.VisualParameters, first.Id/*, first.DataSource*/);
 
-        var newSecondLayer = MakeShapeItem(second.Geometry, second.LayerName, second.VisualParameters, second.Id, second.OriginalSource);
+        var newSecondLayer = MakeShapeItem(second.Feature, second.LayerName, second.VisualParameters, second.Id/*, second.DataSource*/);
 
         if (first.ZIndex < second.ZIndex)
         {
@@ -3205,22 +3207,22 @@ public abstract class MapPresenter : BasePresenter
                     var features = featureSet.Features.Select(f => f.AsFeature(true, SrsBases.WebMercator)).ToList();
 
                     //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
-                    var dataSource = new MemoryDataSource(
-                        features/*,f => f.Label,null*/);
+                    //var dataSource = new MemoryDataSource(
+                    //    features/*,f => f.Label,null*/);
 
-                    var geometries = dataSource.GetAsFeatureSet()?.Features;
+                    //var geometries = dataSource.GetAsFeatureSet()?.Features;
 
-                    if (geometries.IsNullOrEmpty())
+                    if (features.IsNullOrEmpty())
                         return;
 
-                    if (geometries.Count != 1)
+                    if (features.Count != 1)
                     {
                         await DialogService.ShowMessageAsync("فایل جی‌سان حاوی تک عارضه باید باشد", _error, param);
 
                         return;
                     }
 
-                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                    AddDrawingItem(features.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
                 });
             }
 
@@ -3251,13 +3253,13 @@ public abstract class MapPresenter : BasePresenter
 
                     var geometry = Geometry<Point>.CreatePointOrLineStringOrRing(webMercatorPoints, SridHelper.WebMercator);
 
-                    Feature<Point> feature = new Feature<Point>(geometry, "test label");
+                    //Feature<Point> feature = new Feature<Point>(geometry, "test label");
 
-                    var dataSource = new MemoryDataSource([feature]);
+                    //var dataSource = new MemoryDataSource([feature]);
 
                     //var geometries = dataSource.GetAsFeatureSet()?.Features;
 
-                    AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                    AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
                 });
             }
 
@@ -3295,7 +3297,7 @@ public abstract class MapPresenter : BasePresenter
                         return;
                     }
 
-                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
                 });
             }
 

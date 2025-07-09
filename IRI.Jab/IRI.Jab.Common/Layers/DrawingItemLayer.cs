@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
+using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
@@ -11,6 +12,7 @@ using IRI.Sta.Persistence.DataSources;
 using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Enums;
+using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common;
 
@@ -25,21 +27,37 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
 
     public Guid HighlightGeometryKey { get; private set; }
 
-    private Geometry? _geometry;
-    public Geometry? Geometry
+    public Geometry Geometry
     {
-        get { return _geometry; }
+        get => Feature.TheGeometry;
+        //set
+        //{
+        //    _geometry = value;
+        //    RaisePropertyChanged();
+
+        //    this.DataSource = new MemoryDataSource(new List<Geometry<Point>>() { value });
+        //    this.Extent = value.GetBoundingBox();
+        //}
+    }
+
+    private Feature<Point> _feature;
+
+    public Feature<Point> Feature
+    {
+        get { return _feature; }
         set
         {
-            _geometry = value;
+            _feature = value;
             RaisePropertyChanged();
 
-            this.DataSource = new MemoryDataSource(new List<Geometry<Point>>() { value });
-            this.Extent = value.GetBoundingBox();
+            this.DataSource = new MemoryDataSource([_feature]);
+            
+            this.Extent = value.TheGeometry.GetBoundingBox();
         }
     }
 
-    public VectorDataSource/*<Feature<Point>>*/? OriginalSource { get; set; }
+
+    //public VectorDataSource/*<Feature<Point>>*/? OriginalSource { get; set; }
 
     public SpecialPointLayer? SpecialPointLayer { get; set; }
 
@@ -105,32 +123,37 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
 
     public bool CanShowHighlightGeometry() => this.IsSelectedInToc && VisualParameters?.Visibility == System.Windows.Visibility.Visible;
 
-    public static DrawingItemLayer CreateGeometryLayer(
+    public static DrawingItemLayer? Create(
         string layerName,
-        Geometry geometry,
+        Feature<Point> feature,
         VisualParameters? visualParameters = null,
-        int id = int.MinValue,
-        VectorDataSource/*<Feature<Point>>*/? source = null)
+        int id = int.MinValue)//,
+        //IVectorDataSource/*<Feature<Point>>*/? source = null)
     {
+        if (feature is null || feature.TheGeometry.IsNotValidOrEmpty())
+            return null;
+
         DrawingItemLayer result = new DrawingItemLayer(layerName, id, RasterizationApproach.DrawingVisual);
 
-        result.Extent = geometry.GetBoundingBox();
+        //result.Extent = geometry.GetBoundingBox();
 
         result.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
 
-        result.OriginalSource = source;
+        //result.OriginalSource = source;
 
-        result.Geometry = geometry;
+        result.Feature = feature;
 
-        // 7/9/2025
-        // possibly error prone!
-        if (source is not null)
-            result.DataSource = source;
+        //// 7/9/2025
+        //// possibly error prone!
+        //if (source is not null)
+        //    result.DataSource = source;
+
+        var geometryType = feature.TheGeometry.Type;
 
         var featureType =
-            (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint) ? LayerType.Point :
-            ((geometry.Type == GeometryType.LineString || geometry.Type == GeometryType.MultiLineString) ? LayerType.Polyline :
-            (geometry.Type == GeometryType.Polygon || geometry.Type == GeometryType.MultiPolygon) ? LayerType.Polygon : LayerType.None);
+            (geometryType == GeometryType.Point || geometryType == GeometryType.MultiPoint) ? LayerType.Point :
+            ((geometryType == GeometryType.LineString || geometryType == GeometryType.MultiLineString) ? LayerType.Polyline :
+            (geometryType == GeometryType.Polygon || geometryType == GeometryType.MultiPolygon) ? LayerType.Polygon : LayerType.None);
 
         result.Type = LayerType.Drawing | featureType;
 
@@ -144,6 +167,11 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
         result.OnVisibilityChanged += (sender, e) =>
         {
             result.RequestChangeVisibility?.Invoke(result);
+        };
+
+        result.OnLayerNameChanged += (sender, e) =>
+        {
+            feature.Attributes[feature.LabelAttribute] = e.Arg;
         };
 
         return result;

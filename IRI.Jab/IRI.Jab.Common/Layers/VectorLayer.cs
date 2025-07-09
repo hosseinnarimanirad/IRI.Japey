@@ -25,6 +25,7 @@ using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Symbology;
 using IRI.Jab.Common.Enums;
 using IRI.Sta.Persistence.Abstractions;
+using System.Text.RegularExpressions;
 
 namespace IRI.Jab.Common;
 
@@ -908,7 +909,7 @@ public class VectorLayer : BaseLayer
         //}
         //else
         //{
-            geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
+        geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
         //}
 
         if (geometries.Count == 0)
@@ -993,6 +994,8 @@ public class VectorLayer : BaseLayer
 
             var culture = System.Globalization.CultureInfo.CurrentCulture;
 
+            var backgroundBrush = new SolidColorBrush(Color.FromArgb(200, 255, 255, 255));
+
             for (int i = 0; i < labels.Count; i++)
             {
                 FormattedText formattedText = new FormattedText(labels[i] ?? string.Empty, culture, flowDirection,
@@ -1000,7 +1003,17 @@ public class VectorLayer : BaseLayer
 
                 WpfPoint location = mapToScreen(mapCoordinates[i]);
 
-                drawingContext.DrawRectangle(new SolidColorBrush(Color.FromArgb(50, 255, 255, 255)), null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
+                var temp = new WpfPoint(location.X - formattedText.Width * 1.5, location.Y - formattedText.Height / 2.0);
+
+                if (flowDirection == FlowDirection.LeftToRight)
+                {
+                    drawingContext.DrawRectangle(backgroundBrush, null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
+                }
+                else
+                {
+                    drawingContext.DrawRectangle(backgroundBrush, null, new Rect(temp, new Size(formattedText.Width, formattedText.Height)));
+                }
+
                 drawingContext.DrawText(formattedText, new WpfPoint(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
             }
         }
@@ -1033,6 +1046,8 @@ public class VectorLayer : BaseLayer
 
             var culture = System.Globalization.CultureInfo.CurrentCulture;
 
+            var backgroundBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+
             for (int i = 0; i < labels.Count; i++)
             {
                 FormattedText formattedText =
@@ -1040,6 +1055,7 @@ public class VectorLayer : BaseLayer
 
                 WpfPoint location = mapToScreen(mapCoordinates[i]);
 
+                drawingContext.DrawRectangle(backgroundBrush, null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
                 drawingContext.DrawText(formattedText, new WpfPoint(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
             }
         }
@@ -1076,9 +1092,23 @@ public class VectorLayer : BaseLayer
 
         graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
+        var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+
+        var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+        var culture = System.Globalization.CultureInfo.CurrentCulture;
+
+        var backgroundBrush = BrushHelper.CreateGdiBrush(System.Drawing.Color.FromArgb(50, 255, 255, 255), 1);
+
         for (int i = 0; i < labels.Count; i++)
         {
+
+            FormattedText formattedText =
+            new FormattedText(labels[i] ?? string.Empty, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
+
             var location = mapToScreen(mapCoordinates[i]);
+
+            graphic.FillRectangle(backgroundBrush, (int)location.X, (int)location.Y, (int)formattedText.Width, (int)formattedText.Height);
 
             graphic.DrawString(labels[i], font, Labels.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
         }
