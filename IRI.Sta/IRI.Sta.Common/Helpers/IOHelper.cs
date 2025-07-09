@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Sta.Common.Primitives;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -71,6 +72,31 @@ public static class IOHelper
         foreach (var line in lines)
         {
             result.Add(line.Split(delimited));
+        }
+
+        return result;
+    }
+
+    public static List<Point> ReadAllPoints(string fileName, params char[] delimited)
+    {
+        if (!File.Exists(fileName))
+        {
+            return new List<Point>();
+        }
+
+        var lines = File.ReadAllLines(fileName);
+
+        var result = new List<Point>();
+
+        foreach (var line in lines)
+        {
+            var splitted = line.Split(delimited);
+
+            var x = double.Parse(splitted[0]);
+
+            var y = double.Parse(splitted[1]);
+
+            result.Add(new Point(x, y));
         }
 
         return result;

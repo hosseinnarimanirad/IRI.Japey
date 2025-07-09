@@ -1,5 +1,9 @@
 ﻿using IRI.Sta.Common.Common.JsonConverters;
+using IRI.Sta.Spatial.Primitives;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Sta.SpatialReferenceSystem;
 using System.Text.Json.Serialization;
+using IRI.Sta.Common.Primitives;
 
 namespace IRI.Sta.Spatial.GeoJsonFormat;
 
@@ -29,6 +33,20 @@ public class GeoJsonFeature
             Geometry_name = string.Empty,
             Id = "0",
             Properties = attributes ?? new Dictionary<string, object>(),
+        };
+    }
+
+    public Feature<Point> AsFeature(bool isLongitudeFirst, SrsBase? targetSrs = null)
+    {
+        targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
+
+        return new Feature<Point>()
+        {
+            Attributes = this.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
+            //Id = feature.id,
+            //TheGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
+            //                                    .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator).AsGeometry()
+            TheGeometry = this.Geometry.Parse(isLongitudeFirst, SridHelper.GeodeticWGS84).Project(targetSrs)
         };
     }
 }

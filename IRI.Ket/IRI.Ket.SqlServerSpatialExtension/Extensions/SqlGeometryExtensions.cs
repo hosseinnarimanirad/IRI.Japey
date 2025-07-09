@@ -1453,7 +1453,7 @@ public static class SqlGeometryExtensions
     #endregion
 
 
-    #region SqlFeature  
+    //#region SqlFeature  
 
     //public static SqlFeature AsSqlFeature<T>(this Feature<T> feature) where T : IPoint, new()
     //{
@@ -1494,18 +1494,19 @@ public static class SqlGeometryExtensions
     //    };
     //}
 
-    public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase? targetSrs = null)
-    {
-        targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
+    //public static Feature<Point> AsFeature(this GeoJsonFeature feature, bool isLongitudeFirst, SrsBase? targetSrs = null)
+    //{
+    //    targetSrs = targetSrs ?? SrsBases.GeodeticWgs84;
 
-        return new Feature<Point>()
-        {
-            Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
-            //Id = feature.id,
-            TheGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
-                                                .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator).AsGeometry()
-        };
-    }
+    //    return new Feature<Point>()
+    //    {
+    //        Attributes = feature.Properties/*.ToDictionary(f => f.Key, f => (object)f.Value)*/,
+    //        //Id = feature.id,
+    //        //TheGeometry = feature.Geometry.AsSqlGeography(isLongitudeFirst, SridHelper.GeodeticWGS84)
+    //        //                                    .Project(targetSrs.FromWgs84Geodetic<Point>, SridHelper.WebMercator).AsGeometry()
+    //        TheGeometry = feature.Geometry.Parse(isLongitudeFirst, SridHelper.GeodeticWGS84).Project(targetSrs)
+    //    };
+    //}
 
-    #endregion
+    //#endregion
 }

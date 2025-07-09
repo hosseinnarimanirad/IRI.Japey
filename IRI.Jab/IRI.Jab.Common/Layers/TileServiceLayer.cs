@@ -24,7 +24,8 @@ public class TileServiceLayer : BaseLayer
 
     static TileServiceLayer()
     {
-        notFoundImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound);
+        //notFoundImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.imageNotFound);
+        notFoundImage = IRI.Jab.Common.Helpers.ImageUtility.AsByteArray(Properties.Resources.whiteImage);
     }
 
     private TileServices.TileCacheAddress _cache;

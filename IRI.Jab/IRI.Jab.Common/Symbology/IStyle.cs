@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace IRI.Jab.Common.Symbology;
 
-public interface ISymbol
+public interface IStyle
 {
-    VisualParameters Get(Feature<Point> feature);
-}
+    VisualParameters Get(Feature<Point> feature, double scale);
+} 

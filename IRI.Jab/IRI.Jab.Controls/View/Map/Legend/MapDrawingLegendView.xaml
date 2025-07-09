@@ -50,6 +50,10 @@
                         BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه ژئوجی‌سان">
                 <Path Data="{StaticResource json}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
             </Button>
+            <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="1" Cursor="Hand" Command="{Binding AddLongLatTxtToDrawingItemsCommand}"  
+             BorderThickness="0" Focusable="False" ToolTip="بارگذاری از فایل">
+                <Path Data="{StaticResource txt}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>
+            </Button>
             <Button Style="{StaticResource menuCircleButton}" VerticalAlignment="Center" Margin="01" Cursor="Hand" Command="{Binding AddShapefileToDrawingItemsCommand}"  
                         BorderThickness="0" Focusable="False" ToolTip="بارگذاری عارضه شیپ‌فایل">
                 <Path Data="{StaticResource shapefile}" Stretch="Uniform" Fill="White" Width="18" Height="18" FlowDirection="LeftToRight"/>

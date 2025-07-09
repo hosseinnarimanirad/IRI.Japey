@@ -871,7 +871,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
                 if (GetLineSegments().Any(s => boundingBox.IntersectsLineSegment(s.Start, s.End)))
                     return true;
-                 
+
                 return false;
 
             case GeometryType.Polygon:
@@ -1905,13 +1905,19 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     public static Geometry<T> CreatePointOrLineString(List<T> points, int srid)
     {
         if (points.Count == 1)
-        {
             return new Geometry<T>(points, GeometryType.Point, srid);
-        }
+
         else
-        {
             return new Geometry<T>(points, GeometryType.LineString, srid);
-        }
+    }
+    public static Geometry<T> CreatePointOrLineStringOrRing(List<T> points, int srid)
+    {
+        if (points.Count > 2 && points[0].AreExactlyTheSame(points[points.Count - 1]))
+
+            return Geometry<T>.Create(points, GeometryType.Polygon, srid);
+
+        else
+            return CreatePointOrLineString(points, srid);
     }
 
     public static Geometry<T> CreatePointOrLineString(int srid, params T[] points)
@@ -2065,7 +2071,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     {
         if (geoCoordinates.IsNullOrEmpty())
             return Geometry<T>.CreateEmpty(geometryType, srid);
-        
+
         if (isRing)
         {
             var numberOfPoints = geoCoordinates.Length;

@@ -1412,10 +1412,10 @@ public abstract class MapPresenter : BasePresenter
 
     public void AddDrawingItem(
         Geometry<Point> drawing,
-        string name = null,
-        VisualParameters visualParameters = null,
+        string? name = null,
+        VisualParameters? visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource/*<Feature<Point>>*/ source = null)
+        VectorDataSource?/*<Feature<Point>>*/ source = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
@@ -1474,9 +1474,9 @@ public abstract class MapPresenter : BasePresenter
     protected DrawingItemLayer MakeShapeItem(
         Geometry<Point> drawing,
         string name,
-        VisualParameters visualParameters = null,
+        VisualParameters? visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource/*<Feature<Point>>*/ source = null)
+        VectorDataSource?/*<Feature<Point>>*/ source = null)
     {
         var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
 
@@ -3222,6 +3222,41 @@ public abstract class MapPresenter : BasePresenter
             }
 
             return _addGeoJsonToDrawingItemsCommand;
+        }
+    }
+
+    private RelayCommand _addLongLatTxtToDrawingItemsCommand;
+    public RelayCommand AddLongLatTxtToDrawingItemsCommand
+    {
+        get
+        {
+            if (_addLongLatTxtToDrawingItemsCommand == null)
+            {
+                _addLongLatTxtToDrawingItemsCommand = new RelayCommand(async param =>
+                {
+                    var fileName = await DialogService.ShowOpenFileDialogAsync("*.csv|*.csv", param);
+
+                    if (string.IsNullOrWhiteSpace(fileName))
+                        return;
+
+                    var wgsPoints = IOHelper.ReadAllPoints(fileName, IOHelper.CsvDelimiterChar);
+
+                    if (wgsPoints.IsNullOrEmpty())
+                        return;
+
+                    var webMercatorPoints = wgsPoints.Select(p => p.Project(SrsBases.GeodeticWgs84, SrsBases.WebMercator)).ToList();
+                     
+                    var geometry = Geometry<Point>.CreatePointOrLineStringOrRing(webMercatorPoints, SridHelper.WebMercator);
+
+                    var dataSource = new MemoryDataSource([geometry]);
+
+                    var geometries = dataSource.GetAsFeatureSet()?.Features;
+                     
+                    AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                });
+            }
+
+            return _addLongLatTxtToDrawingItemsCommand;
         }
     }
 

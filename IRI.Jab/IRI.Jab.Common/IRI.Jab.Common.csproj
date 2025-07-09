@@ -134,6 +134,7 @@
     <Resource Include="Assets\Images\BaseMaps\stamenWatercolor.jpg" />
     <Resource Include="Assets\Images\BaseMaps\Waze.png" />
     <Resource Include="Assets\Images\imageNotFound.jpg" />
+    <Resource Include="Assets\Images\whiteImage.jpg" />
   </ItemGroup>
 
   <ItemGroup>
