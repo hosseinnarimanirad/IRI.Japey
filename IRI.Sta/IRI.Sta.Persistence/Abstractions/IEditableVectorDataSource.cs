@@ -1,5 +1,4 @@
-﻿using IRI.Sta.Common.Abstrations;
-using IRI.Sta.Common.Primitives;
+﻿using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Sta.Persistence.Abstractions;

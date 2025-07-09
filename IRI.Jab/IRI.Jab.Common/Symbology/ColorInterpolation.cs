@@ -4,7 +4,8 @@ namespace IRI.Jab.Common.Symbology;
 
 public class ColorInterpolation
 {
-    Color _minColor, _maxColor;
+    private readonly Color _minColor;
+    //private readonly Color _maxColor;
 
     int rangeR, rangeB, rangeG;
 
@@ -12,7 +13,7 @@ public class ColorInterpolation
     {
         _minColor = minColor;
 
-        _maxColor = maxColor;
+        //_maxColor = maxColor;
 
         rangeR = maxColor.R - minColor.R;
         rangeG = maxColor.G - minColor.G;

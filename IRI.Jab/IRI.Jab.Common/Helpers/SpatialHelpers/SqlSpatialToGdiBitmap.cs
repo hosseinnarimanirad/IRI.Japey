@@ -7,7 +7,7 @@ using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
-using drawing = System.Drawing;
+using Drawing = System.Drawing;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Jab.Common.Symbology;
@@ -16,11 +16,12 @@ namespace IRI.Jab.Common.Convertor;
 
 public static class SqlSpatialToGdiBitmap
 {
-    static readonly drawing.SolidBrush _labelBackground = new drawing.SolidBrush(drawing.Color.FromArgb(150, 255, 255, 255));
+    static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
-    public static void WriteToImage(drawing.Bitmap image, List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    #region SqlGeometry to GdiBitmap
+    public static void WriteToImage(Drawing.Bitmap image, List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
-        drawing.Graphics graphics = drawing.Graphics.FromImage(image);
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
 
         int p = 0;
 
@@ -35,7 +36,7 @@ public static class SqlSpatialToGdiBitmap
         //return image;
     }
 
-    internal static void WriteToImage(drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    internal static void WriteToImage(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         if (geometry != null)
         {
@@ -43,11 +44,11 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    public static drawing.Bitmap ParseSqlGeometry(List<SqlGeometry> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    public static Drawing.Bitmap ParseSqlGeometry(List<SqlGeometry> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
-        var result = new drawing.Bitmap((int)width, (int)height);
+        var result = new Drawing.Bitmap((int)width, (int)height);
 
-        drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
 
         int p = 0;
 
@@ -63,7 +64,7 @@ public static class SqlSpatialToGdiBitmap
     }
 
 
-    private static int AddGeometry(drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static int AddGeometry(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
@@ -109,7 +110,7 @@ public static class SqlSpatialToGdiBitmap
         return 0;
     }
 
-    private static void AddPoint(drawing.Graphics graphics, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddPoint(Drawing.Graphics graphics, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         var parsedPoint = transform(point.AsWpfPoint()).AsPoint();
 
@@ -121,7 +122,7 @@ public static class SqlSpatialToGdiBitmap
         {
             //96.09.21
             //graphics.DrawImage(pointSymbol.ImagePointSymbol, new drawing.RectangleF((float)parsedPoint.X - _symbolOffset, (float)parsedPoint.Y - _symbolOffset, _symbolSize, _symbolSize));
-            graphics.DrawImage(pointSymbol.ImagePointSymbolGdiPlus, new drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
+            graphics.DrawImage(pointSymbol.ImagePointSymbolGdiPlus, new Drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
         }
         else
         {
@@ -136,7 +137,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPoint(drawing.Graphics graphics, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+    private static void AddMultiPoint(Drawing.Graphics graphics, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
     {
         int numberOfPoints = multiPoint.STNumGeometries().Value;
 
@@ -151,24 +152,24 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddLineString(drawing.Graphics graphics, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddLineString(Drawing.Graphics graphics, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = lineString.STNumPoints().Value;
 
-        drawing.PointF[] points = new drawing.PointF[numberOfPoints];
+        Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
         //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
             var parsedPoint = transform(lineString.STPointN(i + 1).AsWpfPoint());
 
-            points[i] = new drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
+            points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
 
         graphics.DrawLines(pen, points);
     }
 
-    private static void AddMultiLineString(drawing.Graphics graphics, SqlGeometry multiLineString, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddMultiLineString(Drawing.Graphics graphics, SqlGeometry multiLineString, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfLineStrings = multiLineString.STNumGeometries().Value;
 
@@ -183,18 +184,18 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddPolygonRing(drawing.Graphics graphics, SqlGeometry ring, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddPolygonRing(Drawing.Graphics graphics, SqlGeometry ring, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = ring.STNumPoints().Value;
 
-        drawing.PointF[] points = new drawing.PointF[numberOfPoints];
+        Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
         //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
             var parsedPoint = transform(ring.STPointN(i + 1).AsWpfPoint());
 
-            points[i] = new drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
+            points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
 
         if (pen != null)
@@ -208,7 +209,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddPolygon(drawing.Graphics graphics, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddPolygon(Drawing.Graphics graphics, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         var exteriorRing = polygon.STExteriorRing();
 
@@ -224,7 +225,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPolygon(drawing.Graphics graphics, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddMultiPolygon(Drawing.Graphics graphics, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPolygons = multiPolygon.STNumGeometries().Value;
 
@@ -241,7 +242,7 @@ public static class SqlSpatialToGdiBitmap
 
 
     //Labeling
-    public static void DrawLabels(List<string> labels, List<SqlGeometry> geometries, drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
+    public static void DrawLabels(List<string> labels, List<SqlGeometry> geometries, Drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
     {
         if (labels.Count != geometries.Count)
             return;
@@ -252,27 +253,27 @@ public static class SqlSpatialToGdiBitmap
                       return labelParameters.PositionFunc(g.AsGeometry()).AsWpfPoint();
                   }).ToList();
 
-        var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, drawing.FontStyle.Bold);
+        var font = new Drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, Drawing.FontStyle.Bold);
 
-        var graphic = drawing.Graphics.FromImage(image);
+        var graphic = Drawing.Graphics.FromImage(image);
 
-        graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
+        graphic.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        graphic.InterpolationMode = Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-        graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        graphic.PixelOffsetMode = Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-        graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+        graphic.TextRenderingHint = Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
         for (int i = 0; i < labels.Count; i++)
         {
             var location = mapToScreen(mapCoordinates[i]);
 
-            System.Drawing.StringFormat format = new drawing.StringFormat();
+            System.Drawing.StringFormat format = new Drawing.StringFormat();
 
             if (labelParameters.IsRtl)
             {
-                format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+                format.FormatFlags = Drawing.StringFormatFlags.DirectionRightToLeft;
             }
 
             var stringSize = graphic.MeasureString(labels[i], font);
@@ -283,54 +284,17 @@ public static class SqlSpatialToGdiBitmap
         graphic.Flush();
     }
 
-    //public static void DrawLabels(List<NamedSqlGeometry> namedGeometries, drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
-    //{
-    //    //var mapCoordinates = geometries..ConvertAll(
-    //    //          (g) =>
-    //    //          {
-    //    //              return labelParameters.PositionFunc(g).AsWpfPoint();
-    //    //          }).ToList();
-
-    //    var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
-
-    //    var graphic = drawing.Graphics.FromImage(image);
-
-    //    graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-    //    graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-
-    //    graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
-
-    //    graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-
-    //    for (int i = 0; i < namedGeometries.Count; i++)
-    //    {
-    //        //var location = mapToScreen(mapCoordinates[i]);
-    //        //graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
-
-    //        var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry.AsGeometry()).AsWpfPoint());
-
-    //        System.Drawing.StringFormat format = new drawing.StringFormat();
-
-    //        if (labelParameters.IsRtl)
-    //        {
-    //            format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
-    //        }
-
-    //        var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
-
-    //        graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
-    //    }
-
-    //    graphic.Flush();
-    //}
-
-
+    #endregion
+     
 
     // GEOMETRY<T>
-    public static void WriteToImage(drawing.Bitmap image, List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+
+
+    #region Geometry to GdiBitmap
+
+    public static void WriteToImage(Drawing.Bitmap image, List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
-        drawing.Graphics graphics = drawing.Graphics.FromImage(image);
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
 
         int p = 0;
 
@@ -345,7 +309,7 @@ public static class SqlSpatialToGdiBitmap
         //return image;
     }
 
-    internal static void WriteToImage(drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    internal static void WriteToImage(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         if (geometry != null)
         {
@@ -353,11 +317,11 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    public static drawing.Bitmap ParseSqlGeometry(List<Geometry<Point>> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    public static Drawing.Bitmap ParseSqlGeometry(List<Geometry<Point>> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
-        var result = new drawing.Bitmap((int)width, (int)height);
+        var result = new Drawing.Bitmap((int)width, (int)height);
 
-        drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
 
         int p = 0;
 
@@ -373,7 +337,7 @@ public static class SqlSpatialToGdiBitmap
     }
 
 
-    private static int AddGeometry(drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
@@ -417,7 +381,7 @@ public static class SqlSpatialToGdiBitmap
         return 0;
     }
 
-    private static void AddPoint(drawing.Graphics graphics, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddPoint(Drawing.Graphics graphics, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         var parsedPoint = transform(point.AsWpfPoint()).AsPoint();
 
@@ -429,7 +393,7 @@ public static class SqlSpatialToGdiBitmap
         {
             //96.09.21
             //graphics.DrawImage(pointSymbol.ImagePointSymbol, new drawing.RectangleF((float)parsedPoint.X - _symbolOffset, (float)parsedPoint.Y - _symbolOffset, _symbolSize, _symbolSize));
-            graphics.DrawImage(pointSymbol.ImagePointSymbolGdiPlus, new drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
+            graphics.DrawImage(pointSymbol.ImagePointSymbolGdiPlus, new Drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
         }
         else
         {
@@ -444,7 +408,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPoint(drawing.Graphics graphics, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+    private static void AddMultiPoint(Drawing.Graphics graphics, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 
@@ -459,24 +423,24 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddLineString(drawing.Graphics graphics, Geometry<Point> lineString, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddLineString(Drawing.Graphics graphics, Geometry<Point> lineString, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = lineString.NumberOfPoints;
 
-        drawing.PointF[] points = new drawing.PointF[numberOfPoints];
+        Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
         //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
             var parsedPoint = transform(lineString.Points[i].AsWpfPoint());
 
-            points[i] = new drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
+            points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
 
         graphics.DrawLines(pen, points);
     }
 
-    private static void AddMultiLineString(drawing.Graphics graphics, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddMultiLineString(Drawing.Graphics graphics, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -491,18 +455,18 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddPolygonRing(drawing.Graphics graphics, Geometry<Point> ring, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddPolygonRing(Drawing.Graphics graphics, Geometry<Point> ring, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = ring.NumberOfPoints;
 
-        drawing.PointF[] points = new drawing.PointF[numberOfPoints];
+        Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
         //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
             var parsedPoint = transform(ring.Points[i].AsWpfPoint());
 
-            points[i] = new drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
+            points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
 
         if (pen != null)
@@ -516,7 +480,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddPolygon(drawing.Graphics graphics, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddPolygon(Drawing.Graphics graphics, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         //var exteriorRing = polygon.STExteriorRing();
 
@@ -541,7 +505,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPolygon(drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush)
+    private static void AddMultiPolygon(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -556,7 +520,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddGeometryCollection(drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, drawing.Pen pen, drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddGeometryCollection(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -572,7 +536,7 @@ public static class SqlSpatialToGdiBitmap
     }
 
     //Labeling
-    public static void DrawLabels(List<string> labels, List<Geometry<Point>> geometries, drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
+    public static void DrawLabels(List<string> labels, List<Geometry<Point>> geometries, Drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
     {
         if (labels.Count != geometries.Count)
             return;
@@ -583,25 +547,25 @@ public static class SqlSpatialToGdiBitmap
                       return labelParameters.PositionFunc(g).AsWpfPoint();
                   }).ToList();
 
-        var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, drawing.FontStyle.Bold);
+        var font = new Drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, Drawing.FontStyle.Bold);
 
-        var graphic = drawing.Graphics.FromImage(image);
+        var graphic = Drawing.Graphics.FromImage(image);
 
-        graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
+        graphic.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        graphic.InterpolationMode = Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-        graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        graphic.PixelOffsetMode = Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-        graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+        graphic.TextRenderingHint = Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
         var brush = labelParameters.Foreground.AsGdiBrush();
 
-        System.Drawing.StringFormat format = new drawing.StringFormat();
+        System.Drawing.StringFormat format = new Drawing.StringFormat();
 
         if (labelParameters.IsRtl)
         {
-            format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+            format.FormatFlags = Drawing.StringFormatFlags.DirectionRightToLeft;
         }
 
         for (int i = 0; i < labels.Count; i++)
@@ -610,11 +574,11 @@ public static class SqlSpatialToGdiBitmap
 
             var stringSize = graphic.MeasureString(labels[i], font);
 
-            drawing.PointF locationF = new drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
+            Drawing.PointF locationF = new Drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
 
             var rectangleF = labelParameters.IsRtl ?
-                 new drawing.RectangleF(locationF.X - stringSize.Width, locationF.Y, stringSize.Width, stringSize.Height) :
-                 new drawing.RectangleF(locationF.X, locationF.Y, stringSize.Width, stringSize.Height);
+                 new Drawing.RectangleF(locationF.X - stringSize.Width, locationF.Y, stringSize.Width, stringSize.Height) :
+                 new Drawing.RectangleF(locationF.X, locationF.Y, stringSize.Width, stringSize.Height);
 
             graphic.FillRectangle(_labelBackground, rectangleF);
 
@@ -629,6 +593,9 @@ public static class SqlSpatialToGdiBitmap
         brush.Dispose();
     }
 
+    #endregion
+
+    #region Old Codes
     //public static void DrawLabels(List<NamedGeometry> namedGeometries, drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
     //{
     //    var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
@@ -670,5 +637,49 @@ public static class SqlSpatialToGdiBitmap
     //    graphic.Dispose();
     //    brush.Dispose();
     //}
+
+    //public static void DrawLabels(List<NamedSqlGeometry> namedGeometries, drawing.Bitmap image, Func<WpfPoint, WpfPoint> mapToScreen, LabelParameters labelParameters)
+    //{
+    //    //var mapCoordinates = geometries..ConvertAll(
+    //    //          (g) =>
+    //    //          {
+    //    //              return labelParameters.PositionFunc(g).AsWpfPoint();
+    //    //          }).ToList();
+
+    //    var font = new drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize);
+
+    //    var graphic = drawing.Graphics.FromImage(image);
+
+    //    graphic.SmoothingMode = drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+    //    graphic.InterpolationMode = drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+    //    graphic.PixelOffsetMode = drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+    //    graphic.TextRenderingHint = drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+
+    //    for (int i = 0; i < namedGeometries.Count; i++)
+    //    {
+    //        //var location = mapToScreen(mapCoordinates[i]);
+    //        //graphic.DrawString(labels[i], font, labelParameters.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+
+    //        var location = mapToScreen(labelParameters.PositionFunc(namedGeometries[i].TheSqlGeometry.AsGeometry()).AsWpfPoint());
+
+    //        System.Drawing.StringFormat format = new drawing.StringFormat();
+
+    //        if (labelParameters.IsRtl)
+    //        {
+    //            format.FormatFlags = drawing.StringFormatFlags.DirectionRightToLeft;
+    //        }
+
+    //        var stringSize = graphic.MeasureString(namedGeometries[i].Label, font);
+
+    //        graphic.DrawString(namedGeometries[i].Label ?? string.Empty, font, labelParameters.Foreground.AsGdiBrush(), (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
+    //    }
+
+    //    graphic.Flush();
+    //}
+
+    #endregion
 
 }

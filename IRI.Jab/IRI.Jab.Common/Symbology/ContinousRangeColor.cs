@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq; 
 
 namespace IRI.Jab.Common.Symbology;
 
@@ -16,7 +14,7 @@ public class ContinousRangeColor
 
     public List<double> MidValues { get; }
 
-    public List<Color> Colors { get; }
+    //public List<Color> Colors { get; }
 
     public List<ColorInterpolation> Interpolations { get; private set; }
 

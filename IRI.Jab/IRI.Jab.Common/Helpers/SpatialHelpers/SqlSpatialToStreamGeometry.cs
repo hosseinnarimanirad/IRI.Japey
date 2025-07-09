@@ -22,6 +22,8 @@ public static class SqlSpatialToStreamGeometry
 
     //static Pen pen = new Pen(new SolidColorBrush(Colors.Black), 0);
 
+    #region SqlGeometry to StreamGeometry 
+
     public static StreamGeometry ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Geometry pointSymbol = null)
     {
         StreamGeometry result = new StreamGeometry();
@@ -236,9 +238,13 @@ public static class SqlSpatialToStreamGeometry
         return result;
     }
 
+    #endregion
 
 
     // ******************************************************** GEOMETRY<T> ********************************************************************
+
+    #region Geometry to StreamGeometry
+
     public static StreamGeometry ParseSqlGeometry<T>(List<Geometry<T>> geometries, Func<WpfPoint, WpfPoint> transform, Geometry? pointSymbol = null)
         where T : IPoint, new()
     {
@@ -422,4 +428,6 @@ public static class SqlSpatialToStreamGeometry
             AddPoint(context, point, transform);
         }
     }
+
+    #endregion
 }

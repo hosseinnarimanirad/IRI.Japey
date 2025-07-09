@@ -195,11 +195,11 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         //this.DashType = dashType;
     }
 
-    public VisualParameters(Color fill, Color? stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
-        : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity, visibility)
-    {
+    //public VisualParameters(Color fill, Color? stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
+    //    : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity, visibility)
+    //{
 
-    }
+    //}
 
     public VisualParameters(Color fill, Color? stroke = null, double strokeThickness = 1, double opacity = 1)
         : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity)

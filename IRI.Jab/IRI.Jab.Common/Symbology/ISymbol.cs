@@ -1,10 +1,10 @@
-﻿//using System.Windows.Media;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
+using System.Windows.Media;
 
-//namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Symbology;
 
-//public interface ISymbol
-//{
-//    double Opacity { get; set; }
-//    Brush Stroke { get; set; }
-//    double StrokeThickness { get; set; }
-//}
+public interface ISymbol
+{
+    VisualParameters Get(Feature<Point> feature);
+}

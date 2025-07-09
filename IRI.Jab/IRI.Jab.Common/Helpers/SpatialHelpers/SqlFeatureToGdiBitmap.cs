@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using drawing = System.Drawing;
+using Drawing = System.Drawing;
 using IRI.Sta.Spatial.Primitives;
 
 using WpfPoint = System.Windows.Point;
@@ -10,16 +10,16 @@ namespace IRI.Jab.Common.Convertor;
 
 public static class SqlFeatureToGdiBitmap
 {
-    internal static drawing.Bitmap ParseSqlGeometry(
+    internal static Drawing.Bitmap ParseSqlGeometry(
        List<Feature<Point>> features,
        double width,
        double height,
        Func<WpfPoint, WpfPoint> mapToScreen,
        Func<Feature<Point>, VisualParameters> symbologyRule)
     {
-        var result = new drawing.Bitmap((int)width, (int)height);
+        var result = new Drawing.Bitmap((int)width, (int)height);
 
-        drawing.Graphics graphics = drawing.Graphics.FromImage(result);
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
 
         int p = 0;
 

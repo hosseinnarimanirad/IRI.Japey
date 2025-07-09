@@ -23,6 +23,8 @@ public class SqlSpatialToDrawingVisual
     private readonly Pen _defaultPen = new Pen(Brushes.Black, 1);
     private readonly Brush _defaultBrush = Brushes.Gray;
 
+    #region SqlGeometry to Drawing Visual
+
     public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbol? pointSymbol)
     {
         if (pen != null)
@@ -185,8 +187,12 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
+    #endregion
+
 
     // ******************************************************** GEOMETRY<T> ********************************************************************
+
+    #region Geometry To Drawing Visual
 
     public DrawingVisual ParseGeometry<T>(
         List<Geometry<T>> geometries,
@@ -382,4 +388,5 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
+    #endregion
 }

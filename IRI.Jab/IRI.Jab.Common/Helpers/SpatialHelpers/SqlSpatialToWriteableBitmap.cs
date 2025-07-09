@@ -18,6 +18,8 @@ class SqlSpatialToWriteableBitmap
 {
     int pointSize = 4;
 
+    #region SqlGeometry to WriteableBitmap
+
     public WriteableBitmap ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
     {
         //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
@@ -214,8 +216,13 @@ class SqlSpatialToWriteableBitmap
         }
     }
 
+    #endregion
+
 
     // GEOMETRY<T>
+
+    #region Geometry to WriteableBitmap
+
     public WriteableBitmap ParseSqlGeometry(List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
     {
         //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
@@ -410,4 +417,5 @@ class SqlSpatialToWriteableBitmap
         }
     }
 
+    #endregion
 }
