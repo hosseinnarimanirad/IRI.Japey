@@ -122,6 +122,11 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
 
         result.Geometry = geometry;
 
+        // 7/9/2025
+        // possibly error prone!
+        if (source is not null)
+            result.DataSource = source;
+
         var featureType =
             (geometry.Type == GeometryType.Point || geometry.Type == GeometryType.MultiPoint) ? LayerType.Point :
             ((geometry.Type == GeometryType.LineString || geometry.Type == GeometryType.MultiLineString) ? LayerType.Polyline :

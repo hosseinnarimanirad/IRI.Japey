@@ -1910,11 +1910,12 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         else
             return new Geometry<T>(points, GeometryType.LineString, srid);
     }
+
     public static Geometry<T> CreatePointOrLineStringOrRing(List<T> points, int srid)
     {
         if (points.Count > 2 && points[0].AreExactlyTheSame(points[points.Count - 1]))
 
-            return Geometry<T>.Create(points, GeometryType.Polygon, srid);
+            return Geometry<T>.Create(points.Take(points.Count - 1).ToList(), GeometryType.Polygon, srid);
 
         else
             return CreatePointOrLineString(points, srid);

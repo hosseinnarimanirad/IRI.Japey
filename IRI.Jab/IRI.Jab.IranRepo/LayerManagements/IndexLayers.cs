@@ -19,6 +19,8 @@ namespace IRI.Jab.IranRepo;
 
 public static class IndexLayers
 {
+    static FontFamily fontFamily = new FontFamily("Times New Roman");
+
     public static VectorLayer GetLayerFromShapefile(string layerName, string filePath, string color)
     {
         var features = ShapefileDataSourceFactory.Create(filePath, new WebMercator());
@@ -36,10 +38,13 @@ public static class IndexLayers
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 5, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
+        var index250kLabels = new LabelParameters(ScaleInterval.Create(7), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
+
         return new VectorLayer("اندکس ۲۵۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual, ScaleInterval.Create(4))
         {
             ShowInToc = false,
-            CanUserDelete = false
+            CanUserDelete = false,
+            Labels = index250kLabels
         };
 
     }
@@ -52,10 +57,13 @@ public static class IndexLayers
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 3, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
+        var index100kLabels = new LabelParameters(ScaleInterval.Create(9), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
+
         return new VectorLayer("اندکس ۱۰۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.Create(5))
         {
             ShowInToc = false,
-            CanUserDelete = false
+            CanUserDelete = false,
+            Labels = index100kLabels
         };
 
     }
@@ -96,36 +104,19 @@ public static class IndexLayers
     {
         var index250k = IndexLayers.GetIndex250kLayer();
 
-        var fontFamily = new FontFamily("Times New Roman");
+        //var fontFamily = new FontFamily("Times New Roman");
 
-        var index250kLabels = new LabelParameters(ScaleInterval.Create(7), 12, index250k.VisualParameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
-
-        index250k.Commands = GetCommands<Index250k>(map, index250k, index250kLabels);
+        index250k.Commands = GetCommands<Index250k>(map, index250k/*, index250kLabels*/);
 
         //100k
         var index100k = IndexLayers.GetIndex100kLayer();
 
         //var index100kLegend = new MapLegendItemWithOptionsModel(index100k);
 
-        var index100kLabels = new LabelParameters(ScaleInterval.Create(9), 12, index250k.VisualParameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
-
-        index100k.Commands = GetCommands<Index100k>(map, index100k, index100kLabels);
+        index100k.Commands = GetCommands<Index100k>(map, index100k/*, index100kLabels*/);
 
         return new List<ILayer>() { index250k, index100k };
 
-    }
-
-    private static List<ILegendCommand> GetCommands<T>(MapPresenter map, VectorLayer layer, LabelParameters label)
-        where T : class, IGeometryAware<Point>
-    {
-        return new List<ILegendCommand>()
-        {
-            LegendCommand.CreateZoomToExtentCommand(map, layer),
-            LegendCommand.CreateShowAttributeTable/*<T>*/(map,layer),
-            LegendCommand.CreateSelectByDrawing/*<T>*/(map,layer),
-            LegendCommand.CreateClearSelected(map,layer),
-            LegendToggleCommand.CreateToggleLayerLabelCommand(map, layer, label)
-        };
     }
 
 
@@ -192,10 +183,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer, label);
+        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
 
         return layer;
     }
@@ -223,10 +215,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer, label);
+        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
 
         return layer;
     }
@@ -254,10 +247,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer, label);
+        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
 
         return layer;
     }
@@ -285,10 +279,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer, label);
+        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
 
         return layer;
     }
@@ -323,10 +318,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer50k.Commands = GetCommands<GeodeticSheet>(map, layer50k, label);
+        layer50k.Commands = GetCommands<GeodeticSheet>(map, layer50k/*, label*/);
 
         return layer50k;
     }
@@ -354,10 +350,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer25k.Commands = GetCommands<GeodeticSheet>(map, layer25k, label);
+        layer25k.Commands = GetCommands<GeodeticSheet>(map, layer25k/*, label*/);
 
         return layer25k;
     }
@@ -383,10 +380,11 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer10k.Commands = GetCommands<GeodeticSheet>(map, layer10k, label);
+        layer10k.Commands = GetCommands<GeodeticSheet>(map, layer10k/*, label*/);
 
         return layer10k;
     }
@@ -412,11 +410,27 @@ public static class IndexLayers
                 null)
             {
                 ShowInToc = false,
-                CanUserDelete = false
+                CanUserDelete = false,
+                Labels = label
             };
 
-        layer5k.Commands = GetCommands<GeodeticSheet>(map, layer5k, label);
+        layer5k.Commands = GetCommands<GeodeticSheet>(map, layer5k/*, label*/);
 
         return layer5k;
     }
+
+
+    private static List<ILegendCommand> GetCommands<T>(MapPresenter map, VectorLayer layer/*, LabelParameters label*/)
+        where T : class, IGeometryAware<Point>
+    {
+        return new List<ILegendCommand>()
+        {
+            LegendCommand.CreateZoomToExtentCommand(map, layer),
+            LegendCommand.CreateShowAttributeTable/*<T>*/(map,layer),
+            LegendCommand.CreateSelectByDrawing/*<T>*/(map,layer),
+            LegendCommand.CreateClearSelected(map,layer),
+            LegendToggleCommand.CreateToggleLayerLabelCommand(map, layer/*, label*/)
+        };
+    }
+
 }

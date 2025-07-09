@@ -1371,6 +1371,7 @@ public abstract class MapPresenter : BasePresenter
                    layer => DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
                    layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
                    //layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsGeoJson(this,layer),
+                   layer => LegendToggleCommand.CreateToggleLayerLabelCommand(this, layer/*, layer.Labels*/)
                 };
             }
 
@@ -1479,7 +1480,7 @@ public abstract class MapPresenter : BasePresenter
         VectorDataSource?/*<Feature<Point>>*/ source = null)
     {
         var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
-
+        
         shapeItem.OnIsSelectedInTocChanged += (sender, e) =>
         {
             if (shapeItem.IsSelectedInToc)
@@ -1493,6 +1494,8 @@ public abstract class MapPresenter : BasePresenter
         };
 
         TrySetCommandsForDrawingItemLayer(shapeItem);
+
+        shapeItem.Labels = new LabelParameters(ScaleInterval.All, 11, shapeItem.VisualParameters.Stroke, new FontFamily("Times New Roman"), i => i.GetCentroidPlus());
 
         this.IsPanMode = true;
 
@@ -3245,13 +3248,15 @@ public abstract class MapPresenter : BasePresenter
                         return;
 
                     var webMercatorPoints = wgsPoints.Select(p => p.Project(SrsBases.GeodeticWgs84, SrsBases.WebMercator)).ToList();
-                     
+
                     var geometry = Geometry<Point>.CreatePointOrLineStringOrRing(webMercatorPoints, SridHelper.WebMercator);
 
-                    var dataSource = new MemoryDataSource([geometry]);
+                    Feature<Point> feature = new Feature<Point>(geometry, "test label");
 
-                    var geometries = dataSource.GetAsFeatureSet()?.Features;
-                     
+                    var dataSource = new MemoryDataSource([feature]);
+
+                    //var geometries = dataSource.GetAsFeatureSet()?.Features;
+
                     AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                 });
             }

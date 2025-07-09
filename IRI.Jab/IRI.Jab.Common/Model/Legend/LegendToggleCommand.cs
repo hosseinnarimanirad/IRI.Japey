@@ -98,7 +98,7 @@ public class LegendToggleCommand : Notifier, ILegendCommand
 
      
 
-    public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, ILayer layer, LabelParameters labels)
+    public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, ILayer layer/*, LabelParameters labels*/)
     {
         LegendToggleCommand result = new LegendToggleCommand();
 
@@ -128,7 +128,7 @@ public class LegendToggleCommand : Notifier, ILegendCommand
         layer.OnLabelChanged -= layer_OnLabelChanged;
         layer.OnLabelChanged += layer_OnLabelChanged;
 
-        layer.Labels = labels;
+        //layer.Labels = labels;
 
         result.Command = new RelayCommand(param =>
         {

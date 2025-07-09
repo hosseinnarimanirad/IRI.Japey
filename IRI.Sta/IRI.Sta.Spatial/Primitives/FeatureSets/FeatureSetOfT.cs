@@ -72,7 +72,8 @@ public class FeatureSet<T> where T : IPoint, new()
             Title = title,
             Features = features,
             Fields = new List<Field>(),
-            Srid = features.SkipWhile(f => f is null || f.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0
+            Srid = features.SkipWhile(f => f is null || f.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0,
+            
         };
     }
 
