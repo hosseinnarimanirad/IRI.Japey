@@ -611,7 +611,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         this.OnZoomChanged += (sender, e) => { presenter.FireZoomChanged(this.MapScale); };
 
-        this.OnExtentChanged += (sender, e) => { presenter.FireExtentChanged(this.CurrentExtent, e); };
+        this.OnExtentChanged += (sender, e) => { presenter.FireMapExtentChanged(this.CurrentExtent, e); };
 
         this.MouseUp += (sender, e) => { presenter.FireMapMouseUp(this.CurrentPoint); };
 

@@ -671,20 +671,38 @@ public abstract class MapPresenter : BasePresenter
 
     public List<BoundingBox> Extents { get; set; } = new List<BoundingBox>();
 
+    public bool NextExtentEnabled => CurrentExtentIndex > 0;
+
+    public bool PreviousExtentEnabled => CurrentExtentIndex < Extents.Count - 1;
+
+    public int ExtentHistoryLength => this.Extents.Count;
+
     private int _currentExtentIndex = 0;
+    public int CurrentExtentIndex
+    {
+        get { return _currentExtentIndex; }
+        set
+        {
+            _currentExtentIndex = value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(PreviousExtentEnabled));
+            RaisePropertyChanged(nameof(NextExtentEnabled));
+        }
+    }
+
 
     public void GoToPreviousExtent()
     {
-        _currentExtentIndex = Math.Min(Extents.Count - 1, _currentExtentIndex + 1);
+        CurrentExtentIndex = Math.Min(Extents.Count - 1, CurrentExtentIndex + 1);
 
-        ZoomToExtent(Extents[_currentExtentIndex], isExactExtent: true, isNewExtent: false);
+        ZoomToExtent(Extents[CurrentExtentIndex], isExactExtent: true, isNewExtent: false);
     }
 
     public void GoToNextExtent()
     {
-        _currentExtentIndex = Math.Max(0, _currentExtentIndex - 1);
+        CurrentExtentIndex = Math.Max(0, CurrentExtentIndex - 1);
 
-        ZoomToExtent(Extents[_currentExtentIndex], isExactExtent: true, isNewExtent: false);
+        ZoomToExtent(Extents[CurrentExtentIndex], isExactExtent: true, isNewExtent: false);
     }
 
     #endregion
@@ -1735,23 +1753,29 @@ public abstract class MapPresenter : BasePresenter
         this.MapAction = action;
     }
 
-    public void FireExtentChanged(BoundingBox currentExtent, bool isNewExtent)
+    public void FireMapExtentChanged(BoundingBox currentExtent, bool isNewExtent)
     {
         this.RaisePropertyChanged(nameof(CurrentExtent));
 
-        this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
+        this.OnMapExtentChanged?.Invoke(null, EventArgs.Empty);
 
         if (!isNewExtent)
             return;
 
-        this._currentExtentIndex = 0;
+        var lastExtentIndex = ExtentHistoryLength - 1;
 
-        if (this.Extents.Count > 10)
+        if (CurrentExtentIndex > 0)
         {
-            this.Extents.RemoveAt(0);
+            // remove all newer extents
+            this.Extents.RemoveRange(0, this.CurrentExtentIndex );
         }
 
-        this.Extents.Add(currentExtent);
+        this.Extents.Insert(0, currentExtent);
+
+        this.CurrentExtentIndex = 0;
+
+        if (this.ExtentHistoryLength > 5)
+            this.Extents.RemoveAt(lastExtentIndex);
     }
 
     public void FireMouseMove(WpfPoint currentPoint)
@@ -3443,7 +3467,7 @@ public abstract class MapPresenter : BasePresenter
 
     public event EventHandler<WpfPoint> OnMapMouseUp;
 
-    public event EventHandler OnExtentChanged;
+    public event EventHandler OnMapExtentChanged;
 
     public event EventHandler OnCancelEdit;
 
