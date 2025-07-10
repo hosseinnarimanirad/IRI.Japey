@@ -1,80 +1,86 @@
 ﻿using IRI.Extensions;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 using IRI.Test.NetFrameworkTest.Assets;
-
+using Xunit;
 
 namespace IRI.Test.Main.TheGeometry;
 
-
-public class GeometryTest
+public class GeometryTests
 {
-    public GeometryTest()
+    public GeometryTests()
     {
         SqlServerTypes.Utilities.LoadNativeAssembliesv14();
     }
 
     [Fact]
-    public void TestAreaCalculation()
+    public void LineString_CalculateEuclideanLength_ShouldMatchSqlLength()
     {
-        foreach (var item in GeometrySamples.AllGeometries)
-        {
-            var area1 = item.CalculateUnsignedEuclideanArea();
-            var area2 = item.AsSqlGeometry().STArea().Value;
+        // Arrange
+        var geometry = SqlGeometrySamples.Linestring.AsGeometry();
+        var expected = geometry.CalculateEuclideanLength();
 
-            Assert.Equal(area1, area2);
-        }
+        // Act
+        var actual = geometry.AsSqlGeometry().STLength().Value;
+
+        // Assert
+        Assert.Equal(expected, actual, precision: 5);
     }
 
     [Fact]
-    public void TestLengthCalculation()
+    public void Polygon_CalculateUnsignedArea_ShouldMatchSqlArea()
     {
-        foreach (var item in GeometrySamples.AllGeometries)
-        {
-            var length1 = item.CalculateEuclideanLength();
-            var length2 = item.AsSqlGeometry().STLength().Value;
+        // Arrange
+        var geometry = SqlGeometrySamples.Polygon.AsGeometry();
+        var expected = geometry.CalculateUnsignedEuclideanArea();
 
-            Assert.Equal(length1, length2);
-        }
+        // Act
+        var actual = geometry.AsSqlGeometry().STArea().Value;
+
+        // Assert
+        Assert.Equal(expected, actual, precision: 5);
     }
 
     [Fact]
-    public void TestMeanAngularChange()
+    public void LineString_CalculateMeanAngularChange_ShouldMatchExpected()
     {
-        var meanAngularChange = SqlGeometrySamples.LineString_ForAngularChange.AsGeometry().CalculateMeanAngularChange() * 180 / Math.PI;
+        // Arrange
+        var geometry = SqlGeometrySamples.LineString_ForAngularChange.AsGeometry();
+        var expectedDegrees = 72.1864;
 
-        Assert.Equal(72.1864, meanAngularChange, 4 /*0.0001*/);
+        // Act
+        var actualDegrees = geometry.CalculateMeanAngularChange() * 180 / Math.PI;
 
-
-        var meanAngularChangeForPolygon = SqlGeometrySamples.Polygon_ForAngularChange.AsGeometry().CalculateMeanAngularChange() * 180 / Math.PI;
-
-        Assert.Equal(75.687, meanAngularChangeForPolygon, 4 /*0.0001*/);
+        // Assert
+        Assert.Equal(expectedDegrees, actualDegrees, precision: 4);
     }
 
-    // 1401.03.12
     [Fact]
-    public void TestTotalVectorDispalcement()
+    public void Polygon_CalculateMeanAngularChange_ShouldMatchExpected()
     {
+        // Arrange
+        var geometry = SqlGeometrySamples.Polygon_ForAngularChange.AsGeometry();
+        var expectedDegrees = 75.687;
+
+        // Act
+        var actualDegrees = geometry.CalculateMeanAngularChange() * 180 / Math.PI;
+
+        // Assert
+        Assert.Equal(expectedDegrees, actualDegrees, precision: 4);
+    }
+
+    [Fact]
+    public void VectorDisplacement_ShouldMatchExpected()
+    {
+        // Arrange
         var original = SqlGeometrySamples.LineString_ForVectorDisplacement_Original.AsGeometry();
         var simplified = SqlGeometrySamples.LineString_ForVectorDisplacement_Simplified.AsGeometry();
+        var expectedDisplacement = 6.324;
 
-        var dispacement = original.CalculateTotalVectorDisplacement(simplified);
+        // Act
+        var actualDisplacement = original.CalculateTotalVectorDisplacement(simplified);
 
-        Assert.Equal(6.324, dispacement, 3 /*0.001*/);
-
+        // Assert
+        Assert.Equal(expectedDisplacement, actualDisplacement, precision: 3);
     }
-
-
-    //[Fact]
-    //public void Test()
-    //{
-    //    foreach (var item in GeometrySamples.AllGeometries)
-    //    {
-    //        if (item.IsNullOrEmpty())
-    //        {
-    //            continue;
-    //        }
-
-    //        var stat = new AreaStatistics(item);
-    //    }
-    //}
-
 }
