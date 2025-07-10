@@ -97,7 +97,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     public event EventHandler<MapActionEventArgs> OnMapActionChanged;
 
-    public event EventHandler OnExtentChanged;
+    public event EventHandler<bool> OnExtentChanged;
 
     public event EventHandler<EditableFeatureLayer> OnEditableFeatureLayerChanged;
 
@@ -476,7 +476,6 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     #endregion
 
-
     public async Task Register(Jab.Common.Presenter.Map.MapPresenter presenter,
                                 sb.BoundingBox? initialView = null,
                                 List<IrProvince93>? provinces = null)
@@ -612,7 +611,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         this.OnZoomChanged += (sender, e) => { presenter.FireZoomChanged(this.MapScale); };
 
-        this.OnExtentChanged += (sender, e) => { presenter.FireExtentChanged(this.CurrentExtent); };
+        this.OnExtentChanged += (sender, e) => { presenter.FireExtentChanged(this.CurrentExtent, e); };
 
         this.MouseUp += (sender, e) => { presenter.FireMapMouseUp(this.CurrentPoint); };
 
@@ -649,7 +648,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestFlashPoint = Flash;
 
-        presenter.RequestZoomToExtent = (boundingBox, isExactExtent, callback) => { this.ZoomToExtent(boundingBox, false, isExactExtent, callback); };
+        presenter.RequestZoomToExtent = (boundingBox, isExactExtent, isNewExtent, callback) => { this.ZoomToExtent(boundingBox, false, isExactExtent, isNewExtent, callback); };
 
         presenter.RequestAddPointToNewDrawing = p =>
         {
@@ -825,7 +824,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await presenter.Initialize();
 
 
-        presenter.ZoomToExtent(initialView ?? sb.BoundingBoxes.IranMercatorBoundingBox, true);
+        presenter.ZoomToExtent(initialView ?? sb.BoundingBoxes.IranMercatorBoundingBox, true, isNewExtent: true);
 
 
         presenter.RegisterMapOptions();
@@ -2296,7 +2295,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     //POTENTIALLY ERROR PROUNE; Check if exceptions are catched correctly; 
     //POTENTIALLY ERROR PROUNE; Captured Variables
     //IMPROVEMENT; use vector approach for light vector layers insted of "AddLayerAsDrawing"
-    public void Refresh()
+    public void Refresh(bool isNewExtent)
     {
         //UpdateTileInfos();
         Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh Called");
@@ -2346,7 +2345,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         //    ClearOld();
 
         //}), System.Windows.Threading.DispatcherPriority.ContextIdle, null);
-        this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
+        this.OnExtentChanged?.Invoke(null, isNewExtent);
     }
 
     #endregion
@@ -3152,7 +3151,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             //Debug.WriteLine(new StackTrace().GetFrame(0).GetMethod().Name, _refreshCalled);
 
-            Refresh();
+            Refresh(isNewExtent: true);
         }
         else
         {
@@ -3368,7 +3367,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
                     UpdateTileInfos();
 
-                    Refresh();
+                    Refresh(isNewExtent: true);
 
                     if (callback != null)
                     {
@@ -3600,7 +3599,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         sb.BoundingBox boundingBox =
             new sb.BoundingBox(mapCenter.X - width / 2.0, mapCenter.Y - height / 2.0, mapCenter.X + width / 2.0, mapCenter.Y + height / 2.0);
 
-        ZoomToExtent(boundingBox, false, true, callback, withAnimation);
+        ZoomToExtent(boundingBox, false, true, true, callback, withAnimation);
     }
 
     private void ZoomToFeature(Geometry<sb.Point> geometry)
@@ -3655,7 +3654,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     }
 
     //It has animation
-    private async void ZoomToExtent(sb.BoundingBox mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, Action callback = null, bool withAnimation = true)
+    private async void ZoomToExtent(sb.BoundingBox mapBoundingBox, bool canChangeToPointZoom, bool isExactExtent = true, bool isNewExtent = true, Action callback = null, bool withAnimation = true)
     {
         if (double.IsNaN(mapBoundingBox.Width + mapBoundingBox.Height))
             return;
@@ -3787,7 +3786,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             this.OnZoomChanged.SafeInvoke(null, null);
 
-            Refresh();
+            Refresh(isNewExtent);
 
             if (callback != null)
             {
@@ -3821,7 +3820,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         this.OnZoomChanged.SafeInvoke(null, null);
 
-        Refresh();
+        Refresh(isNewExtent: true);
     }
 
 
@@ -3937,7 +3936,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             this.ResetMapViewEvents();
 
-            this.Refresh();
+            this.Refresh(isNewExtent: true);
 
             //this.mapView.CaptureMouse();
 
@@ -4073,7 +4072,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             this.ResetMapViewEvents();
 
-            this.Refresh();
+            this.Refresh(isNewExtent: true);
 
             this.mapView.MouseMove -= MapView_MouseMoveForPanWhileStartNewPart;
             this.mapView.MouseMove += MapView_MouseMoveForPanWhileStartNewPart;
@@ -4337,7 +4336,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             this.ResetMapViewEvents();
 
-            this.Refresh();
+            this.Refresh(isNewExtent: true);
 
             this.drawingLayer.AddSemiVertex(webMercatorPoint);
 
@@ -4582,7 +4581,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             {
                 this.ResetMapViewEvents();
 
-                this.Refresh();
+                this.Refresh(isNewExtent: true);
 
                 this.SetCursor(Cursors.Cross);
 

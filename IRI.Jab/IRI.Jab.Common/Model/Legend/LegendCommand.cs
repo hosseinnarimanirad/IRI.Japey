@@ -115,7 +115,7 @@ public class LegendCommand : Notifier, ILegendCommand
             if (layer == null || map == null)
                 return;
 
-            map.ZoomToExtent(result.Layer.Extent, false);
+            map.ZoomToExtent(result.Layer.Extent, isExactExtent: false, isNewExtent: true);
         });
 
         return result;

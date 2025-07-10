@@ -52,7 +52,7 @@ public static class FeatureTableCommands
 
             var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
-            map.ZoomToExtent(extent, false, () => { TryFlashPoint(map, features); });
+            map.ZoomToExtent(extent, isExactExtent: false, isNewExtent: true, () => { TryFlashPoint(map, features); });
         });
 
         return result;
@@ -97,7 +97,7 @@ public static class FeatureTableCommands
                 {
                     rows.Add(feature.Attributes);
                 }
-                
+
                 // todo: consider solving the general case
                 else if (item is IGeometryAware<Point> geometryAware)
                 {

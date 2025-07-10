@@ -159,7 +159,7 @@ public abstract class MapPresenter : BasePresenter
 
                 _currentEditingLayer.RequestZoomToGeometry = g =>
                 {
-                    this.ZoomToExtent(g.GetBoundingBox(), false);
+                    this.ZoomToExtent(g.GetBoundingBox(), isExactExtent: false, isNewExtent: true);
                 };
             }
 
@@ -667,6 +667,28 @@ public abstract class MapPresenter : BasePresenter
     #endregion
 
 
+    #region Extent Manager
+
+    public List<BoundingBox> Extents { get; set; } = new List<BoundingBox>();
+
+    private int _currentExtentIndex = 0;
+
+    public void GoToPreviousExtent()
+    {
+        _currentExtentIndex = Math.Min(Extents.Count - 1, _currentExtentIndex + 1);
+
+        ZoomToExtent(Extents[_currentExtentIndex], isExactExtent: true, isNewExtent: false);
+    }
+
+    public void GoToNextExtent()
+    {
+        _currentExtentIndex = Math.Max(0, _currentExtentIndex - 1);
+
+        ZoomToExtent(Extents[_currentExtentIndex], isExactExtent: true, isNewExtent: false);
+    }
+
+    #endregion
+
     public MapPresenter()
     {
         //this.MapProviders = new Dictionary<string, Func<TileType, IMapProvider>>()
@@ -745,7 +767,7 @@ public abstract class MapPresenter : BasePresenter
 
     public Func<BoundingBox> RequestCurrentExtent;
 
-    public Action RequestRefresh;
+    public Action<bool> RequestRefresh;
 
     public Action<ILayer> RequestRefreshLayerVisibility;
 
@@ -761,7 +783,8 @@ public abstract class MapPresenter : BasePresenter
 
     //public Action<int> RequestZoomToGoogleZoomLevel;
 
-    public Action<BoundingBox, bool, Action> RequestZoomToExtent;
+    //  bool isExactExtent, bool isNewExtent
+    public Action<BoundingBox, bool, bool, Action> RequestZoomToExtent;
 
     public Action<Geometry<Point>> RequestZoomToFeature;
 
@@ -1042,7 +1065,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
-                this.ZoomToExtent(extent, false, callback);
+                this.ZoomToExtent(extent, false, true, callback);
             };
 
             selectedLayer.RequestRemove = () => { RemoveSelectedLayer(selectedLayer);/*this.SelectedLayers.Remove(selectedLayer);*/ };
@@ -1064,7 +1087,7 @@ public abstract class MapPresenter : BasePresenter
                     ShowSelectedFeatures(selectedLayer.GetSelectedFeatures());
                 }
 
-                Refresh();
+                Refresh(isNewExtent: true);
             };
 
             //selectedLayer.RequestSave = l =>
@@ -1712,11 +1735,23 @@ public abstract class MapPresenter : BasePresenter
         this.MapAction = action;
     }
 
-    public void FireExtentChanged(BoundingBox currentExtent)
+    public void FireExtentChanged(BoundingBox currentExtent, bool isNewExtent)
     {
         this.RaisePropertyChanged(nameof(CurrentExtent));
 
         this.OnExtentChanged?.Invoke(null, EventArgs.Empty);
+
+        if (!isNewExtent)
+            return;
+
+        this._currentExtentIndex = 0;
+
+        if (this.Extents.Count > 10)
+        {
+            this.Extents.RemoveAt(0);
+        }
+
+        this.Extents.Add(currentExtent);
     }
 
     public void FireMouseMove(WpfPoint currentPoint)
@@ -2095,9 +2130,9 @@ public abstract class MapPresenter : BasePresenter
     //    this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(googleZoomLevel, mapCenter, callback, false);
     //}
 
-    public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, Action callback = null)
+    public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, bool isNewExtent, Action callback = null)
     {
-        this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, callback);
+        this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, isNewExtent, callback);
     }
 
     public void Zoom(Geometry<Point> geometry)
@@ -2355,9 +2390,9 @@ public abstract class MapPresenter : BasePresenter
         this.PrintArea = boundingBox;
     }
 
-    public void Refresh()
+    public void Refresh(bool isNewExtent)
     {
-        this.RequestRefresh?.Invoke();
+        this.RequestRefresh?.Invoke(isNewExtent);
     }
 
 
@@ -2737,6 +2772,43 @@ public abstract class MapPresenter : BasePresenter
             return _panCommand;
         }
     }
+
+
+    private RelayCommand _previousExtentCommand;
+    public RelayCommand PreviousExtentCommand
+    {
+        get
+        {
+            if (_previousExtentCommand == null)
+            {
+                _previousExtentCommand = new RelayCommand(param =>
+                {
+                    this.GoToPreviousExtent();
+                });
+            }
+
+            return _previousExtentCommand;
+        }
+    }
+
+    private RelayCommand _nextExtentCommand;
+
+    public RelayCommand NextExtentCommand
+    {
+        get
+        {
+            if (_nextExtentCommand == null)
+            {
+                _nextExtentCommand = new RelayCommand(param =>
+                {
+                    this.GoToNextExtent();
+                });
+            }
+
+            return _nextExtentCommand;
+        }
+    }
+
 
     #endregion
 
