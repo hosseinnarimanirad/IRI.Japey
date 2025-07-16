@@ -27,6 +27,8 @@ public static class NetHelper
     public const string ContentTypeApplicationJson = contentTypeJson;
   
     public const string AccessControlAllowOrigin = "Access-Control-Allow-Origin";
+     
+
 
     public static bool PingHost(string nameOrAddress, int timeout = 3000)
     {
@@ -214,6 +216,7 @@ public static class NetHelper
 
         return client;
     }
+     
 
     private static System.Net.Http.HttpClient CreateHttpClient(string contentType, Encoding encoding, WebProxy? proxy = null, string? bearer = null, Dictionary<string, string>? headers = null)
     {
@@ -255,7 +258,7 @@ public static class NetHelper
         return client;
     }
 
-
+     
     //Http Get
     public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class
     {
@@ -411,35 +414,8 @@ public static class NetHelper
 
 
     public static async Task<Response<T>> HttpPostAsync<T>(HttpParameters parameters)
-    //string address,
-    //object data,
-    //Encoding encoding = null,
-    //WebProxy? proxy = null,
-    //string? bearer = null,
-    //string contentType = contentTypeJson,
-    //Dictionary<string, string> headers = null)
     {
         return await UploadStringTaskAsync<T>(parameters, WebRequestMethods.Http.Post);
-
-        //try
-        //{
-        //    var client = CreateWebClient(contentType, encoding, proxy, bearer, headers);
-
-        //    var stringData = Newtonsoft.Json.JsonConvert.SerializeObject(data, new Newtonsoft.Json.JsonSerializerSettings()
-        //    {
-        //        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-        //    });
-
-        //    var stringResult = await client.UploadStringTaskAsync(address, stringData);
-
-        //    var result = ResponseFactory.Create(Newtonsoft.Json.JsonConvert.DeserializeObject<T>(stringResult));
-
-        //    return result;
-        //}
-        //catch (Exception ex)
-        //{
-        //    return ResponseFactory.CreateError<T>(ex.Message);
-        //}
     }
 
     public static Response<T> HttpPost<T>(HttpParameters parameters) where T : class

@@ -37,7 +37,7 @@ namespace IRI.Tag.SampleWpfApp.ViewModel
 
             this.AddLayer(pointLayer);
 
-            this.ZoomToExtent(pointLayer.Extent, isExactExtent: false);
+            this.ZoomToExtent(pointLayer.Extent, isExactExtent: false, isNewExtent: true);
         }
 
 

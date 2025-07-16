@@ -110,6 +110,11 @@
 
     <Style x:Key="flatButtonPrimaryRound6" TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
         <Setter Property="Border.CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Margin" Value="4"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
     <Style x:Key="flatButtonGrayRound6" TargetType="Button" BasedOn="{StaticResource flatButtonGray}">
         <Setter Property="Border.CornerRadius" Value="6"/>

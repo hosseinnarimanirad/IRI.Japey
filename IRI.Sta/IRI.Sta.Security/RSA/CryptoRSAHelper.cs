@@ -22,51 +22,8 @@ public static class CryptoRSAHelper
     const byte BIT_STRING = 0x3;
     const byte OCTET_STRING = 0x4;
 
-    //#region JSON
-    //internal static void FromJsonString(this RSA rsa, string jsonString)
-    //{
-    //    try
-    //    {
-    //        var paramsJson = JsonConvert.DeserializeObject<RSAParametersJson>(jsonString);
-
-    //        RSAParameters parameters = new RSAParameters();
-
-    //        parameters.Modulus = paramsJson.Modulus != null ? Convert.FromBase64String(paramsJson.Modulus) : null;
-    //        parameters.Exponent = paramsJson.Exponent != null ? Convert.FromBase64String(paramsJson.Exponent) : null;
-    //        parameters.P = paramsJson.P != null ? Convert.FromBase64String(paramsJson.P) : null;
-    //        parameters.Q = paramsJson.Q != null ? Convert.FromBase64String(paramsJson.Q) : null;
-    //        parameters.DP = paramsJson.DP != null ? Convert.FromBase64String(paramsJson.DP) : null;
-    //        parameters.DQ = paramsJson.DQ != null ? Convert.FromBase64String(paramsJson.DQ) : null;
-    //        parameters.InverseQ = paramsJson.InverseQ != null ? Convert.FromBase64String(paramsJson.InverseQ) : null;
-    //        parameters.D = paramsJson.D != null ? Convert.FromBase64String(paramsJson.D) : null;
-    //        rsa.ImportParameters(parameters);
-    //    }
-    //    catch
-    //    {
-    //        throw new Exception("Invalid JSON RSA key.");
-    //    }
-    //}
-
-    //internal static string ToJsonString(this RSA rsa, bool includePrivateParameters)
-    //{
-    //    RSAParameters parameters = rsa.ExportParameters(includePrivateParameters);
-
-    //    var parasJson = new RSAParametersJson()
-    //    {
-    //        Modulus = parameters.Modulus != null ? Convert.ToBase64String(parameters.Modulus) : null,
-    //        Exponent = parameters.Exponent != null ? Convert.ToBase64String(parameters.Exponent) : null,
-    //        P = parameters.P != null ? Convert.ToBase64String(parameters.P) : null,
-    //        Q = parameters.Q != null ? Convert.ToBase64String(parameters.Q) : null,
-    //        DP = parameters.DP != null ? Convert.ToBase64String(parameters.DP) : null,
-    //        DQ = parameters.DQ != null ? Convert.ToBase64String(parameters.DQ) : null,
-    //        InverseQ = parameters.InverseQ != null ? Convert.ToBase64String(parameters.InverseQ) : null,
-    //        D = parameters.D != null ? Convert.ToBase64String(parameters.D) : null
-    //    };
-
-    //    return JsonConvert.SerializeObject(parasJson);
-    //}
-    //#endregion
-
+    const int rsaKeySize = 2048;
+     
 
     #region Encrypt / Decrypt
 
@@ -76,28 +33,28 @@ public static class CryptoRSAHelper
     /// <param name="original"></param>
     /// <param name="base46PublicKey"></param>
     /// <returns>encrypted value in base64string</returns>
-    public static string RsaEncrypt(byte[] original, string base46PublicKey)
-    {
-        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
-        {
-            try
-            {
-                Security.CryptoRSAHelper.FromXmlString(rsa, base46PublicKey.Base64ToNormalString());
-                //rsa.FromXmlString(base46PublicKey.Base64ToNormalString());
+    //public static string RsaEncrypt(byte[] original, string base46PublicKey)
+    //{
+    //    using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(rsaKeySize))
+    //    {
+    //        try
+    //        {
+    //            Security.CryptoRSAHelper.FromXmlString(rsa, base46PublicKey.Base64ToNormalString());
+    //            //rsa.FromXmlString(base46PublicKey.Base64ToNormalString());
 
-                return Convert.ToBase64String(rsa.Encrypt(original, true));
-            }
-            catch (Exception)
-            {
+    //            return Convert.ToBase64String(rsa.Encrypt(original, true));
+    //        }
+    //        catch (Exception)
+    //        {
 
-                throw;
-            }
-            finally
-            {
-                rsa.PersistKeyInCsp = false;
-            }
-        }
-    }
+    //            throw;
+    //        }
+    //        finally
+    //        {
+    //            rsa.PersistKeyInCsp = false;
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// 
@@ -105,42 +62,42 @@ public static class CryptoRSAHelper
     /// <param name="simpleString"></param>
     /// <param name="base46PublicKey"></param>
     /// <returns>encrypted value in base64string</returns>
-    public static string RsaEncrypt(string simpleString, string base46PublicKey)
-    {
-        var originalByte = Encoding.UTF8.GetBytes(simpleString);
+    //public static string RsaEncrypt(string simpleString, string base46PublicKey)
+    //{
+    //    var originalByte = Encoding.UTF8.GetBytes(simpleString);
 
-        return RsaEncrypt(originalByte, base46PublicKey);
-    }
+    //    return RsaEncrypt(originalByte, base46PublicKey);
+    //}
 
 
-    public static string RsaDecrypt(byte[] encoded, string base64PrivateKey)
-    {
-        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
-        {
-            try
-            {
-                Security.CryptoRSAHelper.FromXmlString(rsa, base64PrivateKey.Base64ToNormalString());
-                //rsa.FromXmlString(base64PrivateKey.Base64ToNormalString());
+    //public static string RsaDecrypt(byte[] encoded, string base64PrivateKey)
+    //{
+    //    using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(rsaKeySize))
+    //    {
+    //        try
+    //        {
+    //            Security.CryptoRSAHelper.FromXmlString(rsa, base64PrivateKey.Base64ToNormalString());
+    //            //rsa.FromXmlString(base64PrivateKey.Base64ToNormalString());
 
-                return Encoding.UTF8.GetString(rsa.Decrypt(encoded, true));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                rsa.PersistKeyInCsp = false;
-            }
-        }
-    }
+    //            return Encoding.UTF8.GetString(rsa.Decrypt(encoded, true));
+    //        }
+    //        catch (Exception)
+    //        {
+    //            throw;
+    //        }
+    //        finally
+    //        {
+    //            rsa.PersistKeyInCsp = false;
+    //        }
+    //    }
+    //}
 
-    public static string RsaDecrypt(string base64EncodedString, string base64PrivateKey)
-    {
-        var encodedBytes = Convert.FromBase64String(base64EncodedString);
+    //public static string RsaDecrypt(string base64EncodedString, string base64PrivateKey)
+    //{
+    //    var encodedBytes = Convert.FromBase64String(base64EncodedString);
 
-        return RsaDecrypt(encodedBytes, base64PrivateKey);
-    }
+    //    return RsaDecrypt(encodedBytes, base64PrivateKey);
+    //}
 
 
     public static void test()
@@ -216,104 +173,130 @@ public static class CryptoRSAHelper
     }
 
 
-    //public static string Encryption(string strText)
+
+
+    //static public byte[] RsaEncrypt(byte[] value, RSAParameters rsaKey, bool doOAEPPadding = true)
     //{
-    //    var publicKey = "<RSAKeyValue><Modulus>21wEnTU+mcD2w0Lfo1Gv4rtcSWsQJQTNa6gio05AOkV/Er9w3Y13Ddo5wGtjJ19402S71HUeN0vbKILLJdRSES5MHSdJPSVrOqdrll/vLXxDxWs/U0UT1c8u6k/Ogx9hTtZxYwoeYqdhDblof3E75d9n2F0Zvf6iTb4cI7j6fMs=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
-
-    //    var testData = Encoding.UTF8.GetBytes(strText);
-
-    //    using (var rsa = new RSACryptoServiceProvider(1024))
+    //    try
     //    {
-    //        try
+    //        byte[] encryptedData;
+
+    //        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
     //        {
-    //            // client encrypting data with public key issued by server                    
-    //            rsa.FromXmlString(publicKey.ToString());
+    //            rsa.ImportParameters(rsaKey);
 
-    //            var encryptedData = rsa.Encrypt(testData, true);
-
-    //            var base64Encrypted = Convert.ToBase64String(encryptedData);
-
-    //            return base64Encrypted;
+    //            encryptedData = rsa.Encrypt(value, doOAEPPadding);
     //        }
-    //        finally
-    //        {
-    //            rsa.PersistKeyInCsp = false;
-    //        }
+
+    //        return encryptedData;
+    //    }
+    //    catch (CryptographicException e)
+    //    {
+    //        return null;
     //    }
     //}
 
-    //public static string Decryption(string strText)
+    //static public byte[] RsaDecrypt(byte[] value, RSAParameters rsaKey, bool doOAEPPadding)
     //{
-    //    var privateKey = "<RSAKeyValue><Modulus>21wEnTU+mcD2w0Lfo1Gv4rtcSWsQJQTNa6gio05AOkV/Er9w3Y13Ddo5wGtjJ19402S71HUeN0vbKILLJdRSES5MHSdJPSVrOqdrll/vLXxDxWs/U0UT1c8u6k/Ogx9hTtZxYwoeYqdhDblof3E75d9n2F0Zvf6iTb4cI7j6fMs=</Modulus><Exponent>AQAB</Exponent><P>/aULPE6jd5IkwtWXmReyMUhmI/nfwfkQSyl7tsg2PKdpcxk4mpPZUdEQhHQLvE84w2DhTyYkPHCtq/mMKE3MHw==</P><Q>3WV46X9Arg2l9cxb67KVlNVXyCqc/w+LWt/tbhLJvV2xCF/0rWKPsBJ9MC6cquaqNPxWWEav8RAVbmmGrJt51Q==</Q><DP>8TuZFgBMpBoQcGUoS2goB4st6aVq1FcG0hVgHhUI0GMAfYFNPmbDV3cY2IBt8Oj/uYJYhyhlaj5YTqmGTYbATQ==</DP><DQ>FIoVbZQgrAUYIHWVEYi/187zFd7eMct/Yi7kGBImJStMATrluDAspGkStCWe4zwDDmdam1XzfKnBUzz3AYxrAQ==</DQ><InverseQ>QPU3Tmt8nznSgYZ+5jUo9E0SfjiTu435ihANiHqqjasaUNvOHKumqzuBZ8NRtkUhS6dsOEb8A2ODvy7KswUxyA==</InverseQ><D>cgoRoAUpSVfHMdYXW9nA3dfX75dIamZnwPtFHq80ttagbIe4ToYYCcyUz5NElhiNQSESgS5uCgNWqWXt5PnPu4XmCXx6utco1UVH8HGLahzbAnSy6Cj3iUIQ7Gj+9gQ7PkC434HTtHazmxVgIR5l56ZjoQ8yGNCPZnsdYEmhJWk=</D></RSAKeyValue>";
-
-    //    var testData = Encoding.UTF8.GetBytes(strText);
-
-    //    using (var rsa = new RSACryptoServiceProvider(1024))
+    //    try
     //    {
-    //        try
-    //        {
-    //            var base64Encrypted = strText;
+    //        byte[] decryptedData;
 
-    //            // server decrypting data with private key                    
-    //            rsa.FromXmlString(privateKey);
-
-    //            var resultBytes = Convert.FromBase64String(base64Encrypted);
-    //            var decryptedBytes = rsa.Decrypt(resultBytes, true);
-    //            var decryptedData = Encoding.UTF8.GetString(decryptedBytes);
-    //            return decryptedData.ToString();
-    //        }
-    //        finally
+    //        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
     //        {
-    //            rsa.PersistKeyInCsp = false;
+    //            rsa.ImportParameters(rsaKey);
+
+    //            decryptedData = rsa.Decrypt(value, doOAEPPadding);
     //        }
+
+    //        return decryptedData;
+    //    }
+    //    catch (CryptographicException e)
+    //    {
+    //        return null;
     //    }
     //}
-
-
-    static public byte[] RsaEncrypt(byte[] value, RSAParameters rsaKey, bool doOAEPPadding = true)
-    {
-        try
-        {
-            byte[] encryptedData;
-
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(rsaKey);
-
-                encryptedData = rsa.Encrypt(value, doOAEPPadding);
-            }
-
-            return encryptedData;
-        }
-        catch (CryptographicException e)
-        {
-            return null;
-        }
-    }
-
-    static public byte[] RsaDecrypt(byte[] value, RSAParameters rsaKey, bool doOAEPPadding)
-    {
-        try
-        {
-            byte[] decryptedData;
-
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(rsaKey);
-
-                decryptedData = rsa.Decrypt(value, doOAEPPadding);
-            }
-
-            return decryptedData;
-        }
-        catch (CryptographicException e)
-        {
-            return null;
-        }
-    }
 
     #endregion
 
+    #region Encrypt / Decrypt 
+
+    /// <summary>
+    /// Returns encrypted value in base64string
+    /// </summary>
+    /// <param name="original">Data to encrypt</param>
+    /// <param name="base64PublicKey">Public key in base64 encoded XML format</param>
+    /// <returns>Encrypted value in base64string</returns>
+    public static string RsaEncrypt(byte[] original, string base64PublicKey)
+    {
+        using (RSA rsa = RSA.Create(rsaKeySize))
+        {
+            try
+            {
+                string publicKeyXml = base64PublicKey.Base64ToNormalString();
+                FromXmlString(rsa, publicKeyXml);
+
+                byte[] encryptedData = rsa.Encrypt(original, RSAEncryptionPadding.OaepSHA1);
+                return Convert.ToBase64String(encryptedData);
+            }
+            finally
+            {
+                //rsa.PersistKeyInCsp = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Encrypts a string using RSA
+    /// </summary>
+    /// <param name="plainText">Text to encrypt</param>
+    /// <param name="base64PublicKey">Public key in base64 encoded XML format</param>
+    /// <returns>Encrypted value in base64string</returns>
+    public static string RsaEncrypt(string plainText, string base64PublicKey)
+    {
+        byte[] originalBytes = Encoding.UTF8.GetBytes(plainText);
+        return RsaEncrypt(originalBytes, base64PublicKey);
+    }
+
+    /// <summary>
+    /// Decrypts data using RSA
+    /// </summary>
+    /// <param name="encoded">Encrypted data</param>
+    /// <param name="base64PrivateKey">Private key in base64 encoded XML format</param>
+    /// <returns>Decrypted string</returns>
+    public static string RsaDecrypt(byte[] encoded, string base64PrivateKey)
+    {
+        using (RSA rsa = RSA.Create(rsaKeySize))
+        {
+            try
+            {
+                string privateKeyXml = base64PrivateKey.Base64ToNormalString();
+                FromXmlString(rsa, privateKeyXml);
+
+                byte[] decryptedData = rsa.Decrypt(encoded, RSAEncryptionPadding.OaepSHA1);
+                return Encoding.UTF8.GetString(decryptedData);
+            }
+            finally
+            {
+                //rsa.PersistKeyInCsp = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Decrypts a base64 encoded string using RSA
+    /// </summary>
+    /// <param name="base64EncodedString">Base64 encoded encrypted data</param>
+    /// <param name="base64PrivateKey">Private key in base64 encoded XML format</param>
+    /// <returns>Decrypted string</returns>
+    public static string RsaDecrypt(string base64EncodedString, string base64PrivateKey)
+    {
+        byte[] encodedBytes = Convert.FromBase64String(base64EncodedString);
+
+        return RsaDecrypt(encodedBytes, base64PrivateKey);
+    }
+
+    #endregion
 
     #region XML Representation of the Public/Private Keys
 
@@ -369,10 +352,12 @@ public static class CryptoRSAHelper
               parameters.D != null ? Convert.ToBase64String(parameters.D) : null);
     }
 
-
-    public static RsaKeys GenerateKeys()
+    // The default 1024-bit key is now considered insecure
+    public static RsaKeys GenerateKeysInXml(int keySize = 2048)
     {
-        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
+        // In .NET Core/.NET 5+, RSACryptoServiceProvider is obsolete
+        //using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(keySize))
+        using (RSA rsa = RSA.Create(keySize))
         {
             try
             {
@@ -384,10 +369,36 @@ public static class CryptoRSAHelper
             }
             finally
             {
-                rsa.PersistKeyInCsp = false;
+                //rsa.PersistKeyInCsp = false;
             }
         }
     }
+
+    public static void GenerateKeysInPem(out string base64PrivateKey, out string base64PublicKey, int keySize = 2048)
+    {
+        using (RSA rsa = RSA.Create(keySize))
+        {
+            // Export private key in PKCS#8 format (PEM)
+            byte[] privateKeyBytes = rsa.ExportPkcs8PrivateKey();
+            base64PrivateKey = FormatAsPem(
+                "PRIVATE KEY",
+                Convert.ToBase64String(privateKeyBytes, Base64FormattingOptions.InsertLineBreaks)
+            );
+
+            // Export public key in X.509 SubjectPublicKeyInfo format (PEM)
+            byte[] publicKeyBytes = rsa.ExportSubjectPublicKeyInfo();
+            base64PublicKey = FormatAsPem(
+                "PUBLIC KEY",
+                Convert.ToBase64String(publicKeyBytes, Base64FormattingOptions.InsertLineBreaks)
+            );
+        }
+    }
+
+    private static string FormatAsPem(string keyType, string base64Content)
+    {
+        return $"-----BEGIN {keyType}-----\n{base64Content}\n-----END {keyType}-----\n";
+    }
+     
 
     #endregion
 
@@ -481,7 +492,7 @@ public static class CryptoRSAHelper
 
     private static string ConvertKey(string base64PrivateKey, bool includePrivateKey)
     {
-        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(1024))
+        using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(rsaKeySize))
         {
             try
             {

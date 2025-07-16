@@ -48,7 +48,7 @@ public class EncryptedMessage
 
     }
 
-    public T Decrypt<T>(string base64PriKey) where T : class
+    public T? Decrypt<T>(string base64PriKey) where T : class
     {
         try
         {
@@ -60,7 +60,7 @@ public class EncryptedMessage
 
             return JsonSerializer.Deserialize<T>(decryptedParameters);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
