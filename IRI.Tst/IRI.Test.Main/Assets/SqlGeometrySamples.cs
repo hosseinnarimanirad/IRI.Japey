@@ -49,10 +49,10 @@ namespace IRI.Test.NetFrameworkTest.Assets
 
 
         // line string with two 90 angle change
-        public static SqlGeometry LineString_WitTwo90DegreeAngleChange = SqlGeometry.Parse(new SqlString("LINESTRING(1 1, 3 3, 2 4, 2 0, 1 1)"));
+        public static SqlGeometry LineString_WithTwo90DegreeAngleChange = SqlGeometry.Parse(new SqlString("LINESTRING(1 1, 3 3, 2 4, 2 0, 1 1)"));
 
         // multi linestring with two linestring owning two 90 angle change
-        public static SqlGeometry MultiLineString_WitTwo90DegreeAngleChange = SqlGeometry.Parse(new SqlString("MULTILINESTRING((1 1, 3 3, 2 4, 2 0, 1 1), (10 10, 30 30, 20 40, 20 00, 10 10))"));
+        public static SqlGeometry MultiLineString_WithTwo90DegreeAngleChange = SqlGeometry.Parse(new SqlString("MULTILINESTRING((1 1, 3 3, 2 4, 2 0, 1 1), (10 10, 30 30, 20 40, 20 00, 10 10))"));
 
         // total angle change: 505.3
         // mean angle change: 505.3/(9-2) = 72.1857
