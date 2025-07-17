@@ -20,6 +20,8 @@ public static class JsonHelper
         };
     }
 
+    public static JsonSerializerOptions IgnoreNullValue { get => _ignoreNullValue; }
+
     public static string Serialize<T>(T value)
     {
         //return Newtonsoft.Json.JsonConvert.SerializeObject(value);

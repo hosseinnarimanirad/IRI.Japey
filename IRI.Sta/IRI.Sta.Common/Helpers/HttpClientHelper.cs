@@ -5,7 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http.Json; 
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace IRI.Sta.Common.Helpers;
 
@@ -19,14 +20,12 @@ public static class HttpClientHelper
         {
             var json = JsonHelper.SerializeWithIgnoreNullOption(parameters.Data);
 
-            var content = new StringContent(json, parameters.Encoding);
-
-            var result = await client.PostAsync(parameters.Address, content);
+            var result = await client.PostAsJsonAsync(parameters.Address, parameters.Data, JsonHelper.IgnoreNullValue);
 
             result.EnsureSuccessStatusCode();
 
             var jsonString = await result.Content.ReadAsStringAsync();
-
+            
             return ResponseFactory.Create(JsonHelper.Deserialize<T>(jsonString));
         }
         catch (Exception ex)

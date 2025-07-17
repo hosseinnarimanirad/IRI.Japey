@@ -58,4 +58,9 @@ public static class SecureStringHelper
     {
         return new NetworkCredential("", secureString).Password;
     }
+
+    public static SecureString GetSecureString(string @string)
+    {
+        return new NetworkCredential("", @string).SecurePassword;
+    }
 }
