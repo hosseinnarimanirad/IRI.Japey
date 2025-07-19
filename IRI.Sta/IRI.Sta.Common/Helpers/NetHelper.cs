@@ -258,8 +258,10 @@ public static class NetHelper
         return client;
     }
 
-     
+
     //Http Get
+    #region GET
+
     public static async Task<Response<T>> HttpGetAsync<T>(string address) where T : class
     {
         return await HttpGetAsync<T>(address, Encoding.UTF8, null);
@@ -371,6 +373,8 @@ public static class NetHelper
         }
     }
 
+    #endregion
+
     #region old
 
     //public static Response<T> HttpGet<T>(string address, string contentType = contentTypeJson) where T : class
@@ -412,6 +416,7 @@ public static class NetHelper
 
     #endregion
 
+    #region POST
 
     public static async Task<Response<T>> HttpPostAsync<T>(HttpParameters parameters)
     {
@@ -454,6 +459,7 @@ public static class NetHelper
         //}
     }
 
+    #endregion
 
 
     //Put

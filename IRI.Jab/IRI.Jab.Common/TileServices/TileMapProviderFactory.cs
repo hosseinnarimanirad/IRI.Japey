@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using IRI.Sta.Spatial.Model;
 using IRI.Jab.Common.Helpers;
 using IRI.Jab.Common.Model.Globalization;
+using System.Linq;
 
 namespace IRI.Jab.Common.TileServices;
 
@@ -29,7 +30,7 @@ public static class TileMapProviderFactory
     // this.AddProvider(TileMapProviderFactory.CreateInteranetProvider("localGoogle", "hybridMap", t => $@"http://v-gisserver2/Google/Satellite/{t.ZoomLevel}/gs_{t.ColumnNumber}_{t.RowNumber}_{t.ZoomLevel}.jpg"));
     public static TileMapProvider CreateInteranetProvider(string providerName, string subTitle, Func<TileInfo, string> interanetUrlFunc)
     {
-        TileMapProvider result = new TileMapProvider(providerName, subTitle, interanetUrlFunc, null)
+        TileMapProvider result = new TileMapProvider(providerName, subTitle, interanetUrlFunc, null, null)
         {
             RequireInternetConnection = false
         };
@@ -65,42 +66,39 @@ public static class TileMapProviderFactory
     private static string MakeBingHybridUrl(TileInfo tile, string server) => $@"http://h{server}.ortho.tiles.virtualearth.net/tiles/h{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5978";
     private static string MakeBingStreetUrl(TileInfo tile, string server) => $@"http://r{server}.ortho.tiles.virtualearth.net/tiles/r{TileXYToQuadKey(tile.ColumnNumber, tile.RowNumber, tile.ZoomLevel)}.jpeg?g=5978";
 
-    private static TileMapProvider _bingSatellite;
+    private static TileMapProvider? _bingSatellite;
     public static TileMapProvider BingSatellite
     {
         get
         {
-            if (_bingSatellite == null)
+            if (_bingSatellite is null)
             {
                 _bingSatellite = new TileMapProvider(
                     new PersianEnglishItem("بینگ", BingProvider),
                     new PersianEnglishItem("ماهواره", "Satellite"),
                     tile => MakeBingSatelliteUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingSatellite.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingSatellite72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingSatellite.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingSatellite72.jpg"));
             }
 
             return _bingSatellite;
         }
     }
 
-    private static TileMapProvider _bingStreet;
+    private static TileMapProvider? _bingStreet;
     public static TileMapProvider BingStreet
     {
         get
         {
-            if (_bingStreet == null)
+            if (_bingStreet is null)
             {
                 _bingStreet = new TileMapProvider(
                     new PersianEnglishItem("بینگ", BingProvider),
                     new PersianEnglishItem("راه", "Street"),
                     tile => MakeBingStreetUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingStreet.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingStreet72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingStreet.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingStreet72.jpg"));
+
             }
 
             return _bingStreet;
@@ -108,21 +106,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _bingHybrid;
+    private static TileMapProvider? _bingHybrid;
     public static TileMapProvider BingHybrid
     {
         get
         {
-            if (_bingHybrid == null)
+            if (_bingHybrid is null)
             {
                 _bingHybrid = new TileMapProvider(
                     new PersianEnglishItem("بینگ", BingProvider),
                     new PersianEnglishItem("ترکیبی", "Hybrid"),
                     tile => MakeBingHybridUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingHybrid.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingHybrid72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/bingHybrid.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/bingHybrid72.jpg"));
             }
 
             return _bingHybrid;
@@ -159,21 +155,19 @@ public static class TileMapProviderFactory
     private static string MakeGoogleCleanGreyUrl(TileInfo tile) => $@"https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{tile.ZoomLevel}!2i{tile.ColumnNumber}!3i{tile.RowNumber}!4i256!2m3!1e0!2sm!3i{tile.RowNumber}!3m14!2snl!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjF8cy5lOmx8cC52Om9mZixzLnQ6MTd8cy5lOmcuc3xwLnY6b2ZmLHMudDoxOHxzLmU6Zy5zfHAudjpvZmYscy50OjV8cy5lOmd8cC52Om9ufHAuYzojZmZlM2UzZTMscy50OjgyfHMuZTpsfHAudjpvZmYscy50OjJ8cC52Om9mZixzLnQ6M3xwLmM6I2ZmY2NjY2NjLHMudDozfHMuZTpsfHAudjpvZmYscy50OjR8cy5lOmwuaXxwLnY6b2ZmLHMudDo2NXxzLmU6Z3xwLnY6b2ZmLHMudDo2NXxzLmU6bC50fHAudjpvZmYscy50OjEwNTl8cy5lOmd8cC52Om9mZixzLnQ6MTA1OXxzLmU6bHxwLnY6b2ZmLHMudDo2fHMuZTpnfHAuYzojZmZGRkZGRkYscy50OjZ8cy5lOmx8cC52Om9mZg!4e0!23i1301875";
 
 
-    private static TileMapProvider _googleCleanGrey;
+    private static TileMapProvider? _googleCleanGrey;
     public static TileMapProvider GoogleCleanGrey
     {
         get
         {
-            if (_googleCleanGrey == null)
+            if (_googleCleanGrey is null)
             {
                 _googleCleanGrey = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("خاکستری", "CleanGrey"),
-                    tile => MakeGoogleCleanGreyUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleGrey72.jpg")
-                };
+                    MakeGoogleCleanGreyUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleGrey72.jpg"));
             }
 
             return _googleCleanGrey;
@@ -181,21 +175,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleBlackWhite;
+    private static TileMapProvider? _googleBlackWhite;
     public static TileMapProvider GoogleBlackWhite
     {
         get
         {
-            if (_googleBlackWhite == null)
+            if (_googleBlackWhite is null)
             {
                 _googleBlackWhite = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("سیاه‌سفید", "BlackWhite"),
-                    tile => MakeGoogleBlackWhiteUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleBlackWhite72.jpg")
-                };
+                    MakeGoogleBlackWhiteUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleBlackWhite72.jpg"));
             }
 
             return _googleBlackWhite;
@@ -203,20 +195,20 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleTraffic;
+    private static TileMapProvider? _googleTraffic;
     public static TileMapProvider GoogleTraffic
     {
         get
         {
-            if (_googleTraffic == null)
+            if (_googleTraffic is null)
             {
                 _googleTraffic = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("ترافیک", "Traffic"),
                     tile => MakeGoogleTerafficUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"))
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleTraffic72.jpg"))
                 {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleTraffic72.jpg"),
                     AllowCache = false
                 };
             }
@@ -226,21 +218,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleSatellite;
+    private static TileMapProvider? _googleSatellite;
     public static TileMapProvider GoogleSatellite
     {
         get
         {
-            if (_googleSatellite == null)
+            if (_googleSatellite is null)
             {
                 _googleSatellite = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("ماهواره", "Satellite"),
                     tile => MakeGoogleSatelliteUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleSatellite.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleSatellite72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleSatellite.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleSatellite72.jpg"));
             }
 
             return _googleSatellite;
@@ -248,21 +238,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleHybrid;
+    private static TileMapProvider? _googleHybrid;
     public static TileMapProvider GoogleHybrid
     {
         get
         {
-            if (_googleHybrid == null)
+            if (_googleHybrid is null)
             {
                 _googleHybrid = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("ترکیبی", "Hybrid"),
                     tile => MakeGoogleHybridUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleHybrid.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleHybrid72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleHybrid.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleHybrid72.jpg"));
             }
 
             return _googleHybrid;
@@ -270,21 +258,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleRoadMap;
+    private static TileMapProvider? _googleRoadMap;
     public static TileMapProvider GoogleRoadMap
     {
         get
         {
-            if (_googleRoadMap == null)
+            if (_googleRoadMap is null)
             {
                 _googleRoadMap = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("راه", "RoadMap"),
                     tile => MakeGoogleRoadMapUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleRoadmap.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleRoadMap72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleRoadmap.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleRoadMap72.jpg"));
             }
 
             return _googleRoadMap;
@@ -292,21 +278,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleTerrain;
+    private static TileMapProvider? _googleTerrain;
     public static TileMapProvider GoogleTerrain
     {
         get
         {
-            if (_googleTerrain == null)
+            if (_googleTerrain is null)
             {
                 _googleTerrain = new TileMapProvider(
                     new PersianEnglishItem("گوگل", GoogleProvider),
                     new PersianEnglishItem("توپو", "Terrain"),
                     tile => MakeGoogleTerrainUrl(tile, GetServer()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleTerrain72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/googleTerrain.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/googleTerrain72.jpg"));
             }
 
             return _googleTerrain;
@@ -335,12 +319,12 @@ public static class TileMapProviderFactory
     //}
 
 
-    private static TileMapProvider _googleLight;
+    private static TileMapProvider? _googleLight;
     public static TileMapProvider GoogleLight
     {
         get
         {
-            if (_googleLight == null)
+            if (_googleLight is null)
             {
                 _googleLight = CreateFromXyzUrlIntServer(
                     new PersianEnglishItem("گوگل", GoogleProvider),
@@ -357,12 +341,12 @@ public static class TileMapProviderFactory
 
 
 
-    private static TileMapProvider _googleNature;
+    private static TileMapProvider? _googleNature;
     public static TileMapProvider GoogleNature
     {
         get
         {
-            if (_googleNature == null)
+            if (_googleNature is null)
             {
                 _googleNature = CreateFromXyzUrlIntServer(
                     new PersianEnglishItem("گوگل", GoogleProvider),
@@ -378,12 +362,12 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _googleNeutralBlue;
+    private static TileMapProvider? _googleNeutralBlue;
     public static TileMapProvider GoogleNeutralBlue
     {
         get
         {
-            if (_googleNeutralBlue == null)
+            if (_googleNeutralBlue is null)
             {
                 _googleNeutralBlue = CreateFromXyzUrlIntServer(
                     new PersianEnglishItem("گوگل", GoogleProvider),
@@ -453,22 +437,19 @@ public static class TileMapProviderFactory
     private static string MakeStamenWatercolorUrl(TileInfo tile) => $@"http://{GetServerCharacter()}.tile.stamen.com/watercolor/{tile.ZoomLevel}/{tile.ColumnNumber}/{tile.RowNumber}.jpg";
 
 
-    private static TileMapProvider _openStreetMap;
+    private static TileMapProvider? _openStreetMap;
     public static TileMapProvider OpenStreetMap
     {
         get
         {
-            if (_openStreetMap == null)
+            if (_openStreetMap is null)
             {
                 _openStreetMap = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("راه", "Street"),
                     tile => MakeOpenStreetMapUrl(tile, GetServerCharacter()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/openStreetMap.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmOpenStreetMap72.jpg")
-
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/openStreetMap.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmOpenStreetMap72.jpg"));
             }
 
             return _openStreetMap;
@@ -476,21 +457,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _openTopoMap;
+    private static TileMapProvider? _openTopoMap;
     public static TileMapProvider OpenTopoMap
     {
         get
         {
-            if (_openTopoMap == null)
+            if (_openTopoMap is null)
             {
                 _openTopoMap = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("توپو", "Topo"),
                     tile => MakeOpenTopoMapUrl(tile, GetServerCharacter()),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/openTopoMap.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmOpenTopoMap72.jpg")
-                };
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/openTopoMap.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmOpenTopoMap72.jpg"));
             }
 
             return _openTopoMap;
@@ -498,21 +477,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _mapyWinter;
+    private static TileMapProvider? _mapyWinter;
     public static TileMapProvider MapyWinter
     {
         get
         {
-            if (_mapyWinter == null)
+            if (_mapyWinter is null)
             {
                 _mapyWinter = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("زمستان", "MapyWinter"),
-                    tile => MakeMapyWinterUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/mapyWinter.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmMapyWinter72.jpg")
-                };
+                    MakeMapyWinterUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/mapyWinter.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmMapyWinter72.jpg"));
             }
 
             return _mapyWinter;
@@ -520,21 +497,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _mapyTourist;
+    private static TileMapProvider? _mapyTourist;
     public static TileMapProvider MapyTourist
     {
         get
         {
-            if (_mapyTourist == null)
+            if (_mapyTourist is null)
             {
                 _mapyTourist = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("توریست", "MapyTourist"),
-                    tile => MakeMapyTouristUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/mapyTourism.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmMapyTourist72.jpg")
-                };
+                    MakeMapyTouristUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/mapyTourism.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmMapyTourist72.jpg"));
             }
 
             return _mapyTourist;
@@ -542,21 +517,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _osmHikeBike;
+    private static TileMapProvider? _osmHikeBike;
     public static TileMapProvider OsmHikeBike
     {
         get
         {
-            if (_osmHikeBike == null)
+            if (_osmHikeBike is null)
             {
                 _osmHikeBike = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("طبیعت‌گردی", "HikeBike"),
-                    tile => MakeOsmHikeBikeUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/osmHikeBike.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmHikeBike72.jpg")
-                };
+                    MakeOsmHikeBikeUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/osmHikeBike.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/osmHikeBike72.jpg"));
             }
 
             return _osmHikeBike;
@@ -564,21 +537,19 @@ public static class TileMapProviderFactory
     }
 
 
-    private static TileMapProvider _stamentWatercolor;
+    private static TileMapProvider? _stamentWatercolor;
     public static TileMapProvider StamenWatercolor
     {
         get
         {
-            if (_stamentWatercolor == null)
+            if (_stamentWatercolor is null)
             {
                 _stamentWatercolor = new TileMapProvider(
                     new PersianEnglishItem("OSM", OsmProvider),
                     new PersianEnglishItem("آبرنگ", "Watercolor"),
-                    tile => MakeStamenWatercolorUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/stamenWatercolor.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/stamenWatercolor.jpg")
-                };
+                    MakeStamenWatercolorUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/stamenWatercolor.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/stamenWatercolor.jpg"));
             }
 
             return _stamentWatercolor;
@@ -596,21 +567,19 @@ public static class TileMapProviderFactory
     //server: 1, 2, 3, 4
     private static string MakeWazeRoadMapUrl(TileInfo tile) => $@"https://worldtiles{GetServer(1, 4)}.waze.com/tiles/{tile.ZoomLevel}/{tile.ColumnNumber}/{tile.RowNumber}.png";
 
-    private static TileMapProvider _wazeStreet;
+    private static TileMapProvider? _wazeStreet;
     public static TileMapProvider WazeStreet
     {
         get
         {
-            if (_wazeStreet == null)
+            if (_wazeStreet is null)
             {
                 _wazeStreet = new TileMapProvider(
                     new PersianEnglishItem(WazeProvider, WazeProvider),
                     new PersianEnglishItem("راه", "Street"),
-                    tile => MakeWazeRoadMapUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/waze.png"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/wazeStreet72.jpg")
-                };
+                    MakeWazeRoadMapUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/waze.png"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/wazeStreet72.jpg"));
             }
 
             return _wazeStreet;
@@ -630,42 +599,38 @@ public static class TileMapProviderFactory
 
     private static string MakeCartoDarkUrl(TileInfo tile) => $@"https://cartodb-basemaps-{GetServerCharacter()}.global.ssl.fastly.net/dark_all/{tile.ZoomLevel}/{tile.ColumnNumber}/{tile.RowNumber}.png";
 
-    private static TileMapProvider _cartoDark;
+    private static TileMapProvider? _cartoDark;
     public static TileMapProvider CartoDark
     {
         get
         {
-            if (_cartoDark == null)
+            if (_cartoDark is null)
             {
                 _cartoDark = new TileMapProvider(
                     new PersianEnglishItem("کارتو", CartoProvider),
                     new PersianEnglishItem("تیره", "Dark"),
-                    tile => MakeCartoDarkUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/cartoDark.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/cartoDark72.jpg")
-                };
+                    MakeCartoDarkUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/cartoDark.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/cartoDark72.jpg"));
             }
 
             return _cartoDark;
         }
     }
 
-    private static TileMapProvider _cartoLight;
+    private static TileMapProvider? _cartoLight;
     public static TileMapProvider CartoLight
     {
         get
         {
-            if (_cartoLight == null)
+            if (_cartoLight is null)
             {
                 _cartoLight = new TileMapProvider(
                     new PersianEnglishItem("کارتو", CartoProvider),
                     new PersianEnglishItem("روشن", "Light"),
-                    tile => MakeCartoLightUrl(tile),
-                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/cartoLight.jpg"))
-                {
-                    Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/cartoLight72.jpg")
-                };
+                    MakeCartoLightUrl,
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/cartoLight.jpg"),
+                    ResourceHelper.ReadBinaryStreamFromResource($"{baseMapUri}/72/cartoLight72.jpg"));
             }
 
             return _cartoLight;
@@ -677,12 +642,12 @@ public static class TileMapProviderFactory
     #region Mapbox Commic
 
 
-    private static TileMapProvider _mapboxComic;
+    private static TileMapProvider? _mapboxComic;
     public static TileMapProvider MapboxComic
     {
         get
         {
-            if (_mapboxComic == null)
+            if (_mapboxComic is null)
             {
                 _mapboxComic = CreateFromXyzUrlCharServer(
                     new PersianEnglishItem("مپ‌باکس", Mapbox),
@@ -696,12 +661,12 @@ public static class TileMapProviderFactory
         }
     }
     //http://b.tiles.mapbox.com/v4/mapbox.satellite/6/44/26.png?access_token=pk.eyJ1IjoibW9ob2tvZW1haWxob3N0aW5mbyIsImEiOiJjanU5bmFlbDcxYjNkNDRuenB1cHF6YXo0In0.sdTlXpsCH35pTyzOGK3K8w
-    private static TileMapProvider _mapboxSatellite;
+    private static TileMapProvider? _mapboxSatellite;
     public static TileMapProvider MapboxSatellite
     {
         get
         {
-            if (_mapboxSatellite == null)
+            if (_mapboxSatellite is null)
             {
                 _mapboxSatellite = CreateFromXyzUrlCharServer(
                     new PersianEnglishItem("مپ‌باکس", Mapbox),
@@ -748,6 +713,73 @@ public static class TileMapProviderFactory
 
     #endregion
 
+
+    public static string GetServer(int min = 0, int max = 3)
+    {
+        //first bound is inclusive second bound is exclusive
+        return IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    public static char GetServerCharacter(int min = 0, int max = 2)
+    {
+        //first bound is inclusive second bound is exclusive
+        var random = IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1);
+
+        return _serverChar[random];
+    }
+
+
+    public static TileMapProvider CreateFromXyzUrl(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnailAddress72)
+    {
+        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}");
+
+        return new TileMapProvider(
+                    provider,
+                    mapType,
+                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                                        mapUrl,
+                                        tile.ColumnNumber,
+                                        tile.RowNumber,
+                                        tile.ZoomLevel),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress72));
+    }
+
+    public static TileMapProvider CreateFromXyzUrlIntServer(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnail72Address, int minServer = 0, int maxServer = 3)
+    {
+        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
+
+        return new TileMapProvider(
+                    provider,
+                    mapType,
+                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                                                                            mapUrl,
+                                                                            tile.ColumnNumber,
+                                                                            tile.RowNumber,
+                                                                            tile.ZoomLevel,
+                                                                            GetServer(minServer, maxServer)),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address));
+    }
+
+    public static TileMapProvider CreateFromXyzUrlCharServer(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnail72Address, int minServer = 0, int maxServer = 2)
+    {
+        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
+
+        return new TileMapProvider(
+                    provider,
+                    mapType,
+                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                                                                            mapUrl,
+                                                                            tile.ColumnNumber,
+                                                                            tile.RowNumber,
+                                                                            tile.ZoomLevel,
+                                                                            GetServerCharacter(minServer, maxServer)),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress),
+                    ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address));
+    }
+
+
     public static List<TileMapProvider> GetAll()
     {
         return new List<TileMapProvider>()
@@ -774,72 +806,4 @@ public static class TileMapProviderFactory
         };
     }
 
-
-    public static string GetServer(int min = 0, int max = 3)
-    {
-        //first bound is inclusive second bound is exclusive
-        return IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
-    }
-
-    public static char GetServerCharacter(int min = 0, int max = 2)
-    {
-        //first bound is inclusive second bound is exclusive
-        var random = IRI.Sta.Common.Helpers.RandomHelper.Get(min, max + 1);
-
-        return _serverChar[random];
-    }
-
-
-    public static TileMapProvider CreateFromXyzUrl(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress)
-    {
-        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}");
-
-        return new TileMapProvider(
-                    provider,
-                    mapType,
-                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                                            mapUrl,
-                                                                            tile.ColumnNumber,
-                                                                            tile.RowNumber,
-                                                                            tile.ZoomLevel),
-                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress));
-    }
-
-    public static TileMapProvider CreateFromXyzUrlIntServer(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnail72Address, int minServer = 0, int maxServer = 3)
-    {
-        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
-
-        return new TileMapProvider(
-                    provider, 
-                    mapType, 
-                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                                            mapUrl,
-                                                                            tile.ColumnNumber,
-                                                                            tile.RowNumber,
-                                                                            tile.ZoomLevel,
-                                                                            GetServer(minServer, maxServer)),
-                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress))
-        {
-            Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address)
-        };
-    }
-
-    public static TileMapProvider CreateFromXyzUrlCharServer(PersianEnglishItem provider, PersianEnglishItem mapType, string url, string thumbnailAddress, string thumbnail72Address, int minServer = 0, int maxServer = 2)
-    {
-        var mapUrl = url.Replace("{x}", "{0}").Replace("{y}", "{1}").Replace("{z}", "{2}").Replace("{@server}", "{3}");
-
-        return new TileMapProvider(
-                    provider, 
-                    mapType, 
-                    tile => string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                                                                            mapUrl,
-                                                                            tile.ColumnNumber,
-                                                                            tile.RowNumber,
-                                                                            tile.ZoomLevel,
-                                                                            GetServerCharacter(minServer, maxServer)),
-                    ResourceHelper.ReadBinaryStreamFromResource(thumbnailAddress))
-        {
-            Thumbnail72 = ResourceHelper.ReadBinaryStreamFromResource(thumbnail72Address)
-        };
-    }
 }

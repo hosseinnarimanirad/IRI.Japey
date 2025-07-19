@@ -34,4 +34,18 @@ public static class HttpClientHelper
         }
     }
 
+    //public static async Task<Response<T>> HttpGetAsync<T>(
+    //    HttpClient client,
+    //    HttpParameters parameters) where T : class
+    //{
+    //    try
+    //    {
+    //        var result = await client.GetFromJsonAsync<T>(parameters.Address,)
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return ResponseFactory.CreateError<T>(ex.Message);
+    //    }
+    //}
+
 }

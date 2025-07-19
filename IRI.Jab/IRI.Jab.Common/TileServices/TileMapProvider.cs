@@ -63,9 +63,9 @@ public class TileMapProvider : ValueObjectNotifier
         //}
     }
 
-    private byte[] _thumbnail;
+    private byte[]? _thumbnail;
 
-    public byte[] Thumbnail
+    public byte[]? Thumbnail
     {
         get { return _thumbnail; }
         protected set
@@ -75,9 +75,9 @@ public class TileMapProvider : ValueObjectNotifier
         }
     }
 
-    private byte[] _thumbnail72;
+    private byte[]? _thumbnail72;
 
-    public byte[] Thumbnail72
+    public byte[]? Thumbnail72
     {
         get { return _thumbnail72; }
         set
@@ -101,10 +101,10 @@ public class TileMapProvider : ValueObjectNotifier
 
     }
 
-    public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[] thumbnail)
+    public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
         : this(PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, provider),
                 PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, mapType),
-                urlFunction, thumbnail)
+                urlFunction, thumbnail, thumbnail72)
     {
         //this.MakeUrl = urlFunction;
 
@@ -113,7 +113,7 @@ public class TileMapProvider : ValueObjectNotifier
         //this.MapType = new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English);
     }
 
-    public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction, byte[] thumbnail)
+    public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
     {
         this.MakeUrl = urlFunction;
 
@@ -122,6 +122,8 @@ public class TileMapProvider : ValueObjectNotifier
         this._mapType = mapType;
 
         this._thumbnail = thumbnail;
+         
+        this._thumbnail72 = thumbnail72;
     }
 
     public virtual string GetUrl(TileInfo tile)
