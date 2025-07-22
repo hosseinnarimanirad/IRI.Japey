@@ -1,10 +1,8 @@
-﻿using IRI.Sta.ShapefileFormat.EsriType;
+﻿using System;
+
 using IRI.Sta.ShapefileFormat.Reader;
+using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
-using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IRI.Sta.PersonalGdb;
 

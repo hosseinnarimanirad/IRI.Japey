@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Sta.Security.Helpers;
 
-public static class NetHelper
+public static class EncryptedNetHelper
 {
 
     // 1400.02.14
@@ -19,7 +19,7 @@ public static class NetHelper
             var message = EncryptedMessage.Create(parameter, encPubKey);
 
             //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
-            var response = await IRI.Sta.Common.Helpers.NetHelper.HttpPostAsync<EncryptedMessage>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
+            var response = await NetHelper.HttpPostAsync<EncryptedMessage>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
 
             if (response.HasNotNullResult())
             {
@@ -46,7 +46,7 @@ public static class NetHelper
             var message = EncryptedMessage.Create(parameter, encPubKey);
 
             //var response = await NetHelper.HttpPostAsync<EncryptedMessage>(url, message, null, proxy);
-            var response = await IRI.Sta.Common.Helpers.NetHelper.HttpPostAsync<TResponse>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
+            var response = await NetHelper.HttpPostAsync<TResponse>(new HttpParameters() { Address = url, Data = message, Proxy = proxy });
 
             return response;
         }
