@@ -43,12 +43,12 @@ public static class FeatureTableCommands
 
         result.Command = new RelayCommand((param) =>
         {
-            var layer = param as ISelectedLayer;
+            var layer = param as SelectedLayer;
 
             if (layer == null || map == null)
                 return;
 
-            var features = layer.GetHighlightedFeatures();
+            var features = layer.HighlightedFeatures;
 
             var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
@@ -81,7 +81,7 @@ public static class FeatureTableCommands
 
         result.Command = new RelayCommand((param) =>
         {
-            var layer = param as ISelectedLayer;
+            var layer = param as SelectedLayer;
 
             if (layer == null || map == null)
                 return;
@@ -133,12 +133,12 @@ public static class FeatureTableCommands
 
         result.Command = new RelayCommand((param) =>
         {
-            var layer = param as ISelectedLayer;
+            var layer = param as SelectedLayer;
 
             if (layer == null || map == null)
                 return;
 
-            var features = layer.GetHighlightedFeatures();
+            var features = layer.HighlightedFeatures;
 
             if (features.IsNullOrEmpty())
             {

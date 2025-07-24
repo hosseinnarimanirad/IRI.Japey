@@ -167,8 +167,8 @@ public abstract class MapPresenter : BasePresenter
     }
 
 
-    private ObservableCollection<ISelectedLayer> _selectedLayers = new ObservableCollection<ISelectedLayer>();
-    public ObservableCollection<ISelectedLayer> SelectedLayers
+    private ObservableCollection<SelectedLayer> _selectedLayers = new ObservableCollection<SelectedLayer>();
+    public ObservableCollection<SelectedLayer> SelectedLayers
     {
         get { return _selectedLayers; }
         set
@@ -179,8 +179,8 @@ public abstract class MapPresenter : BasePresenter
     }
 
 
-    private ISelectedLayer _currentLayer;
-    public ISelectedLayer CurrentLayer
+    private SelectedLayer _currentLayer;
+    public SelectedLayer CurrentLayer
     {
         get { return _currentLayer; }
         set
@@ -1060,7 +1060,7 @@ public abstract class MapPresenter : BasePresenter
     //*****************************************Selected Layers & Select Geometries & DrawGeometries & Identify & FlashPoints ******************
     #region Selected Layers & Select/Draw Geometries & Identify & FlashPoints 
 
-    public void AddSelectedLayer(ISelectedLayer selectedLayer)
+    public void AddSelectedLayer(SelectedLayer selectedLayer)
     {
         if (selectedLayer == null)
         {
@@ -1153,7 +1153,7 @@ public abstract class MapPresenter : BasePresenter
         }
     }
 
-    private void RemoveSelectedLayer(ISelectedLayer selectedLayer)
+    private void RemoveSelectedLayer(SelectedLayer selectedLayer)
     {
         if (selectedLayer is null)
             return;
@@ -1323,7 +1323,7 @@ public abstract class MapPresenter : BasePresenter
 
         var result = this.Search(searchTest);
 
-        this.SelectedLayers = new ObservableCollection<ISelectedLayer>();
+        this.SelectedLayers = new ObservableCollection<SelectedLayer>();
 
         foreach (var item in result)
         {
@@ -1334,7 +1334,7 @@ public abstract class MapPresenter : BasePresenter
 
             var fields = (layer as VectorLayer)?.GetFields();
 
-            var newLayer = new SelectedLayer<Feature<Point>>(layer, fields)
+            var newLayer = new SelectedLayer/*<Feature<Point>>*/(layer, fields)
             {
                 ShowSelectedOnMap = true,
                 Features = new ObservableCollection<Feature<Point>>(item.Features)

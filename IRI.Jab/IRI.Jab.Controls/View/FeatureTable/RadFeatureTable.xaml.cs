@@ -1,20 +1,10 @@
 ﻿using IRI.Jab.Common.Model.Map;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
@@ -60,7 +50,7 @@ namespace IRI.Jab.Controls.View
             DependencyProperty.Register(nameof(CanUserEditAttribute), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
 
 
-        public ISelectedLayer Presenter { get { return this.DataContext as ISelectedLayer; } }
+        public SelectedLayer Presenter { get { return this.DataContext as SelectedLayer; } }
 
         public RadFeatureTable()
         {
@@ -89,7 +79,7 @@ namespace IRI.Jab.Controls.View
                     break;
             }
 
-            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(IGeometryAware<Point>.TheGeometry)) ||
+            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(Feature<Point>.TheGeometry)) ||
                 e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
             {
                 e.Cancel = true;
@@ -106,7 +96,7 @@ namespace IRI.Jab.Controls.View
 
         private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<IGeometryAware<Point>>());
+            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<Feature<Point>>());
         }
 
         private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
@@ -115,7 +105,7 @@ namespace IRI.Jab.Controls.View
             {
                 if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Edit)
                 {
-                    var item = e.EditedItem;
+                    var item = e.EditedItem as Feature<Point>;
 
                     Presenter.UpdateFeature(item);
                 }
@@ -134,7 +124,7 @@ namespace IRI.Jab.Controls.View
         {
             if (IsZoomToGeometryEnabled)
             {
-                var selectedItems = grid.SelectedItems.Cast<IGeometryAware<Point>>();
+                var selectedItems = grid.SelectedItems.Cast<Feature<Point>>();
 
                 var action = new Action(() =>
                 {

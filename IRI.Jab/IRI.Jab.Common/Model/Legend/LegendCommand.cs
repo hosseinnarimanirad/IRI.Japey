@@ -171,7 +171,7 @@ public class LegendCommand : Notifier, ILegendCommand
 
             var features = layer.GetFeatures/*<T>*/();
 
-            var newLayer = new Map.SelectedLayer<Feature<Point>>(layer, layer.GetFields());
+            var newLayer = new SelectedLayer/*<Feature<Point>>*/(layer, layer.GetFields());
 
             //newLayer.RequestSave = l =>
             //{
@@ -226,7 +226,7 @@ public class LegendCommand : Notifier, ILegendCommand
                 return;
             }
 
-            var newLayer = new SelectedLayer<Feature<Point>>(layer, layer.GetFields())
+            var newLayer = new SelectedLayer/*<Feature<Point>>*/(layer, layer.GetFields())
             {
                 ShowSelectedOnMap = true
             };

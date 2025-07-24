@@ -12,7 +12,7 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Jab.Common.Model.Map;
 
-public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeometryAware : class, IGeometryAware<Point>
+public class SelectedLayer/*<TGeometryAware> */: Notifier/*, ISelectedLayer *//*where TGeometryAware : class, IGeometryAware<Point>*/
 {
     public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
@@ -22,8 +22,8 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
     public bool ShowSelectedOnMap { get; set; } = false;
 
-    private ObservableCollection<TGeometryAware> _features;
-    public ObservableCollection<TGeometryAware> Features
+    private ObservableCollection<Feature<Point>> _features;
+    public ObservableCollection<Feature<Point>> Features
     {
         get { return _features; }
         set
@@ -35,8 +35,8 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
     public List<Field>? Fields { get; set; }
 
-    private ObservableCollection<TGeometryAware> _highlightedFeatures = new ObservableCollection<TGeometryAware>();
-    public ObservableCollection<TGeometryAware> HighlightedFeatures
+    private ObservableCollection<Feature<Point>> _highlightedFeatures = new ObservableCollection<Feature<Point>>();
+    public ObservableCollection<Feature<Point>> HighlightedFeatures
     {
         get { return _highlightedFeatures; }
         set
@@ -46,14 +46,14 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
             _highlightedFeatures.CollectionChanged += (sender, e) =>
             {
-                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
+                this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures/*.Cast<Feature<Point>>()*/);
 
                 RaisePropertyChanged(nameof(IsSingleValueHighlighted));
                 //Update();
             };
 
             //Update();
-            this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
+            this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures/*.Cast<Feature<Point>>()*/);
 
             RaisePropertyChanged(nameof(IsSingleValueHighlighted));
         }
@@ -63,13 +63,13 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
     {
         get
         {
-            return HighlightedFeatures?.Count() == 1;
+            return HighlightedFeatures?.Count == 1;
         }
     }
 
     //private void Update()
     //{
-    //    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<IGeometryAware<Point>>());
+    //    this.UpdateHighlightedFeaturesOnMap(HighlightedFeatures.Cast<Feature<Point>>());
     //    RaisePropertyChanged(nameof(IsSingleValueHighlighted));
     //}
 
@@ -83,44 +83,44 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
         this.Fields = fields;
     }
 
-    public void UpdateSelectedFeatures(IEnumerable<IGeometryAware<Point>> items)
+    public void UpdateSelectedFeatures(IEnumerable<Feature<Point>> items)
     {
-        Features = new ObservableCollection<TGeometryAware>(items?.Cast<TGeometryAware>());
+        Features = new ObservableCollection<Feature<Point>>(items/*?.Cast<TGeometryAware>()*/);
     }
 
-    public void UpdateHighlightedFeatures(IEnumerable<IGeometryAware<Point>> items)
+    public void UpdateHighlightedFeatures(IEnumerable<Feature<Point>> items)
     {
-        HighlightedFeatures = new ObservableCollection<TGeometryAware>(items.Cast<TGeometryAware>());
+        HighlightedFeatures = new ObservableCollection<Feature<Point>>(items/*.Cast<TGeometryAware>()*/);
     }
 
-    public void UpdateSelectedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable)
+    public void UpdateSelectedFeaturesOnMap(IEnumerable<Feature<Point>> enumerable)
     {
         FeaturesChangedAction?.Invoke(enumerable);
     }
 
-    public void UpdateHighlightedFeaturesOnMap(IEnumerable<IGeometryAware<Point>> enumerable)
+    public void UpdateHighlightedFeaturesOnMap(IEnumerable<Feature<Point>> enumerable)
     {
         HighlightFeaturesChangedAction?.Invoke(enumerable);
     }
 
-    public IEnumerable<IGeometryAware<Point>> GetSelectedFeatures()
+    public IEnumerable<Feature<Point>> GetSelectedFeatures()
     {
-        return Features?.Cast<IGeometryAware<Point>>().ToList();
+        return Features/*?.Cast<Feature<Point>>().ToList()*/;
 
         //AssociatedLayer.
     }
 
     public int CountOfSelectedFeatures()
     {
-        return Features.Count();
+        return Features.Count;
     }
 
-    public IEnumerable<IGeometryAware<Point>> GetHighlightedFeatures()
-    {
-        return HighlightedFeatures?.Cast<IGeometryAware<Point>>().ToList();
-    }
+    //public IEnumerable<Feature<Point>> GetHighlightedFeatures()
+    //{
+    //    return HighlightedFeatures/*?.Cast<Feature<Point>>().ToList()*/;
+    //}
 
-    private void TryFlashPoint(IEnumerable<IGeometryAware<Point>> point)
+    private void TryFlashPoint(IEnumerable<Feature<Point>> point)
     {
         if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point/*.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point*/)
         {
@@ -128,7 +128,7 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
         }
     }
 
-    public void Update(IGeometryAware<Point> oldGeometry, Feature<Point> newGeometry)
+    public void Update(Feature<Point> oldGeometry, Feature<Point> newGeometry)
     {
         var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource/*<Feature<Point>, Point>*/;
 
@@ -138,29 +138,29 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
 
         feature.TheGeometry = newGeometry.TheGeometry;
 
-        //this.UpdateHighlightedFeatures(new List<IGeometryAware<Point>>() { feature });
+        //this.UpdateHighlightedFeatures(new List<Feature<Point>>() { feature });
         //var highlight = HighlightedFeatures.Single(h => h.Id == oldGeometry.Id)
     }
 
-    public void UpdateFeature(object item)
+    public void UpdateFeature(Feature<Point> item)
     {
-        var itemValue = item as Feature<Point>;
+        //var itemValue = item as Feature<Point>;
 
         var dataSource = (this?.AssociatedLayer as VectorLayer)?.DataSource as IEditableVectorDataSource/*<TGeometryAware, Point>*/;
 
         //dataSource.UpdateFeature(itemValue);
-        dataSource.Update(itemValue);
+        dataSource.Update(item);
     }
 
-    public Action<IEnumerable<IGeometryAware<Point>>> FeaturesChangedAction { get; set; }
+    public Action<IEnumerable<Feature<Point>>> FeaturesChangedAction { get; set; }
 
-    public Action<IEnumerable<IGeometryAware<Point>>> HighlightFeaturesChangedAction { get; set; }
+    public Action<IEnumerable<Feature<Point>>> HighlightFeaturesChangedAction { get; set; }
 
-    public Action<IGeometryAware<Point>> RequestFlashSinglePoint { get; set; }
+    public Action<Feature<Point>> RequestFlashSinglePoint { get; set; }
 
-    public Action<IEnumerable<IGeometryAware<Point>>, Action> RequestZoomTo { get; set; }
+    public Action<IEnumerable<Feature<Point>>, Action> RequestZoomTo { get; set; }
 
-    public Action<IGeometryAware<Point>> RequestEdit { get; set; }
+    public Action<Feature<Point>> RequestEdit { get; set; }
 
 
     public void SaveChanges()
@@ -181,9 +181,8 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
             if (_zoomToCommand == null)
             {
                 _zoomToCommand = new RelayCommand(param =>
-                {
-                    var features = HighlightedFeatures.Cast<IGeometryAware<Point>>();
-                    this.RequestZoomTo?.Invoke(features, () => { TryFlashPoint(features); });
+                { 
+                    this.RequestZoomTo?.Invoke(HighlightedFeatures, () => { TryFlashPoint(HighlightedFeatures); });
                 });
             }
 
@@ -201,11 +200,11 @@ public class SelectedLayer<TGeometryAware> : Notifier, ISelectedLayer where TGeo
             {
                 _editCommand = new RelayCommand(param =>
                 {
-                    var highlightedFeatures = GetHighlightedFeatures();
+                    //var highlightedFeatures = GetHighlightedFeatures();
 
-                    if (highlightedFeatures?.Count() == 1)
+                    if (HighlightedFeatures?.Count == 1)
                     {
-                        this.RequestEdit(highlightedFeatures.First());
+                        this.RequestEdit(HighlightedFeatures.First());
                     }
                 });
             }
