@@ -96,7 +96,7 @@ public enum ServiceType
     WCS
 }
 
-[XmlType(Namespace = "http://www.w3.org/1999/xlink")]
+//[XmlType(Namespace = "http://www.w3.org/1999/xlink")]
 public class OnlineResource
 {
     [XmlAttribute("type", Namespace = "http://www.w3.org/1999/xlink")]
@@ -246,8 +246,8 @@ public class LineSymbolizer : Symbolizer
     public Stroke Stroke { get; set; }
 }
 
-[System.Serializable]
-[XmlType(AnonymousType = true, Namespace = StyledLayerDescriptor.defaultNamespace)]
+//[System.Serializable]
+//[XmlType(AnonymousType = true, Namespace = StyledLayerDescriptor.defaultNamespace)]
 public class PolygonSymbolizer : Symbolizer
 {
     [XmlElement("Fill")]
@@ -266,7 +266,7 @@ public class PointSymbolizer : Symbolizer
 public class TextSymbolizer : Symbolizer
 {
     [XmlElement("Label")]
-    public ParameterValueType Label { get; set; }
+    public Label Label { get; set; }
 
     [XmlElement("Font")]
     public Font Font { get; set; }
@@ -303,7 +303,18 @@ public class RasterSymbolizer : Symbolizer
 
     [XmlElement("ImageOutline")]
     public ImageOutline ImageOutline { get; set; }
+
+
+    // This pattern prevents serialization when null
+    public bool ShouldSerializeOpacity() => Opacity.HasValue;
 }
+
+public class Label
+{
+    [XmlElement("PropertyName", Namespace = "http://www.opengis.net/ogc")]
+    public string PropertyName { get; set; }
+}
+
 
 // Supporting classes for symbolizers
 public class Geometry
@@ -356,10 +367,17 @@ public class Graphic
     public double? Opacity { get; set; }
 
     [XmlElement("Size")]
-    public ParameterValueType Size { get; set; }
+    public int Size { get; set; }
+    //public ParameterValueType Size { get; set; }
 
     [XmlElement("Rotation")]
-    public ParameterValueType Rotation { get; set; }
+    public double? Rotation { get; set; }
+    //public ParameterValueType Rotation { get; set; }
+
+
+    // This pattern prevents serialization when null
+    public bool ShouldSerializeOpacity() => Opacity.HasValue;
+    public bool ShouldSerializeRotation() => Rotation.HasValue;
 }
 
 public class GraphicFill
@@ -521,14 +539,18 @@ public class ColorMapEntry
     [XmlAttribute("color")]
     public string Color { get; set; }
 
-    //[XmlAttribute("opacity")]
-    //public double? Opacity { get; set; }
+    [XmlAttribute("opacity")]
+    public double? Opacity { get; set; }
 
     [XmlAttribute("quantity")]
     public double? Quantity { get; set; }
 
     [XmlAttribute("label")]
     public string Label { get; set; }
+
+
+    // This pattern prevents serialization when null
+    public bool ShouldSerializeOpacity() => Opacity.HasValue;
 }
 
 public class ContrastEnhancement
@@ -569,11 +591,43 @@ public class FilterType
 {
     // This would be expanded with actual filter capabilities
     [XmlElement("PropertyIsEqualTo", Namespace = "http://www.opengis.net/ogc")]
-    public PropertyIsEqualTo PropertyIsEqualTo { get; set; }
+    public PropertyFilterBase PropertyIsEqualTo { get; set; }
+
+
+    [XmlElement("PropertyIsLessThan", Namespace = "http://www.opengis.net/ogc")]
+    public PropertyFilterBase PropertyIsLessThan { get; set; }
+
+
+    [XmlElement("PropertyIsNotEqualTo", Namespace = "http://www.opengis.net/ogc")]
+    public PropertyFilterBase PropertyIsNotEqualTo { get; set; }
+
+
+    [XmlElement("PropertyIsLessThanOrEqualTo", Namespace = "http://www.opengis.net/ogc")]
+    public PropertyFilterBase PropertyIsLessThanOrEqualTo { get; set; }
+
+
+    [XmlElement("PropertyIsGreaterThan", Namespace = "http://www.opengis.net/ogc")]
+    public PropertyFilterBase PropertyIsGreaterThan { get; set; }
+
+
+    [XmlElement("PropertyIsGreaterThanOrEqualTo", Namespace = "http://www.opengis.net/ogc")]
+    public PropertyFilterBase PropertyIsGreaterThanOrEqualTo { get; set; }
+
     // Add other filter types as needed
+
+
+
+    //<PropertyIsLike>
+
+    //<PropertyIsNull>
+
+    //<PropertyIsBetween>
+
+
+
 }
 
-public class PropertyIsEqualTo
+public class PropertyFilterBase
 {
     [XmlElement("PropertyName", Namespace = "http://www.opengis.net/ogc")]
     public string PropertyName { get; set; }
