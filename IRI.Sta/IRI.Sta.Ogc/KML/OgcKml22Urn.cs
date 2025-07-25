@@ -4,9199 +4,9197 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace IRI.Ket.KmlFormat.Primitives
+namespace IRI.Ket.KmlFormat.Primitives;
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseType
 {
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseType
-    {
 
-        private AddressLine[] addressLineField;
+    private AddressLine[] addressLineField;
 
-        private SubPremiseTypeSubPremiseName[] subPremiseNameField;
+    private SubPremiseTypeSubPremiseName[] subPremiseNameField;
 
-        private object[] itemsField;
+    private object[] itemsField;
 
-        private SubPremiseTypeSubPremiseNumberPrefix[] subPremiseNumberPrefixField;
+    private SubPremiseTypeSubPremiseNumberPrefix[] subPremiseNumberPrefixField;
 
-        private SubPremiseTypeSubPremiseNumberSuffix[] subPremiseNumberSuffixField;
+    private SubPremiseTypeSubPremiseNumberSuffix[] subPremiseNumberSuffixField;
 
-        private BuildingNameType[] buildingNameField;
+    private BuildingNameType[] buildingNameField;
 
-        private FirmType firmField;
+    private FirmType firmField;
 
-        private MailStopType mailStopField;
+    private MailStopType mailStopField;
 
-        private PostalCode postalCodeField;
+    private PostalCode postalCodeField;
 
-        private SubPremiseType subPremiseField;
+    private SubPremiseType subPremiseField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private string typeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SubPremiseName")]
-        public SubPremiseTypeSubPremiseName[] SubPremiseName
+        set
         {
-            get
-            {
-                return this.subPremiseNameField;
-            }
-            set
-            {
-                this.subPremiseNameField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SubPremiseLocation", typeof(SubPremiseTypeSubPremiseLocation))]
-        [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumber", typeof(SubPremiseTypeSubPremiseNumber))]
-        public object[] Items
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("SubPremiseName")]
+    public SubPremiseTypeSubPremiseName[] SubPremiseName
+    {
+        get
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            return this.subPremiseNameField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumberPrefix")]
-        public SubPremiseTypeSubPremiseNumberPrefix[] SubPremiseNumberPrefix
+        set
         {
-            get
-            {
-                return this.subPremiseNumberPrefixField;
-            }
-            set
-            {
-                this.subPremiseNumberPrefixField = value;
-            }
+            this.subPremiseNameField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumberSuffix")]
-        public SubPremiseTypeSubPremiseNumberSuffix[] SubPremiseNumberSuffix
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("SubPremiseLocation", typeof(SubPremiseTypeSubPremiseLocation))]
+    [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumber", typeof(SubPremiseTypeSubPremiseNumber))]
+    public object[] Items
+    {
+        get
         {
-            get
-            {
-                return this.subPremiseNumberSuffixField;
-            }
-            set
-            {
-                this.subPremiseNumberSuffixField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
-        public BuildingNameType[] BuildingName
-        {
-            get
-            {
-                return this.buildingNameField;
-            }
-            set
-            {
-                this.buildingNameField = value;
-            }
-        }
-
-        /// <remarks/>
-        public FirmType Firm
-        {
-            get
-            {
-                return this.firmField;
-            }
-            set
-            {
-                this.firmField = value;
-            }
-        }
-
-        /// <remarks/>
-        public MailStopType MailStop
-        {
-            get
-            {
-                return this.mailStopField;
-            }
-            set
-            {
-                this.mailStopField = value;
-            }
-        }
-
-        /// <remarks/>
-        public PostalCode PostalCode
-        {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
-        }
-
-        /// <remarks/>
-        public SubPremiseType SubPremise
-        {
-            get
-            {
-                return this.subPremiseField;
-            }
-            set
-            {
-                this.subPremiseField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
-        {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+            return this.itemsField;
+        }
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.itemsField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class AddressLine
+    [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumberPrefix")]
+    public SubPremiseTypeSubPremiseNumberPrefix[] SubPremiseNumberPrefix
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.subPremiseNumberPrefixField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.subPremiseNumberPrefixField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("SubPremiseNumberSuffix")]
+    public SubPremiseTypeSubPremiseNumberSuffix[] SubPremiseNumberSuffix
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.subPremiseNumberSuffixField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.subPremiseNumberSuffixField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseTypeSubPremiseName
+    [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
+    public BuildingNameType[] BuildingName
     {
-
-        private string typeField;
-
-        private SubPremiseTypeSubPremiseNameTypeOccurrence typeOccurrenceField;
-
-        private bool typeOccurrenceFieldSpecified;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.buildingNameField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public SubPremiseTypeSubPremiseNameTypeOccurrence TypeOccurrence
+        set
         {
-            get
-            {
-                return this.typeOccurrenceField;
-            }
-            set
-            {
-                this.typeOccurrenceField = value;
-            }
+            this.buildingNameField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeOccurrenceSpecified
+    /// <remarks/>
+    public FirmType Firm
+    {
+        get
         {
-            get
-            {
-                return this.typeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.typeOccurrenceFieldSpecified = value;
-            }
+            return this.firmField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.firmField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    public MailStopType MailStop
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.mailStopField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.mailStopField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum SubPremiseTypeSubPremiseNameTypeOccurrence
+    public PostalCode PostalCode
     {
-
-        /// <remarks/>
-        Before,
-
-        /// <remarks/>
-        After,
+        get
+        {
+            return this.postalCodeField;
+        }
+        set
+        {
+            this.postalCodeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseTypeSubPremiseLocation
+    public SubPremiseType SubPremise
     {
-
-        private string codeField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.subPremiseField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.subPremiseField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseTypeSubPremiseNumber
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
     {
-
-        private string indicatorField;
-
-        private SubPremiseTypeSubPremiseNumberIndicatorOccurrence indicatorOccurrenceField;
-
-        private bool indicatorOccurrenceFieldSpecified;
-
-        private SubPremiseTypeSubPremiseNumberNumberTypeOccurrence numberTypeOccurrenceField;
-
-        private bool numberTypeOccurrenceFieldSpecified;
-
-        private string premiseNumberSeparatorField;
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public SubPremiseTypeSubPremiseNumberIndicatorOccurrence IndicatorOccurrence
+        set
         {
-            get
-            {
-                return this.indicatorOccurrenceField;
-            }
-            set
-            {
-                this.indicatorOccurrenceField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurrenceFieldSpecified = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public SubPremiseTypeSubPremiseNumberNumberTypeOccurrence NumberTypeOccurrence
+        set
         {
-            get
-            {
-                return this.numberTypeOccurrenceField;
-            }
-            set
-            {
-                this.numberTypeOccurrenceField = value;
-            }
+            this.typeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberTypeOccurrenceSpecified
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.numberTypeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.numberTypeOccurrenceFieldSpecified = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PremiseNumberSeparator
+        set
         {
-            get
-            {
-                return this.premiseNumberSeparatorField;
-            }
-            set
-            {
-                this.premiseNumberSeparatorField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class AddressLine
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum SubPremiseTypeSubPremiseNumberIndicatorOccurrence
-    {
-
-        /// <remarks/>
-        Before,
 
-        /// <remarks/>
-        After,
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum SubPremiseTypeSubPremiseNumberNumberTypeOccurrence
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        /// <remarks/>
-        Before,
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        After,
-    }
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseTypeSubPremiseName
+{
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseTypeSubPremiseNumberPrefix
-    {
+    private string typeField;
 
-        private string numberPrefixSeparatorField;
+    private SubPremiseTypeSubPremiseNameTypeOccurrence typeOccurrenceField;
 
-        private string typeField;
+    private bool typeOccurrenceFieldSpecified;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberPrefixSeparator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.numberPrefixSeparatorField;
-            }
-            set
-            {
-                this.numberPrefixSeparatorField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public SubPremiseTypeSubPremiseNameTypeOccurrence TypeOccurrence
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.typeOccurrenceField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.typeOccurrenceField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool TypeOccurrenceSpecified
+    {
+        get
+        {
+            return this.typeOccurrenceFieldSpecified;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.typeOccurrenceFieldSpecified = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class SubPremiseTypeSubPremiseNumberSuffix
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
-
-        private string numberSuffixSeparatorField;
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberSuffixSeparator
+        get
         {
-            get
-            {
-                return this.numberSuffixSeparatorField;
-            }
-            set
-            {
-                this.numberSuffixSeparatorField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class BuildingNameType
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private string typeField;
-
-        private BuildingNameTypeTypeOccurrence typeOccurrenceField;
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum SubPremiseTypeSubPremiseNameTypeOccurrence
+{
 
-        private bool typeOccurrenceFieldSpecified;
+    /// <remarks/>
+    Before,
 
-        private string codeField;
+    /// <remarks/>
+    After,
+}
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string[] textField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseTypeSubPremiseLocation
+{
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    private string codeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public BuildingNameTypeTypeOccurrence TypeOccurrence
-        {
-            get
-            {
-                return this.typeOccurrenceField;
-            }
-            set
-            {
-                this.typeOccurrenceField = value;
-            }
-        }
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.typeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.typeOccurrenceFieldSpecified = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum BuildingNameTypeTypeOccurrence
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        Before,
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseTypeSubPremiseNumber
+{
 
-        /// <remarks/>
-        After,
-    }
+    private string indicatorField;
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class FirmType
-    {
+    private SubPremiseTypeSubPremiseNumberIndicatorOccurrence indicatorOccurrenceField;
 
-        private AddressLine[] addressLineField;
+    private bool indicatorOccurrenceFieldSpecified;
 
-        private FirmTypeFirmName[] firmNameField;
+    private SubPremiseTypeSubPremiseNumberNumberTypeOccurrence numberTypeOccurrenceField;
 
-        private Department[] departmentField;
+    private bool numberTypeOccurrenceFieldSpecified;
 
-        private MailStopType mailStopField;
+    private string premiseNumberSeparatorField;
 
-        private PostalCode postalCodeField;
+    private string typeField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private string codeField;
 
-        private string typeField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FirmName")]
-        public FirmTypeFirmName[] FirmName
+        set
         {
-            get
-            {
-                return this.firmNameField;
-            }
-            set
-            {
-                this.firmNameField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Department")]
-        public Department[] Department
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public SubPremiseTypeSubPremiseNumberIndicatorOccurrence IndicatorOccurrence
+    {
+        get
         {
-            get
-            {
-                return this.departmentField;
-            }
-            set
-            {
-                this.departmentField = value;
-            }
+            return this.indicatorOccurrenceField;
         }
-
-        /// <remarks/>
-        public MailStopType MailStop
+        set
         {
-            get
-            {
-                return this.mailStopField;
-            }
-            set
-            {
-                this.mailStopField = value;
-            }
+            this.indicatorOccurrenceField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurrenceSpecified
+    {
+        get
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            return this.indicatorOccurrenceFieldSpecified;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.indicatorOccurrenceFieldSpecified = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public SubPremiseTypeSubPremiseNumberNumberTypeOccurrence NumberTypeOccurrence
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.numberTypeOccurrenceField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.numberTypeOccurrenceField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class FirmTypeFirmName
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberTypeOccurrenceSpecified
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.numberTypeOccurrenceFieldSpecified;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.numberTypeOccurrenceFieldSpecified = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string PremiseNumberSeparator
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.premiseNumberSeparatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.premiseNumberSeparatorField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class Department
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private AddressLine[] addressLineField;
-
-        private DepartmentDepartmentName[] departmentNameField;
-
-        private MailStopType mailStopField;
-
-        private PostalCode postalCodeField;
-
-        private System.Xml.Linq.XElement[] anyField;
-        
-        private string typeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DepartmentName")]
-        public DepartmentDepartmentName[] DepartmentName
+        set
         {
-            get
-            {
-                return this.departmentNameField;
-            }
-            set
-            {
-                this.departmentNameField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        public MailStopType MailStop
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.mailStopField;
-            }
-            set
-            {
-                this.mailStopField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        public PostalCode PostalCode
+        set
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
-        {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class DepartmentDepartmentName
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.textField = value;
         }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum SubPremiseTypeSubPremiseNumberIndicatorOccurrence
+{
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
-        {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
-        }
+    /// <remarks/>
+    Before,
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
-    }
+    /// <remarks/>
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum SubPremiseTypeSubPremiseNumberNumberTypeOccurrence
+{
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class MailStopType
-    {
+    Before,
+
+    /// <remarks/>
+    After,
+}
 
-        private AddressLine[] addressLineField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private MailStopTypeMailStopName mailStopNameField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseTypeSubPremiseNumberPrefix
+{
 
-        private MailStopTypeMailStopNumber mailStopNumberField;
+    private string numberPrefixSeparatorField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private string typeField;
 
-        private string typeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberPrefixSeparator
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.numberPrefixSeparatorField;
         }
-
-        /// <remarks/>
-        public MailStopTypeMailStopName MailStopName
+        set
         {
-            get
-            {
-                return this.mailStopNameField;
-            }
-            set
-            {
-                this.mailStopNameField = value;
-            }
+            this.numberPrefixSeparatorField = value;
         }
+    }
 
-        /// <remarks/>
-        public MailStopTypeMailStopNumber MailStopNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.mailStopNumberField;
-            }
-            set
-            {
-                this.mailStopNumberField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class MailStopTypeMailStopName
-    {
-
-        private string typeField;
-
-        private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class MailStopTypeMailStopNumber
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class SubPremiseTypeSubPremiseNumberSuffix
+{
 
-        private string nameNumberSeparatorField;
+    private string numberSuffixSeparatorField;
 
-        private string codeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NameNumberSeparator
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberSuffixSeparator
+    {
+        get
         {
-            get
-            {
-                return this.nameNumberSeparatorField;
-            }
-            set
-            {
-                this.nameNumberSeparatorField = value;
-            }
+            return this.numberSuffixSeparatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.numberSuffixSeparatorField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.typeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PostalCode
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
-
-        private AddressLine[] addressLineField;
-
-        private PostalCodePostalCodeNumber[] postalCodeNumberField;
-
-        private PostalCodePostalCodeNumberExtension[] postalCodeNumberExtensionField;
-
-        private PostalCodePostTown postTownField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private string typeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PostalCodeNumber")]
-        public PostalCodePostalCodeNumber[] PostalCodeNumber
+        set
         {
-            get
-            {
-                return this.postalCodeNumberField;
-            }
-            set
-            {
-                this.postalCodeNumberField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PostalCodeNumberExtension")]
-        public PostalCodePostalCodeNumberExtension[] PostalCodeNumberExtension
-        {
-            get
-            {
-                return this.postalCodeNumberExtensionField;
-            }
-            set
-            {
-                this.postalCodeNumberExtensionField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        public PostalCodePostTown PostTown
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.postTownField;
-            }
-            set
-            {
-                this.postTownField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalCodePostalCodeNumber
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class BuildingNameType
+{
+
+    private string typeField;
 
-        private string typeField;
+    private BuildingNameTypeTypeOccurrence typeOccurrenceField;
 
-        private string codeField;
+    private bool typeOccurrenceFieldSpecified;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public BuildingNameTypeTypeOccurrence TypeOccurrence
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.typeOccurrenceField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.typeOccurrenceField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalCodePostalCodeNumberExtension
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool TypeOccurrenceSpecified
     {
-
-        private string typeField;
-
-        private string numberExtensionSeparatorField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeOccurrenceFieldSpecified;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberExtensionSeparator
+        set
         {
-            get
-            {
-                return this.numberExtensionSeparatorField;
-            }
-            set
-            {
-                this.numberExtensionSeparatorField = value;
-            }
+            this.typeOccurrenceFieldSpecified = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.codeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalCodePostTown
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum BuildingNameTypeTypeOccurrence
+{
 
-        private AddressLine[] addressLineField;
+    /// <remarks/>
+    Before,
 
-        private PostalCodePostTownPostTownName[] postTownNameField;
+    /// <remarks/>
+    After,
+}
 
-        private PostalCodePostTownPostTownSuffix postTownSuffixField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class FirmType
+{
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private AddressLine[] addressLineField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
-        {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
-        }
+    private FirmTypeFirmName[] firmNameField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PostTownName")]
-        public PostalCodePostTownPostTownName[] PostTownName
-        {
-            get
-            {
-                return this.postTownNameField;
-            }
-            set
-            {
-                this.postTownNameField = value;
-            }
-        }
+    private Department[] departmentField;
 
-        /// <remarks/>
-        public PostalCodePostTownPostTownSuffix PostTownSuffix
-        {
-            get
-            {
-                return this.postTownSuffixField;
-            }
-            set
-            {
-                this.postTownSuffixField = value;
-            }
-        }
+    private MailStopType mailStopField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    private PostalCode postalCodeField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.addressLineField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalCodePostTownPostTownName
+    [System.Xml.Serialization.XmlElementAttribute("FirmName")]
+    public FirmTypeFirmName[] FirmName
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.firmNameField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.firmNameField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Department")]
+    public Department[] Department
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.departmentField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.departmentField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalCodePostTownPostTownSuffix
+    public MailStopType MailStop
     {
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.mailStopField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.mailStopField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            return this.postalCodeField;
         }
+        set
+        {
+            this.postalCodeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalRouteType
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
     {
-
-        private AddressLine[] addressLineField;
-
-        private object[] itemsField;
-
-        private PostBox postBoxField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private string typeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PostalRouteName", typeof(PostalRouteTypePostalRouteName))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalRouteNumber", typeof(PostalRouteTypePostalRouteNumber))]
-        public object[] Items
+        set
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostBox PostBox
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.postBoxField;
-            }
-            set
-            {
-                this.postBoxField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.typeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalRouteTypePostalRouteName
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class FirmTypeFirmName
+{
 
-        private string codeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostalRouteTypePostalRouteNumber
-    {
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PostBox
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private AddressLine[] addressLineField;
-
-        private PostBoxPostBoxNumber postBoxNumberField;
-
-        private PostBoxPostBoxNumberPrefix postBoxNumberPrefixField;
-
-        private PostBoxPostBoxNumberSuffix postBoxNumberSuffixField;
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private PostBoxPostBoxNumberExtension postBoxNumberExtensionField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private FirmType firmField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class Department
+{
 
-        private PostalCode postalCodeField;
+    private AddressLine[] addressLineField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private DepartmentDepartmentName[] departmentNameField;
 
-        private string typeField;
+    private MailStopType mailStopField;
 
-        private string indicatorField;
+    private PostalCode postalCodeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XElement[] anyField;
+    
+    private string typeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
-        {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
-        }
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        public PostBoxPostBoxNumber PostBoxNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.postBoxNumberField;
-            }
-            set
-            {
-                this.postBoxNumberField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        public PostBoxPostBoxNumberPrefix PostBoxNumberPrefix
+        set
         {
-            get
-            {
-                return this.postBoxNumberPrefixField;
-            }
-            set
-            {
-                this.postBoxNumberPrefixField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostBoxPostBoxNumberSuffix PostBoxNumberSuffix
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("DepartmentName")]
+    public DepartmentDepartmentName[] DepartmentName
+    {
+        get
         {
-            get
-            {
-                return this.postBoxNumberSuffixField;
-            }
-            set
-            {
-                this.postBoxNumberSuffixField = value;
-            }
+            return this.departmentNameField;
         }
-
-        /// <remarks/>
-        public PostBoxPostBoxNumberExtension PostBoxNumberExtension
+        set
         {
-            get
-            {
-                return this.postBoxNumberExtensionField;
-            }
-            set
-            {
-                this.postBoxNumberExtensionField = value;
-            }
+            this.departmentNameField = value;
         }
+    }
 
-        /// <remarks/>
-        public FirmType Firm
+    /// <remarks/>
+    public MailStopType MailStop
+    {
+        get
         {
-            get
-            {
-                return this.firmField;
-            }
-            set
-            {
-                this.firmField = value;
-            }
+            return this.mailStopField;
         }
-
-        /// <remarks/>
-        public PostalCode PostalCode
+        set
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            this.mailStopField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.postalCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.postalCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostBoxPostBoxNumber
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.typeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostBoxPostBoxNumberPrefix
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
     {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
 
-        private string numberPrefixSeparatorField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string codeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class DepartmentDepartmentName
+{
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string typeField;
 
-        private string[] textField;
+    private string codeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberPrefixSeparator
-        {
-            get
-            {
-                return this.numberPrefixSeparatorField;
-            }
-            set
-            {
-                this.numberPrefixSeparatorField = value;
-            }
-        }
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
+    private string[] textField;
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.typeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostBoxPostBoxNumberSuffix
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
-
-        private string numberSuffixSeparatorField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberSuffixSeparator
+        get
         {
-            get
-            {
-                return this.numberSuffixSeparatorField;
-            }
-            set
-            {
-                this.numberSuffixSeparatorField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostBoxPostBoxNumberExtension
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private string numberExtensionSeparatorField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberExtensionSeparator
-        {
-            get
-            {
-                return this.numberExtensionSeparatorField;
-            }
-            set
-            {
-                this.numberExtensionSeparatorField = value;
-            }
-        }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class DependentLocalityType
-    {
-
-        private AddressLine[] addressLineField;
-
-        private DependentLocalityTypeDependentLocalityName[] dependentLocalityNameField;
-
-        private DependentLocalityTypeDependentLocalityNumber dependentLocalityNumberField;
-
-        private object itemField;
+}
 
-        private Thoroughfare thoroughfareField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private Premise premiseField;
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class MailStopType
+{
 
-        private DependentLocalityType dependentLocalityField;
+    private AddressLine[] addressLineField;
 
-        private PostalCode postalCodeField;
+    private MailStopTypeMailStopName mailStopNameField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private MailStopTypeMailStopNumber mailStopNumberField;
 
-        private string typeField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private string usageTypeField;
+    private string typeField;
 
-        private string connectorField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string indicatorField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
-        {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DependentLocalityName")]
-        public DependentLocalityTypeDependentLocalityName[] DependentLocalityName
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.dependentLocalityNameField;
-            }
-            set
-            {
-                this.dependentLocalityNameField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        public DependentLocalityTypeDependentLocalityNumber DependentLocalityNumber
+        set
         {
-            get
-            {
-                return this.dependentLocalityNumberField;
-            }
-            set
-            {
-                this.dependentLocalityNumberField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LargeMailUser", typeof(LargeMailUserType))]
-        [System.Xml.Serialization.XmlElementAttribute("PostBox", typeof(PostBox))]
-        [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalRoute", typeof(PostalRouteType))]
-        public object Item
+    /// <remarks/>
+    public MailStopTypeMailStopName MailStopName
+    {
+        get
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            return this.mailStopNameField;
         }
-
-        /// <remarks/>
-        public Thoroughfare Thoroughfare
+        set
         {
-            get
-            {
-                return this.thoroughfareField;
-            }
-            set
-            {
-                this.thoroughfareField = value;
-            }
+            this.mailStopNameField = value;
         }
+    }
 
-        /// <remarks/>
-        public Premise Premise
+    /// <remarks/>
+    public MailStopTypeMailStopNumber MailStopNumber
+    {
+        get
         {
-            get
-            {
-                return this.premiseField;
-            }
-            set
-            {
-                this.premiseField = value;
-            }
+            return this.mailStopNumberField;
         }
-
-        /// <remarks/>
-        public DependentLocalityType DependentLocality
+        set
         {
-            get
-            {
-                return this.dependentLocalityField;
-            }
-            set
-            {
-                this.dependentLocalityField = value;
-            }
+            this.mailStopNumberField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsageType
+        set
         {
-            get
-            {
-                return this.usageTypeField;
-            }
-            set
-            {
-                this.usageTypeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Connector
-        {
-            get
-            {
-                return this.connectorField;
-            }
-            set
-            {
-                this.connectorField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class DependentLocalityTypeDependentLocalityName
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class MailStopTypeMailStopName
+{
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class MailStopTypeMailStopNumber
+{
+
+    private string nameNumberSeparatorField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NameNumberSeparator
+    {
+        get
+        {
+            return this.nameNumberSeparatorField;
+        }
+        set
+        {
+            this.nameNumberSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PostalCode
+{
+
+    private AddressLine[] addressLineField;
+
+    private PostalCodePostalCodeNumber[] postalCodeNumberField;
+
+    private PostalCodePostalCodeNumberExtension[] postalCodeNumberExtensionField;
+
+    private PostalCodePostTown postTownField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PostalCodeNumber")]
+    public PostalCodePostalCodeNumber[] PostalCodeNumber
+    {
+        get
+        {
+            return this.postalCodeNumberField;
+        }
+        set
+        {
+            this.postalCodeNumberField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PostalCodeNumberExtension")]
+    public PostalCodePostalCodeNumberExtension[] PostalCodeNumberExtension
+    {
+        get
+        {
+            return this.postalCodeNumberExtensionField;
+        }
+        set
+        {
+            this.postalCodeNumberExtensionField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCodePostTown PostTown
+    {
+        get
+        {
+            return this.postTownField;
+        }
+        set
+        {
+            this.postTownField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalCodePostalCodeNumber
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalCodePostalCodeNumberExtension
+{
+
+    private string typeField;
+
+    private string numberExtensionSeparatorField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberExtensionSeparator
+    {
+        get
+        {
+            return this.numberExtensionSeparatorField;
+        }
+        set
+        {
+            this.numberExtensionSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalCodePostTown
+{
+
+    private AddressLine[] addressLineField;
+
+    private PostalCodePostTownPostTownName[] postTownNameField;
+
+    private PostalCodePostTownPostTownSuffix postTownSuffixField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PostTownName")]
+    public PostalCodePostTownPostTownName[] PostTownName
+    {
+        get
+        {
+            return this.postTownNameField;
+        }
+        set
+        {
+            this.postTownNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCodePostTownPostTownSuffix PostTownSuffix
+    {
+        get
+        {
+            return this.postTownSuffixField;
+        }
+        set
+        {
+            this.postTownSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalCodePostTownPostTownName
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalCodePostTownPostTownSuffix
+{
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalRouteType
+{
+
+    private AddressLine[] addressLineField;
+
+    private object[] itemsField;
+
+    private PostBox postBoxField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PostalRouteName", typeof(PostalRouteTypePostalRouteName))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalRouteNumber", typeof(PostalRouteTypePostalRouteNumber))]
+    public object[] Items
+    {
+        get
+        {
+            return this.itemsField;
+        }
+        set
+        {
+            this.itemsField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBox PostBox
+    {
+        get
+        {
+            return this.postBoxField;
+        }
+        set
+        {
+            this.postBoxField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalRouteTypePostalRouteName
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostalRouteTypePostalRouteNumber
+{
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PostBox
+{
+
+    private AddressLine[] addressLineField;
+
+    private PostBoxPostBoxNumber postBoxNumberField;
+
+    private PostBoxPostBoxNumberPrefix postBoxNumberPrefixField;
+
+    private PostBoxPostBoxNumberSuffix postBoxNumberSuffixField;
+
+    private PostBoxPostBoxNumberExtension postBoxNumberExtensionField;
+
+    private FirmType firmField;
+
+    private PostalCode postalCodeField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private string indicatorField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBoxPostBoxNumber PostBoxNumber
+    {
+        get
+        {
+            return this.postBoxNumberField;
+        }
+        set
+        {
+            this.postBoxNumberField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBoxPostBoxNumberPrefix PostBoxNumberPrefix
+    {
+        get
+        {
+            return this.postBoxNumberPrefixField;
+        }
+        set
+        {
+            this.postBoxNumberPrefixField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBoxPostBoxNumberSuffix PostBoxNumberSuffix
+    {
+        get
+        {
+            return this.postBoxNumberSuffixField;
+        }
+        set
+        {
+            this.postBoxNumberSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBoxPostBoxNumberExtension PostBoxNumberExtension
+    {
+        get
+        {
+            return this.postBoxNumberExtensionField;
+        }
+        set
+        {
+            this.postBoxNumberExtensionField = value;
+        }
+    }
+
+    /// <remarks/>
+    public FirmType Firm
+    {
+        get
+        {
+            return this.firmField;
+        }
+        set
+        {
+            this.firmField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
+        {
+            return this.postalCodeField;
+        }
+        set
+        {
+            this.postalCodeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostBoxPostBoxNumber
+{
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostBoxPostBoxNumberPrefix
+{
+
+    private string numberPrefixSeparatorField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberPrefixSeparator
+    {
+        get
+        {
+            return this.numberPrefixSeparatorField;
+        }
+        set
+        {
+            this.numberPrefixSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostBoxPostBoxNumberSuffix
+{
+
+    private string numberSuffixSeparatorField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberSuffixSeparator
+    {
+        get
+        {
+            return this.numberSuffixSeparatorField;
+        }
+        set
+        {
+            this.numberSuffixSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostBoxPostBoxNumberExtension
+{
+
+    private string numberExtensionSeparatorField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberExtensionSeparator
+    {
+        get
+        {
+            return this.numberExtensionSeparatorField;
+        }
+        set
+        {
+            this.numberExtensionSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class DependentLocalityType
+{
+
+    private AddressLine[] addressLineField;
+
+    private DependentLocalityTypeDependentLocalityName[] dependentLocalityNameField;
+
+    private DependentLocalityTypeDependentLocalityNumber dependentLocalityNumberField;
+
+    private object itemField;
+
+    private Thoroughfare thoroughfareField;
+
+    private Premise premiseField;
+
+    private DependentLocalityType dependentLocalityField;
+
+    private PostalCode postalCodeField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private string usageTypeField;
+
+    private string connectorField;
+
+    private string indicatorField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("DependentLocalityName")]
+    public DependentLocalityTypeDependentLocalityName[] DependentLocalityName
+    {
+        get
+        {
+            return this.dependentLocalityNameField;
+        }
+        set
+        {
+            this.dependentLocalityNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public DependentLocalityTypeDependentLocalityNumber DependentLocalityNumber
+    {
+        get
+        {
+            return this.dependentLocalityNumberField;
+        }
+        set
+        {
+            this.dependentLocalityNumberField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("LargeMailUser", typeof(LargeMailUserType))]
+    [System.Xml.Serialization.XmlElementAttribute("PostBox", typeof(PostBox))]
+    [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalRoute", typeof(PostalRouteType))]
+    public object Item
+    {
+        get
+        {
+            return this.itemField;
+        }
+        set
+        {
+            this.itemField = value;
+        }
+    }
+
+    /// <remarks/>
+    public Thoroughfare Thoroughfare
+    {
+        get
+        {
+            return this.thoroughfareField;
+        }
+        set
+        {
+            this.thoroughfareField = value;
+        }
+    }
+
+    /// <remarks/>
+    public Premise Premise
+    {
+        get
+        {
+            return this.premiseField;
+        }
+        set
+        {
+            this.premiseField = value;
+        }
+    }
+
+    /// <remarks/>
+    public DependentLocalityType DependentLocality
+    {
+        get
+        {
+            return this.dependentLocalityField;
+        }
+        set
+        {
+            this.dependentLocalityField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
+        {
+            return this.postalCodeField;
+        }
+        set
+        {
+            this.postalCodeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string UsageType
+    {
+        get
+        {
+            return this.usageTypeField;
+        }
+        set
+        {
+            this.usageTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Connector
+    {
+        get
+        {
+            return this.connectorField;
+        }
+        set
+        {
+            this.connectorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class DependentLocalityTypeDependentLocalityName
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class DependentLocalityTypeDependentLocalityNumber
+{
+
+    private DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence nameNumberOccurrenceField;
+
+    private bool nameNumberOccurrenceFieldSpecified;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence NameNumberOccurrence
+    {
+        get
+        {
+            return this.nameNumberOccurrenceField;
+        }
+        set
+        {
+            this.nameNumberOccurrenceField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NameNumberOccurrenceSpecified
+    {
+        get
+        {
+            return this.nameNumberOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.nameNumberOccurrenceFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence
+{
+
+    /// <remarks/>
+    Before,
+
+    /// <remarks/>
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class LargeMailUserType
+{
+
+    private AddressLine[] addressLineField;
+
+    private LargeMailUserTypeLargeMailUserName[] largeMailUserNameField;
+
+    private LargeMailUserTypeLargeMailUserIdentifier largeMailUserIdentifierField;
+
+    private BuildingNameType[] buildingNameField;
+
+    private Department departmentField;
+
+    private PostBox postBoxField;
+
+    private Thoroughfare thoroughfareField;
+
+    private PostalCode postalCodeField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("LargeMailUserName")]
+    public LargeMailUserTypeLargeMailUserName[] LargeMailUserName
+    {
+        get
+        {
+            return this.largeMailUserNameField;
+        }
+        set
+        {
+            this.largeMailUserNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public LargeMailUserTypeLargeMailUserIdentifier LargeMailUserIdentifier
+    {
+        get
+        {
+            return this.largeMailUserIdentifierField;
+        }
+        set
+        {
+            this.largeMailUserIdentifierField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
+    public BuildingNameType[] BuildingName
+    {
+        get
+        {
+            return this.buildingNameField;
+        }
+        set
+        {
+            this.buildingNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public Department Department
+    {
+        get
+        {
+            return this.departmentField;
+        }
+        set
+        {
+            this.departmentField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostBox PostBox
+    {
+        get
+        {
+            return this.postBoxField;
+        }
+        set
+        {
+            this.postBoxField = value;
+        }
+    }
+
+    /// <remarks/>
+    public Thoroughfare Thoroughfare
+    {
+        get
+        {
+            return this.thoroughfareField;
+        }
+        set
+        {
+            this.thoroughfareField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
+        {
+            return this.postalCodeField;
+        }
+        set
+        {
+            this.postalCodeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class LargeMailUserTypeLargeMailUserName
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class LargeMailUserTypeLargeMailUserIdentifier
+{
+
+    private string typeField;
+
+    private string indicatorField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class Thoroughfare
+{
+
+    private AddressLine[] addressLineField;
+
+    private object[] itemsField;
+
+    private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
+
+    private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
+
+    private ThoroughfarePreDirectionType thoroughfarePreDirectionField;
+
+    private ThoroughfareLeadingTypeType thoroughfareLeadingTypeField;
+
+    private ThoroughfareNameType[] thoroughfareNameField;
+
+    private ThoroughfareTrailingTypeType thoroughfareTrailingTypeField;
+
+    private ThoroughfarePostDirectionType thoroughfarePostDirectionField;
+
+    private ThoroughfareDependentThoroughfare dependentThoroughfareField;
+
+    private object itemField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private ThoroughfareDependentThoroughfares dependentThoroughfaresField;
+
+    private bool dependentThoroughfaresFieldSpecified;
+
+    private string dependentThoroughfaresIndicatorField;
+
+    private string dependentThoroughfaresConnectorField;
+
+    private string dependentThoroughfaresTypeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber", typeof(ThoroughfareNumber))]
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberRange", typeof(ThoroughfareThoroughfareNumberRange))]
+    public object[] Items
+    {
+        get
+        {
+            return this.itemsField;
+        }
+        set
+        {
+            this.itemsField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
+    public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+    {
+        get
+        {
+            return this.thoroughfareNumberPrefixField;
+        }
+        set
+        {
+            this.thoroughfareNumberPrefixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
+    public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+    {
+        get
+        {
+            return this.thoroughfareNumberSuffixField;
+        }
+        set
+        {
+            this.thoroughfareNumberSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfarePreDirectionType ThoroughfarePreDirection
+    {
+        get
+        {
+            return this.thoroughfarePreDirectionField;
+        }
+        set
+        {
+            this.thoroughfarePreDirectionField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareLeadingTypeType ThoroughfareLeadingType
+    {
+        get
+        {
+            return this.thoroughfareLeadingTypeField;
+        }
+        set
+        {
+            this.thoroughfareLeadingTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareName")]
+    public ThoroughfareNameType[] ThoroughfareName
+    {
+        get
+        {
+            return this.thoroughfareNameField;
+        }
+        set
+        {
+            this.thoroughfareNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareTrailingTypeType ThoroughfareTrailingType
+    {
+        get
+        {
+            return this.thoroughfareTrailingTypeField;
+        }
+        set
+        {
+            this.thoroughfareTrailingTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfarePostDirectionType ThoroughfarePostDirection
+    {
+        get
+        {
+            return this.thoroughfarePostDirectionField;
+        }
+        set
+        {
+            this.thoroughfarePostDirectionField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareDependentThoroughfare DependentThoroughfare
+    {
+        get
+        {
+            return this.dependentThoroughfareField;
+        }
+        set
+        {
+            this.dependentThoroughfareField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("DependentLocality", typeof(DependentLocalityType))]
+    [System.Xml.Serialization.XmlElementAttribute("Firm", typeof(FirmType))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
+    [System.Xml.Serialization.XmlElementAttribute("Premise", typeof(Premise))]
+    public object Item
+    {
+        get
+        {
+            return this.itemField;
+        }
+        set
+        {
+            this.itemField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareDependentThoroughfares DependentThoroughfares
+    {
+        get
+        {
+            return this.dependentThoroughfaresField;
+        }
+        set
+        {
+            this.dependentThoroughfaresField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool DependentThoroughfaresSpecified
+    {
+        get
+        {
+            return this.dependentThoroughfaresFieldSpecified;
+        }
+        set
+        {
+            this.dependentThoroughfaresFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string DependentThoroughfaresIndicator
+    {
+        get
+        {
+            return this.dependentThoroughfaresIndicatorField;
+        }
+        set
+        {
+            this.dependentThoroughfaresIndicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string DependentThoroughfaresConnector
+    {
+        get
+        {
+            return this.dependentThoroughfaresConnectorField;
+        }
+        set
+        {
+            this.dependentThoroughfaresConnectorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string DependentThoroughfaresType
+    {
+        get
+        {
+            return this.dependentThoroughfaresTypeField;
+        }
+        set
+        {
+            this.dependentThoroughfaresTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class ThoroughfareNumber
+{
+
+    private ThoroughfareNumberNumberType numberTypeField;
+
+    private bool numberTypeFieldSpecified;
+
+    private string typeField;
+
+    private string indicatorField;
+
+    private ThoroughfareNumberIndicatorOccurrence indicatorOccurrenceField;
+
+    private bool indicatorOccurrenceFieldSpecified;
+
+    private ThoroughfareNumberNumberOccurrence numberOccurrenceField;
+
+    private bool numberOccurrenceFieldSpecified;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareNumberNumberType NumberType
+    {
+        get
+        {
+            return this.numberTypeField;
+        }
+        set
+        {
+            this.numberTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberTypeSpecified
+    {
+        get
+        {
+            return this.numberTypeFieldSpecified;
+        }
+        set
+        {
+            this.numberTypeFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareNumberIndicatorOccurrence IndicatorOccurrence
+    {
+        get
+        {
+            return this.indicatorOccurrenceField;
+        }
+        set
+        {
+            this.indicatorOccurrenceField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurrenceSpecified
+    {
+        get
+        {
+            return this.indicatorOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.indicatorOccurrenceFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareNumberNumberOccurrence NumberOccurrence
+    {
+        get
+        {
+            return this.numberOccurrenceField;
+        }
+        set
+        {
+            this.numberOccurrenceField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberOccurrenceSpecified
+    {
+        get
+        {
+            return this.numberOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.numberOccurrenceFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareNumberNumberType
+{
+
+    /// <remarks/>
+    Single,
+
+    /// <remarks/>
+    Range,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareNumberIndicatorOccurrence
+{
+
+    /// <remarks/>
+    Before,
+
+    /// <remarks/>
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareNumberNumberOccurrence
+{
+
+    /// <remarks/>
+    BeforeName,
+
+    /// <remarks/>
+    AfterName,
+
+    /// <remarks/>
+    BeforeType,
+
+    /// <remarks/>
+    AfterType,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareThoroughfareNumberRange
+{
+
+    private AddressLine[] addressLineField;
+
+    private ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom thoroughfareNumberFromField;
+
+    private ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo thoroughfareNumberToField;
+
+    private ThoroughfareThoroughfareNumberRangeRangeType rangeTypeField;
+
+    private bool rangeTypeFieldSpecified;
+
+    private string indicatorField;
+
+    private string separatorField;
+
+    private ThoroughfareThoroughfareNumberRangeIndicatorOccurrence indicatorOccurrenceField;
+
+    private bool indicatorOccurrenceFieldSpecified;
+
+    private ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence numberRangeOccurrenceField;
+
+    private bool numberRangeOccurrenceFieldSpecified;
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom ThoroughfareNumberFrom
+    {
+        get
+        {
+            return this.thoroughfareNumberFromField;
+        }
+        set
+        {
+            this.thoroughfareNumberFromField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo ThoroughfareNumberTo
+    {
+        get
+        {
+            return this.thoroughfareNumberToField;
+        }
+        set
+        {
+            this.thoroughfareNumberToField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareThoroughfareNumberRangeRangeType RangeType
+    {
+        get
+        {
+            return this.rangeTypeField;
+        }
+        set
+        {
+            this.rangeTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool RangeTypeSpecified
+    {
+        get
+        {
+            return this.rangeTypeFieldSpecified;
+        }
+        set
+        {
+            this.rangeTypeFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Separator
+    {
+        get
+        {
+            return this.separatorField;
+        }
+        set
+        {
+            this.separatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareThoroughfareNumberRangeIndicatorOccurrence IndicatorOccurrence
+    {
+        get
+        {
+            return this.indicatorOccurrenceField;
+        }
+        set
+        {
+            this.indicatorOccurrenceField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurrenceSpecified
+    {
+        get
+        {
+            return this.indicatorOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.indicatorOccurrenceFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence NumberRangeOccurrence
+    {
+        get
+        {
+            return this.numberRangeOccurrenceField;
+        }
+        set
+        {
+            this.numberRangeOccurrenceField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberRangeOccurrenceSpecified
+    {
+        get
+        {
+            return this.numberRangeOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.numberRangeOccurrenceFieldSpecified = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom
+{
+
+    private AddressLine[] addressLineField;
+
+    private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
+
+    private ThoroughfareNumber[] thoroughfareNumberField;
+
+    private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
+
+    private string[] textField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
+    public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+    {
+        get
+        {
+            return this.thoroughfareNumberPrefixField;
+        }
+        set
+        {
+            this.thoroughfareNumberPrefixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber")]
+    public ThoroughfareNumber[] ThoroughfareNumber
+    {
+        get
+        {
+            return this.thoroughfareNumberField;
+        }
+        set
+        {
+            this.thoroughfareNumberField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
+    public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+    {
+        get
+        {
+            return this.thoroughfareNumberSuffixField;
+        }
+        set
+        {
+            this.thoroughfareNumberSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class ThoroughfareNumberPrefix
+{
+
+    private string numberPrefixSeparatorField;
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberPrefixSeparator
+    {
+        get
+        {
+            return this.numberPrefixSeparatorField;
+        }
+        set
+        {
+            this.numberPrefixSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class ThoroughfareNumberSuffix
+{
+
+    private string numberSuffixSeparatorField;
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberSuffixSeparator
+    {
+        get
+        {
+            return this.numberSuffixSeparatorField;
+        }
+        set
+        {
+            this.numberSuffixSeparatorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo
+{
+
+    private AddressLine[] addressLineField;
+
+    private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
+
+    private ThoroughfareNumber[] thoroughfareNumberField;
+
+    private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
+
+    private string[] textField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
+    public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+    {
+        get
+        {
+            return this.thoroughfareNumberPrefixField;
+        }
+        set
+        {
+            this.thoroughfareNumberPrefixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber")]
+    public ThoroughfareNumber[] ThoroughfareNumber
+    {
+        get
+        {
+            return this.thoroughfareNumberField;
+        }
+        set
+        {
+            this.thoroughfareNumberField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
+    public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+    {
+        get
+        {
+            return this.thoroughfareNumberSuffixField;
+        }
+        set
+        {
+            this.thoroughfareNumberSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareThoroughfareNumberRangeRangeType
+{
+
+    /// <remarks/>
+    Odd,
+
+    /// <remarks/>
+    Even,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareThoroughfareNumberRangeIndicatorOccurrence
+{
+
+    /// <remarks/>
+    Before,
+
+    /// <remarks/>
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence
+{
+
+    /// <remarks/>
+    BeforeName,
+
+    /// <remarks/>
+    AfterName,
+
+    /// <remarks/>
+    BeforeType,
+
+    /// <remarks/>
+    AfterType,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfarePreDirectionType
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareLeadingTypeType
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareNameType
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareTrailingTypeType
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfarePostDirectionType
+{
+
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class ThoroughfareDependentThoroughfare
+{
+
+    private AddressLine[] addressLineField;
+
+    private ThoroughfarePreDirectionType thoroughfarePreDirectionField;
+
+    private ThoroughfareLeadingTypeType thoroughfareLeadingTypeField;
+
+    private ThoroughfareNameType[] thoroughfareNameField;
+
+    private ThoroughfareTrailingTypeType thoroughfareTrailingTypeField;
+
+    private ThoroughfarePostDirectionType thoroughfarePostDirectionField;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfarePreDirectionType ThoroughfarePreDirection
+    {
+        get
+        {
+            return this.thoroughfarePreDirectionField;
+        }
+        set
+        {
+            this.thoroughfarePreDirectionField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareLeadingTypeType ThoroughfareLeadingType
+    {
+        get
+        {
+            return this.thoroughfareLeadingTypeField;
+        }
+        set
+        {
+            this.thoroughfareLeadingTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("ThoroughfareName")]
+    public ThoroughfareNameType[] ThoroughfareName
+    {
+        get
+        {
+            return this.thoroughfareNameField;
+        }
+        set
+        {
+            this.thoroughfareNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfareTrailingTypeType ThoroughfareTrailingType
+    {
+        get
+        {
+            return this.thoroughfareTrailingTypeField;
+        }
+        set
+        {
+            this.thoroughfareTrailingTypeField = value;
+        }
+    }
+
+    /// <remarks/>
+    public ThoroughfarePostDirectionType ThoroughfarePostDirection
+    {
+        get
+        {
+            return this.thoroughfarePostDirectionField;
+        }
+        set
+        {
+            this.thoroughfarePostDirectionField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class Premise
+{
+
+    private AddressLine[] addressLineField;
+
+    private PremisePremiseName[] premiseNameField;
+
+    private object[] itemsField;
+
+    private PremiseNumberPrefix[] premiseNumberPrefixField;
+
+    private PremiseNumberSuffix[] premiseNumberSuffixField;
+
+    private BuildingNameType[] buildingNameField;
+
+    private object[] items1Field;
+
+    private MailStopType mailStopField;
+
+    private PostalCode postalCodeField;
+
+    private Premise premise1Field;
+
+    private System.Xml.Linq.XElement[] anyField;
+
+    private string typeField;
+
+    private string premiseDependencyField;
+
+    private string premiseDependencyTypeField;
+
+    private string premiseThoroughfareConnectorField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
+        {
+            return this.addressLineField;
+        }
+        set
+        {
+            this.addressLineField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseName")]
+    public PremisePremiseName[] PremiseName
+    {
+        get
+        {
+            return this.premiseNameField;
+        }
+        set
+        {
+            this.premiseNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseLocation", typeof(PremisePremiseLocation))]
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumber", typeof(PremiseNumber))]
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberRange", typeof(PremisePremiseNumberRange))]
+    public object[] Items
+    {
+        get
+        {
+            return this.itemsField;
+        }
+        set
+        {
+            this.itemsField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
+    public PremiseNumberPrefix[] PremiseNumberPrefix
+    {
+        get
+        {
+            return this.premiseNumberPrefixField;
+        }
+        set
+        {
+            this.premiseNumberPrefixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
+    public PremiseNumberSuffix[] PremiseNumberSuffix
+    {
+        get
+        {
+            return this.premiseNumberSuffixField;
+        }
+        set
+        {
+            this.premiseNumberSuffixField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
+    public BuildingNameType[] BuildingName
+    {
+        get
+        {
+            return this.buildingNameField;
+        }
+        set
+        {
+            this.buildingNameField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Firm", typeof(FirmType))]
+    [System.Xml.Serialization.XmlElementAttribute("SubPremise", typeof(SubPremiseType))]
+    public object[] Items1
+    {
+        get
+        {
+            return this.items1Field;
+        }
+        set
+        {
+            this.items1Field = value;
+        }
+    }
+
+    /// <remarks/>
+    public MailStopType MailStop
+    {
+        get
+        {
+            return this.mailStopField;
+        }
+        set
+        {
+            this.mailStopField = value;
+        }
+    }
+
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
+        {
+            return this.postalCodeField;
+        }
+        set
+        {
+            this.postalCodeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Premise")]
+    public Premise Premise1
+    {
+        get
+        {
+            return this.premise1Field;
+        }
+        set
+        {
+            this.premise1Field = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
+        {
+            return this.anyField;
+        }
+        set
+        {
+            this.anyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string PremiseDependency
+    {
+        get
+        {
+            return this.premiseDependencyField;
+        }
+        set
+        {
+            this.premiseDependencyField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string PremiseDependencyType
+    {
+        get
+        {
+            return this.premiseDependencyTypeField;
+        }
+        set
+        {
+            this.premiseDependencyTypeField = value;
+        }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string PremiseThoroughfareConnector
+    {
+        get
+        {
+            return this.premiseThoroughfareConnectorField;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.premiseThoroughfareConnectorField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class DependentLocalityTypeDependentLocalityNumber
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
     {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PremisePremiseName
+{
+
+    private string typeField;
 
-        private DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence nameNumberOccurrenceField;
+    private PremisePremiseNameTypeOccurrence typeOccurrenceField;
 
-        private bool nameNumberOccurrenceFieldSpecified;
+    private bool typeOccurrenceFieldSpecified;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence NameNumberOccurrence
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremisePremiseNameTypeOccurrence TypeOccurrence
+    {
+        get
+        {
+            return this.typeOccurrenceField;
+        }
+        set
         {
-            get
-            {
-                return this.nameNumberOccurrenceField;
-            }
-            set
-            {
-                this.nameNumberOccurrenceField = value;
-            }
+            this.typeOccurrenceField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NameNumberOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool TypeOccurrenceSpecified
+    {
+        get
+        {
+            return this.typeOccurrenceFieldSpecified;
+        }
+        set
         {
-            get
-            {
-                return this.nameNumberOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.nameNumberOccurrenceFieldSpecified = value;
-            }
+            this.typeOccurrenceFieldSpecified = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.codeField;
         }
+        set
+        {
+            this.codeField = value;
+        }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            return this.textField;
         }
+        set
+        {
+            this.textField = value;
+        }
     }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremisePremiseNameTypeOccurrence
+{
+
+    /// <remarks/>
+    Before,
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum DependentLocalityTypeDependentLocalityNumberNameNumberOccurrence
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PremisePremiseLocation
+{
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
 
-        /// <remarks/>
-        Before,
+    /// <remarks/>
 
-        /// <remarks/>
-        After,
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class LargeMailUserType
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private AddressLine[] addressLineField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PremiseNumber
+{
 
-        private LargeMailUserTypeLargeMailUserName[] largeMailUserNameField;
+    private PremiseNumberNumberType numberTypeField;
+
+    private bool numberTypeFieldSpecified;
+
+    private string typeField;
+
+    private string indicatorField;
+
+    private PremiseNumberIndicatorOccurrence indicatorOccurrenceField;
+
+    private bool indicatorOccurrenceFieldSpecified;
+
+    private PremiseNumberNumberTypeOccurrence numberTypeOccurrenceField;
+
+    private bool numberTypeOccurrenceFieldSpecified;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremiseNumberNumberType NumberType
+    {
+        get
+        {
+            return this.numberTypeField;
+        }
+        set
+        {
+            this.numberTypeField = value;
+        }
+    }
 
-        private LargeMailUserTypeLargeMailUserIdentifier largeMailUserIdentifierField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberTypeSpecified
+    {
+        get
+        {
+            return this.numberTypeFieldSpecified;
+        }
+        set
+        {
+            this.numberTypeFieldSpecified = value;
+        }
+    }
 
-        private BuildingNameType[] buildingNameField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
+    }
 
-        private Department departmentField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
+        {
+            this.indicatorField = value;
+        }
+    }
 
-        private PostBox postBoxField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremiseNumberIndicatorOccurrence IndicatorOccurrence
+    {
+        get
+        {
+            return this.indicatorOccurrenceField;
+        }
+        set
+        {
+            this.indicatorOccurrenceField = value;
+        }
+    }
 
-        private Thoroughfare thoroughfareField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurrenceSpecified
+    {
+        get
+        {
+            return this.indicatorOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.indicatorOccurrenceFieldSpecified = value;
+        }
+    }
 
-        private PostalCode postalCodeField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremiseNumberNumberTypeOccurrence NumberTypeOccurrence
+    {
+        get
+        {
+            return this.numberTypeOccurrenceField;
+        }
+        set
+        {
+            this.numberTypeOccurrenceField = value;
+        }
+    }
 
-        private System.Xml.Linq.XElement[] anyField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberTypeOccurrenceSpecified
+    {
+        get
+        {
+            return this.numberTypeOccurrenceFieldSpecified;
+        }
+        set
+        {
+            this.numberTypeOccurrenceFieldSpecified = value;
+        }
+    }
 
-        private string typeField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.anyAttrField;
         }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LargeMailUserName")]
-        public LargeMailUserTypeLargeMailUserName[] LargeMailUserName
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
         {
-            get
-            {
-                return this.largeMailUserNameField;
-            }
-            set
-            {
-                this.largeMailUserNameField = value;
-            }
+            this.textField = value;
         }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremiseNumberNumberType
+{
+
+    /// <remarks/>
+    Single,
+
+    /// <remarks/>
+    Range,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremiseNumberIndicatorOccurrence
+{
+
+    /// <remarks/>
+    Before,
+
+    /// <remarks/>
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremiseNumberNumberTypeOccurrence
+{
+
+    /// <remarks/>
+    Before,
+
+    /// <remarks/>
+    After,
+}
 
-        /// <remarks/>
-        public LargeMailUserTypeLargeMailUserIdentifier LargeMailUserIdentifier
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PremisePremiseNumberRange
+{
+
+    private PremisePremiseNumberRangePremiseNumberRangeFrom premiseNumberRangeFromField;
+
+    private PremisePremiseNumberRangePremiseNumberRangeTo premiseNumberRangeToField;
+
+    private string rangeTypeField;
+
+    private string indicatorField;
+
+    private string separatorField;
+
+    private string typeField;
+
+    private PremisePremiseNumberRangeIndicatorOccurence indicatorOccurenceField;
+
+    private bool indicatorOccurenceFieldSpecified;
+
+    private PremisePremiseNumberRangeNumberRangeOccurence numberRangeOccurenceField;
+
+    private bool numberRangeOccurenceFieldSpecified;
+
+    /// <remarks/>
+    public PremisePremiseNumberRangePremiseNumberRangeFrom PremiseNumberRangeFrom
+    {
+        get
+        {
+            return this.premiseNumberRangeFromField;
+        }
+        set
         {
-            get
-            {
-                return this.largeMailUserIdentifierField;
-            }
-            set
-            {
-                this.largeMailUserIdentifierField = value;
-            }
+            this.premiseNumberRangeFromField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
-        public BuildingNameType[] BuildingName
+    /// <remarks/>
+    public PremisePremiseNumberRangePremiseNumberRangeTo PremiseNumberRangeTo
+    {
+        get
+        {
+            return this.premiseNumberRangeToField;
+        }
+        set
         {
-            get
-            {
-                return this.buildingNameField;
-            }
-            set
-            {
-                this.buildingNameField = value;
-            }
+            this.premiseNumberRangeToField = value;
         }
+    }
 
-        /// <remarks/>
-        public Department Department
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string RangeType
+    {
+        get
         {
-            get
-            {
-                return this.departmentField;
-            }
-            set
-            {
-                this.departmentField = value;
-            }
+            return this.rangeTypeField;
         }
+        set
+        {
+            this.rangeTypeField = value;
+        }
+    }
 
-        /// <remarks/>
-        public PostBox PostBox
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
+        {
+            return this.indicatorField;
+        }
+        set
         {
-            get
-            {
-                return this.postBoxField;
-            }
-            set
-            {
-                this.postBoxField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-        public Thoroughfare Thoroughfare
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Separator
+    {
+        get
+        {
+            return this.separatorField;
+        }
+        set
         {
-            get
-            {
-                return this.thoroughfareField;
-            }
-            set
-            {
-                this.thoroughfareField = value;
-            }
+            this.separatorField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremisePremiseNumberRangeIndicatorOccurence IndicatorOccurence
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.indicatorOccurenceField;
         }
+        set
+        {
+            this.indicatorOccurenceField = value;
+        }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurenceSpecified
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.indicatorOccurenceFieldSpecified;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.indicatorOccurenceFieldSpecified = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class LargeMailUserTypeLargeMailUserName
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PremisePremiseNumberRangeNumberRangeOccurence NumberRangeOccurence
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.numberRangeOccurenceField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.numberRangeOccurenceField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool NumberRangeOccurenceSpecified
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.numberRangeOccurenceFieldSpecified;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.numberRangeOccurenceFieldSpecified = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class LargeMailUserTypeLargeMailUserIdentifier
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PremisePremiseNumberRangePremiseNumberRangeFrom
+{
 
-        private string indicatorField;
+    private AddressLine[] addressLineField;
 
-        private string codeField;
+    private PremiseNumberPrefix[] premiseNumberPrefixField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private PremiseNumber[] premiseNumberField;
 
-        private string[] textField;
+    private PremiseNumberSuffix[] premiseNumberSuffixField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+        set
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
+    public PremiseNumberPrefix[] PremiseNumberPrefix
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.premiseNumberPrefixField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.premiseNumberPrefixField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumber")]
+    public PremiseNumber[] PremiseNumber
+    {
+        get
+        {
+            return this.premiseNumberField;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.premiseNumberField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class Thoroughfare
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
+    public PremiseNumberSuffix[] PremiseNumberSuffix
     {
-
-        private AddressLine[] addressLineField;
-
-        private object[] itemsField;
-
-        private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
-
-        private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
-
-        private ThoroughfarePreDirectionType thoroughfarePreDirectionField;
-
-        private ThoroughfareLeadingTypeType thoroughfareLeadingTypeField;
-
-        private ThoroughfareNameType[] thoroughfareNameField;
-
-        private ThoroughfareTrailingTypeType thoroughfareTrailingTypeField;
-
-        private ThoroughfarePostDirectionType thoroughfarePostDirectionField;
-
-        private ThoroughfareDependentThoroughfare dependentThoroughfareField;
-
-        private object itemField;
-
-        private System.Xml.Linq.XElement[] anyField;
+        get
+        {
+            return this.premiseNumberSuffixField;
+        }
+        set
+        {
+            this.premiseNumberSuffixField = value;
+        }
+    }
+}
 
-        private string typeField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private ThoroughfareDependentThoroughfares dependentThoroughfaresField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PremiseNumberPrefix
+{
 
-        private bool dependentThoroughfaresFieldSpecified;
+    private string numberPrefixSeparatorField;
 
-        private string dependentThoroughfaresIndicatorField;
+    private string typeField;
 
-        private string dependentThoroughfaresConnectorField;
+    private string codeField;
 
-        private string dependentThoroughfaresTypeField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string valueField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberPrefixSeparator
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.numberPrefixSeparatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber", typeof(ThoroughfareNumber))]
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberRange", typeof(ThoroughfareThoroughfareNumberRange))]
-        public object[] Items
+        set
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            this.numberPrefixSeparatorField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
-        public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareNumberPrefixField;
-            }
-            set
-            {
-                this.thoroughfareNumberPrefixField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
-        public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+        set
         {
-            get
-            {
-                return this.thoroughfareNumberSuffixField;
-            }
-            set
-            {
-                this.thoroughfareNumberSuffixField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        public ThoroughfarePreDirectionType ThoroughfarePreDirection
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfarePreDirectionField;
-            }
-            set
-            {
-                this.thoroughfarePreDirectionField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        public ThoroughfareLeadingTypeType ThoroughfareLeadingType
+        set
         {
-            get
-            {
-                return this.thoroughfareLeadingTypeField;
-            }
-            set
-            {
-                this.thoroughfareLeadingTypeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareName")]
-        public ThoroughfareNameType[] ThoroughfareName
-        {
-            get
-            {
-                return this.thoroughfareNameField;
-            }
-            set
-            {
-                this.thoroughfareNameField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        public ThoroughfareTrailingTypeType ThoroughfareTrailingType
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareTrailingTypeField;
-            }
-            set
-            {
-                this.thoroughfareTrailingTypeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        public ThoroughfarePostDirectionType ThoroughfarePostDirection
+        set
         {
-            get
-            {
-                return this.thoroughfarePostDirectionField;
-            }
-            set
-            {
-                this.thoroughfarePostDirectionField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        public ThoroughfareDependentThoroughfare DependentThoroughfare
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string Value
+    {
+        get
         {
-            get
-            {
-                return this.dependentThoroughfareField;
-            }
-            set
-            {
-                this.dependentThoroughfareField = value;
-            }
+            return this.valueField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("DependentLocality", typeof(DependentLocalityType))]
-        [System.Xml.Serialization.XmlElementAttribute("Firm", typeof(FirmType))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
-        [System.Xml.Serialization.XmlElementAttribute("Premise", typeof(Premise))]
-        public object Item
+        set
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            this.valueField = value;
         }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PremiseNumberSuffix
+{
+
+    private string numberSuffixSeparatorField;
+
+    private string typeField;
+
+    private string codeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string NumberSuffixSeparator
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.numberSuffixSeparatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.numberSuffixSeparatorField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareDependentThoroughfares DependentThoroughfares
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.dependentThoroughfaresField;
-            }
-            set
-            {
-                this.dependentThoroughfaresField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DependentThoroughfaresSpecified
+        set
         {
-            get
-            {
-                return this.dependentThoroughfaresFieldSpecified;
-            }
-            set
-            {
-                this.dependentThoroughfaresFieldSpecified = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DependentThoroughfaresIndicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.dependentThoroughfaresIndicatorField;
-            }
-            set
-            {
-                this.dependentThoroughfaresIndicatorField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DependentThoroughfaresConnector
+        set
         {
-            get
-            {
-                return this.dependentThoroughfaresConnectorField;
-            }
-            set
-            {
-                this.dependentThoroughfaresConnectorField = value;
-            }
+            this.codeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string DependentThoroughfaresType
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.dependentThoroughfaresTypeField;
-            }
-            set
-            {
-                this.dependentThoroughfaresTypeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class ThoroughfareNumber
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private ThoroughfareNumberNumberType numberTypeField;
-
-        private bool numberTypeFieldSpecified;
-
-        private string typeField;
-
-        private string indicatorField;
-
-        private ThoroughfareNumberIndicatorOccurrence indicatorOccurrenceField;
-
-        private bool indicatorOccurrenceFieldSpecified;
-
-        private ThoroughfareNumberNumberOccurrence numberOccurrenceField;
-
-        private bool numberOccurrenceFieldSpecified;
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private string codeField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PremisePremiseNumberRangePremiseNumberRangeTo
+{
 
-        private string[] textField;
+    private AddressLine[] addressLineField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareNumberNumberType NumberType
-        {
-            get
-            {
-                return this.numberTypeField;
-            }
-            set
-            {
-                this.numberTypeField = value;
-            }
-        }
+    private PremiseNumberPrefix[] premiseNumberPrefixField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberTypeSpecified
-        {
-            get
-            {
-                return this.numberTypeFieldSpecified;
-            }
-            set
-            {
-                this.numberTypeFieldSpecified = value;
-            }
-        }
+    private PremiseNumber[] premiseNumberField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    private PremiseNumberSuffix[] premiseNumberSuffixField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareNumberIndicatorOccurrence IndicatorOccurrence
+        set
         {
-            get
-            {
-                return this.indicatorOccurrenceField;
-            }
-            set
-            {
-                this.indicatorOccurrenceField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
+    public PremiseNumberPrefix[] PremiseNumberPrefix
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurrenceFieldSpecified = value;
-            }
+            return this.premiseNumberPrefixField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareNumberNumberOccurrence NumberOccurrence
+        set
         {
-            get
-            {
-                return this.numberOccurrenceField;
-            }
-            set
-            {
-                this.numberOccurrenceField = value;
-            }
+            this.premiseNumberPrefixField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumber")]
+    public PremiseNumber[] PremiseNumber
+    {
+        get
         {
-            get
-            {
-                return this.numberOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.numberOccurrenceFieldSpecified = value;
-            }
+            return this.premiseNumberField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.premiseNumberField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
+    public PremiseNumberSuffix[] PremiseNumberSuffix
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.premiseNumberSuffixField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.premiseNumberSuffixField = value;
         }
     }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremisePremiseNumberRangeIndicatorOccurence
+{
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareNumberNumberType
-    {
-
-        /// <remarks/>
-        Single,
+    Before,
 
-        /// <remarks/>
-        Range,
-    }
-
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareNumberIndicatorOccurrence
-    {
-
-        /// <remarks/>
-        Before,
+    After,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PremisePremiseNumberRangeNumberRangeOccurence
+{
 
-        /// <remarks/>
-        After,
-    }
-
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareNumberNumberOccurrence
-    {
-
-        /// <remarks/>
-        BeforeName,
+    BeforeName,
 
-        /// <remarks/>
-        AfterName,
-
-        /// <remarks/>
-        BeforeType,
-
-        /// <remarks/>
-        AfterType,
-    }
-
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareThoroughfareNumberRange
-    {
-
-        private AddressLine[] addressLineField;
+    AfterName,
 
-        private ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom thoroughfareNumberFromField;
+    /// <remarks/>
+    BeforeType,
 
-        private ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo thoroughfareNumberToField;
+    /// <remarks/>
+    AfterType,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum ThoroughfareDependentThoroughfares
+{
 
-        private ThoroughfareThoroughfareNumberRangeRangeType rangeTypeField;
+    /// <remarks/>
+    Yes,
 
-        private bool rangeTypeFieldSpecified;
+    /// <remarks/>
+    No,
+}
 
-        private string indicatorField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string separatorField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class PostOffice
+{
 
-        private ThoroughfareThoroughfareNumberRangeIndicatorOccurrence indicatorOccurrenceField;
+    private AddressLine[] addressLineField;
 
-        private bool indicatorOccurrenceFieldSpecified;
+    private object[] itemsField;
 
-        private ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence numberRangeOccurrenceField;
+    private PostalRouteType postalRouteField;
 
-        private bool numberRangeOccurrenceFieldSpecified;
+    private PostBox postBoxField;
 
-        private string typeField;
+    private PostalCode postalCodeField;
 
-        private string codeField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string typeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
-        {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
-        }
+    private string indicatorField;
 
-        /// <remarks/>
-        public ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom ThoroughfareNumberFrom
-        {
-            get
-            {
-                return this.thoroughfareNumberFromField;
-            }
-            set
-            {
-                this.thoroughfareNumberFromField = value;
-            }
-        }
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        public ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo ThoroughfareNumberTo
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareNumberToField;
-            }
-            set
-            {
-                this.thoroughfareNumberToField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareThoroughfareNumberRangeRangeType RangeType
+        set
         {
-            get
-            {
-                return this.rangeTypeField;
-            }
-            set
-            {
-                this.rangeTypeField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RangeTypeSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("PostOfficeName", typeof(PostOfficePostOfficeName))]
+    [System.Xml.Serialization.XmlElementAttribute("PostOfficeNumber", typeof(PostOfficePostOfficeNumber))]
+    public object[] Items
+    {
+        get
         {
-            get
-            {
-                return this.rangeTypeFieldSpecified;
-            }
-            set
-            {
-                this.rangeTypeFieldSpecified = value;
-            }
+            return this.itemsField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+        set
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            this.itemsField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Separator
+    /// <remarks/>
+    public PostalRouteType PostalRoute
+    {
+        get
         {
-            get
-            {
-                return this.separatorField;
-            }
-            set
-            {
-                this.separatorField = value;
-            }
+            return this.postalRouteField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareThoroughfareNumberRangeIndicatorOccurrence IndicatorOccurrence
+        set
         {
-            get
-            {
-                return this.indicatorOccurrenceField;
-            }
-            set
-            {
-                this.indicatorOccurrenceField = value;
-            }
+            this.postalRouteField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurrenceSpecified
+    /// <remarks/>
+    public PostBox PostBox
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurrenceFieldSpecified = value;
-            }
+            return this.postBoxField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence NumberRangeOccurrence
+        set
         {
-            get
-            {
-                return this.numberRangeOccurrenceField;
-            }
-            set
-            {
-                this.numberRangeOccurrenceField = value;
-            }
+            this.postBoxField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberRangeOccurrenceSpecified
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
         {
-            get
-            {
-                return this.numberRangeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.numberRangeOccurrenceFieldSpecified = value;
-            }
+            return this.postalCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.postalCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareThoroughfareNumberRangeThoroughfareNumberFrom
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private AddressLine[] addressLineField;
-
-        private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
-
-        private ThoroughfareNumber[] thoroughfareNumberField;
-
-        private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
-
-        private string[] textField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
-        public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+        set
         {
-            get
-            {
-                return this.thoroughfareNumberPrefixField;
-            }
-            set
-            {
-                this.thoroughfareNumberPrefixField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber")]
-        public ThoroughfareNumber[] ThoroughfareNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareNumberField;
-            }
-            set
-            {
-                this.thoroughfareNumberField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
-        public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+        set
         {
-            get
-            {
-                return this.thoroughfareNumberSuffixField;
-            }
-            set
-            {
-                this.thoroughfareNumberSuffixField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class ThoroughfareNumberPrefix
-    {
+}
 
-        private string numberPrefixSeparatorField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostOfficePostOfficeName
+{
 
-        private string codeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberPrefixSeparator
-        {
-            get
-            {
-                return this.numberPrefixSeparatorField;
-            }
-            set
-            {
-                this.numberPrefixSeparatorField = value;
-            }
-        }
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class ThoroughfareNumberSuffix
-    {
 
-        private string numberSuffixSeparatorField;
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberSuffixSeparator
-        {
-            get
-            {
-                return this.numberSuffixSeparatorField;
-            }
-            set
-            {
-                this.numberSuffixSeparatorField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareThoroughfareNumberRangeThoroughfareNumberTo
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private AddressLine[] addressLineField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class PostOfficePostOfficeNumber
+{
 
-        private ThoroughfareNumberPrefix[] thoroughfareNumberPrefixField;
+    private string indicatorField;
 
-        private ThoroughfareNumber[] thoroughfareNumberField;
+    private PostOfficePostOfficeNumberIndicatorOccurrence indicatorOccurrenceField;
 
-        private ThoroughfareNumberSuffix[] thoroughfareNumberSuffixField;
+    private bool indicatorOccurrenceFieldSpecified;
 
-        private string[] textField;
+    private string codeField;
 
-        private string codeField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberPrefix")]
-        public ThoroughfareNumberPrefix[] ThoroughfareNumberPrefix
+        set
         {
-            get
-            {
-                return this.thoroughfareNumberPrefixField;
-            }
-            set
-            {
-                this.thoroughfareNumberPrefixField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumber")]
-        public ThoroughfareNumber[] ThoroughfareNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public PostOfficePostOfficeNumberIndicatorOccurrence IndicatorOccurrence
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareNumberField;
-            }
-            set
-            {
-                this.thoroughfareNumberField = value;
-            }
+            return this.indicatorOccurrenceField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareNumberSuffix")]
-        public ThoroughfareNumberSuffix[] ThoroughfareNumberSuffix
+        set
         {
-            get
-            {
-                return this.thoroughfareNumberSuffixField;
-            }
-            set
-            {
-                this.thoroughfareNumberSuffixField = value;
-            }
+            this.indicatorOccurrenceField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool IndicatorOccurrenceSpecified
+    {
+        get
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            return this.indicatorOccurrenceFieldSpecified;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.indicatorOccurrenceFieldSpecified = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
+        set
+        {
+            this.codeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareThoroughfareNumberRangeRangeType
-    {
-
-        /// <remarks/>
-        Odd,
 
-        /// <remarks/>
-        Even,
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareThoroughfareNumberRangeIndicatorOccurrence
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        /// <remarks/>
-        Before,
-
-        /// <remarks/>
-        After,
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
     }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public enum PostOfficePostOfficeNumberIndicatorOccurrence
+{
+
+    /// <remarks/>
+    Before,
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareThoroughfareNumberRangeNumberRangeOccurrence
-    {
+    After,
+}
 
-        /// <remarks/>
-        BeforeName,
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        AfterName,
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressLinesType
+{
 
-        /// <remarks/>
-        BeforeType,
+    private AddressLine[] addressLineField;
 
-        /// <remarks/>
-        AfterType,
-    }
+    private System.Xml.Linq.XElement[] anyField;
 
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfarePreDirectionType
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareLeadingTypeType
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
     {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
 
-        private string typeField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string codeField;
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class AddressDetails
+{
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private AddressDetailsPostalServiceElements postalServiceElementsField;
 
-        private string[] textField;
+    private object itemField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    private System.Xml.Linq.XElement[] anyField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
+    private string addressTypeField;
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
-        {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
-        }
+    private string currentStatusField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
-        {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
-        }
-    }
+    private string validFromDateField;
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareNameType
-    {
+    private string validToDateField;
 
-        private string typeField;
+    private string usageField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string addressDetailsKeyField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    public AddressDetailsPostalServiceElements PostalServiceElements
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.postalServiceElementsField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.postalServiceElementsField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Address", typeof(AddressDetailsAddress))]
+    [System.Xml.Serialization.XmlElementAttribute("AddressLines", typeof(AddressLinesType))]
+    [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(AdministrativeArea))]
+    [System.Xml.Serialization.XmlElementAttribute("Country", typeof(AddressDetailsCountry))]
+    [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
+    [System.Xml.Serialization.XmlElementAttribute("Thoroughfare", typeof(Thoroughfare))]
+    public object Item
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.itemField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.itemField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareTrailingTypeType
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string AddressType
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.addressTypeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.addressTypeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfarePostDirectionType
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string CurrentStatus
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.currentStatusField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.currentStatusField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string ValidFromDate
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.validFromDateField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.validFromDateField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class ThoroughfareDependentThoroughfare
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string ValidToDate
     {
-
-        private AddressLine[] addressLineField;
-
-        private ThoroughfarePreDirectionType thoroughfarePreDirectionField;
-
-        private ThoroughfareLeadingTypeType thoroughfareLeadingTypeField;
-
-        private ThoroughfareNameType[] thoroughfareNameField;
-
-        private ThoroughfareTrailingTypeType thoroughfareTrailingTypeField;
-
-        private ThoroughfarePostDirectionType thoroughfarePostDirectionField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private string typeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.validToDateField;
         }
-
-        /// <remarks/>
-        public ThoroughfarePreDirectionType ThoroughfarePreDirection
-        {
-            get
-            {
-                return this.thoroughfarePreDirectionField;
-            }
-            set
-            {
-                this.thoroughfarePreDirectionField = value;
-            }
-        }
-
-        /// <remarks/>
-        public ThoroughfareLeadingTypeType ThoroughfareLeadingType
+        set
         {
-            get
-            {
-                return this.thoroughfareLeadingTypeField;
-            }
-            set
-            {
-                this.thoroughfareLeadingTypeField = value;
-            }
+            this.validToDateField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ThoroughfareName")]
-        public ThoroughfareNameType[] ThoroughfareName
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Usage
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfareNameField;
-            }
-            set
-            {
-                this.thoroughfareNameField = value;
-            }
+            return this.usageField;
         }
-
-        /// <remarks/>
-        public ThoroughfareTrailingTypeType ThoroughfareTrailingType
+        set
         {
-            get
-            {
-                return this.thoroughfareTrailingTypeField;
-            }
-            set
-            {
-                this.thoroughfareTrailingTypeField = value;
-            }
+            this.usageField = value;
         }
+    }
 
-        /// <remarks/>
-        public ThoroughfarePostDirectionType ThoroughfarePostDirection
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.thoroughfarePostDirectionField;
-            }
-            set
-            {
-                this.thoroughfarePostDirectionField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string AddressDetailsKey
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressDetailsKeyField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.addressDetailsKeyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class Premise
-    {
 
-        private AddressLine[] addressLineField;
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
 
-        private PremisePremiseName[] premiseNameField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private object[] itemsField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElements
+{
 
-        private PremiseNumberPrefix[] premiseNumberPrefixField;
+    private AddressDetailsPostalServiceElementsAddressIdentifier[] addressIdentifierField;
 
-        private PremiseNumberSuffix[] premiseNumberSuffixField;
+    private AddressDetailsPostalServiceElementsEndorsementLineCode endorsementLineCodeField;
 
-        private BuildingNameType[] buildingNameField;
+    private AddressDetailsPostalServiceElementsKeyLineCode keyLineCodeField;
 
-        private object[] items1Field;
+    private AddressDetailsPostalServiceElementsBarcode barcodeField;
 
-        private MailStopType mailStopField;
+    private AddressDetailsPostalServiceElementsSortingCode sortingCodeField;
 
-        private PostalCode postalCodeField;
+    private AddressDetailsPostalServiceElementsAddressLatitude addressLatitudeField;
 
-        private Premise premise1Field;
+    private AddressDetailsPostalServiceElementsAddressLatitudeDirection addressLatitudeDirectionField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private AddressDetailsPostalServiceElementsAddressLongitude addressLongitudeField;
 
-        private string typeField;
+    private AddressDetailsPostalServiceElementsAddressLongitudeDirection addressLongitudeDirectionField;
 
-        private string premiseDependencyField;
+    private AddressDetailsPostalServiceElementsSupplementaryPostalServiceData[] supplementaryPostalServiceDataField;
 
-        private string premiseDependencyTypeField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private string premiseThoroughfareConnectorField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressIdentifier")]
+    public AddressDetailsPostalServiceElementsAddressIdentifier[] AddressIdentifier
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.addressIdentifierField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseName")]
-        public PremisePremiseName[] PremiseName
+        set
         {
-            get
-            {
-                return this.premiseNameField;
-            }
-            set
-            {
-                this.premiseNameField = value;
-            }
+            this.addressIdentifierField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseLocation", typeof(PremisePremiseLocation))]
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumber", typeof(PremiseNumber))]
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberRange", typeof(PremisePremiseNumberRange))]
-        public object[] Items
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsEndorsementLineCode EndorsementLineCode
+    {
+        get
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            return this.endorsementLineCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
-        public PremiseNumberPrefix[] PremiseNumberPrefix
+        set
         {
-            get
-            {
-                return this.premiseNumberPrefixField;
-            }
-            set
-            {
-                this.premiseNumberPrefixField = value;
-            }
+            this.endorsementLineCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
-        public PremiseNumberSuffix[] PremiseNumberSuffix
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsKeyLineCode KeyLineCode
+    {
+        get
         {
-            get
-            {
-                return this.premiseNumberSuffixField;
-            }
-            set
-            {
-                this.premiseNumberSuffixField = value;
-            }
+            return this.keyLineCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("BuildingName")]
-        public BuildingNameType[] BuildingName
+        set
         {
-            get
-            {
-                return this.buildingNameField;
-            }
-            set
-            {
-                this.buildingNameField = value;
-            }
+            this.keyLineCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Firm", typeof(FirmType))]
-        [System.Xml.Serialization.XmlElementAttribute("SubPremise", typeof(SubPremiseType))]
-        public object[] Items1
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsBarcode Barcode
+    {
+        get
         {
-            get
-            {
-                return this.items1Field;
-            }
-            set
-            {
-                this.items1Field = value;
-            }
+            return this.barcodeField;
         }
-
-        /// <remarks/>
-        public MailStopType MailStop
+        set
         {
-            get
-            {
-                return this.mailStopField;
-            }
-            set
-            {
-                this.mailStopField = value;
-            }
+            this.barcodeField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsSortingCode SortingCode
+    {
+        get
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            return this.sortingCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Premise")]
-        public Premise Premise1
+        set
         {
-            get
-            {
-                return this.premise1Field;
-            }
-            set
-            {
-                this.premise1Field = value;
-            }
+            this.sortingCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsAddressLatitude AddressLatitude
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.addressLatitudeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.addressLatitudeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PremiseDependency
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsAddressLatitudeDirection AddressLatitudeDirection
+    {
+        get
         {
-            get
-            {
-                return this.premiseDependencyField;
-            }
-            set
-            {
-                this.premiseDependencyField = value;
-            }
+            return this.addressLatitudeDirectionField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PremiseDependencyType
+        set
         {
-            get
-            {
-                return this.premiseDependencyTypeField;
-            }
-            set
-            {
-                this.premiseDependencyTypeField = value;
-            }
+            this.addressLatitudeDirectionField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string PremiseThoroughfareConnector
+    /// <remarks/>
+    public AddressDetailsPostalServiceElementsAddressLongitude AddressLongitude
+    {
+        get
         {
-            get
-            {
-                return this.premiseThoroughfareConnectorField;
-            }
-            set
-            {
-                this.premiseThoroughfareConnectorField = value;
-            }
+            return this.addressLongitudeField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.addressLongitudeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PremisePremiseName
+    public AddressDetailsPostalServiceElementsAddressLongitudeDirection AddressLongitudeDirection
     {
-
-        private string typeField;
-
-        private PremisePremiseNameTypeOccurrence typeOccurrenceField;
-
-        private bool typeOccurrenceFieldSpecified;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressLongitudeDirectionField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremisePremiseNameTypeOccurrence TypeOccurrence
+        set
         {
-            get
-            {
-                return this.typeOccurrenceField;
-            }
-            set
-            {
-                this.typeOccurrenceField = value;
-            }
+            this.addressLongitudeDirectionField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("SupplementaryPostalServiceData")]
+    public AddressDetailsPostalServiceElementsSupplementaryPostalServiceData[] SupplementaryPostalServiceData
+    {
+        get
         {
-            get
-            {
-                return this.typeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.typeOccurrenceFieldSpecified = value;
-            }
+            return this.supplementaryPostalServiceDataField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.supplementaryPostalServiceDataField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremisePremiseNameTypeOccurrence
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        /// <remarks/>
-        Before,
-
-        /// <remarks/>
-        After,
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PremisePremiseLocation
-    {
 
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PremiseNumber
-    {
-
-        private PremiseNumberNumberType numberTypeField;
-
-        private bool numberTypeFieldSpecified;
-
-        private string typeField;
-
-        private string indicatorField;
+}
 
-        private PremiseNumberIndicatorOccurrence indicatorOccurrenceField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private bool indicatorOccurrenceFieldSpecified;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsAddressIdentifier
+{
 
-        private PremiseNumberNumberTypeOccurrence numberTypeOccurrenceField;
+    private string identifierTypeField;
 
-        private bool numberTypeOccurrenceFieldSpecified;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremiseNumberNumberType NumberType
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string IdentifierType
+    {
+        get
         {
-            get
-            {
-                return this.numberTypeField;
-            }
-            set
-            {
-                this.numberTypeField = value;
-            }
+            return this.identifierTypeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberTypeSpecified
+        set
         {
-            get
-            {
-                return this.numberTypeFieldSpecified;
-            }
-            set
-            {
-                this.numberTypeFieldSpecified = value;
-            }
+            this.identifierTypeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+        set
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremiseNumberIndicatorOccurrence IndicatorOccurrence
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurrenceField;
-            }
-            set
-            {
-                this.indicatorOccurrenceField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurrenceSpecified
+        set
         {
-            get
-            {
-                return this.indicatorOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurrenceFieldSpecified = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremiseNumberNumberTypeOccurrence NumberTypeOccurrence
-        {
-            get
-            {
-                return this.numberTypeOccurrenceField;
-            }
-            set
-            {
-                this.numberTypeOccurrenceField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberTypeOccurrenceSpecified
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.numberTypeOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.numberTypeOccurrenceFieldSpecified = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
-    }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremiseNumberNumberType
-    {
-
-        /// <remarks/>
-        Single,
-
-        /// <remarks/>
-        Range,
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremiseNumberIndicatorOccurrence
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        Before,
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsEndorsementLineCode
+{
 
-        /// <remarks/>
-        After,
-    }
+    private string typeField;
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremiseNumberNumberTypeOccurrence
-    {
+    private string codeField;
 
-        /// <remarks/>
-        Before,
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        After,
-    }
+    private string[] textField;
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PremisePremiseNumberRange
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private PremisePremiseNumberRangePremiseNumberRangeFrom premiseNumberRangeFromField;
-
-        private PremisePremiseNumberRangePremiseNumberRangeTo premiseNumberRangeToField;
-
-        private string rangeTypeField;
-
-        private string indicatorField;
-
-        private string separatorField;
-
-        private string typeField;
-
-        private PremisePremiseNumberRangeIndicatorOccurence indicatorOccurenceField;
-
-        private bool indicatorOccurenceFieldSpecified;
-
-        private PremisePremiseNumberRangeNumberRangeOccurence numberRangeOccurenceField;
-
-        private bool numberRangeOccurenceFieldSpecified;
-
-        /// <remarks/>
-        public PremisePremiseNumberRangePremiseNumberRangeFrom PremiseNumberRangeFrom
-        {
-            get
-            {
-                return this.premiseNumberRangeFromField;
-            }
-            set
-            {
-                this.premiseNumberRangeFromField = value;
-            }
-        }
-
-        /// <remarks/>
-        public PremisePremiseNumberRangePremiseNumberRangeTo PremiseNumberRangeTo
+        get
         {
-            get
-            {
-                return this.premiseNumberRangeToField;
-            }
-            set
-            {
-                this.premiseNumberRangeToField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string RangeType
+        set
         {
-            get
-            {
-                return this.rangeTypeField;
-            }
-            set
-            {
-                this.rangeTypeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Separator
+        set
         {
-            get
-            {
-                return this.separatorField;
-            }
-            set
-            {
-                this.separatorField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremisePremiseNumberRangeIndicatorOccurence IndicatorOccurence
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurenceField;
-            }
-            set
-            {
-                this.indicatorOccurenceField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurenceSpecified
+        set
         {
-            get
-            {
-                return this.indicatorOccurenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurenceFieldSpecified = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PremisePremiseNumberRangeNumberRangeOccurence NumberRangeOccurence
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.numberRangeOccurenceField;
-            }
-            set
-            {
-                this.numberRangeOccurenceField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberRangeOccurenceSpecified
+        set
         {
-            get
-            {
-                return this.numberRangeOccurenceFieldSpecified;
-            }
-            set
-            {
-                this.numberRangeOccurenceFieldSpecified = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PremisePremiseNumberRangePremiseNumberRangeFrom
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsKeyLineCode
+{
 
-        private AddressLine[] addressLineField;
+    private string typeField;
 
-        private PremiseNumberPrefix[] premiseNumberPrefixField;
+    private string codeField;
 
-        private PremiseNumber[] premiseNumberField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private PremiseNumberSuffix[] premiseNumberSuffixField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
-        public PremiseNumberPrefix[] PremiseNumberPrefix
+        set
         {
-            get
-            {
-                return this.premiseNumberPrefixField;
-            }
-            set
-            {
-                this.premiseNumberPrefixField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumber")]
-        public PremiseNumber[] PremiseNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.premiseNumberField;
-            }
-            set
-            {
-                this.premiseNumberField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
-        public PremiseNumberSuffix[] PremiseNumberSuffix
+        set
         {
-            get
-            {
-                return this.premiseNumberSuffixField;
-            }
-            set
-            {
-                this.premiseNumberSuffixField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PremiseNumberPrefix
-    {
-
-        private string numberPrefixSeparatorField;
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string valueField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberPrefixSeparator
-        {
-            get
-            {
-                return this.numberPrefixSeparatorField;
-            }
-            set
-            {
-                this.numberPrefixSeparatorField = value;
-            }
-        }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string Value
+        set
         {
-            get
-            {
-                return this.valueField;
-            }
-            set
-            {
-                this.valueField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PremiseNumberSuffix
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string numberSuffixSeparatorField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsBarcode
+{
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string NumberSuffixSeparator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.numberSuffixSeparatorField;
-            }
-            set
-            {
-                this.numberSuffixSeparatorField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.codeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PremisePremiseNumberRangePremiseNumberRangeTo
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private AddressLine[] addressLineField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private PremiseNumberPrefix[] premiseNumberPrefixField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsSortingCode
+{
 
-        private PremiseNumber[] premiseNumberField;
+    private string typeField;
 
-        private PremiseNumberSuffix[] premiseNumberSuffixField;
+    private string codeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberPrefix")]
-        public PremiseNumberPrefix[] PremiseNumberPrefix
+        set
         {
-            get
-            {
-                return this.premiseNumberPrefixField;
-            }
-            set
-            {
-                this.premiseNumberPrefixField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumber")]
-        public PremiseNumber[] PremiseNumber
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.premiseNumberField;
-            }
-            set
-            {
-                this.premiseNumberField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PremiseNumberSuffix")]
-        public PremiseNumberSuffix[] PremiseNumberSuffix
+        set
         {
-            get
-            {
-                return this.premiseNumberSuffixField;
-            }
-            set
-            {
-                this.premiseNumberSuffixField = value;
-            }
+            this.codeField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremisePremiseNumberRangeIndicatorOccurence
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        Before,
-
-        /// <remarks/>
-        After,
-    }
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsAddressLatitude
+{
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PremisePremiseNumberRangeNumberRangeOccurence
-    {
+    private string typeField;
 
-        /// <remarks/>
-        BeforeName,
+    private string codeField;
 
-        /// <remarks/>
-        AfterName,
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        BeforeType,
+    private string[] textField;
 
-        /// <remarks/>
-        AfterType,
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
+        {
+            return this.typeField;
+        }
+        set
+        {
+            this.typeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum ThoroughfareDependentThoroughfares
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
+        get
+        {
+            return this.codeField;
+        }
+        set
+        {
+            this.codeField = value;
+        }
+    }
 
-        /// <remarks/>
-        Yes,
+    /// <remarks/>
 
-        /// <remarks/>
-        No,
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class PostOffice
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private AddressLine[] addressLineField;
-
-        private object[] itemsField;
-
-        private PostalRouteType postalRouteField;
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private PostBox postBoxField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private PostalCode postalCodeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsAddressLatitudeDirection
+{
 
-        private System.Xml.Linq.XElement[] anyField;
+    private string typeField;
 
-        private string typeField;
+    private string codeField;
 
-        private string indicatorField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("PostOfficeName", typeof(PostOfficePostOfficeName))]
-        [System.Xml.Serialization.XmlElementAttribute("PostOfficeNumber", typeof(PostOfficePostOfficeNumber))]
-        public object[] Items
+        set
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalRouteType PostalRoute
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.postalRouteField;
-            }
-            set
-            {
-                this.postalRouteField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        public PostBox PostBox
+        set
         {
-            get
-            {
-                return this.postBoxField;
-            }
-            set
-            {
-                this.postBoxField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
-        {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
-        }
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostOfficePostOfficeName
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsAddressLongitude
+{
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
+        {
+            return this.codeField;
+        }
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.codeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class PostOfficePostOfficeNumber
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private string indicatorField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private PostOfficePostOfficeNumberIndicatorOccurrence indicatorOccurrenceField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsAddressLongitudeDirection
+{
 
-        private bool indicatorOccurrenceFieldSpecified;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public PostOfficePostOfficeNumberIndicatorOccurrence IndicatorOccurrence
+        set
         {
-            get
-            {
-                return this.indicatorOccurrenceField;
-            }
-            set
-            {
-                this.indicatorOccurrenceField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndicatorOccurrenceSpecified
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.indicatorOccurrenceFieldSpecified;
-            }
-            set
-            {
-                this.indicatorOccurrenceFieldSpecified = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public enum PostOfficePostOfficeNumberIndicatorOccurrence
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        /// <remarks/>
-        Before,
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        /// <remarks/>
-        After,
-    }
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsPostalServiceElementsSupplementaryPostalServiceData
+{
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressLinesType
-    {
+    private string typeField;
 
-        private AddressLine[] addressLineField;
+    private string codeField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
+        set
+        {
+            this.codeField = value;
+        }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class AddressDetails
-    {
-
-        private AddressDetailsPostalServiceElements postalServiceElementsField;
-
-        private object itemField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private string addressTypeField;
-
-        private string currentStatusField;
 
-        private string validFromDateField;
-
-        private string validToDateField;
-
-        private string usageField;
-
-        private string codeField;
-
-        private string addressDetailsKeyField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        public AddressDetailsPostalServiceElements PostalServiceElements
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.postalServiceElementsField;
-            }
-            set
-            {
-                this.postalServiceElementsField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Address", typeof(AddressDetailsAddress))]
-        [System.Xml.Serialization.XmlElementAttribute("AddressLines", typeof(AddressLinesType))]
-        [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(AdministrativeArea))]
-        [System.Xml.Serialization.XmlElementAttribute("Country", typeof(AddressDetailsCountry))]
-        [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
-        [System.Xml.Serialization.XmlElementAttribute("Thoroughfare", typeof(Thoroughfare))]
-        public object Item
+        set
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AddressType
+        set
         {
-            get
-            {
-                return this.addressTypeField;
-            }
-            set
-            {
-                this.addressTypeField = value;
-            }
+            this.textField = value;
         }
+    }
+}
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string CurrentStatus
-        {
-            get
-            {
-                return this.currentStatusField;
-            }
-            set
-            {
-                this.currentStatusField = value;
-            }
-        }
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsAddress
+{
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ValidFromDate
+    private string typeField;
+
+    private string codeField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.validFromDateField;
-            }
-            set
-            {
-                this.validFromDateField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string ValidToDate
+        set
         {
-            get
-            {
-                return this.validToDateField;
-            }
-            set
-            {
-                this.validToDateField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Usage
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.usageField;
-            }
-            set
-            {
-                this.usageField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.codeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string AddressDetailsKey
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.addressDetailsKeyField;
-            }
-            set
-            {
-                this.addressDetailsKeyField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElements
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
     {
-
-        private AddressDetailsPostalServiceElementsAddressIdentifier[] addressIdentifierField;
-
-        private AddressDetailsPostalServiceElementsEndorsementLineCode endorsementLineCodeField;
-
-        private AddressDetailsPostalServiceElementsKeyLineCode keyLineCodeField;
-
-        private AddressDetailsPostalServiceElementsBarcode barcodeField;
-
-        private AddressDetailsPostalServiceElementsSortingCode sortingCodeField;
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private AddressDetailsPostalServiceElementsAddressLatitude addressLatitudeField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private AddressDetailsPostalServiceElementsAddressLatitudeDirection addressLatitudeDirectionField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class AdministrativeArea
+{
 
-        private AddressDetailsPostalServiceElementsAddressLongitude addressLongitudeField;
+    private AddressLine[] addressLineField;
 
-        private AddressDetailsPostalServiceElementsAddressLongitudeDirection addressLongitudeDirectionField;
+    private AdministrativeAreaAdministrativeAreaName[] administrativeAreaNameField;
 
-        private AddressDetailsPostalServiceElementsSupplementaryPostalServiceData[] supplementaryPostalServiceDataField;
+    private AdministrativeAreaSubAdministrativeArea subAdministrativeAreaField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private object itemField;
 
-        private string typeField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string typeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressIdentifier")]
-        public AddressDetailsPostalServiceElementsAddressIdentifier[] AddressIdentifier
-        {
-            get
-            {
-                return this.addressIdentifierField;
-            }
-            set
-            {
-                this.addressIdentifierField = value;
-            }
-        }
+    private string usageTypeField;
 
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsEndorsementLineCode EndorsementLineCode
-        {
-            get
-            {
-                return this.endorsementLineCodeField;
-            }
-            set
-            {
-                this.endorsementLineCodeField = value;
-            }
-        }
+    private string indicatorField;
 
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsKeyLineCode KeyLineCode
-        {
-            get
-            {
-                return this.keyLineCodeField;
-            }
-            set
-            {
-                this.keyLineCodeField = value;
-            }
-        }
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsBarcode Barcode
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.barcodeField;
-            }
-            set
-            {
-                this.barcodeField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsSortingCode SortingCode
+        set
         {
-            get
-            {
-                return this.sortingCodeField;
-            }
-            set
-            {
-                this.sortingCodeField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsAddressLatitude AddressLatitude
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AdministrativeAreaName")]
+    public AdministrativeAreaAdministrativeAreaName[] AdministrativeAreaName
+    {
+        get
         {
-            get
-            {
-                return this.addressLatitudeField;
-            }
-            set
-            {
-                this.addressLatitudeField = value;
-            }
+            return this.administrativeAreaNameField;
         }
-
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsAddressLatitudeDirection AddressLatitudeDirection
+        set
         {
-            get
-            {
-                return this.addressLatitudeDirectionField;
-            }
-            set
-            {
-                this.addressLatitudeDirectionField = value;
-            }
+            this.administrativeAreaNameField = value;
         }
+    }
 
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsAddressLongitude AddressLongitude
+    /// <remarks/>
+    public AdministrativeAreaSubAdministrativeArea SubAdministrativeArea
+    {
+        get
         {
-            get
-            {
-                return this.addressLongitudeField;
-            }
-            set
-            {
-                this.addressLongitudeField = value;
-            }
+            return this.subAdministrativeAreaField;
         }
-
-        /// <remarks/>
-        public AddressDetailsPostalServiceElementsAddressLongitudeDirection AddressLongitudeDirection
+        set
         {
-            get
-            {
-                return this.addressLongitudeDirectionField;
-            }
-            set
-            {
-                this.addressLongitudeDirectionField = value;
-            }
+            this.subAdministrativeAreaField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SupplementaryPostalServiceData")]
-        public AddressDetailsPostalServiceElementsSupplementaryPostalServiceData[] SupplementaryPostalServiceData
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
+    [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
+    public object Item
+    {
+        get
         {
-            get
-            {
-                return this.supplementaryPostalServiceDataField;
-            }
-            set
-            {
-                this.supplementaryPostalServiceDataField = value;
-            }
+            return this.itemField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.itemField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsAddressIdentifier
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private string identifierTypeField;
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string IdentifierType
-        {
-            get
-            {
-                return this.identifierTypeField;
-            }
-            set
-            {
-                this.identifierTypeField = value;
-            }
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string UsageType
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.usageTypeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.usageTypeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsEndorsementLineCode
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsKeyLineCode
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AdministrativeAreaAdministrativeAreaName
+{
 
-        private string codeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsBarcode
-    {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsSortingCode
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string typeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AdministrativeAreaSubAdministrativeArea
+{
 
-        private string codeField;
+    private AddressLine[] addressLineField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    private AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName[] subAdministrativeAreaNameField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
-    }
+    private object itemField;
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsAddressLatitude
-    {
+    private System.Xml.Linq.XElement[] anyField;
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string usageTypeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string indicatorField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("SubAdministrativeAreaName")]
+    public AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName[] SubAdministrativeAreaName
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.subAdministrativeAreaNameField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.subAdministrativeAreaNameField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsAddressLatitudeDirection
+    [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
+    [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
+    public object Item
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.itemField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.itemField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsAddressLongitude
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string UsageType
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.usageTypeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.usageTypeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsAddressLongitudeDirection
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.indicatorField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.anyAttrField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsPostalServiceElementsSupplementaryPostalServiceData
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName
+{
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsAddress
-    {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class AdministrativeArea
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class Locality
+{
+
+    private AddressLine[] addressLineField;
 
-        private AddressLine[] addressLineField;
+    private LocalityLocalityName[] localityNameField;
 
-        private AdministrativeAreaAdministrativeAreaName[] administrativeAreaNameField;
+    private object itemField;
 
-        private AdministrativeAreaSubAdministrativeArea subAdministrativeAreaField;
+    private Thoroughfare thoroughfareField;
 
-        private object itemField;
+    private Premise premiseField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private DependentLocalityType dependentLocalityField;
 
-        private string typeField;
+    private PostalCode postalCodeField;
 
-        private string usageTypeField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private string indicatorField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string usageTypeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    private string indicatorField;
+
+    private System.Xml.Linq.XAttribute[] anyAttrField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AdministrativeAreaName")]
-        public AdministrativeAreaAdministrativeAreaName[] AdministrativeAreaName
+        set
         {
-            get
-            {
-                return this.administrativeAreaNameField;
-            }
-            set
-            {
-                this.administrativeAreaNameField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        public AdministrativeAreaSubAdministrativeArea SubAdministrativeArea
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("LocalityName")]
+    public LocalityLocalityName[] LocalityName
+    {
+        get
         {
-            get
-            {
-                return this.subAdministrativeAreaField;
-            }
-            set
-            {
-                this.subAdministrativeAreaField = value;
-            }
+            return this.localityNameField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
-        [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
-        public object Item
+        set
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            this.localityNameField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("LargeMailUser", typeof(LargeMailUserType))]
+    [System.Xml.Serialization.XmlElementAttribute("PostBox", typeof(PostBox))]
+    [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
+    [System.Xml.Serialization.XmlElementAttribute("PostalRoute", typeof(PostalRouteType))]
+    public object Item
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.itemField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        set
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            this.itemField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsageType
+    /// <remarks/>
+    public Thoroughfare Thoroughfare
+    {
+        get
         {
-            get
-            {
-                return this.usageTypeField;
-            }
-            set
-            {
-                this.usageTypeField = value;
-            }
+            return this.thoroughfareField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+        set
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            this.thoroughfareField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    public Premise Premise
+    {
+        get
+        {
+            return this.premiseField;
+        }
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.premiseField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AdministrativeAreaAdministrativeAreaName
+    public DependentLocalityType DependentLocality
     {
-
-        private string typeField;
-
-        private string codeField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.dependentLocalityField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.dependentLocalityField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    public PostalCode PostalCode
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.postalCodeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.postalCodeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AdministrativeAreaSubAdministrativeArea
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
     {
-
-        private AddressLine[] addressLineField;
-
-        private AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName[] subAdministrativeAreaNameField;
-
-        private object itemField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private string typeField;
-
-        private string usageTypeField;
-
-        private string indicatorField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SubAdministrativeAreaName")]
-        public AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName[] SubAdministrativeAreaName
+        set
         {
-            get
-            {
-                return this.subAdministrativeAreaNameField;
-            }
-            set
-            {
-                this.subAdministrativeAreaNameField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
-        [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalCode", typeof(PostalCode))]
-        public object Item
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string UsageType
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.usageTypeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsageType
+        set
         {
-            get
-            {
-                return this.usageTypeField;
-            }
-            set
-            {
-                this.usageTypeField = value;
-            }
+            this.usageTypeField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Indicator
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.indicatorField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.indicatorField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AdministrativeAreaSubAdministrativeAreaSubAdministrativeAreaName
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
     {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class LocalityLocalityName
+{
 
-        private string typeField;
+    private string typeField;
 
-        private string codeField;
+    private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        private string[] textField;
+    private string[] textField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class Locality
-    {
-
-        private AddressLine[] addressLineField;
 
-        private LocalityLocalityName[] localityNameField;
-
-        private object itemField;
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
+        {
+            return this.anyAttrField;
+        }
+        set
+        {
+            this.anyAttrField = value;
+        }
+    }
 
-        private Thoroughfare thoroughfareField;
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
+        {
+            return this.textField;
+        }
+        set
+        {
+            this.textField = value;
+        }
+    }
+}
 
-        private Premise premiseField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private DependentLocalityType dependentLocalityField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsCountry
+{
 
-        private PostalCode postalCodeField;
+    private AddressLine[] addressLineField;
 
-        private System.Xml.Linq.XElement[] anyField;
+    private AddressDetailsCountryCountryNameCode[] countryNameCodeField;
 
-        private string typeField;
+    private CountryName[] countryNameField;
 
-        private string usageTypeField;
+    private object itemField;
 
-        private string indicatorField;
+    private System.Xml.Linq.XElement[] anyField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
+    public AddressLine[] AddressLine
+    {
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.addressLineField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LocalityName")]
-        public LocalityLocalityName[] LocalityName
+        set
         {
-            get
-            {
-                return this.localityNameField;
-            }
-            set
-            {
-                this.localityNameField = value;
-            }
+            this.addressLineField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("LargeMailUser", typeof(LargeMailUserType))]
-        [System.Xml.Serialization.XmlElementAttribute("PostBox", typeof(PostBox))]
-        [System.Xml.Serialization.XmlElementAttribute("PostOffice", typeof(PostOffice))]
-        [System.Xml.Serialization.XmlElementAttribute("PostalRoute", typeof(PostalRouteType))]
-        public object Item
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("CountryNameCode")]
+    public AddressDetailsCountryCountryNameCode[] CountryNameCode
+    {
+        get
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            return this.countryNameCodeField;
         }
-
-        /// <remarks/>
-        public Thoroughfare Thoroughfare
+        set
         {
-            get
-            {
-                return this.thoroughfareField;
-            }
-            set
-            {
-                this.thoroughfareField = value;
-            }
+            this.countryNameCodeField = value;
         }
+    }
 
-        /// <remarks/>
-        public Premise Premise
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("CountryName")]
+    public CountryName[] CountryName
+    {
+        get
         {
-            get
-            {
-                return this.premiseField;
-            }
-            set
-            {
-                this.premiseField = value;
-            }
+            return this.countryNameField;
         }
-
-        /// <remarks/>
-        public DependentLocalityType DependentLocality
+        set
         {
-            get
-            {
-                return this.dependentLocalityField;
-            }
-            set
-            {
-                this.dependentLocalityField = value;
-            }
+            this.countryNameField = value;
         }
+    }
 
-        /// <remarks/>
-        public PostalCode PostalCode
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(AdministrativeArea))]
+    [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
+    [System.Xml.Serialization.XmlElementAttribute("Thoroughfare", typeof(Thoroughfare))]
+    public object Item
+    {
+        get
         {
-            get
-            {
-                return this.postalCodeField;
-            }
-            set
-            {
-                this.postalCodeField = value;
-            }
+            return this.itemField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+        set
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            this.itemField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAnyElementAttribute()]
+    public System.Xml.Linq.XElement[] Any
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string UsageType
+        set
         {
-            get
-            {
-                return this.usageTypeField;
-            }
-            set
-            {
-                this.usageTypeField = value;
-            }
+            this.anyField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Indicator
+    /// <remarks/>
+
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.indicatorField;
-            }
-            set
-            {
-                this.indicatorField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.anyAttrField = value;
         }
     }
-
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class LocalityLocalityName
-    {
+}
 
-        private string typeField;
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string codeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+public partial class AddressDetailsCountryCountryNameCode
+{
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string schemeField;
 
-        private string[] textField;
+    private string codeField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
-        {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
-        }
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
-        }
+    private string[] textField;
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Scheme
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.schemeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.schemeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsCountry
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
     {
-
-        private AddressLine[] addressLineField;
-
-        private AddressDetailsCountryCountryNameCode[] countryNameCodeField;
-
-        private CountryName[] countryNameField;
-
-        private object itemField;
-
-        private System.Xml.Linq.XElement[] anyField;
-
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AddressLine")]
-        public AddressLine[] AddressLine
+        get
         {
-            get
-            {
-                return this.addressLineField;
-            }
-            set
-            {
-                this.addressLineField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CountryNameCode")]
-        public AddressDetailsCountryCountryNameCode[] CountryNameCode
+        set
         {
-            get
-            {
-                return this.countryNameCodeField;
-            }
-            set
-            {
-                this.countryNameCodeField = value;
-            }
+            this.codeField = value;
         }
+    }
+
+    /// <remarks/>
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("CountryName")]
-        public CountryName[] CountryName
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.countryNameField;
-            }
-            set
-            {
-                this.countryNameField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("AdministrativeArea", typeof(AdministrativeArea))]
-        [System.Xml.Serialization.XmlElementAttribute("Locality", typeof(Locality))]
-        [System.Xml.Serialization.XmlElementAttribute("Thoroughfare", typeof(Thoroughfare))]
-        public object Item
+        set
         {
-            get
-            {
-                return this.itemField;
-            }
-            set
-            {
-                this.itemField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAnyElementAttribute()]
-        public System.Xml.Linq.XElement[] Any
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyField;
-            }
-            set
-            {
-                this.anyField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+        set
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    public partial class AddressDetailsCountryCountryNameCode
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
 
-        private string schemeField;
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
+[System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
+public partial class CountryName
+{
 
-        private string codeField;
+    private string typeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
+    private string codeField;
 
-        private string[] textField;
+    private System.Xml.Linq.XAttribute[] anyAttrField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Scheme
+    private string[] textField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Type
+    {
+        get
         {
-            get
-            {
-                return this.schemeField;
-            }
-            set
-            {
-                this.schemeField = value;
-            }
+            return this.typeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.typeField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Code
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.codeField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.codeField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0")]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "urn:oasis:names:tc:ciq:xsdschema:xAL:2.0", IsNullable = false)]
-    public partial class CountryName
-    {
-
-        private string typeField;
-
-        private string codeField;
 
-        private System.Xml.Linq.XAttribute[] anyAttrField;
-
-        private string[] textField;
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Type
+    public System.Xml.Linq.XAttribute[] AnyAttr
+    {
+        get
         {
-            get
-            {
-                return this.typeField;
-            }
-            set
-            {
-                this.typeField = value;
-            }
+            return this.anyAttrField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string Code
+        set
         {
-            get
-            {
-                return this.codeField;
-            }
-            set
-            {
-                this.codeField = value;
-            }
+            this.anyAttrField = value;
         }
+    }
 
-        /// <remarks/>
-    
-        public System.Xml.Linq.XAttribute[] AnyAttr
+    /// <remarks/>
+    [System.Xml.Serialization.XmlTextAttribute()]
+    public string[] Text
+    {
+        get
         {
-            get
-            {
-                return this.anyAttrField;
-            }
-            set
-            {
-                this.anyAttrField = value;
-            }
+            return this.textField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
-        public string[] Text
+        set
         {
-            get
-            {
-                return this.textField;
-            }
-            set
-            {
-                this.textField = value;
-            }
+            this.textField = value;
         }
     }
+}
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-   
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.w3.org/2005/Atom")]
-    [System.Xml.Serialization.XmlRootAttribute("author", Namespace = "http://www.w3.org/2005/Atom", IsNullable = false)]
-    public partial class atomPersonConstruct
-    {
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.w3.org/2005/Atom")]
+[System.Xml.Serialization.XmlRootAttribute("author", Namespace = "http://www.w3.org/2005/Atom", IsNullable = false)]
+public partial class atomPersonConstruct
+{
 
-        private string[] itemsField;
+    private string[] itemsField;
 
-        private ItemsChoiceType[] itemsElementNameField;
+    private ItemsChoiceType[] itemsElementNameField;
 
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("email", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("name", typeof(string))]
-        [System.Xml.Serialization.XmlElementAttribute("uri", typeof(string))]
-        [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
-        public string[] Items
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("email", typeof(string))]
+    [System.Xml.Serialization.XmlElementAttribute("name", typeof(string))]
+    [System.Xml.Serialization.XmlElementAttribute("uri", typeof(string))]
+    [System.Xml.Serialization.XmlChoiceIdentifierAttribute("ItemsElementName")]
+    public string[] Items
+    {
+        get
         {
-            get
-            {
-                return this.itemsField;
-            }
-            set
-            {
-                this.itemsField = value;
-            }
+            return this.itemsField;
         }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public ItemsChoiceType[] ItemsElementName
+        set
         {
-            get
-            {
-                return this.itemsElementNameField;
-            }
-            set
-            {
-                this.itemsElementNameField = value;
-            }
+            this.itemsField = value;
         }
     }
 
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-   [DataContract]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.w3.org/2005/Atom", IncludeInSchema = false)]
-    public enum ItemsChoiceType
+    [System.Xml.Serialization.XmlElementAttribute("ItemsElementName")]
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public ItemsChoiceType[] ItemsElementName
     {
-
-        /// <remarks/>
-        email,
+        get
+        {
+            return this.itemsElementNameField;
+        }
+        set
+        {
+            this.itemsElementNameField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[DataContract]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.w3.org/2005/Atom", IncludeInSchema = false)]
+public enum ItemsChoiceType
+{
 
-        /// <remarks/>
-        name,
+    /// <remarks/>
+    email,
 
-        /// <remarks/>
-        uri,
-    }
+    /// <remarks/>
+    name,
 
+    /// <remarks/>
+    uri,
 }

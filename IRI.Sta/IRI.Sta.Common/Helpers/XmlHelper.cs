@@ -4,34 +4,91 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace IRI.Sta.Common.Helpers;
 
 public static class XmlHelper
 {
-    public static void Serialize<T>(string path, T value)
+    static readonly XmlWriterSettings _indentedSettings;
+
+    static XmlHelper()
     {
-        System.Xml.XmlTextWriter writer = null;
+        _indentedSettings = new XmlWriterSettings()
+        {
+            Indent = true,
+            IndentChars = "  ", // 2 spaces for indentation
+            Encoding = Encoding.UTF8,
+            CloseOutput = true,
+            NewLineOnAttributes = true, 
+        };
+    }
+
+    public static void Serialize<T>(string path, T value, bool isIndented = false)
+    {
+        Serialize(path, value, isIndented ? _indentedSettings : null);
+    }
+
+    public static void Serialize<T>(string path, T value, XmlWriterSettings? settings)
+    {
+        XmlWriter? writer = null;
 
         try
         {
-            writer = new System.Xml.XmlTextWriter(path, Encoding.UTF8);
+            //// Configure XML writer settings for indentation
+            //var settings = new XmlWriterSettings
+            //{
+            //    Indent = true,
+            //    IndentChars = "  ", // 2 spaces for indentation
+            //    Encoding = Encoding.UTF8,
+            //    CloseOutput = true
+            //};
 
-            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+            // Create the writer with proper settings
+            writer = XmlWriter.Create(path, settings);
 
-            serializer.Serialize(writer, value);
+            // Create the serializer
+            var serializer = new XmlSerializer(typeof(T));
+
+            //// Add XML namespace declarations if needed (for SLD files)
+            //var namespaces = new XmlSerializerNamespaces();
+            //namespaces.Add("", "http://www.opengis.net/sld");
+            //namespaces.Add("ogc", "http://www.opengis.net/ogc");
+            //namespaces.Add("xlink", "http://www.w3.org/1999/xlink");
+            //namespaces.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+            // Serialize with namespaces
+            serializer.Serialize(writer, value/*, namespaces*/);
         }
         catch (Exception ex)
         {
-            throw ex;
+            // Wrap in a more descriptive exception
+            throw new InvalidOperationException($"Failed to serialize XML to {path}", ex);
         }
         finally
         {
-            writer.Close();
+            writer?.Dispose(); // Proper cleanup using Dispose instead of Close
         }
 
+        //System.Xml.XmlTextWriter writer = null;
 
+        //try
+        //{
+        //    writer = new System.Xml.XmlTextWriter(path, Encoding.UTF8);
+
+        //    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+
+        //    serializer.Serialize(writer, value);
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw ex;
+        //}
+        //finally
+        //{
+        //    writer.Close();
+        //}
     }
 
     public static string Parse<T>(T value)
@@ -129,7 +186,7 @@ public static class XmlHelper
             throw new ArgumentException("XML string cannot be null or empty", nameof(xmlString));
 
         var serializer = new XmlSerializer(typeof(T));
-         
+
         using (var reader = new StringReader(xmlString))
         {
             try

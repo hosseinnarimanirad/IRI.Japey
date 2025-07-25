@@ -35,5 +35,5 @@ public static class GeoJsonVsShapefile
         // CONCLUSION:
         // shapefile 8% more compact
     }
-
+     
 }
