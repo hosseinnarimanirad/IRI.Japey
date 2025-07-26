@@ -150,7 +150,7 @@ public static class SqlSpatialHelper
             return BoundingBox.NaN;
         }
 
-        var validEnvelopes = envelopes.Where(i => !i.IsNotValidOrEmpty()).ToList();
+        var validEnvelopes = envelopes/*.Where(i => !i.IsNotValidOrEmpty())*/.ToList();
 
         if (validEnvelopes.Count == 0)
         {
@@ -310,7 +310,7 @@ public static class SqlSpatialHelper
             return BoundingBox.NaN;
         }
 
-        var validEnvelopes = envelopes.Where(i => !i.IsNotValidOrEmpty()).ToList();
+        var validEnvelopes = envelopes/*.Where(i => !i.IsNotValidOrEmpty())*/.ToList();
 
         if (validEnvelopes.Count == 0)
         {

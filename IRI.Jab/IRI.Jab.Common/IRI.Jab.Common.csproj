@@ -88,7 +88,7 @@
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
   </ItemGroup>
-
+  
   <ItemGroup>
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />

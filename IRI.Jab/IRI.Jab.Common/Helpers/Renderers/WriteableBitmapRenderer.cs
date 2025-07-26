@@ -3,7 +3,7 @@ using System.Windows.Media;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
-using Microsoft.SqlServer.Types;
+//using Microsoft.SqlServer.Types;
 
 using IRI.Extensions; 
 using IRI.Sta.Common.Primitives;
@@ -20,7 +20,7 @@ internal class WriteableBitmapRenderer
      
     #region Geometry to WriteableBitmap
 
-    public WriteableBitmap ParseSqlGeometry(List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
+    public WriteableBitmap ParseSqlGeometry(List<Geometry<Point>> geometries, /*Func<WpfPoint, WpfPoint> transform,*/ int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
     {
         //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
 
@@ -36,7 +36,7 @@ internal class WriteableBitmapRenderer
             {
                 foreach (var item in geometries)
                 {
-                    AddGeometry(result, item, transform, intBorderColor, intFillColor, pointSymbol, symbol);
+                    AddGeometry(result, item, /*transform,*/ intBorderColor, intFillColor, pointSymbol, symbol);
                 }
             }
         }
@@ -46,7 +46,7 @@ internal class WriteableBitmapRenderer
         return result;
     }
 
-    private int AddGeometry(WriteableBitmap context, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    private int AddGeometry(WriteableBitmap context, Geometry<Point> geometry, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
     {
         if (geometry.IsNotValidOrEmpty())
         {
@@ -56,27 +56,27 @@ internal class WriteableBitmapRenderer
         switch (geometry.Type)
         {
             case GeometryType.Point:
-                AddPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
+                AddPoint(context, geometry, /*transform,*/ border, fill, imageSymbol, geometrySymbol);
                 break;
 
             case GeometryType.LineString:
-                AddLineString(context, geometry, transform, border, fill);
+                AddLineString(context, geometry, /*transform, */border, fill);
                 break;
 
             case GeometryType.Polygon:
-                AddPolygon(context, geometry, transform, border, fill);
+                AddPolygon(context, geometry, /*transform, */border, fill);
                 break;
 
             case GeometryType.MultiPoint:
-                AddMultiPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
+                AddMultiPoint(context, geometry, /*transform, */border, fill, imageSymbol, geometrySymbol);
                 break;
 
             case GeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, border, fill);
+                AddMultiLineString(context, geometry, /*transform,*/ border, fill);
                 break;
 
             case GeometryType.MultiPolygon:
-                AddMultiPolygon(context, geometry, transform, border, fill);
+                AddMultiPolygon(context, geometry, /*transform, */border, fill);
                 break;
 
             case GeometryType.GeometryCollection:
@@ -90,9 +90,10 @@ internal class WriteableBitmapRenderer
         return 0;
     }
 
-    private void AddPoint(WriteableBitmap context, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    private void AddPoint(WriteableBitmap context, Geometry<Point> point, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
     {
-        var center = transform(point.AsWpfPoint()).AsPoint();
+        //var center = transform(point.AsWpfPoint()).AsPoint();
+        var center = point.AsPoint();
 
         if (geometrySymbol != null)
         {
@@ -108,7 +109,7 @@ internal class WriteableBitmapRenderer
         }
     }
 
-    private void AddMultiPoint(WriteableBitmap context, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    private void AddMultiPoint(WriteableBitmap context, Geometry<Point> multiPoint, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 
@@ -119,11 +120,11 @@ internal class WriteableBitmapRenderer
             if (point.IsNotValidOrEmpty())
                 continue;
 
-            AddPoint(context, point, transform, border, fill, imageSymbol, geometrySymbol);
+            AddPoint(context, point, /*transform,*/ border, fill, imageSymbol, geometrySymbol);
         }
     }
 
-    private void AddLineString(WriteableBitmap context, Geometry<Point> lineString, Func<WpfPoint, WpfPoint> transform, int border, int fill)
+    private void AddLineString(WriteableBitmap context, Geometry<Point> lineString, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
     {
         int numberOfPoints = lineString.NumberOfPoints;
 
@@ -131,7 +132,7 @@ internal class WriteableBitmapRenderer
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            var point = transform(lineString.Points[i].AsWpfPoint());
+            var point = /*transform*/(lineString.Points[i].AsWpfPoint());
 
             points[2 * i] = (int)point.X;
 
@@ -145,7 +146,7 @@ internal class WriteableBitmapRenderer
         //}
     }
 
-    private void AddMultiLineString(WriteableBitmap context, Geometry<Point> multiLineString, Func<WpfPoint, WpfPoint> transform, int border, int fill)
+    private void AddMultiLineString(WriteableBitmap context, Geometry<Point> multiLineString, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -153,11 +154,11 @@ internal class WriteableBitmapRenderer
         {
             var lineString = multiLineString.Geometries[i];
 
-            AddLineString(context, lineString, transform, border, fill);
+            AddLineString(context, lineString, /*transform,*/ border, fill);
         }
     }
 
-    private void AddPolygon(WriteableBitmap context, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
+    private void AddPolygon(WriteableBitmap context, Geometry<Point> polygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
     {
         //var exteriorRing = polygon.STExteriorRing();
 
@@ -178,11 +179,11 @@ internal class WriteableBitmapRenderer
         {
             var ring = polygon.Geometries[i];
 
-            AddPolygonRing(context, ring, transform, border, fill);
+            AddPolygonRing(context, ring, /*transform, */border, fill);
         }
     }
 
-    private void AddPolygonRing(WriteableBitmap context, Geometry<Point> polygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
+    private void AddPolygonRing(WriteableBitmap context, Geometry<Point> polygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
     {
         int numberOfPoints = polygon.NumberOfPoints;
 
@@ -190,7 +191,7 @@ internal class WriteableBitmapRenderer
 
         for (int i = 0; i < numberOfPoints; i++)
         {
-            var point = transform(polygon.Points[i].AsWpfPoint());
+            var point = /*transform*/(polygon.Points[i].AsWpfPoint());
 
             points[2 * i] = (int)point.X;
 
@@ -202,7 +203,7 @@ internal class WriteableBitmapRenderer
         WriteableBitmapExtensions.FillPolygon(context, points, fill);
     }
 
-    private void AddMultiPolygon(WriteableBitmap context, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
+    private void AddMultiPolygon(WriteableBitmap context, Geometry<Point> multiPolygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
     {
         int numberOfLineStrings = multiPolygon.NumberOfGeometries;
 
@@ -210,7 +211,7 @@ internal class WriteableBitmapRenderer
         {
             var polygon = multiPolygon.Geometries[i];
 
-            AddPolygon(context, polygon, transform, border, fill);
+            AddPolygon(context, polygon, /*transform, */border, fill);
         }
     }
 
@@ -219,201 +220,201 @@ internal class WriteableBitmapRenderer
 
     #region SqlGeometry to WriteableBitmap
 
-    public WriteableBitmap ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
-    {
-        //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
+    //public WriteableBitmap ParseSqlGeometry(List<SqlGeometry> geometries, /*Func<WpfPoint, WpfPoint> transform,*/ int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
+    //{
+    //    //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
 
-        //int? intFillColor = fill.HasValue ? WriteableBitmapExtensions.ConvertColor(fill.Value) : (int?)null;
-        int intBorderColor = WriteableBitmapExtensions.ConvertColor(border);
+    //    //int? intFillColor = fill.HasValue ? WriteableBitmapExtensions.ConvertColor(fill.Value) : (int?)null;
+    //    int intBorderColor = WriteableBitmapExtensions.ConvertColor(border);
 
-        int intFillColor = WriteableBitmapExtensions.ConvertColor(fill);
+    //    int intFillColor = WriteableBitmapExtensions.ConvertColor(fill);
 
-        WriteableBitmap result = new WriteableBitmap(width, height, 96, 96, PixelFormats.Pbgra32, null);
-        if (geometries != null)
-        {
-            using (result.GetBitmapContext())
-            {
-                foreach (SqlGeometry item in geometries)
-                {
-                    AddGeometry(result, item, transform, intBorderColor, intFillColor, pointSymbol, symbol);
-                }
-            }
-        }
+    //    WriteableBitmap result = new WriteableBitmap(width, height, 96, 96, PixelFormats.Pbgra32, null);
+    //    if (geometries != null)
+    //    {
+    //        using (result.GetBitmapContext())
+    //        {
+    //            foreach (SqlGeometry item in geometries)
+    //            {
+    //                AddGeometry(result, item, transform, intBorderColor, intFillColor, pointSymbol, symbol);
+    //            }
+    //        }
+    //    }
 
-        //result.Freeze();
+    //    //result.Freeze();
 
-        return result;
-    }
+    //    return result;
+    //}
 
-    private int AddGeometry(WriteableBitmap context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
-    {
-        if (geometry.IsNotValidOrEmpty())
-        {
-            return 1;
-        }
+    //private int AddGeometry(WriteableBitmap context, SqlGeometry geometry, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    //{
+    //    if (geometry.IsNotValidOrEmpty())
+    //    {
+    //        return 1;
+    //    }
 
-        var type = geometry.GetOpenGisType();
+    //    var type = geometry.GetOpenGisType();
 
-        switch (type)
-        {
-            case OpenGisGeometryType.Point:
-                AddPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
-                break;
+    //    switch (type)
+    //    {
+    //        case OpenGisGeometryType.Point:
+    //            AddPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
+    //            break;
 
-            case OpenGisGeometryType.LineString:
-                AddLineString(context, geometry, transform, border, fill);
-                break;
+    //        case OpenGisGeometryType.LineString:
+    //            AddLineString(context, geometry, transform, border, fill);
+    //            break;
 
-            case OpenGisGeometryType.Polygon:
-                AddPolygon(context, geometry, transform, border, fill);
-                break;
+    //        case OpenGisGeometryType.Polygon:
+    //            AddPolygon(context, geometry, transform, border, fill);
+    //            break;
 
-            case OpenGisGeometryType.MultiPoint:
-                AddMultiPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
-                break;
+    //        case OpenGisGeometryType.MultiPoint:
+    //            AddMultiPoint(context, geometry, transform, border, fill, imageSymbol, geometrySymbol);
+    //            break;
 
-            case OpenGisGeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, border, fill);
-                break;
+    //        case OpenGisGeometryType.MultiLineString:
+    //            AddMultiLineString(context, geometry, transform, border, fill);
+    //            break;
 
-            case OpenGisGeometryType.MultiPolygon:
-                AddMultiPolygon(context, geometry, transform, border, fill);
-                break;
+    //        case OpenGisGeometryType.MultiPolygon:
+    //            AddMultiPolygon(context, geometry, transform, border, fill);
+    //            break;
 
-            case OpenGisGeometryType.GeometryCollection:
-            case OpenGisGeometryType.CircularString:
-            case OpenGisGeometryType.CompoundCurve:
-            case OpenGisGeometryType.CurvePolygon:
-            default:
-                break;
-        }
+    //        case OpenGisGeometryType.GeometryCollection:
+    //        case OpenGisGeometryType.CircularString:
+    //        case OpenGisGeometryType.CompoundCurve:
+    //        case OpenGisGeometryType.CurvePolygon:
+    //        default:
+    //            break;
+    //    }
 
-        return 0;
-    }
+    //    return 0;
+    //}
 
-    private void AddPoint(WriteableBitmap context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
-    {
-        var center = transform(point.AsWpfPoint()).AsPoint();
+    //private void AddPoint(WriteableBitmap context, SqlGeometry point, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    //{
+    //    var center = transform(point.AsWpfPoint()).AsPoint();
 
-        if (geometrySymbol != null)
-        {
-            GeometryHelper.Transform(context, geometrySymbol, center, border, fill);
-        }
-        else if (imageSymbol != null)
-        {
-            throw new NotImplementedException();
-        }
-        else
-        {
-            context.DrawEllipseCentered((int)center.X, (int)center.Y, pointSize, pointSize, border);
-        }
-    }
+    //    if (geometrySymbol != null)
+    //    {
+    //        GeometryHelper.Transform(context, geometrySymbol, center, border, fill);
+    //    }
+    //    else if (imageSymbol != null)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //    else
+    //    {
+    //        context.DrawEllipseCentered((int)center.X, (int)center.Y, pointSize, pointSize, border);
+    //    }
+    //}
 
-    private void AddMultiPoint(WriteableBitmap context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
-    {
-        int numberOfPoints = multiPoint.STNumGeometries().Value;
+    //private void AddMultiPoint(WriteableBitmap context, SqlGeometry multiPoint, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill, ImageSource imageSymbol, Geometry<Point> geometrySymbol)
+    //{
+    //    int numberOfPoints = multiPoint.STNumGeometries().Value;
 
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            var point = multiPoint.STGeometryN(i + 1);
+    //    for (int i = 0; i < numberOfPoints; i++)
+    //    {
+    //        var point = multiPoint.STGeometryN(i + 1);
 
-            if (point.IsNotValidOrEmpty())
-                continue;
+    //        if (point.IsNotValidOrEmpty())
+    //            continue;
 
-            AddPoint(context, point, transform, border, fill, imageSymbol, geometrySymbol);
-        }
-    }
+    //        AddPoint(context, point, transform, border, fill, imageSymbol, geometrySymbol);
+    //    }
+    //}
 
-    private void AddLineString(WriteableBitmap context, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, int border, int fill)
-    {
-        int numberOfPoints = lineString.STNumPoints().Value;
+    //private void AddLineString(WriteableBitmap context, SqlGeometry lineString, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
+    //{
+    //    int numberOfPoints = lineString.STNumPoints().Value;
 
-        int[] points = new int[2 * numberOfPoints];
+    //    int[] points = new int[2 * numberOfPoints];
 
-        //STPointN(index): index is between 1 and number of points
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            var point = transform(lineString.STPointN(i + 1).AsWpfPoint());
+    //    //STPointN(index): index is between 1 and number of points
+    //    for (int i = 0; i < numberOfPoints; i++)
+    //    {
+    //        var point = transform(lineString.STPointN(i + 1).AsWpfPoint());
 
-            points[2 * i] = (int)point.X;
+    //        points[2 * i] = (int)point.X;
 
-            points[2 * i + 1] = (int)point.Y;
-        }
+    //        points[2 * i + 1] = (int)point.Y;
+    //    }
 
-        //context.DrawPolyline(points, intColor);
-        //if (border.HasValue)
-        //{
-        WriteableBitmapExtensions.DrawPolylineAa(context, points, border);
-        //}
-    }
+    //    //context.DrawPolyline(points, intColor);
+    //    //if (border.HasValue)
+    //    //{
+    //    WriteableBitmapExtensions.DrawPolylineAa(context, points, border);
+    //    //}
+    //}
 
-    private void AddMultiLineString(WriteableBitmap context, SqlGeometry multiLineString, Func<WpfPoint, WpfPoint> transform, int border, int fill)
-    {
-        int numberOfLineStrings = multiLineString.STNumGeometries().Value;
+    //private void AddMultiLineString(WriteableBitmap context, SqlGeometry multiLineString, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
+    //{
+    //    int numberOfLineStrings = multiLineString.STNumGeometries().Value;
 
-        for (int i = 1; i <= numberOfLineStrings; i++)
-        {
-            SqlGeometry lineString = multiLineString.STGeometryN(i);
+    //    for (int i = 1; i <= numberOfLineStrings; i++)
+    //    {
+    //        SqlGeometry lineString = multiLineString.STGeometryN(i);
 
-            AddLineString(context, lineString, transform, border, fill);
-        }
-    }
+    //        AddLineString(context, lineString, transform, border, fill);
+    //    }
+    //}
 
-    private void AddPolygon(WriteableBitmap context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
-    {
-        var exteriorRing = polygon.STExteriorRing();
+    //private void AddPolygon(WriteableBitmap context, SqlGeometry polygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
+    //{
+    //    var exteriorRing = polygon.STExteriorRing();
 
-        AddPolygonRing(context, exteriorRing, transform, border, fill);
+    //    AddPolygonRing(context, exteriorRing, transform, border, fill);
 
-        int numberOfInteriorRings = polygon.STNumInteriorRing().Value;
+    //    int numberOfInteriorRings = polygon.STNumInteriorRing().Value;
 
-        for (int i = 0; i < numberOfInteriorRings; i++)
-        {
-            var ring = polygon.STInteriorRingN(i + 1);
+    //    for (int i = 0; i < numberOfInteriorRings; i++)
+    //    {
+    //        var ring = polygon.STInteriorRingN(i + 1);
 
-            AddPolygonRing(context, ring, transform, border, fill);
-        }
-    }
+    //        AddPolygonRing(context, ring, transform, border, fill);
+    //    }
+    //}
 
-    private void AddPolygonRing(WriteableBitmap context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
-    {
-        int numberOfPoints = polygon.STNumPoints().Value;
+    //private void AddPolygonRing(WriteableBitmap context, SqlGeometry polygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
+    //{
+    //    int numberOfPoints = polygon.STNumPoints().Value;
 
-        int[] points = new int[2 * numberOfPoints];
+    //    int[] points = new int[2 * numberOfPoints];
 
-        //STPointN(index): index is between 1 and number of points
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            var point = transform(polygon.STPointN(i + 1).AsWpfPoint());
+    //    //STPointN(index): index is between 1 and number of points
+    //    for (int i = 0; i < numberOfPoints; i++)
+    //    {
+    //        var point = transform(polygon.STPointN(i + 1).AsWpfPoint());
 
-            points[2 * i] = (int)point.X;
+    //        points[2 * i] = (int)point.X;
 
-            points[2 * i + 1] = (int)point.Y;
-        }
+    //        points[2 * i + 1] = (int)point.Y;
+    //    }
 
-        //if (border.HasValue)
-        //{
-        WriteableBitmapExtensions.DrawPolylineAa(context, points, border);
-        //}
+    //    //if (border.HasValue)
+    //    //{
+    //    WriteableBitmapExtensions.DrawPolylineAa(context, points, border);
+    //    //}
 
-        //if (fill.HasValue)
-        //{
-        WriteableBitmapExtensions.FillPolygon(context, points, fill);
-        //}
+    //    //if (fill.HasValue)
+    //    //{
+    //    WriteableBitmapExtensions.FillPolygon(context, points, fill);
+    //    //}
 
-    }
+    //}
 
-    private void AddMultiPolygon(WriteableBitmap context, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, int border, int fill)
-    {
-        int numberOfLineStrings = multiPolygon.STNumGeometries().Value;
+    //private void AddMultiPolygon(WriteableBitmap context, SqlGeometry multiPolygon, /*Func<WpfPoint, WpfPoint> transform,*/ int border, int fill)
+    //{
+    //    int numberOfLineStrings = multiPolygon.STNumGeometries().Value;
 
-        for (int i = 1; i <= numberOfLineStrings; i++)
-        {
-            SqlGeometry polygon = multiPolygon.STGeometryN(i);
+    //    for (int i = 1; i <= numberOfLineStrings; i++)
+    //    {
+    //        SqlGeometry polygon = multiPolygon.STGeometryN(i);
 
-            AddPolygon(context, polygon, transform, border, fill);
-        }
-    }
+    //        AddPolygon(context, polygon, transform, border, fill);
+    //    }
+    //}
 
     #endregion
 }

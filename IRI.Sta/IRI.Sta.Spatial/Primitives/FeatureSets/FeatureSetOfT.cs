@@ -29,9 +29,14 @@ public class FeatureSet<T> where T : IPoint, new()
 
     protected FeatureSet() { }
 
-    public FeatureSet<T> FilterByGeometry(Predicate<Geometry<T>> predicate)
+    public FeatureSet<T>? FilterByGeometry(Predicate<Geometry<T>> predicate)
     {
-        var result = Create(string.Empty, Features.Where(f => predicate(f.TheGeometry)).ToList());
+        var filteredFeatures = Features.Where(f => predicate(f.TheGeometry)).ToList();
+
+        if (filteredFeatures.IsNullOrEmpty())
+            return null;
+
+        var result = Create(string.Empty, filteredFeatures);
 
         result.Fields = this.Fields;
 

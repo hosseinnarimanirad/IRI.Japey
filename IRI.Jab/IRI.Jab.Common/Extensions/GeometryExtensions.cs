@@ -7,7 +7,6 @@ using System.Windows.Media;
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
-//using System.Windows.Media;
 
 namespace IRI.Extensions;
 
@@ -103,7 +102,7 @@ public static class GeometryExtensions
         double yScale = imageHeight / mapExtent.Height;
         double scale = xScale > yScale ? yScale : xScale;
 
-        Func<WpfPoint, WpfPoint> mapToScreen = new Func<WpfPoint, WpfPoint>(p => new WpfPoint((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        var mapToScreen = new Func<T, T>(p => new T() { X = ((p.X - mapExtent.XMin) * scale), Y = -(p.Y - mapExtent.YMax) * scale });
 
         var pen = visualParameters.GetWpfPen();
 
@@ -116,7 +115,7 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid)], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 

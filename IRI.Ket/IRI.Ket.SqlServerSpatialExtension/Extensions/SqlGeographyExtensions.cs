@@ -1,8 +1,7 @@
 ﻿using Microsoft.SqlServer.Types;
 using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Sta.Common.Primitives;
-using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.GeoJsonFormat;
+using IRI.Sta.SpatialReferenceSystem; 
 
 namespace IRI.Extensions;
 
@@ -13,10 +12,10 @@ public static class SqlGeographyExtensions
         return geography == null || geography.IsNull || geography.STIsEmpty().IsTrue;
     }
 
-    public static bool IsNotValidOrEmpty(this SqlGeography geography)
-    {
-        return geography.IsNullOrEmpty() || geography.STIsValid().IsFalse;
-    }
+    //public static bool IsNotValidOrEmpty(this SqlGeography geography)
+    //{
+    //    return geography.IsNullOrEmpty() || geography.STIsValid().IsFalse;
+    //}
      
     public static OpenGisGeographyType GetOpenGisType(this SqlGeography geography)
     {

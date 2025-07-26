@@ -9,9 +9,7 @@ using IRI.Sta.Spatial.Primitives.Esri;
 using IRI.Sta.ShapefileFormat.EsriType;
 using IRI.Sta.Spatial.GeoJsonFormat;
 using IRI.Ket.SqlServerSpatialExtension.Helpers;
-using IRI.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
-using IRI.Sta.Spatial.GeoJsonFormat;
 
 namespace IRI.Extensions;
 
@@ -22,10 +20,10 @@ public static class SqlGeometryExtensions
         return geometry == null || geometry.IsNull || geometry.STIsEmpty().IsTrue;
     }
 
-    public static bool IsNotValidOrEmpty(this SqlGeometry geometry)
-    {
-        return geometry.IsNullOrEmpty() || geometry.STIsValid().IsFalse;
-    }
+    //public static bool IsNotValidOrEmpty(this SqlGeometry geometry)
+    //{
+    //    return geometry.IsNullOrEmpty() || geometry.STIsValid().IsFalse;
+    //}
 
     public static int GetSrid(this SqlGeometry geometry)
     {
@@ -226,8 +224,8 @@ public static class SqlGeometryExtensions
 
     public static SqlGeometry GetCentroidOrOnSurface(this SqlGeometry geometry)
     {
-        if (geometry.IsNotValidOrEmpty())
-            return SqlGeometry.Null;
+        //if (geometry.IsNotValidOrEmpty())
+        //    return SqlGeometry.Null;
 
         return geometry.STContains(geometry.STCentroid()).Value ? geometry.STCentroid() : geometry.STPointOnSurface();
     }
@@ -653,10 +651,10 @@ public static class SqlGeometryExtensions
 
     public static IEsriShape AsEsriShape(this SqlGeometry geometry, Func<IPoint, IPoint> mapFunction = null)
     {
-        if (geometry.IsNotValidOrEmpty())
-        {
-            return null;
-        }
+        //if (geometry.IsNotValidOrEmpty())
+        //{
+        //    return null;
+        //}
 
         OpenGisGeometryType geometryType = geometry.GetOpenGisType();
 

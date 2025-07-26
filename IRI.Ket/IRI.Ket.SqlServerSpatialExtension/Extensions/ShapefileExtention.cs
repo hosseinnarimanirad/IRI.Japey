@@ -51,7 +51,7 @@ public static class ShapefileExtention
         {
             var temp = geometry.STGeometryN(i + 1);
 
-            if (!temp.IsNotValidOrEmpty() && AreConsistent(esriType, temp.GetOpenGisType()))
+            if (/*!temp.IsNotValidOrEmpty() &&*/ AreConsistent(esriType, temp.GetOpenGisType()))
             {
                 collection.Add(temp);
             }

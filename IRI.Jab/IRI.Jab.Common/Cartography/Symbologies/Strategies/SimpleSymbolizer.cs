@@ -1,15 +1,13 @@
-﻿using System.Windows.Media;
-using IRI.Jab.Common.Cartography.Common;
+﻿using System;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
+using IRI.Jab.Common.Cartography.Common;
 
 namespace IRI.Jab.Common.Cartography.Symbologies;
 
 public class SimpleSymbolizer : Notifier, ISymbolizer
 {
     public SymbologyType Type { get => SymbologyType.Single; }
-
-    public VisualParameters Get(Feature<Point> feature, double scale) => Param;
 
     private VisualParameters _param;
 
@@ -27,4 +25,9 @@ public class SimpleSymbolizer : Notifier, ISymbolizer
     {
         Param = visualParameters;
     }
+
+
+    public VisualParameters Get(Feature<Point> feature, double scale) => Param;
+    public Predicate<Feature<Point>> IsFilterPassed => feature => true;
+
 }

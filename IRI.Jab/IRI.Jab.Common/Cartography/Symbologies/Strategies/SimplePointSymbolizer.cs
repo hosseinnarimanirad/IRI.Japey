@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using IRI.Jab.Common.Cartography.Common;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
@@ -71,6 +72,8 @@ public class SimplePointSymbolizer : Notifier, ISymbolizer
             RaisePropertyChanged();
         }
     }
+
+    public Predicate<Feature<Point>> IsFilterPassed => throw new NotImplementedException();
 
     public SimplePointSymbolizer()
     {

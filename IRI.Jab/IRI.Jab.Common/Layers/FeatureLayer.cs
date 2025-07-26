@@ -79,7 +79,7 @@ public class FeatureLayer : BaseLayer
     }
 
     // todo: unused input parameters
-    public Path AsBitmapUsingGdiPlus(List<Feature<Point>> features, List<string> labels, double mapScale, BoundingBox boundingBox, double width, double height, Func<WpfPoint, WpfPoint> mapToScreen, RectangleGeometry area)
+    public Path? AsBitmapUsingGdiPlus(List<Feature<Point>> features, List<string> labels, double mapScale, /*BoundingBox boundingBox,*/ double width, double height, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ RectangleGeometry area)
     {
         if (features == null)
             return null;
@@ -88,7 +88,7 @@ public class FeatureLayer : BaseLayer
             features,
             width,
             height,
-            mapToScreen,
+            //mapToScreen,
             this.SymbologyRule);
 
 

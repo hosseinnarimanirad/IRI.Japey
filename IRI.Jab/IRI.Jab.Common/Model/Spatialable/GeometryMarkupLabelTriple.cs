@@ -1,51 +1,50 @@
-﻿using Microsoft.SqlServer.Types;
+﻿
+//namespace IRI.Jab.Common.Model;
 
-namespace IRI.Jab.Common.Model;
+//public class GeometryMarkupLabelTriple : Notifier
+//{
+//    private SqlGeometry _geometryWm;
 
-public class GeometryMarkupLabelTriple : Notifier
-{
-    private SqlGeometry _geometryWm;
+//    public SqlGeometry GeometryWm
+//    {
+//        get { return _geometryWm; }
+//        set
+//        {
+//            _geometryWm = value;
+//            RaisePropertyChanged();
+//        }
+//    }
 
-    public SqlGeometry GeometryWm
-    {
-        get { return _geometryWm; }
-        set
-        {
-            _geometryWm = value;
-            RaisePropertyChanged();
-        }
-    }
+//    private string _pathMarkup;
 
-    private string _pathMarkup;
+//    public string PathMarkup
+//    {
+//        get { return _pathMarkup; }
+//        set
+//        {
+//            _pathMarkup = value;
+//            RaisePropertyChanged();
+//        }
+//    }
 
-    public string PathMarkup
-    {
-        get { return _pathMarkup; }
-        set
-        {
-            _pathMarkup = value;
-            RaisePropertyChanged();
-        }
-    }
+//    private string _label;
 
-    private string _label;
+//    public string Label
+//    {
+//        get { return _label; }
+//        set
+//        {
+//            _label = value;
+//            RaisePropertyChanged();
+//        }
+//    }
 
-    public string Label
-    {
-        get { return _label; }
-        set
-        {
-            _label = value;
-            RaisePropertyChanged();
-        }
-    }
+//    public GeometryMarkupLabelTriple(string label, string markup, SqlGeometry geometryWm)
+//    {
+//        this.Label = label;
 
-    public GeometryMarkupLabelTriple(string label, string markup, SqlGeometry geometryWm)
-    {
-        this.Label = label;
+//        this.PathMarkup = markup;
 
-        this.PathMarkup = markup;
-
-        this.GeometryWm = geometryWm;
-    }
-}
+//        this.GeometryWm = geometryWm;
+//    }
+//}

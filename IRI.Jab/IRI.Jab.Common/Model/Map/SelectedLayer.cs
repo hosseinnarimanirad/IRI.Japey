@@ -122,7 +122,7 @@ public class SelectedLayer/*<TGeometryAware> */: Notifier/*, ISelectedLayer *//*
 
     private void TryFlashPoint(IEnumerable<Feature<Point>> point)
     {
-        if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point/*.GetOpenGisType() == Microsoft.SqlServer.Types.OpenGisGeometryType.Point*/)
+        if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point)
         {
             RequestFlashSinglePoint?.Invoke(point.First());
         }

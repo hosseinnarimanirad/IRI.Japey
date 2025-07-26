@@ -66,9 +66,9 @@ namespace IRI.Benchmarking.Benchmarking
             DateTime t3 = DateTime.Now;                             //*
             //*********************************************************
             //
-            ScaleTransform transform = new ScaleTransform(+1, -1);
-            StreamGeometry geo =
-                IRI.Jab.Common.Convertor.StreamGeometryRenderer.ParseSqlGeometry(geometries, p => transform.Transform(p));
+            //ScaleTransform transform = new ScaleTransform(+1, -1);
+            //StreamGeometry geo =
+            //    IRI.Jab.Common.Convertor.StreamGeometryRenderer.ParseSqlGeometry(geometries, p => transform.Transform(p));
             //
             //*********************************************************
             watch.Stop();                                           //*
@@ -88,10 +88,10 @@ namespace IRI.Benchmarking.Benchmarking
             //
             DrawingGroup drawing = new DrawingGroup();
             //
-            using (DrawingContext dc = drawing.Open())
-            {
-                dc.DrawGeometry(new SolidColorBrush(Colors.Orange), new Pen(new SolidColorBrush(Colors.Black), 5), geo);
-            }
+            //using (DrawingContext dc = drawing.Open())
+            //{
+            //    dc.DrawGeometry(new SolidColorBrush(Colors.Orange), new Pen(new SolidColorBrush(Colors.Black), 5), geo);
+            //}
             //
             //*********************************************************
             watch.Stop();                                           //*

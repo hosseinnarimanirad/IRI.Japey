@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Collections.Generic;
-using Microsoft.SqlServer.Types;
 
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
@@ -23,11 +22,9 @@ public class DrawingVisualRenderer
     private readonly Pen _defaultPen = new Pen(Brushes.Black, 1);
     private readonly Brush _defaultBrush = Brushes.Gray;
 
-    #region Geometry To Drawing Visual
-
     public DrawingVisual ParseGeometry<T>(
         List<Geometry<T>> geometries,
-        Func<WpfPoint, WpfPoint> transform,
+        //Func<WpfPoint, WpfPoint> transform,
         Pen? pen,
         Brush? brush,
         SimplePointSymbolizer? pointSymbol)
@@ -61,7 +58,7 @@ public class DrawingVisualRenderer
         {
             foreach (Geometry<T> item in geometries)
             {
-                AddGeometry(context, item, transform, brush, pen, pointSymbol);
+                AddGeometry(context, item, /*transform,*/ brush, pen, pointSymbol);
             }
         }
 
@@ -71,7 +68,7 @@ public class DrawingVisualRenderer
     private void AddGeometry<T>(
         DrawingContext context,
         Geometry<T> geometry,
-        Func<WpfPoint, WpfPoint> transform,
+        //Func<WpfPoint, WpfPoint> transform,
         Brush? brush,
         Pen? pen,
         SimplePointSymbolizer? pointSymbol)
@@ -83,31 +80,31 @@ public class DrawingVisualRenderer
         switch (geometry.Type)
         {
             case GeometryType.Point:
-                AddPoint(context, geometry, transform, brush, pen, pointSymbol);
+                AddPoint(context, geometry, /*transform,*/ brush, pen, pointSymbol);
                 break;
 
             case GeometryType.LineString:
-                AddLineString(context, geometry, transform, pen ?? _defaultPen);
+                AddLineString(context, geometry, /*transform, */pen ?? _defaultPen);
                 break;
 
             case GeometryType.Polygon:
-                AddPolygon(context, geometry, transform, brush, pen);
+                AddPolygon(context, geometry, /*transform, */brush, pen);
                 break;
 
             case GeometryType.MultiPoint:
-                AddMultiPoint(context, geometry, transform, brush, pen, pointSymbol);
+                AddMultiPoint(context, geometry, /*transform, */brush, pen, pointSymbol);
                 break;
 
             case GeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, pen ?? _defaultPen);
+                AddMultiLineString(context, geometry, /*transform, */pen ?? _defaultPen);
                 break;
 
             case GeometryType.MultiPolygon:
-                AddMultiPolygon(context, geometry, transform, brush, pen);
+                AddMultiPolygon(context, geometry, /*transform, */brush, pen);
                 break;
 
             case GeometryType.GeometryCollection:
-                AddGeometryCollection(context, geometry, transform, brush, pen, pointSymbol);
+                AddGeometryCollection(context, geometry, /*transform,*/ brush, pen, pointSymbol);
                 break;
 
             case GeometryType.CircularString:
@@ -120,7 +117,7 @@ public class DrawingVisualRenderer
         return;
     }
 
-    private void AddLineString<T>(DrawingContext context, Geometry<T> lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    private void AddLineString<T>(DrawingContext context, Geometry<T> lineString, /*Func<WpfPoint, WpfPoint> transform,*/ Pen pen)
         where T : IPoint, new()
     {
         int numberOfPoints = lineString.NumberOfPoints;
@@ -131,11 +128,12 @@ public class DrawingVisualRenderer
 
             var end = lineString.Points[i + 1].AsWpfPoint();
 
-            context.DrawLine(pen, transform(start), transform(end));
+            //context.DrawLine(pen, transform(start), transform(end));
+            context.DrawLine(pen, start, end);
         }
     }
 
-    private void AddMultiLineString<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    private void AddMultiLineString<T>(DrawingContext context, Geometry<T> multiLineString, /*Func<WpfPoint, WpfPoint> transform,*/ Pen pen)
         where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
@@ -144,30 +142,30 @@ public class DrawingVisualRenderer
         {
             var lineString = multiLineString.Geometries[i];
 
-            AddLineString(context, lineString, transform, pen);
+            AddLineString(context, lineString, /*transform, */pen);
         }
     }
 
     //todo: performance can be enhanced, using DrawLine method for polygon drawing
-    private void AddPolygon<T>(DrawingContext context, Geometry<T> polygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+    private void AddPolygon<T>(DrawingContext context, Geometry<T> polygon, /*Func<WpfPoint, WpfPoint> transform, */Brush? brush, Pen? pen)
         where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { polygon }, transform);
+        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { polygon }/*, transform*/);
 
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddMultiPolygon<T>(DrawingContext context, Geometry<T> multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+    private void AddMultiPolygon<T>(DrawingContext context, Geometry<T> multiPolygon, /*Func<WpfPoint, WpfPoint> transform,*/ Brush? brush, Pen? pen)
         where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { multiPolygon }, transform);
+        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { multiPolygon }/*, transform*/);
 
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddGeometryCollection<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    private void AddGeometryCollection<T>(DrawingContext context, Geometry<T> multiLineString, /*Func<WpfPoint, WpfPoint> transform,*/ Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
@@ -176,17 +174,17 @@ public class DrawingVisualRenderer
         {
             var lineString = multiLineString.Geometries[i];
 
-            AddGeometry(context, lineString, transform, brush, pen, pointSymbol);
+            AddGeometry(context, lineString, /*transform, */brush, pen, pointSymbol);
         }
     }
 
-    private void AddPoint<T>(DrawingContext context, Geometry<T> point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    private void AddPoint<T>(DrawingContext context, Geometry<T> point, /*Func<WpfPoint, WpfPoint> transform,*/ Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
         var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
 
-        var location = transform(point.AsWpfPoint());
+        var location = /*transform*/(point.AsWpfPoint());
 
         if (pointSymbol?.GeometryPointSymbol != null)
         { 
@@ -206,7 +204,7 @@ public class DrawingVisualRenderer
         }
     }
 
-    private void AddMultiPoint<T>(DrawingContext context, Geometry<T> multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    private void AddMultiPoint<T>(DrawingContext context, Geometry<T> multiPoint, /*Func<WpfPoint, WpfPoint> transform,*/ Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
@@ -215,179 +213,177 @@ public class DrawingVisualRenderer
         {
             var point = multiPoint.Geometries[i];
 
-            AddPoint(context, point, transform, brush, pen, pointSymbol);
+            AddPoint(context, point, /*transform,*/ brush, pen, pointSymbol);
         }
     }
 
-    #endregion
 
 
+    //// ******************************************************** SqlGeometry ********************************************************************
 
-    // ******************************************************** SqlGeometry ********************************************************************
+    //#region SqlGeometry to Drawing Visual
 
-    #region SqlGeometry to Drawing Visual
+    //public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
+    //{
+    //    if (pen != null)
+    //        pen.Freeze();
 
-    public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
-    {
-        if (pen != null)
-            pen.Freeze();
+    //    if (brush != null)
+    //        brush.Freeze();
 
-        if (brush != null)
-            brush.Freeze();
+    //    if (pointSymbol?.GeometryPointSymbol != null)
+    //    {
+    //        var rect = pointSymbol.GeometryPointSymbol.GetRenderBounds(new Pen(new SolidColorBrush(Colors.Black), 0));
 
-        if (pointSymbol?.GeometryPointSymbol != null)
-        {
-            var rect = pointSymbol.GeometryPointSymbol.GetRenderBounds(new Pen(new SolidColorBrush(Colors.Black), 0));
+    //        pointSymbolWidth = rect.Width;
 
-            pointSymbolWidth = rect.Width;
+    //        pointSymbolHeight = rect.Height;
 
-            pointSymbolHeight = rect.Height;
+    //        pointSymbolMinX = rect.BottomLeft.X;
 
-            pointSymbolMinX = rect.BottomLeft.X;
+    //        pointSymbolMinY = rect.BottomLeft.Y;
+    //    }
 
-            pointSymbolMinY = rect.BottomLeft.Y;
-        }
+    //    DrawingVisual result = new DrawingVisual();
 
-        DrawingVisual result = new DrawingVisual();
+    //    if (geometries != null)
+    //    {
+    //        using (DrawingContext context = result.RenderOpen())
+    //        {
+    //            foreach (SqlGeometry item in geometries)
+    //            {
+    //                AddGeometry(context, item, transform, brush, pen, pointSymbol);
+    //            }
+    //        }
+    //    }
 
-        if (geometries != null)
-        {
-            using (DrawingContext context = result.RenderOpen())
-            {
-                foreach (SqlGeometry item in geometries)
-                {
-                    AddGeometry(context, item, transform, brush, pen, pointSymbol);
-                }
-            }
-        }
+    //    return result;
+    //}
 
-        return result;
-    }
+    //private void AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    //{
+    //    if (geometry.IsNotValidOrEmpty())
+    //        return;
 
-    private void AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
-    {
-        if (geometry.IsNotValidOrEmpty())
-            return;
+    //    var type = geometry.GetOpenGisType();
 
-        var type = geometry.GetOpenGisType();
+    //    switch (type)
+    //    {
+    //        case OpenGisGeometryType.Point:
+    //            AddPoint(context, geometry, transform, brush, pen, pointSymbol);
+    //            break;
 
-        switch (type)
-        {
-            case OpenGisGeometryType.Point:
-                AddPoint(context, geometry, transform, brush, pen, pointSymbol);
-                break;
+    //        case OpenGisGeometryType.LineString:
+    //            AddLineString(context, geometry, transform, pen ?? _defaultPen);
+    //            break;
 
-            case OpenGisGeometryType.LineString:
-                AddLineString(context, geometry, transform, pen ?? _defaultPen);
-                break;
+    //        case OpenGisGeometryType.Polygon:
+    //            AddPolygon(context, geometry, transform, brush, pen);
+    //            break;
 
-            case OpenGisGeometryType.Polygon:
-                AddPolygon(context, geometry, transform, brush, pen);
-                break;
+    //        case OpenGisGeometryType.MultiPoint:
+    //            AddMultiPoint(context, geometry, transform, brush, pen, pointSymbol);
+    //            break;
 
-            case OpenGisGeometryType.MultiPoint:
-                AddMultiPoint(context, geometry, transform, brush, pen, pointSymbol);
-                break;
+    //        case OpenGisGeometryType.MultiLineString:
+    //            AddMultiLineString(context, geometry, transform, pen ?? _defaultPen);
+    //            break;
 
-            case OpenGisGeometryType.MultiLineString:
-                AddMultiLineString(context, geometry, transform, pen ?? _defaultPen);
-                break;
+    //        case OpenGisGeometryType.MultiPolygon:
+    //            AddMultiPolygon(context, geometry, transform, brush, pen);
+    //            break;
 
-            case OpenGisGeometryType.MultiPolygon:
-                AddMultiPolygon(context, geometry, transform, brush, pen);
-                break;
+    //        case OpenGisGeometryType.GeometryCollection:
+    //        case OpenGisGeometryType.CircularString:
+    //        case OpenGisGeometryType.CompoundCurve:
+    //        case OpenGisGeometryType.CurvePolygon:
+    //        default:
+    //            break;
+    //    }
 
-            case OpenGisGeometryType.GeometryCollection:
-            case OpenGisGeometryType.CircularString:
-            case OpenGisGeometryType.CompoundCurve:
-            case OpenGisGeometryType.CurvePolygon:
-            default:
-                break;
-        }
+    //    return;
+    //}
 
-        return;
-    }
+    //private void AddLineString(DrawingContext context, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    //{
+    //    int numberOfPoints = lineString.STNumPoints().Value;
 
-    private void AddLineString(DrawingContext context, SqlGeometry lineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
-    {
-        int numberOfPoints = lineString.STNumPoints().Value;
+    //    //STPointN(index): index is between 1 and number of points
+    //    for (int i = 1; i < numberOfPoints; i++)
+    //    {
+    //        var start = lineString.STPointN(i).AsWpfPoint();
 
-        //STPointN(index): index is between 1 and number of points
-        for (int i = 1; i < numberOfPoints; i++)
-        {
-            var start = lineString.STPointN(i).AsWpfPoint();
+    //        var end = lineString.STPointN(i + 1).AsWpfPoint();
 
-            var end = lineString.STPointN(i + 1).AsWpfPoint();
+    //        context.DrawLine(pen, transform(start), transform(end));
+    //    }
+    //}
 
-            context.DrawLine(pen, transform(start), transform(end));
-        }
-    }
+    //private void AddMultiLineString(DrawingContext context, SqlGeometry multiLineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
+    //{
+    //    int numberOfLineStrings = multiLineString.STNumGeometries().Value;
 
-    private void AddMultiLineString(DrawingContext context, SqlGeometry multiLineString, Func<WpfPoint, WpfPoint> transform, Pen pen)
-    {
-        int numberOfLineStrings = multiLineString.STNumGeometries().Value;
+    //    for (int i = 1; i <= numberOfLineStrings; i++)
+    //    {
+    //        SqlGeometry lineString = multiLineString.STGeometryN(i);
 
-        for (int i = 1; i <= numberOfLineStrings; i++)
-        {
-            SqlGeometry lineString = multiLineString.STGeometryN(i);
+    //        AddLineString(context, lineString, transform, pen);
+    //    }
+    //}
 
-            AddLineString(context, lineString, transform, pen);
-        }
-    }
+    ////todo: performance can be enhanced, using DrawLine method for polygon drawing
+    //private void AddPolygon(DrawingContext context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+    //{
+    //    //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
+    //    var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<SqlGeometry>() { polygon }, transform);
 
-    //todo: performance can be enhanced, using DrawLine method for polygon drawing
-    private void AddPolygon(DrawingContext context, SqlGeometry polygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
-    {
-        //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<SqlGeometry>() { polygon }, transform);
+    //    context.DrawGeometry(brush, pen, geometry);
+    //}
 
-        context.DrawGeometry(brush, pen, geometry);
-    }
+    //private void AddMultiPolygon(DrawingContext context, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
+    //{
+    //    //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
+    //    var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<SqlGeometry>() { multiPolygon }, transform);
 
-    private void AddMultiPolygon(DrawingContext context, SqlGeometry multiPolygon, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen)
-    {
-        //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<SqlGeometry>() { multiPolygon }, transform);
+    //    context.DrawGeometry(brush, pen, geometry);
+    //}
 
-        context.DrawGeometry(brush, pen, geometry);
-    }
+    //private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    //{
+    //    var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
+    //    var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
 
-    private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
-    {
-        var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
-        var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
+    //    var location = transform(point.AsWpfPoint());
 
-        var location = transform(point.AsWpfPoint());
+    //    if (pointSymbol?.GeometryPointSymbol != null)
+    //    {
+    //        var geometry = StreamGeometryRenderer.Transform(
+    //                            pointSymbol.GeometryPointSymbol,
+    //                            new WpfPoint(location.X - pointSymbolMinX - symbolWidth / 2.0, location.Y - pointSymbolMinY + symbolHeight / 2.0));
 
-        if (pointSymbol?.GeometryPointSymbol != null)
-        {
-            var geometry = StreamGeometryRenderer.Transform(
-                                pointSymbol.GeometryPointSymbol,
-                                new WpfPoint(location.X - pointSymbolMinX - symbolWidth / 2.0, location.Y - pointSymbolMinY + symbolHeight / 2.0));
+    //        context.DrawGeometry(brush, pen, geometry);
+    //    }
+    //    else if (pointSymbol?.ImagePointSymbol != null)
+    //    {
+    //        context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, symbolWidth, symbolHeight));
+    //    }
+    //    else
+    //    {
+    //        context.DrawEllipse(brush, pen, location, symbolWidth, symbolHeight);
+    //    }
+    //}
 
-            context.DrawGeometry(brush, pen, geometry);
-        }
-        else if (pointSymbol?.ImagePointSymbol != null)
-        {
-            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, symbolWidth, symbolHeight));
-        }
-        else
-        {
-            context.DrawEllipse(brush, pen, location, symbolWidth, symbolHeight);
-        }
-    }
+    //private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
+    //{
+    //    int numberOfPoints = multiPoint.STNumGeometries().Value;
 
-    private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
-    {
-        int numberOfPoints = multiPoint.STNumGeometries().Value;
+    //    for (int i = 1; i <= numberOfPoints; i++)
+    //    {
+    //        SqlGeometry point = multiPoint.STGeometryN(i);
 
-        for (int i = 1; i <= numberOfPoints; i++)
-        {
-            SqlGeometry point = multiPoint.STGeometryN(i);
+    //        AddPoint(context, point, transform, brush, pen, pointSymbol);
+    //    }
+    //}
 
-            AddPoint(context, point, transform, brush, pen, pointSymbol);
-        }
-    }
-
-    #endregion
+    //#endregion
 }

@@ -1767,7 +1767,7 @@ public abstract class MapPresenter : BasePresenter
         if (CurrentExtentIndex > 0)
         {
             // remove all newer extents
-            this.Extents.RemoveRange(0, this.CurrentExtentIndex );
+            this.Extents.RemoveRange(0, this.CurrentExtentIndex);
         }
 
         this.Extents.Insert(0, currentExtent);
@@ -2426,7 +2426,7 @@ public abstract class MapPresenter : BasePresenter
 
     const string _error = "خطا";
 
-    public virtual async Task AddShapefile(object owner)
+    public virtual async Task AddShapefile(object owner, int? maxSizeInKB)
     {
         this.IsBusy = true;
 
@@ -2439,14 +2439,14 @@ public abstract class MapPresenter : BasePresenter
             return;
         }
 
-        //FileInfo info = new FileInfo(fileName);
+        FileInfo info = new FileInfo(fileName);
 
-        //if (info.Length / 10000.0 > 1000) //5k
-        //{
-        //    ShowMessage("حجم فایل انتخابی بیش از حد مجاز است");
+        if (maxSizeInKB.HasValue && info.Length / 10000.0 > maxSizeInKB) //5k
+        {
+            await DialogService.ShowMessageAsync("حجم فایل انتخابی بیش از حد مجاز است", "خطا", owner);
 
-        //    return;
-        //}
+            return;
+        }
 
         await AddShapefile(fileName, owner);
     }
@@ -2847,7 +2847,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 _addShapefileCommand = new RelayCommand(async param =>
                 {
-                    await AddShapefile(param);
+                    await AddShapefile(param, 2000);
                 });
             }
             return _addShapefileCommand;
