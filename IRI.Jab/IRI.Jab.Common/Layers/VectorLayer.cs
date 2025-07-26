@@ -22,10 +22,10 @@ using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
-using IRI.Jab.Common.Cartography;
 using IRI.Jab.Common.Enums;
 using IRI.Sta.Persistence.Abstractions;
 using System.Text.RegularExpressions;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common;
 
@@ -110,14 +110,14 @@ public class VectorLayer : BaseLayer
     }
 
     public VectorLayer(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
-        RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbol pointSymbol = null, LabelParameters labeling = null)
+        RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbolizer pointSymbol = null, LabelParameters labeling = null)
     {
         Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
     }
 
     private void Initialize(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
                                 RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
-                                SimplePointSymbol pointSymbol, LabelParameters labeling)
+                                SimplePointSymbolizer pointSymbol, LabelParameters labeling)
     {
         this.LayerId = Guid.NewGuid();
 

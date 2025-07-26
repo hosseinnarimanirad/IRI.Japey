@@ -1,5 +1,5 @@
-﻿using System.Windows.Media; 
-
+﻿using System.Windows.Media;
+using IRI.Jab.Common.Cartography.Symbologies;
 using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Helpers;
 using IRI.Sta.Common.Primitives;
@@ -74,7 +74,7 @@ public partial class VisualParameters
 
         if (sqlGeometryAware?.TheGeometry?.IsPointOrMultiPoint() == true)
         {
-            result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 3, .9) { PointSymbol = new IRI.Jab.Common.Cartography.SimplePointSymbol(10) };
+            result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 3, .9) { PointSymbol = new SimplePointSymbolizer(10) };
         }
         else
         {

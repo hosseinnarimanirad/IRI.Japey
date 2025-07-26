@@ -10,7 +10,7 @@ using IRI.Sta.Spatial.Primitives;
 
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Abstrations;
-using IRI.Jab.Common.Cartography;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -25,7 +25,7 @@ public class SqlSpatialToDrawingVisual
 
     #region SqlGeometry to Drawing Visual
 
-    public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbol? pointSymbol)
+    public DrawingVisual ParseSqlGeometry(List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
     {
         if (pen != null)
             pen.Freeze();
@@ -62,7 +62,7 @@ public class SqlSpatialToDrawingVisual
         return result;
     }
 
-    private void AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddGeometry(DrawingContext context, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return;
@@ -150,7 +150,7 @@ public class SqlSpatialToDrawingVisual
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddPoint(DrawingContext context, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
     {
         var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
         var symbolHeight = pointSymbol?.SymbolHeight ?? pointSymbolHeight;
@@ -175,7 +175,7 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
-    private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddMultiPoint(DrawingContext context, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
     {
         int numberOfPoints = multiPoint.STNumGeometries().Value;
 
@@ -199,7 +199,7 @@ public class SqlSpatialToDrawingVisual
         Func<WpfPoint, WpfPoint> transform,
         Pen? pen,
         Brush? brush,
-        SimplePointSymbol? pointSymbol)
+        SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         DrawingVisual result = new DrawingVisual();
@@ -243,7 +243,7 @@ public class SqlSpatialToDrawingVisual
         Func<WpfPoint, WpfPoint> transform,
         Brush? brush,
         Pen? pen,
-        SimplePointSymbol? pointSymbol)
+        SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         if (geometry.IsNotValidOrEmpty())
@@ -336,7 +336,7 @@ public class SqlSpatialToDrawingVisual
         context.DrawGeometry(brush, pen, geometry);
     }
 
-    private void AddGeometryCollection<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddGeometryCollection<T>(DrawingContext context, Geometry<T> multiLineString, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
@@ -349,7 +349,7 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
-    private void AddPoint<T>(DrawingContext context, Geometry<T> point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddPoint<T>(DrawingContext context, Geometry<T> point, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         var symbolWidth = pointSymbol?.SymbolWidth ?? pointSymbolWidth;
@@ -375,7 +375,7 @@ public class SqlSpatialToDrawingVisual
         }
     }
 
-    private void AddMultiPoint<T>(DrawingContext context, Geometry<T> multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbol? pointSymbol)
+    private void AddMultiPoint<T>(DrawingContext context, Geometry<T> multiPoint, Func<WpfPoint, WpfPoint> transform, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
         where T : IPoint, new()
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;

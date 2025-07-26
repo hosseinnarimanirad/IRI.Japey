@@ -1,9 +1,14 @@
 ﻿using System.Windows.Media;
+using IRI.Jab.Common.Cartography.Common;
+using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
-namespace IRI.Jab.Common.Cartography;
+namespace IRI.Jab.Common.Cartography.Symbologies;
 
-public class SimplePointSymbol : Notifier
+public class SimplePointSymbolizer : Notifier, ISymbolizer
 {
+    public SymbologyType Type { get => SymbologyType.Single; }
+
     private double _symbolWidth = 16;
 
     public double SymbolWidth
@@ -67,15 +72,20 @@ public class SimplePointSymbol : Notifier
         }
     }
 
-    public SimplePointSymbol()
+    public SimplePointSymbolizer()
     {
 
     }
 
-    public SimplePointSymbol(double pointSize)
+    public SimplePointSymbolizer(double pointSize)
     {
         SymbolHeight = pointSize;
 
         SymbolWidth = pointSize;
+    }
+
+    public VisualParameters Get(Feature<Point> feature, double scale)
+    {
+        throw new System.NotImplementedException();
     }
 }

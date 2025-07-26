@@ -10,7 +10,7 @@ using IRI.Sta.Spatial.Primitives;
 using Drawing = System.Drawing;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
-using IRI.Jab.Common.Cartography;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -19,7 +19,8 @@ public static class SqlSpatialToGdiBitmap
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
     #region SqlGeometry to GdiBitmap
-    public static void WriteToImage(Drawing.Bitmap image, List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+
+    public static void WriteToImage(Drawing.Bitmap image, List<SqlGeometry> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
 
@@ -36,7 +37,7 @@ public static class SqlSpatialToGdiBitmap
         //return image;
     }
 
-    internal static void WriteToImage(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    internal static void WriteToImage(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry != null)
         {
@@ -44,7 +45,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    public static Drawing.Bitmap ParseSqlGeometry(List<SqlGeometry> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    public static Drawing.Bitmap ParseSqlGeometry(List<SqlGeometry> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         var result = new Drawing.Bitmap((int)width, (int)height);
 
@@ -64,7 +65,7 @@ public static class SqlSpatialToGdiBitmap
     }
 
 
-    private static int AddGeometry(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static int AddGeometry(Drawing.Graphics graphics, SqlGeometry geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
@@ -110,7 +111,7 @@ public static class SqlSpatialToGdiBitmap
         return 0;
     }
 
-    private static void AddPoint(Drawing.Graphics graphics, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddPoint(Drawing.Graphics graphics, SqlGeometry point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         var parsedPoint = transform(point.AsWpfPoint()).AsPoint();
 
@@ -137,7 +138,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPoint(Drawing.Graphics graphics, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+    private static void AddMultiPoint(Drawing.Graphics graphics, SqlGeometry multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
     {
         int numberOfPoints = multiPoint.STNumGeometries().Value;
 
@@ -292,7 +293,7 @@ public static class SqlSpatialToGdiBitmap
 
     #region Geometry to GdiBitmap
 
-    public static void WriteToImage(Drawing.Bitmap image, List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    public static void WriteToImage(Drawing.Bitmap image, List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
 
@@ -309,7 +310,7 @@ public static class SqlSpatialToGdiBitmap
         //return image;
     }
 
-    internal static void WriteToImage(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    internal static void WriteToImage(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry != null)
         {
@@ -317,7 +318,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    public static Drawing.Bitmap ParseSqlGeometry(List<Geometry<Point>> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    public static Drawing.Bitmap ParseSqlGeometry(List<Geometry<Point>> geometries, double width, double height, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         var result = new Drawing.Bitmap((int)width, (int)height);
 
@@ -337,7 +338,7 @@ public static class SqlSpatialToGdiBitmap
     }
 
 
-    private static int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
@@ -381,7 +382,7 @@ public static class SqlSpatialToGdiBitmap
         return 0;
     }
 
-    private static void AddPoint(Drawing.Graphics graphics, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddPoint(Drawing.Graphics graphics, Geometry<Point> point, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         var parsedPoint = transform(point.AsWpfPoint()).AsPoint();
 
@@ -408,7 +409,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddMultiPoint(Drawing.Graphics graphics, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+    private static void AddMultiPoint(Drawing.Graphics graphics, Geometry<Point> multiPoint, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 
@@ -520,7 +521,7 @@ public static class SqlSpatialToGdiBitmap
         }
     }
 
-    private static void AddGeometryCollection(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbol pointSymbol)
+    private static void AddGeometryCollection(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 

@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Cartography;
+namespace IRI.Jab.Common.Cartography.Symbologies.Strategies;
 
-public enum SymbologyType
+public class SymbolizerContext
 {
-    Single = 1,
-    Nominal = 2,
-    GraduatedColor = 3,
 }

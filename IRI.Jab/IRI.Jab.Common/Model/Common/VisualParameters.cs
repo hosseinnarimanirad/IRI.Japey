@@ -6,7 +6,8 @@ using System.Runtime.CompilerServices;
 
 using IRI.Extensions;
 using IRI.Jab.Common.Helpers;
-using IRI.Jab.Common.Cartography;
+using IRI.Jab.Common.Cartography.Symbologies.Strategies;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common;
 
@@ -163,9 +164,9 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
 
 
     // ************************************* PointSymbol ********************************************
-    private SimplePointSymbol _pointSymbol = new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
+    private SimplePointSymbolizer _pointSymbol = new SimplePointSymbolizer() { SymbolWidth = 4, SymbolHeight = 4 };
 
-    public SimplePointSymbol PointSymbol
+    public SimplePointSymbolizer PointSymbol
     {
         get { return _pointSymbol; }
         set

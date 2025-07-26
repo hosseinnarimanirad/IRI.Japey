@@ -8,6 +8,7 @@ using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Model.Legend;
 using IRI.Jab.Common.Presenter.Map;
 using IRI.Jab.Common.Helpers;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.IranRepo;
 
@@ -20,7 +21,7 @@ public static class NccLayers
 
         var leveling1 = NccRepository.GetLayer("leveling1", "ترازیابی درجه ۱", new VisualParameters("#88A10024", "#FFA10024", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(10),
+            PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA10024", 1), fontFamily, i => i));
@@ -34,7 +35,7 @@ public static class NccLayers
          
         var leveling2 = NccRepository.GetLayer("leveling2", "ترازیابی درجه ۲", new VisualParameters("#88E51400", "#FFE51400", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(8),
+            PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFE51400", 1), fontFamily, i => i));
@@ -47,7 +48,7 @@ public static class NccLayers
 
         var leveling3 = NccRepository.GetLayer("leveling3", "ترازیابی درجه ۳", new VisualParameters("#88FA6900", "#FFFA6900", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(6),
+            PointSymbol = new SimplePointSymbolizer(6),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFFA6900", 1), fontFamily, i => i));
@@ -61,7 +62,7 @@ public static class NccLayers
 
         var geodesy1 = NccRepository.GetLayer("geodesy1", "ژئودزی ۱", new VisualParameters("#880050EF", "#FF0050EF", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(10),
+            PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i));
@@ -74,7 +75,7 @@ public static class NccLayers
 
         var geodesy2 = NccRepository.GetLayer("geodesy2", "ژئودزی ۲", new VisualParameters("#881CA1E2", "#FF1CA1E2", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(8),
+            PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i));
@@ -87,7 +88,7 @@ public static class NccLayers
 
         var gravity = NccRepository.GetLayer("gravity", "ثقل سنجی", new VisualParameters("#88AA00FF", "#FFAA00FF", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(10),
+            PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFAA00FF", 1), fontFamily, i => i));
@@ -100,7 +101,7 @@ public static class NccLayers
 
         var geodynamic = NccRepository.GetLayer("geodynamic", "ژئودینامیک", new VisualParameters("#88A4C401", "#FFA4C401", 1, .9)
         {
-            PointSymbol = new SimplePointSymbol(10),
+            PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
         new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA4C401", 1), fontFamily, i => i));

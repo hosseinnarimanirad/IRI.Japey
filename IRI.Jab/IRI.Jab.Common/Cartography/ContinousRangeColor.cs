@@ -4,8 +4,7 @@ using System.Drawing;
 using System.Linq; 
 
 namespace IRI.Jab.Common.Cartography;
-
-
+ 
 public class ContinousRangeColor
 {
     public double MinValue { get; }

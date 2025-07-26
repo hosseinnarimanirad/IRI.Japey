@@ -152,4 +152,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Cartography\Symbologies\Decorators\" />
+    <Folder Include="Cartography\Symbologies\Factories\" />
+  </ItemGroup>
+
 </Project>

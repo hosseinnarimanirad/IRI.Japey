@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq; 
 
 namespace IRI.Jab.Common.Cartography;
-
-
+ 
 public class DiscreteRangeColor
 {
     public double MinValue { get; }
