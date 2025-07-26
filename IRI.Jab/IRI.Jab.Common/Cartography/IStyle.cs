@@ -2,7 +2,7 @@
 using IRI.Sta.Spatial.Primitives;
 using System.Windows.Media;
 
-namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Cartography;
 
 public interface IStyle
 {

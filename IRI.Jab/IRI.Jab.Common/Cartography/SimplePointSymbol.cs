@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Cartography;
 
 public class SimplePointSymbol : Notifier
 {

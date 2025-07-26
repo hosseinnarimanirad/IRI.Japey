@@ -22,7 +22,7 @@ using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Common.Abstrations;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 using IRI.Jab.Common.Enums;
 using IRI.Sta.Persistence.Abstractions;
 using System.Text.RegularExpressions;

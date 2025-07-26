@@ -10,7 +10,7 @@ using IRI.Sta.Spatial.Primitives;
 
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Abstrations;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 
 namespace IRI.Jab.Common.Convertor;
 

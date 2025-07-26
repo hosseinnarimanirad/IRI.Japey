@@ -15,7 +15,7 @@ using IRI.Ket.DigitalImageProcessing;
 using IRI.Sta.SpatialReferenceSystem;
 
 using Point = IRI.Sta.Common.Primitives.Point;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 
 namespace IRI.Jab.Common.Raster;
 

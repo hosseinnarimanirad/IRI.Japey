@@ -74,7 +74,7 @@ public partial class VisualParameters
 
         if (sqlGeometryAware?.TheGeometry?.IsPointOrMultiPoint() == true)
         {
-            result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 3, .9) { PointSymbol = new IRI.Jab.Common.Symbology.SimplePointSymbol(10) };
+            result = new VisualParameters(DefaultHighlightStroke, DefaultHighlightFill, 3, .9) { PointSymbol = new IRI.Jab.Common.Cartography.SimplePointSymbol(10) };
         }
         else
         {

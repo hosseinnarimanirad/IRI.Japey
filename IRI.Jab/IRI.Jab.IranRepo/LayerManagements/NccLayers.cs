@@ -2,7 +2,7 @@
 
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Jab.Common.Model.Legend;

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using IRI.Jab.Common.Assets.Commands;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 
 namespace IRI.Jab.Common.Model.Legend;
 

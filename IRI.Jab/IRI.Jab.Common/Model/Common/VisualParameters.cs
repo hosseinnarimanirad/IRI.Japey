@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 using IRI.Extensions;
 using IRI.Jab.Common.Helpers;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 
 namespace IRI.Jab.Common;
 

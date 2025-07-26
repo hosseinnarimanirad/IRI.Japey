@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq; 
 
-namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Cartography;
 
 
 public class ContinousRangeColor

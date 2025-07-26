@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Cartography;
 
 public class ColorInterpolation
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Jab.Common.Symbology;
+namespace IRI.Jab.Common.Cartography;
 
 
 public class DiscreteRangeColor

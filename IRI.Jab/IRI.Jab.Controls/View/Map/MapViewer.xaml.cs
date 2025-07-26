@@ -39,7 +39,7 @@ using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
 using IRI.Jab.Common.Enums;
-using IRI.Jab.Common.Symbology;
+using IRI.Jab.Common.Cartography;
 using IRI.Sta.Persistence.Abstractions;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
@@ -1039,7 +1039,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             throw new NotImplementedException();
         }
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new IRI.Jab.Common.Cartography.SimplePointSymbol() { GeometryPointSymbol = pointSymbol }, parameters);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
@@ -2981,7 +2981,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
+            new IRI.Jab.Common.Cartography.SimplePointSymbol() { GeometryPointSymbol = pointSymbol });
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
 
@@ -3003,7 +3003,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new IRI.Jab.Common.Symbology.SimplePointSymbol() { GeometryPointSymbol = pointSymbol })
+            new IRI.Jab.Common.Cartography.SimplePointSymbol() { GeometryPointSymbol = pointSymbol })
         {
             ZIndex = int.MaxValue
         };
