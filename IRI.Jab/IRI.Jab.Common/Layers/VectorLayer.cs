@@ -179,7 +179,7 @@ public class VectorLayer : BaseLayer
 
         if (this.Type.HasFlag(LayerType.Point))
         {
-            geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, mapToScreen, this.VisualParameters.PointSymbol.GeometryPointSymbol);
+            geo = StreamGeometryRenderer.ParseSqlGeometry(geometries, mapToScreen, this.VisualParameters.PointSymbol.GeometryPointSymbol);
 
             geo.FillRule = FillRule.Nonzero;
 
@@ -187,7 +187,7 @@ public class VectorLayer : BaseLayer
         }
         else
         {
-            geo = SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, p => p);
+            geo = StreamGeometryRenderer.ParseSqlGeometry(geometries, p => p);
 
             geo.Transform = viewTransform;
         }
@@ -219,7 +219,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geometries, mapToScreen, pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(geometries, mapToScreen, pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
 
@@ -255,7 +255,7 @@ public class VectorLayer : BaseLayer
 
         var pen = this.VisualParameters.GetGdiPlusPen();
 
-        var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
             geometries,
             width,
             height,
@@ -269,7 +269,7 @@ public class VectorLayer : BaseLayer
 
         if (labels != null)
         {
-            SqlSpatialToGdiBitmap.DrawLabels(labels, geometries, image, mapToScreen, this.Labels);
+            GdiBitmapRenderer.DrawLabels(labels, geometries, image, mapToScreen, this.Labels);
         }
 
         BitmapImage bitmapImage = Helpers.ImageUtility.AsBitmapImage(image, System.Drawing.Imaging.ImageFormat.Png);
@@ -297,7 +297,7 @@ public class VectorLayer : BaseLayer
         if (geometries == null)
             return null;
 
-        var image = new SqlSpatialToWriteableBitmap().ParseSqlGeometry(
+        var image = new WriteableBitmapRenderer().ParseSqlGeometry(
                             geometries,
                             mapToScreen,
                             (int)width,
@@ -409,7 +409,7 @@ public class VectorLayer : BaseLayer
 
         //var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-        var drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(
+        var drawingVisual = new DrawingVisualRenderer().ParseGeometry(
                                 geometries,
                                 p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
                                 pen,
@@ -465,7 +465,7 @@ public class VectorLayer : BaseLayer
         //var mapShift = (mapBoundingBoxOfTile.Center - new Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
 
 
-        var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
                         geometries,
                         tileWidth,
                         tileHeight,
@@ -523,7 +523,7 @@ public class VectorLayer : BaseLayer
 
         var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
-        var image = new SqlSpatialToWriteableBitmap().ParseSqlGeometry(
+        var image = new WriteableBitmapRenderer().ParseSqlGeometry(
             geometries,
             transform,
             (int)tileWidth,
@@ -697,7 +697,7 @@ public class VectorLayer : BaseLayer
 
                 var pen = this.VisualParameters.GetGdiPlusPen();
                 pen.Width = 2;
-                var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+                var image = GdiBitmapRenderer.ParseSqlGeometry(
                                 geometries,
                                 256,
                                 256,
@@ -757,7 +757,7 @@ public class VectorLayer : BaseLayer
 
         Func<WpfPoint, WpfPoint> mapToScreen = new Func<WpfPoint, WpfPoint>(p => new WpfPoint((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
 
-        var image = SqlSpatialToGdiBitmap.ParseSqlGeometry(
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
             geoLabledPairs.Geometries,
             imageWidth,
             imageHeight,
@@ -771,7 +771,7 @@ public class VectorLayer : BaseLayer
 
         if (geoLabledPairs.Labels != null)
         {
-            SqlSpatialToGdiBitmap.DrawLabels(geoLabledPairs.Labels, geoLabledPairs.Geometries, image, mapToScreen, this.Labels);
+            GdiBitmapRenderer.DrawLabels(geoLabledPairs.Labels, geoLabledPairs.Geometries, image, mapToScreen, this.Labels);
         }
 
         return image;
@@ -803,7 +803,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(geoLabledPairs.Geometries, i => mapToScreen(i), pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -847,7 +847,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry(geoLabledPairs.Geometries, mapToScreen, pen, brush, VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(geoLabledPairs.Geometries, mapToScreen, pen, brush, VisualParameters.PointSymbol);
 
         drawingVisual.Opacity = this.VisualParameters.Opacity;
 

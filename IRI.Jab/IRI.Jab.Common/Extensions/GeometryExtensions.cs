@@ -116,7 +116,7 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new SqlSpatialToDrawingVisual().ParseGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry], mapToScreen, pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 

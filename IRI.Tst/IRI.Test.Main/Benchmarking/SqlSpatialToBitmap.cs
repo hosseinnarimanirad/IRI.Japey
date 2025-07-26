@@ -68,7 +68,7 @@ namespace IRI.Benchmarking.Benchmarking
             //
             ScaleTransform transform = new ScaleTransform(+1, -1);
             StreamGeometry geo =
-                IRI.Jab.Common.Convertor.SqlSpatialToStreamGeometry.ParseSqlGeometry(geometries, p => transform.Transform(p));
+                IRI.Jab.Common.Convertor.StreamGeometryRenderer.ParseSqlGeometry(geometries, p => transform.Transform(p));
             //
             //*********************************************************
             watch.Stop();                                           //*

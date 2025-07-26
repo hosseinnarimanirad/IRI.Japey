@@ -14,7 +14,7 @@ using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common.Convertor;
 
-public static class SqlSpatialToGdiBitmap
+public static class GdiBitmapRenderer
 {
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
@@ -286,12 +286,41 @@ public static class SqlSpatialToGdiBitmap
     }
 
     #endregion
-     
+
 
     // GEOMETRY<T>
 
 
     #region Geometry to GdiBitmap
+    internal static Drawing.Bitmap ParseSqlGeometry(
+      List<Feature<Point>> features,
+      double width,
+      double height,
+      Func<WpfPoint, WpfPoint> mapToScreen,
+      Func<Feature<Point>, VisualParameters> symbologyRule)
+    {
+        var result = new Drawing.Bitmap((int)width, (int)height);
+
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
+
+        int p = 0;
+
+        if (features != null)
+        {
+            foreach (var item in features)
+            {
+                var symbology = symbologyRule(item);
+
+                var pen = symbology.GetGdiPlusPen(symbology.Opacity);
+
+                var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
+
+                GdiBitmapRenderer.WriteToImage(graphics, item.TheGeometry, mapToScreen, pen, brush, symbology.PointSymbol);
+            }
+        }
+
+        return result;
+    }
 
     public static void WriteToImage(Drawing.Bitmap image, List<Geometry<Point>> geometries, Func<WpfPoint, WpfPoint> transform, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {

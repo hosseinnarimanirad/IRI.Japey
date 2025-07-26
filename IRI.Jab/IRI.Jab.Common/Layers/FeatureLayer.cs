@@ -84,7 +84,7 @@ public class FeatureLayer : BaseLayer
         if (features == null)
             return null;
 
-        var image = SqlFeatureToGdiBitmap.ParseSqlGeometry(
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
             features,
             width,
             height,
