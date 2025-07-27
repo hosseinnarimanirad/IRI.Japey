@@ -23,7 +23,7 @@ public class DrawingVisualRenderer
     private readonly Brush _defaultBrush = Brushes.Gray;
 
     public DrawingVisual ParseGeometry<T>(
-        List<Geometry<T>> geometries,
+        List<Feature<T>> features,
         //Func<WpfPoint, WpfPoint> transform,
         Pen? pen,
         Brush? brush,
@@ -32,7 +32,7 @@ public class DrawingVisualRenderer
     {
         DrawingVisual result = new DrawingVisual();
 
-        if (geometries.IsNullOrEmpty())
+        if (features.IsNullOrEmpty())
             return result;
 
         if (pen != null)
@@ -56,9 +56,9 @@ public class DrawingVisualRenderer
 
         using (DrawingContext context = result.RenderOpen())
         {
-            foreach (Geometry<T> item in geometries)
+            foreach (var item in features)
             {
-                AddGeometry(context, item, /*transform,*/ brush, pen, pointSymbol);
+                AddGeometry(context, item.TheGeometry, /*transform,*/ brush, pen, pointSymbol);
             }
         }
 
@@ -151,7 +151,7 @@ public class DrawingVisualRenderer
         where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { polygon }/*, transform*/);
+        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Feature<T>>() { polygon.AsFeature() }/*, transform*/);
 
         context.DrawGeometry(brush, pen, geometry);
     }
@@ -160,7 +160,7 @@ public class DrawingVisualRenderer
         where T : IPoint, new()
     {
         //There is no DrawPolygon method for DrawingContext so we should get the Geometry and use the DrawGeometry method
-        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Geometry<T>>() { multiPolygon }/*, transform*/);
+        var geometry = StreamGeometryRenderer.ParseSqlGeometry(new List<Feature<T>>() { multiPolygon.AsFeature() }/*, transform*/);
 
         context.DrawGeometry(brush, pen, geometry);
     }

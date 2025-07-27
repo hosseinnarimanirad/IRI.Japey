@@ -1,11 +1,11 @@
-﻿using System; 
+﻿using System;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 //using Microsoft.SqlServer.Types;
 
-using IRI.Extensions; 
+using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
@@ -17,30 +17,30 @@ namespace IRI.Jab.Common.Convertor;
 internal class WriteableBitmapRenderer
 {
     int pointSize = 4;
-     
+
     #region Geometry to WriteableBitmap
 
-    public WriteableBitmap ParseSqlGeometry(List<Geometry<Point>> geometries, /*Func<WpfPoint, WpfPoint> transform,*/ int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
+    public WriteableBitmap ParseSqlGeometry(List<Feature<Point>> features, /*Func<WpfPoint, WpfPoint> transform,*/ int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
     {
-        //int? intBorderColor = border.HasValue ? WriteableBitmapExtensions.ConvertColor(border.Value) : (int?)null;
 
-        //int? intFillColor = fill.HasValue ? WriteableBitmapExtensions.ConvertColor(fill.Value) : (int?)null;
+        WriteableBitmap result = new WriteableBitmap(width, height, 96, 96, PixelFormats.Pbgra32, null);
+
+        if (features.IsNullOrEmpty())
+            return result;
+
+
         int intBorderColor = WriteableBitmapExtensions.ConvertColor(border);
 
         int intFillColor = WriteableBitmapExtensions.ConvertColor(fill);
 
-        WriteableBitmap result = new WriteableBitmap(width, height, 96, 96, PixelFormats.Pbgra32, null);
-        if (geometries != null)
+        using (result.GetBitmapContext())
         {
-            using (result.GetBitmapContext())
+            foreach (var item in features)
             {
-                foreach (var item in geometries)
-                {
-                    AddGeometry(result, item, /*transform,*/ intBorderColor, intFillColor, pointSymbol, symbol);
-                }
+                AddGeometry(result, item.TheGeometry, /*transform,*/ intBorderColor, intFillColor, pointSymbol, symbol);
             }
         }
-
+         
         //result.Freeze();
 
         return result;

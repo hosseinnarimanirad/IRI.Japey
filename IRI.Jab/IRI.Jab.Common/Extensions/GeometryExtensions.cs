@@ -115,7 +115,7 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid)], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 

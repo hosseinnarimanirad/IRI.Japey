@@ -179,7 +179,7 @@ public class VectorLayer : BaseLayer
 
         if (this.Type.HasFlag(LayerType.Point))
         {
-            geo = StreamGeometryRenderer.ParseSqlGeometry(features.Select(f => f.TheGeometry).ToList(), /*mapToScreen,*/ this.VisualParameters.PointSymbol.GeometryPointSymbol);
+            geo = StreamGeometryRenderer.ParseSqlGeometry(features, /*mapToScreen,*/ this.VisualParameters.PointSymbol.GeometryPointSymbol);
 
             geo.FillRule = FillRule.Nonzero;
 
@@ -187,7 +187,7 @@ public class VectorLayer : BaseLayer
         }
         else
         {
-            geo = StreamGeometryRenderer.ParseSqlGeometry(features.Select(f => f.TheGeometry).ToList()/*, p => p*/);
+            geo = StreamGeometryRenderer.ParseSqlGeometry(features/*, p => p*/);
 
             geo.Transform = viewTransform;
         }
@@ -219,7 +219,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features.Select(f => f.TheGeometry).ToList(), /*mapToScreen,*/ pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*mapToScreen,*/ pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)width, (int)height, 96, 96, PixelFormats.Pbgra32);
 
@@ -256,7 +256,7 @@ public class VectorLayer : BaseLayer
         //var pen = this.VisualParameters.GetGdiPlusPen();
 
         var image = GdiBitmapRenderer.ParseSqlGeometry(
-            features.Select(f => f.TheGeometry).ToList(),
+            features,
             width,
             height,
             //mapToScreen,
@@ -298,7 +298,7 @@ public class VectorLayer : BaseLayer
             return null;
 
         var image = new WriteableBitmapRenderer().ParseSqlGeometry(
-                            features.Select(f => f.TheGeometry).ToList(),
+                            features,
                             //mapToScreen,
                             (int)width,
                             (int)height,
@@ -398,7 +398,7 @@ public class VectorLayer : BaseLayer
         //var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
 
         var drawingVisual = new DrawingVisualRenderer().ParseGeometry(
-                                features.Select(f => f.TheGeometry).ToList(),
+                                features,
                                 //p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
                                 this.VisualParameters.GetWpfPen(),
                                 this.VisualParameters.Fill,
@@ -438,7 +438,7 @@ public class VectorLayer : BaseLayer
         //var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
 
         var image = GdiBitmapRenderer.ParseSqlGeometry(
-                        features.Select(f => f.TheGeometry).ToList(),
+                        features,
                         tileWidth,
                         tileHeight,
                         //p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
@@ -482,7 +482,7 @@ public class VectorLayer : BaseLayer
         //var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
         var image = new WriteableBitmapRenderer().ParseSqlGeometry(
-            features.Select(f => f.TheGeometry).ToList(),
+            features,
             //transform,
             (int)tileWidth,
             (int)tileHeight,
@@ -648,16 +648,18 @@ public class VectorLayer : BaseLayer
                 if (feature is null || feature.Features.IsNullOrEmpty())
                     continue;
 
-                var geometries = feature.GetGeometries();
+                //var geometries = feature.GetGeometries();
 
                 var transform = MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+
+                var features = feature.Transform(transform).Features;
 
                 //Func<WpfPoint, WpfPoint> mapToScreen = p =>  transform(p.AsPoint()).AsWpfPoint(); 
 
                 var pen = this.VisualParameters.GetGdiPlusPen();
                 pen.Width = 2;
                 var image = GdiBitmapRenderer.ParseSqlGeometry(
-                                geometries,
+                                features,
                                 256,
                                 256,
                                 //mapToScreen,
@@ -717,10 +719,11 @@ public class VectorLayer : BaseLayer
         //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
         var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
 
-        var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+        var features = feature.Transform(mapToScreen).Features;
+        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
 
         var image = GdiBitmapRenderer.ParseSqlGeometry(
-            geometries,
+            features,
             imageWidth,
             imageHeight,
             //mapToScreen,
@@ -734,7 +737,7 @@ public class VectorLayer : BaseLayer
         //if (geoLabledPairs.Labels != null)
         if (this.CanRenderLabels(mapScale))
         {
-            GdiBitmapRenderer.DrawLabels(feature.Features, image, /*mapToScreen, */this.Labels);
+            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
         }
 
         return image;
@@ -764,13 +767,15 @@ public class VectorLayer : BaseLayer
         //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
         var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
 
-        var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+        var features = feature.Transform(mapToScreen).Features;
+
+        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
 
         var pen = this.VisualParameters.GetWpfPen();
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(geometries, /*i => mapToScreen(i), */pen, brush, this.VisualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*i => mapToScreen(i), */pen, brush, this.VisualParameters.PointSymbol);
 
         RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
 
@@ -778,7 +783,7 @@ public class VectorLayer : BaseLayer
 
         if (this.CanRenderLabels(mapScale) && feature.IsLabeled())
         {
-            this.DrawLabels(feature.Features, image/*, mapToScreen*/);
+            this.DrawLabels(features, image/*, mapToScreen*/);
         }
 
         image.Freeze();
@@ -810,7 +815,9 @@ public class VectorLayer : BaseLayer
         //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
         var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
 
-        var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+        var features = feature.Transform(mapToScreen).Features;
+
+        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
 
         var pen = this.VisualParameters.GetWpfPen();
         pen.LineJoin = PenLineJoin.Round;
@@ -820,7 +827,7 @@ public class VectorLayer : BaseLayer
         Brush brush = this.VisualParameters.Fill;
 
         DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(
-                                        geometries,
+                                        features,
                                         //mapToScreen,
                                         pen,
                                         brush,

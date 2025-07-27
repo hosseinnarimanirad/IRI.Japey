@@ -21,16 +21,7 @@ public class FeatureSet<T> where T : IPoint, new()
     public BoundingBox Extent => BoundingBox.GetMergedBoundingBox(Features.Select(f => f.TheGeometry.GetBoundingBox()));
 
     public bool IsLabeled() => string.IsNullOrEmpty(this.Features?.FirstOrDefault().LabelAttribute) == true;
-
-    //public FeatureSet(List<Feature<T>> features)
-    //{
-    //    this.Features = features;
-
-    //    this.Fields = new List<Field>();
-
-    //    Srid = features.SkipWhile(f => f is null || f.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0;
-    //}
-
+     
     protected FeatureSet() { }
 
     public FeatureSet<T> FilterByGeometry(Predicate<Geometry<T>> predicate)
@@ -45,27 +36,6 @@ public class FeatureSet<T> where T : IPoint, new()
         result.Fields = this.Fields;
 
         return result;
-    }
-
-    // todo: add geometry type, srid, ... checkes
-    public void Add(Feature<T> feature)
-    {
-        this.Features.Add(feature);
-    }
-
-    public void Remove(Feature<T> feature)
-    {
-        this.Features.Remove(feature);
-    }
-
-    public void Update(Feature<T> newFeature)
-    {
-        var index = Features.IndexOf(Features.FirstOrDefault(f => f.Id == newFeature.Id));
-
-        if (index < 0)
-            return;
-
-        Features[index] = newFeature;
     }
 
     public static FeatureSet<T> Create(string title, List<Feature<T>> features)
@@ -108,6 +78,42 @@ public class FeatureSet<T> where T : IPoint, new()
         }
     }
 
+    public FeatureSet<T> Transform(Func<T, T> transform, int? newSrid = 0)
+    {
+        var result = Create(this.Title, this.Features.Select(f => f.Transform(transform, newSrid)).ToList());
+
+        result.Fields = this.Fields;
+        
+        result.LayerId = this.LayerId;
+
+        return result;
+    }
+
+
+
+    // todo: add geometry type, srid, ... checkes
+    public void Add(Feature<T> feature)
+    {
+        this.Features.Add(feature);
+    }
+
+    public void Remove(Feature<T> feature)
+    {
+        this.Features.Remove(feature);
+    }
+
+    public void Update(Feature<T> newFeature)
+    {
+        var index = Features.IndexOf(Features.FirstOrDefault(f => f.Id == newFeature.Id));
+
+        if (index < 0)
+            return;
+
+        Features[index] = newFeature;
+    }
+
+
+
     public override bool Equals(object obj)
     {
         var featureSet = obj as FeatureSet<T>;
@@ -122,14 +128,4 @@ public class FeatureSet<T> where T : IPoint, new()
 
     public override string ToString() => $"FeatureSet, FeatureCount:{this.Features?.Count ?? 0}";
 
-    public FeatureSet<T> Transform(Func<T, T> transform, int? newSrid = 0)
-    {
-        var result = Create(this.Title, this.Features.Select(f => f.Transform(transform, newSrid)).ToList());
-
-        result.Fields = this.Fields;
-        
-        result.LayerId = this.LayerId;
-
-        return result;
-    }
 }

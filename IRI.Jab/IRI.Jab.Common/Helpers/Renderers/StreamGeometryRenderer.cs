@@ -19,29 +19,29 @@ public static class StreamGeometryRenderer
     const double pointSize = 4;
 
     //static Pen pen = new Pen(new SolidColorBrush(Colors.Black), 0);
-     
+
     #region Geometry to StreamGeometry
 
-    public static StreamGeometry ParseSqlGeometry<T>(List<Geometry<T>> geometries, /*Func<WpfPoint, WpfPoint> transform,*/ Geometry? pointSymbol = null)
+    public static StreamGeometry ParseSqlGeometry<T>(List<Feature<T>> features, /*Func<WpfPoint, WpfPoint> transform,*/ Geometry? pointSymbol = null)
         where T : IPoint, new()
     {
         StreamGeometry result = new StreamGeometry();
 
         result.FillRule = FillRule.Nonzero;
 
+        if (features.IsNullOrEmpty())
+            return result;
+
         int p = 0;
 
-        if (geometries != null)
-        {
-            using (StreamGeometryContext context = result.Open())
-            {
-                foreach (Geometry<T> item in geometries)
-                {
-                    p += AddGeometry(context, item, /*transform,*/ pointSymbol);
-                }
-            }
-        }
 
+        using (StreamGeometryContext context = result.Open())
+        {
+            foreach (var item in features)
+            {
+                p += AddGeometry(context, item.TheGeometry, /*transform,*/ pointSymbol);
+            }
+        } 
         //result.Freeze();
 
         return result;
@@ -177,7 +177,7 @@ public static class StreamGeometryRenderer
         var location = /*transform*/(point.AsWpfPoint());
 
         var geometry = pointSymbol.GetFlattenedPathGeometry();
-        
+
         //context.DrawGeometry(pointSymbol);
 
         foreach (var figure in geometry.Figures)

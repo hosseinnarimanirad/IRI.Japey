@@ -10,6 +10,7 @@ using Drawing = System.Drawing;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Jab.Common.Cartography.Symbologies;
+using IRI.Sta.Common.Services;
 
 namespace IRI.Jab.Common.Convertor;
 
@@ -18,6 +19,40 @@ public static class GdiBitmapRenderer
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
     #region Geometry to GdiBitmap
+
+    public static void WriteToImage(Drawing.Bitmap image, List<Feature<Point>> features, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    {
+        if (features.IsNullOrEmpty())
+            return;
+
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
+
+        int p = 0;
+
+        foreach (var item in features)
+        {
+            p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
+        } 
+    }
+
+    public static Drawing.Bitmap ParseSqlGeometry(List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    {
+        var result = new Drawing.Bitmap((int)width, (int)height);
+
+        if (features.IsNullOrEmpty())
+            return result;
+
+        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
+
+        int p = 0;
+
+        foreach (var item in features)
+        {
+            p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
+        }
+         
+        return result;
+    }
 
     internal static Drawing.Bitmap ParseSqlGeometry(
       List<Feature<Point>> features,
@@ -49,48 +84,12 @@ public static class GdiBitmapRenderer
         return result;
     }
 
-    public static void WriteToImage(Drawing.Bitmap image, List<Geometry<Point>> geometries, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
-    {
-        Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
-
-        int p = 0;
-
-        if (geometries != null)
-        {
-            foreach (Geometry<Point> item in geometries)
-            {
-                p += AddGeometry(graphics, item, /*transform,*/ pen, brush, pointSymbol);
-            }
-        }
-
-        //return image;
-    }
-
     internal static void WriteToImage(Drawing.Graphics graphics, Geometry<Point> geometry, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry != null)
         {
             AddGeometry(graphics, geometry, /*transform,*/ pen, brush, pointSymbol);
         }
-    }
-
-    public static Drawing.Bitmap ParseSqlGeometry(List<Geometry<Point>> geometries, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
-    {
-        var result = new Drawing.Bitmap((int)width, (int)height);
-
-        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
-
-        int p = 0;
-
-        if (geometries != null)
-        {
-            foreach (Geometry<Point> item in geometries)
-            {
-                p += AddGeometry(graphics, item, /*transform,*/ pen, brush, pointSymbol);
-            }
-        }
-
-        return result;
     }
 
 
