@@ -19,63 +19,39 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
 //where TPoint : IPoint, new()
 {
     protected FeatureSet<Point> _features;
-
-    //protected Func<FeatureSet<Point>, string>? _labelFunc;
-
+     
     private int _uniqueId = 0;
-
-    //protected Func<int, FeatureSet<Point>>? _idFunc;
-
-    //protected Func<TGeometryAware, Feature<Point>> _mapToFeatureFunc;
-
+     
     public override int Srid { get => GetSrid(); protected set => _ = value; }
 
     public MemoryDataSource()
     {
-
     }
 
     public MemoryDataSource(List<Geometry<Point>> geometries)
     {
         var features = geometries.Select(g => new Feature<Point>(g) { Id = GetNewId() }).ToList();
 
-        Func<int, Feature<Point>> idFunc = id => features.Single(f => f.Id == id);
-
-        Initialize(features/*, null, idFunc*/);
+        Initialize(features);
     }
 
-    public MemoryDataSource(List<Feature<Point>> features/*, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc*/)
+    public MemoryDataSource(List<Feature<Point>> features)
     {
-        Initialize(features/*, labelFunc, idFunc*/);
+        Initialize(features);
     }
 
-    private void Initialize(List<Feature<Point>> features/*, Func<Feature<Point>, string>? labelFunc, Func<int, Feature<Point>>? idFunc*/)
+    private void Initialize(List<Feature<Point>> features)
     {
         foreach (var item in features)
             item.Id = GetNewId();
 
         _features = FeatureSet<Point>.Create(string.Empty, features);
-        //_labelFunc = labelFunc;
-        //_idFunc = idFunc;
-        //this.WebMercatorExtent = features.Select(f => f.TheGeometry).GetBoundingBox();
-        //_mapToFeatureFunc = f => f;
+        
         GeometryType = features.First().TheGeometry.Type;
 
         UpdateExtent();
     }
-
-    //public MemoryDataSource(
-    //    List<TGeometryAware> features,
-    //    Func<TGeometryAware, string> labelingFunc,
-    //    Func<int, TGeometryAware> idFunc,
-    //    Func<TGeometryAware, Feature<Point>> mapToFeatureFunc)
-    //{
-    //    _features = features;
-    //    _labelFunc = labelingFunc;
-    //    _idFunc = idFunc;
-    //    _mapToFeatureFunc = mapToFeatureFunc;
-    //    GeometryType = features.First().TheGeometry.Type;
-    //}
+     
 
     // todo: remove this method
     public int GetSrid()
@@ -86,7 +62,6 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
 
     public override string ToString()
     {
-        //return $"MemoryDataSourceOfT {typeof(TGeometryAware).Name}";
         return $"MemoryDataSource";
     }
 
@@ -97,27 +72,9 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
 
     protected void UpdateExtent()
     {
-        WebMercatorExtent = _features.Extent;// _features.Select(f => f.TheGeometry).GetBoundingBox();
+        WebMercatorExtent = _features.Extent; 
     }
-
-    // Get GeometryAwares [GENERIC]
-    //public List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox)
-    //{
-    //    return _features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList();
-    //}
-
-    //public List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry)
-    //{
-    //    if (geometry.IsNotValidOrEmpty())
-    //    {
-    //        return _features.ToList();
-    //    }
-    //    else
-    //    {
-    //        return _features.Where(f => f.TheGeometry.Intersects(geometry)).ToList();
-    //    }
-    //}
-
+     
     // Get as FeatureSet of Point
     public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
@@ -132,45 +89,19 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
             //var result = new FeatureSet<Point>(_features.Features.Where(f => f.TheGeometry.Intersects(geometry)).ToList());
 
             //result.Fields = this._features.Fields;
-        }
-
-        //return new FeatureSet<Point>(GetGeometryAwares(geometry == null ? null : geometry.NeutralizeGenericPoint<Point>())
-        //        .Select(ToFeatureMappingFunc)
-        //        .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
-        //        {
-        //            Id = g.Id,
-        //            LabelAttribute = g.LabelAttribute,
-        //            Attributes = g.Attributes
-        //        })
-        //        .ToList());
+        } 
     }
 
     public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         return _features.FilterByGeometry(f => f.Intersects(boundingBox));
-
-        //return new FeatureSet<Point>(_features.Features.Where(f => f.TheGeometry.Intersects(boundingBox)).ToList());
-
-        //return new FeatureSet<Point>(GetGeometryAwares(boundingBox)
-        //        .Select(ToFeatureMappingFunc)
-        //        .Select(g => new Feature<Point>(g.TheGeometry.NeutralizeGenericPoint<Point>())
-        //        {
-        //            LabelAttribute = g.LabelAttribute,
-        //            Id = g.Id,
-        //            Attributes = g.Attributes
-        //        })
-        //        .ToList());
     }
 
     public static MemoryDataSource CreateFromShapefile(string shpFileName, string label, SrsBase targetSrs = null, bool correctFarsiCharacters = true, Encoding dataEncoding = null, Encoding headerEncoding = null)
     {
-        //var features = ShapefileHelper.ReadAsSqlFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
         var features = Shapefile.ReadAsFeature(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
 
-        var result = new MemoryDataSource(features/*, f => f.Label, i => (Feature)features.Single(tt => tt.Id == i)*/);
-
-
-        //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
+        var result = new MemoryDataSource(features);
 
         return result;
     }
@@ -180,8 +111,6 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
         var features = await Shapefile.ReadAsFeatureAsync(shpFileName, dataEncoding, targetSrs, headerEncoding, correctFarsiCharacters, label);
 
         var result = new MemoryDataSource(features/*, i => i.Label, i => (Feature)features.Single(tt => tt.Id == i)*/);
-
-        //result.ToDataTableMappingFunc = sqlFeatureToDataTableMapping;
 
         return result;
     }
@@ -272,7 +201,4 @@ public class MemoryDataSource/*<TGeometryAware>*/ : VectorDataSource/*<TGeometry
     {
         throw new NotImplementedException();
     }
-
-    //protected override Feature<Point> ToFeatureMappingFunc(TGeometryAware geometryAware) => _mapToFeatureFunc(geometryAware);
-
 }

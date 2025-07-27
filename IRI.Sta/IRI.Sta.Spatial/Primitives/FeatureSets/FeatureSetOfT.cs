@@ -20,6 +20,8 @@ public class FeatureSet<T> where T : IPoint, new()
 
     public BoundingBox Extent => BoundingBox.GetMergedBoundingBox(Features.Select(f => f.TheGeometry.GetBoundingBox()));
 
+    public bool IsLabeled() => string.IsNullOrEmpty(this.Features?.FirstOrDefault().LabelAttribute) == true;
+
     //public FeatureSet(List<Feature<T>> features)
     //{
     //    this.Features = features;
@@ -94,6 +96,18 @@ public class FeatureSet<T> where T : IPoint, new()
         return Features.Select(f => f.TheGeometry).ToList();
     }
 
+    public List<string> GetLabels()
+    {
+        if (this.IsLabeled())
+        {
+            return this.Features.Select(f => f.Label).ToList();
+        }
+        else
+        {
+            return new List<string>();
+        }
+    }
+
     public override bool Equals(object obj)
     {
         var featureSet = obj as FeatureSet<T>;
@@ -107,4 +121,15 @@ public class FeatureSet<T> where T : IPoint, new()
     public override int GetHashCode() => this.LayerId.GetHashCode();
 
     public override string ToString() => $"FeatureSet, FeatureCount:{this.Features?.Count ?? 0}";
+
+    public FeatureSet<T> Transform(Func<T, T> transform, int? newSrid = 0)
+    {
+        var result = Create(this.Title, this.Features.Select(f => f.Transform(transform, newSrid)).ToList());
+
+        result.Fields = this.Fields;
+        
+        result.LayerId = this.LayerId;
+
+        return result;
+    }
 }

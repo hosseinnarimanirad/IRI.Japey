@@ -16,7 +16,7 @@ namespace IRI.Jab.Common.Convertor;
 public static class GdiBitmapRenderer
 {
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
-     
+
     #region Geometry to GdiBitmap
 
     internal static Drawing.Bitmap ParseSqlGeometry(
@@ -293,15 +293,15 @@ public static class GdiBitmapRenderer
     }
 
     //Labeling
-    public static void DrawLabels(List<string> labels, List<Geometry<Point>> geometries, Drawing.Bitmap image, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ LabelParameters labelParameters)
+    public static void DrawLabels(List<Feature<Point>> features, Drawing.Bitmap image, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ LabelParameters labelParameters)
     {
-        if (labels.Count != geometries.Count)
+        if (features.IsNullOrEmpty())
             return;
 
-        var mapCoordinates = geometries.ConvertAll(
+        var mapCoordinates = features.ConvertAll(
                   (g) =>
                   {
-                      return labelParameters.PositionFunc(g).AsWpfPoint();
+                      return labelParameters.PositionFunc(g.TheGeometry).AsWpfPoint();
                   }).ToList();
 
         var font = new Drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, Drawing.FontStyle.Bold);
@@ -325,11 +325,11 @@ public static class GdiBitmapRenderer
             format.FormatFlags = Drawing.StringFormatFlags.DirectionRightToLeft;
         }
 
-        for (int i = 0; i < labels.Count; i++)
+        for (int i = 0; i < features.Count; i++)
         {
-            var location = /*mapToScreen*/(mapCoordinates[i]);
+            var location = /*mapToScreen*/mapCoordinates[i];
 
-            var stringSize = graphic.MeasureString(labels[i], font);
+            var stringSize = graphic.MeasureString(features[i].Label, font);
 
             Drawing.PointF locationF = new Drawing.PointF((float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0));
 
@@ -339,7 +339,7 @@ public static class GdiBitmapRenderer
 
             graphic.FillRectangle(_labelBackground, rectangleF);
 
-            graphic.DrawString(labels[i] ?? string.Empty, font, brush, locationF, format);
+            graphic.DrawString(features[i].Label, font, brush, locationF, format);
 
             //graphic.DrawString(labels[i], font, brush, (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
         }

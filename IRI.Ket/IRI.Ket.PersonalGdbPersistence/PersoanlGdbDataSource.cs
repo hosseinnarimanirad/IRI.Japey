@@ -425,10 +425,5 @@ public class PersoanlGdbDataSource : VectorDataSource//<Feature<Point>>// Relati
     public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         throw new NotImplementedException();
-    }
-
-    //public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
-    //{
-    //    throw new NotImplementedException();
-    //}
+    } 
 }

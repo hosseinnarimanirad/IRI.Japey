@@ -44,5 +44,5 @@ public abstract class IndexBase : IGeometryAware<Point>
         set => throw new NotImplementedException();
     }
 
-    public abstract Feature AsFeature();
+    public abstract Feature<Point> AsFeature();
 }

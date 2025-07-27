@@ -1550,7 +1550,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         layerTile.IsProcessing = true;
 
-        var geoLabelPair = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, tile.WebMercatorExtent);
+        //var geoLabelPair = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, tile.WebMercatorExtent);
+        var feature = await layer.DataSource.GetAsFeatureSetAsync(mapScale, tile.WebMercatorExtent);
+
+        if (feature is null || feature.Features.IsNullOrEmpty())
+            return;
 
         if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
         {
@@ -1578,7 +1582,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         Func<sb.Point, sb.Point> transform = p => _vt.Transform(new Point(p.X - shiftX, p.Y - shiftY)).AsPoint();
 
-        var geometries = geoLabelPair.Geometries.Select(g => g.Transform(transform, g.Srid)).ToList();
+        var features = feature.Transform(transform, null).Features;
 
         //private static Func<WpfPoint, WpfPoint> MapToTileScreenWpf(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Func<WpfPoint, WpfPoint> viewTransform)
         //{
@@ -1589,13 +1593,13 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         switch (layer.ToRasterTechnique)
         {
             case RasterizationApproach.DrawingVisual:
-                pathImage = layer.AsTileUsingDrawingVisual(geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
+                pathImage = layer.AsTileUsingDrawingVisual(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
                 break;
             case RasterizationApproach.GdiPlus:
-                pathImage = layer.AsTileUsingGdiPlusAsync(geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
+                pathImage = layer.AsTileUsingGdiPlusAsync(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
                 break;
             case RasterizationApproach.WriteableBitmap:
-                pathImage = layer.AsTileUsingWriteableBitmap(geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
+                pathImage = layer.AsTileUsingWriteableBitmap(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
                 break;
             //case RasterizationApproach.OpenTk:
             //    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
@@ -1660,7 +1664,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             var mapScale = this.MapScale;
 
             //consider if layer was Labeled
-            var geoLabledPairs = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, extent);
+            //var geoLabledPairs = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, extent);
+            var feature = await layer.DataSource.GetAsFeatureSetAsync(mapScale, extent);
+
+            if (feature is null || feature.Features.IsNullOrEmpty())
+                return;
 
             if (this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
@@ -1671,12 +1679,13 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
 
-            var geometires = geoLabledPairs.Geometries.Select(g => g.Transform(transform, g.Srid)).ToList();
+            //var geometires = geoLabledPairs.Geometries.Select(g => g.Transform(transform, g.Srid)).ToList();
+            var features = feature.Transform(transform).Features;
 
             switch (layer.ToRasterTechnique)
             {
                 case RasterizationApproach.GdiPlus:
-                    path = layer.AsBitmapUsingGdiPlus(geometires, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen*/ area);
+                    path = layer.AsBitmapUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen*/ area);
                     break;
 
                 //case RasterizationApproach.OpenTk:
@@ -1684,15 +1693,15 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 //    break;
 
                 case RasterizationApproach.DrawingVisual:
-                    path = layer.AsDrawingVisual(geometires, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
+                    path = layer.AsDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
                     break;
 
                 case RasterizationApproach.WriteableBitmap:
-                    path = layer.AsBitmapUsingWriteableBitmap(geometires, geoLabledPairs.Labels, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
+                    path = layer.AsBitmapUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
                     break;
 
                 case RasterizationApproach.StreamGeometry:
-                    path = layer.AsShape(geometires, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
+                    path = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
                     break;
 
                 case RasterizationApproach.None:

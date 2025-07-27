@@ -1,4 +1,5 @@
-﻿using IRI.Sta.Spatial.Primitives;
+﻿using IRI.Sta.Common.Primitives;
+using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Sta.Spatial.MapIndexes;
 
@@ -13,9 +14,9 @@ public class Index100k : IndexBase
     public string BlockNumber { get; set; }
 
 
-    public override Feature AsFeature()
+    public override Feature<Point> AsFeature()
     {
-        return new Feature()
+        return new Feature<Point>()
         {
             TheGeometry = TheGeometry,
             LabelAttribute = nameof(SheetNumber),

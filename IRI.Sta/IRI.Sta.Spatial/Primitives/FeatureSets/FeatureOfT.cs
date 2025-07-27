@@ -75,6 +75,14 @@ public class Feature<T> : IGeometryAware<T>, ICustomTypeDescriptor where T : IPo
         return $"Geometry: {TheGeometry?.Type}, Attributes: {Attributes?.Count}";
     }
 
+    public Feature<T> Transform(Func<T, T> transform, int? newSrid = 0)
+    {
+        return new Feature<T>(TheGeometry.Transform(transform, newSrid ?? TheGeometry.Srid), this.Attributes)
+        {
+            Id = this.Id,
+            LabelAttribute = this.LabelAttribute
+        };
+    }
 
     #region ICustomTypeDescriptor
 
