@@ -6,6 +6,8 @@ namespace IRI.Sta.Spatial.Primitives;
 
 public class FeatureSet<T> where T : IPoint, new()
 {
+    public static FeatureSet<T> Empty = new FeatureSet<T>() { Features = new List<Feature<T>>(), Fields = new List<Field>(), LayerId = Guid.Empty };
+
     public Guid LayerId { get; set; }
 
     public string Title { get; set; }
@@ -29,12 +31,12 @@ public class FeatureSet<T> where T : IPoint, new()
 
     protected FeatureSet() { }
 
-    public FeatureSet<T>? FilterByGeometry(Predicate<Geometry<T>> predicate)
+    public FeatureSet<T> FilterByGeometry(Predicate<Geometry<T>> predicate)
     {
         var filteredFeatures = Features.Where(f => predicate(f.TheGeometry)).ToList();
 
         if (filteredFeatures.IsNullOrEmpty())
-            return null;
+            return FeatureSet<T>.Empty;
 
         var result = Create(string.Empty, filteredFeatures);
 
@@ -78,8 +80,31 @@ public class FeatureSet<T> where T : IPoint, new()
             Features = features,
             Fields = new List<Field>(),
             Srid = features.SkipWhile(f => f is null || f.TheGeometry.IsNotValidOrEmpty())?.FirstOrDefault()?.TheGeometry.Srid ?? 0,
-            
+
         };
     }
 
+    public bool HasNoGeometry() => Features.IsNullOrEmpty();
+
+    public List<Geometry<T>> GetGeometries()
+    {
+        if (HasNoGeometry())
+            return new List<Geometry<T>>();
+
+        return Features.Select(f => f.TheGeometry).ToList();
+    }
+
+    public override bool Equals(object obj)
+    {
+        var featureSet = obj as FeatureSet<T>;
+
+        if (featureSet is null)
+            return false;
+
+        return featureSet.LayerId == this.LayerId && featureSet.Srid == this.Srid;
+    }
+
+    public override int GetHashCode() => this.LayerId.GetHashCode();
+
+    public override string ToString() => $"FeatureSet, FeatureCount:{this.Features?.Count ?? 0}";
 }

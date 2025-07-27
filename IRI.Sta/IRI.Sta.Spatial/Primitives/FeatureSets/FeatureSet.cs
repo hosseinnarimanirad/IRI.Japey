@@ -1,8 +1,8 @@
-﻿using IRI.Sta.Common.Primitives;
+﻿//using IRI.Sta.Common.Primitives;
 
-namespace IRI.Sta.Spatial.Primitives;
+//namespace IRI.Sta.Spatial.Primitives;
 
-public class FeatureSet : FeatureSet<Point>
-{
+//public class FeatureSet : FeatureSet<Point>
+//{
 
-}
+//}

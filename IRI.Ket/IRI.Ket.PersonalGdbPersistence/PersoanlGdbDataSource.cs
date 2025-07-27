@@ -253,7 +253,7 @@ public class PersoanlGdbDataSource : VectorDataSource//<Feature<Point>>// Relati
 
     private FeatureSet<Point> Select(Geometry<Point>? geometryBoundingBox, string? searchText)
     {
-        FeatureSet result = new FeatureSet() { Srid = Srid, Fields = new List<Field>(), Features = new List<Feature<Point>>() };
+        FeatureSet<Point> result = FeatureSet<Point>.Create(string.Empty, new List<Feature<Point>>());
 
         using (var conn = new OleDbConnection(PersonalGdbInfrastructure.GetConnectionString(_mdbFileName)))
         {

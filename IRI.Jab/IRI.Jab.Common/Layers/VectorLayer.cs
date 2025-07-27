@@ -393,10 +393,10 @@ public class VectorLayer : BaseLayer
     {
         if (geometries == null)
             return null;
-         
+
         //var shiftX = region.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - region.WebMercatorExtent.Width / 2.0;
         //var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
-         
+
         var drawingVisual = new DrawingVisualRenderer().ParseGeometry(
                                 geometries,
                                 //p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
@@ -440,7 +440,7 @@ public class VectorLayer : BaseLayer
         var image = GdiBitmapRenderer.ParseSqlGeometry(
                         geometries,
                         tileWidth,
-                        tileHeight, 
+                        tileHeight,
                         //p => viewTransform(new WpfPoint(p.X - shiftX, p.Y - shiftY)),
                         this.VisualParameters.GetGdiPlusPen(),
                         this.VisualParameters.Fill.AsGdiBrush(),
@@ -480,7 +480,7 @@ public class VectorLayer : BaseLayer
         {
             return null;
         }
-         
+
         //var transform = MapToTileScreenWpf(totalExtent, region.WebMercatorExtent, viewTransform);
 
         var image = new WriteableBitmapRenderer().ParseSqlGeometry(
@@ -643,6 +643,9 @@ public class VectorLayer : BaseLayer
             foreach (var tile in googleTiles)
             {
                 var geometries = await GetGeometriesForDisplayAsync(scale, tile.WebMercatorExtent);
+
+                if (geometries.IsNullOrEmpty())
+                    continue;
 
                 var transform = MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
@@ -863,9 +866,9 @@ public class VectorLayer : BaseLayer
         return new GeometryLabelPairs(geometries, labels);
     }
 
-    public async Task<List<Geometry<Point>>?> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
+    public async Task<List<Geometry<Point>>> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
     {
-        List<Geometry<Point>> geometries = new List<Geometry<Point>>();
+        //List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
         //if (this.DataSource is MemoryScaleDependentDataSource)
         //{
@@ -873,11 +876,16 @@ public class VectorLayer : BaseLayer
         //}
         //else
         //{
-        geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
+        var features = await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox);
+
+        if (features == FeatureSet<Point>.Empty)
+            return new List<Geometry<Point>>();
+
+        var geometries = features.GetGeometries();
         //}
 
-        if (geometries.Count == 0)
-            return null;
+        //if (geometries.Count == 0)
+        //    return null;
 
         return geometries;
     }

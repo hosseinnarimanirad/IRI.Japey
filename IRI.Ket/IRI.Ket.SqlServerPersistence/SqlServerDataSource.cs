@@ -552,7 +552,7 @@ public class SqlServerDataSource : VectorDataSource/*<Feature<Point>>*/, IEditab
     {
         SqlConnection connection = new SqlConnection(_connectionString);
 
-        FeatureSet result = new FeatureSet() { Srid = this.GetSrid(), Fields = new List<Field>(), Features = new List<Feature<Point>>() };
+        FeatureSet<Point> result = FeatureSet<Point>.Create(string.Empty, new List<Feature<Point>>());
 
         try
         {
@@ -702,7 +702,7 @@ public class SqlServerDataSource : VectorDataSource/*<Feature<Point>>*/, IEditab
     //}
 
     #region CRUD
-    
+
 
     //public void Add(IGeometryAware<Point> newValue)
     //{
