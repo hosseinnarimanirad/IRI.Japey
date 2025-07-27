@@ -42,7 +42,8 @@ using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Cartography;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
-using ControlzEx.Standard;
+using ControlzEx.Standard; 
+using IRI.Jab.Common.Convertor;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -1578,18 +1579,12 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         //var shiftY = tile.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + tile.WebMercatorExtent.Height / 2.0;
 
         var shiftX = tile.WebMercatorExtent.TopLeft.X - totalExtent.TopLeft.X /*- tile.WebMercatorExtent.Width / 2.0*/;
-        var shiftY = tile.WebMercatorExtent.BottomRight.Y - totalExtent.BottomRight.Y /*+ tile.WebMercatorExtent.Height / 2.0*/;
+        var shiftY = tile.WebMercatorExtent.TopLeft.Y - totalExtent.TopLeft.Y /*+ tile.WebMercatorExtent.Height / 2.0*/;
 
         Func<sb.Point, sb.Point> transform = p => _vt.Transform(new Point(p.X - shiftX, p.Y - shiftY)).AsPoint();
 
         var features = feature.Transform(transform, null).Features;
-
-        //private static Func<WpfPoint, WpfPoint> MapToTileScreenWpf(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Func<WpfPoint, WpfPoint> viewTransform)
-        //{
-        //    return p => { return viewTransform(new WpfPoint(p.X - mapBoundingBoxOfTile.TopLeft.X + totalExtent.TopLeft.X,
-        //                                                    p.Y - mapBoundingBoxOfTile.BottomRight.Y + totalExtent.BottomRight.Y)); };
-        //}
-
+          
         switch (layer.ToRasterTechnique)
         {
             case RasterizationApproach.DrawingVisual:
