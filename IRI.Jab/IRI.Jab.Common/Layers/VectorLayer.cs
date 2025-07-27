@@ -566,19 +566,19 @@ public class VectorLayer : BaseLayer
     //    return p => { return viewTransform(new WpfPoint(p.X - mapBoundingBoxOfTile.TopLeft.X + totalExtent.TopLeft.X, p.Y - mapBoundingBoxOfTile.BottomRight.Y + totalExtent.BottomRight.Y)); };
     //}
 
-    private static Func<WpfPoint, WpfPoint> OldMapToTileScreenWpf(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
-    {
-        var mapShift = (mapBoundingBoxOfTile.Center - new Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
+    //private static Func<WpfPoint, WpfPoint> OldMapToTileScreenWpf(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
+    //{
+    //    var mapShift = (mapBoundingBoxOfTile.Center - new Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
 
-        return p => { return viewTransform.Transform(new WpfPoint(p.X - mapShift.X, p.Y - mapShift.Y)); };
-    }
+    //    return p => { return viewTransform.Transform(new WpfPoint(p.X - mapShift.X, p.Y - mapShift.Y)); };
+    //}
 
-    private static Func<Point, Point> MapToTileScreen(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
-    {
-        var mapShift = (mapBoundingBoxOfTile.Center - new Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
+    //private static Func<Point, Point> MapToTileScreen(BoundingBox totalExtent, BoundingBox mapBoundingBoxOfTile, Transform viewTransform)
+    //{
+    //    var mapShift = (mapBoundingBoxOfTile.Center - new Point(totalExtent.TopLeft.X + mapBoundingBoxOfTile.Width / 2.0, totalExtent.TopLeft.Y - mapBoundingBoxOfTile.Height / 2.0)).AsWpfPoint();
 
-        return p => { return viewTransform.Transform(new WpfPoint(p.X - mapShift.X, p.Y - mapShift.Y)).AsPoint(); };
-    }
+    //    return p => { return viewTransform.Transform(new WpfPoint(p.X - mapShift.X, p.Y - mapShift.Y)).AsPoint(); };
+    //}
 
     public void BindWithFrameworkElement(FrameworkElement element)
     {
@@ -615,7 +615,57 @@ public class VectorLayer : BaseLayer
 
 
     #region Raster Save And Export Methods
+     
+    public async Task<System.Drawing.Bitmap> ParseToBitmapImage(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    {
+        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
 
+        if (feature is null || feature.HasNoGeometry())
+            return new System.Drawing.Bitmap((int)imageWidth, (int)imageHeight);
+
+        var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
+
+        var pen = this.VisualParameters.GetGdiPlusPen();
+
+        //double xScale = imageWidth / mapExtent.Width;
+        //double yScale = imageHeight / mapExtent.Height;
+        //double scale = xScale > yScale ? yScale : xScale;
+        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
+
+        var features = feature.Transform(mapToScreen).Features;
+        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
+            features,
+            imageWidth,
+            imageHeight,
+            //mapToScreen,
+            pen,
+            this.VisualParameters.Fill.AsGdiBrush(),
+            this.VisualParameters.PointSymbol);
+
+        if (image == null)
+            return null;
+
+        //if (geoLabledPairs.Labels != null)
+        if (this.CanRenderLabels(mapScale))
+        {
+            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
+        }
+
+        return image;
+    }
+
+    public static Func<Point, Point> CreateMapToScreenMapFunc(BoundingBox mapExtent, double screenWidth, double screenHeight)
+    {
+        double xScale = screenWidth / mapExtent.Width;
+        double yScale = screenHeight / mapExtent.Height;
+        double scale = xScale > yScale ? yScale : xScale;
+
+        return new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+    }
 
     // Todo: this method has been totally changed but not tested!
     public async Task SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
@@ -690,57 +740,6 @@ public class VectorLayer : BaseLayer
                 SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
                 break;
         }
-    }
-
-    public static Func<Point, Point> CreateMapToScreenMapFunc(BoundingBox mapExtent, double screenWidth, double screenHeight)
-    {
-        double xScale = screenWidth / mapExtent.Width;
-        double yScale = screenHeight / mapExtent.Height;
-        double scale = xScale > yScale ? yScale : xScale;
-
-        return new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-    }
-
-    public async Task<System.Drawing.Bitmap> ParseToBitmapImage(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    {
-        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
-        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
-
-        if (feature is null || feature.HasNoGeometry())
-            return new System.Drawing.Bitmap((int)imageWidth, (int)imageHeight);
-
-        var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
-
-        var pen = this.VisualParameters.GetGdiPlusPen();
-
-        //double xScale = imageWidth / mapExtent.Width;
-        //double yScale = imageHeight / mapExtent.Height;
-        //double scale = xScale > yScale ? yScale : xScale;
-        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
-
-        var features = feature.Transform(mapToScreen).Features;
-        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
-
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
-            features,
-            imageWidth,
-            imageHeight,
-            //mapToScreen,
-            pen,
-            this.VisualParameters.Fill.AsGdiBrush(),
-            this.VisualParameters.PointSymbol);
-
-        if (image == null)
-            return null;
-
-        //if (geoLabledPairs.Labels != null)
-        if (this.CanRenderLabels(mapScale))
-        {
-            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
-        }
-
-        return image;
     }
 
     private async void SaveAsPngGdiPlus(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
@@ -840,6 +839,7 @@ public class VectorLayer : BaseLayer
 
     #endregion
 
+
     #region Vector Export Methods
 
     public void ExportAsShapefile(string shpFileName)
@@ -858,6 +858,7 @@ public class VectorLayer : BaseLayer
     }
 
     #endregion
+
 
     #region GetGeometry & GetFeature Methods
 

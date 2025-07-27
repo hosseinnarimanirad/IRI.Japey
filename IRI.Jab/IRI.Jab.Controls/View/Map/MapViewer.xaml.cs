@@ -1404,22 +1404,19 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         Debug.WriteLine($"AddTiledLayer; {DateTime.Now.ToLongTimeString()}; AddTiledLayer called LayerName: {layer.LayerName}");
 
-        if (layer == null)
+        if (layer is null)
             return;
 
         var mapScale = MapScale;
-
-        // 1401.12.20
-        //if (layer.VisualParameters.Visibility != Visibility.Visible)
+         
         if (!layer.CanRenderLayer(mapScale))
             return;
 
         Action action = async () =>
         {
-            if (this.CurrentTileInfos == null)
+            if (this.CurrentTileInfos is null)
                 return;
-
-            //Try #3
+             
             layer.TileManager.Update(CurrentTileInfos.Select(i => i.Parse()).ToList());
 
             foreach (var region in CurrentTileInfos)
@@ -1435,99 +1432,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             this.jobs.Add(new Job(
                 new LayerTag(mapScale) { LayerType = layer.Type, BoundingBox = extent },
                 Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)));
-        });
-
-        //Action action = async () =>
-        //{
-        //    await AddNonTiledLayer(vectorLayer);
-        //};
-
-        //var extent = this.CurrentExtent;
-
-        //Task.Run(() =>
-        //   this.jobs.Add(new Job(
-        //      new LayerTag(mapScale) { LayerType = LayerType.VectorLayer, BoundingBox = extent },
-        //      Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-        //  );
+        }); 
     }
-
-    //private async void OldAddTiledLayer(VectorLayer layer, TileInfo tile)
-    //{
-    //    var mapScale = MapScale;
-
-    //    var extent = this.CurrentExtent;
-
-    //    var layerTile = layer.TileManager.Find(tile);
-
-    //    if (layerTile == null || layerTile.IsProcessing)
-    //    {
-    //        Debug.Print($"Layer escaped; Already is in process! {layer.LayerName} - {tile.ToShortString()}");
-    //        return;
-    //    }
-
-    //    if (tile.ZoomLevel != this.CurrentZoomLevel)
-    //    {
-    //        Debug.Print($"Layer escaped! ZoomLevel Conflict 1 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-    //        layerTile.IsProcessing = false;
-    //        return;
-    //    }
-
-    //    layerTile.IsProcessing = true;
-
-    //    var geoLabelPair = await layer.GetGeometryLabelPairAsync(mapScale, tile.WebMercatorExtent);
-
-    //    if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
-    //    {
-    //        Debug.Print($"Layer escaped! ZoomLevel Conflict 2 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-    //        layerTile.IsProcessing = false;
-    //        return;
-    //    }
-
-    //    double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
-
-    //    double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
-
-    //    var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
-
-    //    Path pathImage;
-
-    //    switch (layer.ToRasterTechnique)
-    //    {
-    //        case RasterizationApproach.DrawingVisual:
-    //            pathImage = layer.AsTileUsingDrawingVisual(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-    //            break;
-    //        case RasterizationApproach.GdiPlus:
-    //            pathImage = layer.AsTileUsingGdiPlusAsync(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-    //            break;
-    //        case RasterizationApproach.WriteableBitmap:
-    //            pathImage = layer.AsTileUsingWriteableBitmap(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-    //            break;
-    //        case RasterizationApproach.OpenTk:
-    //            pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, MapToScreen, extent);
-    //            break;
-    //        case RasterizationApproach.StreamGeometry:
-    //        //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
-    //        case RasterizationApproach.None:
-    //        default:
-    //            throw new NotImplementedException();
-    //    }
-
-    //    if (tile.ZoomLevel != this.CurrentZoomLevel || MapScale != mapScale)
-    //    {
-    //        Debug.Print($"Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
-    //        return;
-    //    }
-
-    //    if (pathImage != null)
-    //    {
-    //        this.mapView.Children.Add(pathImage);
-
-    //        Canvas.SetZIndex(pathImage, layer.ZIndex);
-    //    }
-
-    //    layerTile.IsProcessing = false;
-    //}
-
+     
 
     //This method should be improved. it is not working well
     private async Task AddVectorLayerAsTiledAsync(VectorLayer layer, TileInfo tile)
@@ -1540,7 +1447,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         var layerTile = layer.TileManager.Find(tile);
 
-        if (layerTile == null || layerTile.IsProcessing)
+        if (layerTile is null || layerTile.IsProcessing)
             return;
 
         if (tile.ZoomLevel != this.CurrentZoomLevel)
@@ -1562,9 +1469,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             layerTile.IsProcessing = false;
             return;
         }
-
-        Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync called LayerName: {layer.LayerName} tile:{tile.ToShortString()}");
-
+         
         double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
         double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
@@ -1618,48 +1523,23 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             Canvas.SetZIndex(pathImage, layer.ZIndex);
         }
-
-        Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync finished LayerName: {layer.LayerName} tile:{tile.ToShortString()}");
-
+         
         layerTile.IsProcessing = false;
     }
 
 
+    // todo: consider if layer was Labeled
     private async Task AddNonTiledLayer(VectorLayer layer)
-    {
-        Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer called LayerName: {layer.LayerName ?? layer.LayerId.ToString()}");
-
+    { 
         try
         {
             if (this.CurrentTileInfos == null)
                 return;
-
-            #region Old Tries
-
-            // Try #1
-            //var image = layer.AsDrawing(this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
-
-            ////consider if layer was Labeled
-            //var geometries = await layer.GetGeometries(this.MapScale, this.CurrentExtent);
-
-            ////Try #2
-            //var image = layer.AsBitmapUsingOpenTK(geometries, this.MapScale, this.GetExactCurrentExtent(), this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen);
-
-            //image.RenderTransform = viewTransformForPoints;
-
-            //this.mapView.Children.Add(image);
-
-            //Canvas.SetZIndex(image, this.mapView.Children.Count);
-
-            #endregion
-
-            //Try #3
+             
             var extent = this.CurrentExtent;
 
             var mapScale = this.MapScale;
-
-            //consider if layer was Labeled
-            //var geoLabledPairs = await layer.GetGeometryLabelPairForDisplayAsync(mapScale, extent);
+             
             var feature = await layer.DataSource.GetAsFeatureSetAsync(mapScale, extent);
 
             if (feature is null || feature.Features.IsNullOrEmpty())
@@ -1673,8 +1553,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             Path? path;
 
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
-
-            //var geometires = geoLabledPairs.Geometries.Select(g => g.Transform(transform, g.Srid)).ToList();
+             
             var features = feature.Transform(transform).Features;
 
             switch (layer.ToRasterTechnique)
@@ -2067,62 +1946,13 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         element.BeginAnimation(OpacityProperty, animation);
     }
-
-    //StreamGeometry Approach
-    //private async Task AddLayerAsShape(VectorLayer layer)
-    //{
-    //    var mapScale = MapScale;
-
-    //    var extent = CurrentExtent;
-
-    //    var geoLabelPairs = await layer.GetGeometryLabelPair(mapScale, extent);
-
-    //    if (mapScale != MapScale || CurrentExtent != extent)
-    //        return;
-
-    //    var result =
-    //        layer.AsShape(geoLabelPairs.Geometries, mapScale,
-    //            extent,
-    //            this.mapView.ActualWidth, this.mapView.ActualHeight,
-    //            this.viewTransform,
-    //            new TransformGroup() { Children = new TransformCollection() { this.panTransformForPoints } },
-    //            p => this.MapToScreen(p.AsWpfPoint()).AsPoint());
-
-    //    //if (result.Item1 != null)
-    //    //{
-    //    //    this.mapView.Children.Add(result.Item1);
-
-    //    //    Canvas.SetZIndex(result.Item1, int.MaxValue);
-    //    //}
-
-    //    this.mapView.Children.Add(result);
-
-    //    Canvas.SetZIndex(result, int.MaxValue);
-    //}
-
+     
     private async void AddLayer(RasterLayer layer, sb.BoundingBox boundingBox)
-    {
-        //94.06.28
-        //////////if (!this.Layers.Contains(layer))
-        //////////{
-        //////////    this.Layers.Add(layer);
-        //////////}
-
-
+    { 
         var paths = await layer.ParseToPath(boundingBox, this.viewTransform, this.MapScale, GetUnitDistance());
-        //var paths = await layer.ParseToPath(boundingBox, this.mapTransform, this.viewTransform, this.MapScale, GetUnitDistance());
-
-        //Debug.WriteLine(string.Format("Number of Images for layer: {0} was {1}", layer.LayerName, paths.Count));
-
+         
         foreach (var item in paths)
-        {
-            var tag = item.Tag as LayerTag;
-
-            //if (tag != null)
-            //{
-            //    (item.Tag as LayerTag).LayerType = layer.Type;
-            //}
-
+        { 
             if (layer.Type == LayerType.BaseMap)
             {
                 this.mapView.Children.Insert(0, item);
@@ -2139,8 +1969,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         try
         {
             if (tile.ZoomLevel != CurrentZoomLevel ||
-                //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType ||*/ !layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
-                (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
+                (_presenter != null && !layer.HasTheSameMapProvider(_presenter.SelectedMapProvider)))
                 return;
 
             //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
@@ -2151,7 +1980,6 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
 
             if (tile.ZoomLevel != CurrentZoomLevel ||
-                 //(this._presenter != null && (/*layer.TileType != this._presenter?.BaseMapType || */!layer.ProviderFullName.EqualsIgnoreCase(this._presenter?.ProviderTypeFullName))))
                  (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
                 return;
 
@@ -2164,12 +1992,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RectangleGeometry geometry = new RectangleGeometry(new Rect(topLeft, bottomRigth), 0, 0);
 
             geometry.Transform = viewTransform;
-
-            //94.12.16
-            //int width = (int)(mercatorExtent.Width * this.MapScale / this.GetUnitDistance());
-
-            //int height = (int)(mercatorExtent.Height * this.MapScale / this.GetUnitDistance());
-
+             
             ImageBrush fill;
 
             try
@@ -2186,18 +2009,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             {
                 Fill = fill,
                 Data = geometry,
-                Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile },
-                //ToolTip = $"R:{tile.RowNumber}, C:{tile.ColumnNumber}, Z:{tile.ZoomLevel}"
-                //Tag = new LayerTag(GoogleMapsUtility.GetGoogleMapScale(tile.ZoomLevel)) { Layer = layer, LayerType = layer.Type, Tile = tile }
+                Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile }, 
             };
-
-            //System.Diagnostics.Debug.WriteLine($"path after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
-
+             
             layer.Element = path;
-
-            //94.09.04
-            //var action = new Action(() =>
-            //{
+             
             if (layer.Type == LayerType.BaseMap)
             {
                 this.mapView.Children.Insert(0, path);
@@ -2211,7 +2027,6 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             MessageBox.Show("AddLayerAsync " + ex.Message);
         }
-
     }
 
     #endregion
@@ -2227,10 +2042,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         if (tiles == null)
             return;
-
-        //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
-
-
+         
         // 1401.12.05
         IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
 
@@ -2238,24 +2050,17 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             RefreshTiles(infos, tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
         }
-
-        //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps end {DateTime.Now.ToLongTimeString()}");
     }
 
 
     public void RefreshTiles(IEnumerable<ILayer> infos, TileInfo tile, Func<ILayer, bool> criteria)
     {
-        // 1401.12.05
-        //IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
         double mapScale = MapScale;
 
         Action action = async () =>
-        {
-            //System.Diagnostics.Debug.WriteLine($"RefreshBaseMaps start {DateTime.Now.ToLongTimeString()}");
-
+        { 
             foreach (ILayer item in infos)
             {
-                //if (item.VisualParameters.Visibility != Visibility.Visible)
                 if (!item.CanRenderLayer(mapScale))
                     continue;
 
@@ -2270,8 +2075,6 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 {
                     if (item is VectorLayer vectorLayer)
                     {
-                        //VectorLayer vectorLayer = (VectorLayer)item;
-
                         vectorLayer.TileManager.TryAdd(tile);
 
                         await AddVectorLayerAsTiledAsync(vectorLayer, tile);
@@ -2303,14 +2106,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
             //}
         });
-
-        ////94.09.17
-        //Task.Run(() =>
-        // this.jobs.Add(
-        //     new Job(
-        //         new LayerTag(WebMercatorUtility.GetGoogleMapScale(tile.ZoomLevel)) { LayerType = LayerType.None, Tile = tile },
-        //         Dispatcher.BeginInvoke(action, DispatcherPriority.Background)))
-        //                        );
+         
     }
 
     private void RefreshLayerVisibility(ILayer layer)
@@ -4773,8 +4569,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
     #region Search
-
-
+     
     public List<FeatureSet<sb.Point>>? GetFeatures(string searchText)
     {
         List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
@@ -4806,8 +4601,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
     #region Identify
-
-
+     
     public List<FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
     {
         List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
@@ -4853,8 +4647,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         return result;
     }
-
-
+     
     public List<VectorLayer> GetAllVectorLayers(IEnumerable<ILayer>? layers)
     {
         var result = new List<VectorLayer>();
@@ -4870,8 +4663,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         return result;
     }
-
-
+     
     #endregion
 
 
