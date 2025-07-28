@@ -173,44 +173,44 @@ public class VectorLayer : BaseLayer
 
     #region Default Rendering
     //StreamGeometry Approach
-    public Path AsShape(List<Feature<Point>> features, TransformGroup viewTransform, TranslateTransform viewTransformForPoints/*, Func<WpfPoint, WpfPoint> mapToScreen*/)
-    {
-        StreamGeometry geo;
+    //public Path AsShape(List<Feature<Point>> features, TransformGroup viewTransform, TranslateTransform viewTransformForPoints/*, Func<WpfPoint, WpfPoint> mapToScreen*/)
+    //{
+    //    StreamGeometry geo;
 
-        if (this.Type.HasFlag(LayerType.Point))
-        {
-            geo = StreamGeometryRenderer.ParseSqlGeometry(features, /*mapToScreen,*/ this.VisualParameters.PointSymbol.GeometryPointSymbol);
+    //    if (this.Type.HasFlag(LayerType.Point))
+    //    {
+    //        geo = StreamGeometryRenderer.ParseSqlGeometry(features, /*mapToScreen,*/ this.VisualParameters.PointSymbol.GeometryPointSymbol);
 
-            geo.FillRule = FillRule.Nonzero;
+    //        geo.FillRule = FillRule.Nonzero;
 
-            geo.Transform = viewTransformForPoints;
-        }
-        else
-        {
-            geo = StreamGeometryRenderer.ParseSqlGeometry(features/*, p => p*/);
+    //        geo.Transform = viewTransformForPoints;
+    //    }
+    //    else
+    //    {
+    //        geo = StreamGeometryRenderer.ParseSqlGeometry(features/*, p => p*/);
 
-            geo.Transform = viewTransform;
-        }
+    //        geo.Transform = viewTransform;
+    //    }
 
-        //GeometryDrawing drawing = new GeometryDrawing();
+    //    //GeometryDrawing drawing = new GeometryDrawing();
 
-        Path path = new Path()
-        {
-            StrokeDashArray = VisualParameters.DashType,
-            Data = geo,
-            Tag = new LayerTag(-1) { Layer = this, IsTiled = false },
-            Stroke = VisualParameters.Stroke,
-            Fill = VisualParameters.Fill,
-            StrokeThickness = VisualParameters.StrokeThickness
-        };
+    //    Path path = new Path()
+    //    {
+    //        StrokeDashArray = VisualParameters.DashType,
+    //        Data = geo,
+    //        Tag = new LayerTag(-1) { Layer = this, IsTiled = false },
+    //        Stroke = VisualParameters.Stroke,
+    //        Fill = VisualParameters.Fill,
+    //        StrokeThickness = VisualParameters.StrokeThickness
+    //    };
 
-        this.Element = path;
+    //    this.Element = path;
 
-        return path;
-    }
+    //    return path;
+    //}
 
     //DrawingVisual Approach
-    public Path? AsDrawingVisual(List<Feature<Point>> features, double mapScale, double width, double height, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ RectangleGeometry area)
+    public ImageBrush? AsDrawingVisual(List<Feature<Point>> features, double mapScale, double width, double height/*,*/ /*Func<WpfPoint, WpfPoint> mapToScreen,*/ /*RectangleGeometry area*/)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -232,21 +232,23 @@ public class VectorLayer : BaseLayer
 
         image.Freeze();
 
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false },
-        };
+        return new ImageBrush(image);
 
-        this.Element = path;
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new LayerTag(mapScale) { Layer = this, IsTiled = false },
+        //};
 
-        path.Fill = new ImageBrush(image);
+        //this.Element = path;
 
-        return path;
+        //path.Fill = new ImageBrush(image);
+
+        //return path;
     }
 
     //Gdi+
-    public Path AsBitmapUsingGdiPlus(List<Feature<Point>> features, double mapScale, double width, double height, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ RectangleGeometry area)
+    public ImageBrush? AsBitmapUsingGdiPlus(List<Feature<Point>> features, double mapScale, double width, double height/*,*/ /*Func<WpfPoint, WpfPoint> mapToScreen,*/ /*RectangleGeometry area*/)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -255,7 +257,7 @@ public class VectorLayer : BaseLayer
 
         //var pen = this.VisualParameters.GetGdiPlusPen();
 
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
+        var bitmap = GdiBitmapRenderer.ParseSqlGeometry(
             features,
             width,
             height,
@@ -264,35 +266,37 @@ public class VectorLayer : BaseLayer
             this.VisualParameters.Fill.AsGdiBrush(),
             this.VisualParameters.PointSymbol);
 
-        if (image == null)
+        if (bitmap == null)
             return null;
 
         if (CanRenderLabels(mapScale))
         {
-            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen,*/ this.Labels);
+            GdiBitmapRenderer.DrawLabels(features, bitmap, /*mapToScreen,*/ this.Labels);
         }
 
-        BitmapImage bitmapImage = Helpers.ImageUtility.AsBitmapImage(image, System.Drawing.Imaging.ImageFormat.Png);
+        BitmapImage image = ImageUtility.AsBitmapImage(bitmap, System.Drawing.Imaging.ImageFormat.Png);
 
-        image.Dispose();
+        bitmap.Dispose();
 
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new Model.LayerTag(mapScale) { Layer = this, Tile = null, IsDrawn = true, IsNew = true }
-        };
+        image.Freeze();
 
-        this.Element = path;
+        return new ImageBrush(image);
 
-        path.Fill = new ImageBrush(bitmapImage);
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new Model.LayerTag(mapScale) { Layer = this, Tile = null, IsDrawn = true, IsNew = true }
+        //};
 
-        bitmapImage.Freeze();
+        //this.Element = path;
 
-        return path;
+        //path.Fill = new ImageBrush(bitmapImage);
+
+        //return path;
     }
 
     //Consider Labels
-    public Path? AsBitmapUsingWriteableBitmap(List<Feature<Point>> features, double mapScale, double width, double height, /*Func<WpfPoint, WpfPoint> mapToScreen, */RectangleGeometry area)
+    public ImageBrush? AsBitmapUsingWriteableBitmap(List<Feature<Point>> features, double mapScale, double width, double height/*,*/ /*Func<WpfPoint, WpfPoint> mapToScreen, *//*RectangleGeometry area*/)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -313,20 +317,22 @@ public class VectorLayer : BaseLayer
             //this.DrawLabel(labels, geometries, image, transform);
         }
 
-        //BitmapImage bitmapImage = IRI.Jab.Common.Imaging.ImageUtility.AsBitmapImage(image);
+        image.Freeze();
 
-        //Try #3
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new LayerTag(mapScale) { Layer = this, Tile = null, IsDrawn = true, IsNew = true }
-        };
+        return new ImageBrush(image);
 
-        this.Element = path;
+        ////Try #3
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new LayerTag(mapScale) { Layer = this, Tile = null, IsDrawn = true, IsNew = true }
+        //};
+        
+        //this.Element = path;
 
-        path.Fill = new ImageBrush(image);
+        //path.Fill = new ImageBrush(image);
 
-        return path;
+        //return path;
     }
 
     //OpenTK
@@ -389,7 +395,7 @@ public class VectorLayer : BaseLayer
     #region Tile Rendering
 
     //DrawingVisual Approach
-    public Path? AsTileUsingDrawingVisual(List<Feature<Point>> features, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area/*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
+    public ImageBrush? AsTileUsingDrawingVisual(List<Feature<Point>> features, double mapScale, /*TileInfo region,*/ double tileWidth, double tileHeight/*, RectangleGeometry area*//*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
     {
         if (features is null)
             return null;
@@ -404,6 +410,9 @@ public class VectorLayer : BaseLayer
                                 this.VisualParameters.Fill,
                                 this.VisualParameters.PointSymbol);
 
+        if (drawingVisual is null)
+            return null;
+
         RenderTargetBitmap image = new RenderTargetBitmap((int)tileWidth, (int)tileHeight, 96, 96, PixelFormats.Pbgra32);
 
         image.Render(drawingVisual);
@@ -415,21 +424,23 @@ public class VectorLayer : BaseLayer
 
         image.Freeze();
 
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = new TileInfo(region.RowNumber, region.ColumnNumber, region.ZoomLevel), IsDrawn = true, IsNew = true }
-        };
+        return new ImageBrush(image);
 
-        this.Element = path;
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = new TileInfo(region.RowNumber, region.ColumnNumber, region.ZoomLevel), IsDrawn = true, IsNew = true }
+        //};
 
-        path.Fill = new ImageBrush(image);
+        //this.Element = path;
 
-        return path;
+        //path.Fill = new ImageBrush(image);
+
+        //return path;
     }
 
     //Gdi+ Approach
-    public Path? AsTileUsingGdiPlusAsync(List<Feature<Point>> features, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area/*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
+    public ImageBrush? AsTileUsingGdiPlusAsync(List<Feature<Point>> features, double mapScale, /*TileInfo region, */double tileWidth, double tileHeight/*, RectangleGeometry area*//*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -437,7 +448,7 @@ public class VectorLayer : BaseLayer
         //var shiftX = region.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - region.WebMercatorExtent.Width / 2.0;
         //var shiftY = region.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + region.WebMercatorExtent.Height / 2.0;
 
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
+        var bitmap = GdiBitmapRenderer.ParseSqlGeometry(
                         features,
                         tileWidth,
                         tileHeight,
@@ -446,7 +457,7 @@ public class VectorLayer : BaseLayer
                         this.VisualParameters.Fill.AsGdiBrush(),
                         this.VisualParameters.PointSymbol);
 
-        if (image is null)
+        if (bitmap is null)
             return null;
 
         if (this.CanRenderLabels(mapScale))
@@ -455,26 +466,28 @@ public class VectorLayer : BaseLayer
             //SqlSpatialToGdiBitmap.DrawLabels(labels, geometries, image, transform, Labels);
         }
 
-        var bitmapImage = ImageUtility.AsBitmapImage(image, System.Drawing.Imaging.ImageFormat.Png);
+        var image = ImageUtility.AsBitmapImage(bitmap, System.Drawing.Imaging.ImageFormat.Png);
 
-        image.Dispose();
+        bitmap.Dispose();
 
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = new TileInfo(region.RowNumber, region.ColumnNumber, region.ZoomLevel), IsDrawn = true, IsNew = true }
-        };
+        return new ImageBrush(image);
 
-        this.Element = path;
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = new TileInfo(region.RowNumber, region.ColumnNumber, region.ZoomLevel), IsDrawn = true, IsNew = true }
+        //};
 
-        path.Fill = new ImageBrush(bitmapImage);
+        //this.Element = path;
 
-        return path;
+        //path.Fill = new ImageBrush(bitmapImage);
+
+        //return path;
     }
 
     //Writeable Bitmap Approach
     //Consider Labeling
-    public Path? AsTileUsingWriteableBitmap(List<Feature<Point>> features, double mapScale, TileInfo region, double tileWidth, double tileHeight, RectangleGeometry area/*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
+    public ImageBrush? AsTileUsingWriteableBitmap(List<Feature<Point>> features, double mapScale, /*TileInfo region, */double tileWidth, double tileHeight/*, RectangleGeometry area*//*,*/ /*Func<WpfPoint, WpfPoint> viewTransform, *//*BoundingBox totalExtent*/)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -492,17 +505,21 @@ public class VectorLayer : BaseLayer
         if (image is null)
             return null;
 
-        Path path = new Path()
-        {
-            Data = area,
-            Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = region, IsDrawn = true, IsNew = true }
-        };
+        image.Freeze();
 
-        this.Element = path;
+        return new ImageBrush(image);
 
-        path.Fill = new ImageBrush(image);
+        //Path path = new Path()
+        //{
+        //    //Data = area,
+        //    Tag = new LayerTag(mapScale) { Layer = this, IsTiled = true, Tile = region, IsDrawn = true, IsNew = true }
+        //};
 
-        return path;
+        //this.Element = path;
+
+        //path.Fill = new ImageBrush(image);
+
+        //return path;
     }
 
     ////OpenTK Approach

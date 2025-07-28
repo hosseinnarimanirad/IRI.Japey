@@ -42,8 +42,8 @@ using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Cartography;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
-using ControlzEx.Standard; 
-using IRI.Jab.Common.Convertor;
+using ControlzEx.Standard;
+using IRI.Jab.Common.Convertor; 
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -1408,7 +1408,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             return;
 
         var mapScale = MapScale;
-         
+
         if (!layer.CanRenderLayer(mapScale))
             return;
 
@@ -1416,12 +1416,12 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         {
             if (this.CurrentTileInfos is null)
                 return;
-             
+
             layer.TileManager.Update(CurrentTileInfos.Select(i => i.Parse()).ToList());
 
             foreach (var region in CurrentTileInfos)
             {
-                await AddVectorLayerAsTiledAsync(layer, region);
+                await AddTiledLayerAsync(layer, region);
             }
         };
 
@@ -1432,12 +1432,12 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             this.jobs.Add(new Job(
                 new LayerTag(mapScale) { LayerType = layer.Type, BoundingBox = extent },
                 Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)));
-        }); 
+        });
     }
-     
+
 
     //This method should be improved. it is not working well
-    private async Task AddVectorLayerAsTiledAsync(VectorLayer layer, TileInfo tile)
+    private async Task AddTiledLayerAsync(VectorLayer layer, TileInfo tile)
     {
         var mapScale = MapScale;
 
@@ -1469,7 +1469,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             layerTile.IsProcessing = false;
             return;
         }
-         
+
         double tileScreenWidth = MapToScreen(tile.WebMercatorExtent.Width);
 
         double tileScreenHeight = MapToScreen(tile.WebMercatorExtent.Height);
@@ -1477,8 +1477,8 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         var area = ParseToRectangleGeometry(tile.WebMercatorExtent);
 
 
-        Path? pathImage;
 
+        ImageBrush? imageBrush;
 
         //var shiftX = tile.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - tile.WebMercatorExtent.Width / 2.0;
         //var shiftY = tile.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + tile.WebMercatorExtent.Height / 2.0;
@@ -1489,17 +1489,17 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         Func<sb.Point, sb.Point> transform = p => _vt.Transform(new Point(p.X - shiftX, p.Y - shiftY)).AsPoint();
 
         var features = feature.Transform(transform, null).Features;
-          
+
         switch (layer.ToRasterTechnique)
         {
             case RasterizationApproach.DrawingVisual:
-                pathImage = layer.AsTileUsingDrawingVisual(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
+                imageBrush = layer.AsTileUsingDrawingVisual(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
                 break;
             case RasterizationApproach.GdiPlus:
-                pathImage = layer.AsTileUsingGdiPlusAsync(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
+                imageBrush = layer.AsTileUsingGdiPlusAsync(features, mapScale, /*tile, */tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
                 break;
             case RasterizationApproach.WriteableBitmap:
-                pathImage = layer.AsTileUsingWriteableBitmap(features, mapScale, tile, tileScreenWidth, tileScreenHeight, area/*, o => _vt.Transform(o), totalExtent*/);
+                imageBrush = layer.AsTileUsingWriteableBitmap(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
                 break;
             //case RasterizationApproach.OpenTk:
             //    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
@@ -1517,29 +1517,38 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             return;
         }
 
-        if (pathImage != null)
-        {
-            this.mapView.Children.Add(pathImage);
+        if (imageBrush != null)
+        { 
+            Path path = new Path()
+            {
+                Data = area,
+                Tag = new LayerTag(mapScale) { Layer = layer, IsTiled = true, IsDrawn = true, IsNew = true, Tile = tile.Clone() },
+                Fill = imageBrush
+            };
 
-            Canvas.SetZIndex(pathImage, layer.ZIndex);
+            layer.Element = path;
+
+            this.mapView.Children.Add(path);
+
+            Canvas.SetZIndex(path, layer.ZIndex);
         }
-         
+
         layerTile.IsProcessing = false;
     }
 
 
     // todo: consider if layer was Labeled
     private async Task AddNonTiledLayer(VectorLayer layer)
-    { 
+    {
         try
         {
             if (this.CurrentTileInfos == null)
                 return;
-             
+
             var extent = this.CurrentExtent;
 
             var mapScale = this.MapScale;
-             
+
             var feature = await layer.DataSource.GetAsFeatureSetAsync(mapScale, extent);
 
             if (feature is null || feature.Features.IsNullOrEmpty())
@@ -1550,16 +1559,16 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             var area = ParseToRectangleGeometry(extent);
 
-            Path? path;
+            ImageBrush? imageBrush = null;
 
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
-             
+
             var features = feature.Transform(transform).Features;
 
             switch (layer.ToRasterTechnique)
             {
                 case RasterizationApproach.GdiPlus:
-                    path = layer.AsBitmapUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen*/ area);
+                    imageBrush = layer.AsBitmapUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen area*/);
                     break;
 
                 //case RasterizationApproach.OpenTk:
@@ -1567,33 +1576,42 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 //    break;
 
                 case RasterizationApproach.DrawingVisual:
-                    path = layer.AsDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
+                    imageBrush = layer.AsDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
                     break;
 
                 case RasterizationApproach.WriteableBitmap:
-                    path = layer.AsBitmapUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, /*this.MapToScreen,*/ area);
+                    imageBrush = layer.AsBitmapUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
                     break;
 
-                case RasterizationApproach.StreamGeometry:
-                    path = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
-                    break;
+                //case RasterizationApproach.StreamGeometry:
+                //    imageBrush = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
+                //    break;
 
                 case RasterizationApproach.None:
                 default:
                     throw new NotImplementedException();
             }
 
-            if (path is null || this.MapScale != mapScale || this.CurrentExtent != extent)
+            if (imageBrush is null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
 
             if (layer.IsValid)
             {
+                Path path = new Path()
+                {
+                    Data = area,
+                    Tag = new LayerTag(mapScale) { Layer = layer, IsTiled = false, IsDrawn = true, IsNew = true },
+                    Fill = imageBrush
+                };
+
+                layer.Element = path;
+
                 this.mapView.Children.Add(path);
 
                 Canvas.SetZIndex(path, layer.ZIndex);
             }
 
-            Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer finished LayerName: {layer.LayerName}");
+            //Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer finished LayerName: {layer.LayerName}");
         }
         catch (Exception ex)
         {
@@ -1666,126 +1684,250 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     }
 
 
+
+    private async void AddLayer(RasterLayer layer, sb.BoundingBox boundingBox)
+    {
+        var paths = await layer.ParseToPath(boundingBox, this.viewTransform, this.MapScale, GetUnitDistance());
+
+        foreach (var item in paths)
+        {
+            if (layer.Type == LayerType.BaseMap)
+            {
+                this.mapView.Children.Insert(0, item);
+            }
+            else
+            {
+                this.mapView.Children.Add(item);
+            }
+        }
+    }
+
+    private async Task AddTileServiceLayerAsync(TileServiceLayer layer, TileInfo tile)
+    {
+        try
+        {
+            if (tile.ZoomLevel != CurrentZoomLevel ||
+                (_presenter != null && !layer.HasTheSameMapProvider(_presenter.SelectedMapProvider)))
+                return;
+
+            //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+
+            // 1401.11.07
+            var geoImage = await layer.GetTileAsync(tile, this.HttpClient);
+
+            //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+
+            if (tile.ZoomLevel != CurrentZoomLevel ||
+                 (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
+                return;
+
+            var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => MapProjects.GeodeticWgs84ToWebMercator(i));
+
+            Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
+
+            Point bottomRigth = webMercatorExtent.BottomRight.AsWpfPoint();
+
+            RectangleGeometry geometry = new RectangleGeometry(new Rect(topLeft, bottomRigth), 0, 0);
+
+            geometry.Transform = viewTransform;
+
+            ImageBrush fill;
+
+            try
+            {
+                fill = new ImageBrush(IRI.Jab.Common.Helpers.ImageUtility.ToImage(geoImage.Image));
+            }
+            catch (Exception ex)
+            {
+                fill = new ImageBrush();
+                Debug.WriteLine($"MapViewer; AddLayerAsync(TileServiceLayer) {ex.Message}");
+            }
+
+            Path path = new Path()
+            {
+                Fill = fill,
+                Data = geometry,
+                Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile },
+            };
+
+            layer.Element = path;
+
+            if (layer.Type == LayerType.BaseMap)
+            {
+                this.mapView.Children.Insert(0, path);
+            }
+            else
+            {
+                this.mapView.Children.Add(path);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("AddLayerAsync " + ex.Message);
+        }
+    }
+
+    #endregion
+
+
+    #region Refresh
+
+    private void RefreshBaseMaps()
+    {
+        this.Clear(tag => (tag.IsTiled || tag.LayerType == LayerType.BaseMap), false);
+
+        var tiles = this.CurrentTileInfos;
+
+        if (tiles == null)
+            return;
+
+        // 1401.12.05
+        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+
+        foreach (var tile in tiles)
+        {
+            RefreshTiles(infos, tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
+        }
+    }
+
+    public void RefreshTiles(IEnumerable<ILayer> infos, TileInfo tile, Func<ILayer, bool> criteria)
+    {
+        double mapScale = MapScale;
+
+        Action action = async () =>
+        {
+            foreach (ILayer item in infos)
+            {
+                if (!item.CanRenderLayer(mapScale))
+                    continue;
+
+                if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
+                    return;
+
+                if (item.Rendering != RenderingApproach.Tiled)
+                    continue;
+
+                //Do not draw if criteria not satisfied
+                if (criteria(item))
+                {
+                    if (item is VectorLayer vectorLayer)
+                    {
+                        vectorLayer.TileManager.TryAdd(tile);
+
+                        await AddTiledLayerAsync(vectorLayer, tile);
+                    }
+                    else if (item is TileServiceLayer tileServiceLayer)
+                    {
+                        await AddTileServiceLayerAsync(/*item as TileServiceLayer*/ tileServiceLayer, tile);
+                    }
+                    else if (item is FeatureLayer)
+                    {
+
+                    }
+                    else
+                    {
+                        //return;
+                        throw new NotImplementedException();
+                    }
+                }
+            }
+        };
+
+        Task.Run(() =>
+        {
+            //lock (locker)
+            //{
+            this.jobs.Add(
+                    new Job(
+                        new LayerTag(mapScale) { LayerType = LayerType.None, Tile = tile },
+                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
+            //}
+        });
+
+    }
+
+    private void RefreshLayerVisibility(ILayer layer)
+    {
+        if (layer == null)
+            return;
+
+        //Clear current layer
+        this.ClearLayer(layer, remove: false, forceRemove: false);
+
+        if (layer.Rendering == RenderingApproach.Tiled)
+        {
+            AddTiledLayer(layer as VectorLayer);
+        }
+        else
+        {
+            AddLayer(layer);
+        }
+    }
+
+    //POTENTIALLY ERROR PROUNE; Check if exceptions are catched correctly; 
+    //POTENTIALLY ERROR PROUNE; Captured Variables
+    //IMPROVEMENT; use vector approach for light vector layers insted of "AddLayerAsDrawing"
+    public void Refresh(bool isNewExtent)
+    {
+        //UpdateTileInfos();
+        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh Called");
+
+        if (this.CurrentTileInfos == null)
+            return;
+
+        StopUnnecessaryJobs();
+
+        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-StopUnnecessaryJobs finished");
+
+        ClearNonTiled();
+
+        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-ClearNonTiled finished");
+
+        var mapScale = this.MapScale;
+
+        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / mapScale, RenderingApproach.Default);
+
+        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-UpdateAndGetLayers finished");
+
+        if (infos == null) return;
+
+        foreach (ILayer item in infos)
+        {
+            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-Proccessing {item.LayerName}");
+
+            if (!item.CanRenderLayer(mapScale))
+                continue;
+
+            if (MapScale != mapScale)
+                return;
+
+            if (item.Rendering == RenderingApproach.Tiled)
+                continue;
+
+            AddLayer(item);
+        }
+        //****************************
+
+        //ResetViewTransformForPoints();
+        this.panTransformForPoints.X = 0;
+        this.panTransformForPoints.Y = 0;
+
+        //Dispatcher.BeginInvoke(new Action(() =>
+        //{
+        //    ClearOld();
+
+        //}), System.Windows.Threading.DispatcherPriority.ContextIdle, null);
+        this.OnExtentChanged?.Invoke(null, isNewExtent);
+    }
+
+    #endregion
+
+    #region Moveable Item
+
     bool itemIsMoving = false;
 
     FrameworkElement currentMoveableItem;
 
-    //Point startMapPointLocation;
-
-    public void Element_MouseDownForMoveableItem(object sender, MouseButtonEventArgs e)
-    {
-        e.Handled = true;
-
-        itemIsMoving = true;
-
-        var element = sender as FrameworkElement;
-
-        this.currentMoveableItem = element;
-
-        this.mapView.CaptureMouse();
-
-        this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
-        this.mapView.MouseMove += Element_MouseMoveForMoveableItem;
-
-        this.mapView.MouseUp -= Element_MouseUpForMoveableItem;
-        this.mapView.MouseUp += Element_MouseUpForMoveableItem;
-
-
-        this.prevMouseLocation = (e.GetPosition(this.mapView));
-
-        this.startPointLocationForPan = this.prevMouseLocation;
-
-        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
-
-        layer.SelectLocatable(this.currentMoveableItem);
-        //this.startMapPointLocation = ScreenToMap(this.prevMouseLocation);
-    }
-
-    public void Element_MouseMoveForMoveableItem(object sender, MouseEventArgs e)
-    {
-        //var translateTransform = ((TransformGroup)(currentMoveableItem.RenderTransform)).Children[2] as TranslateTransform;
-
-        Point currentMouseLocation = (e.GetPosition(this.mapView));
-
-        var currentMapLocation = ScreenToMap(currentMouseLocation);
-
-        var prevMapLocation = ScreenToMap(prevMouseLocation);
-
-        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
-
-        var locateable = layer.Get(this.currentMoveableItem);
-
-        if (locateable != null)
-        {
-            locateable.X += currentMapLocation.X - prevMapLocation.X;
-            locateable.Y += currentMapLocation.Y - prevMapLocation.Y;
-
-            if (locateable.CanBeUsedAsEditingPoint)
-            {
-                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
-            }
-        }
-
-
-        //translateTransform.X += currentMouseLocation.X - this.prevMouseLocation.X;
-
-        //translateTransform.Y += currentMouseLocation.Y - this.prevMouseLocation.Y;
-
-        this.prevMouseLocation = currentMouseLocation;
-
-    }
-
-    public void Element_MouseUpForMoveableItem(object sender, MouseButtonEventArgs e)
-    {
-        e.Handled = true;
-
-        Point currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
-
-        var prevMapLocation = ScreenToMap(prevMouseLocation);
-
-        var offset = new Point(currentMouseLocation.X - prevMapLocation.X, currentMouseLocation.Y - prevMapLocation.Y);
-
-        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
-
-        var locateable = layer.Get(this.currentMoveableItem);
-
-        if (locateable != null)
-        {
-            locateable.X += offset.X;
-            locateable.Y += offset.Y;
-
-            if (locateable.CanBeUsedAsEditingPoint)
-            {
-                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
-            }
-
-        }
-
-        this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
-
-        this.mapView.MouseUp -= Element_MouseUpForMoveableItem;
-
-        itemIsMoving = false;
-
-        this.mapView.ReleaseMouseCapture();
-
-    }
-
-    //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
-    private void Item_OnPositionChanged(object sender, EventArgs e)
-    {
-        var item = sender as Locateable;
-
-        var element = item.Element;
-
-        var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
-        var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
-
-        var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), width, height);
-
-        ((TransformGroup)(element.RenderTransform)).Children[2] = (new TranslateTransform(screenLocation.X, screenLocation.Y));
-
-    }
 
     //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
     private void AddComplexLayer(SpecialPointLayer specialPointLayer, bool withAnimation = true)
@@ -1946,245 +2088,125 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         element.BeginAnimation(OpacityProperty, animation);
     }
-     
-    private async void AddLayer(RasterLayer layer, sb.BoundingBox boundingBox)
-    { 
-        var paths = await layer.ParseToPath(boundingBox, this.viewTransform, this.MapScale, GetUnitDistance());
-         
-        foreach (var item in paths)
-        { 
-            if (layer.Type == LayerType.BaseMap)
-            {
-                this.mapView.Children.Insert(0, item);
-            }
-            else
-            {
-                this.mapView.Children.Add(item);
-            }
-        }
-    }
 
-    private async Task AddTileServiceLayerAsync(TileServiceLayer layer, TileInfo tile)
+
+    public void Element_MouseDownForMoveableItem(object sender, MouseButtonEventArgs e)
     {
-        try
-        {
-            if (tile.ZoomLevel != CurrentZoomLevel ||
-                (_presenter != null && !layer.HasTheSameMapProvider(_presenter.SelectedMapProvider)))
-                return;
+        e.Handled = true;
 
-            //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync before {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+        itemIsMoving = true;
 
-            // 1401.11.07
-            var geoImage = await layer.GetTileAsync(tile, this.HttpClient);
+        var element = sender as FrameworkElement;
 
-            //System.Diagnostics.Debug.WriteLine($"layer.GetTileAsync after  {tile.ToShortString()} {DateTime.Now.ToLongTimeString()}");
+        this.currentMoveableItem = element;
 
-            if (tile.ZoomLevel != CurrentZoomLevel ||
-                 (this._presenter != null && !layer.HasTheSameMapProvider(this._presenter.SelectedMapProvider)))
-                return;
+        this.mapView.CaptureMouse();
 
-            var webMercatorExtent = geoImage.GeodeticWgs84BoundingBox.Transform(i => MapProjects.GeodeticWgs84ToWebMercator(i));
+        this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
+        this.mapView.MouseMove += Element_MouseMoveForMoveableItem;
 
-            Point topLeft = webMercatorExtent.TopLeft.AsWpfPoint();
+        this.mapView.MouseUp -= Element_MouseUpForMoveableItem;
+        this.mapView.MouseUp += Element_MouseUpForMoveableItem;
 
-            Point bottomRigth = webMercatorExtent.BottomRight.AsWpfPoint();
 
-            RectangleGeometry geometry = new RectangleGeometry(new Rect(topLeft, bottomRigth), 0, 0);
+        this.prevMouseLocation = (e.GetPosition(this.mapView));
 
-            geometry.Transform = viewTransform;
-             
-            ImageBrush fill;
+        this.startPointLocationForPan = this.prevMouseLocation;
 
-            try
-            {
-                fill = new ImageBrush(IRI.Jab.Common.Helpers.ImageUtility.ToImage(geoImage.Image));
-            }
-            catch (Exception ex)
-            {
-                fill = new ImageBrush();
-                Debug.WriteLine($"MapViewer; AddLayerAsync(TileServiceLayer) {ex.Message}");
-            }
+        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
 
-            Path path = new Path()
-            {
-                Fill = fill,
-                Data = geometry,
-                Tag = new LayerTag(this.MapScale) { Layer = layer, Tile = tile }, 
-            };
-             
-            layer.Element = path;
-             
-            if (layer.Type == LayerType.BaseMap)
-            {
-                this.mapView.Children.Insert(0, path);
-            }
-            else
-            {
-                this.mapView.Children.Add(path);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("AddLayerAsync " + ex.Message);
-        }
+        layer.SelectLocatable(this.currentMoveableItem);
+        //this.startMapPointLocation = ScreenToMap(this.prevMouseLocation);
     }
+
+    public void Element_MouseMoveForMoveableItem(object sender, MouseEventArgs e)
+    {
+        //var translateTransform = ((TransformGroup)(currentMoveableItem.RenderTransform)).Children[2] as TranslateTransform;
+
+        Point currentMouseLocation = (e.GetPosition(this.mapView));
+
+        var currentMapLocation = ScreenToMap(currentMouseLocation);
+
+        var prevMapLocation = ScreenToMap(prevMouseLocation);
+
+        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
+
+        var locateable = layer.Get(this.currentMoveableItem);
+
+        if (locateable != null)
+        {
+            locateable.X += currentMapLocation.X - prevMapLocation.X;
+            locateable.Y += currentMapLocation.Y - prevMapLocation.Y;
+
+            if (locateable.CanBeUsedAsEditingPoint)
+            {
+                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+            }
+        }
+
+
+        //translateTransform.X += currentMouseLocation.X - this.prevMouseLocation.X;
+
+        //translateTransform.Y += currentMouseLocation.Y - this.prevMouseLocation.Y;
+
+        this.prevMouseLocation = currentMouseLocation;
+
+    }
+
+    public void Element_MouseUpForMoveableItem(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+
+        Point currentMouseLocation = ScreenToMap((e.GetPosition(this.mapView)));
+
+        var prevMapLocation = ScreenToMap(prevMouseLocation);
+
+        var offset = new Point(currentMouseLocation.X - prevMapLocation.X, currentMouseLocation.Y - prevMapLocation.Y);
+
+        var layer = ((this.currentMoveableItem.Tag as LayerTag).Layer as SpecialPointLayer);
+
+        var locateable = layer.Get(this.currentMoveableItem);
+
+        if (locateable != null)
+        {
+            locateable.X += offset.X;
+            locateable.Y += offset.Y;
+
+            if (locateable.CanBeUsedAsEditingPoint)
+            {
+                this.CurrentEditingPoint = new Point(locateable.X, locateable.Y);
+            }
+
+        }
+
+        this.mapView.MouseMove -= Element_MouseMoveForMoveableItem;
+
+        this.mapView.MouseUp -= Element_MouseUpForMoveableItem;
+
+        itemIsMoving = false;
+
+        this.mapView.ReleaseMouseCapture();
+
+    }
+
+    //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
+    private void Item_OnPositionChanged(object sender, EventArgs e)
+    {
+        var item = sender as Locateable;
+
+        var element = item.Element;
+
+        var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
+        var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
+
+        var screenLocation = item.AncherFunction(MapToScreen(new Point(item.X, item.Y)), width, height);
+
+        ((TransformGroup)(element.RenderTransform)).Children[2] = (new TranslateTransform(screenLocation.X, screenLocation.Y));
+
+    }
+
 
     #endregion
-
-
-    #region Refresh
-
-    private void RefreshBaseMaps()
-    {
-        this.Clear(tag => (tag.IsTiled || tag.LayerType == LayerType.BaseMap), false);
-
-        var tiles = this.CurrentTileInfos;
-
-        if (tiles == null)
-            return;
-         
-        // 1401.12.05
-        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
-
-        foreach (var tile in tiles)
-        {
-            RefreshTiles(infos, tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
-        }
-    }
-
-
-    public void RefreshTiles(IEnumerable<ILayer> infos, TileInfo tile, Func<ILayer, bool> criteria)
-    {
-        double mapScale = MapScale;
-
-        Action action = async () =>
-        { 
-            foreach (ILayer item in infos)
-            {
-                if (!item.CanRenderLayer(mapScale))
-                    continue;
-
-                if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
-                    return;
-
-                if (item.Rendering != RenderingApproach.Tiled)
-                    continue;
-
-                //Do not draw if criteria not satisfied
-                if (criteria(item))
-                {
-                    if (item is VectorLayer vectorLayer)
-                    {
-                        vectorLayer.TileManager.TryAdd(tile);
-
-                        await AddVectorLayerAsTiledAsync(vectorLayer, tile);
-                    }
-                    else if (item is TileServiceLayer tileServiceLayer)
-                    {
-                        await AddTileServiceLayerAsync(/*item as TileServiceLayer*/ tileServiceLayer, tile);
-                    }
-                    else if (item is FeatureLayer)
-                    {
-
-                    }
-                    else
-                    {
-                        //return;
-                        throw new NotImplementedException();
-                    }
-                }
-            }
-        };
-
-        Task.Run(() =>
-        {
-            //lock (locker)
-            //{
-            this.jobs.Add(
-                    new Job(
-                        new LayerTag(mapScale) { LayerType = LayerType.None, Tile = tile },
-                        Dispatcher.BeginInvoke(action, DispatcherPriority.Background)));
-            //}
-        });
-         
-    }
-
-    private void RefreshLayerVisibility(ILayer layer)
-    {
-        if (layer == null)
-            return;
-
-        //Clear current layer
-        this.ClearLayer(layer, remove: false, forceRemove: false);
-
-        if (layer.Rendering == RenderingApproach.Tiled)
-        {
-            AddTiledLayer(layer as VectorLayer);
-        }
-        else
-        {
-            AddLayer(layer);
-        }
-    }
-
-    //POTENTIALLY ERROR PROUNE; Check if exceptions are catched correctly; 
-    //POTENTIALLY ERROR PROUNE; Captured Variables
-    //IMPROVEMENT; use vector approach for light vector layers insted of "AddLayerAsDrawing"
-    public void Refresh(bool isNewExtent)
-    {
-        //UpdateTileInfos();
-        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh Called");
-
-        if (this.CurrentTileInfos == null)
-            return;
-
-        StopUnnecessaryJobs();
-
-        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-StopUnnecessaryJobs finished");
-
-        ClearNonTiled();
-
-        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-ClearNonTiled finished");
-
-        var mapScale = this.MapScale;
-
-        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / mapScale, RenderingApproach.Default);
-
-        Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-UpdateAndGetLayers finished");
-
-        if (infos == null) return;
-
-        foreach (ILayer item in infos)
-        {
-            Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-Proccessing {item.LayerName}");
-
-            if (!item.CanRenderLayer(mapScale))
-                continue;
-
-            if (MapScale != mapScale)
-                return;
-
-            if (item.Rendering == RenderingApproach.Tiled)
-                continue;
-
-            AddLayer(item);
-        }
-        //****************************
-
-        //ResetViewTransformForPoints();
-        this.panTransformForPoints.X = 0;
-        this.panTransformForPoints.Y = 0;
-
-        //Dispatcher.BeginInvoke(new Action(() =>
-        //{
-        //    ClearOld();
-
-        //}), System.Windows.Threading.DispatcherPriority.ContextIdle, null);
-        this.OnExtentChanged?.Invoke(null, isNewExtent);
-    }
-
-    #endregion
-
 
     #region Others
     //POTENTIALLY ERROR PROUNE; not sure everything is considered or not
@@ -4569,7 +4591,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
     #region Search
-     
+
     public List<FeatureSet<sb.Point>>? GetFeatures(string searchText)
     {
         List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
@@ -4601,7 +4623,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
     #region Identify
-     
+
     public List<FeatureSet<sb.Point>>? GetFeatures(sb.Point point)
     {
         List<FeatureSet<sb.Point>> result = new List<FeatureSet<sb.Point>>();
@@ -4647,7 +4669,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         return result;
     }
-     
+
     public List<VectorLayer> GetAllVectorLayers(IEnumerable<ILayer>? layers)
     {
         var result = new List<VectorLayer>();
@@ -4663,7 +4685,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         return result;
     }
-     
+
     #endregion
 
 

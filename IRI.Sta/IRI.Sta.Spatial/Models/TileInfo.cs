@@ -12,23 +12,9 @@ public class TileInfo
     public int ColumnNumber { get; private set; }
 
     public int ZoomLevel { get; private set; }
-
-    //public double UsedMapScale { get; set; }
-
+     
     public BoundingBox GeodeticExtent { get; private set; }
-
-    //public BoundingBox MercatorExtent
-    //{
-    //    get
-    //    {
-    //        //var topLeft = IRI.Sta.SpatialReferenceSystem.Projection.GeodeticToMercator(GeodeticExtent.TopLeft);
-    //        //var bottomRight = IRI.Sta.SpatialReferenceSystem.Projection.GeodeticToMercator(GeodeticExtent.BottomRigth);
-
-    //        //return new BoundingBox(Math.Min(topLeft.X, bottomRight.X), Math.Min(topLeft.Y, bottomRight.Y), Math.Max(topLeft.X, bottomRight.X), Math.Max(topLeft.Y, bottomRight.Y));
-    //        return GeodeticExtent.Transform(i => MapProjects.GeodeticToMercator(i));
-    //    }
-    //}
-
+     
     public BoundingBox WebMercatorExtent
     {
         get
@@ -88,5 +74,8 @@ public class TileInfo
         return $"{ZoomLevel}{RowNumber}{ColumnNumber}".GetHashCode();
     }
 
-
+    public TileInfo Clone()
+    {
+        return new TileInfo(this.RowNumber, this.ColumnNumber, this.ZoomLevel);
+    }
 }
