@@ -190,9 +190,12 @@ public static class DrawingItemLegendCommands
 
                 var scale = WebMercatorUtility.GetGoogleMapScale(map.CurrentZoomLevel);
 
-                var drawingVisual = await layer.AsDrawingVisual(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+                //var drawingVisual = await layer.AsDrawingVisual(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
 
-                IRI.Jab.Common.Helpers.ImageUtility.Save(fileName, drawingVisual, currentScreenSize.Width, currentScreenSize.Height);
+                //var image = Helpers.ImageUtility.Render(drawingVisual, currentScreenSize.Width, currentScreenSize.Height);
+                var image = await layer.AsRenderTargetBitmap(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+
+                IRI.Jab.Common.Helpers.ImageUtility.Save(fileName, image/* drawingVisual, currentScreenSize.Width, currentScreenSize.Height*/);
 
                 //RenderTargetBitmap image = new RenderTargetBitmap(currentScreenSize.Width, currentScreenSize.Height, 96, 96, PixelFormats.Pbgra32);
 

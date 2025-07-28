@@ -208,17 +208,26 @@ public static class ImageUtility
         //}
     }
 
-    public static void Save(string fileName, DrawingVisual drawingVisual, int width, int height, BitmapEncoder? preferedEncoder = null)
+    public static RenderTargetBitmap Render(/*string fileName,*/ List<DrawingVisual> drawingVisuals, int screenWidth, int screenHeight)
     {
-        RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+        RenderTargetBitmap image = new RenderTargetBitmap(screenWidth, screenHeight, 96, 96, PixelFormats.Pbgra32);
 
-        image.Render(drawingVisual);
+        foreach (var item in drawingVisuals)
+        {
+            image.Render(item);
+        }
 
-        Save(fileName, image, preferedEncoder);
+        image.Freeze();
+
+        return image;
+        //Save(fileName, image, preferedEncoder);
     }
 
-    private static void Save(string fileName, RenderTargetBitmap image, BitmapEncoder? preferedEncoder)
+    public static void Save(string fileName, RenderTargetBitmap? image, BitmapEncoder? preferedEncoder = null)
     {
+        if (image is null)
+            return;
+
         var frame = BitmapFrame.Create(image);
 
         BitmapEncoder encoder = preferedEncoder ?? new PngBitmapEncoder();

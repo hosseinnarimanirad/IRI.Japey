@@ -2897,7 +2897,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             switch (item)
             {
                 case VectorLayer vectorLayer:
-                    visuals.Add(await vectorLayer.AsDrawingVisual(boundingBox, width, height, this.MapScale));
+                    visuals.AddRange(await vectorLayer.AsDrawingVisual(boundingBox, width, height, this.MapScale));
                     break;
 
                 case DrawingLayer drawingLayer:

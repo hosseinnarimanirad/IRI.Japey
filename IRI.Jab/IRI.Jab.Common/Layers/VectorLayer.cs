@@ -23,6 +23,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Enums;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
+using IRI.Sta.Common.Services;
 
 namespace IRI.Jab.Common;
 
@@ -168,8 +169,8 @@ public class VectorLayer : BaseLayer
         return $"{Enum.GetName(this.Type)} - {this.DataSource.ToString()}";
     }
 
-    #region Default Rendering
-    
+    #region Rendering
+
 
     //DrawingVisual Approach
     public ImageBrush? RenderUsingDrawingVisual(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight/*,*/ /*Func<WpfPoint, WpfPoint> mapToScreen,*/ /*RectangleGeometry area*/)
@@ -177,26 +178,33 @@ public class VectorLayer : BaseLayer
         if (features.IsNullOrEmpty())
             return null;
 
-        var pen = this.VisualParameters.GetWpfPen();
+        //var pen = this.VisualParameters.GetWpfPen();
 
-        Brush brush = this.VisualParameters.Fill;
+        //Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*mapToScreen,*/ pen, brush, this.VisualParameters.PointSymbol);
+        //DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*mapToScreen,*/ pen, brush, this.VisualParameters.PointSymbol);
 
-        if (drawingVisual is null)
-            return null;
+        //if (drawingVisual is null)
+        //    return null;
 
-        RenderTargetBitmap image = new RenderTargetBitmap((int)screenWidth, (int)screenHeight, 96, 96, PixelFormats.Pbgra32);
+        //RenderTargetBitmap image = new RenderTargetBitmap((int)screenWidth, (int)screenHeight, 96, 96, PixelFormats.Pbgra32);
 
-        image.Render(drawingVisual);
+        //image.Render(drawingVisual);
 
-        if (this.CanRenderLabels(mapScale))
-        {
-            this.DrawLabels(features, image/*, mapToScreen*/);
-        }
+        //if (this.CanRenderLabels(mapScale))
+        //{
+        //    var renderedLabels = this.DrawLabels(features/*, image*//*, mapToScreen*/);
 
-        image.Freeze();
+        //    if (renderedLabels is not null)
+        //        image.Render(renderedLabels);
+        //}
 
+        //image.Freeze();
+
+        var drawingVisuals = AsDrawingVisual(features, mapScale);
+
+        var image = ImageUtility.Render(drawingVisuals, (int)screenWidth, (int)screenHeight);
+       
         return new ImageBrush(image);
 
         //Path path = new Path()
@@ -292,7 +300,7 @@ public class VectorLayer : BaseLayer
         //    //Data = area,
         //    Tag = new LayerTag(mapScale) { Layer = this, Tile = null, IsDrawn = true, IsNew = true }
         //};
-        
+
         //this.Element = path;
 
         //path.Fill = new ImageBrush(image);
@@ -635,7 +643,7 @@ public class VectorLayer : BaseLayer
 
 
     #region Raster Save And Export Methods
-     
+
     public async Task<System.Drawing.Bitmap> ParseToBitmapImage(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
         //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
@@ -742,14 +750,18 @@ public class VectorLayer : BaseLayer
         }
     }
 
-    public void SaveAsPng(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public async void SaveAsPng(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
         switch (this.ToRasterTechnique)
         {
 
             case RasterizationApproach.StreamGeometry:
             case RasterizationApproach.DrawingVisual:
-                SaveAsPngDrawingVisual(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                //SaveAsPngDrawingVisual(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                var renderTargetBitmap = await AsRenderTargetBitmap(mapExtent, imageWidth, imageHeight, mapScale);
+
+                ImageUtility.Save(fileName, renderTargetBitmap);
+
                 break;
 
             case RasterizationApproach.WriteableBitmap:
@@ -757,28 +769,90 @@ public class VectorLayer : BaseLayer
             case RasterizationApproach.GdiPlus:
             case RasterizationApproach.None:
             default:
-                SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                //SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
+                var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
+
+                image.Save(fileName);
+
+                image.Dispose();
                 break;
         }
     }
 
-    private async void SaveAsPngGdiPlus(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    {
-        var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
+    //private async void SaveAsPngGdiPlus(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    //{
+    //    var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
 
-        image.Save(fileName);
+    //    image.Save(fileName);
 
-        image.Dispose();
-    }
+    //    image.Dispose();
+    //}
 
-    private async void SaveAsPngDrawingVisual(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    //// todo: consider using AsDrawingVisual method and removing the duplicate codes
+    //private async void SaveAsPngDrawingVisual(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    //{
+    //    ////var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+    //    //var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
+
+    //    ////if (geoLabledPairs.Geometries == null)
+    //    //if (feature is null || feature.HasNoGeometry())
+    //    //    return;
+
+    //    ////double xScale = imageWidth / mapExtent.Width;
+    //    ////double yScale = imageHeight / mapExtent.Height;
+    //    ////double scale = xScale > yScale ? yScale : xScale;
+    //    ////Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+    //    //var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
+
+    //    //var features = feature.Transform(mapToScreen).Features;
+
+    //    ////var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+
+    //    //var pen = this.VisualParameters.GetWpfPen();
+
+    //    //Brush brush = this.VisualParameters.Fill;
+
+    //    //DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*i => mapToScreen(i), */pen, brush, this.VisualParameters.PointSymbol);
+    //    var drawingVisuals = await AsDrawingVisual(mapExtent, imageWidth, imageHeight, mapScale);
+
+    //    if (drawingVisuals.IsNullOrEmpty())
+    //        return;
+
+    //    ImageUtility.Save(fileName, drawingVisuals, (int)imageWidth, (int)imageHeight);
+
+    //    //RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
+
+    //    //foreach (var item in drawingVisuals)
+    //    //{
+    //    //    image.Render(item);
+    //    //}
+
+    //    ////if (this.CanRenderLabels(mapScale) && feature.IsLabeled())
+    //    ////{
+    //    ////    this.DrawLabels(features, image/*, mapToScreen*/);
+    //    ////}
+
+    //    //image.Freeze();
+
+    //    //PngBitmapEncoder pngImage = new PngBitmapEncoder();
+
+    //    //pngImage.Frames.Add(BitmapFrame.Create(image));
+
+    //    //using (System.IO.Stream stream = System.IO.File.Create(fileName))
+    //    //{
+    //    //    pngImage.Save(stream);
+    //    //}
+
+    //}
+
+    public async Task<List<Feature<Point>>> GetRenderReadyFeatures(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
         //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
         var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
 
         //if (geoLabledPairs.Geometries == null)
         if (feature is null || feature.HasNoGeometry())
-            return;
+            return new List<Feature<Point>>();
 
         //double xScale = imageWidth / mapExtent.Width;
         //double yScale = imageHeight / mapExtent.Height;
@@ -786,62 +860,28 @@ public class VectorLayer : BaseLayer
         //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
         var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
 
-        var features = feature.Transform(mapToScreen).Features;
-
-        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
-
-        var pen = this.VisualParameters.GetWpfPen();
-
-        Brush brush = this.VisualParameters.Fill;
-
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(features, /*i => mapToScreen(i), */pen, brush, this.VisualParameters.PointSymbol);
-
-        RenderTargetBitmap image = new RenderTargetBitmap((int)imageWidth, (int)imageHeight, 96, 96, PixelFormats.Pbgra32);
-
-        image.Render(drawingVisual);
-
-        if (this.CanRenderLabels(mapScale) && feature.IsLabeled())
-        {
-            this.DrawLabels(features, image/*, mapToScreen*/);
-        }
-
-        image.Freeze();
-
-        PngBitmapEncoder pngImage = new PngBitmapEncoder();
-
-        pngImage.Frames.Add(BitmapFrame.Create(image));
-
-        using (System.IO.Stream stream = System.IO.File.Create(fileName))
-        {
-            pngImage.Save(stream);
-        }
-
+        return feature.Transform(mapToScreen).Features;
     }
 
-    public async Task<DrawingVisual?> AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public async Task<List<DrawingVisual>> AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    { 
+        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
+
+        return AsDrawingVisual(features, mapScale);
+    }
+
+    private List<DrawingVisual> AsDrawingVisual(List<Feature<Point>> features, double mapScale)
     {
-        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
-        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
-
-
-        //if (geoLabledPairs.Geometries == null)
-        if (feature is null || feature.HasNoGeometry())
-            return null;
-
-        //double xScale = imageWidth / mapExtent.Width;
-        //double yScale = imageHeight / mapExtent.Height;
-        //double scale = xScale > yScale ? yScale : xScale;
-        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
-
-        var features = feature.Transform(mapToScreen).Features;
-
-        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+        var result = new List<DrawingVisual>();
 
         var pen = this.VisualParameters.GetWpfPen();
-        pen.LineJoin = PenLineJoin.Round;
-        pen.EndLineCap = PenLineCap.Round;
-        pen.StartLineCap = PenLineCap.Round;
+
+        if (pen is not null)
+        {
+            pen.LineJoin = PenLineJoin.Round;
+            pen.EndLineCap = PenLineCap.Round;
+            pen.StartLineCap = PenLineCap.Round;
+        }
 
         Brush brush = this.VisualParameters.Fill;
 
@@ -854,7 +894,36 @@ public class VectorLayer : BaseLayer
 
         drawingVisual.Opacity = this.VisualParameters.Opacity;
 
-        return drawingVisual;
+        result.Add(drawingVisual);
+
+        if (this.CanRenderLabels(mapScale) /*&& feature.IsLabeled()*/)
+        {
+            var renderedLabels = this.DrawLabels(features/*, image*//*, mapToScreen*/);
+
+            if (renderedLabels is not null)
+            {
+                renderedLabels.Opacity = this.VisualParameters.Opacity;
+
+                result.Add(renderedLabels);
+            }
+        }
+
+        return result;
+    }
+
+    public async Task<RenderTargetBitmap?> AsRenderTargetBitmap(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    {
+        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
+
+        if (features.IsNullOrEmpty())
+            return null;
+
+        var drawingVisuals = AsDrawingVisual(features, mapScale);
+
+        if (drawingVisuals.IsNullOrEmpty())
+            return null;
+
+        return ImageUtility.Render(drawingVisuals, (int)imageWidth, (int)imageHeight);
     }
 
     #endregion
@@ -958,10 +1027,10 @@ public class VectorLayer : BaseLayer
 
 
     //POTENTIALLY ERROR PROUNE; formattedText is always RTL
-    public void DrawLabels(List<Feature<Point>> features, RenderTargetBitmap bmp)
+    public DrawingVisual? DrawLabels(List<Feature<Point>> features/*, RenderTargetBitmap bmp*/)
     {
         if (features.IsNullOrEmpty())
-            return;
+            return null;
 
         var mapCoordinates = features.ConvertAll(
                   (g) =>
@@ -1015,7 +1084,8 @@ public class VectorLayer : BaseLayer
             }
         }
 
-        bmp.Render(drawingVisual);
+        //bmp.Render(drawingVisual);
+        return drawingVisual;
     }
 
 
