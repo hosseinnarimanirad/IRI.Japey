@@ -29,7 +29,7 @@ public static class GeneralHelper
 
         var scale = WebMercatorUtility.GetGoogleMapScale(level);
 
-        var bitmap = await vectorLayer.ParseToBitmapImage(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+        var bitmap = await vectorLayer.AsGdiBitmapAsync(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
 
         var diff = IRI.Ket.GdiPlus.Helpers.ImageHelper.CalculateDifPlusBitmaps(originalBitmap, bitmap, true);
 

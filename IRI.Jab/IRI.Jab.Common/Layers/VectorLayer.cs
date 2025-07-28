@@ -204,7 +204,7 @@ public class VectorLayer : BaseLayer
         var drawingVisuals = AsDrawingVisual(features, mapScale);
 
         var image = ImageUtility.Render(drawingVisuals, (int)screenWidth, (int)screenHeight);
-       
+
         return new ImageBrush(image);
 
         //Path path = new Path()
@@ -223,29 +223,34 @@ public class VectorLayer : BaseLayer
     //Gdi+
     public ImageBrush? RenderUsingGdiPlus(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight/*,*/ /*Func<WpfPoint, WpfPoint> mapToScreen,*/ /*RectangleGeometry area*/)
     {
-        if (features.IsNullOrEmpty())
+        //if (features.IsNullOrEmpty())
+        //    return null;
+
+        ////var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
+
+        ////var pen = this.VisualParameters.GetGdiPlusPen();
+
+        //var bitmap = GdiBitmapRenderer.ParseSqlGeometry(
+        //    features,
+        //    screenWidth,
+        //    screenHeight,
+        //    //mapToScreen,
+        //    this.VisualParameters.GetGdiPlusPen(),
+        //    this.VisualParameters.Fill.AsGdiBrush(),
+        //    this.VisualParameters.PointSymbol);
+
+        //if (bitmap == null)
+        //    return null;
+
+        //if (CanRenderLabels(mapScale))
+        //{
+        //    GdiBitmapRenderer.DrawLabels(features, bitmap, /*mapToScreen,*/ this.Labels);
+        //}
+
+        var bitmap = AsGdiBitmap(features, screenWidth, screenHeight, mapScale);
+
+        if (bitmap is null)
             return null;
-
-        //var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
-
-        //var pen = this.VisualParameters.GetGdiPlusPen();
-
-        var bitmap = GdiBitmapRenderer.ParseSqlGeometry(
-            features,
-            screenWidth,
-            screenHeight,
-            //mapToScreen,
-            this.VisualParameters.GetGdiPlusPen(),
-            this.VisualParameters.Fill.AsGdiBrush(),
-            this.VisualParameters.PointSymbol);
-
-        if (bitmap == null)
-            return null;
-
-        if (CanRenderLabels(mapScale))
-        {
-            GdiBitmapRenderer.DrawLabels(features, bitmap, /*mapToScreen,*/ this.Labels);
-        }
 
         BitmapImage image = ImageUtility.AsBitmapImage(bitmap, System.Drawing.Imaging.ImageFormat.Png);
 
@@ -641,51 +646,6 @@ public class VectorLayer : BaseLayer
         element.SetBinding(Path.OpacityProperty, binding5);
     }
 
-
-    #region Raster Save And Export Methods
-
-    public async Task<System.Drawing.Bitmap> ParseToBitmapImage(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    {
-        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
-        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
-
-        if (feature is null || feature.HasNoGeometry())
-            return new System.Drawing.Bitmap((int)imageWidth, (int)imageHeight);
-
-        var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
-
-        var pen = this.VisualParameters.GetGdiPlusPen();
-
-        //double xScale = imageWidth / mapExtent.Width;
-        //double yScale = imageHeight / mapExtent.Height;
-        //double scale = xScale > yScale ? yScale : xScale;
-        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
-
-        var features = feature.Transform(mapToScreen).Features;
-        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
-
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
-            features,
-            imageWidth,
-            imageHeight,
-            //mapToScreen,
-            pen,
-            this.VisualParameters.Fill.AsGdiBrush(),
-            this.VisualParameters.PointSymbol);
-
-        if (image == null)
-            return null;
-
-        //if (geoLabledPairs.Labels != null)
-        if (this.CanRenderLabels(mapScale))
-        {
-            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
-        }
-
-        return image;
-    }
-
     public static Func<Point, Point> CreateMapToScreenMapFunc(BoundingBox mapExtent, double screenWidth, double screenHeight)
     {
         double xScale = screenWidth / mapExtent.Width;
@@ -694,6 +654,78 @@ public class VectorLayer : BaseLayer
 
         return new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
     }
+
+    public async Task<List<Feature<Point>>> GetRenderReadyFeatures(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    {
+        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
+
+        //if (geoLabledPairs.Geometries == null)
+        if (feature is null || feature.HasNoGeometry())
+            return new List<Feature<Point>>();
+
+        //double xScale = imageWidth / mapExtent.Width;
+        //double yScale = imageHeight / mapExtent.Height;
+        //double scale = xScale > yScale ? yScale : xScale;
+        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
+
+        return feature.Transform(mapToScreen).Features;
+    }
+
+
+    #region Raster Save And Export Methods
+
+    public async Task<System.Drawing.Bitmap?> AsGdiBitmapAsync(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    {
+        ////var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
+        //var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
+
+        //if (feature is null || feature.HasNoGeometry())
+        //    return new System.Drawing.Bitmap((int)imageWidth, (int)imageHeight);
+
+        ////double xScale = imageWidth / mapExtent.Width;
+        ////double yScale = imageHeight / mapExtent.Height;
+        ////double scale = xScale > yScale ? yScale : xScale;
+        ////Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
+        //var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
+
+        //var features = feature.Transform(mapToScreen).Features;
+        //var geometries = feature.GetGeometries().Select(g => g.Transform(mapToScreen, g.Srid)).ToList();
+        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
+
+        return AsGdiBitmap(features, imageWidth, imageHeight, mapScale);
+    }
+
+    public System.Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double imageWidth, double imageHeight, double mapScale)
+    {
+        if (features.IsNullOrEmpty())
+            return null;
+
+        //var borderBrush = this.VisualParameters.Stroke.AsGdiBrush();
+
+        //var pen = this.VisualParameters.GetGdiPlusPen();
+
+        var image = GdiBitmapRenderer.ParseSqlGeometry(
+            features,
+            imageWidth,
+            imageHeight,
+            //mapToScreen,
+            this.VisualParameters.GetGdiPlusPen(),
+            this.VisualParameters.Fill.AsGdiBrush(),
+            this.VisualParameters.PointSymbol);
+
+        if (image is null)
+            return null;
+
+        if (this.CanRenderLabels(mapScale))
+        {
+            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
+        }
+
+        return image;
+    }
+
 
     // Todo: this method has been totally changed but not tested!
     public async Task SaveAsGoogleTiles(string outputFolderPath, int minLevel = 1, int maxLevel = 13)
@@ -721,29 +753,34 @@ public class VectorLayer : BaseLayer
             foreach (var tile in googleTiles)
             {
                 //var geometries = await GetGeometriesForDisplayAsync(scale, tile.WebMercatorExtent);
-                var feature = await this.DataSource.GetAsFeatureSetAsync(scale, tile.WebMercatorExtent);
+                //var feature = await this.DataSource.GetAsFeatureSetAsync(scale, tile.WebMercatorExtent);
 
-                if (feature is null || feature.Features.IsNullOrEmpty())
-                    continue;
+                //if (feature is null || feature.Features.IsNullOrEmpty())
+                //    continue;
 
-                //var geometries = feature.GetGeometries();
+                ////var geometries = feature.GetGeometries();
 
-                var transform = MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
+                //var transform = MapUtility.GetMapToScreen(tile.WebMercatorExtent, 256, 256);
 
-                var features = feature.Transform(transform).Features;
+                //var features = feature.Transform(transform).Features;
 
                 //Func<WpfPoint, WpfPoint> mapToScreen = p =>  transform(p.AsPoint()).AsWpfPoint(); 
 
-                var pen = this.VisualParameters.GetGdiPlusPen();
-                pen.Width = 2;
-                var image = GdiBitmapRenderer.ParseSqlGeometry(
-                                features,
-                                256,
-                                256,
-                                //mapToScreen,
-                                pen,
-                                this.VisualParameters.Fill.AsGdiBrush(),
-                                this.VisualParameters.PointSymbol);
+                //var pen = this.VisualParameters.GetGdiPlusPen();
+                //pen.Width = 2;
+                //var image = GdiBitmapRenderer.ParseSqlGeometry(
+                //                features,
+                //                256,
+                //                256,
+                //                //mapToScreen,
+                //                pen,
+                //                this.VisualParameters.Fill.AsGdiBrush(),
+                //                this.VisualParameters.PointSymbol);
+
+                var image = await AsGdiBitmapAsync(tile.WebMercatorExtent, 256, 256, scale);
+
+                if (image is null)
+                    continue;
 
                 image.Save($"{directory}\\{tile.ZoomLevel}, {tile.RowNumber}, {tile.ColumnNumber}.jpg");
             }
@@ -760,6 +797,9 @@ public class VectorLayer : BaseLayer
                 //SaveAsPngDrawingVisual(fileName, mapExtent, imageWidth, imageHeight, mapScale);
                 var renderTargetBitmap = await AsRenderTargetBitmap(mapExtent, imageWidth, imageHeight, mapScale);
 
+                if (renderTargetBitmap is null)
+                    return;
+
                 ImageUtility.Save(fileName, renderTargetBitmap);
 
                 break;
@@ -770,7 +810,10 @@ public class VectorLayer : BaseLayer
             case RasterizationApproach.None:
             default:
                 //SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
-                var image = await ParseToBitmapImage(mapExtent, imageWidth, imageHeight, mapScale);
+                var image = await AsGdiBitmapAsync(mapExtent, imageWidth, imageHeight, mapScale);
+
+                if (image is null)
+                    return;
 
                 image.Save(fileName);
 
@@ -845,26 +888,8 @@ public class VectorLayer : BaseLayer
 
     //}
 
-    public async Task<List<Feature<Point>>> GetRenderReadyFeatures(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    {
-        //var geoLabledPairs = await this.GetGeometryLabelPairForDisplayAsync(mapScale, mapExtent);
-        var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
-
-        //if (geoLabledPairs.Geometries == null)
-        if (feature is null || feature.HasNoGeometry())
-            return new List<Feature<Point>>();
-
-        //double xScale = imageWidth / mapExtent.Width;
-        //double yScale = imageHeight / mapExtent.Height;
-        //double scale = xScale > yScale ? yScale : xScale;
-        //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
-
-        return feature.Transform(mapToScreen).Features;
-    }
-
     public async Task<List<DrawingVisual>> AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    { 
+    {
         var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
 
         return AsDrawingVisual(features, mapScale);
