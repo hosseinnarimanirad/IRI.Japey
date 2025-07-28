@@ -849,6 +849,21 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         }
     }
 
+    private bool IntersectsPolygon(BoundingBox boundingBox)
+    {
+        // check if polygon is inside boundingBox
+        if (boundingBox.Covers(this.GetLastPoint()))
+            return true;
+
+        // check if bounding box is inside polygon
+        if (TopologyUtility.IsPointInPolygon<T>(this, new T() { X = boundingBox.XMin, Y = boundingBox.YMin }))
+            return true;
+
+        var boundingBoxGeometry = boundingBox.AsGeometry<T>(this.Srid);
+
+        return this.Geometries.Any(g => boundingBoxGeometry.IntersectsLineStringOrRing(g, isRing: true));
+    }
+
 
     public bool Intersects(BoundingBox boundingBox)
     {
@@ -875,6 +890,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return false;
 
             case GeometryType.Polygon:
+                return IntersectsPolygon(boundingBox);
 
             case GeometryType.MultiPoint:
             case GeometryType.MultiLineString:
