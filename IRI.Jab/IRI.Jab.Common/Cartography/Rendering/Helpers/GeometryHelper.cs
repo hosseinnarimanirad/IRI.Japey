@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
-using drawing = System.Drawing; 
+using drawing = System.Drawing;
 
-namespace IRI.Jab.Common.Convertor;
+namespace IRI.Jab.Common.Cartography.Rendering.Helpers;
 
 public class GeometryHelper
 {
     static int pointSize = 4;
-   
+
     internal static void Transform(drawing.Graphics graphics, Geometry<Point> original, Point location, drawing.Pen pen, drawing.Brush brush)
     {
         if (original.Geometries != null)
@@ -35,7 +34,7 @@ public class GeometryHelper
             {
                 graphics.DrawEllipse(pen, (float)(firstPoint.X + location.X), (float)(firstPoint.Y + location.Y), pointSize, pointSize);
             }
-            else if (original.Type == IRI.Sta.Common.Primitives.GeometryType.LineString)
+            else if (original.Type == GeometryType.LineString)
             {
                 AddLineString(graphics, original, location, pen, brush);
             }
@@ -78,7 +77,7 @@ public class GeometryHelper
             {
                 context.DrawEllipseCentered(border, (int)(firstPoint.X + location.X), (int)(firstPoint.Y + location.Y), pointSize, pointSize);
             }
-            else if (original.Type == IRI.Sta.Common.Primitives.GeometryType.LineString)
+            else if (original.Type == GeometryType.LineString)
             {
                 AddLineString(context, original, location, border, fill);
             }
@@ -110,13 +109,13 @@ public class GeometryHelper
         {
             System.Windows.Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
 
-            var firstPoint = new System.Drawing.PointF((float)(firstLocalPoint.X + location.X), (float)(firstLocalPoint.Y + location.Y));
+            var firstPoint = new drawing.PointF((float)(firstLocalPoint.X + location.X), (float)(firstLocalPoint.Y + location.Y));
 
             foreach (var segment in figure.Segments)
             {
                 if (segment is PolyLineSegment)
                 {
-                    var points = ((PolyLineSegment)segment).Points.Select(i => new System.Drawing.PointF((float)(i.X + location.X), (float)(i.Y + location.Y))).ToList();
+                    var points = ((PolyLineSegment)segment).Points.Select(i => new drawing.PointF((float)(i.X + location.X), (float)(i.Y + location.Y))).ToList();
 
                     points.Add(firstPoint);
 
@@ -133,7 +132,7 @@ public class GeometryHelper
                 else
                 {
                     throw new NotImplementedException();
-                } 
+                }
             }
         }
 
@@ -165,7 +164,7 @@ public class GeometryHelper
 
                     var y2 = ((LineSegment)segment).Point.Y + location.Y;
 
-                    context.DrawLine((int)(firstPoint.X), (int)(firstPoint.Y), (int)(x2), (int)(y2), border);
+                    context.DrawLine((int)firstPoint.X, (int)firstPoint.Y, (int)x2, (int)y2, border);
                 }
                 else
                 {
@@ -184,7 +183,7 @@ public class GeometryHelper
 
         for (int i = 1; i < points.Count; i++)
         {
-            context.DrawLine((int)(points[i - 1].X), (int)(points[i - 1].Y), (int)(points[i].X), (int)(points[i].Y), border);
+            context.DrawLine((int)points[i - 1].X, (int)points[i - 1].Y, (int)points[i].X, (int)points[i].Y, border);
         }
     }
 }

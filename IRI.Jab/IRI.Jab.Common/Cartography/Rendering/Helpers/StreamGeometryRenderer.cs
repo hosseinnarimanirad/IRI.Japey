@@ -12,7 +12,7 @@ using WpfPoint = System.Windows.Point;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Sta.Common.Abstrations;
 
-namespace IRI.Jab.Common.Convertor;
+namespace IRI.Jab.Common.Cartography.Rendering.Helpers;
 
 public static class StreamGeometryRenderer
 {
@@ -41,7 +41,7 @@ public static class StreamGeometryRenderer
             {
                 p += AddGeometry(context, item.TheGeometry, /*transform,*/ pointSymbol);
             }
-        } 
+        }
         //result.Freeze();
 
         return result;
@@ -106,11 +106,11 @@ public static class StreamGeometryRenderer
 
         int numberOfPoints = lineString.NumberOfPoints;
 
-        context.BeginFigure(/*transform*/(lineString.Points[0].AsWpfPoint()), isFilled: true, isClosed: isClosed);
+        context.BeginFigure(/*transform*/lineString.Points[0].AsWpfPoint(), isFilled: true, isClosed: isClosed);
 
         for (int i = 1; i < numberOfPoints; i++)
         {
-            var point = /*transform*/(lineString.Points[i].AsWpfPoint());
+            var point = /*transform*/lineString.Points[i].AsWpfPoint();
 
             context.LineTo(point, isStroked: true, isSmoothJoin: false);
         }
@@ -163,7 +163,7 @@ public static class StreamGeometryRenderer
     private static void AddPoint<T>(StreamGeometryContext context, Geometry<T> point/*, Func<WpfPoint, WpfPoint> transform*/)
         where T : IPoint, new()
     {
-        var center = /*transform*/(point.AsWpfPoint());
+        var center = /*transform*/point.AsWpfPoint();
 
         context.DrawGeometry(new EllipseGeometry(new Rect(center.X - pointSize / 2.0, center.Y - pointSize / 2.0, pointSize, pointSize)));
         //context.DrawGeometry(new EllipseGeometry(transform(new Point(point.STX.Value, point.STY.Value)), pointSize, pointSize));
@@ -174,7 +174,7 @@ public static class StreamGeometryRenderer
     private static void AddPoint<T>(StreamGeometryContext context, Geometry<T> point, Geometry pointSymbol/*, Func<WpfPoint, WpfPoint> transform*/)
         where T : IPoint, new()
     {
-        var location = /*transform*/(point.AsWpfPoint());
+        var location = /*transform*/point.AsWpfPoint();
 
         var geometry = pointSymbol.GetFlattenedPathGeometry();
 

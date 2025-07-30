@@ -1,5 +1,4 @@
-﻿using IRI.Jab.Common.Convertor;
-using IRI.Jab.Common;
+﻿using IRI.Jab.Common;
 using IRI.Sta.Common.Abstrations;
 using IRI.Sta.Spatial.Primitives;
 using System;
@@ -7,6 +6,7 @@ using System.Windows.Media;
 using WpfPoint = System.Windows.Point;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Helpers;
+using IRI.Jab.Common.Cartography.Rendering;
 
 namespace IRI.Extensions;
 
@@ -82,13 +82,11 @@ public static class GeometryExtensions
             {
                 ctx.ArcTo(arcSegment.Point, arcSegment.Size, arcSegment.RotationAngle, arcSegment.IsLargeArc, arcSegment.SweepDirection, arcSegment.IsStroked, arcSegment.IsSmoothJoin);
                 continue;
-            }
-
-
+            } 
         }
     }
 
-    public static DrawingVisual? AsDrawingVisual<T>(this Geometry<T> geometry, VisualParameters visualParameters, int imageWidth, int imageHeight, BoundingBox? mapBoundary = null) where T : IPoint, new()
+    public static DrawingVisual? AsDrawingVisual (this Geometry<Point> geometry, VisualParameters visualParameters, int imageWidth, int imageHeight, BoundingBox? mapBoundary = null) 
     {
         if (geometry.IsNullOrEmpty())
             return null;
@@ -102,7 +100,7 @@ public static class GeometryExtensions
         double yScale = imageHeight / mapExtent.Height;
         double scale = xScale > yScale ? yScale : xScale;
 
-        var mapToScreen = new Func<T, T>(p => new T() { X = ((p.X - mapExtent.XMin) * scale), Y = -(p.Y - mapExtent.YMax) * scale });
+        var mapToScreen = new Func<Point, Point>(p => new Point() { X = ((p.X - mapExtent.XMin) * scale), Y = -(p.Y - mapExtent.YMax) * scale });
 
         var pen = visualParameters.GetWpfPen();
 
@@ -115,7 +113,7 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 
@@ -131,7 +129,7 @@ public static class GeometryExtensions
     /// <param name="googleZoomLevel"></param>
     /// <param name="mapBoundary"></param>
     /// <returns></returns>
-    public static DrawingVisual? AsDrawingVisual<T>(this Geometry<T> geometry, VisualParameters visualParameters, int googleZoomLevel, BoundingBox? mapBoundary = null) where T : IPoint, new()
+    public static DrawingVisual? AsDrawingVisual(this Geometry<Point> geometry, VisualParameters visualParameters, int googleZoomLevel, BoundingBox? mapBoundary = null)  
     {
         if (geometry.IsNullOrEmpty())
             return null;

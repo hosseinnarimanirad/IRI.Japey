@@ -42,8 +42,7 @@ using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Cartography;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
-using ControlzEx.Standard;
-using IRI.Jab.Common.Convertor; 
+using ControlzEx.Standard; 
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 

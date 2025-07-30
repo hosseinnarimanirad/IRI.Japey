@@ -7,14 +7,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using IRI.Jab.Common.Model;
-using IRI.Jab.Common.Convertor;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Persistence.DataSources;
-
-using WpfPoint = System.Windows.Point;
+ 
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Jab.Common.Enums;
+using IRI.Jab.Common.Cartography.Rendering;
 
 namespace IRI.Jab.Common;
 
@@ -84,7 +83,7 @@ public class FeatureLayer : BaseLayer
         if (features == null)
             return null;
 
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
+        var image = new GdiBitmapRenderStrategy().ParseSqlGeometry(
             features,
             width,
             height,

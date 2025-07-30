@@ -13,7 +13,6 @@ using IRI.Extensions;
 using IRI.Jab.Common.Model;
 using IRI.Jab.Common.Helpers;
 using IRI.Sta.Spatial.Helpers;
-using IRI.Jab.Common.Convertor;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Persistence.DataSources;
 
@@ -23,7 +22,7 @@ using IRI.Sta.Common.Primitives;
 using IRI.Jab.Common.Enums;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
-using IRI.Sta.Common.Services;
+using IRI.Jab.Common.Cartography.Rendering;
 
 namespace IRI.Jab.Common;
 
@@ -279,7 +278,7 @@ public class VectorLayer : BaseLayer
         if (features.IsNullOrEmpty())
             return null;
 
-        var image = new WriteableBitmapRenderer().ParseSqlGeometry(
+        var image = new WriteableBitmapRenderStrategy().ParseSqlGeometry(
                             features,
                             //mapToScreen,
                             (int)screenWidth,
@@ -706,7 +705,7 @@ public class VectorLayer : BaseLayer
 
         //var pen = this.VisualParameters.GetGdiPlusPen();
 
-        var image = GdiBitmapRenderer.ParseSqlGeometry(
+        var image = new GdiBitmapRenderStrategy().ParseSqlGeometry(
             features,
             imageWidth,
             imageHeight,
@@ -720,7 +719,7 @@ public class VectorLayer : BaseLayer
 
         if (this.CanRenderLabels(mapScale))
         {
-            GdiBitmapRenderer.DrawLabels(features, image, /*mapToScreen, */this.Labels);
+            new GdiBitmapRenderStrategy().DrawLabels(features, image, /*mapToScreen, */this.Labels);
         }
 
         return image;
@@ -910,7 +909,7 @@ public class VectorLayer : BaseLayer
 
         Brush brush = this.VisualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderer().ParseGeometry(
+        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy().ParseGeometry(
                                         features,
                                         //mapToScreen,
                                         pen,
@@ -1047,10 +1046,7 @@ public class VectorLayer : BaseLayer
 
     #endregion
 
-
-
-
-
+      
     //POTENTIALLY ERROR PROUNE; formattedText is always RTL
     public DrawingVisual? DrawLabels(List<Feature<Point>> features/*, RenderTargetBitmap bmp*/)
     {
@@ -1262,5 +1258,4 @@ public class VectorLayer : BaseLayer
 
         return bitmap;
     }
-
 }

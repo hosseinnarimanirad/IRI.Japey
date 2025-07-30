@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 using IRI.Jab.Common.Cartography.Common;
 using IRI.Sta.Common.Primitives;
@@ -90,5 +91,10 @@ public class SimplePointSymbolizer : Notifier, ISymbolizer
     public VisualParameters Get(Feature<Point> feature, double scale)
     {
         throw new System.NotImplementedException();
+    }
+
+    public ImageBrush Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
+    {
+        throw new NotImplementedException();
     }
 }
