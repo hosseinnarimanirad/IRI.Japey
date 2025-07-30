@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace IRI.Jab.Common.Cartography.Symbologies;
 
-public class SimpleSymbolizer : Notifier, ISymbolizer
+public class SimpleSymbolizer : SymbolizerBase
 {
-    public SymbologyType Type { get => SymbologyType.Single; }
+    public override SymbologyType Type { get => SymbologyType.Single; }
 
     private VisualParameters _param;
 
@@ -28,14 +28,18 @@ public class SimpleSymbolizer : Notifier, ISymbolizer
         Param = visualParameters;
     }
 
+    public SimpleSymbolizer(Func<Feature<Point>, bool> filter, VisualParameters visualParameters):this(visualParameters)
+    {
+        this.IsFilterPassed = filter;
+    }
 
-    public VisualParameters Get(Feature<Point> feature, double scale) => Param;
+    //public override VisualParameters Get( ) => Param;
 
     public ImageBrush Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
     {
         throw new NotImplementedException();
     }
 
-    public Predicate<Feature<Point>> IsFilterPassed => feature => true;
+    //public override Func<Feature<Point>, bool> IsFilterPassed { get; private set; }
 
 }

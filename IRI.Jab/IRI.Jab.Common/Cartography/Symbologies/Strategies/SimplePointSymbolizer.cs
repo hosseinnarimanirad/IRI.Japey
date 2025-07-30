@@ -7,9 +7,9 @@ using IRI.Sta.Spatial.Primitives;
 
 namespace IRI.Jab.Common.Cartography.Symbologies;
 
-public class SimplePointSymbolizer : Notifier, ISymbolizer
+public class SimplePointSymbolizer : SymbolizerBase
 {
-    public SymbologyType Type { get => SymbologyType.Single; }
+    public override SymbologyType Type { get => SymbologyType.Single; }
 
     private double _symbolWidth = 16;
 
@@ -88,13 +88,14 @@ public class SimplePointSymbolizer : Notifier, ISymbolizer
         SymbolWidth = pointSize;
     }
 
-    public VisualParameters Get(Feature<Point> feature, double scale)
-    {
-        throw new System.NotImplementedException();
-    }
+    //public override VisualParameters Get()
+    //{
+    //    throw new System.NotImplementedException();
+    //}
 
     public ImageBrush Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
     {
         throw new NotImplementedException();
     }
+
 }

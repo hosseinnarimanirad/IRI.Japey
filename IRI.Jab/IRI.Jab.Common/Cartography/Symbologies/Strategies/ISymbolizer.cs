@@ -1,19 +1,26 @@
-﻿using IRI.Jab.Common.Cartography.Common;
+﻿using System; 
+
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Windows.Media;
+using IRI.Jab.Common.Cartography.Common;
 
 namespace IRI.Jab.Common.Cartography.Symbologies;
 
 public interface ISymbolizer
 {
+
     SymbologyType Type { get; }
 
-    VisualParameters Get(Feature<Point> feature, double scale);
+    double? MinScaleDenominator { get; set; }
 
-    Predicate<Feature<Point>> IsFilterPassed { get; }
+    double? MaxScaleDenominator { get; set; }
 
-    ImageBrush Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight);
+    //VisualParameters Get();
+
+    Func<Feature<Point>, bool> IsFilterPassed { get; }
+
+    Predicate<double> ScalePredicate { get; }
+
+    bool IsInScaleRange(double scale);
+    //ImageBrush Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight);
 }

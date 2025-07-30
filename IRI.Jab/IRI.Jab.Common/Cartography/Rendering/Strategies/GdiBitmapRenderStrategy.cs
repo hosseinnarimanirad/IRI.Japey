@@ -11,6 +11,9 @@ using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Jab.Common.Cartography.Symbologies;
 using System.Windows.Media;
 using IRI.Jab.Common.Cartography.Rendering.Helpers;
+using IRI.Jab.Common.Helpers;
+using System.Windows.Media.Imaging;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 
 namespace IRI.Jab.Common.Cartography.Rendering;
@@ -19,9 +22,82 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 {
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
+    public GdiBitmapRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    {
+    }
+
     public override ImageBrush? Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
     {
-        throw new NotImplementedException();
+        var bitmap = AsGdiBitmap(features, screenWidth, screenHeight, mapScale);
+
+        if (bitmap is null)
+            return null;
+
+        BitmapImage image = ImageUtility.AsBitmapImage(bitmap, System.Drawing.Imaging.ImageFormat.Png);
+
+        bitmap.Dispose();
+
+        image.Freeze();
+
+        return new ImageBrush(image);
+
+    }
+
+    public System.Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double imageWidth, double imageHeight, double mapScale)
+    {
+        if (features.IsNullOrEmpty())
+            return null;
+
+        Drawing.Bitmap image = new Drawing.Bitmap((int)imageWidth, (int)imageHeight);
+
+        using (Drawing.Graphics graphics = Drawing.Graphics.FromImage(image))
+        {
+            foreach (var symbolizer in _symbolizers)
+            { 
+                // check scale
+                if (!symbolizer.IsInScaleRange(mapScale))
+                    continue;
+
+                // filter features
+                var filteredFeatures = features.Where(symbolizer.IsFilterPassed).ToList();
+
+                switch (symbolizer)
+                {
+                    case SimplePointSymbolizer simplePointSymbolizer:
+                        break;
+
+                    case SimpleSymbolizer simpleSymbolizer:
+
+                        ParseSqlGeometry(
+                            graphics,
+                            filteredFeatures,
+                            imageWidth,
+                            imageHeight,
+                            //mapToScreen,
+                            simpleSymbolizer.Param.GetGdiPlusPen(),
+                            simpleSymbolizer.Param.Fill.AsGdiBrush(),
+                            simpleSymbolizer.Param.PointSymbol);
+
+                        if (image is null)
+                            return null;
+
+                        break;
+
+                    case LabelSymbolizer labelSymbolizer:
+                        if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
+                        {
+                             DrawLabels(filteredFeatures, graphics, /*mapToScreen, */labelSymbolizer.Labels);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+
+            }
+        }
+         
+        return image;
     }
 
 
@@ -40,14 +116,14 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         }
     }
 
-    public Drawing.Bitmap ParseSqlGeometry(List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    public void ParseSqlGeometry(Drawing.Graphics graphics, List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
-        var result = new Drawing.Bitmap((int)width, (int)height);
+        //var result = new Drawing.Bitmap((int)width, (int)height);
 
         if (features.IsNullOrEmpty())
-            return result;
+            return /*result*/;
 
-        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
+        //Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
 
         int p = 0;
 
@@ -56,8 +132,27 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
         }
 
-        return result;
+        return /*result*/;
     }
+
+    //public Drawing.Bitmap ParseSqlGeometry(List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    //{
+    //    var result = new Drawing.Bitmap((int)width, (int)height);
+
+    //    if (features.IsNullOrEmpty())
+    //        return result;
+
+    //    Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
+
+    //    int p = 0;
+
+    //    foreach (var item in features)
+    //    {
+    //        p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
+    //    }
+
+    //    return result;
+    //}
 
     internal Drawing.Bitmap ParseSqlGeometry(
       List<Feature<Point>> features,
@@ -297,7 +392,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
     }
 
     //Labeling
-    public void DrawLabels(List<Feature<Point>> features, Drawing.Bitmap image, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ LabelParameters labelParameters)
+    public void DrawLabels(List<Feature<Point>> features, Drawing.Graphics graphic, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ LabelParameters labelParameters)
     {
         if (features.IsNullOrEmpty())
             return;
@@ -310,7 +405,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
         var font = new Drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, Drawing.FontStyle.Bold);
 
-        var graphic = Drawing.Graphics.FromImage(image);
+        //var graphic = Drawing.Graphics.FromImage(image);
 
         graphic.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 

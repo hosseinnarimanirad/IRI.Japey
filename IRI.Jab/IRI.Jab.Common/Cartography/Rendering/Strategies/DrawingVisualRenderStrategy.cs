@@ -9,6 +9,10 @@ using IRI.Sta.Spatial.Primitives;
 using WpfPoint = System.Windows.Point;
 using IRI.Jab.Common.Cartography.Symbologies;
 using IRI.Jab.Common.Cartography.Rendering.Helpers;
+using IRI.Jab.Common.Helpers;
+using System.Linq;
+using System.Windows;
+using Point = IRI.Sta.Common.Primitives.Point;
 
 namespace IRI.Jab.Common.Cartography.Rendering;
 
@@ -20,6 +24,190 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
     private readonly Pen _defaultPen = new Pen(Brushes.Black, 1);
     private readonly Brush _defaultBrush = Brushes.Gray;
+    //private readonly List<ISymbolizer> _symbolizers;
+
+    public DrawingVisualRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    {
+    }
+
+    public override ImageBrush? Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
+    {
+        if (features.IsNullOrEmpty())
+            return null;
+
+        var drawingVisuals = AsDrawingVisual(features, mapScale);
+
+        var image = ImageUtility.Render(drawingVisuals, (int)screenWidth, (int)screenHeight);
+
+        return new ImageBrush(image);
+    }
+
+    public List<DrawingVisual> AsDrawingVisual(List<Feature<Point>> features, double mapScale)
+    {
+        var result = new List<DrawingVisual>();
+
+        foreach (var symbolizer in _symbolizers)
+        {
+            // check scale
+            if (!symbolizer.IsInScaleRange(mapScale))
+                continue;
+
+            // filter features
+            var filteredFeatures = features.Where(symbolizer.IsFilterPassed).ToList();
+
+            //var visualParameters = symbolizer.Get();
+
+            // check symbology type
+            switch (symbolizer)
+            {
+                case SimplePointSymbolizer simplePointSymbolizer:
+                    break;
+
+                case SimpleSymbolizer simpleSymbolizer:
+
+                    var pen = simpleSymbolizer.Param.GetWpfPen();
+
+                    if (pen is not null)
+                    {
+                        pen.LineJoin = PenLineJoin.Round;
+                        pen.EndLineCap = PenLineCap.Round;
+                        pen.StartLineCap = PenLineCap.Round;
+                    }
+
+                    Brush brush = simpleSymbolizer.Param.Fill;
+
+                    DrawingVisual drawingVisual = ParseGeometry(
+                                                    filteredFeatures,
+                                                    //mapToScreen,
+                                                    pen,
+                                                    brush,
+                                                    simpleSymbolizer.Param.PointSymbol);
+
+                    drawingVisual.Opacity = simpleSymbolizer.Param.Opacity;
+
+                    result.Add(drawingVisual);
+
+                    break;
+
+                case LabelSymbolizer labelSymbolizer:
+
+                    if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true /*&& feature.IsLabeled()*/)
+                    {
+                        var renderedLabels = this.DrawLabels(filteredFeatures, labelSymbolizer.Labels/*, image*//*, mapToScreen*/);
+
+                        if (renderedLabels is not null)
+                        {
+                            //renderedLabels.Opacity = visualParameters.Opacity;
+
+                            result.Add(renderedLabels);
+                        }
+                    }
+
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        //var pen = visualParameters.GetWpfPen();
+
+        //if (pen is not null)
+        //{
+        //    pen.LineJoin = PenLineJoin.Round;
+        //    pen.EndLineCap = PenLineCap.Round;
+        //    pen.StartLineCap = PenLineCap.Round;
+        //}
+
+        //Brush brush = visualParameters.Fill;
+
+        //DrawingVisual drawingVisual = ParseGeometry(
+        //                                features,
+        //                                //mapToScreen,
+        //                                pen,
+        //                                brush,
+        //                                VisualParameters.PointSymbol);
+
+        //drawingVisual.Opacity = this.VisualParameters.Opacity;
+
+        //result.Add(drawingVisual);
+
+        //if (this.CanRenderLabels(mapScale) /*&& feature.IsLabeled()*/)
+        //{
+        //    var renderedLabels = this.DrawLabels(features/*, image*//*, mapToScreen*/);
+
+        //    if (renderedLabels is not null)
+        //    {
+        //        renderedLabels.Opacity = this.VisualParameters.Opacity;
+
+        //        result.Add(renderedLabels);
+        //    }
+        //}
+
+        return result;
+    }
+
+    public DrawingVisual? DrawLabels(List<Feature<Point>> features, LabelParameters labels)
+    {
+        if (features.IsNullOrEmpty())
+            return null;
+
+        var mapCoordinates = features.ConvertAll(
+                  (g) =>
+                  {
+                      var point = labels.PositionFunc(g.TheGeometry);
+                      return new WpfPoint(point.Points[0].X, point.Points[0].Y);
+                  }).ToList();
+
+        DrawingVisual drawingVisual = new DrawingVisual();
+
+        using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+        {
+            var typeface = new Typeface(labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+
+            var flowDirection = labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+            var culture = System.Globalization.CultureInfo.CurrentCulture;
+
+            var backgroundBrush = new SolidColorBrush(Color.FromArgb(200, 255, 255, 255));
+
+            for (int i = 0; i < features.Count; i++)
+            {
+                var label = features[i].Label;
+
+                if (string.IsNullOrEmpty(label))
+                    continue;
+
+                FormattedText formattedText =
+                    new FormattedText(label,
+                                        culture,
+                                        flowDirection,
+                                        typeface,
+                                        labels.FontSize,
+                                        labels.Foreground,
+                                        pixelsPerDip: 96);
+
+                WpfPoint location = /*mapToScreen*/(mapCoordinates[i]);
+
+                var temp = new WpfPoint(location.X - formattedText.Width * 1.5, location.Y - formattedText.Height / 2.0);
+
+                if (flowDirection == FlowDirection.LeftToRight)
+                {
+                    drawingContext.DrawRectangle(backgroundBrush, null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
+                }
+                else
+                {
+                    drawingContext.DrawRectangle(backgroundBrush, null, new Rect(temp, new Size(formattedText.Width, formattedText.Height)));
+                }
+
+                drawingContext.DrawText(formattedText, new WpfPoint(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
+            }
+        }
+
+        //bmp.Render(drawingVisual);
+        return drawingVisual;
+    }
+
 
     public DrawingVisual ParseGeometry(
         List<Feature<Point>> features,
@@ -62,6 +250,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
         return result;
     }
+
 
     private void AddGeometry(
         DrawingContext context,
@@ -207,11 +396,6 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         }
     }
 
-
-    public override ImageBrush? Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
-    {
-        throw new NotImplementedException();
-    }
 
     //// ******************************************************** SqlGeometry ********************************************************************
 

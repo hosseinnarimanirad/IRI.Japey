@@ -14,6 +14,7 @@ using IRI.Sta.Persistence.DataSources;
 using Point = IRI.Sta.Common.Primitives.Point;
 using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Cartography.Rendering;
+using IRI.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Jab.Common;
 
@@ -24,6 +25,8 @@ public class FeatureLayer : BaseLayer
     public Func<Feature<Point>, VisualParameters> SymbologyRule { get; set; }
 
     private LayerType _type;
+
+    public List<ISymbolizer> Symbolizers { get; protected set; }
 
     public override LayerType Type
     {
@@ -83,7 +86,7 @@ public class FeatureLayer : BaseLayer
         if (features == null)
             return null;
 
-        var image = new GdiBitmapRenderStrategy().ParseSqlGeometry(
+        var image = new GdiBitmapRenderStrategy(this.Symbolizers).ParseSqlGeometry(
             features,
             width,
             height,

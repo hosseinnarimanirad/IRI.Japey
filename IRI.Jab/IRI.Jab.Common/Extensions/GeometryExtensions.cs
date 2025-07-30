@@ -82,11 +82,11 @@ public static class GeometryExtensions
             {
                 ctx.ArcTo(arcSegment.Point, arcSegment.Size, arcSegment.RotationAngle, arcSegment.IsLargeArc, arcSegment.SweepDirection, arcSegment.IsStroked, arcSegment.IsSmoothJoin);
                 continue;
-            } 
+            }
         }
     }
 
-    public static DrawingVisual? AsDrawingVisual (this Geometry<Point> geometry, VisualParameters visualParameters, int imageWidth, int imageHeight, BoundingBox? mapBoundary = null) 
+    public static DrawingVisual? AsDrawingVisual(this Geometry<Point> geometry, VisualParameters visualParameters, int imageWidth, int imageHeight, BoundingBox? mapBoundary = null)
     {
         if (geometry.IsNullOrEmpty())
             return null;
@@ -113,7 +113,8 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy().ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
+        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy([new IRI.Jab.Common.Cartography.Symbologies.SimpleSymbolizer(visualParameters)])
+                                            .ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
 
@@ -129,7 +130,7 @@ public static class GeometryExtensions
     /// <param name="googleZoomLevel"></param>
     /// <param name="mapBoundary"></param>
     /// <returns></returns>
-    public static DrawingVisual? AsDrawingVisual(this Geometry<Point> geometry, VisualParameters visualParameters, int googleZoomLevel, BoundingBox? mapBoundary = null)  
+    public static DrawingVisual? AsDrawingVisual(this Geometry<Point> geometry, VisualParameters visualParameters, int googleZoomLevel, BoundingBox? mapBoundary = null)
     {
         if (geometry.IsNullOrEmpty())
             return null;

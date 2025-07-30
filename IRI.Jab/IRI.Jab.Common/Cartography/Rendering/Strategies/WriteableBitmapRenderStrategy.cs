@@ -3,9 +3,11 @@ using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 
 using System;
+using System.Linq;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using IRI.Jab.Common.Cartography.Symbologies;
 using IRI.Jab.Common.Cartography.Rendering.Helpers;
 
 
@@ -15,10 +17,60 @@ public class WriteableBitmapRenderStrategy : RenderStrategy
 {
     int pointSize = 4;
 
+    public WriteableBitmapRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    {
+    }
+
     public override ImageBrush? Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
     {
-        throw new NotImplementedException();
+        if (features.IsNullOrEmpty())
+            return null;
+
+        WriteableBitmap image = null;
+
+        foreach (var symbolizer in _symbolizers)
+        {
+            // check scale
+            if (!symbolizer.IsInScaleRange(mapScale))
+                continue;
+
+            // filter features
+            var filteredFeatures = features.Where(symbolizer.IsFilterPassed).ToList();
+
+            switch (symbolizer)
+            {
+                case SimplePointSymbolizer simplePointSymbolizer:
+                    break;
+
+                case SimpleSymbolizer simpleSymbolizer:
+                    image = ParseSqlGeometry(
+                        filteredFeatures,
+                        //mapToScreen,
+                        (int)screenWidth,
+                        (int)screenHeight,
+                        simpleSymbolizer.Param.Stroke.AsSolidColor().Value,
+                        simpleSymbolizer.Param.Fill.AsSolidColor().Value);
+
+                    break;
+
+                case LabelSymbolizer labelSymbolizer:
+                    if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
+                    {
+                        //this.DrawLabel(labels, geometries, image, transform);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        image.Freeze();
+
+        return new ImageBrush(image);
+
     }
+
 
     public WriteableBitmap ParseSqlGeometry(List<Feature<Point>> features, /*Func<WpfPoint, WpfPoint> transform,*/ int width, int height, Color border, Color fill, ImageSource pointSymbol = null, Geometry<Point> symbol = null)
     {

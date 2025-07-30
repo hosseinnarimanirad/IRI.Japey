@@ -11,4 +11,5 @@ public enum SymbologyType
     Single = 1,
     Nominal = 2,
     GraduatedColor = 3,
+    Label = 4,
 }

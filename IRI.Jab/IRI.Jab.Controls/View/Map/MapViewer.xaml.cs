@@ -42,7 +42,8 @@ using IRI.Jab.Common.Enums;
 using IRI.Jab.Common.Cartography;
 using IRI.Sta.Persistence.Abstractions;
 using IRI.Jab.Common.Cartography.Symbologies;
-using ControlzEx.Standard; 
+using ControlzEx.Standard;
+using IRI.Jab.Common.Cartography.Rendering;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
@@ -1477,7 +1478,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
 
-        ImageBrush? imageBrush;
+        //ImageBrush? imageBrush;
 
         //var shiftX = tile.WebMercatorExtent.Center.X - totalExtent.TopLeft.X - tile.WebMercatorExtent.Width / 2.0;
         //var shiftY = tile.WebMercatorExtent.Center.Y - totalExtent.TopLeft.Y + tile.WebMercatorExtent.Height / 2.0;
@@ -1489,26 +1490,30 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         var features = feature.Transform(transform, null).Features;
 
-        switch (layer.ToRasterTechnique)
-        {
-            case RasterizationApproach.DrawingVisual:
-                imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
-                break;
-            case RasterizationApproach.GdiPlus:
-                imageBrush = layer.RenderUsingGdiPlus(features, mapScale, /*tile, */tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
-                break;
-            case RasterizationApproach.WriteableBitmap:
-                imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
-                break;
-            //case RasterizationApproach.OpenTk:
-            //    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
-            //    break;
-            case RasterizationApproach.StreamGeometry:
-            //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
-            case RasterizationApproach.None:
-            default:
-                throw new NotImplementedException();
-        }
+        var renderingStrategy = RenderStrategyContext.Create(layer);
+
+        var imageBrush = renderingStrategy.Render(features, mapScale, tileScreenWidth, tileScreenHeight);
+
+        //switch (layer.ToRasterTechnique)
+        //{
+        //    case RasterizationApproach.DrawingVisual:
+        //        imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
+        //        break;
+        //    case RasterizationApproach.GdiPlus:
+        //        imageBrush = layer.RenderUsingGdiPlus(features, mapScale, /*tile, */tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
+        //        break;
+        //    case RasterizationApproach.WriteableBitmap:
+        //        imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
+        //        break;
+        //    //case RasterizationApproach.OpenTk:
+        //    //    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
+        //    //    break;
+        //    case RasterizationApproach.StreamGeometry:
+        //    //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
+        //    case RasterizationApproach.None:
+        //    default:
+        //        throw new NotImplementedException();
+        //}
 
         if (tile.ZoomLevel != this.CurrentZoomLevel)//|| MapScale != mapScale)
         {
@@ -1558,38 +1563,44 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             var area = ParseToRectangleGeometry(extent);
 
-            ImageBrush? imageBrush = null;
+            //ImageBrush? imageBrush = null;
 
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
 
             var features = feature.Transform(transform).Features;
 
-            switch (layer.ToRasterTechnique)
-            {
-                case RasterizationApproach.GdiPlus:
-                    imageBrush = layer.RenderUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen area*/);
-                    break;
 
-                //case RasterizationApproach.OpenTk:
-                //    path = layer.AsBitmapUsingOpenTK(geometires, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                //    break;
+            var renderingStrategy = RenderStrategyContext.Create(layer);
 
-                case RasterizationApproach.DrawingVisual:
-                    imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
-                    break;
+            var imageBrush = renderingStrategy.Render(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight);
 
-                case RasterizationApproach.WriteableBitmap:
-                    imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
-                    break;
 
-                //case RasterizationApproach.StreamGeometry:
-                //    imageBrush = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
-                //    break;
+            //switch (layer.ToRasterTechnique)
+            //{
+            //    case RasterizationApproach.GdiPlus:
+            //        imageBrush = layer.RenderUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen area*/);
+            //        break;
 
-                case RasterizationApproach.None:
-                default:
-                    throw new NotImplementedException();
-            }
+            //    //case RasterizationApproach.OpenTk:
+            //    //    path = layer.AsBitmapUsingOpenTK(geometires, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
+            //    //    break;
+
+            //    case RasterizationApproach.DrawingVisual:
+            //        imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
+            //        break;
+
+            //    case RasterizationApproach.WriteableBitmap:
+            //        imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
+            //        break;
+
+            //    //case RasterizationApproach.StreamGeometry:
+            //    //    imageBrush = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
+            //    //    break;
+
+            //    case RasterizationApproach.None:
+            //    default:
+            //        throw new NotImplementedException();
+            //}
 
             if (imageBrush is null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
