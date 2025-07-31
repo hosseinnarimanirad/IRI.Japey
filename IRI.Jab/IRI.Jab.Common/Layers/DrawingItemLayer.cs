@@ -51,7 +51,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
             RaisePropertyChanged();
 
             this.DataSource = new MemoryDataSource([_feature]);
-            
+
             this.Extent = value.TheGeometry.GetBoundingBox();
         }
     }
@@ -128,7 +128,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
         Feature<Point> feature,
         VisualParameters? visualParameters = null,
         int id = int.MinValue)//,
-        //IVectorDataSource/*<Feature<Point>>*/? source = null)
+                              //IVectorDataSource/*<Feature<Point>>*/? source = null)
     {
         if (feature is null || feature.TheGeometry.IsNotValidOrEmpty())
             return null;
@@ -138,6 +138,8 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
         //result.Extent = geometry.GetBoundingBox();
 
         result.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
+
+        result.Symbolizers = [new Cartography.Symbologies.SimpleSymbolizer(result.VisualParameters)];
 
         //result.OriginalSource = source;
 
