@@ -127,6 +127,18 @@
   <data name="srs_ceaTitle" xml:space="preserve">
     <value>Cylindrical Equal Area</value>
   </data>
+  <data name="srs_defaultLatitude" xml:space="preserve">
+    <value>Latitude:</value>
+  </data>
+  <data name="srs_defaultLongitude" xml:space="preserve">
+    <value>Longitude:</value>
+  </data>
+  <data name="srs_defaultX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="srs_defaultY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
   <data name="srs_geodeticDmsSubTitle" xml:space="preserve">
     <value>Geodetic, WGS84</value>
   </data>
@@ -156,18 +168,6 @@
   </data>
   <data name="srs_utmTitle" xml:space="preserve">
     <value>Universal Transeverse Mercator (UTM)</value>
-  </data>
-  <data name="srs__defaultLatitude" xml:space="preserve">
-    <value>Latitude:</value>
-  </data>
-  <data name="srs__defaultLongitude" xml:space="preserve">
-    <value>Longitude:</value>
-  </data>
-  <data name="srs__defaultX" xml:space="preserve">
-    <value>X:</value>
-  </data>
-  <data name="srs__defaultY" xml:space="preserve">
-    <value>Y:</value>
   </data>
   <data name="whiteImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\whiteImage.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

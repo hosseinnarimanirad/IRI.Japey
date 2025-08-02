@@ -2,6 +2,8 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using System.Windows;
 
 namespace IRI.Jab.Common;
 
@@ -14,11 +16,12 @@ public class LocalizationManager //: INotifyPropertyChanged
     // Custom event to avoid PropertyChanged overhead
     public event Action LanguageChanged;
 
+    public event Action FlowDirectionChanged;
 
     public CultureInfo CurrentCulture
     {
         get => _currentCulture;
-        set
+        private set
         {
             if (_currentCulture != value)
             {
@@ -26,10 +29,20 @@ public class LocalizationManager //: INotifyPropertyChanged
                 CultureInfo.CurrentUICulture = value;
                 CultureInfo.CurrentCulture = value;
                 LanguageChanged?.Invoke();
+                FlowDirectionChanged?.Invoke(); // New event
             }
         }
     }
 
+    public FlowDirection CurrentFlowDirection =>
+      IsRightToLeftLanguage(CurrentCulture) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+
+    private bool IsRightToLeftLanguage(CultureInfo culture)
+    {
+        // List of RTL language codes
+        var rtlLanguages = new[] { "fa", "ar", "he" }; // Persian, Arabic, Hebrew
+        return rtlLanguages.Contains(culture.TwoLetterISOLanguageName);
+    }
 
     //public string this[string key] => Resources.ResourceManager.GetString(key, CultureInfo.CurrentUICulture);
 
@@ -45,10 +58,20 @@ public class LocalizationManager //: INotifyPropertyChanged
             return resourceSet?.GetString(key) ?? $"#{key}#";
         }
     }
+     
+    //public bool IsFrench => CurrentCulture.Name.Equals("fr-FR", StringComparison.OrdinalIgnoreCase);
+    
+    public bool IsPersian => CurrentCulture.Name.Equals("fa-IR", StringComparison.OrdinalIgnoreCase);
 
     //public void SetCulture(CultureInfo culture)
     //{
     //    CultureInfo.CurrentUICulture = culture;
     //    LanguageChanged?.Invoke();
     //}
+
+    public void SetCulture(CultureInfo culture)
+    {
+        CurrentCulture = culture;
+    }
+
 }

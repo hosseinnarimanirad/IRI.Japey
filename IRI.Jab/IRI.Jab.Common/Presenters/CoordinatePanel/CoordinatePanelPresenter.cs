@@ -8,6 +8,11 @@ namespace IRI.Jab.Common.Presenter;
 
 public class CoordinatePanelPresenter : Notifier
 {
+    private readonly LocalizationManager _localization;
+    public FlowDirection CurrentFlowDirection => _localization.CurrentFlowDirection;
+
+
+
     private ObservableCollection<SpatialReferenceItem> _spatialReferences = new ObservableCollection<SpatialReferenceItem>();
 
     public ObservableCollection<SpatialReferenceItem> SpatialReferences
@@ -48,7 +53,12 @@ public class CoordinatePanelPresenter : Notifier
 
         this.SpatialReferences.First().IsSelected = true;
 
-        SetLanguage(LanguageMode.Persian);
+        //SetLanguage(LanguageMode.Persian);
+        _localization = LocalizationManager.Instance;
+        _localization.FlowDirectionChanged += () =>
+        {
+            RaisePropertyChanged(nameof(CurrentFlowDirection));
+        };
     }
 
     private void UpdateSelectedItem()
@@ -59,28 +69,28 @@ public class CoordinatePanelPresenter : Notifier
         }
     }
 
-    public void SetLanguage(LanguageMode value)
-    {
-        foreach (var item in SpatialReferences)
-        {
-            item.UILanguage = value;
-        }
+    //public void SetLanguage(LanguageMode value)
+    //{
+    //    foreach (var item in SpatialReferences)
+    //    {
+    //        item.UILanguage = value;
+    //    }
 
-        this.UIFlow = value == LanguageMode.Persian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-    }
+    //    this.UIFlow = value == LanguageMode.Persian ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+    //}
 
-    private FlowDirection _uiFlow;
+    //private FlowDirection _uiFlow;
 
-    public FlowDirection UIFlow
-    {
-        get { return _uiFlow; }
-        set
-        {
-            _uiFlow = value;
-            RaisePropertyChanged();
-            System.Diagnostics.Debug.WriteLine("UIFlow: " + value.ToString());
-        }
-    }
+    //public FlowDirection UIFlow
+    //{
+    //    get { return _uiFlow; }
+    //    set
+    //    {
+    //        _uiFlow = value;
+    //        RaisePropertyChanged();
+    //        System.Diagnostics.Debug.WriteLine("UIFlow: " + value.ToString());
+    //    }
+    //}
 
     public string GetCurrentPosstionString(IRI.Sta.Common.Primitives.Point geodeticPoint)
     {

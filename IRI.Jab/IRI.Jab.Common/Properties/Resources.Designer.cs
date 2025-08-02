@@ -71,42 +71,6 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Latitude:.
-        /// </summary>
-        public static string srs__defaultLatitude {
-            get {
-                return ResourceManager.GetString("srs__defaultLatitude", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Longitude:.
-        /// </summary>
-        public static string srs__defaultLongitude {
-            get {
-                return ResourceManager.GetString("srs__defaultLongitude", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to X:.
-        /// </summary>
-        public static string srs__defaultX {
-            get {
-                return ResourceManager.GetString("srs__defaultX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Y:.
-        /// </summary>
-        public static string srs__defaultY {
-            get {
-                return ResourceManager.GetString("srs__defaultY", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cylindrical Equal Area.
         /// </summary>
         public static string srs_ceaSubTitle {
@@ -121,6 +85,42 @@ namespace IRI.Jab.Common.Properties {
         public static string srs_ceaTitle {
             get {
                 return ResourceManager.GetString("srs_ceaTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude:.
+        /// </summary>
+        public static string srs_defaultLatitude {
+            get {
+                return ResourceManager.GetString("srs_defaultLatitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude:.
+        /// </summary>
+        public static string srs_defaultLongitude {
+            get {
+                return ResourceManager.GetString("srs_defaultLongitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X:.
+        /// </summary>
+        public static string srs_defaultX {
+            get {
+                return ResourceManager.GetString("srs_defaultX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y:.
+        /// </summary>
+        public static string srs_defaultY {
+            get {
+                return ResourceManager.GetString("srs_defaultY", resourceCulture);
             }
         }
         

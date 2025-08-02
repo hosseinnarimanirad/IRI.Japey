@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="IRI.Jab.Controls.View.Map.CoordinatePanelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             xmlns:resx="clr-namespace:IRI.Jab.Common.Properties;assembly=IRI.Jab.Common"
+             xmlns:resx="clr-namespace:IRI.Jab.Common.Properties;assembly=IRI.Jab.Common"             
              x:Name="root" Height="auto" Width="auto" Opacity=".8" MouseLeave="UserControl_MouseLeave">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -10,7 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Border BorderThickness="1" CornerRadius="3" Padding="2" FlowDirection="{Binding UIFlow}" MinWidth="460">
+    <Border BorderThickness="1" CornerRadius="3" Padding="2" FlowDirection="{Binding CurrentFlowDirection}" MinWidth="460">
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
@@ -37,22 +37,22 @@
                        FlowDirection="LeftToRight" Height="Auto" HorizontalContentAlignment="Right" Foreground="{DynamicResource MahApps.Brushes.Highlight}"
                        DockPanel.Dock="Right"/>
                 <Label Visibility="{Binding SelectedItem.IsZoneVisible, Converter={StaticResource boolToVisibilityConverter}}"   
-                       Content="{Binding SelectedItem.ZoneItem.Title}" Height="auto" Style="{StaticResource staticText}"
+                       Content="{Binding SelectedItem.ZoneItem}" Height="auto" Style="{StaticResource staticText}"
                        DockPanel.Dock="Right"/>
                 <Label Width="100" Content="{Binding SelectedItem.YValue}" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}" 
                        Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"   HorizontalContentAlignment="Right" 
                        DockPanel.Dock="Right"/>
-                <Label Content="{Binding SelectedItem.YLabelItem.Title}" Height="auto" Style="{StaticResource staticText}"
+                <Label Content="{Binding SelectedItem.YLabelItem}" Height="auto" Style="{StaticResource staticText}"
                        DockPanel.Dock="Right"/>
 
                 <Label Width="100" Content="{Binding SelectedItem.XValue}" Margin="00 0 10 0" FlowDirection="LeftToRight" Height="Auto"  
                        HorizontalContentAlignment="Right" Background="White" Foreground="{DynamicResource MahApps.Brushes.Highlight}"
                        DockPanel.Dock="Right"/>
 
-                <Label Content="{Binding SelectedItem.XLabelItem.Title}" Height="auto" Style="{StaticResource staticText}" 
+                <Label Content="{Binding SelectedItem.XLabelItem}" Height="auto" Style="{StaticResource staticText}" 
                        DockPanel.Dock="Right"/>
 
-                <Label Margin="0,0,1,0" Style="{StaticResource staticText}" Content="{Binding SelectedItem.SubTitleItem.Title}"
+                <Label Margin="0,0,1,0" Style="{StaticResource staticText}" Content="{Binding SelectedItem.SubTitleItem}"
                        DockPanel.Dock="Left"/>
             </DockPanel>
             <ItemsControl Grid.Row="3" ItemsSource="{Binding SpatialReferences}">

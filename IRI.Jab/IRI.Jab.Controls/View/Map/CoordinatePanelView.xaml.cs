@@ -120,10 +120,10 @@ namespace IRI.Jab.Controls.View.Map
                                     FlowDirection.RightToLeft :
                                     FlowDirection.LeftToRight;
 
-            if (this.Presenter != null)
-            {
-                this.Presenter.SetLanguage(value);
-            }
+            //if (this.Presenter != null)
+            //{
+            //    this.Presenter.SetLanguage(value);
+            //}
         }
 
 
