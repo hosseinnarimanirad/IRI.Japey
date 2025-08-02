@@ -1,20 +1,5 @@
-﻿using IRI.Sta.Common.Helpers;
-using IRI.Sta.Spatial.Primitives;
-using IRI.Sta.Common.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Tag.SampleWpfApp
@@ -35,9 +20,9 @@ namespace IRI.Tag.SampleWpfApp
             {
                 SqlServerTypes.Utilities.LoadNativeAssembliesv14(Environment.CurrentDirectory);
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show("problem #1000");
+                MessageBox.Show("error!");
             }
 
             var presenter = new ViewModel.AppPresenter();

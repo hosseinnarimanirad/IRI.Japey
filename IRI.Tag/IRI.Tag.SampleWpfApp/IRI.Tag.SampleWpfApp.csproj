@@ -24,6 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Reference Include="Microsoft.SqlServer.Types">
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>

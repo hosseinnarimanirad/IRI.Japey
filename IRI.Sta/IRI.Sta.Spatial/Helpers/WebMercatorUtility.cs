@@ -16,8 +16,8 @@ public static class WebMercatorUtility
     private const int ImageSize = 256;
 
     private const double EarthRadius = 6378137;
-    private const double MinLatitude = -85.05112878;
-    private const double MaxLatitude = 85.05112878;
+    //private const double MinLatitude = -85.05112878;
+    //private const double MaxLatitude = 85.05112878;
     private const double MinLongitude = -180;
     private const double MaxLongitude = 180;
     private const double EarthCircumference = 2 * Math.PI * EarthRadius;
@@ -35,7 +35,8 @@ public static class WebMercatorUtility
 
     static WebMercatorUtility()
     {
-        MaxAllowableLatitude = 85.05112877822864;
+        //MaxAllowableLatitude = 85.05112877822864;
+        MaxAllowableLatitude = 85.0;
 
         MaxIsometricLatitude = MapProjects.GeodeticLatitudeToIsometricLatitude(MaxAllowableLatitude, _firstEccentricity);
 

@@ -4,13 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IRI.Tag.SampleWpfApp"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d" Loaded="Window_Loaded" 
         xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:MapViewer="clr-namespace:IRI.Jab.Controls;assembly=IRI.Jab.Controls" 
         xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
-        Title="MainWindow" Height="600" Width="800" x:Name="root" >
+        Title="MainWindow" Height="600" Width="900" x:Name="root" >
     <Window.Resources>
-
         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
             <Setter Property="mahApp:HeaderedControlHelper.HeaderFontSize" Value="12" />
         </Style>
@@ -26,7 +25,7 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1">
             <StackPanel.Resources>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">
                     <Setter Property="Margin" Value="4"/>
                 </Style>
             </StackPanel.Resources>
@@ -46,23 +45,37 @@
             <Border BorderBrush="Black" BorderThickness="1" Margin="2">
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Add Marker Sample" Command="{Binding ShowSpecialPointLayerSampleCommand}"/>
-
                 </StackPanel>
             </Border>
         </StackPanel>
+ 
+        <MapViewer:MapViewer 
+            Grid.Row="1" 
+            Grid.Column="1" 
+            x:Name="map" 
+            BorderBrush="Black" 
+            BorderThickness="1"/>
 
-
-        <MapViewer:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"  />
-
-        <MapViewer:MapInfoView Grid.Column="1"  Grid.Row="1" DataContext="{Binding }"/>
-
-
-        <iriJabMapControls:CoordinatePanelView Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"
-                                                                           DataContext="{Binding CoordinatePanel}"
-                                                                           Position="{Binding CurrentPoint, ElementName=map}"/>
+        <MapViewer:MapInfoView 
+            Grid.Row="1" 
+            Grid.Column="1"  
+            UILanguage="English" 
+            DataContext="{Binding }" 
+            FlowDirection="LeftToRight"/>
+ 
+        <iriJabMapControls:CoordinatePanelView 
+            Grid.Column="1" 
+            Grid.Row="1" 
+            Margin="10" 
+            UILanguage="English"
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"
+            DataContext="{Binding CoordinatePanel}" 
+            Position="{Binding CurrentPoint, ElementName=map}"/>
+        
         <StackPanel Grid.Row="1">
-            <Expander Header="نقشه‌های پایه" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
-                <ListBox ItemsSource="{Binding MapProviders}" Height="250">
+            <Expander Header="Base maps" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+                <ListBox ItemsSource="{Binding MapProviders}" Height="150">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Margin="2" Text="{Binding FullName}" Foreground="Black" Cursor="Hand">
@@ -74,13 +87,11 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Expander>
-
-            <Expander Header="عوارض ترسیمی" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+            <Expander Header="Drawings" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
                 <iriJabMapControls:MapDrawingLegendView MinHeight="90"/>
             </Expander>
-            <Expander Header="لایه‌ها" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
+            <Expander Header="layers" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
                 <iriJabMapControls:MapLegendWithOptionsView EnableFilterMode="True"  DataContext="{Binding Layers}" GroupName="B"/>
-
             </Expander>
         </StackPanel>
     </Grid>
