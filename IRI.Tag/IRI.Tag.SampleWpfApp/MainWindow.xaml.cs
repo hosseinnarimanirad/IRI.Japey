@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
+using IRI.Jab.Common;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Tag.SampleWpfApp
@@ -40,6 +42,7 @@ namespace IRI.Tag.SampleWpfApp
 
             presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false, isNewExtent: true);
 
+            LocalizationManager.Instance.CurrentCulture = (new CultureInfo("fa-IR"));
         }
     }
 }

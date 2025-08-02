@@ -1,13 +1,11 @@
-﻿using IRI.Jab.Common.Model;
-using IRI.Jab.Controls.Presenter;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using IRI.Jab.Common.Model;
 using IRI.Extensions;
-using IRI.Jab.Common.Model.CoordinatePanel;
 using IRI.Jab.Common.Presenter;
 
 namespace IRI.Jab.Controls.View.Map
@@ -18,15 +16,7 @@ namespace IRI.Jab.Controls.View.Map
     public partial class CoordinatePanelView : UserControl, INotifyPropertyChanged
     {
         public CoordinatePanelPresenter Presenter { get { return this.DataContext as CoordinatePanelPresenter; } }
-        //const string persianLongitudeLabel = "طول جغرافیایی";
-        //const string persianLatitudeLabel = "عرض جغرافیایی";
-
-        //const string englishLongitudeLabel = "Longitude";
-        //const string englishLatitudeLabel = "Latitude";
-
-        //const string persianZoneLabel = "ناحیه";
-        //const string englishZoneLabel = "Zone";
-
+       
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,11 +30,9 @@ namespace IRI.Jab.Controls.View.Map
 
         public CoordinatePanelView()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
-
-
-
+         
 
         private void options_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -54,7 +42,7 @@ namespace IRI.Jab.Controls.View.Map
 
             this.Opacity = 1;
         }
-         
+
 
 
         /// <summary>
@@ -65,10 +53,8 @@ namespace IRI.Jab.Controls.View.Map
         public void SetCoordinates(Point geodeticPoint)
         {
             Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
-
-
         }
-         
+
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -98,7 +84,7 @@ namespace IRI.Jab.Controls.View.Map
                     return;
                 }
             })));
-         
+
 
         public LanguageMode UILanguage
         {
@@ -130,13 +116,17 @@ namespace IRI.Jab.Controls.View.Map
 
         private void SetLanguage(LanguageMode value)
         {
+            this.FlowDirection = (value == LanguageMode.Persian) ?
+                                    FlowDirection.RightToLeft :
+                                    FlowDirection.LeftToRight;
+
             if (this.Presenter != null)
             {
                 this.Presenter.SetLanguage(value);
             }
         }
 
-         
+
 
     }
 }

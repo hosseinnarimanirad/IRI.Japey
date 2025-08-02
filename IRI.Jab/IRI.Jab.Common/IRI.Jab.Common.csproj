@@ -54,6 +54,7 @@
     <None Remove="Assets\Images\imageNotFound.jpg" />
     <None Remove="Assets\Images\Logos\google.png" />
     <None Remove="Deploy\Stateless.dll" />
+    <None Remove="Properties\Resources.resx~RF2341c1.TMP" />
   </ItemGroup>
  
   <ItemGroup>
@@ -81,6 +82,7 @@
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Persistence\IRI.Sta.Persistence.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Security\IRI.Sta.Security.csproj" />
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.ShapefileFormat\IRI.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.SpatialReferenceSystem\IRI.Sta.SpatialReferenceSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -146,8 +148,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.fa-IR.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

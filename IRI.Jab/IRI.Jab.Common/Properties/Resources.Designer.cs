@@ -22,7 +22,7 @@ namespace IRI.Jab.Common.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace IRI.Jab.Common.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IRI.Jab.Common.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace IRI.Jab.Common.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace IRI.Jab.Common.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imageNotFound {
+        public static System.Drawing.Bitmap imageNotFound {
             get {
                 object obj = ResourceManager.GetObject("imageNotFound", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -71,9 +71,153 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latitude:.
+        /// </summary>
+        public static string srs__defaultLatitude {
+            get {
+                return ResourceManager.GetString("srs__defaultLatitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude:.
+        /// </summary>
+        public static string srs__defaultLongitude {
+            get {
+                return ResourceManager.GetString("srs__defaultLongitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X:.
+        /// </summary>
+        public static string srs__defaultX {
+            get {
+                return ResourceManager.GetString("srs__defaultX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y:.
+        /// </summary>
+        public static string srs__defaultY {
+            get {
+                return ResourceManager.GetString("srs__defaultY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cylindrical Equal Area.
+        /// </summary>
+        public static string srs_ceaSubTitle {
+            get {
+                return ResourceManager.GetString("srs_ceaSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cylindrical Equal Area.
+        /// </summary>
+        public static string srs_ceaTitle {
+            get {
+                return ResourceManager.GetString("srs_ceaTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geodetic, WGS84.
+        /// </summary>
+        public static string srs_geodeticDmsSubTitle {
+            get {
+                return ResourceManager.GetString("srs_geodeticDmsSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geodetic, WGS84 (dms).
+        /// </summary>
+        public static string srs_geodeticDmsTitle {
+            get {
+                return ResourceManager.GetString("srs_geodeticDmsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geodetic, WGS84.
+        /// </summary>
+        public static string srs_geodeticSubTitle {
+            get {
+                return ResourceManager.GetString("srs_geodeticSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geodetic, WGS84 (decimal degree).
+        /// </summary>
+        public static string srs_geodeticTitle {
+            get {
+                return ResourceManager.GetString("srs_geodeticTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mercator.
+        /// </summary>
+        public static string srs_mercatorSubTitle {
+            get {
+                return ResourceManager.GetString("srs_mercatorSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mercator.
+        /// </summary>
+        public static string srs_mercatorTitle {
+            get {
+                return ResourceManager.GetString("srs_mercatorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transeverse Mercator.
+        /// </summary>
+        public static string srs_tmSubTitle {
+            get {
+                return ResourceManager.GetString("srs_tmSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transeverse Mercator.
+        /// </summary>
+        public static string srs_tmTitle {
+            get {
+                return ResourceManager.GetString("srs_tmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UTM.
+        /// </summary>
+        public static string srs_utmSubTitle {
+            get {
+                return ResourceManager.GetString("srs_utmSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Universal Transeverse Mercator (UTM).
+        /// </summary>
+        public static string srs_utmTitle {
+            get {
+                return ResourceManager.GetString("srs_utmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap whiteImage {
+        public static System.Drawing.Bitmap whiteImage {
             get {
                 object obj = ResourceManager.GetObject("whiteImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

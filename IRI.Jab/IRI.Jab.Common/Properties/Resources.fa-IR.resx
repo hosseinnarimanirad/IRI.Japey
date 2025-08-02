@@ -117,59 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="imageNotFound" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\Images\imageNotFound.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="srs_ceaSubTitle" xml:space="preserve">
-    <value>Cylindrical Equal Area</value>
+    <value>ceaSubTitle</value>
   </data>
   <data name="srs_ceaTitle" xml:space="preserve">
-    <value>Cylindrical Equal Area</value>
+    <value>سیستم تصویر Cylindrical Equal Area</value>
   </data>
   <data name="srs_geodeticDmsSubTitle" xml:space="preserve">
-    <value>Geodetic, WGS84</value>
+    <value>ژئودتیک</value>
   </data>
   <data name="srs_geodeticDmsTitle" xml:space="preserve">
-    <value>Geodetic, WGS84 (dms)</value>
+    <value>سیستم مختصات ژئودتیک، WGS84 (درجه، دقیقه، ثانیه)</value>
   </data>
   <data name="srs_geodeticSubTitle" xml:space="preserve">
-    <value>Geodetic, WGS84</value>
+    <value>ژئودتیک</value>
   </data>
   <data name="srs_geodeticTitle" xml:space="preserve">
-    <value>Geodetic, WGS84 (decimal degree)</value>
+    <value>سیستم مختصات ژئودتیک، WGS84 (اعشار درجه)</value>
   </data>
   <data name="srs_mercatorSubTitle" xml:space="preserve">
     <value>Mercator</value>
   </data>
   <data name="srs_mercatorTitle" xml:space="preserve">
-    <value>Mercator</value>
+    <value>سیستم تصویر Mercator</value>
   </data>
   <data name="srs_tmSubTitle" xml:space="preserve">
     <value>Transeverse Mercator</value>
   </data>
   <data name="srs_tmTitle" xml:space="preserve">
-    <value>Transeverse Mercator</value>
+    <value>سیستم تصویر Transeverse Mercator</value>
   </data>
   <data name="srs_utmSubTitle" xml:space="preserve">
     <value>UTM</value>
   </data>
   <data name="srs_utmTitle" xml:space="preserve">
-    <value>Universal Transeverse Mercator (UTM)</value>
+    <value>سیستم تصویر Univarsal Transverse Mercator - UTM</value>
   </data>
   <data name="srs__defaultLatitude" xml:space="preserve">
-    <value>Latitude:</value>
+    <value>عرض جغرافیایی:</value>
   </data>
   <data name="srs__defaultLongitude" xml:space="preserve">
-    <value>Longitude:</value>
+    <value>طول جغرافیایی:</value>
   </data>
   <data name="srs__defaultX" xml:space="preserve">
     <value>X:</value>
   </data>
   <data name="srs__defaultY" xml:space="preserve">
     <value>Y:</value>
-  </data>
-  <data name="whiteImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Assets\Images\whiteImage.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
