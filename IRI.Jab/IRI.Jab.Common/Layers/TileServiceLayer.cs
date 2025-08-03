@@ -62,9 +62,10 @@ public class TileServiceLayer : BaseLayer
     {
         //this.Provider = TileServices.MapProviderType.Custom;
 
-        this._cache = new TileCacheAddress(mapProvider.Provider.EnglishTitle, mapProvider.MapType.EnglishTitle, getFileName);
+        this._cache = new TileCacheAddress(mapProvider.ProviderEn, mapProvider.MapTypeEn, getFileName);
 
         this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+
         this.VisualParameters.Opacity = opacity;    
 
         this._mapProvider = mapProvider;

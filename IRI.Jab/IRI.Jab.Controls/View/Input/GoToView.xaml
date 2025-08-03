@@ -30,19 +30,18 @@
                                HamburgerHeight="48" Content="{Binding SelectedItem.Content}"
                                ItemClick="HamburgerMenu_ItemClick" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding MenuItems}">-->
 
-    <mahApp:HamburgerMenu  x:Name="hamburgerMenuControl" PaneBackground="{DynamicResource MahApps.Brushes.Highlight}" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" DisplayMode="CompactInline"
-                               ItemTemplate="{StaticResource MenuItemTemplate}" CompactPaneLength="48" 
-                               HamburgerHeight="48" Content="{Binding SelectedItem.Content}"
-                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding MenuItems}">
-
+    <mahApp:HamburgerMenu   x:Name="hamburgerMenuControl" PaneBackground="{DynamicResource MahApps.Brushes.Highlight}" 
+                            IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" DisplayMode="CompactInline"
+                            ItemTemplate="{StaticResource MenuItemTemplate}" CompactPaneLength="48" 
+                            HamburgerHeight="48" Content="{Binding SelectedItem.Content}"
+                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding MenuItems}">
         <mahApp:HamburgerMenu.ContentTemplate>
             <DataTemplate DataType="{x:Type FrameworkElement}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <!--<TextBlock Grid.Row="0" Foreground="Black" Background="Red" HorizontalAlignment="Center">سیستم مرجع مکانی را از سمت چپ انتخاب کنید.</TextBlock>-->
+                    </Grid.RowDefinitions> 
                     <ContentControl Grid.Row="0" Content="{Binding }"/>
                     <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="8">
                         <Button Command="{Binding ElementName=window, Path=DataContext.PanToCommand}" Height="32" Width="32" Margin="4" Cursor="Hand">

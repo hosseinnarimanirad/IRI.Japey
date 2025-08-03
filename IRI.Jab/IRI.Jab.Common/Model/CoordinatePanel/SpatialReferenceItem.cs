@@ -53,8 +53,6 @@ public class SpatialReferenceItem : Notifier, IDisposable
         RaisePropertyChanged(nameof(YLabelItem));
     }
 
-    ~SpatialReferenceItem() { Dispose(); }
-
     public IPoint FromWgs84Geodetic(Point geodeticPoint)
     {
         return _fromWgs84Geodetic(geodeticPoint);
@@ -192,8 +190,30 @@ public class SpatialReferenceItem : Notifier, IDisposable
         return $"{x},{y}";
     }
 
+    #region IDispose
+
+    private bool _disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources
+                LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+            }
+
+            // Dispose unmanaged resources here if any
+            _disposed = true;
+        }
+    }
+
     public void Dispose()
     {
-        LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
+
+    #endregion
 }

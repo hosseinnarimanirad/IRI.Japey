@@ -1,14 +1,15 @@
 ﻿<mahApp:MetroWindow x:Class="IRI.Jab.Controls.View.Input.GoToMetroWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              
-             xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             
-             xmlns:map="clr-namespace:IRI.Jab.Controls.View.Input" FlowDirection="RightToLeft"
-             WindowStyle="ToolWindow" Width="550" Height="250" ShowIconOnTitleBar="False" ShowInTaskbar="False"
-        Title="بروبه مختصات"  GlowBrush="{DynamicResource MahApps.Brushes.Accent}" ShowMaxRestoreButton="False" ShowMinButton="False">
+                    xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                    x:Name="root" FlowDirection="{Binding ElementName=root, Path=CurrentFlowDirection}"
+                    xmlns:map="clr-namespace:IRI.Jab.Controls.View.Input"  
+                    WindowStyle="ToolWindow" Width="550" Height="250" ShowIconOnTitleBar="False" ShowInTaskbar="False"
+                    Title="{Binding ElementName=root, Path=WindowTitle}" ShowMaxRestoreButton="False" ShowMinButton="False"
+                    GlowBrush="{DynamicResource MahApps.Brushes.Accent}" >
     <Grid>
         <map:GoToView />
     </Grid>

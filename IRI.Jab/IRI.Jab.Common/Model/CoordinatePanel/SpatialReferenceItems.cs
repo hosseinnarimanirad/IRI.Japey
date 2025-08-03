@@ -1,7 +1,7 @@
 ﻿using System;
 using IRI.Sta.Common.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Jab.Common.Model.Globalization;
+using static IRI.Jab.Common.Localization.LocalizationResourceKeys;
 
 namespace IRI.Jab.Common.Model.CoordinatePanel;
 
@@ -33,12 +33,57 @@ public static class SpatialReferenceItems
     //static readonly PersianEnglishItem _defaultLatitude = new PersianEnglishItem("عرض جغرافیایی:", "Latitude:");
     //static readonly PersianEnglishItem _defaultLongitude = new PersianEnglishItem("طول جغرافیایی:", "Longitude:");
 
-    static readonly SpatialReferenceItem _geodeticWgs84 = new SpatialReferenceItem(p => p, toStringForGeodetic, "srs_geodeticTitle", "srs_geodeticSubTitle", "srs_defaultLongitude", "srs_defaultLatitude");
-    static readonly SpatialReferenceItem _geodeticDmsWgs84 = new SpatialReferenceItem(p => p, toStringForGeodeticDms, "srs_geodeticDmsTitle", "srs_geodeticDmsSubTitle", "srs_defaultLongitude", "srs_defaultLatitude");
-    static readonly SpatialReferenceItem _utmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToUTM(p, p.Y > 0), toStringForDefault, "srs_utmTitle", "srs_utmSubTitle", "srs_defaultX", "srs_defaultY", "srs_utmZone") { IsZoneVisible = true };
-    static readonly SpatialReferenceItem _mercatorWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToMercator(p), toStringForDefault, "srs_mercatorTitle", "srs_mercatorSubTitle", "srs_defaultX", "srs_defaultY");
-    static readonly SpatialReferenceItem _tmWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), toStringForDefault, "srs_tmTitle", "srs_tmSubTitle", "srs_defaultX", "srs_defaultY");
-    static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), toStringForDefault, "srs_ceaTitle", "srs_ceaSubTitle", "srs_defaultX", "srs_defaultY");
+    static readonly SpatialReferenceItem _geodeticWgs84 
+        = new SpatialReferenceItem(p => p, 
+                                    toStringForGeodetic, 
+                                    srs_geodeticTitle.ToString(), 
+                                    srs_geodeticSubTitle.ToString(), 
+                                    srs_defaultLongitude.ToString(), 
+                                    srs_defaultLatitude.ToString());
+
+    static readonly SpatialReferenceItem _geodeticDmsWgs84 
+        = new SpatialReferenceItem(p => p, 
+                                    toStringForGeodeticDms, 
+                                    srs_geodeticDmsTitle.ToString(), 
+                                    srs_geodeticDmsSubTitle.ToString(), 
+                                    srs_defaultLongitude.ToString(), 
+                                    srs_defaultLatitude.ToString());
+
+    static readonly SpatialReferenceItem _utmWgs84 
+        = new SpatialReferenceItem(p => MapProjects.GeodeticToUTM(p, p.Y > 0), 
+                                    toStringForDefault,
+                                    srs_utmTitle.ToString(), 
+                                    srs_utmSubTitle.ToString(), 
+                                    srs_defaultX.ToString(), 
+                                    srs_defaultY.ToString(), 
+                                    srs_utmZone.ToString()) { IsZoneVisible = true };
+
+
+    static readonly SpatialReferenceItem _mercatorWgs84 
+        = new SpatialReferenceItem(p => MapProjects.GeodeticToMercator(p), 
+                                    toStringForDefault,
+                                    srs_mercatorTitle.ToString(), 
+                                    srs_mercatorSubTitle.ToString(), 
+                                    srs_defaultX.ToString(), 
+                                    srs_defaultY.ToString());
+
+
+    static readonly SpatialReferenceItem _tmWgs84 
+        = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), 
+                                    toStringForDefault,
+                                    srs_tmTitle.ToString(), 
+                                    srs_tmSubTitle.ToString(), 
+                                    srs_defaultX.ToString(), 
+                                    srs_defaultY.ToString());
+
+
+    static readonly SpatialReferenceItem _cylindricalEqualAreaWgs84 
+        = new SpatialReferenceItem(p => MapProjects.GeodeticToCylindricalEqualArea(p), 
+                                    toStringForDefault,
+                                    srs_ceaTitle.ToString(), 
+                                    srs_ceaSubTitle.ToString(), 
+                                    srs_defaultX.ToString(), 
+                                    srs_defaultY.ToString());
 
     public static SpatialReferenceItem GeodeticWgs84
     {

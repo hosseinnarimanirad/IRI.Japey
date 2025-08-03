@@ -15,12 +15,12 @@ namespace IRI.Jab.Controls.Common.Defaults
         public static Action<Sta.Common.Primitives.Point> GetDefaultGoToAction(Window ownerWindow, MapPresenter mapPresenter)
         {
             var result = new Action<Sta.Common.Primitives.Point>((Sta.Common.Primitives.Point webMercatorPoint) =>
-            {
-                var gotoView = new IRI.Jab.Controls.View.Input.GoToMetroWindow();
-
+            { 
                 var gotoPresenter = IRI.Jab.Controls.Presenter.GoToPresenter.Create(mapPresenter);
+                
+                var gotoView = new IRI.Jab.Controls.View.Input.GoToMetroWindow(gotoPresenter);
 
-                gotoView.DataContext = gotoPresenter;
+                //gotoView.DataContext = gotoPresenter;
                 gotoView.Owner = ownerWindow;
                 gotoView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 gotoView.Show();

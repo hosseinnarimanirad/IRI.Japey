@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 
 using IRI.Sta.Spatial.Model;
-using IRI.Jab.Common.Model.Globalization;
 
 namespace IRI.Jab.Common.TileServices;
 
-public class TileMapProvider : ValueObjectNotifier
+public class TileMapProvider : ValueObjectNotifier, IDisposable
 {
     public bool RequireInternetConnection { get; set; } = true;
 
@@ -39,29 +38,42 @@ public class TileMapProvider : ValueObjectNotifier
     //    }
     //}
 
-    private readonly PersianEnglishItem _mapType;
 
-    public PersianEnglishItem MapType
-    {
-        get { return _mapType; }
-        //private set
-        //{
-        //    _mapType = value;
-        //    RaisePropertyChanged();
-        //}
-    }
+    private string _providerResourceKey { get; set; }
+    public string Provider => LocalizationManager.Instance[_providerResourceKey];
 
-    private readonly PersianEnglishItem _provider;
+    public string ProviderEn => LocalizationManager.Instance.GetDefaultValue(_providerResourceKey);
 
-    public PersianEnglishItem Provider
-    {
-        get { return _provider; }
-        //private set
-        //{
-        //    _provider = value;
-        //    RaisePropertyChanged();
-        //}
-    }
+    //private readonly PersianEnglishItem _provider;
+
+    //public PersianEnglishItem Provider
+    //{
+    //    get { return _provider; }
+    //    //private set
+    //    //{
+    //    //    _provider = value;
+    //    //    RaisePropertyChanged();
+    //    //}
+    //}
+
+    private string _mapTypeResourceKey { get; set; }
+    public string MapType => LocalizationManager.Instance[_mapTypeResourceKey];
+
+    public string MapTypeEn => LocalizationManager.Instance.GetDefaultValue(_mapTypeResourceKey);
+
+
+    //private readonly string _mapType;
+
+    //public PersianEnglishItem MapType
+    //{
+    //    get { return _mapType; }
+    //    //private set
+    //    //{
+    //    //    _mapType = value;
+    //    //    RaisePropertyChanged();
+    //    //}
+    //}
+
 
     private byte[]? _thumbnail;
 
@@ -90,7 +102,13 @@ public class TileMapProvider : ValueObjectNotifier
 
     //public string FullTitle { get { return $"{ProviderName} - {MapName}"; } }
 
-    public string FullName { get { return $"{Provider?.EnglishTitle}{MapType?.EnglishTitle}"; } }
+    public string FullName
+    {
+        get
+        {
+            return $"{ProviderEn}{MapTypeEn}";
+        }
+    }
 
     public string Title { get { return $"{Provider} {MapType}"; } }
 
@@ -101,30 +119,42 @@ public class TileMapProvider : ValueObjectNotifier
 
     }
 
-    public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
-        : this(PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, provider),
-                PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, mapType),
-                urlFunction, thumbnail, thumbnail72)
-    {
-        //this.MakeUrl = urlFunction;
+    //public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
+    //    : this(PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, provider),
+    //            PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, mapType),
+    //            urlFunction, thumbnail, thumbnail72)
+    //{
+    //    //this.MakeUrl = urlFunction;
 
-        //this.Provider = new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English);
+    //    //this.Provider = new PersianEnglishItem(string.Empty, provider, Model.LanguageMode.English);
 
-        //this.MapType = new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English);
-    }
+    //    //this.MapType = new PersianEnglishItem(string.Empty, mapType, Model.LanguageMode.English);
+    //}
 
-    public TileMapProvider(PersianEnglishItem provider, PersianEnglishItem mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
+    public TileMapProvider(string providerResourceKey, string mapTypeResourceKey, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
     {
         this.MakeUrl = urlFunction;
 
-        this._provider = provider;
+        this._providerResourceKey = providerResourceKey;
 
-        this._mapType = mapType;
+        this._mapTypeResourceKey = mapTypeResourceKey;
 
         this._thumbnail = thumbnail;
-         
+
         this._thumbnail72 = thumbnail72;
+
+        LocalizationManager.Instance.LanguageChanged += Instance_LanguageChanged;
     }
+
+    private void Instance_LanguageChanged()
+    {
+        RaisePropertyChanged(nameof(Provider));
+        RaisePropertyChanged(nameof(MapType));
+
+        RaisePropertyChanged(nameof(Title));
+    }
+
+    
 
     public virtual string GetUrl(TileInfo tile)
     {
@@ -168,5 +198,33 @@ public class TileMapProvider : ValueObjectNotifier
     //    //using object.Equals handle the case of null==null otherwise it will use Equals and return false in this case
     //    return !object.Equals(first, second);
     //}
+
+
+    #region IDispose
+
+    private bool _disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources
+                LocalizationManager.Instance.LanguageChanged -= Instance_LanguageChanged;
+            }
+
+            // Dispose unmanaged resources here if any
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    #endregion
 
 }

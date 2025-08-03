@@ -1,10 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input; 
+using System.Windows.Input;
 using IRI.Extensions;
+using IRI.Jab.Common;
 using IRI.Jab.Common.Presenter;
 
 namespace IRI.Jab.Controls.View.Map;
@@ -12,20 +10,20 @@ namespace IRI.Jab.Controls.View.Map;
 /// <summary>
 /// Interaction logic for CoordinatePanelView.xaml
 /// </summary>
-public partial class CoordinatePanelView : UserControl, INotifyPropertyChanged
+public partial class CoordinatePanelView : NotifiableUserControl
 {
     public CoordinatePanelPresenter Presenter { get { return this.DataContext as CoordinatePanelPresenter; } }
    
-    #region INotifyPropertyChanged
+    //#region INotifyPropertyChanged
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    //public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    //protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+    //{
+    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //}
 
-    #endregion
+    //#endregion
 
     public CoordinatePanelView()
     {

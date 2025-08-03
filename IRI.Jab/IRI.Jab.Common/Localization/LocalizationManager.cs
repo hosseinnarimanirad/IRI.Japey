@@ -72,4 +72,9 @@ public class LocalizationManager //: INotifyPropertyChanged
         CurrentCulture = culture;
     }
 
+    public string GetDefaultValue(string key)
+    {
+        return Resources.ResourceManager.GetString(key, CultureInfo.InvariantCulture)
+               ?? $"#{key}#";
+    }
 }

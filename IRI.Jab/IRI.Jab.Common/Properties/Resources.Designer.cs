@@ -106,12 +106,39 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go To.
+        /// </summary>
+        public static string goto_dialogTitle {
+            get {
+                return ResourceManager.GetString("goto_dialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap imageNotFound {
             get {
                 object obj = ResourceManager.GetObject("imageNotFound", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pan.
+        /// </summary>
+        public static string map_pan {
+            get {
+                return ResourceManager.GetString("map_pan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom To.
+        /// </summary>
+        public static string map_zoomTo {
+            get {
+                return ResourceManager.GetString("map_zoomTo", resourceCulture);
             }
         }
         
@@ -292,6 +319,240 @@ namespace IRI.Jab.Common.Properties {
         public static string srs_utmZone {
             get {
                 return ResourceManager.GetString("srs_utmZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BlackWhite.
+        /// </summary>
+        public static string tile_mapType_BlackWhite {
+            get {
+                return ResourceManager.GetString("tile_mapType_BlackWhite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CleanGrey.
+        /// </summary>
+        public static string tile_mapType_CleanGrey {
+            get {
+                return ResourceManager.GetString("tile_mapType_CleanGrey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comic.
+        /// </summary>
+        public static string tile_mapType_Comic {
+            get {
+                return ResourceManager.GetString("tile_mapType_Comic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string tile_mapType_Dark {
+            get {
+                return ResourceManager.GetString("tile_mapType_Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HikeBike.
+        /// </summary>
+        public static string tile_mapType_HikeBike {
+            get {
+                return ResourceManager.GetString("tile_mapType_HikeBike", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hybrid.
+        /// </summary>
+        public static string tile_mapType_Hybrid {
+            get {
+                return ResourceManager.GetString("tile_mapType_Hybrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string tile_mapType_Light {
+            get {
+                return ResourceManager.GetString("tile_mapType_Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MapyTourist.
+        /// </summary>
+        public static string tile_mapType_MapyTourist {
+            get {
+                return ResourceManager.GetString("tile_mapType_MapyTourist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MapyWinter.
+        /// </summary>
+        public static string tile_mapType_MapyWinter {
+            get {
+                return ResourceManager.GetString("tile_mapType_MapyWinter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nature.
+        /// </summary>
+        public static string tile_mapType_Nature {
+            get {
+                return ResourceManager.GetString("tile_mapType_Nature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NeutralBlue.
+        /// </summary>
+        public static string tile_mapType_NeutralBlue {
+            get {
+                return ResourceManager.GetString("tile_mapType_NeutralBlue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RoadMap.
+        /// </summary>
+        public static string tile_mapType_RoadMap {
+            get {
+                return ResourceManager.GetString("tile_mapType_RoadMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Satellite.
+        /// </summary>
+        public static string tile_mapType_Satellite {
+            get {
+                return ResourceManager.GetString("tile_mapType_Satellite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Street.
+        /// </summary>
+        public static string tile_mapType_Street {
+            get {
+                return ResourceManager.GetString("tile_mapType_Street", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terrain.
+        /// </summary>
+        public static string tile_mapType_Terrain {
+            get {
+                return ResourceManager.GetString("tile_mapType_Terrain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Topo.
+        /// </summary>
+        public static string tile_mapType_Topo {
+            get {
+                return ResourceManager.GetString("tile_mapType_Topo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traffic.
+        /// </summary>
+        public static string tile_mapType_Traffic {
+            get {
+                return ResourceManager.GetString("tile_mapType_Traffic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watercolor.
+        /// </summary>
+        public static string tile_mapType_Watercolor {
+            get {
+                return ResourceManager.GetString("tile_mapType_Watercolor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BING.
+        /// </summary>
+        public static string tile_provider_bing {
+            get {
+                return ResourceManager.GetString("tile_provider_bing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CARTO.
+        /// </summary>
+        public static string tile_provider_carto {
+            get {
+                return ResourceManager.GetString("tile_provider_carto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOOGLE.
+        /// </summary>
+        public static string tile_provider_google {
+            get {
+                return ResourceManager.GetString("tile_provider_google", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAPBOX.
+        /// </summary>
+        public static string tile_provider_mapbox {
+            get {
+                return ResourceManager.GetString("tile_provider_mapbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NOKIA.
+        /// </summary>
+        public static string tile_provider_nokia {
+            get {
+                return ResourceManager.GetString("tile_provider_nokia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OPENSTREETMAP.
+        /// </summary>
+        public static string tile_provider_osm {
+            get {
+                return ResourceManager.GetString("tile_provider_osm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WAZE.
+        /// </summary>
+        public static string tile_provider_waze {
+            get {
+                return ResourceManager.GetString("tile_provider_waze", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to YANDEX.
+        /// </summary>
+        public static string tile_provider_yandex {
+            get {
+                return ResourceManager.GetString("tile_provider_yandex", resourceCulture);
             }
         }
         

@@ -132,6 +132,9 @@
   <data name="draw_newDrawingText" xml:space="preserve">
     <value>Click on the last point to finish drawing.</value>
   </data>
+  <data name="goto_dialogTitle" xml:space="preserve">
+    <value>Go To</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="imageNotFound" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\imageNotFound.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -144,6 +147,12 @@
   </data>
   <data name="mapPanel_srs" xml:space="preserve">
     <value>Spatial Reference System</value>
+  </data>
+  <data name="map_pan" xml:space="preserve">
+    <value>Pan</value>
+  </data>
+  <data name="map_zoomTo" xml:space="preserve">
+    <value>Zoom To</value>
   </data>
   <data name="srs_ceaSubTitle" xml:space="preserve">
     <value>Cylindrical Equal Area</value>
@@ -195,6 +204,102 @@
   </data>
   <data name="srs_utmZone" xml:space="preserve">
     <value>Zone</value>
+  </data>
+  <data name="tile_mapType_BlackWhite" xml:space="preserve">
+    <value>BlackWhite</value>
+    <comment>GoogleBlackWhite</comment>
+  </data>
+  <data name="tile_mapType_CleanGrey" xml:space="preserve">
+    <value>CleanGrey</value>
+    <comment>GoogleCleanGrey</comment>
+  </data>
+  <data name="tile_mapType_Comic" xml:space="preserve">
+    <value>Comic</value>
+    <comment>MapboxComic</comment>
+  </data>
+  <data name="tile_mapType_Dark" xml:space="preserve">
+    <value>Dark</value>
+    <comment>CartoDark</comment>
+  </data>
+  <data name="tile_mapType_HikeBike" xml:space="preserve">
+    <value>HikeBike</value>
+    <comment>OsmHikeBike</comment>
+  </data>
+  <data name="tile_mapType_Hybrid" xml:space="preserve">
+    <value>Hybrid</value>
+    <comment>GoogleHybrid, BingHybrid</comment>
+  </data>
+  <data name="tile_mapType_Light" xml:space="preserve">
+    <value>Light</value>
+    <comment>GoogleLight, CartoLight</comment>
+  </data>
+  <data name="tile_mapType_MapyTourist" xml:space="preserve">
+    <value>MapyTourist</value>
+    <comment>MapyTourist</comment>
+  </data>
+  <data name="tile_mapType_MapyWinter" xml:space="preserve">
+    <value>MapyWinter</value>
+    <comment>MapyWinter</comment>
+  </data>
+  <data name="tile_mapType_Nature" xml:space="preserve">
+    <value>Nature</value>
+    <comment>GoogleNature</comment>
+  </data>
+  <data name="tile_mapType_NeutralBlue" xml:space="preserve">
+    <value>NeutralBlue</value>
+    <comment>GoogleNeutralBlue</comment>
+  </data>
+  <data name="tile_mapType_RoadMap" xml:space="preserve">
+    <value>RoadMap</value>
+    <comment>GoogleRoadMap</comment>
+  </data>
+  <data name="tile_mapType_Satellite" xml:space="preserve">
+    <value>Satellite</value>
+    <comment>GoogleSatellite, BingSatellite, MapboxSatellite</comment>
+  </data>
+  <data name="tile_mapType_Street" xml:space="preserve">
+    <value>Street</value>
+    <comment>BingStreet, OpenStreetMap, WazeStreet</comment>
+  </data>
+  <data name="tile_mapType_Terrain" xml:space="preserve">
+    <value>Terrain</value>
+    <comment>GoogleTerrain</comment>
+  </data>
+  <data name="tile_mapType_Topo" xml:space="preserve">
+    <value>Topo</value>
+    <comment>OpenTopoMap</comment>
+  </data>
+  <data name="tile_mapType_Traffic" xml:space="preserve">
+    <value>Traffic</value>
+    <comment>GoogleTraffic</comment>
+  </data>
+  <data name="tile_mapType_Watercolor" xml:space="preserve">
+    <value>Watercolor</value>
+    <comment>StamenWatercolor</comment>
+  </data>
+  <data name="tile_provider_bing" xml:space="preserve">
+    <value>BING</value>
+  </data>
+  <data name="tile_provider_carto" xml:space="preserve">
+    <value>CARTO</value>
+  </data>
+  <data name="tile_provider_google" xml:space="preserve">
+    <value>GOOGLE</value>
+  </data>
+  <data name="tile_provider_mapbox" xml:space="preserve">
+    <value>MAPBOX</value>
+  </data>
+  <data name="tile_provider_nokia" xml:space="preserve">
+    <value>NOKIA</value>
+  </data>
+  <data name="tile_provider_osm" xml:space="preserve">
+    <value>OPENSTREETMAP</value>
+  </data>
+  <data name="tile_provider_waze" xml:space="preserve">
+    <value>WAZE</value>
+  </data>
+  <data name="tile_provider_yandex" xml:space="preserve">
+    <value>YANDEX</value>
   </data>
   <data name="whiteImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Images\whiteImage.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -11,7 +11,7 @@ using System.Windows.Controls;
 
 namespace IRI.Jab.Common;
 
-public class UserControlNotifier : UserControl, INotifyPropertyChanged
+public class NotifiableUserControl : UserControl, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -56,4 +56,7 @@ public class UserControlNotifier : UserControl, INotifyPropertyChanged
         }
 
     }
+
+
+
 }
