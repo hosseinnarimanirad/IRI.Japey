@@ -58,6 +58,7 @@ public class CoordinatePanelPresenter : Notifier
         _localization.FlowDirectionChanged += () =>
         {
             RaisePropertyChanged(nameof(CurrentFlowDirection));
+            RaisePropertyChanged(nameof(SelectedItem));
         };
     }
 

@@ -51,6 +51,8 @@
     <None Remove="Assets\Images\BaseMaps\osmHikeBike.jpg" />
     <None Remove="Assets\Images\BaseMaps\stamenWatercolor.jpg" />
     <None Remove="Assets\Images\BaseMaps\Waze.png" />
+    <None Remove="Assets\Images\Flags\en.png" />
+    <None Remove="Assets\Images\Flags\fa.png" />
     <None Remove="Assets\Images\imageNotFound.jpg" />
     <None Remove="Assets\Images\Logos\google.png" />
     <None Remove="Deploy\Stateless.dll" />
@@ -135,6 +137,12 @@
     <Resource Include="Assets\Images\BaseMaps\osmHikeBike.jpg" />
     <Resource Include="Assets\Images\BaseMaps\stamenWatercolor.jpg" />
     <Resource Include="Assets\Images\BaseMaps\Waze.png" />
+    <Resource Include="Assets\Images\Flags\en.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Images\Flags\fa.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Images\imageNotFound.jpg" />
     <Resource Include="Assets\Images\whiteImage.jpg" />
   </ItemGroup>

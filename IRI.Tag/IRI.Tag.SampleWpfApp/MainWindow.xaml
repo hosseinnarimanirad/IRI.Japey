@@ -7,6 +7,7 @@
         mc:Ignorable="d" Loaded="Window_Loaded" 
         xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:MapViewer="clr-namespace:IRI.Jab.Controls;assembly=IRI.Jab.Controls" 
+        xmlns:localization="clr-namespace:IRI.Jab.Common.Localization;assembly=IRI.Jab.Common"
         xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
         Title="MainWindow" Height="600" Width="900" x:Name="root" >
     <Window.Resources>
@@ -23,6 +24,31 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
+        <ComboBox ItemsSource="{Binding AvailableLanguages}"
+              SelectedItem="{Binding SelectedLanguage}"
+              HorizontalContentAlignment="Center" VerticalAlignment="Center">
+            <ComboBox.DataContext>
+                <localization:LanguageSelectorViewModel/>
+            </ComboBox.DataContext>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="3">
+                        <Image Source="{Binding FlagUri}" Stretch="UniformToFill"
+                           Width="24" Height="24"
+                           Margin="0,0,5,0">
+                            <Image.Clip>
+                                <EllipseGeometry Center="12,12" RadiusX="10" RadiusY="10"/>
+                            </Image.Clip>
+                        </Image>
+                        <TextBlock Text="{Binding NativeName}"
+                               VerticalAlignment="Center"
+                               FlowDirection="{Binding TextFlowDirection}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
         <StackPanel Grid.Column="1">
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource flatButtonPrimary}">

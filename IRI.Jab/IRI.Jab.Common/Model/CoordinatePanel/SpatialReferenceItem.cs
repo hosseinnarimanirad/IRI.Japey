@@ -2,13 +2,12 @@
 
 using IRI.Extensions;
 using IRI.Sta.Common.Primitives;
-using IRI.Jab.Common.Model.Globalization;
 using IRI.Sta.Common.Abstrations;
 using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Jab.Common.Model.CoordinatePanel;
 
-public class SpatialReferenceItem : Notifier
+public class SpatialReferenceItem : Notifier, IDisposable
 {
     const string defaultXLabel = "X";
     const string defaultYLabel = "Y";
@@ -16,6 +15,8 @@ public class SpatialReferenceItem : Notifier
     private Func<Point, Point> _fromWgs84Geodetic;
 
     private Func<double, string> _toString;
+
+    public Action<SpatialReferenceItem> FireIsSelectedChanged;
 
     public SpatialReferenceItem(
         Func<Point, Point> fromWgs84Geodetic,
@@ -43,12 +44,13 @@ public class SpatialReferenceItem : Notifier
     private void OnLanguageChanged()
     {
         RaisePropertyChanged(nameof(TitleItem));
+        RaisePropertyChanged(nameof(SubTitleItem));
+        RaisePropertyChanged(nameof(ZoneItem));
+        RaisePropertyChanged(nameof(XLabelItem));
+        RaisePropertyChanged(nameof(YLabelItem));
     }
 
-    public void Dispose()
-    {
-        LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
-    }
+    ~SpatialReferenceItem() { Dispose(); }
 
     public IPoint FromWgs84Geodetic(Point geodeticPoint)
     {
@@ -75,38 +77,25 @@ public class SpatialReferenceItem : Notifier
     }
 
 
-    public string TitleItemResourceKey { get; private set; }
-
+    private string TitleItemResourceKey { get; set; }
     public string TitleItem => LocalizationManager.Instance[TitleItemResourceKey];
 
-    //private PersianEnglishItem _titleItem;
 
-    //public PersianEnglishItem TitleItem
-    //{
-    //    get { return _titleItem; }
-    //    set
-    //    {
-    //        _titleItem = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
-
-    public string SubTitleItemResourceKey { get; private set; }
-
+    private string SubTitleItemResourceKey { get; set; }
     public string SubTitleItem => LocalizationManager.Instance[SubTitleItemResourceKey];
 
-    //private PersianEnglishItem _subTitleItem;
 
-    //public PersianEnglishItem SubTitleItem
-    //{
-    //    get { return _subTitleItem; }
-    //    set
-    //    {
-    //        _subTitleItem = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
+    private string ZoneItemResourceKey { get; set; }
+    public string ZoneItem => string.IsNullOrWhiteSpace(ZoneItemResourceKey) ? string.Empty : LocalizationManager.Instance[ZoneItemResourceKey];
+
+
+    private string XLabelItemResourceKey { get; set; }
+    public string XLabelItem => LocalizationManager.Instance[XLabelItemResourceKey];
+
+
+    private string YLabelItemResourceKey { get; set; }
+    public string YLabelItem => LocalizationManager.Instance[YLabelItemResourceKey];
+
 
     private bool _isZoneVisible = false;
     public bool IsZoneVisible
@@ -118,57 +107,6 @@ public class SpatialReferenceItem : Notifier
             RaisePropertyChanged();
         }
     }
-
-
-    public string ZoneItemResourceKey { get; private set; }
-
-    public string ZoneItem => string.IsNullOrWhiteSpace(ZoneItemResourceKey) ? string.Empty : LocalizationManager.Instance[ZoneItemResourceKey];
-
-    //private PersianEnglishItem _zoneItem = new PersianEnglishItem("ناحیه :", "Zone :", LanguageMode.Persian);
-
-    //public PersianEnglishItem ZoneItem
-    //{
-    //    get { return _zoneItem; }
-    //    set
-    //    {
-    //        _zoneItem = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
-
-    public string XLabelItemResourceKey { get; private set; }
-
-    public string XLabelItem => LocalizationManager.Instance[XLabelItemResourceKey];
-
-    //private PersianEnglishItem _xLabelItem;
-
-    //public PersianEnglishItem XLabelItem
-    //{
-    //    get { return _xLabelItem; }
-    //    set
-    //    {
-    //        _xLabelItem = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
-
-    public string YLabelItemResourceKey { get; private set; }
-
-    public string YLabelItem => LocalizationManager.Instance[YLabelItemResourceKey];
-
-    //private PersianEnglishItem _yLabelItem;
-
-    //public PersianEnglishItem YLabelItem
-    //{
-    //    get { return _yLabelItem; }
-    //    set
-    //    {
-    //        _yLabelItem = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
 
 
     private string _zoneNumber;
@@ -219,25 +157,7 @@ public class SpatialReferenceItem : Notifier
     }
 
 
-    //private LanguageMode _uiLanguage;
-
-    //public LanguageMode UILanguage
-    //{
-    //    get { return _uiLanguage; }
-    //    set
-    //    {
-    //        _uiLanguage = value;
-    //        RaisePropertyChanged();
-    //        //this.TitleItem.UILanguage = value;
-    //        this.SubTitleItem.UILanguage = value;
-    //        this.ZoneItem.UILanguage = value;
-    //        this.XLabelItem.UILanguage = value;
-    //        this.YLabelItem.UILanguage = value;
-    //    }
-    //}
-
     private bool _isSelected;
-
     public bool IsSelected
     {
         get { return _isSelected; }
@@ -257,8 +177,6 @@ public class SpatialReferenceItem : Notifier
         }
     }
 
-    public Action<SpatialReferenceItem> FireIsSelectedChanged;
-
 
     public string GetPositionString(Point geodeticPoint) //where T : IPoint, new()
     {
@@ -269,5 +187,10 @@ public class SpatialReferenceItem : Notifier
         var y = _toString(point.Y);
 
         return $"{x},{y}";
+    }
+
+    public void Dispose()
+    {
+        LocalizationManager.Instance.LanguageChanged -= OnLanguageChanged;
     }
 }

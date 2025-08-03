@@ -42,7 +42,7 @@ namespace IRI.Tag.SampleWpfApp
 
             presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false, isNewExtent: true);
 
-            LocalizationManager.Instance.SetCulture(new CultureInfo("fa-IR"));
+            //LocalizationManager.Instance.SetCulture(new CultureInfo(""));
         }
     }
 }
