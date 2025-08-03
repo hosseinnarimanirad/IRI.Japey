@@ -61,12 +61,84 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Point.
+        /// </summary>
+        public static string draw_addPointText {
+            get {
+                return ResourceManager.GetString("draw_addPointText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel Drawing.
+        /// </summary>
+        public static string draw_cancelDrawingText {
+            get {
+                return ResourceManager.GetString("draw_cancelDrawingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish Drawing Part.
+        /// </summary>
+        public static string draw_finishDrawingPartText {
+            get {
+                return ResourceManager.GetString("draw_finishDrawingPartText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish Drawing.
+        /// </summary>
+        public static string draw_finishDrawingText {
+            get {
+                return ResourceManager.GetString("draw_finishDrawingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on the last point to finish drawing..
+        /// </summary>
+        public static string draw_newDrawingText {
+            get {
+                return ResourceManager.GetString("draw_newDrawingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap imageNotFound {
             get {
                 object obj = ResourceManager.GetObject("imageNotFound", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Point.
+        /// </summary>
+        public static string mapPanel_currentPoint {
+            get {
+                return ResourceManager.GetString("mapPanel_currentPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi part.
+        /// </summary>
+        public static string mapPanel_multiPart {
+            get {
+                return ResourceManager.GetString("mapPanel_multiPart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spatial Reference System.
+        /// </summary>
+        public static string mapPanel_srs {
+            get {
+                return ResourceManager.GetString("mapPanel_srs", resourceCulture);
             }
         }
         
@@ -211,6 +283,15 @@ namespace IRI.Jab.Common.Properties {
         public static string srs_utmTitle {
             get {
                 return ResourceManager.GetString("srs_utmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zone.
+        /// </summary>
+        public static string srs_utmZone {
+            get {
+                return ResourceManager.GetString("srs_utmZone", resourceCulture);
             }
         }
         

@@ -24,7 +24,8 @@ public class SpatialReferenceItem : Notifier, IDisposable
         string titleItemResourceKey,
         string subTitleItemResourceKey,
         string xLabelResourceKey,
-        string yLabelResourceKey)
+        string yLabelResourceKey,
+        string? zoneItemResourceKey = "")
     {
         this._fromWgs84Geodetic = fromWgs84Geodetic;
 
@@ -37,6 +38,8 @@ public class SpatialReferenceItem : Notifier, IDisposable
         this.XLabelItemResourceKey = xLabelResourceKey;
 
         this.YLabelItemResourceKey = yLabelResourceKey;
+
+        this.ZoneItemResourceKey = zoneItemResourceKey;
 
         LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
     }
@@ -85,7 +88,7 @@ public class SpatialReferenceItem : Notifier, IDisposable
     public string SubTitleItem => LocalizationManager.Instance[SubTitleItemResourceKey];
 
 
-    private string ZoneItemResourceKey { get; set; }
+    private string? ZoneItemResourceKey { get; set; }
     public string ZoneItem => string.IsNullOrWhiteSpace(ZoneItemResourceKey) ? string.Empty : LocalizationManager.Instance[ZoneItemResourceKey];
 
 

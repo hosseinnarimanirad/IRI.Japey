@@ -117,6 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="draw_addPointText" xml:space="preserve">
+    <value>افزودن نقطه</value>
+  </data>
+  <data name="draw_cancelDrawingText" xml:space="preserve">
+    <value>لغو ترسیم</value>
+  </data>
+  <data name="draw_finishDrawingPartText" xml:space="preserve">
+    <value>تکمیل بخش</value>
+  </data>
+  <data name="draw_finishDrawingText" xml:space="preserve">
+    <value>پایان ترسیم</value>
+  </data>
+  <data name="draw_newDrawingText" xml:space="preserve">
+    <value>برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید.</value>
+  </data>
+  <data name="mapPanel_currentPoint" xml:space="preserve">
+    <value>نقطه جاری</value>
+  </data>
+  <data name="mapPanel_multiPart" xml:space="preserve">
+    <value>عوارض چندتکه‌ای</value>
+  </data>
+  <data name="mapPanel_srs" xml:space="preserve">
+    <value>سیستم مرجع مکانی</value>
+  </data>
   <data name="srs_ceaSubTitle" xml:space="preserve">
     <value>ceaSubTitle</value>
   </data>
@@ -163,6 +187,9 @@
     <value>UTM</value>
   </data>
   <data name="srs_utmTitle" xml:space="preserve">
-    <value>سیستم تصویر Univarsal Transverse Mercator - UTM</value>
+    <value>سیستم تصویر UTM</value>
+  </data>
+  <data name="srs_utmZone" xml:space="preserve">
+    <value>ناحیه</value>
   </data>
 </root>

@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace IRI.Jab.Common;
 
-public class Notifier : INotifyPropertyChanged
+public class UserControlNotifier : UserControl, INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

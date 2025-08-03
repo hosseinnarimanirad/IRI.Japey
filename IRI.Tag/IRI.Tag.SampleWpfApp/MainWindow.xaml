@@ -34,12 +34,12 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <Image Source="{Binding FlagUri}" Stretch="UniformToFill"
-                           Width="24" Height="24"
+                        <Image Source="{Binding FlagUri}" Stretch="Uniform"
+                           Width="34" Height="24"
                            Margin="0,0,5,0">
-                            <Image.Clip>
+                            <!--<Image.Clip>
                                 <EllipseGeometry Center="12,12" RadiusX="10" RadiusY="10"/>
-                            </Image.Clip>
+                            </Image.Clip>-->
                         </Image>
                         <TextBlock Text="{Binding NativeName}"
                                VerticalAlignment="Center"
@@ -85,7 +85,7 @@
         <MapViewer:MapInfoView 
             Grid.Row="1" 
             Grid.Column="1"  
-            UILanguage="English" 
+             
             DataContext="{Binding }" 
             FlowDirection="LeftToRight"/>
  
@@ -93,7 +93,7 @@
             Grid.Column="1" 
             Grid.Row="1" 
             Margin="10" 
-            UILanguage="English"
+            
             HorizontalAlignment="Right" 
             VerticalAlignment="Bottom"
             DataContext="{Binding CoordinatePanel}" 
