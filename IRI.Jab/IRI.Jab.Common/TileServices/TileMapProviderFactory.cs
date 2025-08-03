@@ -72,9 +72,7 @@ public static class TileMapProviderFactory
         {
             if (_bingSatellite is null)
             {
-                _bingSatellite = new TileMapProvider(
-                    //new PersianEnglishItem("بینگ", BingProvider),
-                    //new PersianEnglishItem("ماهواره", "Satellite"),
+                _bingSatellite = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_bing.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Satellite.ToString(),
                     tile => MakeBingSatelliteUrl(tile, GetServer()),
@@ -93,9 +91,7 @@ public static class TileMapProviderFactory
         {
             if (_bingStreet is null)
             {
-                _bingStreet = new TileMapProvider(
-                    //new PersianEnglishItem("بینگ", BingProvider),
-                    //new PersianEnglishItem("راه", "Street"),
+                _bingStreet = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_bing.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Street.ToString(),
                     tile => MakeBingStreetUrl(tile, GetServer()),
@@ -116,9 +112,7 @@ public static class TileMapProviderFactory
         {
             if (_bingHybrid is null)
             {
-                _bingHybrid = new TileMapProvider(
-                    //new PersianEnglishItem("بینگ", BingProvider),
-                    //new PersianEnglishItem("ترکیبی", "Hybrid"),
+                _bingHybrid = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_bing.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Hybrid.ToString(),
                     tile => MakeBingHybridUrl(tile, GetServer()),
@@ -167,9 +161,7 @@ public static class TileMapProviderFactory
         {
             if (_googleCleanGrey is null)
             {
-                _googleCleanGrey = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("خاکستری", "CleanGrey"),
+                _googleCleanGrey = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_CleanGrey.ToString(),
                     MakeGoogleCleanGreyUrl,
@@ -189,9 +181,7 @@ public static class TileMapProviderFactory
         {
             if (_googleBlackWhite is null)
             {
-                _googleBlackWhite = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("سیاه‌سفید", "BlackWhite"),
+                _googleBlackWhite = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_BlackWhite.ToString(),
                     MakeGoogleBlackWhiteUrl,
@@ -211,9 +201,7 @@ public static class TileMapProviderFactory
         {
             if (_googleTraffic is null)
             {
-                _googleTraffic = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("ترافیک", "Traffic"),
+                _googleTraffic = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Traffic.ToString(),
                     tile => MakeGoogleTerafficUrl(tile, GetServer()),
@@ -236,9 +224,7 @@ public static class TileMapProviderFactory
         {
             if (_googleSatellite is null)
             {
-                _googleSatellite = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("ماهواره", "Satellite"),
+                _googleSatellite = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Satellite.ToString(),
                     tile => MakeGoogleSatelliteUrl(tile, GetServer()),
@@ -258,9 +244,7 @@ public static class TileMapProviderFactory
         {
             if (_googleHybrid is null)
             {
-                _googleHybrid = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("ترکیبی", "Hybrid"),
+                _googleHybrid = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Hybrid.ToString(),
                     tile => MakeGoogleHybridUrl(tile, GetServer()),
@@ -280,9 +264,7 @@ public static class TileMapProviderFactory
         {
             if (_googleRoadMap is null)
             {
-                _googleRoadMap = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("راه", "RoadMap"),
+                _googleRoadMap = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_RoadMap.ToString(),
                     tile => MakeGoogleRoadMapUrl(tile, GetServer()),
@@ -302,9 +284,7 @@ public static class TileMapProviderFactory
         {
             if (_googleTerrain is null)
             {
-                _googleTerrain = new TileMapProvider(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("توپو", "Terrain"),
+                _googleTerrain = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Terrain.ToString(),
                     tile => MakeGoogleTerrainUrl(tile, GetServer()),
@@ -345,9 +325,7 @@ public static class TileMapProviderFactory
         {
             if (_googleLight is null)
             {
-                _googleLight = CreateFromXyzUrlIntServer(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("روشن", "Light"),
+                _googleLight = CreateFromXyzUrlIntServer( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Light.ToString(),
                     "https://mt{@server}.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
@@ -369,9 +347,7 @@ public static class TileMapProviderFactory
         {
             if (_googleNature is null)
             {
-                _googleNature = CreateFromXyzUrlIntServer(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("طبیعت", "Nature"),
+                _googleNature = CreateFromXyzUrlIntServer( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Nature.ToString(),
                    "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i{y}!3m14!2snl!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjV8cC5oOiNGRkE4MDB8cC5nOjEscy50OjQ5fHAuaDojNTNGRjAwfHAuczotNzN8cC5sOjQwfHAuZzoxLHMudDo1MHxwLmg6I0ZCRkYwMHxwLmc6MSxzLnQ6NTF8cC5oOiMwMEZGRkR8cC5sOjMwfHAuZzoxLHMudDo2fHAuaDojMDBCRkZGfHAuczo2fHAubDo4fHAuZzoxLHMudDoyfHAuaDojNjc5NzE0fHAuczozMy40fHAubDotMjUuNHxwLmc6MQ!4e0!23i1301875",
@@ -392,9 +368,7 @@ public static class TileMapProviderFactory
         {
             if (_googleNeutralBlue is null)
             {
-                _googleNeutralBlue = CreateFromXyzUrlIntServer(
-                    //new PersianEnglishItem("گوگل", GoogleProvider),
-                    //new PersianEnglishItem("آبی", "NeutralBlue"),
+                _googleNeutralBlue = CreateFromXyzUrlIntServer( 
                     Localization.LocalizationResourceKeys.tile_provider_google.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_NeutralBlue.ToString(),
                     "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i{y}!3m14!2snl!3sUS!5e18!12m1!1e68!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjZ8cy5lOmd8cC5jOiNmZjE5MzM0MSxzLnQ6NXxzLmU6Z3xwLmM6I2ZmMmM1YTcxLHMudDozfHMuZTpnfHAuYzojZmYyOTc2OGF8cC5sOi0zNyxzLnQ6MnxzLmU6Z3xwLmM6I2ZmNDA2ZDgwLHMudDo0fHMuZTpnfHAuYzojZmY0MDZkODAscy5lOmwudC5zfHAudjpvbnxwLmM6I2ZmM2U2MDZmfHAudzoyfHAuZzowLjg0LHMuZTpsLnQuZnxwLmM6I2ZmZmZmZmZmLHMudDoxfHMuZTpnfHAudzowLjZ8cC5jOiNmZjFhMzU0MSxzLmU6bC5pfHAudjpvZmYscy50OjQwfHMuZTpnfHAuYzojZmYyYzVhNzE!4e0!23i1301875",
@@ -469,9 +443,7 @@ public static class TileMapProviderFactory
         {
             if (_openStreetMap is null)
             {
-                _openStreetMap = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("راه", "Street"),
+                _openStreetMap = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Street.ToString(),
                     tile => MakeOpenStreetMapUrl(tile, GetServerCharacter()),
@@ -491,9 +463,7 @@ public static class TileMapProviderFactory
         {
             if (_openTopoMap is null)
             {
-                _openTopoMap = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("توپو", "Topo"),
+                _openTopoMap = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Topo.ToString(),
                     tile => MakeOpenTopoMapUrl(tile, GetServerCharacter()),
@@ -513,9 +483,7 @@ public static class TileMapProviderFactory
         {
             if (_mapyWinter is null)
             {
-                _mapyWinter = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("زمستان", "MapyWinter"),
+                _mapyWinter = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_MapyWinter.ToString(),
                     MakeMapyWinterUrl,
@@ -535,9 +503,7 @@ public static class TileMapProviderFactory
         {
             if (_mapyTourist is null)
             {
-                _mapyTourist = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("توریست", "MapyTourist"),
+                _mapyTourist = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_MapyTourist.ToString(),
                     MakeMapyTouristUrl,
@@ -557,9 +523,7 @@ public static class TileMapProviderFactory
         {
             if (_osmHikeBike is null)
             {
-                _osmHikeBike = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("طبیعت‌گردی", "HikeBike"),
+                _osmHikeBike = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_HikeBike.ToString(),
                     MakeOsmHikeBikeUrl,
@@ -579,9 +543,7 @@ public static class TileMapProviderFactory
         {
             if (_stamentWatercolor is null)
             {
-                _stamentWatercolor = new TileMapProvider(
-                    //new PersianEnglishItem("OSM", OsmProvider),
-                    //new PersianEnglishItem("آبرنگ", "Watercolor"),
+                _stamentWatercolor = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_osm.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Watercolor.ToString(),
                     MakeStamenWatercolorUrl,
@@ -611,9 +573,7 @@ public static class TileMapProviderFactory
         {
             if (_wazeStreet is null)
             {
-                _wazeStreet = new TileMapProvider(
-                    //new PersianEnglishItem(WazeProvider, WazeProvider),
-                    //new PersianEnglishItem("راه", "Street"),
+                _wazeStreet = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_waze.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Street.ToString(),
                     MakeWazeRoadMapUrl,
@@ -645,9 +605,7 @@ public static class TileMapProviderFactory
         {
             if (_cartoDark is null)
             {
-                _cartoDark = new TileMapProvider(
-                    //new PersianEnglishItem("کارتو", CartoProvider),
-                    //new PersianEnglishItem("تیره", "Dark"),
+                _cartoDark = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_carto.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Dark.ToString(),
                     MakeCartoDarkUrl,
@@ -666,9 +624,7 @@ public static class TileMapProviderFactory
         {
             if (_cartoLight is null)
             {
-                _cartoLight = new TileMapProvider(
-                    //new PersianEnglishItem("کارتو", CartoProvider),
-                    //new PersianEnglishItem("روشن", "Light"),
+                _cartoLight = new TileMapProvider( 
                     Localization.LocalizationResourceKeys.tile_provider_carto.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Light.ToString(),
                     MakeCartoLightUrl,
@@ -692,9 +648,7 @@ public static class TileMapProviderFactory
         {
             if (_mapboxComic is null)
             {
-                _mapboxComic = CreateFromXyzUrlCharServer(
-                    //new PersianEnglishItem("مپ‌باکس", Mapbox),
-                    //new PersianEnglishItem("فانتزی", "Comic"),
+                _mapboxComic = CreateFromXyzUrlCharServer( 
                     Localization.LocalizationResourceKeys.tile_provider_mapbox.ToString(),
                     Localization.LocalizationResourceKeys.tile_mapType_Comic.ToString(),
                     "https://{@server}.tiles.mapbox.com/v4/mapbox.comic/{z}/{x}/{y}.jpg?access_token=pk.eyJ1IjoibW9ob2tvZW1haWxob3N0aW5mbyIsImEiOiJjanU5bmFlbDcxYjNkNDRuenB1cHF6YXo0In0.sdTlXpsCH35pTyzOGK3K8w",

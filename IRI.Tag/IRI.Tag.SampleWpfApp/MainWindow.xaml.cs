@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using IRI.Jab.Common;
+using IRI.Jab.Common.TileServices;
 using IRI.Sta.Common.Primitives;
 
 namespace IRI.Tag.SampleWpfApp
@@ -27,22 +28,17 @@ namespace IRI.Tag.SampleWpfApp
                 MessageBox.Show("error!");
             }
 
-            var presenter = new ViewModel.AppPresenter();
+            var presenter = new ViewModel.AppViewModel();
 
             await this.map.Register(presenter);
 
             presenter.Initialize(this);
 
             this.DataContext = presenter;
-
-
-            //presenter.RemoveAllProviders();
-            //add a map provider to default providers
-            //presenter.MapProviders.Add(Jab.Common.TileServices.TileMapProviderFactory.WazeStreet);
-
+             
             presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false, isNewExtent: true);
 
-            //LocalizationManager.Instance.SetCulture(new CultureInfo(""));
+            presenter.SelectedMapProvider = TileMapProviderFactory.GoogleRoadMap;
         }
     }
 }

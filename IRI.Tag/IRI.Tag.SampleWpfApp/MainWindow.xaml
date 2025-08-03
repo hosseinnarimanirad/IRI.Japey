@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:IRI.Tag.SampleWpfApp"
         mc:Ignorable="d" Loaded="Window_Loaded" 
         xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:MapViewer="clr-namespace:IRI.Jab.Controls;assembly=IRI.Jab.Controls" 
@@ -66,19 +65,10 @@
                 </StackPanel>
             </Border>
         </StackPanel>
- 
-        <MapViewer:MapViewer 
-            Grid.Row="1" 
-            Grid.Column="1" 
-            x:Name="map" 
-            BorderBrush="Black" 
-            BorderThickness="1"/>
 
-        <MapViewer:MapInfoView 
-            Grid.Row="1" 
-            Grid.Column="1"   
-            DataContext="{Binding }" 
-            FlowDirection="LeftToRight"/>
+        <MapViewer:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"/>
+        
+        <MapViewer:MapInfoView Grid.Row="1" Grid.Column="1" DataContext="{Binding }"/>
  
         <iriJabMapControls:CoordinatePanelView 
             Grid.Column="1" 
@@ -91,14 +81,7 @@
         
         <StackPanel Grid.Row="1">
             <Expander Header="Base maps" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
-                <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedMapProvider, Mode=TwoWay}" VerticalAlignment="Center"
-                          >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Title}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedMapProvider, Mode=TwoWay}" VerticalAlignment="Center" DisplayMemberPath="Title"/>
             </Expander>
             <Expander Header="Drawings" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
                 <iriJabMapControls:MapDrawingLegendView MinHeight="90"/>

@@ -5,16 +5,13 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Slider.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.RadioButton.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.TabControl.xaml" />
 
-
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Amber.xaml" />
-
 
                 <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/Styles/ButtonStyles.xaml"/>
 
@@ -27,10 +24,7 @@
                 <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Converters.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Fonts.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/IRI.Jab.Common;component/Assets/IRI.Colors.xaml"/>
- 
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
-
     </Application.Resources>
 </Application>

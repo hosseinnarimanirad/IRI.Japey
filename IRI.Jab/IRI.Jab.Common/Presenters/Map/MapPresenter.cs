@@ -421,7 +421,7 @@ public abstract class MapPresenter : BasePresenter
     //    await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
     //}
 
-    public async Task SetTileBaseMap(TileMapProvider? provider, double opacity)
+    public void SetTileBaseMap(TileMapProvider? provider/*, double opacity*/)
     {
         if (provider is null)
             return;
@@ -2936,7 +2936,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_changeBaseMapCommand == null)
             {
-                _changeBaseMapCommand = new RelayCommand(async param =>
+                _changeBaseMapCommand = new RelayCommand(/*async*/ param =>
                 {
                     try
                     {
@@ -2949,7 +2949,7 @@ public abstract class MapPresenter : BasePresenter
                         //this.ProviderTypeFullName = provider;
                         var provider = this.MapProviders.FirstOrDefault(m => m.FullName.EqualsIgnoreCase(param?.ToString()));
 
-                        await this.SetTileBaseMap(provider, BaseMapOpacity);
+                        /*await*/ this.SetTileBaseMap(provider/*, BaseMapOpacity*/);
 
                     }
                     catch (Exception ex)
