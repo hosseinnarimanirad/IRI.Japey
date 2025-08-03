@@ -34,16 +34,8 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="3">
-                        <Image Source="{Binding FlagUri}" Stretch="Uniform"
-                           Width="34" Height="24"
-                           Margin="0,0,5,0">
-                            <!--<Image.Clip>
-                                <EllipseGeometry Center="12,12" RadiusX="10" RadiusY="10"/>
-                            </Image.Clip>-->
-                        </Image>
-                        <TextBlock Text="{Binding NativeName}"
-                               VerticalAlignment="Center"
-                               FlowDirection="{Binding TextFlowDirection}"/>
+                        <Image Source="{Binding FlagUri}" Stretch="Uniform" Width="34" Height="24" Margin="0,0,5,0"/>
+                        <TextBlock Text="{Binding NativeName}" VerticalAlignment="Center" FlowDirection="{Binding TextFlowDirection}"/>
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
@@ -84,16 +76,14 @@
 
         <MapViewer:MapInfoView 
             Grid.Row="1" 
-            Grid.Column="1"  
-             
+            Grid.Column="1"   
             DataContext="{Binding }" 
             FlowDirection="LeftToRight"/>
  
         <iriJabMapControls:CoordinatePanelView 
             Grid.Column="1" 
             Grid.Row="1" 
-            Margin="10" 
-            
+            Margin="10"  
             HorizontalAlignment="Right" 
             VerticalAlignment="Bottom"
             DataContext="{Binding CoordinatePanel}" 
@@ -101,17 +91,14 @@
         
         <StackPanel Grid.Row="1">
             <Expander Header="Base maps" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
-                <ListBox ItemsSource="{Binding MapProviders}" Height="150">
-                    <ListBox.ItemTemplate>
+                <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedMapProvider, Mode=TwoWay}" VerticalAlignment="Center"
+                          >
+                    <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Margin="2" Text="{Binding FullName}" Foreground="Black" Cursor="Hand">
-                                <TextBlock.InputBindings>
-                                    <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=root, Path=DataContext.ChangeBaseMapCommand}" CommandParameter="{Binding FullName}"/>
-                                </TextBlock.InputBindings>
-                            </TextBlock>
+                            <TextBlock Text="{Binding Title}" />
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </Expander>
             <Expander Header="Drawings" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
                 <iriJabMapControls:MapDrawingLegendView MinHeight="90"/>

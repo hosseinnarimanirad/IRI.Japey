@@ -106,18 +106,18 @@ public class TileMapProvider : ValueObjectNotifier, IDisposable
     {
         get
         {
-            return $"{ProviderEn}{MapTypeEn}";
+            return $"{ProviderEn}-{MapTypeEn}";
         }
     }
 
-    public string Title { get { return $"{Provider} {MapType}"; } }
+    public string Title { get { return $"{Provider}-{MapType}"; } }
 
     public Func<TileInfo, string> MakeUrl { get; protected set; }
 
-    protected TileMapProvider()
-    {
+    //protected TileMapProvider()
+    //{
 
-    }
+    //}
 
     //public TileMapProvider(string provider, string mapType, Func<TileInfo, string> urlFunction, byte[]? thumbnail, byte[]? thumbnail72)
     //    : this(PersianEnglishItem.CreateUpperCasedEnglish(string.Empty, provider),
@@ -168,8 +168,8 @@ public class TileMapProvider : ValueObjectNotifier, IDisposable
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Provider;
-        yield return MapType;
+        yield return ProviderEn;
+        yield return MapTypeEn;
     }
 
     //public override bool Equals(object obj)

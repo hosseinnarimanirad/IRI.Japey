@@ -216,7 +216,7 @@
 
 
             <TextBlock Text="{Binding ElementName=root, Path=NewDrawingText}" VerticalAlignment="Center" Margin="8,0" Foreground="{StaticResource  MahApps.Brushes.Accent2}"
-                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}" HorizontalAlignment="Center"/>
+                        Visibility="{Binding IsDrawMode, Converter={StaticResource boolToVisibilityConverter}}" HorizontalAlignment="Center" TextDecorations="Underline"/>
             <StackPanel >
                 <StackPanel.Visibility>
                     <MultiBinding Converter="{StaticResource multiBooleanToVisibilityConverter}">

@@ -38,7 +38,7 @@ namespace IRI.Tag.SampleWpfApp
 
             //presenter.RemoveAllProviders();
             //add a map provider to default providers
-            presenter.MapProviders.Add(Jab.Common.TileServices.TileMapProviderFactory.WazeStreet);
+            //presenter.MapProviders.Add(Jab.Common.TileServices.TileMapProviderFactory.WazeStreet);
 
             presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false, isNewExtent: true);
 

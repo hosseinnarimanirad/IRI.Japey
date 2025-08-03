@@ -377,6 +377,8 @@ public abstract class MapPresenter : BasePresenter
         {
             _selectedMapProvider = value;
             RaisePropertyChanged();
+
+            _ = SetTileService(value, BaseMapOpacity, MapSettings.GetLocalFileName);
         }
     }
 
@@ -419,9 +421,12 @@ public abstract class MapPresenter : BasePresenter
     //    await SetTileService(provider, MapSettings.GetLocalFileName);//, MapSettings.GetFileName);             
     //}
 
-    public async Task SetTileBaseMap(TileMapProvider provider, double opacity)
+    public async Task SetTileBaseMap(TileMapProvider? provider, double opacity)
     {
-        if (provider == null)
+        if (provider is null)
+            return;
+
+        if (provider.FullName == SelectedMapProvider.FullName)
             return;
 
         if (!this.MapProviders.Contains(provider))
@@ -430,7 +435,7 @@ public abstract class MapPresenter : BasePresenter
 
         this.SelectedMapProvider = provider;
 
-        await SetTileService(provider, opacity, MapSettings.GetLocalFileName);
+        //await SetTileService(provider, opacity, MapSettings.GetLocalFileName);
     }
 
     private bool _doNotCheckInternet = false;
