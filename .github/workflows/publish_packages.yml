@@ -1,90 +1,89 @@
-name: NuGet Package Publisher (IRI Projects)
+name: NuGet Package Publisher
 
 on:
   push:
-    branches: [ "master" ]
-  workflow_dispatch:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master ]
 
 env:
   DOTNET_VERSION: '8.0.x'
-  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
   PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
 
 jobs:
   build-and-publish:
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
-    
-    - name: Cache .NET
+        fetch-depth: 0  # Required for MinVer versioning
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: |
           ~/.dotnet
           ~/.nuget/packages
-        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/global.json') }}
+        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/Directory.Build.props') }}-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-    - name: Restore dependencies
-      run: |
-        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
-        foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            dotnet restore $_.FullName
-          }
-        }
-    
+
     - name: Build
       run: |
-        $warningCodes = "CS1591,CS1573,CS0618,CS8604,CS8618,NU5104"  # Add your specific warning codes
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            dotnet build $_.FullName --configuration Release --no-restore `
-              --verbosity minimal `
-              --property:WarningLevel=0 `
-              --property:NoWarn="$warningCodes" `
-              --property:GenerateDocumentationFile=false `
-              --property:DisableImplicitNuGetFallbackFolder=true
+            dotnet build $_.FullName --configuration Release --no-restore
           }
         }
-    
-    #- name: Run tests
-    #  run: |
-    #    $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
-    #    foreach ($prefix in $prefixes) {
-    #      Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { $_.FullName -match '\.Tests\\' } | ForEach-Object {
-    #        dotnet test $_.FullName --configuration Release --no-build --verbosity normal
-    #      }
-    #    }
-    
+
+    - name: Test
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.Tests.csproj" | ForEach-Object {
+            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
+          }
+        }
+
     - name: Pack
       run: |
         New-Item -ItemType Directory -Force -Path ./nupkgs | Out-Null
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { $_.FullName -notmatch '\.Tests\\' } | ForEach-Object {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { 
+            $_.FullName -notmatch '\.Tests\\' 
+          } | ForEach-Object {
             dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs
           }
         }
-    
+
+    - name: Verify Versions
+      run: |
+        Write-Output "=== Packaged Versions ==="
+        Get-ChildItem ./nupkgs/*.nupkg | ForEach-Object {
+          $name = $_.Name -replace '\.nupkg$',''
+          Write-Output $name
+        }
+
     - name: Publish to NuGet
       if: github.ref == 'refs/heads/master'
       run: |
         $apiKey = "${{ secrets.NUGET_API_KEY }}"
-        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
-        foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path ./nupkgs -Filter "${prefix}*.nupkg" | ForEach-Object {
-            dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
-          }
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
         }
-       
+
+    - name: Upload Artifacts
+      if: github.ref != 'refs/heads/master'
+      uses: actions/upload-artifact@v3
+      with:
+        name: nuget-packages
+        path: ./nupkgs/*.nupkg
