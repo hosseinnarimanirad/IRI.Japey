@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IRI.Jab.Controls.Presenter
 {
-    public class MapApplicationPresenter<TUser> : MapPresenter where TUser : class
+    public class MapApplicationPresenter : MapPresenter
     {
         public MapApplicationPresenter()
         {
@@ -42,7 +42,7 @@ namespace IRI.Jab.Controls.Presenter
         public virtual void Initialize(System.Windows.Window ownerWindow)
         {
             this.DialogService = new IRI.Jab.Controls.Services.Dialog.DefaultDialogService(ownerWindow);
- 
+
             this.RequestShowGoToView = IRI.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
             this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer, this);

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace IRI.Tag.SampleWpfApp.ViewModel;
 
-public class AppViewModel : MapApplicationPresenter<object>
+public class AppViewModel : MapApplicationPresenter
 {
     public void ShowSpecialPointLayerSample()
     {
