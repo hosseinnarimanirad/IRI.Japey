@@ -7,6 +7,16 @@
     <NoWarn>CS8602,CS8618,CS8625</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Company>Maptor</Company>
+    <Description>A .NET standard library containing primitive graph structures and algorithms</Description>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.Graph</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>graph</PackageTags>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Folder Include="MaximumFlow\" />
   </ItemGroup>

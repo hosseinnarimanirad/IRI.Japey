@@ -10,6 +10,7 @@
     <!-- or "latest", "preview", or "11.0" -->
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+  
   <PropertyGroup>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Hossein Narimani Rad</Authors>
@@ -18,8 +19,8 @@
     <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.ShapefileFormat</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>shapefile;GIS;spatial;dbf</PackageTags>
-  </PropertyGroup> 
-
+  </PropertyGroup>
+ 
   <ItemGroup>
     <Content Include="Info\Info.txt" />
     <Content Include="License.txt" />

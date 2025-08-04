@@ -7,6 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+
   <ItemGroup>
     <None Remove="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <None Remove="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />
@@ -58,20 +59,20 @@
     <None Remove="Deploy\Stateless.dll" />
     <None Remove="Properties\Resources.resx~RF2341c1.TMP" />
   </ItemGroup>
- 
+
   <ItemGroup>
     <Content Include="Assets\Images\Logos\google.png" />
     <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.18.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Stateless" Version="5.12.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
+    <PackageReference Include="DocumentFormat.OpenXml" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="Stateless" />
+    <PackageReference Include="System.Data.SqlClient" />
+    <PackageReference Include="System.Drawing.Common" />
+    <PackageReference Include="WriteableBitmapEx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -92,7 +93,7 @@
       <HintPath>..\..\IRI.Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyPlusRightHanded.cur" />

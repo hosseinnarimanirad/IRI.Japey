@@ -7,11 +7,21 @@
     <NoWarn>CS8602,CS8618,CS8625</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Company>Maptor</Company>
+    <Description>A .NET standard library to work with gsm gprs</Description>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.GsmGprs</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>gsm</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.IO.Ports" Version="9.0.4" />
+    <PackageReference Include="System.IO.Ports" /> 
   </ItemGroup>
 </Project>

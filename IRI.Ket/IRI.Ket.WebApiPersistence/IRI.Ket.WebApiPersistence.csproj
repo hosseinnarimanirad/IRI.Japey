@@ -9,5 +9,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Persistence\IRI.Sta.Persistence.csproj" />
   </ItemGroup>
-
+   
 </Project>

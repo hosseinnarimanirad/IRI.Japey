@@ -1,11 +1,12 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>1.2.0</VersionPrefix>
-    <VersionSuffix Condition="'$(GITHUB_REF_NAME)' != 'master'">-alpha</VersionSuffix>
-    <Version>$(VersionPrefix)$(VersionSuffix)</Version>
+    <MinVerDefaultPreReleasePhase>dev</MinVerDefaultPreReleasePhase>
+    <MinVerMinimumMajorMinor>1.2</MinVerMinimumMajorMinor>
     
     <PackageIcon>package-icon.png</PackageIcon>
-    <PackageIconUrl/> 
+    <PackageIconUrl/>
+
+    <MinVerBuildMetadata>ci.$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</MinVerBuildMetadata>
   </PropertyGroup>
 
   <ItemGroup>

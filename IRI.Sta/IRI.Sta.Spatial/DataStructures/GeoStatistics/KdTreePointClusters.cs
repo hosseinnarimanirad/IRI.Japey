@@ -144,7 +144,7 @@ public class KdTreePointClusters<T> where T : IPoint
                     //}
 
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return new List<T>();
                 }
@@ -153,7 +153,7 @@ public class KdTreePointClusters<T> where T : IPoint
             return result;
 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return new List<T>();
         }

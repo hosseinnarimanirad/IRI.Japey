@@ -7,7 +7,17 @@
     <NoWarn>CS8602,CS8618,CS8625</NoWarn>
     <!--<LangVersion>latestMajor</LangVersion>-->
   </PropertyGroup>
- 
+
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Company>Maptor</Company>
+    <Description>A .NET standard library containing machine learning structures and algorithms</Description>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Sta/IRI.Sta.MachineLearning</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>MachineLearning</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\IRI.Sta.Common\IRI.Sta.Common.csproj" />
     <ProjectReference Include="..\IRI.Sta.Spatial\IRI.Sta.Spatial.csproj" />
