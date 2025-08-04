@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Required for MinVer versioning
+        fetch-depth: 0  # Required for MinVer
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -83,7 +83,8 @@ jobs:
 
     - name: Upload Artifacts
       if: github.ref != 'refs/heads/master'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: nuget-packages
         path: ./nupkgs/*.nupkg
+        retention-days: 3  # Auto-cleanup dev artifacts
