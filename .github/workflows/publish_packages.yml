@@ -36,14 +36,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
 
-  #  - name: Restore dependencies
-  #    run: |
-   #     $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
-    #    foreach ($prefix in $prefixes) {
-     #     Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-      #      dotnet restore $_.FullName
-       #   }
-        #}
+    - name: Restore dependencies
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
+          }
+        }
 
     - name: Build
       run: |
