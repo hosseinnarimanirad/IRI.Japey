@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Required for MinVer
+        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -34,6 +34,16 @@ jobs:
         key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/Directory.Build.props') }}-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
+
+    # ADDED THIS CRITICAL STEP
+    - name: Restore dependencies
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
+          }
+        }
 
     - name: Build
       run: |
@@ -65,14 +75,6 @@ jobs:
           }
         }
 
-    - name: Verify Versions
-      run: |
-        Write-Output "=== Packaged Versions ==="
-        Get-ChildItem ./nupkgs/*.nupkg | ForEach-Object {
-          $name = $_.Name -replace '\.nupkg$',''
-          Write-Output $name
-        }
-
     - name: Publish to NuGet
       if: github.ref == 'refs/heads/master'
       run: |
@@ -87,4 +89,3 @@ jobs:
       with:
         name: nuget-packages
         path: ./nupkgs/*.nupkg
-        retention-days: 3  # Auto-cleanup dev artifacts
