@@ -54,9 +54,9 @@ jobs:
               /p:NoWarn="${{ env.NOWARN_CODES }}" ` 
               /p:WarningLevel=0 ` 
               /p:GenerateDocumentationFile=false ` 
-              --verbosity minimal
+              --verbosity:minimal 
           }
-        } 
+        }
 
     - name: Test
       run: |
