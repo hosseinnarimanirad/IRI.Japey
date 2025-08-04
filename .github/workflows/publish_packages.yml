@@ -10,7 +10,7 @@ env:
   DOTNET_VERSION: '8.0.x'
   PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab'
   NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
-  NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603' # Added warning suppression list
+  NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603'  
 
 jobs:
   build-and-publish:
@@ -53,7 +53,7 @@ jobs:
             dotnet build $_.FullName `
               --configuration Release `
               --no-restore `
-              /p:NoWarn="$(${{ env.NOWARN_CODES }})" `
+              /p:NoWarn=${{ env.NOWARN_CODES }}" `
               /p:WarningLevel=0 `
               /p:GenerateDocumentationFile=false `
               --verbosity minimal
