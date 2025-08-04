@@ -2,10 +2,8 @@ name: NuGet Package Publisher
 
 on:
   push:
-    branches: [ master, develop ]
-  pull_request:
     branches: [ master ]
-
+    
 env:
   DOTNET_VERSION: '8.0.x'
   PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab'
@@ -73,20 +71,8 @@ jobs:
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            # Force release version on master
-            if ("${{ github.ref }}" -eq "refs/heads/master") {
-              dotnet pack $_.FullName `
-                /p:VersionPrefix="${{ steps.version.outputs.stable }}" `
-                /p:VersionSuffix="" `
-                --configuration Release `
-                --output ./nupkgs
-            } else {
-              # Default MinVer behavior for other branches
-              dotnet pack $_.FullName `
-                --configuration Release `
-                --output ./nupkgs
-            }
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
+            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs             
           }
         }
 
