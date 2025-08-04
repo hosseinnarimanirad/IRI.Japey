@@ -10,6 +10,7 @@ env:
   DOTNET_VERSION: '8.0.x'
   PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab'
   NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+  NOWARN_CODES: 'CS1591,CS1573,CS0618,NU5104,CS8600,CS0414,CS8601,CS8603' # Added warning suppression list
 
 jobs:
   build-and-publish:
@@ -35,7 +36,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
 
-    # ADDED THIS CRITICAL STEP
     - name: Restore dependencies
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
@@ -45,12 +45,16 @@ jobs:
           }
         }
 
-    - name: Build
+    - name: Build (with warning suppression) # Modified build step
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            dotnet build $_.FullName --configuration Release --no-restore
+            dotnet build $_.FullName --configuration Release --no-restore `
+              --verbosity minimal `
+              --property:NoWarn="${{ env.NOWARN_CODES }}" `
+              --property:WarningLevel=0 `
+              --property:GenerateDocumentationFile=false
           }
         }
 
