@@ -50,12 +50,12 @@ jobs:
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            dotnet build $_.FullName `
-              /p:Configuration=Release `
-              /p:NoRestore=true `
-              /p:NoWarn="${{ env.NOWARN_CODES }}" `
-              /p:WarningLevel=0 `
-              /p:GenerateDocumentationFile=false `
+            dotnet build $_.FullName  \
+              /p:Configuration=Release  \
+              /p:NoRestore=true  \
+              /p:NoWarn="${{ env.NOWARN_CODES }}"  \
+              /p:WarningLevel=0  \
+              /p:GenerateDocumentationFile=false  \
               /v:minimal
           }
         }
