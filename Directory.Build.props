@@ -1,13 +1,11 @@
 <Project>
-  <PropertyGroup> 
-    
-    <MinVerMinimumMajorMinor>2.0</MinVerMinimumMajorMinor>
-    <!--<MinVerDefaultPreReleaseIdentifiers>dev.0</MinVerDefaultPreReleaseIdentifiers>-->
+  <PropertyGroup>
+
+    <Version>2.1.0</Version>
     
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageIconUrl/>
-
-    <MinVerBuildMetadata>ci.$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</MinVerBuildMetadata>
+ 
   </PropertyGroup>
 
   <ItemGroup>
