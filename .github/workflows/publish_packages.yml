@@ -45,16 +45,16 @@ jobs:
           }
         }
 
-    - name: Build (with warning suppression) # Modified build step
+    - name: Build
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
             dotnet build $_.FullName --configuration Release --no-restore `
-              --verbosity minimal `
-              --property:NoWarn="${{ env.NOWARN_CODES }}" `
-              --property:WarningLevel=0 `
-              --property:GenerateDocumentationFile=false
+              /p:NoWarn="${{ env.NOWARN_CODES }}" `
+              /p:WarningLevel=0 `
+              /p:GenerateDocumentationFile=false `
+              --verbosity minimal
           }
         }
 
