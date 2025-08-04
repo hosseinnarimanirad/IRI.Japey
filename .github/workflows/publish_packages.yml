@@ -1,12 +1,14 @@
-name: NuGet Package Publisher (IRI.Sta Projects)
+name: NuGet Package Publisher (IRI Projects)
 
 on:
   push:
     branches: [ "master" ]
+  workflow_dispatch:
 
 env:
   DOTNET_VERSION: '8.0.x'
-  PROJECT_PREFIX: 'IRI.Sta'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+  PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab'
 
 jobs:
   build-and-publish:
@@ -17,7 +19,6 @@ jobs:
       with:
         fetch-depth: 0 
     
-    # Cache .NET installation for faster builds
     - name: Cache .NET
       uses: actions/cache@v3
       with:
@@ -28,74 +29,56 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
     
-    # Only setup .NET if not cached
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-    - name: Restore IRI.Sta projects
+    - name: Restore dependencies
       run: |
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet restore $_.FullName
-        }
-    
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.x'
-
-    - name: Determine Version
-      id: gitversion
-      uses: gittools/actions/gitversion/execute@v0
-
-    - name: Display Version
-      run: |
-        echo "Major: ${{ steps.gitversion.outputs.major }}"
-        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-        echo "NuGet Version: ${{ steps.gitversion.outputs.nuGetVersion }}"
-    
-    - name: Build IRI.Sta projects
-      run: |
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet build $_.FullName --configuration Release --no-restore
-        }
-      
-    - name: Pack IRI.Sta projects
-      run: |
-        $versionSuffix = "ci-${{ github.run_number }}"
-        # Create nupkgs directory if it doesn't exist
-        if (!(Test-Path -Path "./nupkgs")) {
-          New-Item -ItemType Directory -Path "./nupkgs"
-        }
-        
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet pack $_.FullName `
-            --configuration Release `
-            --no-build `
-            --output ./nupkgs `
-            -p:PackageIcon="package-icon.png" `
-            -p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
-        }
-        
-    - name: Push to NuGet
-      if: github.ref == 'refs/heads/master'  # Only push releases from master
-      run: |
-        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
-          dotnet nuget push $_.FullName `
-            --api-key ${{ secrets.NUGET_API_KEY }} `
-            --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} `
-            --skip-duplicate
-        }
-        
-    - name: Push to GitHub Packages
-      if: github.ref == 'refs/heads/master'  # Only push releases from master
-      run: |
-        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
-            dotnet nuget push $_.FullName `
-              --api-key ${{ secrets.GITHUB_TOKEN }} `
-              --source "https://nuget.pkg.github.com/hosseinnarimanirad/index.json" `
-              --skip-duplicate
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
           }
+        }
+    
+    - name: Build
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet build $_.FullName --configuration Release --no-restore
+          }
+        }
+    
+    - name: Run tests
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { $_.FullName -match '\.Tests\\' } | ForEach-Object {
+            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
+          }
+        }
+    
+    - name: Pack
+      run: |
+        New-Item -ItemType Directory -Force -Path ./nupkgs | Out-Null
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { $_.FullName -notmatch '\.Tests\\' } | ForEach-Object {
+            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs
+          }
+        }
+    
+    - name: Publish to NuGet
+      if: github.ref == 'refs/heads/master'
+      run: |
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./nupkgs -Filter "${prefix}*.nupkg" | ForEach-Object {
+            dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+          }
+        }
        
