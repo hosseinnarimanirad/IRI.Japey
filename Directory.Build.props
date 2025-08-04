@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <MinVerDefaultPreReleasePhase>dev</MinVerDefaultPreReleasePhase>
-    <MinVerMinimumMajorMinor>1.2</MinVerMinimumMajorMinor>
+    <MinVerMinimumMajorMinor>1.3</MinVerMinimumMajorMinor>
+    <MinVerDefaultPreReleaseIdentifiers>dev.0</MinVerDefaultPreReleaseIdentifiers>
     
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageIconUrl/>
