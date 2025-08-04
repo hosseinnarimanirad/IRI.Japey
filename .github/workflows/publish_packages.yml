@@ -71,13 +71,22 @@ jobs:
 
     - name: Pack
       run: |
-        New-Item -ItemType Directory -Force -Path ./nupkgs | Out-Null
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | Where-Object { 
-            $_.FullName -notmatch '\.Tests\\' 
-          } | ForEach-Object {
-            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            # Force release version on master
+            if ("${{ github.ref }}" -eq "refs/heads/master") {
+              dotnet pack $_.FullName `
+                /p:VersionPrefix="${{ steps.version.outputs.stable }}" `
+                /p:VersionSuffix="" `
+                --configuration Release `
+                --output ./nupkgs
+            } else {
+              # Default MinVer behavior for other branches
+              dotnet pack $_.FullName `
+                --configuration Release `
+                --output ./nupkgs
+            }
           }
         }
 
