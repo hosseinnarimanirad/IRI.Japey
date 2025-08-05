@@ -33,7 +33,7 @@ public class GridDataSource : VectorDataSource/*<GeodeticSheet>*/
 
     private GridDataSource()
     {
-        GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
+        GeodeticWgs84Extent = BoundingBoxes.GeodeticWgs84_Iran;
     }
 
     public override string ToString()

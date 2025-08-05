@@ -5,40 +5,39 @@ using IRI.Jab.Common;
 using IRI.Jab.Common.TileServices;
 using IRI.Sta.Common.Primitives;
 
-namespace IRI.Tag.SampleWpfApp
+namespace IRI.Tag.SampleWpfApp;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        try
         {
-            InitializeComponent();
+            SqlServerTypes.Utilities.LoadNativeAssembliesv14(Environment.CurrentDirectory);
+        }
+        catch
+        {
+            MessageBox.Show("error!");
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SqlServerTypes.Utilities.LoadNativeAssembliesv14(Environment.CurrentDirectory);
-            }
-            catch
-            {
-                MessageBox.Show("error!");
-            }
+        var presenter = new ViewModel.AppViewModel();
 
-            var presenter = new ViewModel.AppViewModel();
+        await this.map.Register(presenter);
 
-            await this.map.Register(presenter);
+        presenter.Initialize(this);
 
-            presenter.Initialize(this);
+        this.DataContext = presenter;
+         
+        presenter.ZoomToExtent(BoundingBoxes.WebMercator_Africa, false, isNewExtent: true);
 
-            this.DataContext = presenter;
-             
-            presenter.ZoomToExtent(BoundingBoxes.IranWebMercatorBoundingBox, false, isNewExtent: true);
-
-            presenter.SelectedMapProvider = TileMapProviderFactory.GoogleRoadMap;
-        }
+        presenter.SelectedMapProvider = TileMapProviderFactory.GoogleRoadMap;
     }
 }

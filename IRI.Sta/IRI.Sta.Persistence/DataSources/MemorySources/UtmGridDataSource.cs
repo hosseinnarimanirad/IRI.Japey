@@ -35,7 +35,7 @@ public class UtmGridDataSource : VectorDataSource/*<UtmSheet>*/
 
     private UtmGridDataSource()
     {
-        GeodeticWgs84Extent = BoundingBoxes.IranGeodeticWgs84BoundingBox;
+        GeodeticWgs84Extent = BoundingBoxes.GeodeticWgs84_Iran;
     }
 
     public override string ToString()

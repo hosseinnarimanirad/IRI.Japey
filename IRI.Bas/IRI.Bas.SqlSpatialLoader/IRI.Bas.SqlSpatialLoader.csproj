@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="contentFiles\any\any\images\Bitmap1.bmp" />
     <None Remove="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
     <None Remove="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
     <None Remove="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />
@@ -28,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="contentFiles\any\any\images\Bitmap1.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
     <Content Include="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
     <Content Include="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />

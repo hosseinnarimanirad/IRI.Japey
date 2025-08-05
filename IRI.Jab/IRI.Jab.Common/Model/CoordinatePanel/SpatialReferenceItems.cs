@@ -67,6 +67,14 @@ public static class SpatialReferenceItems
                                     srs_defaultX.ToString(), 
                                     srs_defaultY.ToString());
 
+    static readonly SpatialReferenceItem _webMercator
+        = new SpatialReferenceItem(p => MapProjects.GeodeticWgs84ToWebMercator(p),
+                                    toStringForDefault,
+                                    srs_webMercatorTitle.ToString(),
+                                    srs_webMercatorSubTitle.ToString(),
+                                    srs_defaultX.ToString(),
+                                    srs_defaultY.ToString());
+
 
     static readonly SpatialReferenceItem _tmWgs84 
         = new SpatialReferenceItem(p => MapProjects.GeodeticToTransverseMercator(p), 
@@ -103,6 +111,11 @@ public static class SpatialReferenceItems
     public static SpatialReferenceItem MercatorWgs84
     {
         get { return _mercatorWgs84; }
+    }
+
+    public static SpatialReferenceItem WebMercator
+    {
+        get { return _webMercator; }
     }
 
     public static SpatialReferenceItem TmWgs84

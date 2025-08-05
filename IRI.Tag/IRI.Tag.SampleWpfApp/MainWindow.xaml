@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Loaded="Window_Loaded" 
-        xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
-        xmlns:localization="clr-namespace:IRI.Jab.Common.Localization;assembly=IRI.Jab.Common"
+        xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"  
         xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View;assembly=IRI.Jab.Controls"
         Title="MainWindow" Height="600" Width="900" x:Name="root" >
     <Window.Resources>

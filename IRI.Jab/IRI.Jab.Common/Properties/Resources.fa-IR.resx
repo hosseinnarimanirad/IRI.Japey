@@ -201,6 +201,12 @@
   <data name="srs_utmZone" xml:space="preserve">
     <value>ناحیه</value>
   </data>
+  <data name="srs_webMercatorSubTitle" xml:space="preserve">
+    <value>وب مرکاتور</value>
+  </data>
+  <data name="srs_webMercatorTitle" xml:space="preserve">
+    <value>وب مرکاتور</value>
+  </data>
   <data name="tile_mapType_BlackWhite" xml:space="preserve">
     <value>سیاه‌سفید</value>
   </data>

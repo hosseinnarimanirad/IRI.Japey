@@ -40,6 +40,8 @@ public enum LocalizationResourceKeys
     srs_utmSubTitle,
     srs_utmTitle,
     srs_utmZone,
+    srs_webMercatorTitle,
+    srs_webMercatorSubTitle,
 
 
     tile_provider_bing,

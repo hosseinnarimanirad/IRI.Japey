@@ -572,7 +572,7 @@ public abstract class MapPresenter : BasePresenter
     {
         get
         {
-            return this.RequestCurrentExtent?.Invoke() ?? BoundingBoxes.IranMercatorBoundingBox;
+            return this.RequestCurrentExtent?.Invoke() ?? BoundingBoxes.Mercator_Iran;
         }
     }
 

@@ -513,7 +513,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestRefreshLayerVisibility = this.RefreshLayerVisibility;
 
-        presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.BoundingBoxes.IranMercatorBoundingBox); };
+        presenter.RequestIranExtent = () => { this.ZoomToExtent(sb.BoundingBoxes.Mercator_Iran); };
 
         presenter.RequestFullExtent = this.FullExtent;
 
@@ -825,7 +825,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await presenter.Initialize();
 
 
-        presenter.ZoomToExtent(initialView ?? sb.BoundingBoxes.IranMercatorBoundingBox, true, isNewExtent: true);
+        presenter.ZoomToExtent(initialView ?? sb.BoundingBoxes.Mercator_Iran, true, isNewExtent: true);
 
 
         presenter.RegisterMapOptions();

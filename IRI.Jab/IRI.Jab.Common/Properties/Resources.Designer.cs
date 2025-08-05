@@ -323,6 +323,24 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Web Mercator.
+        /// </summary>
+        public static string srs_webMercatorSubTitle {
+            get {
+                return ResourceManager.GetString("srs_webMercatorSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Mercator.
+        /// </summary>
+        public static string srs_webMercatorTitle {
+            get {
+                return ResourceManager.GetString("srs_webMercatorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BlackWhite.
         /// </summary>
         public static string tile_mapType_BlackWhite {
