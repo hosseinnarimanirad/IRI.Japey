@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="contentFiles\any\any\images\Bitmap1.bmp" />
-    <None Remove="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
-    <None Remove="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
-    <None Remove="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />
-    <None Remove="Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll" />
     <None Remove="SqlServerTypes\x64\msvcr100.dll" />
     <None Remove="SqlServerTypes\x64\msvcr110.dll" />
     <None Remove="SqlServerTypes\x64\msvcr120.dll" />
@@ -29,13 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="contentFiles\any\any\images\Bitmap1.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll" />
-    <Content Include="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll" />
-    <Content Include="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll" />
-    <Content Include="Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll" />
     <Content Include="SqlServerTypes\x64\msvcr100.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
