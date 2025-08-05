@@ -4,10 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Loaded="Window_Loaded" 
-        xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:MapViewer="clr-namespace:IRI.Jab.Controls;assembly=IRI.Jab.Controls" 
+        xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
         xmlns:localization="clr-namespace:IRI.Jab.Common.Localization;assembly=IRI.Jab.Common"
-        xmlns:iriJabMapControls="clr-namespace:IRI.Jab.Controls.View.Map;assembly=IRI.Jab.Controls"
+        xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View;assembly=IRI.Jab.Controls"
         Title="MainWindow" Height="600" Width="900" x:Name="root" >
     <Window.Resources>
         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
@@ -24,7 +23,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ComboBox ItemsSource="{Binding AvailableLanguages}"
+        <iriJabControls:LanguageCombo/>
+        <!--<ComboBox ItemsSource="{Binding AvailableLanguages}"
               SelectedItem="{Binding SelectedLanguage}"
               HorizontalContentAlignment="Center" VerticalAlignment="Center">
             <ComboBox.DataContext>
@@ -38,7 +38,7 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>
+        </ComboBox>-->
         
         <StackPanel Grid.Column="1">
             <StackPanel.Resources>
@@ -66,11 +66,11 @@
             </Border>
         </StackPanel>
 
-        <MapViewer:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"/>
-        
-        <MapViewer:MapInfoView Grid.Row="1" Grid.Column="1" DataContext="{Binding }"/>
- 
-        <iriJabMapControls:CoordinatePanelView 
+        <iriJabControls:MapViewer Grid.Row="1" Grid.Column="1" x:Name="map" BorderBrush="Black" BorderThickness="1"/>
+
+        <iriJabControls:MapInfoView Grid.Row="1" Grid.Column="1" DataContext="{Binding }"/>
+
+        <iriJabControls:CoordinatePanelView 
             Grid.Column="1" 
             Grid.Row="1" 
             Margin="10"  
@@ -84,10 +84,10 @@
                 <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedMapProvider, Mode=TwoWay}" VerticalAlignment="Center" DisplayMemberPath="Title"/>
             </Expander>
             <Expander Header="Drawings" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
-                <iriJabMapControls:MapDrawingLegendView MinHeight="90"/>
+                <iriJabControls:MapDrawingLegendView MinHeight="90"/>
             </Expander>
             <Expander Header="layers" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
-                <iriJabMapControls:MapLegendWithOptionsView EnableFilterMode="True"  DataContext="{Binding Layers}" GroupName="B"/>
+                <iriJabControls:MapLegendWithOptionsView EnableFilterMode="True"  DataContext="{Binding Layers}" GroupName="B"/>
             </Expander>
         </StackPanel>
     </Grid>

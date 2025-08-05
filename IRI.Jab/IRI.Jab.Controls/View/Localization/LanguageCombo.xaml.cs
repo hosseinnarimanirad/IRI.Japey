@@ -13,16 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View
+namespace IRI.Jab.Controls.View;
+/// <summary>
+/// Interaction logic for LanguageCombo.xaml
+/// </summary>
+public partial class LanguageCombo : UserControl
 {
-    /// <summary>
-    /// Interaction logic for MultiLineStringEditorView.xaml
-    /// </summary>
-    public partial class MultiLineStringEditorView : UserControl
+    public LanguageCombo()
     {
-        public MultiLineStringEditorView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

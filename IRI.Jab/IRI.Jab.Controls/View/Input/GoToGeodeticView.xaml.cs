@@ -1,11 +1,8 @@
-﻿using IRI.Jab.Common;
+﻿using System;
+using IRI.Jab.Common;
 using IRI.Jab.Common.Localization;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
 
-namespace IRI.Jab.Controls.View.Input;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for GoToGeodetic.xaml
@@ -30,76 +27,14 @@ public partial class GoToGeodeticView : NotifiableUserControl, IDisposable
     }
 
     public string XLabel => LocalizationManager.Instance[LocalizationResourceKeys.srs_defaultLongitude.ToString()];
-
-    //private string _xLabel;
-
-    //public string XLabel
-    //{
-    //    get { return _xLabel; }
-    //    set
-    //    {
-    //        _xLabel = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
+     
     public string YLabel => LocalizationManager.Instance[LocalizationResourceKeys.srs_defaultLatitude.ToString()];
-
-    //private string _yLabel;
-
-    //public string YLabel
-    //{
-    //    get { return _yLabel; }
-    //    set
-    //    {
-    //        _yLabel = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
+     
     public string PanToLabel => LocalizationManager.Instance[LocalizationResourceKeys.map_pan.ToString()];
-
-    //private string _panToLabel;
-
-    //public string PanToLabel
-    //{
-    //    get { return _panToLabel; }
-    //    set
-    //    {
-    //        _panToLabel = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
+     
 
     public string ZoomToLabel => LocalizationManager.Instance[LocalizationResourceKeys.map_zoomTo.ToString()];
-
-    //private string _zoomToLabel;
-
-    //public string ZoomToLabel
-    //{
-    //    get { return _zoomToLabel; }
-    //    set
-    //    {
-    //        _zoomToLabel = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
-
-    //public string Note { get => string.Empty; }
-
-    //private LanguageMode _uiLanguage;
-
-    //public LanguageMode UILanguage
-    //{
-    //    get { return _uiLanguage; }
-    //    set
-    //    {
-    //        _uiLanguage = value;
-    //        RaisePropertyChanged();
-
-    //        UpdateUI();
-    //    }
-    //}
+     
 
     //private void UpdateUI()
     //{
@@ -115,14 +50,7 @@ public partial class GoToGeodeticView : NotifiableUserControl, IDisposable
 
     //    //this.ZoomToLabel = isPersian ? "بزرگ‌نمایی" : "Zoom To";
     //}
-
-    //public event PropertyChangedEventHandler PropertyChanged;
-
-    //protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-    //{
-    //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    //}
-
+     
     //public IRI.Jab.Common.Model.Language Language
     //{
     //    get { return (IRI.Jab.Common.Model.Language)GetValue(LanguageProperty); }

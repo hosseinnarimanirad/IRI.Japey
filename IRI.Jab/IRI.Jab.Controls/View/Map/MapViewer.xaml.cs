@@ -38,16 +38,14 @@ using IRI.Sta.Spatial.Model;
 using IRI.Sta.Spatial.Helpers;
 using IRI.Sta.SpatialReferenceSystem;
 using IRI.Sta.Common.Abstrations;
-using IRI.Jab.Common.Enums;
-using IRI.Jab.Common.Cartography;
+using IRI.Jab.Common.Enums; 
 using IRI.Sta.Persistence.Abstractions;
-using IRI.Jab.Common.Cartography.Symbologies;
-using ControlzEx.Standard;
+using IRI.Jab.Common.Cartography.Symbologies; 
 using IRI.Jab.Common.Cartography.Rendering;
 
 //using Geometry = IRI.Sta.Spatial.Primitives.Geometry<IRI.Sta.Common.Primitives.Point>;
 
-namespace IRI.Jab.Controls;
+namespace IRI.Jab.Controls.View;
 
 public partial class MapViewer : UserControl, INotifyPropertyChanged
 {

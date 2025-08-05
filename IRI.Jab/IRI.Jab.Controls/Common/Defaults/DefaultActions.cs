@@ -18,7 +18,7 @@ namespace IRI.Jab.Controls.Common.Defaults
             { 
                 var gotoPresenter = IRI.Jab.Controls.Presenter.GoToPresenter.Create(mapPresenter);
                 
-                var gotoView = new IRI.Jab.Controls.View.Input.GoToMetroWindow(gotoPresenter);
+                var gotoView = new IRI.Jab.Controls.View.GoToMetroWindow(gotoPresenter);
 
                 //gotoView.DataContext = gotoPresenter;
                 gotoView.Owner = ownerWindow;

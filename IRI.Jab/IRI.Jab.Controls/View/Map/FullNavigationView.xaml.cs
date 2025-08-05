@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace IRI.Jab.Controls.View.Map;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for FullNavigationView.xaml

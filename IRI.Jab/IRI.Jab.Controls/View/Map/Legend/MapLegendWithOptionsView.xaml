@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="IRI.Jab.Controls.View.Map.MapLegendWithOptionsView"
+﻿<UserControl x:Class="IRI.Jab.Controls.View.MapLegendWithOptionsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
-             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Map" x:Name="root"
-             xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View.Map" >
+             xmlns:local="clr-namespace:IRI.Jab.Controls" x:Name="root"
+             xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View" >
     <Grid>
         <Grid.Resources>
             <CollectionViewSource x:Key="collectionViewSource" Source="{Binding}" Filter="CollectionViewSource_Filter"/>

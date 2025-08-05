@@ -14,16 +14,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Dialogs
+namespace IRI.Jab.Controls.View.Dialogs;
+
+/// <summary>
+/// Interaction logic for ChangePasswordDialogView.xaml
+/// </summary>
+public partial class ChangePasswordDialogView : MetroWindow
 {
-    /// <summary>
-    /// Interaction logic for ChangePasswordDialogView.xaml
-    /// </summary>
-    public partial class ChangePasswordDialogView : MetroWindow
+    public ChangePasswordDialogView()
     {
-        public ChangePasswordDialogView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

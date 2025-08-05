@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using IRI.Jab.Common;
 using IRI.Jab.Common.Model;
 
-namespace IRI.Jab.Controls.View.Map;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for UserControl1.xaml

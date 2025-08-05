@@ -3,7 +3,7 @@ using IRI.Jab.Common.Localization;
 using System;
 using System.Windows;
 
-namespace IRI.Jab.Controls;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for MapInfoView.xaml

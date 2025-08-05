@@ -14,16 +14,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Dialogs
+namespace IRI.Jab.Controls.View.Dialogs;
+
+/// <summary>
+/// Interaction logic for MessageBoxView.xaml
+/// </summary>
+public partial class MessageBoxView : MetroWindow
 {
-    /// <summary>
-    /// Interaction logic for MessageBoxView.xaml
-    /// </summary>
-    public partial class MessageBoxView : MetroWindow
+    public MessageBoxView()
     {
-        public MessageBoxView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

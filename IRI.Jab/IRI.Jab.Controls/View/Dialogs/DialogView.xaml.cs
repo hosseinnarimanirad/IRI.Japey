@@ -14,17 +14,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Dialogs
+namespace IRI.Jab.Controls.View.Dialogs;
+
+/// <summary>
+/// Interaction logic for AreYouSureDialog.xaml
+/// </summary>
+public partial class DialogView : MetroWindow
 {
-    /// <summary>
-    /// Interaction logic for AreYouSureDialog.xaml
-    /// </summary>
-    public partial class DialogView : MetroWindow
+    public DialogView()
     {
-        public DialogView()
-        {
-            InitializeComponent();            
-        }
-         
+        InitializeComponent();            
     }
+     
 }

@@ -3,11 +3,11 @@
 namespace IRI.Jab.Controls.View;
 
 /// <summary>
-/// Interaction logic for ComplexLegend.xaml
+/// Interaction logic for MultiLineStringEditorView.xaml
 /// </summary>
-public partial class ComplexLegend : UserControl
+public partial class PolygonEditorView : UserControl
 {
-    public ComplexLegend()
+    public PolygonEditorView()
     {
         InitializeComponent();
     }

@@ -14,16 +14,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IRI.Jab.Controls.View.Dialogs
+namespace IRI.Jab.Controls.View.Dialogs;
+
+/// <summary>
+/// Interaction logic for SignUpDialogView.xaml
+/// </summary>
+public partial class UserNameSignUpDialogView : MetroWindow
 {
-    /// <summary>
-    /// Interaction logic for SignUpDialogView.xaml
-    /// </summary>
-    public partial class UserNameSignUpDialogView : MetroWindow
+    public UserNameSignUpDialogView()
     {
-        public UserNameSignUpDialogView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

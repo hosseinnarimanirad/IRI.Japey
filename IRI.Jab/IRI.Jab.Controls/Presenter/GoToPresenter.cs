@@ -1,15 +1,16 @@
-﻿using IRI.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Sta.Common.Primitives;
-using IRI.Jab.Common.Presenter.Map;
-using IRI.Jab.Common;
-using IRI.Jab.Common.Assets.Commands;
-using IRI.Extensions;
-using IRI.Jab.Controls.Model.GoTo;
-using IRI.Jab.Controls.View.Input;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+
+using IRI.Extensions;
+using IRI.Jab.Common;
+using IRI.Jab.Controls.View;
+using IRI.Sta.Common.Primitives;
+using IRI.Jab.Controls.Model.GoTo;
+using IRI.Jab.Common.Presenter.Map;
+using IRI.Jab.Common.Assets.Commands;
 using IRI.Sta.SpatialReferenceSystem;
+using IRI.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Jab.Controls.Presenter;
 
@@ -88,24 +89,14 @@ public class GoToPresenter : Notifier
 
     public Model.DegreeMinuteSecondModel LongitudeDms
     {
-        get { return _longitudeDms; }
-        //set
-        //{
-        //    //_longitudeDms = value;
-        //    RaisePropertyChanged();
-        //}
+        get { return _longitudeDms; } 
     }
 
     private readonly Model.DegreeMinuteSecondModel _latitudeDms;
 
     public Model.DegreeMinuteSecondModel LatitudeDms
     {
-        get { return _latitudeDms; }
-        //set
-        //{
-        //    _latitudeDms = value;
-        //    RaisePropertyChanged();
-        //}
+        get { return _latitudeDms; } 
     }
 
 
@@ -134,11 +125,7 @@ public class GoToPresenter : Notifier
             }
 
             _selectedItem = value;
-            RaisePropertyChanged();
-            //RaisePropertyChanged("SelectedItem.Content");
-
-            //this.LongitudeDms.SetValue(0);
-            //this.LatitudeDms.SetValue(0);
+            RaisePropertyChanged(); 
         }
     }
 

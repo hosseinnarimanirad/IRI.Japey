@@ -1,10 +1,9 @@
-﻿<userControl:NotifiableUserControl x:Class="IRI.Jab.Controls.View.Input.GoToGeodeticView"
+﻿<userControl:NotifiableUserControl x:Class="IRI.Jab.Controls.View.GoToGeodeticView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
              xmlns:userControl="clr-namespace:IRI.Jab.Common;assembly=IRI.Jab.Common" 
-             xmlns:local="clr-namespace:IRI.Jab.Controls.View.Input"
+             xmlns:local="clr-namespace:IRI.Jab.Controls.View"
              x:Name="window" >
     <Grid Margin="4" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>

@@ -10,132 +10,131 @@ using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Common.Primitives;
 
-namespace IRI.Jab.Controls.View
+namespace IRI.Jab.Controls.View;
+
+/// <summary>
+/// Interaction logic for RadFeatureTable.xaml
+/// </summary>
+public partial class RadFeatureTable : UserControl
 {
-    /// <summary>
-    /// Interaction logic for RadFeatureTable.xaml
-    /// </summary>
-    public partial class RadFeatureTable : UserControl
+    public bool IsZoomToGeometryEnabled
     {
-        public bool IsZoomToGeometryEnabled
+        get { return (bool)GetValue(IsZoomToGeometryEnabledProperty); }
+        set { SetValue(IsZoomToGeometryEnabledProperty, value); }
+    }
+
+    public static readonly DependencyProperty IsZoomToGeometryEnabledProperty =
+      DependencyProperty.Register(nameof(IsZoomToGeometryEnabled), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
+
+    public bool CanUserEditGeometry
+    {
+        get { return (bool)GetValue(CanUserEditGeometryProperty); }
+        set { SetValue(CanUserEditGeometryProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for CanUserEditGeometry.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CanUserEditGeometryProperty =
+        DependencyProperty.Register(nameof(CanUserEditGeometry), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
+
+
+    public bool CanUserEditAttribute
+    {
+        get { return (bool)GetValue(CanUserEditAttributeProperty); }
+        set { SetValue(CanUserEditAttributeProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for CanUserEditAttribute.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CanUserEditAttributeProperty =
+        DependencyProperty.Register(nameof(CanUserEditAttribute), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+
+
+    public SelectedLayer Presenter { get { return this.DataContext as SelectedLayer; } }
+
+    public RadFeatureTable()
+    {
+        InitializeComponent();
+    }
+
+    private void RadGridView_AutoGeneratingColumn(object sender, Telerik.Windows.Controls.GridViewAutoGeneratingColumnEventArgs e)
+    {
+        if (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType) == TypeCode.Object)
         {
-            get { return (bool)GetValue(IsZoomToGeometryEnabledProperty); }
-            set { SetValue(IsZoomToGeometryEnabledProperty, value); }
+            e.Cancel = true;
         }
 
-        public static readonly DependencyProperty IsZoomToGeometryEnabledProperty =
-          DependencyProperty.Register(nameof(IsZoomToGeometryEnabled), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
-
-
-        public bool CanUserEditGeometry
+        switch (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType))
         {
-            get { return (bool)GetValue(CanUserEditGeometryProperty); }
-            set { SetValue(CanUserEditGeometryProperty, value); }
+            case TypeCode.Double:
+            case TypeCode.Int16:
+            case TypeCode.Int32:
+            case TypeCode.Int64:
+            case TypeCode.Decimal:
+            case TypeCode.SByte:
+            case TypeCode.Single:
+                e.Column.TextAlignment = TextAlignment.Left;
+                break;
+            default:
+                break;
         }
 
-        // Using a DependencyProperty as the backing store for CanUserEditGeometry.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CanUserEditGeometryProperty =
-            DependencyProperty.Register(nameof(CanUserEditGeometry), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
-
-
-
-        public bool CanUserEditAttribute
+        if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(Feature<Point>.TheGeometry)) ||
+            e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
         {
-            get { return (bool)GetValue(CanUserEditAttributeProperty); }
-            set { SetValue(CanUserEditAttributeProperty, value); }
+            e.Cancel = true;
         }
 
-        // Using a DependencyProperty as the backing store for CanUserEditAttribute.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CanUserEditAttributeProperty =
-            DependencyProperty.Register(nameof(CanUserEditAttribute), typeof(bool), typeof(RadFeatureTable), new PropertyMetadata(false));
+        if (Presenter.Fields.IsNullOrEmpty())
+            return;
 
+        var field = Presenter?.Fields?.FirstOrDefault(f => f.Name == e.Column.Header.ToString());
 
-        public SelectedLayer Presenter { get { return this.DataContext as SelectedLayer; } }
+        if (field is not null)
+            e.Column.Header = field.Alias;
+    }
 
-        public RadFeatureTable()
+    private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+    {
+        this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<Feature<Point>>());
+    }
+
+    private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
+    {
+        if (e.EditAction == Telerik.Windows.Controls.GridView.GridViewEditAction.Commit)
         {
-            InitializeComponent();
-        }
-
-        private void RadGridView_AutoGeneratingColumn(object sender, Telerik.Windows.Controls.GridViewAutoGeneratingColumnEventArgs e)
-        {
-            if (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType) == TypeCode.Object)
+            if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Edit)
             {
-                e.Cancel = true;
+                var item = e.EditedItem as Feature<Point>;
+
+                Presenter.UpdateFeature(item);
             }
-
-            switch (Type.GetTypeCode(e.ItemPropertyInfo.PropertyType))
+            else if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Insert)
             {
-                case TypeCode.Double:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Decimal:
-                case TypeCode.SByte:
-                case TypeCode.Single:
-                    e.Column.TextAlignment = TextAlignment.Left;
-                    break;
-                default:
-                    break;
+
             }
-
-            if (e.Column.Header.ToString().EqualsIgnoreCase(nameof(Feature<Point>.TheGeometry)) ||
-                e.Column.Header.ToString().EqualsIgnoreCase("TheGeometry"/*nameof(IGeometryAware.TheGeometry)*/))
+            else
             {
-                e.Cancel = true;
+                throw new NotImplementedException();
             }
-
-            if (Presenter.Fields.IsNullOrEmpty())
-                return;
-
-            var field = Presenter?.Fields?.FirstOrDefault(f => f.Name == e.Column.Header.ToString());
-
-            if (field is not null)
-                e.Column.Header = field.Alias;
         }
+    }
 
-        private void grid_SelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
+    private void grid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (IsZoomToGeometryEnabled)
         {
-            this.Presenter.UpdateHighlightedFeatures(grid.SelectedItems.Cast<Feature<Point>>());
-        }
+            var selectedItems = grid.SelectedItems.Cast<Feature<Point>>();
 
-        private void grid_RowEditEnded(object sender, Telerik.Windows.Controls.GridViewRowEditEndedEventArgs e)
-        {
-            if (e.EditAction == Telerik.Windows.Controls.GridView.GridViewEditAction.Commit)
+            var action = new Action(() =>
             {
-                if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Edit)
+                if (selectedItems?.Count() == 1 && selectedItems.First().TheGeometry.Type == GeometryType.Point)
                 {
-                    var item = e.EditedItem as Feature<Point>;
-
-                    Presenter.UpdateFeature(item);
+                    Presenter.RequestFlashSinglePoint(selectedItems.First());
                 }
-                else if (e.EditOperationType == Telerik.Windows.Controls.GridView.GridViewEditOperationType.Insert)
-                {
+            });
 
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-        }
-
-        private void grid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (IsZoomToGeometryEnabled)
-            {
-                var selectedItems = grid.SelectedItems.Cast<Feature<Point>>();
-
-                var action = new Action(() =>
-                {
-                    if (selectedItems?.Count() == 1 && selectedItems.First().TheGeometry.Type == GeometryType.Point)
-                    {
-                        Presenter.RequestFlashSinglePoint(selectedItems.First());
-                    }
-                });
-
-                Presenter.RequestZoomTo?.Invoke(selectedItems, action);
-            }
+            Presenter.RequestZoomTo?.Invoke(selectedItems, action);
         }
     }
 }

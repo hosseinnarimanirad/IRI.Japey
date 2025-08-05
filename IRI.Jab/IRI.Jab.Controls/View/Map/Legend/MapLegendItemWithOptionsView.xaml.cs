@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace IRI.Jab.Controls.View.Map;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for MapLegendItemWithOptions.xaml

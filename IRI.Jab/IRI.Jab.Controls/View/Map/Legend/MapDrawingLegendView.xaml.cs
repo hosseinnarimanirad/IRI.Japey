@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Runtime.CompilerServices;
 
-namespace IRI.Jab.Controls.View.Map;
+namespace IRI.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for MapDrawingLegendView.xaml

@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using IRI.Jab.Common.Model;
 
-namespace IRI.Jab.Controls.View.Map;
+namespace IRI.Jab.Controls.View;
 
 
 /// <summary>
