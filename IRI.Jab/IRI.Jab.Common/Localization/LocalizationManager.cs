@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 
-namespace IRI.Jab.Common;
+namespace IRI.Jab.Common.Localization;
 
 public class LocalizationManager //: INotifyPropertyChanged
 {
@@ -63,7 +63,7 @@ public class LocalizationManager //: INotifyPropertyChanged
     {
         CurrentCulture = CultureInfo.GetCultureInfo("en-US");
     }
-     
+
 
     //public bool IsFrench => CurrentCulture.Name.Equals("fr-FR", StringComparison.OrdinalIgnoreCase);
 

@@ -6,7 +6,7 @@
         mc:Ignorable="d" Loaded="Window_Loaded" 
         xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"  
         xmlns:iriJabControls="clr-namespace:IRI.Jab.Controls.View;assembly=IRI.Jab.Controls"
-        Title="MainWindow" Height="600" Width="900" x:Name="root" >
+        Title="MainWindow" Height="600" Width="900" x:Name="root" FlowDirection="{Binding CurrentFlowDirection}">
     <Window.Resources>
         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
             <Setter Property="mahApp:HeaderedControlHelper.HeaderFontSize" Value="12" />
@@ -47,15 +47,15 @@
             </StackPanel.Resources>
             <Border BorderBrush="Black" BorderThickness="1" Margin="2">
                 <StackPanel Orientation="Horizontal" >
-                    <Button Content="Clear" Command="{Binding ClearAllCommand}"/>
-                    <Button Content="Full extent" Command="{Binding FullExtentCommand}"/>
-                    <Button Content="Add shapefile" Command="{Binding AddShapefileCommand}"/>
-                    <Button Content="Measure Length" Command="{Binding MeasureLengthCommand}"/>
-                    <Button Content="Measure Area" Command="{Binding MeasureAreaCommand}"/>
-                    <Button Content="Draw Point" Command="{Binding DrawPointCommand}"/>
-                    <Button Content="Draw Polyline" Command="{Binding DrawPolylineCommand}"/>
-                    <Button Content="Draw Polygon" Command="{Binding DrawPolygonCommand}"/>
-                    <Button Content="Go To" Command="{Binding GoToCommand}"/>
+                    <Button Content="{Binding ClearText}" Command="{Binding ClearAllCommand}"/>
+                    <Button Content="{Binding FullExtentText}" Command="{Binding FullExtentCommand}"/>
+                    <Button Content="{Binding AddShapefileText}" Command="{Binding AddShapefileCommand}"/>
+                    <Button Content="{Binding MeasureLengthText}" Command="{Binding MeasureLengthCommand}"/>
+                    <Button Content="{Binding MeasureAreaText}" Command="{Binding MeasureAreaCommand}"/>
+                    <Button Content="{Binding DrawPointText}" Command="{Binding DrawPointCommand}"/>
+                    <Button Content="{Binding DrawPolylineText}" Command="{Binding DrawPolylineCommand}"/>
+                    <Button Content="{Binding DrawPolygonText}" Command="{Binding DrawPolygonCommand}"/>
+                    <Button Content="{Binding GoToText}" Command="{Binding GoToCommand}"/>
                 </StackPanel>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="2">
@@ -79,13 +79,13 @@
             Position="{Binding CurrentPoint, ElementName=map}"/>
         
         <StackPanel Grid.Row="1">
-            <Expander Header="Base maps" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+            <Expander Header="{Binding BaseMapsText}" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
                 <ComboBox ItemsSource="{Binding MapProviders}" SelectedItem="{Binding SelectedMapProvider, Mode=TwoWay}" VerticalAlignment="Center" DisplayMemberPath="Title"/>
             </Expander>
-            <Expander Header="Drawings" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
+            <Expander Header="{Binding DrawingsText}" DockPanel.Dock="Top" IsExpanded="True"  Margin="0,1,0,0" Cursor="Hand">
                 <iriJabControls:MapDrawingLegendView MinHeight="90"/>
             </Expander>
-            <Expander Header="layers" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
+            <Expander Header="{Binding LayersText}" IsExpanded="True" Margin="0,1,0,0" Cursor="Hand">
                 <iriJabControls:MapLegendWithOptionsView EnableFilterMode="True"  DataContext="{Binding Layers}" GroupName="B"/>
             </Expander>
         </StackPanel>

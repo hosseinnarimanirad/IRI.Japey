@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 
 namespace IRI.Jab.Common.Localization;
- 
+
 public class LanguageSelectorViewModel : Notifier
 {
     private readonly LocalizationManager _localization = LocalizationManager.Instance;

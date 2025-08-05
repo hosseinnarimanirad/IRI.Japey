@@ -70,6 +70,20 @@ public enum LocalizationResourceKeys
     tile_mapType_Watercolor,
     tile_mapType_Dark,
     tile_mapType_Comic,
+
+
+    ui_addShapefile,
+    ui_baseMaps,
+    ui_clear,
+    ui_drawings,
+    ui_drawPoint,
+    ui_drawPolygon,
+    ui_drawPolyline,
+    ui_fullExtent,
+    ui_goTo,
+    ui_layers,
+    ui_measureArea,
+    ui_measureLength,
 }
 
 //public static class LocalizationResourceKeys

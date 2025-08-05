@@ -285,4 +285,40 @@
   <data name="tile_provider_yandex" xml:space="preserve">
     <value>یاندکس</value>
   </data>
+  <data name="ui_addShapefile" xml:space="preserve">
+    <value>افزودن شیپ‌فایل</value>
+  </data>
+  <data name="ui_baseMaps" xml:space="preserve">
+    <value>نقشه‌های پایه</value>
+  </data>
+  <data name="ui_clear" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="ui_drawings" xml:space="preserve">
+    <value>عوارض ترسیمی</value>
+  </data>
+  <data name="ui_drawPoint" xml:space="preserve">
+    <value>ترسیم نقطه</value>
+  </data>
+  <data name="ui_drawPolygon" xml:space="preserve">
+    <value>ترسیم چندضلعی</value>
+  </data>
+  <data name="ui_drawPolyline" xml:space="preserve">
+    <value>ترسیم خط</value>
+  </data>
+  <data name="ui_fullExtent" xml:space="preserve">
+    <value>نمای کل</value>
+  </data>
+  <data name="ui_goTo" xml:space="preserve">
+    <value>برو به...</value>
+  </data>
+  <data name="ui_layers" xml:space="preserve">
+    <value>لایه‌ها</value>
+  </data>
+  <data name="ui_measureArea" xml:space="preserve">
+    <value>محاسبه مساحت</value>
+  </data>
+  <data name="ui_measureLength" xml:space="preserve">
+    <value>محاسبه فاصله</value>
+  </data>
 </root>

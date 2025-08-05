@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using IRI.Jab.Common.Model;
-using System.Windows; 
+using System.Windows;
+using IRI.Jab.Common.Localization;
 
 namespace IRI.Jab.Common.Presenter;
 

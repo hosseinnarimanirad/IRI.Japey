@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 using MahApps.Metro.Controls;
-
-using IRI.Jab.Common;
 using IRI.Jab.Common.Localization;
 
 namespace IRI.Jab.Controls.View;

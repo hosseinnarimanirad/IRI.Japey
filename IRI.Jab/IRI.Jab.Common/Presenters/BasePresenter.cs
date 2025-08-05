@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Security.Principal;
-
+using System.Windows;
 using IRI.Jab.Common.Abstractions;
+using IRI.Jab.Common.Localization;
+using static IRI.Jab.Common.Localization.LocalizationResourceKeys;
 
 namespace IRI.Jab.Common.Presenter;
 
@@ -89,6 +91,33 @@ public class BasePresenter : Notifier
     //    //return this.RequestSaveFile?.Invoke(filter);
     //}
 
+    public BasePresenter()
+    {
+        LocalizationManager.Instance.LanguageChanged += OnLanguageChanged;
+        LocalizationManager.Instance.FlowDirectionChanged += Instance_FlowDirectionChanged;
+    }
+
+    private void Instance_FlowDirectionChanged()
+    {
+        RaisePropertyChanged(nameof(CurrentFlowDirection));
+    }
+
+    private void OnLanguageChanged()
+    {
+        RaisePropertyChanged(nameof(AddShapefileText));
+        RaisePropertyChanged(nameof(BaseMapsText));
+        RaisePropertyChanged(nameof(ClearText));
+        RaisePropertyChanged(nameof(DrawingsText));
+        RaisePropertyChanged(nameof(DrawPointText));
+        RaisePropertyChanged(nameof(DrawPolygonText));
+        RaisePropertyChanged(nameof(DrawPolylineText));
+        RaisePropertyChanged(nameof(FullExtentText));
+        RaisePropertyChanged(nameof(GoToText));
+        RaisePropertyChanged(nameof(LayersText));
+        RaisePropertyChanged(nameof(MeasureAreaText));
+        RaisePropertyChanged(nameof(MeasureLengthText));
+    }
+
     public void RedirectRequestesTo(BasePresenter presenter)
     {
         if (presenter == this)
@@ -104,27 +133,19 @@ public class BasePresenter : Notifier
     }
 
 
-    //public async Task<bool?> RequestYesNoDialog<T>(string message, string title)
-    //{
-    //    return await DialogService?.ShowYesNoDialogAsync<T>(message, title);
-    //}
 
-    //public async Task<bool?> RequestYesNoDialog(object owner, string message, string title)
-    //{
-    //    return await DialogService?.ShowYesNoDialogAsync(message, title, owner);
-    //}
+    public FlowDirection CurrentFlowDirection => LocalizationManager.Instance.CurrentFlowDirection;
 
-    //public Action<string> RequestShowMessage;
-
-    //public async Task ShowMessage<T>(string message, string title = null)
-    //{
-    //    await DialogService?.ShowMessageAsync<T>(message, null, title);
-    //}
-
-    //public async Task ShowMessageAsync(object owner, string message, string title = null)
-    //{
-    //    await DialogService?.ShowMessageAsync(null, message, title, owner);
-    //    //this.RequestShowMessage?.Invoke(message);
-    //}
-
+    public string AddShapefileText => LocalizationManager.Instance[ui_addShapefile.ToString()];
+    public string BaseMapsText => LocalizationManager.Instance[ui_baseMaps.ToString()];
+    public string ClearText => LocalizationManager.Instance[ui_clear.ToString()];
+    public string DrawingsText => LocalizationManager.Instance[ui_drawings.ToString()];
+    public string DrawPointText => LocalizationManager.Instance[ui_drawPoint.ToString()];
+    public string DrawPolygonText => LocalizationManager.Instance[ui_drawPolygon.ToString()];
+    public string DrawPolylineText => LocalizationManager.Instance[ui_drawPolyline.ToString()];
+    public string FullExtentText => LocalizationManager.Instance[ui_fullExtent.ToString()];
+    public string GoToText => LocalizationManager.Instance[ui_goTo.ToString()];
+    public string LayersText => LocalizationManager.Instance[ui_layers.ToString()];
+    public string MeasureAreaText => LocalizationManager.Instance[ui_measureArea.ToString()];
+    public string MeasureLengthText => LocalizationManager.Instance[ui_measureLength.ToString()];
 }

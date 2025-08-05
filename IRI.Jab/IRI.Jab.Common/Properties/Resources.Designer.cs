@@ -575,6 +575,114 @@ namespace IRI.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Shapefile.
+        /// </summary>
+        public static string ui_addShapefile {
+            get {
+                return ResourceManager.GetString("ui_addShapefile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Base Maps.
+        /// </summary>
+        public static string ui_baseMaps {
+            get {
+                return ResourceManager.GetString("ui_baseMaps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string ui_clear {
+            get {
+                return ResourceManager.GetString("ui_clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drawings.
+        /// </summary>
+        public static string ui_drawings {
+            get {
+                return ResourceManager.GetString("ui_drawings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Point.
+        /// </summary>
+        public static string ui_drawPoint {
+            get {
+                return ResourceManager.GetString("ui_drawPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Polygon.
+        /// </summary>
+        public static string ui_drawPolygon {
+            get {
+                return ResourceManager.GetString("ui_drawPolygon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw Polyline.
+        /// </summary>
+        public static string ui_drawPolyline {
+            get {
+                return ResourceManager.GetString("ui_drawPolyline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full Extent.
+        /// </summary>
+        public static string ui_fullExtent {
+            get {
+                return ResourceManager.GetString("ui_fullExtent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go To.
+        /// </summary>
+        public static string ui_goTo {
+            get {
+                return ResourceManager.GetString("ui_goTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layers.
+        /// </summary>
+        public static string ui_layers {
+            get {
+                return ResourceManager.GetString("ui_layers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure Area.
+        /// </summary>
+        public static string ui_measureArea {
+            get {
+                return ResourceManager.GetString("ui_measureArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure Length.
+        /// </summary>
+        public static string ui_measureLength {
+            get {
+                return ResourceManager.GetString("ui_measureLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap whiteImage {
