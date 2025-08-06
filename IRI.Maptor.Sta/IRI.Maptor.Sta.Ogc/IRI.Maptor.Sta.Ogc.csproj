@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!-- or "latest", "preview", or "11.0" -->
+    <LangVersion>latest</LangVersion>
+    <NoWarn>CS8602,CS8618,CS8625</NoWarn>
+    <!--<LangVersion>latestMajor</LangVersion>-->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Company>Maptor</Company>
+    <Description>A .NET standard library containing OGC standards such as SFA, SLD, WFS, WMS, GML, KML</Description>
+    <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Maptor.Sta/IRI.Maptor.Sta.Ogc</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>GIS;spatial;OGC;GML;SLD;WMS;WFS</PackageTags>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <ProjectReference Include="..\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <Compile Update="KML\Ogckml22.cs">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Update="KML\OgcKml22Urn.cs">
+      <SubType>code</SubType>
+    </Compile>  
+  </ItemGroup>
+
+</Project>

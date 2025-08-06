@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DigitalImageProcessing\MorphologicalProcessing\**" />
+    <Compile Remove="DigitalImageProcessing\Object Recognition\**" />
+    <EmbeddedResource Remove="DigitalImageProcessing\MorphologicalProcessing\**" />
+    <EmbeddedResource Remove="DigitalImageProcessing\Object Recognition\**" />
+    <None Remove="DigitalImageProcessing\MorphologicalProcessing\**" />
+    <None Remove="DigitalImageProcessing\Object Recognition\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DigitalImageProcessing\ImageMatching\SIFT\Qs.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DigitalImageProcessing\ImageMatching\SIFT\Qs.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" /> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj" />
+    <ProjectReference Include="..\..\IRI.Sta\IRI.Sta.Spatial\IRI.Maptor.Sta.Spatial.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DigitalImageProcessing\FrequencyDomainEnhancement\" />
+  </ItemGroup>
+
+</Project>

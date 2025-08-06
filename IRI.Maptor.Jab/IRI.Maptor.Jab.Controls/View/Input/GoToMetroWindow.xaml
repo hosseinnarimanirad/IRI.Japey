@@ -1,0 +1,13 @@
+﻿<mahApp:MetroWindow x:Class="IRI.Maptor.Jab.Controls.View.GoToMetroWindow"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              
+                    xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                    x:Name="root" FlowDirection="{Binding ElementName=root, Path=CurrentFlowDirection}"
+                    xmlns:iriControls="clr-namespace:IRI.Maptor.Jab.Controls.View"  
+                    WindowStyle="ToolWindow" Width="550" Height="250" ShowIconOnTitleBar="False" ShowInTaskbar="False"
+                    Title="{Binding ElementName=root, Path=WindowTitle}" ShowMaxRestoreButton="False" ShowMinButton="False"
+                    GlowBrush="{DynamicResource MahApps.Brushes.Accent}" >
+    <Grid>
+        <iriControls:GoToView />
+    </Grid>
+</mahApp:MetroWindow>
