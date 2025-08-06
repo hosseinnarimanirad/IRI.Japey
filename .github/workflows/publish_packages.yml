@@ -6,7 +6,7 @@ on:
     
 env:
   DOTNET_VERSION: '8.0.x'
-  PROJECT_PREFIXES: 'IRI.Sta IRI.Ket IRI.Jab IRI.Bas'
+  PROJECT_PREFIXES: 'IRI.Maptor.Sta IRI.Maptor.Ket IRI.Maptor.Jab IRI.Maptor.Bas'
   NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
   NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603'  
 
@@ -82,21 +82,7 @@ jobs:
         $apiKey = "${{ secrets.NUGET_API_KEY }}"
         Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
           dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
-        }
-
-    - name: Publish to NuGet
-      if: github.ref == 'refs/heads/master'
-      run: |
-        # Create nupkgs directory if it doesn't exist
-        New-Item -ItemType Directory -Force -Path ./nupkgs | Out-Null
-        
-        $apiKey = "${{ secrets.NUGET_API_KEY }}"
-        $packages = Get-ChildItem -Path . -Recurse -Filter *.nupkg -Exclude *Tests*
-        
-        $packages | ForEach-Object {
-          Write-Host "Publishing $($_.Name)"
-          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
-        }
+        } 
 
     - name: Upload Artifacts
       if: github.ref != 'refs/heads/master'
