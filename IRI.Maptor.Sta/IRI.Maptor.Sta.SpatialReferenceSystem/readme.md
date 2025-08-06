@@ -79,14 +79,3 @@ Assert.Equal(cartesianFromGeodeticPoint.Y.Value, cartesianFromTransform.Y, 9);
 Assert.Equal(cartesianFromGeodeticPoint.Z.Value, cartesianFromTransform.Z, 9);
 ```
 
-## 🌐 Related Components
-
-- ![IRI.Maptor.Sta.Common](https://github.com/hosseinnarimanirad/IRI.Japey/tree/master/IRI.Maptor.Sta/IRI.Maptor.Sta.Common) - Core Japey (Maptor) standard class library.
-
-## 🛠 Building from Source
-
-```
-git clone https://github.com/hosseinnarimanirad/IRI.Japey.git
-cd IRI.Japey/IRI.Maptor.Sta/IRI.Maptor.Sta.SpatialReferenceSystem
-dotnet build -c Release
-```
