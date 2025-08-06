@@ -50,5 +50,4 @@ We welcome contributions! Please:
 
 ---
 
-**📦 NuGet**: [IRI.Maptor.Sta.Spatial](https://www.nuget.org/packages/IRI.Maptor.Sta.Spatial)  
-**🔗 Source Code**: [SFC Implementation](https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Maptor.Sta/IRI.Maptor.Sta.Spatial/Analysis/SFC)
+**📦 NuGet**: [IRI.Maptor.Sta.Spatial](https://www.nuget.org/packages/IRI.Maptor.Sta.Spatial)
