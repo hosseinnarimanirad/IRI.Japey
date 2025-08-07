@@ -21,7 +21,7 @@ This library provides implementations of horizontal spatial reference systems as
 
 *Fig. 1: Relationship between geocentric, topocentric, and 2D coordinate systems*
 
-## 📌 Core Features
+## ✨ Features
 
 ### 1. Supported Map Projections & Horizontal Datums
 This library implements standard map projections and geodetic datums, including:
@@ -55,7 +55,7 @@ Transformation between different spatial reference systems are available includi
 
 Convert WGS84 to AT:
 
-``` C#
+```csharp
 // Arrange
 var wgs84Ellipsoid = Ellipsoids.WGS84;
 double latitudeInDegrees = 35.123456;
@@ -79,3 +79,7 @@ Assert.Equal(cartesianFromGeodeticPoint.Y.Value, cartesianFromTransform.Y, 9);
 Assert.Equal(cartesianFromGeodeticPoint.Z.Value, cartesianFromTransform.Z, 9);
 ```
 
+---
+
+📦 **NuGet**: [IRI.Maptor.Sta.Spatial](https://www.nuget.org/packages/IRI.Maptor.Sta.SpatialReferenceSystem)
+🐞 **Report Issues**: [GitHub Issues](https://github.com/hosseinnarimanirad/Maptor/issues)

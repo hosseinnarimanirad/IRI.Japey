@@ -1,4 +1,4 @@
-# Lat/Long Coordinate Precision Analysis
+# 🗺️ Lat/Long Coordinate Precision Analysis
 
 📊 A practical guide to understanding how decimal precision in latitude/longitude coordinates translates to real-world distances.
 
@@ -14,7 +14,7 @@ Mainly it depend on the latitude of point:
 
 ![image](https://github.com/user-attachments/assets/44af8d52-0e7a-48d8-a03d-fcfea450b784)
 
-## Code Example
+## 💻 Code Example
 
 ```csharp
 // Calculate precision at specific latitude
@@ -34,13 +34,13 @@ Console.WriteLine($"0.00001° ≈ {distance:0.##} meters E/W");
     🏗️ Survey engineering: 7+ decimal places
     
 
-## Learn More
+## 📚 Learn More
 
 For detailed technical analysis:  
     ![StackExchange: How precise should lat/long storage be?](https://gis.stackexchange.com/a/208739)
 
 
-## Contribute
+## 🤝 Contribute
 
 Found an edge case? Open an issue or submit a PR with:  
     1- Your test coordinates  
