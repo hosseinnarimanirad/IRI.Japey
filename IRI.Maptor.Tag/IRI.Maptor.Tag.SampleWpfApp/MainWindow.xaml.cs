@@ -34,7 +34,7 @@ public partial class MainWindow : Window
 
         presenter.Initialize(this);
 
-        this.DataContext = presenter;
+        //this.DataContext = presenter;
          
         presenter.ZoomToExtent(BoundingBoxes.WebMercator_Africa, false, isNewExtent: true);
 

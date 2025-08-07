@@ -46,6 +46,8 @@ namespace IRI.Maptor.Jab.Controls.Presenter
             this.RequestShowGoToView = IRI.Maptor.Jab.Controls.Common.Defaults.DefaultActions.GetDefaultGoToAction(ownerWindow, this);
 
             this.RequestShowSymbologyView = layer => Common.Defaults.DefaultActions.GetDefaultShowSymbologyView(ownerWindow, layer, this);
+
+            ownerWindow.DataContext = this;
         }
 
         public override async Task Initialize()
