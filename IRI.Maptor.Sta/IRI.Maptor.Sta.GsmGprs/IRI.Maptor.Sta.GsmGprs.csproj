@@ -15,6 +15,7 @@
     <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Maptor.Sta/IRI.Maptor.Sta.GsmGprs</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>gsm</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,5 +24,12 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.Ports" /> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 </Project>

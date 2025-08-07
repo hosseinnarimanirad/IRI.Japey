@@ -17,6 +17,10 @@
     <RepositoryUrl>https://github.com/hosseinnarimanirad/Maptor/tree/master/IRI.Maptor.Sta/IRI.Maptor.Sta.Common</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>GIS;spatial</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Title>Maptor Common standard library</Title>
+    <Copyright>Maptor</Copyright> 
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
   
   <ItemGroup>
@@ -26,6 +30,13 @@
  
   <ItemGroup>
     <Compile Update="Models\WiseWebClient.cs" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
