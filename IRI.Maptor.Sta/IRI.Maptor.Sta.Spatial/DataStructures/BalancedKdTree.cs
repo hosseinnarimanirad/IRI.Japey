@@ -1,8 +1,9 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Analysis;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.DataStructures.Trees;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Spatial.AdvancedStructures;
 

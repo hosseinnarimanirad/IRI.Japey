@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class AnimationHelper
 {
@@ -11,14 +11,14 @@ public static class AnimationHelper
         var result = new DoubleAnimation
         {
             Duration = new Duration(new TimeSpan(5000000)),
-            To=to,
-            EasingFunction=new ElasticEase
+            To = to,
+            EasingFunction = new ElasticEase
             {
-                Oscillations=2,
-                Springiness=10
+                Oscillations = 2,
+                Springiness = 10
             }
         };
-         
+
         Storyboard.SetTarget(result, target);
 
         Storyboard.SetTargetProperty(result, propertyPath);

@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Primitives.Esri;
 using static IRI.Maptor.Tst.NetFrameworkTest.Assets.EsriJsonSamples;
 

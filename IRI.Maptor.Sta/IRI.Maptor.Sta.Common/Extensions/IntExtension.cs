@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class IntExtension
 {
     public static string Number2String(this int number, bool isCaps)
     {
-        Char c = (Char)((isCaps ? 65 : 97) + (number));
+        char c = (char)((isCaps ? 65 : 97) + number);
 
         return c.ToString();
     }

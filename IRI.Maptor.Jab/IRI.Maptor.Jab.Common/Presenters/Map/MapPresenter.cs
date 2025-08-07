@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 //using System.Windows;
 using System.Windows.Input;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
@@ -40,6 +40,7 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Ket.GdiPersistence;
 using IRI.Maptor.Sta.Persistence.Abstractions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Presenter.Map;
 

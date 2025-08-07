@@ -1,7 +1,7 @@
 ﻿using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using System.Collections.Generic;
 
 namespace IRI.Maptor.Tst.Esri;

@@ -1,5 +1,5 @@
 ﻿using IRI.Maptor.Sta.Mathematics;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Media.Animation;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.SpatialReferenceSystem;

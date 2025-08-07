@@ -5,7 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Linq;
 using IRI.Maptor.Sta.ShapefileFormat.Model;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.ShapefileFormat.Dbf;
 

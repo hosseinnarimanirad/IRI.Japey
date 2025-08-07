@@ -1,12 +1,11 @@
 ﻿using System.Windows.Media;
-using IRI.Maptor.Jab.Common.Helpers; 
+using IRI.Maptor.Jab.Common.Helpers;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class PenExtensions
 {
-
-    public static System.Drawing.Pen AsGdiPen(this System.Windows.Media.Pen pen)
+    public static System.Drawing.Pen AsGdiPen(this Pen pen)
     {
         var brush = pen.Brush as SolidColorBrush;
         brush = brush ?? Brushes.Transparent;
@@ -28,8 +27,8 @@ public static class PenExtensions
     {
         var color = ColorHelper.ToGdiColor(hexColor);
 
-        var alpha = opacity > 1 ? 255 : (opacity < 0 ? 0 : opacity * 255);
-         
+        var alpha = opacity > 1 ? 255 : opacity < 0 ? 0 : opacity * 255;
+
         return new System.Drawing.Pen(System.Drawing.Color.FromArgb((int)alpha, color.R, color.G, color.B), thickness);
     }
 }

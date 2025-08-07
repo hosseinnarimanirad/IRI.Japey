@@ -7,8 +7,9 @@ using WpfPoint = System.Windows.Point;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
+using IRI.Maptor.Extensions;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeometryExtensions
 {
@@ -100,7 +101,7 @@ public static class GeometryExtensions
         double yScale = imageHeight / mapExtent.Height;
         double scale = xScale > yScale ? yScale : xScale;
 
-        var mapToScreen = new Func<Point, Point>(p => new Point() { X = ((p.X - mapExtent.XMin) * scale), Y = -(p.Y - mapExtent.YMax) * scale });
+        var mapToScreen = new Func<Point, Point>(p => new Point() { X = (p.X - mapExtent.XMin) * scale, Y = -(p.Y - mapExtent.YMax) * scale });
 
         var pen = visualParameters.GetWpfPen();
 
@@ -113,7 +114,7 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy([new IRI.Maptor.Jab.Common.Cartography.Symbologies.SimpleSymbolizer(visualParameters)])
+        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy([new Jab.Common.Cartography.Symbologies.SimpleSymbolizer(visualParameters)])
                                             .ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
 
         drawingVisual.Opacity = visualParameters.Opacity;
@@ -139,6 +140,6 @@ public static class GeometryExtensions
 
         var screenSize = WebMercatorUtility.ToScreenSize(googleZoomLevel, mapExtent);
 
-        return AsDrawingVisual(geometry, visualParameters, screenSize.Width, screenSize.Height, mapExtent);
+        return geometry.AsDrawingVisual(visualParameters, screenSize.Width, screenSize.Height, mapExtent);
     }
 }

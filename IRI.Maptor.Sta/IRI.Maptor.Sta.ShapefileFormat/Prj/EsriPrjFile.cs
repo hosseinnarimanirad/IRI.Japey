@@ -1,5 +1,4 @@
 ﻿using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Extensions;
 using IRI.Maptor.Sta.ShapefileFormat.Prj;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using Ellipsoid = IRI.Maptor.Sta.SpatialReferenceSystem.Ellipsoid<IRI.Maptor.Sta
 using IRI.Maptor.Sta.Metrics;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.SpatialReferenceSystem.Models;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.ShapefileFormat.Prj;
 

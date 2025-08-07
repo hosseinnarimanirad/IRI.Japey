@@ -2,7 +2,7 @@
 
 //using Microsoft.SqlServer.Types;
 
-//using IRI.Extensions;
+//using IRI.Maptor.Extensions;
 //using IRI.Maptor.Sta.Spatial.Primitives;
 //using IRI.Maptor.Sta.Spatial.Analysis;
 //using IRI.Maptor.Sta.Common.Primitives;

@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Assets.ShapeStrings;
 using IRI.Maptor.Sta.Common.Enums;
 using IRI.Maptor.Sta.Spatial.Primitives;
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Assets.Data
 {

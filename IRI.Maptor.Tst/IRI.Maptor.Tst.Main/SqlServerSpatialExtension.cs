@@ -11,8 +11,9 @@ using System.IO;
 using IRI.Maptor.Sta.ShapefileFormat.Prj;
 using IRI.Maptor.Ket.SqlServerSpatialExtension;
 using IRI.Maptor.Sta.ShapefileFormat;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Tst.NetFrameworkTest.Assets;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.NetFrameworkTest.SqlServerSpatialExtension;
 

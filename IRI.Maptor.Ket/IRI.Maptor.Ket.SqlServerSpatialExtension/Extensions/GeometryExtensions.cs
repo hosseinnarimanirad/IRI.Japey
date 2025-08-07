@@ -6,8 +6,10 @@ using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Ket.SqlServerSpatialExtension;
+using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeometryExtensions
 {
@@ -175,10 +177,10 @@ public static class GeometryExtensions
     {
         var type = geometry.Type;
 
-        
+
         if (geometry.IsNullOrEmpty())
         {
-            return IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);
+            return Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeometry(type, geometry.Srid);
         }
 
         SqlGeometryBuilder builder = new SqlGeometryBuilder();
@@ -228,12 +230,12 @@ public static class GeometryExtensions
 
     public static OpenGisGeometryType ToOpenGisGeometryType(this GeometryType type)
     {
-        return (OpenGisGeometryType)((int)type);
+        return (OpenGisGeometryType)(int)type;
     }
 
     public static GeometryType ToGeometryType(this OpenGisGeometryType type)
     {
-        return (GeometryType)((int)type);
+        return (GeometryType)(int)type;
     }
 
     private static void AddPoint<T>(SqlGeometryBuilder builder, Geometry<T> point) where T : IPoint, new()
@@ -381,7 +383,7 @@ public static class GeometryExtensions
         {
             if (geometry.IsNullOrEmpty())
             {
-                IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
+                Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
             }
 
             switch (item.Type)
@@ -451,7 +453,7 @@ public static class GeometryExtensions
 
         if (geometry.IsNullOrEmpty())
         {
-            return IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeography(type, geometry.Srid);
+            return Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.CreateEmptySqlGeography(type, geometry.Srid);
         }
 
         SqlGeographyBuilder builder = new SqlGeographyBuilder();
@@ -617,7 +619,7 @@ public static class GeometryExtensions
         {
             if (geometry.IsNullOrEmpty())
             {
-                IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
+                Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
             }
 
             switch (item.Type)
@@ -689,12 +691,12 @@ public static class GeometryExtensions
 
     public static string GetLengthLabel<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
     {
-        var length = CalculateLength(line, toGeodeticWgs84Func);
+        var length = line.CalculateLength(toGeodeticWgs84Func);
 
         return UnitHelper.GetLengthLabel(length);
     }
 
     #endregion
 
-     
+
 }

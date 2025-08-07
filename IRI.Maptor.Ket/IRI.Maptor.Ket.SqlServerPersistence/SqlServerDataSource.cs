@@ -2,11 +2,12 @@
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Types;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Persistence.DataSources;
 using IRI.Maptor.Sta.Persistence.Abstractions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.SqlServerPersistence;
 

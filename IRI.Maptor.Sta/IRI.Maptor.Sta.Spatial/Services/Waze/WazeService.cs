@@ -1,5 +1,4 @@
 ﻿using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using IRI.Maptor.Sta.Common.Services;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Helpers;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Spatial.Services.Waze;
 
@@ -21,7 +21,7 @@ public static class WazeService
 
         //https://www.waze.com/row-rtserver/web/TGeoRSS?ma=600&mj=100&mu=100&left=51.263646841049194&right=51.328981161117554&bottom=35.72281242757668&top=35.74842331753895&_=1520571802973
 
-        var time = DateTime.UtcNow - IRI.Extensions.DateTimeExtensions.JulianDate;
+        var time = DateTime.UtcNow - DateTimeExtensions.JulianDate;
 
         long epoc = ((long)time.TotalSeconds) * (long)1000;
         epoc = _epoc > 0 ? _epoc : epoc;

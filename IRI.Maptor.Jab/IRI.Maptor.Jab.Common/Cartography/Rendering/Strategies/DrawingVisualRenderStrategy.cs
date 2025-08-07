@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 
@@ -13,6 +13,7 @@ using IRI.Maptor.Jab.Common.Helpers;
 using System.Linq;
 using System.Windows;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering;
 

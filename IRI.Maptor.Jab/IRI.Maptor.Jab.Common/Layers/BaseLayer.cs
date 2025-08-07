@@ -3,12 +3,13 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Jab.Common.Model.Legend;
 using IRI.Maptor.Jab.Common.Assets.Commands;
 using IRI.Maptor.Jab.Common.Enums;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 

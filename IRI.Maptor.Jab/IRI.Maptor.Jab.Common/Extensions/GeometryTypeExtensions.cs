@@ -1,9 +1,8 @@
 ﻿using System;
-
 using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Sta.Common.Primitives;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeometryTypeExtensions
 {

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Collections.Generic;
-
-using IRI.Extensions;
-using IRI.Maptor.Jab.Common.Model; 
+using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 

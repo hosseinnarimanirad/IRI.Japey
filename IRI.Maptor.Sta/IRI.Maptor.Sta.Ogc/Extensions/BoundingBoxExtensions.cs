@@ -1,7 +1,7 @@
-﻿using IRI.Maptor.Sta.Ogc.WMS; 
+﻿using IRI.Maptor.Sta.Ogc.WMS;
 using IRI.Maptor.Sta.Common.Primitives;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class BoundingBoxExtensions
 {

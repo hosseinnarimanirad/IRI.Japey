@@ -7,7 +7,7 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Common.Enums;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class PointExtensions
 {

@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using System;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;

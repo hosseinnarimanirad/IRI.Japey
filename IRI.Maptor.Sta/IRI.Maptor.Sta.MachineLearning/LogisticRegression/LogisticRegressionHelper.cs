@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.MachineLearning;
 

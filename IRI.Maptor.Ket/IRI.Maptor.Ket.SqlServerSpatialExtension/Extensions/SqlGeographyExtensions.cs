@@ -1,9 +1,9 @@
 ﻿using Microsoft.SqlServer.Types;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Sta.SpatialReferenceSystem; 
+using IRI.Maptor.Sta.SpatialReferenceSystem;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class SqlGeographyExtensions
 {
@@ -16,7 +16,7 @@ public static class SqlGeographyExtensions
     //{
     //    return geography.IsNullOrEmpty() || geography.STIsValid().IsFalse;
     //}
-     
+
     public static OpenGisGeographyType GetOpenGisType(this SqlGeography geography)
     {
         if (geography == null)
@@ -50,7 +50,7 @@ public static class SqlGeographyExtensions
         }
     }
 
-     
+
     #region Projection
 
     public static SqlGeometry Project(this SqlGeography geography, Func<Point, Point> mapFunction, int newSrid = 0)
@@ -209,17 +209,17 @@ public static class SqlGeographyExtensions
 
     public static SqlGeometry GeodeticToMercator(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToMercator(point, Ellipsoids.WGS84));
+        return geometry.Project(point => MapProjects.GeodeticToMercator(point, Ellipsoids.WGS84));
     }
 
     public static SqlGeometry GeodeticWgs84ToWebMercator(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
+        return geometry.Project(point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
     }
 
     public static SqlGeometry GeodeticToCylindricalEqualArea(this SqlGeography geometry)
     {
-        return Project(geometry, point => MapProjects.GeodeticToCylindricalEqualArea<Point>(point, Ellipsoids.WGS84));
+        return geometry.Project(point => MapProjects.GeodeticToCylindricalEqualArea(point, Ellipsoids.WGS84));
     }
 
     #endregion
@@ -238,19 +238,19 @@ public static class SqlGeographyExtensions
                 return geography.SqlPointToGeoJsonPoint(isLongitudeFirst);
 
             case OpenGisGeographyType.MultiPoint:
-                return SqlMultiPointToGeoJsonMultiPoint(geography, isLongitudeFirst);
+                return geography.SqlMultiPointToGeoJsonMultiPoint(isLongitudeFirst);
 
             case OpenGisGeographyType.LineString:
-                return SqlLineStringToGeoJsonPolyline(geography, isLongitudeFirst);
+                return geography.SqlLineStringToGeoJsonPolyline(isLongitudeFirst);
 
             case OpenGisGeographyType.MultiLineString:
-                return SqlMultiLineStringToGeoJsonPolyline(geography, isLongitudeFirst);
+                return geography.SqlMultiLineStringToGeoJsonPolyline(isLongitudeFirst);
 
             case OpenGisGeographyType.Polygon:
-                return SqlPolygonToGeoJsonPolygon(geography, isLongitudeFirst);
+                return geography.SqlPolygonToGeoJsonPolygon(isLongitudeFirst);
 
             case OpenGisGeographyType.MultiPolygon:
-                return SqlMultiPolygonToGeoJsonMultiPolygon(geography, isLongitudeFirst);
+                return geography.SqlMultiPolygonToGeoJsonMultiPolygon(isLongitudeFirst);
 
             case OpenGisGeographyType.GeometryCollection:
             case OpenGisGeographyType.CircularString:
@@ -317,12 +317,12 @@ public static class SqlGeographyExtensions
         //This check is required
         if (geometry.IsNullOrEmpty())
             return GeoJsonMultiPoint.Empty;
-            //return new GeoJsonMultiPoint()
-            //{
-            //    //Type = GeoJson.MultiPoint,
-            //    //Coordinates = new double[0][],
-            //    Coordinates = [],
-            //};
+        //return new GeoJsonMultiPoint()
+        //{
+        //    //Type = GeoJson.MultiPoint,
+        //    //Coordinates = new double[0][],
+        //    Coordinates = [],
+        //};
 
         var numberOfGeometries = geometry.STNumGeometries().Value;
 
@@ -448,7 +448,7 @@ public static class SqlGeographyExtensions
             Type = GeoJson.MultiPolygon,
         };
     }
-     
+
     #endregion
 
 

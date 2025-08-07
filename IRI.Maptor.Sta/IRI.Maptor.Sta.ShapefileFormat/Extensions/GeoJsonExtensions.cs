@@ -7,9 +7,9 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Maptor.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Maptor.Sta.ShapefileFormat.ShapeTypes.Abstractions; 
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeoJsonExtensions
 {

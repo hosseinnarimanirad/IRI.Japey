@@ -5,7 +5,7 @@ using IRI.Maptor.Sta.MachineLearning;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeometryExtensions
 {
@@ -15,7 +15,7 @@ public static class GeometryExtensions
         Func<T, T> toScreenMap,
         bool retain3Poins) where T : IPoint, new()
     {
-        Func<List<T>, List<T>> filter = pList => SimplifyByLogisticRegression(pList, model, toScreenMap, retain3Poins);
+        Func<List<T>, List<T>> filter = pList => pList.SimplifyByLogisticRegression(model, toScreenMap, retain3Poins);
 
         var temp = geometry.FilterPoints(filter);
 

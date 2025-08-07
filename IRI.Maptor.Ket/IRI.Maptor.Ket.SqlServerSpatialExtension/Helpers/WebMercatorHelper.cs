@@ -1,12 +1,13 @@
 ﻿using System.Text;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.ShapefileFormat.Dbf;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers;
 

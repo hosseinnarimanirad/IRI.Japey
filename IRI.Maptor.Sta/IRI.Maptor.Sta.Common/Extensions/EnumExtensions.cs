@@ -1,14 +1,12 @@
-﻿using IRI.Maptor.Sta.Common.Enums;
-using IRI.Maptor.Sta.Common.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Collections.Generic;
 
-namespace IRI.Extensions;
+using IRI.Maptor.Sta.Common.Enums;
+
+namespace IRI.Maptor.Extensions;
 
 public static class EnumExtensions
 {
@@ -25,7 +23,7 @@ public static class EnumExtensions
         var attributes = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
 
         return attributes.Length == 0 ? value.ToString() : ((DescriptionAttribute)attributes[0]).Description;
-         
+
         //return enumValue.GetType()
         //     .GetMember(enumValue.ToString())
         //     ?.First()
@@ -125,16 +123,15 @@ public static class EnumExtensions
 
         return (T)(object)flags.Cast<int>().Aggregate(0, (c, n) => c |= n);
     }
-     
-}
 
-
-public enum DisplayProperty
-{
-    Description,
-    GroupName,
-    Name,
-    Prompt,
-    ShortName,
-    Order
 }
+ 
+//public enum DisplayProperty
+//{
+//    Description,
+//    GroupName,
+//    Name,
+//    Prompt,
+//    ShortName,
+//    Order
+//}

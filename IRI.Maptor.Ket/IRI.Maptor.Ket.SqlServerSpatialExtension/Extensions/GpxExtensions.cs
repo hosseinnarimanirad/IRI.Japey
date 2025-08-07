@@ -3,7 +3,7 @@ using Microsoft.SqlServer.Types;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 
 //namespace IRI.Maptor.Ket.SqlServerSpatialExtension
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GpxExtensions
 {

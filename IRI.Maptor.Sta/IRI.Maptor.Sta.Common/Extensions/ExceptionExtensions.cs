@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class ExceptionExtensions
 {
@@ -15,7 +15,7 @@ public static class ExceptionExtensions
             return string.Empty;
         }
 
-        return $"MESSAGE: { ex.Message} INNER: {ex.InnerException?.Message ?? string.Empty}";
+        return $"MESSAGE: {ex.Message} INNER: {ex.InnerException?.Message ?? string.Empty}";
     }
 
     public static string GetFullMessage(this Exception ex)
@@ -25,7 +25,7 @@ public static class ExceptionExtensions
             return string.Empty;
         }
 
-        var innerException = ex?.Message + " - " + GetFullMessage(ex.InnerException);
+        var innerException = ex?.Message + " - " + ex.InnerException.GetFullMessage();
 
         return $"{ex.Message}" + innerException != null ? $" {Environment.NewLine} {innerException}" : string.Empty;
     }

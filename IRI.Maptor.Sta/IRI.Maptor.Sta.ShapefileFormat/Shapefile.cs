@@ -6,7 +6,7 @@ using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using System.Threading.Tasks;
 using IRI.Maptor.Sta.ShapefileFormat.Reader;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.ShapefileFormat.Writer;
 using IRI.Maptor.Sta.ShapefileFormat.Model;
 using IRI.Maptor.Sta.ShapefileFormat.Dbf;
@@ -16,7 +16,8 @@ using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.ShapefileFormat.ShapeTypes.Abstractions;
-using IRI.Maptor.Sta.SpatialReferenceSystem; 
+using IRI.Maptor.Sta.SpatialReferenceSystem;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.ShapefileFormat;
 

@@ -1,10 +1,9 @@
 ﻿using System;
-
-using IRI.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Jab.Common.Localization;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Model.CoordinatePanel;
 

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Mathematics;
 using IRI.Maptor.Sta.Common.Model;
 using IRI.Maptor.Jab.Common.Helpers;

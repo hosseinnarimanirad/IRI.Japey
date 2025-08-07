@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Contracts.Google;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.NetFrameworkTest.Assets
 {

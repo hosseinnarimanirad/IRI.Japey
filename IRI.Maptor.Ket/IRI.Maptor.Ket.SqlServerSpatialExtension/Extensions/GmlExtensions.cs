@@ -3,11 +3,10 @@ using System.Data.SqlTypes;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GmlExtensions
-{
-
+{ 
     public static string AsGml3(this SqlGeometry geometry, bool writeSrid = false)
     {
         var gml = geometry?.AsGml();

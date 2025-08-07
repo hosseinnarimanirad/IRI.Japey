@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class PathHelper
 {

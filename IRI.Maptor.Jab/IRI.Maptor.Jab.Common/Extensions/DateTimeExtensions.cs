@@ -1,7 +1,7 @@
-﻿using System; 
+﻿using System;
 using IRI.Maptor.Jab.Common.Model.Common;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class DateTimeExtensions
 {
@@ -15,5 +15,5 @@ public static class DateTimeExtensions
         return new SpecialDateTime(dateTime);
     }
 
-    
+
 }

@@ -5,7 +5,7 @@ using IRI.Maptor.Sta.Spatial.Analysis.Topology;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Spatial.Helpers;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class BoundingBoxExtensions
 {

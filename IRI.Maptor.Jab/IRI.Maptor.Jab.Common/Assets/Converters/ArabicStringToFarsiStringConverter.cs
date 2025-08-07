@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
-
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Assets.Converters;
 

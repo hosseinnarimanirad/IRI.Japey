@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using IRI.Maptor.Tst.NetFrameworkTest.Assets;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using Microsoft.SqlServer.Types;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.Esri;
 

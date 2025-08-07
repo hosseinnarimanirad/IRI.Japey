@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using IRI.Msh.Exceptions;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
+using IRI.Maptor.Sta.Common.Exceptions;
 
 namespace IRI.Maptor.Sta.Mathematics;
 
@@ -38,7 +38,7 @@ public static class Statistics
         {
             throw new ZeroSizeArrayException();
         }
-
+        
         double resultVlaue = values[0];
 
         for (int i = 1; i < values.Length; i++)

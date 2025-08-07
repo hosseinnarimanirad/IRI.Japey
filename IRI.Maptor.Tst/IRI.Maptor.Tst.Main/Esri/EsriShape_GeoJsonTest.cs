@@ -1,4 +1,5 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Tst.NetFrameworkTest.Assets;
 using Microsoft.SqlServer.Types;
 

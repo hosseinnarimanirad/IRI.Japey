@@ -11,7 +11,7 @@
 //using OpenTK.Graphics.OpenGL;
 //using System.Diagnostics;
 //using System.Windows;
-//using IRI.Extensions;
+//using IRI.Maptor.Extensions;
 //using IRI.Maptor.Ket.SpatialExtensions;
 
 //namespace IRI.Maptor.Jab.Common.Convertor

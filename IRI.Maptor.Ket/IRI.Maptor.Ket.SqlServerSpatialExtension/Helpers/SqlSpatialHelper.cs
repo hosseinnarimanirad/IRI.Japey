@@ -1,10 +1,9 @@
 ﻿using Microsoft.SqlServer.Types;
-
-using IRI.Extensions;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives.Esri;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers;
 

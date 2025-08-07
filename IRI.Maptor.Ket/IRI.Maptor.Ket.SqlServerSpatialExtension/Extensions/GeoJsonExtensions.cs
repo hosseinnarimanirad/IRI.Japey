@@ -6,7 +6,7 @@ using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class GeoJsonExtensions
 {
@@ -73,7 +73,7 @@ public static class GeoJsonExtensions
     {
         builder.BeginGeometry(OpenGisGeometryType.Point);
 
-        var temporaryPoint = IRI.Maptor.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+        var temporaryPoint = Point.Parse(point.Coordinates, isLongitudeFirst);
 
         builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 
@@ -90,7 +90,7 @@ public static class GeoJsonExtensions
         {
             builder.BeginGeometry(OpenGisGeometryType.Point);
 
-            var temporaryPoint = IRI.Maptor.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+            var temporaryPoint = Point.Parse(item, isLongitudeFirst);
 
             builder.BeginFigure(temporaryPoint.X, temporaryPoint.Y);
 
@@ -296,7 +296,7 @@ public static class GeoJsonExtensions
     {
         builder.BeginGeography(OpenGisGeographyType.Point);
 
-        var temporaryPoint = IRI.Maptor.Sta.Common.Primitives.Point.Parse(point.Coordinates, isLongitudeFirst);
+        var temporaryPoint = Point.Parse(point.Coordinates, isLongitudeFirst);
 
         builder.BeginFigure(temporaryPoint.Y, temporaryPoint.X);
 
@@ -313,7 +313,7 @@ public static class GeoJsonExtensions
         {
             builder.BeginGeography(OpenGisGeographyType.Point);
 
-            var temporaryPoint = IRI.Maptor.Sta.Common.Primitives.Point.Parse(item, isLongitudeFirst);
+            var temporaryPoint = Point.Parse(item, isLongitudeFirst);
 
             builder.BeginFigure(temporaryPoint.Y, temporaryPoint.X);
 

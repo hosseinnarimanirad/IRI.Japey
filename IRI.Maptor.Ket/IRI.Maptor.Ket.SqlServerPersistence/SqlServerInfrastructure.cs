@@ -2,10 +2,9 @@
 using System.Data.SqlTypes;
 using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Types;
-
-using IRI.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Persistence.Infrastructure;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.SqlServerPersistence;
 

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Data;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Persistence.DataSources;
 

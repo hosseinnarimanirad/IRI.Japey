@@ -9,9 +9,10 @@ using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
+using IRI.Maptor.Extensions;
 
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class Sta_GeometryExtensions
 {

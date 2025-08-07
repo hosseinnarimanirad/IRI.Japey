@@ -6,9 +6,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Controls.View;
 

@@ -2,12 +2,12 @@
 using IRI.Maptor.Sta.Common.Model;
 using System;
 using System.Text;
-using IRI.Extensions;
 using IRI.Maptor.Sta.Spatial.IO;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Helpers;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.GdiPlus.WorldfileFormat;
 

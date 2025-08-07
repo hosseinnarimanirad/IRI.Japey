@@ -1,7 +1,7 @@
 ﻿using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Sta.Spatial.Model;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class TileInfoExtensions
 {

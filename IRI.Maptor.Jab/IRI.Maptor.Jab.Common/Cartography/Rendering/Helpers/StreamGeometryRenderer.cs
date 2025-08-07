@@ -4,13 +4,14 @@ using System.Windows;
 using System.Windows.Media;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 using IRI.Maptor.Sta.Common.Abstrations;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
 

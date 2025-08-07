@@ -1,4 +1,5 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 using Microsoft.SqlServer.Types;
 using System.Data.SqlTypes;
 

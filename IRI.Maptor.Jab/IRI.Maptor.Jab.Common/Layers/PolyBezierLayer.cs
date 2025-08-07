@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
@@ -16,6 +16,7 @@ using LineSegment = System.Windows.Media.LineSegment;
 using WpfPoint = System.Windows.Point;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Jab.Common.Enums;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 

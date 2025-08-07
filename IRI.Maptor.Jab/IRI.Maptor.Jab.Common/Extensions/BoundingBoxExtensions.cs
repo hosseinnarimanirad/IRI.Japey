@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using IRI.Maptor.Sta.Common.Primitives;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class BoundingBoxExtensions
 {

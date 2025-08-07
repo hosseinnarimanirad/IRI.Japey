@@ -1,7 +1,8 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.GeoJsons;
 

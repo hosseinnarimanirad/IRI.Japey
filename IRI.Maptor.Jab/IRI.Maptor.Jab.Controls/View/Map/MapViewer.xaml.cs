@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Net.Http;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Services;
 using IRI.Maptor.Sta.Spatial.Primitives;
@@ -38,10 +38,11 @@ using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Jab.Common.Enums; 
+using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Persistence.Abstractions;
-using IRI.Maptor.Jab.Common.Cartography.Symbologies; 
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
+using IRI.Maptor.Extensions;
 
 //using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 

@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 
@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
+using IRI.Maptor.Extensions;
 
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering;

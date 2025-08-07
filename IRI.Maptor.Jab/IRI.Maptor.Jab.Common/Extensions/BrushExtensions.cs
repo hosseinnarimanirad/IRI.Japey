@@ -1,6 +1,7 @@
-﻿using System.Windows.Media;
+﻿using IRI.Maptor.Extensions;
+using System.Windows.Media;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class BrushExtensions
 {
@@ -24,7 +25,5 @@ public static class BrushExtensions
         var solidColorBrush = brush as SolidColorBrush;
 
         return solidColorBrush != null ? new System.Drawing.SolidBrush(solidColorBrush.Color.AsGdiColor(opacity)) : null;
-    }
-
-
+    } 
 }

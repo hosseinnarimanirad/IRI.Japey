@@ -2,9 +2,8 @@
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Globalization;
-
-using IRI.Extensions;
 using IRI.Maptor.Jab.Common.Helpers;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Assets.Converters;
 

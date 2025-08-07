@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Jab.Common.Model;

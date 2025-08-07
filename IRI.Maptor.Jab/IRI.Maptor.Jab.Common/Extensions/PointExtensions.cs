@@ -1,7 +1,7 @@
 ﻿using IRI.Maptor.Sta.Common.Abstrations;
 using System;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class PointExtensions
 {
@@ -20,8 +20,8 @@ public static class PointExtensions
         return new System.Drawing.Point(Convert.ToInt32(Math.Round(point.X)), Convert.ToInt32(Math.Round(point.Y)));
     }
 
-    public static IRI.Maptor.Sta.Common.Primitives.Point AsPoint(this System.Windows.Point point)
+    public static Sta.Common.Primitives.Point AsPoint(this System.Windows.Point point)
     {
-        return new IRI.Maptor.Sta.Common.Primitives.Point(point.X, point.Y);
+        return new Sta.Common.Primitives.Point(point.X, point.Y);
     }
 }

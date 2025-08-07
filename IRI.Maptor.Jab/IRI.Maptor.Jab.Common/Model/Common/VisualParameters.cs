@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies.Strategies;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;

@@ -5,7 +5,7 @@
 
 ////using Microsoft.SqlServer.Types;
 
-//using IRI.Extensions;
+//using IRI.Maptor.Extensions;
 //using IRI.Maptor.Sta.Common.Primitives;
 //using IRI.Maptor.Sta.Spatial.Primitives;
 //using Point = IRI.Maptor.Sta.Common.Primitives.Point;

@@ -6,7 +6,7 @@ using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class ShapefileExtention
 {
@@ -295,5 +295,5 @@ public static class ShapefileExtention
     #endregion
 
 
-      
+
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class ListExtensions
 {

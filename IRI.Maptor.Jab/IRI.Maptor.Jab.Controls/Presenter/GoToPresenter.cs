@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Controls.View;
 using IRI.Maptor.Sta.Common.Primitives;
@@ -11,6 +11,7 @@ using IRI.Maptor.Jab.Common.Presenter.Map;
 using IRI.Maptor.Jab.Common.Assets.Commands;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Controls.Presenter;
 
@@ -131,7 +132,7 @@ public class GoToPresenter : Notifier
 
 
     public GoToPresenter(Action<Point> requestPanTo, Action<Point> requestZoomTo, List<HamburgerGoToMenuItem> items = null)
-    {
+    {        
         this.RequestZoomTo = requestZoomTo;
 
         this.RequestPanTo = requestPanTo;

@@ -4,7 +4,8 @@ using IRI.Maptor.Sta.Common.Primitives;
 using System.Text.Json.Serialization;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 

@@ -10,8 +10,9 @@ using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Ket.SqlServerSpatialExtension.Helpers;
 using IRI.Maptor.Sta.ShapefileFormat.ShapeTypes.Abstractions;
+using IRI.Maptor.Extensions;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class SqlGeometryExtensions
 {
@@ -52,7 +53,7 @@ public static class SqlGeometryExtensions
 
         try
         {
-            return geometry.Transform(i => MapProjects.GeodeticToCylindricalEqualArea(toWgs84((Point)i)))
+            return geometry.Transform(i => MapProjects.GeodeticToCylindricalEqualArea(toWgs84(i)))
                             .STArea()
                             .Value / 1000000.0;
         }
@@ -105,7 +106,7 @@ public static class SqlGeometryExtensions
 
     public static string AsWkbString(this SqlGeometry geometry)
     {
-        return IRI.Maptor.Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
+        return Sta.Common.Helpers.HexStringHelper.ByteToHexBitFiddle(geometry?.AsWkb(), true);
     }
 
 
@@ -858,19 +859,19 @@ public static class SqlGeometryExtensions
                 return geometry.SqlPointToEsriJsonPoint();
 
             case OpenGisGeometryType.MultiPoint:
-                return SqlMultiPointToEsriJsonMultiPoint(geometry);
+                return geometry.SqlMultiPointToEsriJsonMultiPoint();
 
             case OpenGisGeometryType.LineString:
-                return SqlLineStringToEsriJsonPolyline(geometry);
+                return geometry.SqlLineStringToEsriJsonPolyline();
 
             case OpenGisGeometryType.MultiLineString:
-                return SqlMultiLineStringToEsriJsonPolyline(geometry);
+                return geometry.SqlMultiLineStringToEsriJsonPolyline();
 
             case OpenGisGeometryType.Polygon:
-                return SqlPolygonToEsriJsonPolygon(geometry);
+                return geometry.SqlPolygonToEsriJsonPolygon();
 
             case OpenGisGeometryType.MultiPolygon:
-                return SqlMultiPolygonToEsriJsonMultiPolygon(geometry);
+                return geometry.SqlMultiPolygonToEsriJsonMultiPolygon();
         }
     }
 
@@ -1075,16 +1076,16 @@ public static class SqlGeometryExtensions
                 throw new NotImplementedException();
 
             case OpenGisGeometryType.LineString:
-                return SqlLineStringToPathMarkup(geometry, decimals);
+                return geometry.SqlLineStringToPathMarkup(decimals);
 
             case OpenGisGeometryType.MultiLineString:
-                return SqlMultiLineStringToPathMarkup(geometry, decimals);
+                return geometry.SqlMultiLineStringToPathMarkup(decimals);
 
             case OpenGisGeometryType.Polygon:
-                return SqlPolygonToPathMarkup(geometry, decimals);
+                return geometry.SqlPolygonToPathMarkup(decimals);
 
             case OpenGisGeometryType.MultiPolygon:
-                return SqlMultiPolygonToPathMarkup(geometry, decimals);
+                return geometry.SqlMultiPolygonToPathMarkup(decimals);
         }
     }
 
@@ -1189,7 +1190,7 @@ public static class SqlGeometryExtensions
 
         for (int i = 1; i <= numberOfParts; i++)
         {
-            result.Append(SqlPolygonToPathMarkup(geometry.STGeometryN(i), decimals));
+            result.Append(geometry.STGeometryN(i).SqlPolygonToPathMarkup(decimals));
         }
 
         return result.ToString();
@@ -1222,19 +1223,19 @@ public static class SqlGeometryExtensions
                 return geometry.SqlPointToGeoJsonPoint(isXFirst);
 
             case OpenGisGeometryType.MultiPoint:
-                return SqlMultiPointToGeoJsonMultiPoint(geometry, isXFirst);
+                return geometry.SqlMultiPointToGeoJsonMultiPoint(isXFirst);
 
             case OpenGisGeometryType.LineString:
-                return SqlLineStringToGeoJsonPolyline(geometry, isXFirst);
+                return geometry.SqlLineStringToGeoJsonPolyline(isXFirst);
 
             case OpenGisGeometryType.MultiLineString:
-                return SqlMultiLineStringToGeoJsonPolyline(geometry, isXFirst);
+                return geometry.SqlMultiLineStringToGeoJsonPolyline(isXFirst);
 
             case OpenGisGeometryType.Polygon:
-                return SqlPolygonToGeoJsonPolygon(geometry, isXFirst);
+                return geometry.SqlPolygonToGeoJsonPolygon(isXFirst);
 
             case OpenGisGeometryType.MultiPolygon:
-                return SqlMultiPolygonToGeoJsonMultiPolygon(geometry, isXFirst);
+                return geometry.SqlMultiPolygonToGeoJsonMultiPolygon(isXFirst);
         }
     }
 
@@ -1438,12 +1439,12 @@ public static class SqlGeometryExtensions
 
     #region Model
 
-    public static SqlGeometry AsSqlGeometry(this IRI.Maptor.Sta.Spatial.Model.TileInfo tile)
+    public static SqlGeometry AsSqlGeometry(this Sta.Spatial.Model.TileInfo tile)
     {
         return tile.WebMercatorExtent.AsSqlGeometry();
     }
 
-    public static Geometry<Point> AsGeometry(this IRI.Maptor.Sta.Spatial.Model.TileInfo tile)
+    public static Geometry<Point> AsGeometry(this Sta.Spatial.Model.TileInfo tile)
     {
         return tile.WebMercatorExtent.AsGeometry<Point>(0);
     }

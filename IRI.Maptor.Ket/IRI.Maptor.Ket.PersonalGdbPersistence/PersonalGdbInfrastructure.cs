@@ -1,4 +1,5 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Ket.PersonalGdbPersistence.Model;
 using IRI.Maptor.Ket.PersonalGdbPersistence.Xml;
 using IRI.Maptor.Sta.Common.Primitives;

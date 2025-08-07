@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class StringExtensions
 {
@@ -102,6 +101,6 @@ public static class StringExtensions
         if (string.IsNullOrEmpty(value))
             return null;
 
-        return value.Split(new Char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+        return value.Split(new char[] { separator }, StringSplitOptions.RemoveEmptyEntries);
     }
 }

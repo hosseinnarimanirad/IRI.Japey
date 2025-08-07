@@ -1,11 +1,11 @@
 ﻿using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Contracts.Here;
-using IRI.Extensions;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Services;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Spatial.Services.Here;
 

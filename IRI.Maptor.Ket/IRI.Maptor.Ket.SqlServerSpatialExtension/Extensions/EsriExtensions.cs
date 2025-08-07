@@ -1,7 +1,7 @@
 ﻿//using IRI.Maptor.Sta.Common.Primitives.Esri;
 //
 
-//namespace IRI.Extensions
+//namespace IRI.Maptor.Extensions
 //{
 //    public static class EsriExtensions
 //    {

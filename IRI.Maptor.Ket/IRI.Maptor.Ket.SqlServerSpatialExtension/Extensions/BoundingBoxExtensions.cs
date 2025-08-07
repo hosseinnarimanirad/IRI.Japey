@@ -3,7 +3,7 @@ using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using Microsoft.SqlServer.Types;
 using IRI.Maptor.Sta.Common.Primitives;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class BoundingBoxExtensions
 {

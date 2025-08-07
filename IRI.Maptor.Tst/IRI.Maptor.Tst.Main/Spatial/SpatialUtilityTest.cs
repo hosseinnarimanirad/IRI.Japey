@@ -3,11 +3,12 @@ using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Tst.NetFrameworkTest.Assets;
 using System.Collections.Generic;
 using IRI.Maptor.Sta.Metrics;
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using static IRI.Maptor.Sta.Common.Enums.SpatialRelation;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.IO.OgcSFA;
 using IRI.Maptor.Sta.Spatial.Helpers;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.NetFrameworkTest.Spatial;
 

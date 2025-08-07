@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class DateTimeExtensions
 {
@@ -31,16 +31,16 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return ToPersianAlphabeticDate(_midValidPersianDateTime, includeDayOfWeek, useFarsiNumbers);
+            return _midValidPersianDateTime.ToPersianAlphabeticDate(includeDayOfWeek, useFarsiNumbers);
 
         var year = _calendar.GetYear(dateTime);
 
-        var month = GetPersianMonthName(dateTime);
+        var month = dateTime.GetPersianMonthName();
 
         var day = _calendar.GetDayOfMonth(dateTime);
 
         var result = includeDayOfWeek ?
-            FormattableString.Invariant($"{GetPersianDayOfWeekName(dateTime)} {day:00} {month} {year:0000}") :
+            FormattableString.Invariant($"{dateTime.GetPersianDayOfWeekName()} {day:00} {month} {year:0000}") :
             FormattableString.Invariant($"{day:00} {month} {year:0000}");
 
         return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result;
@@ -50,7 +50,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return ToLongPersianDateTime(_midValidPersianDateTime);
+            return _midValidPersianDateTime.ToLongPersianDateTime();
 
         var year = _calendar.GetYear(dateTime);
 
@@ -68,7 +68,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return ToLongPersianDateTimeSimple(_midValidPersianDateTime);
+            return _midValidPersianDateTime.ToLongPersianDateTimeSimple();
 
         var result = FormattableString.Invariant(
             $"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}-{_calendar.GetHour(dateTime):00}:{_calendar.GetMinute(dateTime):00}:{_calendar.GetSecond(dateTime):00}");
@@ -80,7 +80,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return ToPersianDate(_midValidPersianDateTime);
+            return _midValidPersianDateTime.ToPersianDate();
 
         var result = FormattableString.Invariant($"{_calendar.GetYear(dateTime):0000}/{_calendar.GetMonth(dateTime):00}/{_calendar.GetDayOfMonth(dateTime):00}");
 
@@ -106,9 +106,9 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return ToPersianYearMonth(_midValidPersianDateTime, useFarsiNumbers);
+            return _midValidPersianDateTime.ToPersianYearMonth(useFarsiNumbers);
 
-        var result = FormattableString.Invariant($"{GetPersianMonthName(dateTime)} {_calendar.GetYear(dateTime)}");
+        var result = FormattableString.Invariant($"{dateTime.GetPersianMonthName()} {_calendar.GetYear(dateTime)}");
 
         return useFarsiNumbers ? result.LatinNumbersToFarsiNumbers() : result; ;
     }
@@ -117,7 +117,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetBeginningOfThePersianYear(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetBeginningOfThePersianYear();
 
         var year = _calendar.GetYear(dateTime);
 
@@ -128,7 +128,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetBeginningOfThePersianMonth(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetBeginningOfThePersianMonth();
 
         var year = _calendar.GetYear(dateTime);
 
@@ -141,7 +141,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetBeginningOfThePersianMonth(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetBeginningOfThePersianMonth();
 
         var year = _calendar.GetYear(dateTime);
 
@@ -156,7 +156,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetBeginningOfThePersianWeek(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetBeginningOfThePersianWeek();
 
         var dayOfWeek = ((int)_calendar.GetDayOfWeek(dateTime) + 1) % 7;
 
@@ -167,7 +167,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetPersianMonthName(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetPersianMonthName();
 
         var monthIndex = _calendar.GetMonth(dateTime) - 1;
 
@@ -178,7 +178,7 @@ public static class DateTimeExtensions
     {
         //to avoid ArgumentOutOfRangeException
         if (dateTime < _midValidPersianDateTime)
-            return GetPersianDayOfWeekName(_midValidPersianDateTime);
+            return _midValidPersianDateTime.GetPersianDayOfWeekName();
 
         var dayOfWeek = _calendar.GetDayOfWeek(dateTime);
 
@@ -221,7 +221,7 @@ public static class DateTimeExtensions
 
     public static string GetPersianEllapsedDateCoarse(this DateTime dateTime)
     {
-        var interval = (DateTime.Now - dateTime);
+        var interval = DateTime.Now - dateTime;
 
         var result = string.Empty;
 
@@ -269,7 +269,7 @@ public static class DateTimeExtensions
 
     public static string GetPersianEllapsedDateNormal(this DateTime dateTime)
     {
-        var interval = (DateTime.Now - dateTime);
+        var interval = DateTime.Now - dateTime;
 
         var result = string.Empty;
 

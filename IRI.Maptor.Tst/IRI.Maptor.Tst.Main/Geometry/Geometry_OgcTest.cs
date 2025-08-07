@@ -1,4 +1,4 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
 using Microsoft.SqlServer.Types;
@@ -6,6 +6,7 @@ using IRI.Maptor.Sta.Spatial.IO.OgcSFA;
 using System.Collections.Generic;
 using System.Data.SqlTypes; // For SqlBytes
 using Xunit;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Tst.Main.TheGeometry;
 

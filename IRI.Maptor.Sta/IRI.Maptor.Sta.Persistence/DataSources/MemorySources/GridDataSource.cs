@@ -2,12 +2,11 @@
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
-
-using IRI.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Spatial.MapIndexes;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Persistence.DataSources;
 

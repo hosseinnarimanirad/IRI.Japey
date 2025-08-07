@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 
@@ -14,6 +14,7 @@ using IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
 using IRI.Maptor.Jab.Common.Helpers;
 using System.Windows.Media.Imaging;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using IRI.Maptor.Extensions;
 
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering;

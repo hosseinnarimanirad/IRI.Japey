@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
-
-using IRI.Extensions;
 using IRI.Maptor.Sta.Common.Contracts.Google;
 using IRI.Maptor.Sta.Common.Services;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Ket.WindowsBase.ManagedNativeWifi;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Ket.WindowsBase.Services.Google;
 

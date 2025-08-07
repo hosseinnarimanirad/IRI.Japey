@@ -1,4 +1,5 @@
-﻿using IRI.Extensions;
+﻿using IRI.Maptor.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Encodings;
 using IRI.Maptor.Sta.Common.Helpers;
 using System;

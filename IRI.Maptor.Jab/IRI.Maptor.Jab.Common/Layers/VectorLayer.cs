@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Helpers;
@@ -23,6 +23,7 @@ using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 

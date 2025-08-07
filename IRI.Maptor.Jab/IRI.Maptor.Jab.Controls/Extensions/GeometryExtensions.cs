@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks; 
 
-namespace IRI.Extensions;
+namespace IRI.Maptor.Extensions;
 
 public static class Jab_GeometryExtensions
 {

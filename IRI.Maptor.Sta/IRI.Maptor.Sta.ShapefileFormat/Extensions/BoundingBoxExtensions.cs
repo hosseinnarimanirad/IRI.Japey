@@ -1,12 +1,10 @@
-﻿using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Sta.ShapefileFormat.EsriType;
-using IRI.Maptor.Sta.Spatial.Primitives;
-using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace IRI.Extensions;
+using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Sta.ShapefileFormat.EsriType;
+
+namespace IRI.Maptor.Extensions;
 
 public static class BoundingBoxExtensions
 {

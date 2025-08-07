@@ -3,9 +3,10 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 
-using IRI.Extensions;
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common.Model;
 
