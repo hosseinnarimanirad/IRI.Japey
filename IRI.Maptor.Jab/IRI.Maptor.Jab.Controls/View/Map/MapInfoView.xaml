@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
         xmlns:userControl="clr-namespace:IRI.Maptor.Jab.Common;assembly=IRI.Maptor.Jab.Common"
         xmlns:local="clr-namespace:IRI.Maptor.Jab.Controls" x:Name="root"                   
         xmlns:system="clr-namespace:System;assembly=netstandard">
@@ -95,7 +96,9 @@
                 <Setter Property="Margin" Value="8"/>
                 <Setter Property="FlowDirection" Value="LeftToRight"/>
             </Style>
-
+            <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                <Setter Property="mahApp:HeaderedControlHelper.HeaderFontSize" Value="12" />
+            </Style>
         </ResourceDictionary>
     </userControl:NotifiableUserControl.Resources>
     <Border CornerRadius="15" BorderThickness="3" MinWidth="420" VerticalAlignment="Top" HorizontalAlignment="Center" 

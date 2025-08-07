@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 using System.Windows;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Common.TileServices;
@@ -19,6 +20,8 @@ public partial class MainWindow : Window
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         try
         {
             SqlServerTypes.Utilities.LoadNativeAssembliesv14(Environment.CurrentDirectory);

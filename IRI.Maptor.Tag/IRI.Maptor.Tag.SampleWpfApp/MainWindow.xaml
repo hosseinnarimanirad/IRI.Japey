@@ -8,9 +8,7 @@
         xmlns:iriJabControls="clr-namespace:IRI.Maptor.Jab.Controls.View;assembly=IRI.Maptor.Jab.Controls"
         Title="MainWindow" Height="600" Width="900" x:Name="root" FlowDirection="{Binding CurrentFlowDirection}">
     <Window.Resources>
-        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
-            <Setter Property="mahApp:HeaderedControlHelper.HeaderFontSize" Value="12" />
-        </Style>
+       
     </Window.Resources>
     <Grid >
         <Grid.ColumnDefinitions>
