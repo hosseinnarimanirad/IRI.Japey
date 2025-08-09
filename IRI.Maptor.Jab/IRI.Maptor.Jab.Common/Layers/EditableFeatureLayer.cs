@@ -590,9 +590,13 @@ public class EditableFeatureLayer : BaseLayer
             leftToolTip: _displayCoordinates,
             middleToolTip: _delete,
 
-            rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCopy,
-            leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.CustomShapes.xY,
-            middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
+            //rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarPageCopy,
+            //leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.CustomShapes.xY,
+            //middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
+
+            rightSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.PageCopy,
+            leftSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.AxisXy,
+            middleSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Delete);
 
         presenter.RightCommandAction = i =>
         {
@@ -667,9 +671,13 @@ public class EditableFeatureLayer : BaseLayer
             rightToolTip: _finish,
             middleToolTip: _delete,
 
-            leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
-            rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
-            middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
+            //leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+            //rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+            //middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
+
+            leftSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Close,
+            rightSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Check,
+            middleSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Delete);
 
         presenter.RightCommandAction = i =>
         {
@@ -1312,7 +1320,7 @@ public class EditableFeatureLayer : BaseLayer
             return _goToNextPointCommand;
         }
     }
-     
+
 
     private RelayCommand _deleteCurrentPointCommand;
     public RelayCommand DeleteCurrentPointCommand
@@ -1388,7 +1396,7 @@ public class EditableFeatureLayer : BaseLayer
         }
     }
 
-     
+
 
     private RelayCommand _convertToDrawingItemCommand;
     public RelayCommand ConvertToDrawingItemCommand
@@ -1403,6 +1411,6 @@ public class EditableFeatureLayer : BaseLayer
             return _convertToDrawingItemCommand;
         }
     }
-     
+
     #endregion
 }

@@ -1521,7 +1521,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         }
 
         if (imageBrush != null)
-        { 
+        {
             Path path = new Path()
             {
                 Data = area,
@@ -4233,13 +4233,13 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     private FrameworkElement GetRightClickOptionsForDraw()
     {
         var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
-          rightToolTip: "تکمیل",
-          leftToolTip: "لغو",
-          middleToolTip: "تکمیل تکه‌جاری",
+        rightToolTip: "تکمیل",
+        leftToolTip: "لغو",
+        middleToolTip: "تکمیل تکه‌جاری",
 
-      rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
-      leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
-      middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheckmark);
+        rightSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Check, // IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+        leftSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Close, // IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClose,
+        middleSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Checkmark); // IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheckmark);
 
         presenter.LeftCommandAction = i =>
         {

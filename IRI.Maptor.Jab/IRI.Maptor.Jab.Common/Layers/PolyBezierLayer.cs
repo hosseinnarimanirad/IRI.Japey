@@ -268,9 +268,9 @@ public class PolyBezierLayer : BaseLayer
             leftToolTip: string.Empty,
             middleToolTip: string.Empty,
 
-            rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClipboard,
-            leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarAdd,
-            middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
+            rightSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Clipboard,// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarClipboard,
+            leftSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Add,// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarAdd,
+            middleSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Delete);// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
 
         presenter.RightCommandAction = i =>
         {
@@ -509,8 +509,8 @@ public class PolyBezierLayer : BaseLayer
             leftToolTip: string.Empty,
             middleToolTip: string.Empty,
 
-            rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCitySeattle,
-            leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
+            rightSymbol: MahApps.Metro.IconPacks.PackIconModernKind.CitySeattle,// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCitySeattle,
+            leftSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Check,// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
             middleSymbol: null);
 
         presenter.RightCommandAction = i =>

@@ -3,20 +3,18 @@
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Jab.Common.Assets.Commands;
 using IRI.Maptor.Sta.Common.Abstrations;
+using MahApps.Metro.IconPacks;  // Add this at the top of your file
+
 
 namespace IRI.Maptor.Jab.Common.Presenters.MapOptions;
 
 public class MapOptionsPresenter : Notifier, ILocateable
 {
-    private Point _point;
+    private Point _point = Point.NaN;
 
     public Point Location
     {
-        get
-        {
-            return _point;
-        }
-
+        get => _point;
         set
         {
             _point = value;
@@ -24,16 +22,16 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
-    public Action<object> RightCommandAction;
-    public Action<object> LeftCommandAction;
-    public Action<object> MiddleCommandAction;
-    public Action<object> UpperRightCommandAction;
-    public Action<object> UpperLeftCommandAction;
+    public Action<object>? RightCommandAction;
+    public Action<object>? LeftCommandAction;
+    public Action<object>? MiddleCommandAction;
+    public Action<object>? UpperRightCommandAction;
+    public Action<object>? UpperLeftCommandAction;
 
     #region Symbols
-     
-    private string _rightSymbol;
-    public string RightSymbol
+
+    private PackIconModernKind? _rightSymbol;
+    public PackIconModernKind? RightSymbol
     {
         get { return _rightSymbol; }
         set
@@ -43,9 +41,9 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
-     
-    private string _leftSymbol;
-    public string LeftSymbol
+
+    private PackIconModernKind? _leftSymbol;
+    public PackIconModernKind? LeftSymbol
     {
         get { return _leftSymbol; }
         set
@@ -55,9 +53,9 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
-     
-    private string _middleSymbol;
-    public string MiddleSymbol
+
+    private PackIconModernKind? _middleSymbol;
+    public PackIconModernKind? MiddleSymbol
     {
         get { return _middleSymbol; }
         set
@@ -67,9 +65,9 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
-     
-    private string _upperRightSymbol;
-    public string UpperRightSymbol
+
+    private PackIconModernKind? _upperRightSymbol;
+    public PackIconModernKind? UpperRightSymbol
     {
         get { return _upperRightSymbol; }
         set
@@ -79,9 +77,9 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
-     
-    private string _upperLeftSymbol;
-    public string UpperLeftSymbol
+
+    private PackIconModernKind? _upperLeftSymbol;
+    public PackIconModernKind? UpperLeftSymbol
     {
         get { return _upperLeftSymbol; }
         set
@@ -91,13 +89,15 @@ public class MapOptionsPresenter : Notifier, ILocateable
         }
     }
 
+
+
     #endregion
 
 
     #region Tooltips
 
-    private string _rightToolTip;
-    public string RightToolTip
+    private string? _rightToolTip;
+    public string? RightToolTip
     {
         get { return _rightToolTip; }
         set
@@ -108,8 +108,8 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private string _leftToolTip;
-    public string LeftToolTip
+    private string? _leftToolTip;
+    public string? LeftToolTip
     {
         get { return _leftToolTip; }
         set
@@ -120,8 +120,8 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private string _middleToolTip;
-    public string MiddleToolTip
+    private string? _middleToolTip;
+    public string? MiddleToolTip
     {
         get { return _middleToolTip; }
         set
@@ -132,8 +132,8 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private string _upperRightTooltip;
-    public string UpperRightToolTip
+    private string? _upperRightTooltip;
+    public string? UpperRightToolTip
     {
         get { return _upperRightTooltip; }
         set
@@ -144,8 +144,8 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private string _upperLeftToolTip;
-    public string UpperLeftToolTip
+    private string? _upperLeftToolTip;
+    public string? UpperLeftToolTip
     {
         get { return _upperLeftToolTip; }
         set
@@ -160,7 +160,7 @@ public class MapOptionsPresenter : Notifier, ILocateable
 
     #region Commands
 
-    private RelayCommand _rightCommand;
+    private RelayCommand? _rightCommand;
     public RelayCommand RightCommand
     {
         get
@@ -177,7 +177,7 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private RelayCommand _leftCommand;
+    private RelayCommand? _leftCommand;
     public RelayCommand LeftCommand
     {
         get
@@ -194,7 +194,7 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private RelayCommand _middleCommand;
+    private RelayCommand? _middleCommand;
     public RelayCommand MiddleCommand
     {
         get
@@ -211,7 +211,7 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private RelayCommand _upperRightCommand;
+    private RelayCommand? _upperRightCommand;
     public RelayCommand UpperRightCommand
     {
         get
@@ -228,7 +228,7 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
 
-    private RelayCommand _upperLeftCommand;
+    private RelayCommand? _upperLeftCommand;
     public RelayCommand UpperLeftCommand
     {
         get
@@ -245,9 +245,9 @@ public class MapOptionsPresenter : Notifier, ILocateable
     }
 
     #endregion
-     
+
     public MapOptionsPresenter(string rightToolTip, string leftToolTip, string middleToolTip,
-                                string rightSymbol, string leftSymbol, string middleSymbol)
+                                PackIconModernKind? rightSymbol, PackIconModernKind? leftSymbol, PackIconModernKind? middleSymbol)
     {
         this.RightToolTip = rightToolTip;
         this.LeftToolTip = leftToolTip;

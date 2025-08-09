@@ -427,7 +427,7 @@ public abstract class MapPresenter : BasePresenter
         if (provider is null)
             return;
 
-        if (provider.FullName == SelectedMapProvider.FullName)
+        if (provider.FullName == SelectedMapProvider?.FullName)
             return;
 
         if (!this.MapProviders.Contains(provider))

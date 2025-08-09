@@ -207,6 +207,18 @@
   <data name="srs_webMercatorTitle" xml:space="preserve">
     <value>وب مرکاتور</value>
   </data>
+  <data name="symbology_fillLabel" xml:space="preserve">
+    <value>رنگ سطح</value>
+  </data>
+  <data name="symbology_strokeLabel" xml:space="preserve">
+    <value>رنگ مرز</value>
+  </data>
+  <data name="symbology_strokeWidthLabel" xml:space="preserve">
+    <value>ضخامت مرز</value>
+  </data>
+  <data name="symbology_title" xml:space="preserve">
+    <value>سمبل لایه</value>
+  </data>
   <data name="tile_mapType_BlackWhite" xml:space="preserve">
     <value>سیاه‌سفید</value>
   </data>

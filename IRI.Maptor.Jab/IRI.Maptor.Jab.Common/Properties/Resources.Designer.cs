@@ -341,6 +341,42 @@ namespace IRI.Maptor.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fill.
+        /// </summary>
+        public static string symbology_fillLabel {
+            get {
+                return ResourceManager.GetString("symbology_fillLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stroke.
+        /// </summary>
+        public static string symbology_strokeLabel {
+            get {
+                return ResourceManager.GetString("symbology_strokeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stroke width.
+        /// </summary>
+        public static string symbology_strokeWidthLabel {
+            get {
+                return ResourceManager.GetString("symbology_strokeWidthLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layer Symbology.
+        /// </summary>
+        public static string symbology_title {
+            get {
+                return ResourceManager.GetString("symbology_title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BlackWhite.
         /// </summary>
         public static string tile_mapType_BlackWhite {

@@ -19,7 +19,7 @@
     <PackageVersion Include="Npgsql" Version="9.0.2" />
     <PackageVersion Include="System.Data.OleDb" Version="9.0.4" />
     <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
-    <PackageVersion Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+    <PackageVersion Include="MahApps.Metro.IconPacks" Version="6.0.0" />
     <PackageVersion Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageVersion Include="Telerik.UI.for.Wpf.60.Xaml" Version="2022.3.912" />
     <PackageVersion Include="Dapper" Version="2.0.123" />

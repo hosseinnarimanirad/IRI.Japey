@@ -211,6 +211,18 @@
   <data name="srs_webMercatorTitle" xml:space="preserve">
     <value>Web Mercator</value>
   </data>
+  <data name="symbology_fillLabel" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="symbology_strokeLabel" xml:space="preserve">
+    <value>Stroke</value>
+  </data>
+  <data name="symbology_strokeWidthLabel" xml:space="preserve">
+    <value>Stroke width</value>
+  </data>
+  <data name="symbology_title" xml:space="preserve">
+    <value>Layer Symbology</value>
+  </data>
   <data name="tile_mapType_BlackWhite" xml:space="preserve">
     <value>BlackWhite</value>
     <comment>GoogleBlackWhite</comment>

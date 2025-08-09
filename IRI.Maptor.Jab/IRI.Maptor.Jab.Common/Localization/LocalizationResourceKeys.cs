@@ -43,6 +43,10 @@ public enum LocalizationResourceKeys
     srs_webMercatorTitle,
     srs_webMercatorSubTitle,
 
+    symbology_fillLabel,
+    symbology_strokeLabel,
+    symbology_strokeWidthLabel,
+    symbology_title,
 
     tile_provider_bing,
     tile_provider_carto,
