@@ -1,0 +1,1 @@
+﻿A .NET standard library to work with gsm gprs

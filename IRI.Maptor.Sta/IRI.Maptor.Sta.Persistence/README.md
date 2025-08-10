@@ -1,0 +1,1 @@
+﻿A .NET standard library containing primitive types to work with persistence laysers

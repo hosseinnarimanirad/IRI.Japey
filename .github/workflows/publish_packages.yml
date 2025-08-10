@@ -1,101 +1,93 @@
-name: NuGet Package Publisher (IRI.Sta Projects)
+name: NuGet Package Publisher
 
 on:
   push:
-    branches: [ "master" ]
-
+    branches: [ master ]
+    
 env:
   DOTNET_VERSION: '8.0.x'
-  PROJECT_PREFIX: 'IRI.Sta'
+  PROJECT_PREFIXES: 'IRI.Maptor.Sta IRI.Maptor.Ket IRI.Maptor.Jab IRI.Maptor.Bas'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+  NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603'  
 
 jobs:
   build-and-publish:
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
-        fetch-depth: 0 
-    
-    # Cache .NET installation for faster builds
-    - name: Cache .NET
+        fetch-depth: 0
+        path: '.' 
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Cache dependencies
       uses: actions/cache@v3
       with:
         path: |
           ~/.dotnet
           ~/.nuget/packages
-        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/global.json') }}
+        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/Directory.Build.props') }}-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
-    
-    # Only setup .NET if not cached
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-    - name: Restore IRI.Sta projects
-      run: |
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet restore $_.FullName
-        }
-    
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0
-      with:
-        versionSpec: '5.x'
 
-    - name: Determine Version
-      id: gitversion
-      uses: gittools/actions/gitversion/execute@v0
-
-    - name: Display Version
+    - name: Restore dependencies
       run: |
-        echo "Major: ${{ steps.gitversion.outputs.major }}"
-        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-        echo "NuGet Version: ${{ steps.gitversion.outputs.nuGetVersion }}"
-    
-    - name: Build IRI.Sta projects
-      run: |
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet build $_.FullName --configuration Release --no-restore
-        }
-      
-    - name: Pack IRI.Sta projects
-      run: |
-        $versionSuffix = "ci-${{ github.run_number }}"
-        # Create nupkgs directory if it doesn't exist
-        if (!(Test-Path -Path "./nupkgs")) {
-          New-Item -ItemType Directory -Path "./nupkgs"
-        }
-        
-        Get-ChildItem -Path . -Recurse -Filter "${{ env.PROJECT_PREFIX }}*.csproj" | ForEach-Object {
-          dotnet pack $_.FullName `
-            --configuration Release `
-            --no-build `
-            --output ./nupkgs `
-            -p:PackageIcon="package-icon.png" `
-            -p:PackageIconFullPath="$($_.DirectoryName)/../../images/package-icon.png"
-        }
-        
-    - name: Push to NuGet
-      if: github.ref == 'refs/heads/master'  # Only push releases from master
-      run: |
-        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
-          dotnet nuget push $_.FullName `
-            --api-key ${{ secrets.NUGET_API_KEY }} `
-            --source ${{ secrets.NUGET_SOURCE || 'https://api.nuget.org/v3/index.json' }} `
-            --skip-duplicate
-        }
-        
-    - name: Push to GitHub Packages
-      if: github.ref == 'refs/heads/master'  # Only push releases from master
-      run: |
-        Get-ChildItem -Path ./nupkgs -Filter "${{ env.PROJECT_PREFIX }}*.nupkg" | ForEach-Object {
-            dotnet nuget push $_.FullName `
-              --api-key ${{ secrets.GITHUB_TOKEN }} `
-              --source "https://nuget.pkg.github.com/hosseinnarimanirad/index.json" `
-              --skip-duplicate
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
           }
-       
+        }
+
+    - name: Build
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet build $_.FullName `
+              --configuration Release `
+              --no-restore `
+              /p:NoWarn=$"{{ env.NOWARN_CODES }}" `
+              /p:WarningLevel=0 `
+              /p:GenerateDocumentationFile=false `
+              --verbosity minimal
+          }
+        }
+        
+    - name: Test
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.Tests.csproj" | ForEach-Object {
+            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
+          }
+        }
+
+    - name: Pack
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path . -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
+            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs             
+          }
+        }
+
+    - name: Publish to NuGet
+      if: github.ref == 'refs/heads/master'
+      run: |
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+        } 
+
+    - name: Upload Artifacts
+      if: github.ref != 'refs/heads/master'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./nupkgs/*.nupkg

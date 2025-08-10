@@ -1,0 +1,1 @@
+﻿A .NET standard library containing primitive types for hashing, cryptrography, etc.

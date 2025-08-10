@@ -13,7 +13,7 @@ Maptor is a **.NET-based geospatial library** designed for efficient spatial dat
 ✔ **Geometry Operations** – Points, lines, polygons, and spatial queries.  
 ✔ **Geodetic Calculations** – Distance, azimuth, and area computations.  
 ✔ **Raster & Vector I/O** – Shapefiles, GeoJSON, SQL Server, PostgreSQL, Personal GDB, GPX and raster support.  
-✔ **Graph algorithms** – BFS, DFS, Minimum spanning tree, Dijkstra, MinCut, FloydWarshall.
+✔ **Graph algorithms** – BFS, DFS, Minimum spanning tree, Dijkstra, MinCut, FloydWarshall.  
 ✔ **OGC Standards** - WKB, WKT, WFS, WMS, GML 2, GML 3.
 
 

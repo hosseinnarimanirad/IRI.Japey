@@ -1,0 +1,1 @@
+﻿A .NET standard library containing OGC standards such as SFA, SLD, WFS, WMS, GML, KML
