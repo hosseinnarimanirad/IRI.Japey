@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public enum AngleRange
 {
-    public enum AngleRange
-    {
-        ZeroTo2Pi = 0,
-        MinusPiTOPi = 1
-    }
+    ZeroTo2Pi = 0,
+    MinusPiTOPi = 1
 }

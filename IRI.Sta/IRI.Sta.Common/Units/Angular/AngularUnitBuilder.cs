@@ -5,80 +5,79 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public static class AngularUnitBuilder
 {
-    public static class AngularUnitBuilder
+
+    static AngularUnitBuilder()
+    {
+        m_UnitPairs = new Dictionary<AngleMode, Type>();
+
+        m_UnitPairs.Add(AngleMode.Degree, typeof(Degree));
+
+        m_UnitPairs.Add(AngleMode.Grade, typeof(Grade));
+
+        m_UnitPairs.Add(AngleMode.Radian, typeof(Radian));
+    }
+
+    public static AngularUnit Build(double value, AngleMode mode, AngleRange range)
     {
 
-        static AngularUnitBuilder()
+        switch (mode)
         {
-            m_UnitPairs = new Dictionary<AngleMode, Type>();
+            case AngleMode.Degree:
 
-            m_UnitPairs.Add(AngleMode.Degree, typeof(Degree));
+                return new Degree(value, range);
 
-            m_UnitPairs.Add(AngleMode.Grade, typeof(Grade));
+            case AngleMode.Grade:
 
-            m_UnitPairs.Add(AngleMode.Radian, typeof(Radian));
-        }
+                return new Grade(value, range);
 
-        public static AngularUnit Build(double value, AngleMode mode, AngleRange range)
-        {
+            case AngleMode.Radian:
 
-            switch (mode)
-            {
-                case AngleMode.Degree:
+                return new Radian(value, range);
 
-                    return new Degree(value, range);
-
-                case AngleMode.Grade:
-
-                    return new Grade(value, range);
-
-                case AngleMode.Radian:
-
-                    return new Radian(value, range);
-
-                default:
-                    throw new NotImplementedException();
-
-            }
+            default:
+                throw new NotImplementedException();
 
         }
 
-        public static AngularUnit BuildFromRadianValue(double value, AngleMode mode, AngleRange range)
+    }
+
+    public static AngularUnit BuildFromRadianValue(double value, AngleMode mode, AngleRange range)
+    {
+
+        switch (mode)
         {
+            case AngleMode.Degree:
 
-            switch (mode)
-            {
-                case AngleMode.Degree:
+                value = UnitConversion.RadianToDegree(value);
 
-                    value = UnitConversion.RadianToDegree(value);
+                break;
 
-                    break;
+            case AngleMode.Grade:
 
-                case AngleMode.Grade:
+                value = UnitConversion.RadianToGrade(value);
 
-                    value = UnitConversion.RadianToGrade(value);
+                break;
 
-                    break;
+            case AngleMode.Radian:
 
-                case AngleMode.Radian:
+                break;
 
-                    break;
-
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return Build(value, mode, range);
-
+            default:
+                throw new NotImplementedException();
         }
 
-        private static Dictionary<AngleMode, System.Type> m_UnitPairs;
+        return Build(value, mode, range);
 
-        public static Dictionary<AngleMode, System.Type> UnitPairs
-        {
-            get { return AngularUnitBuilder.m_UnitPairs; }
-        }
+    }
+
+    private static Dictionary<AngleMode, System.Type> m_UnitPairs;
+
+    public static Dictionary<AngleMode, System.Type> UnitPairs
+    {
+        get { return AngularUnitBuilder.m_UnitPairs; }
     }
 }

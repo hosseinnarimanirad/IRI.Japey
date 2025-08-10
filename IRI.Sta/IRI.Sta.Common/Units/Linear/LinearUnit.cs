@@ -5,50 +5,48 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public abstract class LinearUnit : IComparable<LinearUnit>
 {
-    public abstract class LinearUnit : IComparable<LinearUnit>
+    private double m_Value;
+
+    public double Value
     {
-        private double m_Value;
-
-        public double Value
+        get
         {
-            get
-            {
-                return m_Value;
-            }
-
-            set
-            {
-                m_Value = value;
-            }
+            return m_Value;
         }
 
-        public abstract LinearMode Mode { get; }
-
-        protected LinearUnit() { }
-
-        protected LinearUnit(double value)
+        set
         {
-            this.m_Value = value;
+            m_Value = value;
         }
-
-        public abstract LinearUnit Add(LinearUnit value);
-
-        public abstract LinearUnit Subtract(LinearUnit value);
-
-        public abstract LinearUnit Multiply(LinearUnit value);
-
-        public abstract LinearUnit Divide(LinearUnit value);
-
-        public abstract LinearUnit Negate();
-
-        public abstract LinearUnit Clone();
-
-        public abstract LinearUnit ChangeTo<T>()
-            where T : LinearUnit;
-
-        public abstract int CompareTo(LinearUnit other);
     }
 
+    public abstract LinearMode Mode { get; }
+
+    protected LinearUnit() { }
+
+    protected LinearUnit(double value)
+    {
+        this.m_Value = value;
+    }
+
+    public abstract LinearUnit Add(LinearUnit value);
+
+    public abstract LinearUnit Subtract(LinearUnit value);
+
+    public abstract LinearUnit Multiply(LinearUnit value);
+
+    public abstract LinearUnit Divide(LinearUnit value);
+
+    public abstract LinearUnit Negate();
+
+    public abstract LinearUnit Clone();
+
+    public abstract LinearUnit ChangeTo<T>()
+        where T : LinearUnit;
+
+    public abstract int CompareTo(LinearUnit other);
 }

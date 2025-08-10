@@ -1415,7 +1415,7 @@ public abstract class MapPresenter : BasePresenter
         string name = null,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>, Point> source = null)
+        VectorDataSource<Feature<Point>> source = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
@@ -1476,7 +1476,7 @@ public abstract class MapPresenter : BasePresenter
         string name,
         VisualParameters visualParameters = null,
         int id = int.MinValue,
-        VectorDataSource<Feature<Point>, Point> source = null)
+        VectorDataSource<Feature<Point>> source = null)
     {
         var shapeItem = DrawingItemLayer.CreateGeometryLayer(name, drawing, visualParameters, id, source);
 
@@ -1872,7 +1872,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 var commands = new List<ILegendCommand>();
 
-                foreach (var item in LegendCommand.GetDefaultVectorLayerCommands<Feature<Point>>())
+                foreach (var item in LegendCommand.GetDefaultVectorLayerCommands/*<Feature<Point>>*/())
                 {
                     commands.Add(item(this, layer));
                 }
@@ -3209,7 +3209,7 @@ public abstract class MapPresenter : BasePresenter
                         f => f.Label,
                         null);
 
-                    var geometries = dataSource.GetGeometries();
+                    var geometries = dataSource.GetAsFeatureSet()?.Features;
 
                     if (geometries.IsNullOrEmpty())
                         return;
@@ -3221,7 +3221,7 @@ public abstract class MapPresenter : BasePresenter
                         return;
                     }
 
-                    AddDrawingItem(geometries.First(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                 });
             }
 
@@ -3247,7 +3247,7 @@ public abstract class MapPresenter : BasePresenter
 
                     var dataSource = ShapefileDataSourceFactory.Create(fileName, new WebMercator());
 
-                    var geometries = dataSource.GetGeometries();
+                    var geometries = dataSource.GetAsFeatureSet()?.Features;
 
                     if (geometries.IsNullOrEmpty())
                         return;
@@ -3259,7 +3259,7 @@ public abstract class MapPresenter : BasePresenter
                         return;
                     }
 
-                    AddDrawingItem(geometries.First(), Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
+                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue, dataSource);
                 });
             }
 

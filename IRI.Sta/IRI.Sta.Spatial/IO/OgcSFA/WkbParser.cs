@@ -10,7 +10,7 @@ public static class WkbParser
 {
     #region Wkb To Geometry
 
-    public static Geometry<Point> Parse(byte[] wkb, int srid)
+    public static Geometry<Point>? Parse(byte[] wkb, int srid)
     {
         if (wkb.IsNullOrEmpty())
             return null;
@@ -181,7 +181,7 @@ public static class WkbParser
 
     #region Geometry To Wkb
 
-    internal static byte[] AsWkb<T>(Geometry<T> geometry) where T : IPoint, new()
+    internal static byte[]? AsWkb<T>(Geometry<T> geometry) where T : IPoint, new()
     {
         if (geometry.IsNullOrEmpty())
             return null;

@@ -47,18 +47,14 @@ public class UtmSheet : IGeometryAware<Point>
     public string SheetName { get; set; }
 
     public UtmIndexType Type { get; set; }
-
-    //public double Width { get; set; }
-
-    //public double Height { get; set; }
-
+     
     public int UtmZone { get; set; }
 
     static UtmSheet()
     {
-        _2kUtmBlockColumns = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U' };
+        _2kUtmBlockColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U'];
 
-        _2kUtmSheetColumns = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T' };
+        _2kUtmSheetColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
     }
 
     protected UtmSheet()
@@ -67,7 +63,7 @@ public class UtmSheet : IGeometryAware<Point>
     }
 
     //From BoundingBox
-    public static UtmSheet Create(BoundingBox utmBoundingBox, UtmIndexType type, int utmZone)
+    public static UtmSheet? Create(BoundingBox utmBoundingBox, UtmIndexType type, int utmZone)
     {
         var centerLatLong = MapProjects.UTMToGeodetic(utmBoundingBox.Center, utmZone);
 
@@ -113,7 +109,7 @@ public class UtmSheet : IGeometryAware<Point>
 
     //From lat/long
 
-    public static UtmSheet Create2kUtmBlock(double longitude, double latitude, int utmZone)
+    public static UtmSheet? Create2kUtmBlock(double longitude, double latitude, int utmZone)
     {
         var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
@@ -127,7 +123,7 @@ public class UtmSheet : IGeometryAware<Point>
         return Create2kBlock(rowColumn.Row, rowColumn.Column, utmZone);
     }
 
-    public static UtmSheet Create2kUtmSheet(double longitude, double latitude, int utmZone)
+    public static UtmSheet? Create2kUtmSheet(double longitude, double latitude, int utmZone)
     {
         var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
@@ -143,7 +139,7 @@ public class UtmSheet : IGeometryAware<Point>
         return Create2kSheet(block, rowColumn.Row, rowColumn.Column);
     }
 
-    public static UtmSheet Create1kUtmSheet(double longitude, double latitude, int utmZone)
+    public static UtmSheet? Create1kUtmSheet(double longitude, double latitude, int utmZone)
     {
         var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
@@ -159,7 +155,7 @@ public class UtmSheet : IGeometryAware<Point>
         return Create1kSheet(utm2kSheet, rowColumn.Row, rowColumn.Column);
     }
 
-    public static UtmSheet Create500UtmSheet(double longitude, double latitude, int utmZone)
+    public static UtmSheet? Create500UtmSheet(double longitude, double latitude, int utmZone)
     {
         var utmPoint = MapProjects.GeodeticToUTM(new Point(longitude, latitude), Ellipsoids.WGS84, utmZone);
 
@@ -184,13 +180,9 @@ public class UtmSheet : IGeometryAware<Point>
             Row = row,
             Column = column,
             UtmZone = utmZone,
-            SheetName = $"{utmZone}{_2kUtmBlockColumns[column]}{(row + 1).ToString("00")}",
+            SheetName = $"{utmZone}{_2kUtmBlockColumns[column]}{row + 1:00}",
             Type = UtmIndexType.Ncc2kBlock,
-            UtmExtent = CreateBound(row, column, UtmIndexes._2kUtmXmin, UtmIndexes._2kUtmYmax, UtmIndexes._2kUtmBlockWidth, UtmIndexes._2kUtmBlockHeight)
-            //Extent = new BoundingBox(MapIndexes._2kUtmXmin + column * MapIndexes._2kUtmBlockWidth,
-            //                         MapIndexes._2kUtmYmax - (row + 1) * MapIndexes._2kUtmBlockHeight,
-            //                         MapIndexes._2kUtmXmin + (column + 1) * MapIndexes._2kUtmBlockWidth,
-            //                         MapIndexes._2kUtmYmax - row * MapIndexes._2kUtmBlockHeight)
+            UtmExtent = CreateBound(row, column, UtmIndexes._2kUtmXmin, UtmIndexes._2kUtmYmax, UtmIndexes._2kUtmBlockWidth, UtmIndexes._2kUtmBlockHeight) 
         };
 
         return result;
@@ -199,16 +191,14 @@ public class UtmSheet : IGeometryAware<Point>
     private static UtmSheet Create2kSheet(UtmSheet utm2kBlock, int row, int column)
     {
         if (utm2kBlock.Type != UtmIndexType.Ncc2kBlock)
-        {
             throw new NotImplementedException();
-        }
 
         UtmSheet result = new UtmSheet()
         {
             Row = row,
             Column = column,
             UtmZone = utm2kBlock.UtmZone,
-            SheetName = $"{utm2kBlock.SheetName}{_2kUtmSheetColumns[column]}{(row + 1).ToString("00")}",
+            SheetName = $"{utm2kBlock.SheetName}{_2kUtmSheetColumns[column]}{row + 1:00}",
             Type = UtmIndexType.Ncc2kSheet,
             UtmExtent = CreateBound(row, column, utm2kBlock.UtmExtent.XMin, utm2kBlock.UtmExtent.YMax, UtmIndexes._2kUtmSheetWidth, UtmIndexes._2kUtmSheetHeight)
         };
@@ -219,9 +209,7 @@ public class UtmSheet : IGeometryAware<Point>
     private static UtmSheet Create1kSheet(UtmSheet utm2kSheet, int row, int column)
     {
         if (utm2kSheet.Type != UtmIndexType.Ncc2kSheet)
-        {
             throw new NotImplementedException();
-        }
 
         UtmSheet result = new UtmSheet()
         {
@@ -239,9 +227,7 @@ public class UtmSheet : IGeometryAware<Point>
     private static UtmSheet Create500Sheet(UtmSheet utm1kSheet, int row, int column)
     {
         if (utm1kSheet.Type != UtmIndexType.Ncc1k)
-        {
             throw new NotImplementedException();
-        }
 
         UtmSheet result = new UtmSheet()
         {
@@ -255,10 +241,7 @@ public class UtmSheet : IGeometryAware<Point>
 
         return result;
     }
-
-
-
-
+      
     private static BoundingBox CreateBound(int row, int column, double xMin, double yMax, double width, double height)
     {
         return new BoundingBox(xMin + column * width,
@@ -270,25 +253,19 @@ public class UtmSheet : IGeometryAware<Point>
     private static int RowColumnToSheetNumber(int row, int column)
     {
         if (row == 0 && column == 1)
-        {
             return 1;
-        }
+         
         else if (row == 1 && column == 1)
-        {
             return 2;
-        }
+         
         else if (row == 1 && column == 0)
-        {
             return 3;
-        }
+         
         else if (row == 0 && column == 0)
-        {
             return 4;
-        }
+         
         else
-        {
             throw new NotImplementedException();
-        }
     }
 
     private static RowColumn CalculateRowColumn(BoundingBox utmBoundingBox, Point utmPoint, double columnWidth, double rowHeight)

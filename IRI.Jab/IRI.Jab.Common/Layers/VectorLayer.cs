@@ -213,7 +213,7 @@ public class VectorLayer : BaseLayer
     {
         if (geometries.IsNullOrEmpty())
             return null;
-         
+
         var pen = this.VisualParameters.GetWpfPen();
 
         Brush brush = this.VisualParameters.Fill;
@@ -658,30 +658,6 @@ public class VectorLayer : BaseLayer
         element.SetBinding(Path.OpacityProperty, binding5);
     }
 
-    //private LayerType GetGeometryType(Geometry<Point> geometry)
-    //{
-    //    switch (geometry.Type)
-    //    {
-    //        case GeometryType.Point:
-    //        case GeometryType.MultiPoint:
-    //            return LayerType.Point;
-
-    //        case GeometryType.LineString:
-    //        case GeometryType.MultiLineString:
-    //            return LayerType.Polyline;
-
-    //        case GeometryType.Polygon:
-    //        case GeometryType.MultiPolygon:
-    //            return LayerType.Polygon;
-
-    //        case GeometryType.GeometryCollection:
-    //        case GeometryType.CircularString:
-    //        case GeometryType.CompoundCurve:
-    //        case GeometryType.CurvePolygon:
-    //        default:
-    //            throw new NotImplementedException();
-    //    }
-    //}
 
     #region Raster Save And Export Methods
 
@@ -884,14 +860,14 @@ public class VectorLayer : BaseLayer
     public void ExportAsShapefile(string shpFileName)
     {
         //var features = GetFeatures<T>();
-        var features = this.DataSource.GetAsFeatureSetOfPoint();
+        var features = this.DataSource.GetAsFeatureSet();
 
         features.SaveAsShapefile(shpFileName, System.Text.Encoding.UTF8, null, true);
     }
 
     public void ExportAsGeoJson(string geoJsonFileName, bool isLongitudeFirst)
     {
-        var features = this.DataSource.GetAsFeatureSetOfPoint();
+        var features = this.DataSource.GetAsFeatureSet();
 
         features.SaveAsGeoJson(geoJsonFileName, isLongitudeFirst);
     }
@@ -908,11 +884,11 @@ public class VectorLayer : BaseLayer
 
         if (this.CanRenderLabels(mapScale))
         {
-            var geoLabelPairs = await this.DataSource.GetNamedGeometriesAsync(mapExtent);
+            var geoLabelPairs = await this.DataSource.GetAsFeatureSetAsync(mapExtent);
 
-            geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
+            geometries = geoLabelPairs.Features.Select(i => i.TheGeometry).ToList();
 
-            labels = geoLabelPairs.Select(i => i.Label).ToList();
+            labels = geoLabelPairs.Features.Select(i => i.Label).ToList();
         }
         else
         {
@@ -922,27 +898,7 @@ public class VectorLayer : BaseLayer
         return new GeometryLabelPairs(geometries, labels);
     }
 
-    //public async GeometryLabelPairs GetGeometryLabelPairForDisplay(double mapScale, BoundingBox mapExtent)
-    //{
-    //    List<Geometry<Point>> geometries; List<string> labels = null;
-
-    //    if (this.IsLabeled(mapScale))
-    //    {
-    //        var geoLabelPairs =await this.DataSource.GetGeometryLabelPairsForDisplayAsync(mapExtent);
-
-    //        geometries = geoLabelPairs.Select(i => i.TheGeometry).ToList();
-
-    //        labels = geoLabelPairs.Select(i => i.Label).ToList();
-    //    }
-    //    else
-    //    {
-    //        geometries = this.GetGeometriesForDisplay(mapScale, mapExtent);
-    //    }
-
-    //    return new GeometryLabelPairs(geometries, labels);
-    //}
-
-    public async Task<List<Geometry<Point>>>? GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
+    public async Task<List<Geometry<Point>>?> GetGeometriesForDisplayAsync(double mapScale, BoundingBox boundingBox)
     {
         List<Geometry<Point>> geometries = new List<Geometry<Point>>();
 
@@ -952,7 +908,7 @@ public class VectorLayer : BaseLayer
         }
         else
         {
-            geometries = (await this.DataSource.GetAsFeatureSetOfPointAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
+            geometries = (await this.DataSource.GetAsFeatureSetAsync(mapScale, boundingBox)).Features.Select(f => f.TheGeometry).ToList();
         }
 
         if (geometries.Count == 0)
@@ -985,9 +941,9 @@ public class VectorLayer : BaseLayer
     //    return DataSource?.GetEntireFeatures();
     //}
 
-    public List<T>? GetFeatures<T>() where T : class, IGeometryAware<Point>
+    public FeatureSet<Point>? GetFeatures/*<T>*/()// where T : class, IGeometryAware<Point>
     {
-        return GetFeatures<T>(null);
+        return GetFeatures/*<T>*/(null);
     }
 
     public List<Field>? GetFields()
@@ -995,12 +951,15 @@ public class VectorLayer : BaseLayer
         return DataSource?.Fields;
     }
 
-    public List<TGeometryAware>? GetFeatures<TGeometryAware>(Geometry<Point> geometry) where TGeometryAware : class, IGeometryAware<Point>
+    public FeatureSet<Point>? GetFeatures/*<TGeometryAware>*/(Geometry<Point>? geometry) //where TGeometryAware : class, IGeometryAware<Point>
     {
-        if (DataSource as VectorDataSource<TGeometryAware, Point> != null)
-        {
-            return (DataSource as VectorDataSource<TGeometryAware, Point>)!.GetGeometryAwares(geometry);
-        }
+        return DataSource.GetAsFeatureSet(geometry);
+
+        //if (DataSource as VectorDataSource<TGeometryAware> != null)
+        //{
+        //    //return (DataSource as VectorDataSource<TGeometryAware>)!.GetGeometryAwares(geometry);
+        //    return (DataSource as VectorDataSource<TGeometryAware>)!.GetAsFeatureSet(geometry);
+        //}
 
         return null;
     }

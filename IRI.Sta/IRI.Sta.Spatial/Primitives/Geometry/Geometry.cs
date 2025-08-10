@@ -1742,7 +1742,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return WktParser.AsWkt(this);
     }
 
-    public byte[] AsWkb()
+    public byte[]? AsWkb()
     {
         return WkbParser.AsWkb(this);
     }

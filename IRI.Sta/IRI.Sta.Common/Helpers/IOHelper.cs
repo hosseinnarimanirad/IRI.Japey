@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace IRI.Sta.Spatial.Helpers;
+namespace IRI.Sta.Common.Helpers;
 
 public static class IOHelper
 {
@@ -39,9 +39,9 @@ public static class IOHelper
     {
         try
         {
-            if (!System.IO.Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
-                System.IO.Directory.CreateDirectory(path);
+                Directory.CreateDirectory(path);
             }
 
             return true;
@@ -54,7 +54,7 @@ public static class IOHelper
 
     public static string GetExtensionWithoutDot(string path)
     {
-        return System.IO.Path.GetExtension(path).Replace(".", "");
+        return Path.GetExtension(path).Replace(".", "");
     }
 
     public static List<string[]> ReadAllDelimitedFile(string fileName, params char[] delimited)
@@ -64,7 +64,7 @@ public static class IOHelper
             return new List<string[]>();
         }
 
-        var lines = System.IO.File.ReadAllLines(fileName);
+        var lines = File.ReadAllLines(fileName);
 
         var result = new List<string[]>();
 

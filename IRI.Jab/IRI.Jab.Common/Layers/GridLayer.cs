@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
 using IRI.Jab.Common.Model;
+using IRI.Jab.Common.Enums;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Persistence.DataSources;
-using IRI.Jab.Common.Enums;
+using System.Linq;
 
 namespace IRI.Jab.Common;
 
@@ -23,13 +24,13 @@ public class GridLayer : BaseLayer
         DataSource = source;
     }
 
-    public List<Geometry<Point>> GetLines(BoundingBox boundingBox)
+    public List<Geometry<Point>>? GetLines(BoundingBox boundingBox)
     {
-        if (DataSource == null)
+        if (DataSource is null)
         {
             return null;
         }
 
-        return DataSource.GetGeometries(boundingBox);
+        return DataSource.GetAsFeatureSet(boundingBox).Features.Select(f => f.TheGeometry).ToList(); ;
     }
 }

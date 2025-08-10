@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public enum AngleMode
 {
-    public enum AngleMode
-    {
-        Degree,
-        Grade,
-        Radian,
-        //mil//1/6400
-    }
+    Degree,
+    Grade,
+    Radian,
+    //mil//1/6400
 }

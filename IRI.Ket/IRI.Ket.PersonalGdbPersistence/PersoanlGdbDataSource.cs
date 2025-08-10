@@ -10,7 +10,7 @@ using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Ket.PersonalGdbPersistence;
 
-public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// RelationalDbSource<Feature<Point>>
+public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>>// RelationalDbSource<Feature<Point>>
 {
     protected BoundingBox _extent = BoundingBox.NaN;
 
@@ -373,7 +373,7 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
     }
 
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
         if (geometry is not null)
         {
@@ -387,10 +387,10 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         }
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
-    {
-        return GetAsFeatureSetOfPoint(geometry).Features;
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(Geometry<Point>? geometry)
+    //{
+    //    return GetAsFeatureSet(geometry).Features;
+    //}
 
     //public override void Add(Feature<Point> newValue)
     //{
@@ -422,13 +422,13 @@ public class PersoanlGdbDataSource : VectorDataSource<Feature<Point>, Point>// R
         return Select(null, searchText);
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         throw new NotImplementedException();
     }
 
-    public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
-    {
-        throw new NotImplementedException();
-    }
+    //public override List<Feature<Point>> GetGeometryAwares(BoundingBox boundingBox)
+    //{
+    //    throw new NotImplementedException();
+    //}
 }

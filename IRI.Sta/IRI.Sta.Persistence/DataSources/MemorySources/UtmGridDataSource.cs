@@ -11,7 +11,7 @@ using IRI.Sta.SpatialReferenceSystem;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
+public class UtmGridDataSource : VectorDataSource<UtmSheet>
 {
     public int UtmZone { get; set; }
 
@@ -45,14 +45,14 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
 
 
     // Get GeometryAwares [GENERIC]
-    public override List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
+    public List<UtmSheet> GetGeometryAwares(BoundingBox boundingBox)
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToGeodeticWgs84);
 
         return UtmIndexes.GetIndexSheets(geographicBoundingBox, Type, UtmZone);
     }
 
-    public override List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
+    public List<UtmSheet> GetGeometryAwares(Geometry<Point>? geometry)
     {
         var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 
@@ -63,7 +63,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
 
 
     // Get as FeatureSet of Point
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         var geographicBoundingBox = boundingBox.Transform(MapProjects.WebMercatorToMercatorWgs84);
 
@@ -75,7 +75,7 @@ public class UtmGridDataSource : VectorDataSource<UtmSheet, Point>
         return new FeatureSet<Point>(features);
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
         var geographicBoundingBox = geometry?.GetBoundingBox().Transform(MapProjects.WebMercatorToGeodeticWgs84) ?? GeodeticWgs84Extent;
 

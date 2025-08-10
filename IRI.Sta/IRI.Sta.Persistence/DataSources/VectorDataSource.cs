@@ -3,18 +3,16 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using IRI.Sta.Common.Primitives;
-using IRI.Sta.Common.Abstrations;
+using IRI.Sta.Common.Primitives; 
 using IRI.Sta.Spatial.Primitives;
 using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSource
-    where TGeometryAware : class, IGeometryAware<TPoint>
-    where TPoint : IPoint, new()
+public abstract class VectorDataSource<TGeometryAware> : IVectorDataSource
+    where TGeometryAware : class, IGeometryAware<Point>
 {
-    protected abstract Feature<TPoint> ToFeatureMappingFunc(TGeometryAware geometryAware);
+    protected abstract Feature<Point> ToFeatureMappingFunc(TGeometryAware geometryAware);
 
     public virtual BoundingBox WebMercatorExtent { get; protected set; }
 
@@ -26,154 +24,136 @@ public abstract class VectorDataSource<TGeometryAware, TPoint> : IVectorDataSour
 
     #region Get Geometries
 
-    public virtual List<Geometry<Point>> GetGeometries() => GetGeometries(null);
+    //public virtual List<Geometry<Point>> GetGeometries() => GetGeometries(null);
 
-    public virtual List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
-    {
-        return GetAsFeatureSetOfPoint(boundingBox).Features.Select(f => f.TheGeometry).ToList();
-    }
-
-    public virtual List<Geometry<Point>> GetGeometries(Geometry<Point>? geometry)
-    {
-        return GetAsFeatureSetOfPoint(geometry).Features.Select(f => f.TheGeometry).ToList();
-    }
-
-
-    public virtual Task<List<Geometry<Point>>> GetGeometriesAsync() => Task.Run(GetGeometries);
-
-    public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetGeometries(boundingBox));
-    }
-
-    public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(Geometry<Point>? geometry)
-    {
-        return Task.Run(() => GetGeometries(geometry));
-    }
-
-    #endregion
-
-
-    #region Get Named-Geometries
-
-    public virtual List<NamedGeometry> GetNamedGeometries()
-    {
-        return GetNamedGeometries(Geometry<Point>.Empty);
-    }
-
-    public virtual List<NamedGeometry> GetNamedGeometries(BoundingBox boundingBox)
-    {
-        return GetAsFeatureSetOfPoint(boundingBox).Features.Select(f => new NamedGeometry(f.TheGeometry, f.Label)).ToList();
-    }
-
-    public virtual List<NamedGeometry> GetNamedGeometries(Geometry<Point>? geometry)
-    {
-        return GetAsFeatureSetOfPoint(geometry).Features.Select(f => new NamedGeometry(f.TheGeometry, f.Label)).ToList();
-    }
-
-    public virtual List<NamedGeometry> GetNamedGeometries(double mapScale, BoundingBox boundingBox)
-    {
-        return GetNamedGeometries(boundingBox);
-    }
-
-
-    public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync() => Task.Run(GetNamedGeometries);
-
-    public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetNamedGeometries(boundingBox));
-    }
-
-    public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(Geometry<Point>? geometry)
-    {
-        return Task.Run(() => GetNamedGeometries(geometry));
-    }
-
-    public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(double mapScale, BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetNamedGeometries(mapScale, boundingBox));
-    }
-
-    #endregion
-
-
-    #region Get as FeatureSet of Point
-
-    public virtual FeatureSet<Point> GetAsFeatureSetOfPoint() => GetAsFeatureSetOfPoint(Geometry<Point>.Empty);
-
-    public abstract FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox);
-
-    public abstract FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry);
-
-    public virtual FeatureSet<Point> GetAsFeatureSetOfPoint(double mapScale, BoundingBox boundingBox)
-    {
-        return GetAsFeatureSetOfPoint(boundingBox);
-    }
-
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync() => Task.Run(GetAsFeatureSetOfPoint);
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetAsFeatureSetOfPoint(boundingBox));
-    }
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(Geometry<Point>? geometry)
-    {
-        return Task.Run(() => GetAsFeatureSetOfPoint(geometry));
-    }
-
-    public virtual Task<FeatureSet<Point>> GetAsFeatureSetOfPointAsync(double mapScale, BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetAsFeatureSetOfPoint(mapScale, boundingBox));
-    }
-
-    #endregion
-
-
-    #region Get GeometryAwares [GENERIC]
-
-    public virtual List<TGeometryAware> GetGeometryAwares() => GetGeometryAwares(Geometry<TPoint>.Empty);
-
-    public abstract List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox);
-
-    public abstract List<TGeometryAware> GetGeometryAwares(Geometry<TPoint>? geometry);
-
-
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync() => Task.Run(GetGeometryAwares);
-
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(BoundingBox boundingBox)
-    {
-        return Task.Run(() => GetGeometryAwares(boundingBox));
-    }
-
-    public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(Geometry<TPoint>? geometry)
-    {
-        return Task.Run(() => GetGeometryAwares(geometry));
-    }
-
-    #endregion
-
-
-    #region Get Features [Generic]
-
-    public virtual FeatureSet<TPoint> GetAsFeatureSet() => GetAsFeatureSet(Geometry<TPoint>.Empty);
+    //public virtual List<Geometry<Point>> GetGeometries(BoundingBox boundingBox)
     //{
-    //return new FeatureSet<TPoint>(GetGeometryAwares().Select(ToFeatureMappingFunc).ToList());            
+    //    return GetAsFeatureSet(boundingBox).Features.Select(f => f.TheGeometry).ToList();
     //}
 
-    public virtual FeatureSet<TPoint> GetAsFeatureSet(BoundingBox boundingBox)
-    {
-        //var features = GetAsFeatureSet().Features.Where(i => !i.TheGeometry.IsNotValidOrEmpty() && i.TheGeometry.Intersects(boundingBox)).ToList();
-        return new FeatureSet<TPoint>(GetGeometryAwares(boundingBox).Select(ToFeatureMappingFunc).ToList());
-    }
+    //public virtual List<Geometry<Point>> GetGeometries(Geometry<Point>? geometry)
+    //{
+    //    return GetAsFeatureSet(geometry).Features.Select(f => f.TheGeometry).ToList();
+    //}
 
-    public virtual FeatureSet<TPoint> GetAsFeatureSet(Geometry<TPoint>? geometry)
-    {
-        return new FeatureSet<TPoint>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList());
-    }
+
+    //public virtual Task<List<Geometry<Point>>> GetGeometriesAsync() => Task.Run(GetGeometries);
+
+    //public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(BoundingBox boundingBox) => Task.Run(() => GetGeometries(boundingBox));
+
+    //public virtual Task<List<Geometry<Point>>> GetGeometriesAsync(Geometry<Point>? geometry) => Task.Run(() => GetGeometries(geometry));
 
     #endregion
+
+
+    //#region Get Named-Geometries
+
+    //public virtual List<NamedGeometry> GetNamedGeometries()
+    //{
+    //    return GetNamedGeometries(Geometry<Point>.Empty);
+    //}
+
+    //public virtual List<NamedGeometry> GetNamedGeometries(BoundingBox boundingBox)
+    //{
+    //    return GetAsFeatureSet(boundingBox).Features.Select(f => new NamedGeometry(f.TheGeometry, f.Label)).ToList();
+    //}
+
+    //public virtual List<NamedGeometry> GetNamedGeometries(Geometry<Point>? geometry)
+    //{
+    //    return GetAsFeatureSet(geometry).Features.Select(f => new NamedGeometry(f.TheGeometry, f.Label)).ToList();
+    //}
+
+    //public virtual List<NamedGeometry> GetNamedGeometries(double mapScale, BoundingBox boundingBox)
+    //{
+    //    return GetNamedGeometries(boundingBox);
+    //}
+
+
+    //public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync() => Task.Run(GetNamedGeometries);
+
+    //public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(BoundingBox boundingBox)
+    //{
+    //    return Task.Run(() => GetNamedGeometries(boundingBox));
+    //}
+
+    //public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(Geometry<Point>? geometry)
+    //{
+    //    return Task.Run(() => GetNamedGeometries(geometry));
+    //}
+
+    //public virtual Task<List<NamedGeometry>> GetNamedGeometriesAsync(double mapScale, BoundingBox boundingBox)
+    //{
+    //    return Task.Run(() => GetNamedGeometries(mapScale, boundingBox));
+    //}
+
+    //#endregion
+
+
+    #region Get as FeatureSet
+
+    public virtual FeatureSet<Point> GetAsFeatureSet() => GetAsFeatureSet(Geometry<Point>.Empty);
+
+    public abstract FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox);
+
+    public abstract FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry);
+
+    public virtual FeatureSet<Point> GetAsFeatureSet(double mapScale, BoundingBox boundingBox) => GetAsFeatureSet(boundingBox);
+
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync() => Task.Run(GetAsFeatureSet);
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(boundingBox));
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(Geometry<Point>? geometry) => Task.Run(() => GetAsFeatureSet(geometry));
+
+    public virtual Task<FeatureSet<Point>> GetAsFeatureSetAsync(double mapScale, BoundingBox boundingBox) => Task.Run(() => GetAsFeatureSet(mapScale, boundingBox));
+
+    #endregion
+
+
+    //#region Get GeometryAwares [GENERIC]
+
+    //public virtual List<TGeometryAware> GetGeometryAwares() => GetGeometryAwares(Geometry<Point>.Empty);
+
+    //public abstract List<TGeometryAware> GetGeometryAwares(BoundingBox boundingBox);
+
+    //public abstract List<TGeometryAware> GetGeometryAwares(Geometry<Point>? geometry);
+
+
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync() => Task.Run(GetGeometryAwares);
+
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(BoundingBox boundingBox)
+    //{
+    //    return Task.Run(() => GetGeometryAwares(boundingBox));
+    //}
+
+    //public virtual Task<List<TGeometryAware>> GetGeometryAwaresAsync(Geometry<Point>? geometry)
+    //{
+    //    return Task.Run(() => GetGeometryAwares(geometry));
+    //}
+
+    //#endregion
+
+
+    //#region Get Features [Generic]
+
+    //public virtual FeatureSet<Point> GetAsFeatureSet() => GetAsFeatureSet(Geometry<Point>.Empty);
+    ////{
+    ////return new FeatureSet<TPoint>(GetGeometryAwares().Select(ToFeatureMappingFunc).ToList());            
+    ////}
+
+    //public virtual FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
+    //{
+    //    //var features = GetAsFeatureSet().Features.Where(i => !i.TheGeometry.IsNotValidOrEmpty() && i.TheGeometry.Intersects(boundingBox)).ToList();
+    //    return new FeatureSet<Point>(GetGeometryAwares(boundingBox).Select(ToFeatureMappingFunc).ToList());
+    //}
+
+    //public virtual FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
+    //{
+    //    return new FeatureSet<Point>(GetGeometryAwares(geometry).Select(ToFeatureMappingFunc).ToList());
+    //}
+
+    //#endregion
 
 
     #region Other

@@ -15,7 +15,7 @@ using IRI.Sta.Persistence.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware, Point>, IScaleDependentDataSource where TGeometryAware : class, IGeometryAware<Point>
+public class MemoryScaleDependentDataSource<TGeometryAware> : MemoryDataSource<TGeometryAware>, IScaleDependentDataSource where TGeometryAware : class, IGeometryAware<Point>
 {
     Dictionary<double, List<Geometry<Point>>> source;
 

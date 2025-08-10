@@ -17,7 +17,7 @@ using IRI.Sta.ShapefileFormat.ShapeTypes.Abstractions;
 
 namespace IRI.Sta.Persistence.DataSources;
 
-public class ShapefileDataSource : MemoryDataSource<Feature<Point>, Point>
+public class ShapefileDataSource : MemoryDataSource<Feature<Point>>
 {
     string _shapefileName;
 

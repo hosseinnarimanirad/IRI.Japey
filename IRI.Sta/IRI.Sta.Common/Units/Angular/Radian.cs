@@ -5,213 +5,212 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace IRI.Sta.Metrics
+namespace IRI.Sta.Metrics;
+
+public class Radian : AngularUnit
 {
-    public class Radian : AngularUnit
+    #region Fields
+
+    private readonly double[] minValue = new double[] { 0, -Math.PI };
+
+    private readonly double[] maxValue = new double[] { 2 * Math.PI, Math.PI };
+
+    private const double period = 2 * Math.PI;
+
+    #endregion
+
+    #region Properties
+
+    public override AngleMode Mode
     {
-        #region Fields
+        get { return AngleMode.Radian; }
+    }
 
-        private readonly double[] minValue = new double[] { 0, -Math.PI };
+    //public override AngleRange Range
+    //{
+    //    get { return m_Range; }
 
-        private readonly double[] maxValue = new double[] { 2 * Math.PI, Math.PI };
+    //    set
+    //    {
+    //        this.m_Range = value;
 
-        private const double period = 2 * Math.PI;
+    //        SetValue(this.m_Value);
+    //    }
+    //}
 
-        #endregion
+    public override double Sin
+    {
+        get { return Math.Sin(this.Value); }
+    }
 
-        #region Properties
+    public override double Cos
+    {
+        get { return Math.Cos(this.Value); }
+    }
 
-        public override AngleMode Mode
+    public override double Tan
+    {
+        get { return Math.Tan(this.Value); }
+    }
+
+    public override double Cot
+    {
+        get { return 1 / Math.Tan(this.Value); }
+    }
+
+    public override double Sinh
+    {
+        get { return Math.Sinh(this.Value); }
+    }
+
+    public override double Cosh
+    {
+        get { return Math.Cosh(this.Value); }
+    }
+
+    public override double Tanh
+    {
+        get { return Math.Tanh(this.Value); }
+    }
+
+    #endregion
+
+    #region Constructors
+
+    public Radian() 
+        : base(0, AngleRange.ZeroTo2Pi) { }
+
+    public Radian(double value) 
+        : base(value, AngleRange.ZeroTo2Pi) { }
+
+    public Radian(double value, AngleRange range)
+        : base(value, range) { }
+
+    #endregion
+
+    #region Methods
+
+    public override AngularUnit Add(AngularUnit value)
+    {
+        return new Radian(this.Value + value.ChangeTo<Radian>().Value, this.Range);
+    }
+
+    public override AngularUnit Subtract(AngularUnit value)
+    {
+        return new Radian(this.Value - value.ChangeTo<Radian>().Value, this.Range);
+    }
+
+    public override AngularUnit Multiply(AngularUnit value)
+    {
+        return new Radian(this.Value * value.ChangeTo<Radian>().Value, this.Range);
+    }
+
+    public override AngularUnit Divide(AngularUnit value)
+    {
+        return new Radian(this.Value / value.ChangeTo<Radian>().Value, this.Range);
+    }
+
+    public override AngularUnit Negate()
+    {
+        return new Radian(-this.Value, this.Range);
+    }
+
+    public override string ToString()
+    {
+        return string.Format(CultureInfo.InvariantCulture,
+                                  "{0} Radian",
+                                  this.Value.ToString(CultureInfo.InvariantCulture));
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj.GetType() == typeof(Radian))
         {
-            get { return AngleMode.Radian; }
+            return this == (Radian)obj;
         }
 
-        //public override AngleRange Range
-        //{
-        //    get { return m_Range; }
+        return false;
+    }
 
-        //    set
-        //    {
-        //        this.m_Range = value;
+    public override int GetHashCode()
+    {
+        return this.ToString().GetHashCode();
+    }
 
-        //        SetValue(this.m_Value);
-        //    }
-        //}
-
-        public override double Sin
+    public sealed override AngleAdapter Adapter
+    {
+        get
         {
-            get { return Math.Sin(this.Value); }
+            return new AngleAdapter(minValue[(int)this.Range],
+                                    maxValue[(int)this.Range],
+                                    period);
         }
+    }
 
-        public override double Cos
+    public override AngularUnit Clone()
+    {
+        return new Radian(this.Value, this.Range);
+    }
+
+    public override AngularUnit ChangeTo<T>()
+    {
+        if (typeof(T) == typeof(Degree))
         {
-            get { return Math.Cos(this.Value); }
+            return (Degree)this;
         }
-
-        public override double Tan
+        else if (typeof(T) == typeof(Grade))
         {
-            get { return Math.Tan(this.Value); }
+            return (Grade)this;
         }
-
-        public override double Cot
+        else if (typeof(T) == typeof(Radian))
         {
-            get { return 1 / Math.Tan(this.Value); }
+            return this.Clone();
         }
+        else
+            throw new NotImplementedException();
+    }
 
-        public override double Sinh
-        {
-            get { return Math.Sinh(this.Value); }
-        }
+    public override int CompareTo(AngularUnit other)
+    {
+        return this.Value.CompareTo(other.ChangeTo<Radian>().Value);
+    }
 
-        public override double Cosh
-        {
-            get { return Math.Cosh(this.Value); }
-        }
+    #endregion
 
-        public override double Tanh
-        {
-            get { return Math.Tanh(this.Value); }
-        }
+    #region Operators
 
-        #endregion
+    public static bool operator ==(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) == 0); }
 
-        #region Constructors
+    public static bool operator !=(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) != 0); }
 
-        public Radian() 
-            : base(0, AngleRange.ZeroTo2Pi) { }
+    public static bool operator <(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) < 0); }
 
-        public Radian(double value) 
-            : base(value, AngleRange.ZeroTo2Pi) { }
+    public static bool operator >(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) > 0); }
 
-        public Radian(double value, AngleRange range)
-            : base(value, range) { }
+    public static bool operator <=(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) <= 0); }
 
-        #endregion
+    public static bool operator >=(Radian firstValue, AngularUnit secondValue)
+    { return (firstValue.CompareTo(secondValue) >= 0); }
 
-        #region Methods
+    public static explicit operator Degree(Radian angle)
+    {
 
-        public override AngularUnit Add(AngularUnit value)
-        {
-            return new Radian(this.Value + value.ChangeTo<Radian>().Value, this.Range);
-        }
-
-        public override AngularUnit Subtract(AngularUnit value)
-        {
-            return new Radian(this.Value - value.ChangeTo<Radian>().Value, this.Range);
-        }
-
-        public override AngularUnit Multiply(AngularUnit value)
-        {
-            return new Radian(this.Value * value.ChangeTo<Radian>().Value, this.Range);
-        }
-
-        public override AngularUnit Divide(AngularUnit value)
-        {
-            return new Radian(this.Value / value.ChangeTo<Radian>().Value, this.Range);
-        }
-
-        public override AngularUnit Negate()
-        {
-            return new Radian(-this.Value, this.Range);
-        }
-
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.InvariantCulture,
-                                      "{0} Radian",
-                                      this.Value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(Radian))
-            {
-                return this == (Radian)obj;
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.ToString().GetHashCode();
-        }
-
-        public sealed override AngleAdapter Adapter
-        {
-            get
-            {
-                return new AngleAdapter(minValue[(int)this.Range],
-                                        maxValue[(int)this.Range],
-                                        period);
-            }
-        }
-
-        public override AngularUnit Clone()
-        {
-            return new Radian(this.Value, this.Range);
-        }
-
-        public override AngularUnit ChangeTo<T>()
-        {
-            if (typeof(T) == typeof(Degree))
-            {
-                return (Degree)this;
-            }
-            else if (typeof(T) == typeof(Grade))
-            {
-                return (Grade)this;
-            }
-            else if (typeof(T) == typeof(Radian))
-            {
-                return this.Clone();
-            }
-            else
-                throw new NotImplementedException();
-        }
-
-        public override int CompareTo(AngularUnit other)
-        {
-            return this.Value.CompareTo(other.ChangeTo<Radian>().Value);
-        }
-
-        #endregion
-
-        #region Operators
-
-        public static bool operator ==(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) == 0); }
-
-        public static bool operator !=(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) != 0); }
-
-        public static bool operator <(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) < 0); }
-
-        public static bool operator >(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) > 0); }
-
-        public static bool operator <=(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) <= 0); }
-
-        public static bool operator >=(Radian firstValue, AngularUnit secondValue)
-        { return (firstValue.CompareTo(secondValue) >= 0); }
-
-        public static explicit operator Degree(Radian angle)
-        {
-
-            return new Degree(UnitConversion.RadianToDegree(angle.Value), angle.Range);
-
-        }
-
-        public static explicit operator Grade(Radian angle)
-        {
-
-            return new Grade(UnitConversion.RadianToGrade(angle.Value), angle.Range);
-
-        }
-
-        #endregion
+        return new Degree(UnitConversion.RadianToDegree(angle.Value), angle.Range);
 
     }
+
+    public static explicit operator Grade(Radian angle)
+    {
+
+        return new Grade(UnitConversion.RadianToGrade(angle.Value), angle.Range);
+
+    }
+
+    #endregion
+
 }

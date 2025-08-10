@@ -13,7 +13,7 @@ using IRI.Sta.SpatialReferenceSystem.MapProjections;
 namespace IRI.Sta.Persistence.DataSources;
 
 
-public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
+public class MemoryDataSource : MemoryDataSource<Feature<Point>>
 {
     public MemoryDataSource() : this(new List<Feature<Point>>(), null, null)
     {
@@ -49,14 +49,14 @@ public class MemoryDataSource : MemoryDataSource<Feature<Point>, Point>
         UpdateExtent();
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(Geometry<Point>? geometry)
+    public override FeatureSet<Point> GetAsFeatureSet(Geometry<Point>? geometry)
     {
         return new FeatureSet<Point>(GetGeometryAwares(geometry)
                 .Select(ToFeatureMappingFunc)
                 .ToList());
     }
 
-    public override FeatureSet<Point> GetAsFeatureSetOfPoint(BoundingBox boundingBox)
+    public override FeatureSet<Point> GetAsFeatureSet(BoundingBox boundingBox)
     {
         return new FeatureSet<Point>(GetGeometryAwares(boundingBox)
                 .Select(ToFeatureMappingFunc)

@@ -82,7 +82,7 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
 
         //    CopyToSqlServer(_pyramidParameters.TableName, geometries, i);
         //}
-        var originalGeometries = GetGeometries();
+        var originalGeometries = GetAsFeatureSet().Features.Select(f => f.TheGeometry).ToList();// GetGeometries();
 
         for (int i = 15; i > 1; i--)
         {
@@ -151,7 +151,6 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
     {
         int srid = GetSrid();
 
-        //var whereClause = $" (GEO.STIntersects(GEOMETRY::STPolyFromText('{boundingBox.AsWkt()}',{srid})) = 1) ";
         var whereClause = GetWhereClause(_pyramidTableSpatialColumn, boundingBox, srid);
 
         return GetGeometries(mapScale, whereClause);
@@ -175,70 +174,64 @@ public class SqlServerScaleDependentDataSource : SqlServerDataSource, IScaleDepe
             whereClause = $" (Level = {zoomLevel} ) AND {whereClause} ";
         }
 
-        //return SelectGeometries(
-        //    string.Format(
-        //        CultureInfo.InvariantCulture,
-        //        "SELECT GEO FROM {0} {1} ", _pyramidParameters.TableName, whereClause ?? string.Empty),
-        //    _pyramidParameters.ConnectionString);
-
         return SelectGeometries(FormattableString.Invariant($"SELECT {_pyramidTableSpatialColumn} FROM {_pyramidParameters.TableName} {MakeWhereClause(whereClause)} "), _pyramidParameters.ConnectionString);
     }
 
 
 
-    public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
-    {
-        int srid = GetSrid();
+    //public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, BoundingBox boundingBox)
+    //{
+    //    int srid = GetSrid();
 
-        //var whereClause = $" (GEO.STIntersects(GEOMETRY::STPolyFromText('{boundingBox.AsWkt()}',{srid})) = 1) ";
-        var whereClause = GetWhereClause(_pyramidTableSpatialColumn, boundingBox, srid);
+    //    //var whereClause = $" (GEO.STIntersects(GEOMETRY::STPolyFromText('{boundingBox.AsWkt()}',{srid})) = 1) ";
+    //    var whereClause = GetWhereClause(_pyramidTableSpatialColumn, boundingBox, srid);
 
-        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
+    //    int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
-        if (!(_levels?.Count < 1) && zoomLevel > _levels.Max())
-        {
-            //zoomLevel = _levels.Max();
+    //    if (!(_levels?.Count < 1) && zoomLevel > _levels.Max())
+    //    {
+    //        //zoomLevel = _levels.Max();
 
-            return GetNamedGeometries(boundingBox);// GetGeometryLabelPairsForDisplay(boundingBox);
-        }
-        else
-        {
-            return GetGeometryLabelPairs(mapScale, whereClause);
-        }
-    }
+    //        return GetNamedGeometries(boundingBox);// GetGeometryLabelPairsForDisplay(boundingBox);
+    //    }
+    //    else
+    //    {
+    //        return GetGeometryLabelPairs(mapScale, whereClause);
+    //    }
+    //}
 
-    public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
-    {
-        int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
+    //public List<NamedGeometry> GetGeometryLabelPairs(double mapScale, string whereClause)
+    //{
+    //    int zoomLevel = WebMercatorUtility.GetZoomLevel(mapScale, 35);
 
-        if (zoomLevel > _levels.Max())
-        {
-            //zoomLevel = _levels.Max();
+    //    if (zoomLevel > _levels.Max())
+    //    {
+    //        //zoomLevel = _levels.Max();
 
-            return GetGeometryLabelPairs(whereClause);
-        }
+    //        return GetGeometryLabelPairs(whereClause);
+    //    }
 
-        if (string.IsNullOrWhiteSpace(whereClause))
-        {
-            whereClause = $" (Level = {zoomLevel}) ";
-        }
-        else
-        {
-            whereClause = $" (Level = {zoomLevel} ) AND {whereClause} ";
-        }
+    //    if (string.IsNullOrWhiteSpace(whereClause))
+    //    {
+    //        whereClause = $" (Level = {zoomLevel}) ";
+    //    }
+    //    else
+    //    {
+    //        whereClause = $" (Level = {zoomLevel} ) AND {whereClause} ";
+    //    }
 
-        //return SelectGeometries(
-        //    string.Format(
-        //        CultureInfo.InvariantCulture,
-        //        "SELECT GEO FROM {0} {1} ", _pyramidParameters.TableName, whereClause ?? string.Empty),
-        //    _pyramidParameters.ConnectionString);
+    //    //return SelectGeometries(
+    //    //    string.Format(
+    //    //        CultureInfo.InvariantCulture,
+    //    //        "SELECT GEO FROM {0} {1} ", _pyramidParameters.TableName, whereClause ?? string.Empty),
+    //    //    _pyramidParameters.ConnectionString);
 
-        //return SelectGeometries(FormattableString.Invariant($"SELECT GEO FROM {_pyramidParameters.TableName} {whereClause ?? string.Empty} "), _pyramidParameters.ConnectionString);
+    //    //return SelectGeometries(FormattableString.Invariant($"SELECT GEO FROM {_pyramidParameters.TableName} {whereClause ?? string.Empty} "), _pyramidParameters.ConnectionString);
 
-        //return GetGeometryLabelPairs(whereClause);
-        //throw new Exception("label column not available in _P table");
-        return SelectGeometryLabelPairs(FormattableString.Invariant($"SELECT {_pyramidTableSpatialColumn} FROM {_pyramidParameters.TableName} {MakeWhereClause(whereClause)} "), _pyramidParameters.ConnectionString);
-    }
+    //    //return GetGeometryLabelPairs(whereClause);
+    //    //throw new Exception("label column not available in _P table");
+    //    return SelectGeometryLabelPairs(FormattableString.Invariant($"SELECT {_pyramidTableSpatialColumn} FROM {_pyramidParameters.TableName} {MakeWhereClause(whereClause)} "), _pyramidParameters.ConnectionString);
+    //}
 
 
 

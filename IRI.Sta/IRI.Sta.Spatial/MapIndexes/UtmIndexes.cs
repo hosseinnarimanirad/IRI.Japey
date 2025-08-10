@@ -1,13 +1,7 @@
 ﻿using IRI.Extensions;
 using IRI.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using IRI.Sta.Common.Primitives;
 using IRI.Sta.SpatialReferenceSystem;
-using IRI.Sta.Spatial.MapIndexes;
-using IRI.Sta.Spatial.MapIndexes;
 
 namespace IRI.Sta.Spatial.MapIndexes;
 
@@ -55,48 +49,28 @@ public static class UtmIndexes
     //    return $"{column}{row.ToString("00")}";
     //}
 
-    public static UtmSheet GetIndexSheet(double longitude, double latitude, int utmZone, UtmIndexType type)
+    public static UtmSheet? GetIndexSheet(double longitude, double latitude, int utmZone, UtmIndexType type)
     {
-        switch (type)
+        return type switch
         {
-            case UtmIndexType.Ncc2kBlock:
-                return UtmSheet.Create2kUtmBlock(longitude, latitude, utmZone);
-
-            case UtmIndexType.Ncc2kSheet:
-                return UtmSheet.Create2kUtmSheet(longitude, latitude, utmZone);
-
-            case UtmIndexType.Ncc1k:
-                return UtmSheet.Create1kUtmSheet(longitude, latitude, utmZone);
-
-            case UtmIndexType.Ncc500:
-                return UtmSheet.Create500UtmSheet(longitude, latitude, utmZone);
-
-            default:
-                throw new NotImplementedException();
-        }
+            UtmIndexType.Ncc2kBlock => UtmSheet.Create2kUtmBlock(longitude, latitude, utmZone),
+            UtmIndexType.Ncc2kSheet => UtmSheet.Create2kUtmSheet(longitude, latitude, utmZone),
+            UtmIndexType.Ncc1k => UtmSheet.Create1kUtmSheet(longitude, latitude, utmZone),
+            UtmIndexType.Ncc500 => UtmSheet.Create500UtmSheet(longitude, latitude, utmZone),
+            _ => throw new NotImplementedException(),
+        };
     }
 
     public static List<UtmSheet> GetIndexSheets(BoundingBox geographicIntersectRegion, UtmIndexType type, int utmZone)
-    {
-        switch (type)
+    { 
+        return type switch
         {
-            case UtmIndexType.Ncc2kBlock:
-                return GetIndexSheets(geographicIntersectRegion, _2kUtmBlockWidth, _2kUtmBlockHeight, UtmIndexType.Ncc2kBlock, utmZone);
-
-            case UtmIndexType.Ncc2kSheet:
-                return GetIndexSheets(geographicIntersectRegion, _2kUtmSheetWidth, _2kUtmSheetHeight, UtmIndexType.Ncc2kSheet, utmZone);
-
-            case UtmIndexType.Ncc1k:
-                return GetIndexSheets(geographicIntersectRegion, _1kUtmSheetWidth, _1kUtmSheetHeight, UtmIndexType.Ncc1k, utmZone);
-
-            case UtmIndexType.Ncc500:
-                return GetIndexSheets(geographicIntersectRegion, _500UtmSheetWidth, _500UtmSheetHeight, UtmIndexType.Ncc500, utmZone);
-
-            default:
-                throw new NotImplementedException();
-        }
-
-
+            UtmIndexType.Ncc2kBlock => GetIndexSheets(geographicIntersectRegion, _2kUtmBlockWidth, _2kUtmBlockHeight, UtmIndexType.Ncc2kBlock, utmZone),
+            UtmIndexType.Ncc2kSheet => GetIndexSheets(geographicIntersectRegion, _2kUtmSheetWidth, _2kUtmSheetHeight, UtmIndexType.Ncc2kSheet, utmZone),
+            UtmIndexType.Ncc1k => GetIndexSheets(geographicIntersectRegion, _1kUtmSheetWidth, _1kUtmSheetHeight, UtmIndexType.Ncc1k, utmZone),
+            UtmIndexType.Ncc500 => GetIndexSheets(geographicIntersectRegion, _500UtmSheetWidth, _500UtmSheetHeight, UtmIndexType.Ncc500, utmZone),
+            _ => throw new NotImplementedException(),
+        };
     }
 
     private static List<UtmSheet> GetIndexSheets(BoundingBox geographicIntersectRegion, double utmWidth, double utmHeight, UtmIndexType type, int utmZone)
@@ -107,17 +81,13 @@ public static class UtmIndexes
         List<UtmSheet> result = new List<UtmSheet>();
 
         if (geoBound.IsNaN())
-        {
             return result;
-        }
 
         var utmBound = geoBound.GeodeticWgs84MbbToUtmMbb(utmZone)
                         .Intersect(_2kUtmBoudingBox);
 
         if (utmBound.IsNaN())
-        {
             return result;
-        }
 
         int iStart = (int)Math.Floor((utmBound.XMin - _2kUtmXmin) / utmWidth);
 
@@ -135,7 +105,10 @@ public static class UtmIndexes
 
                 var startY = _2kUtmYmin + j * utmHeight;
 
-                result.Add(UtmSheet.Create(new BoundingBox(startX, startY, startX + utmWidth, startY + utmHeight), type, utmZone));
+                var sheet = UtmSheet.Create(new BoundingBox(startX, startY, startX + utmWidth, startY + utmHeight), type, utmZone);
+
+                if (sheet is not null)
+                    result.Add(sheet);
             }
         }
 
@@ -145,23 +118,14 @@ public static class UtmIndexes
     //for 2k, 1k, 1:500 scales
     public static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, UtmIndexType type, int utmZone)
     {
-        switch (type)
+        return type switch
         {
-            case UtmIndexType.Ncc2kBlock:
-                return GetIndexLines(geographicIntersectRegion, _2kUtmBlockWidth, _2kUtmBlockHeight, utmZone);
-
-            case UtmIndexType.Ncc2kSheet:
-                return GetIndexLines(geographicIntersectRegion, _2kUtmSheetWidth, _2kUtmSheetHeight, utmZone);
-
-            case UtmIndexType.Ncc1k:
-                return GetIndexLines(geographicIntersectRegion, _1kUtmSheetWidth, _1kUtmSheetHeight, utmZone);
-
-            case UtmIndexType.Ncc500:
-                return GetIndexLines(geographicIntersectRegion, _500UtmSheetWidth, _500UtmSheetHeight, utmZone);
-
-            default:
-                throw new NotImplementedException();
-        }
+            UtmIndexType.Ncc2kBlock => GetIndexLines(geographicIntersectRegion, _2kUtmBlockWidth, _2kUtmBlockHeight, utmZone),
+            UtmIndexType.Ncc2kSheet => GetIndexLines(geographicIntersectRegion, _2kUtmSheetWidth, _2kUtmSheetHeight, utmZone),
+            UtmIndexType.Ncc1k => GetIndexLines(geographicIntersectRegion, _1kUtmSheetWidth, _1kUtmSheetHeight, utmZone),
+            UtmIndexType.Ncc500 => GetIndexLines(geographicIntersectRegion, _500UtmSheetWidth, _500UtmSheetHeight, utmZone),
+            _ => throw new NotImplementedException(),
+        };
     }
 
     private static List<Geometry<Point>> GetIndexLines(BoundingBox geographicIntersectRegion, double utmWidth, double utmHeight, int utmZone)
@@ -186,17 +150,12 @@ public static class UtmIndexes
                           .Intersect(geographicIntersectRegion);
 
         if (geoBound.IsNaN())
-        {
             return result;
-        }
 
-        var utmBound = geoBound.GeodeticWgs84MbbToUtmMbb(utmZone)
-                        .Intersect(_2kUtmBoudingBox);
+        var utmBound = geoBound.GeodeticWgs84MbbToUtmMbb(utmZone).Intersect(_2kUtmBoudingBox);
 
         if (utmBound.IsNaN())
-        {
             return result;
-        }
 
         var startX = _2kUtmXmin + Math.Floor((utmBound.XMin - _2kUtmXmin) / utmWidth) * utmWidth;
 
@@ -230,6 +189,5 @@ public static class UtmIndexes
 
         return result.Select(g => g.Transform(p => MapProjects.UTMToGeodetic(p, utmZone), SridHelper.GeodeticWGS84)).ToList();
     }
-
 
 }
