@@ -50,9 +50,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Bas.SqlSpatialLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tag.SampleWpfApp", "samples\IRI.Maptor.Tag.SampleWpfApp\IRI.Maptor.Tag.SampleWpfApp.csproj", "{7004D483-0FA3-475A-BB99-327B747E7084}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Article.Sfc", "research\IRI.Maptor.Article.Sfc\IRI.Maptor.Article.Sfc.csproj", "{ABB3E4C9-9952-486D-AE45-9AA76013AA43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.Sfc", "research\IRI.Maptor.Res.Sfc\IRI.Maptor.Res.Sfc.csproj", "{ABB3E4C9-9952-486D-AE45-9AA76013AA43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Dan.TrajectoryCompression01", "research\IRI.Maptor.Dan.TrajectoryCompression01\IRI.Maptor.Dan.TrajectoryCompression01.csproj", "{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.TrajectoryCompression", "research\IRI.Maptor.Res.TrajectoryCompression\IRI.Maptor.Res.TrajectoryCompression.csproj", "{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{5FFC5712-E99B-4F5A-8E1F-F038505042E2}"
 EndProject
@@ -70,7 +70,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.GdiPlus", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.GsmGprs", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.GsmGprs\IRI.Maptor.Sta.GsmGprs.csproj", "{70207D4B-EE52-43D6-B693-D9023926A981}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Article04.FastSimplification", "research\IRI.Maptor.Article04.FastSimplification\IRI.Maptor.Article04.FastSimplification.csproj", "{97D4AB96-AA2B-442E-B433-9699A6123787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.FastSimplification", "research\IRI.Maptor.Res.FastSimplification\IRI.Maptor.Res.FastSimplification.csproj", "{97D4AB96-AA2B-442E-B433-9699A6123787}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.SpatialReferenceSystem", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.SpatialReferenceSystem\IRI.Maptor.Sta.SpatialReferenceSystem.csproj", "{A4D96303-6C3E-453C-8CE9-1A3D771AE9F9}"
 EndProject
