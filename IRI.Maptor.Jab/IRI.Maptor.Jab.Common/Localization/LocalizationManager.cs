@@ -46,7 +46,7 @@ public class LocalizationManager //: INotifyPropertyChanged
             // Explicitly specify to fallback to default resources
             return Resources.ResourceManager.GetString(key, CurrentCulture)
                    ?? Resources.ResourceManager.GetString(key, CultureInfo.InvariantCulture)
-                   ?? $"#{key}#"; // Fallback for missing keys
+                   ?? $"#{key}"; // Fallback for missing keys
 
             //// Explicitly use the current culture and prevent caching issues
             //var resourceSet = Resources.ResourceManager.GetResourceSet(

@@ -61,6 +61,177 @@ namespace IRI.Maptor.Jab.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Boundary.
+        /// </summary>
+        public static string cmd_legend_boundary {
+            get {
+                return ResourceManager.GetString("cmd_legend_boundary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Break Into Geometries.
+        /// </summary>
+        public static string cmd_legend_breakIntoGeometries {
+            get {
+                return ResourceManager.GetString("cmd_legend_breakIntoGeometries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Break Into Points.
+        /// </summary>
+        public static string cmd_legend_breakIntoPoints {
+            get {
+                return ResourceManager.GetString("cmd_legend_breakIntoPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Selected Features.
+        /// </summary>
+        public static string cmd_legend_clearSelected {
+            get {
+                return ResourceManager.GetString("cmd_legend_clearSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convex Hull.
+        /// </summary>
+        public static string cmd_legend_convexHull {
+            get {
+                return ResourceManager.GetString("cmd_legend_convexHull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download images.
+        /// </summary>
+        public static string cmd_legend_downloadRegionImages {
+            get {
+                return ResourceManager.GetString("cmd_legend_downloadRegionImages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string cmd_legend_duplicateFeature {
+            get {
+                return ResourceManager.GetString("cmd_legend_duplicateFeature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string cmd_legend_edit {
+            get {
+                return ResourceManager.GetString("cmd_legend_edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Envelope.
+        /// </summary>
+        public static string cmd_legend_envelope {
+            get {
+                return ResourceManager.GetString("cmd_legend_envelope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as GeoJson.
+        /// </summary>
+        public static string cmd_legend_exportAsGeoJson {
+            get {
+                return ResourceManager.GetString("cmd_legend_exportAsGeoJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as png.
+        /// </summary>
+        public static string cmd_legend_exportAsPng {
+            get {
+                return ResourceManager.GetString("cmd_legend_exportAsPng", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as Shapefile.
+        /// </summary>
+        public static string cmd_legend_exportAsShapefile {
+            get {
+                return ResourceManager.GetString("cmd_legend_exportAsShapefile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exterior Ring.
+        /// </summary>
+        public static string cmd_legend_exteriorRing {
+            get {
+                return ResourceManager.GetString("cmd_legend_exteriorRing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Layer.
+        /// </summary>
+        public static string cmd_legend_removeLayer {
+            get {
+                return ResourceManager.GetString("cmd_legend_removeLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select by Drawing.
+        /// </summary>
+        public static string cmd_legend_selectByDrawing {
+            get {
+                return ResourceManager.GetString("cmd_legend_selectByDrawing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Attributes.
+        /// </summary>
+        public static string cmd_legend_showAttributes {
+            get {
+                return ResourceManager.GetString("cmd_legend_showAttributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Symbology.
+        /// </summary>
+        public static string cmd_legend_showSymbology {
+            get {
+                return ResourceManager.GetString("cmd_legend_showSymbology", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Layer Label.
+        /// </summary>
+        public static string cmd_legend_toggleLayerLabel {
+            get {
+                return ResourceManager.GetString("cmd_legend_toggleLayerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom To Extent.
+        /// </summary>
+        public static string cmd_legend_zoomToExtent {
+            get {
+                return ResourceManager.GetString("cmd_legend_zoomToExtent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Point.
         /// </summary>
         public static string draw_addPointText {
@@ -634,6 +805,60 @@ namespace IRI.Maptor.Jab.Common.Properties {
         public static string ui_clear {
             get {
                 return ResourceManager.GetString("ui_clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add GeoJson.
+        /// </summary>
+        public static string ui_drawingLegend_addGeoJson {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_addGeoJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Lat/Long Text.
+        /// </summary>
+        public static string ui_drawingLegend_addLatLongTxt {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_addLatLongTxt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Shapefile.
+        /// </summary>
+        public static string ui_drawingLegend_addShapefile {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_addShapefile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Down.
+        /// </summary>
+        public static string ui_drawingLegend_moveDown {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_moveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Up.
+        /// </summary>
+        public static string ui_drawingLegend_moveUp {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_moveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove All.
+        /// </summary>
+        public static string ui_drawingLegend_removeAll {
+            get {
+                return ResourceManager.GetString("ui_drawingLegend_removeAll", resourceCulture);
             }
         }
         

@@ -2,13 +2,14 @@
 
 using IRI.Maptor.Jab.Common.Presenter.Map;
 using IRI.Maptor.Jab.Common.Assets.Commands;
+using IRI.Maptor.Jab.Common.Localization;
+using MahApps.Metro.IconPacks;
 
 namespace IRI.Maptor.Jab.Common.Model.Legend;
 
 public class LegendToggleCommand : Notifier, ILegendCommand
 {
     private RelayCommand _command;
-
     public RelayCommand Command
     {
         get { return _command; }
@@ -20,7 +21,6 @@ public class LegendToggleCommand : Notifier, ILegendCommand
     }
 
     private string _pathMarkup;
-
     public string PathMarkup
     {
         get { return _pathMarkup; }
@@ -32,7 +32,6 @@ public class LegendToggleCommand : Notifier, ILegendCommand
     }
 
     private string _notCheckedPathMarkup;
-
     public string NotCheckedPathMarkup
     {
         get { return _notCheckedPathMarkup; }
@@ -45,7 +44,6 @@ public class LegendToggleCommand : Notifier, ILegendCommand
 
 
     private bool _isSelected;
-
     public bool IsSelected
     {
         get { return _isSelected; }
@@ -59,7 +57,6 @@ public class LegendToggleCommand : Notifier, ILegendCommand
     }
 
     private bool _isEnabled = true;
-
     public bool IsEnabled
     {
         get { return _isEnabled; }
@@ -70,20 +67,22 @@ public class LegendToggleCommand : Notifier, ILegendCommand
         }
     }
 
-    private string _toolTip;
+    //private string _toolTip;
+    //public string ToolTip
+    //{
+    //    get { return _toolTip; }
+    //    set
+    //    {
+    //        _toolTip = value;
+    //        RaisePropertyChanged();
+    //    }
+    //}
 
-    public string ToolTip
-    {
-        get { return _toolTip; }
-        set
-        {
-            _toolTip = value;
-            RaisePropertyChanged();
-        }
-    }
+    private string ToolTipResourceKey { get; set; }
+    public string ToolTip => LocalizationManager.Instance[ToolTipResourceKey];
+
 
     private bool _isCommandVisible = true;
-
     public bool IsCommandVisible
     {
         get { return _isCommandVisible; }
@@ -96,15 +95,25 @@ public class LegendToggleCommand : Notifier, ILegendCommand
 
     public ILayer Layer { get; set; }
 
-     
+
+    public LegendToggleCommand()
+    {
+        Localization.LocalizationManager.Instance.LanguageChanged += Instance_LanguageChanged;
+    }
+
+    private void Instance_LanguageChanged()
+    {
+        RaisePropertyChanged(nameof(ToolTip));
+    }
 
     public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, ILayer layer/*, LabelParameters labels*/)
     {
         LegendToggleCommand result = new LegendToggleCommand();
 
-        result.PathMarkup = IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
+        result.PathMarkup = new PackIconModern() { Kind = PackIconModernKind.TextSerif }.Data;// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
         result.NotCheckedPathMarkup = IRI.Maptor.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone;
-        result.ToolTip = "نمایش برچسب عوارض";
+        //result.ToolTip = "نمایش برچسب عوارض";
+        result.ToolTipResourceKey = LocalizationResourceKeys.cmd_legend_toggleLayerLabel.ToString();
         result.Layer = layer;
         result.IsSelected = layer.Labels?.IsOn == true;
 

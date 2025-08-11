@@ -10,7 +10,7 @@ public interface ILegendCommand
 
     bool IsEnabled { get; set; }
 
-    string ToolTip { get; set; }
+    string ToolTip { get; /*set;*/ }
 
     ILayer Layer { get; set; }
 

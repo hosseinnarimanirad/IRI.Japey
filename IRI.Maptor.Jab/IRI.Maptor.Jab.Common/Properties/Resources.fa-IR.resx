@@ -117,6 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="cmd_legend_boundary" xml:space="preserve">
+    <value>مرز</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoGeometries" xml:space="preserve">
+    <value>تفکیک به هندسه</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoPoints" xml:space="preserve">
+    <value>تفکیک به نقاط</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_clearSelected" xml:space="preserve">
+    <value>پاک کردن عوارض انتخابی</value>
+  </data>
+  <data name="cmd_legend_convexHull" xml:space="preserve">
+    <value>پوش محدب</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_downloadRegionImages" xml:space="preserve">
+    <value>دانلود تصاویر محدوده</value>
+  </data>
+  <data name="cmd_legend_duplicateFeature" xml:space="preserve">
+    <value>ایجاد کپی از عارضه</value>
+    <comment>drawing layer - create a clone from the feature</comment>
+  </data>
+  <data name="cmd_legend_edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="cmd_legend_envelope" xml:space="preserve">
+    <value>مستطیل دربرگیرنده</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_exportAsGeoJson" xml:space="preserve">
+    <value>خروجی در قالب GeoJson</value>
+  </data>
+  <data name="cmd_legend_exportAsPng" xml:space="preserve">
+    <value>خروجی عکسی</value>
+  </data>
+  <data name="cmd_legend_exportAsShapefile" xml:space="preserve">
+    <value>خروجی در قالب شیپ‌فایل</value>
+  </data>
+  <data name="cmd_legend_exteriorRing" xml:space="preserve">
+    <value>حلقه خارجی</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_removeLayer" xml:space="preserve">
+    <value>حذف لایه</value>
+  </data>
+  <data name="cmd_legend_selectByDrawing" xml:space="preserve">
+    <value>انتخاب عوارض محدودهٔ ترسیم</value>
+  </data>
+  <data name="cmd_legend_showAttributes" xml:space="preserve">
+    <value>اطلاعات توصیفی</value>
+  </data>
+  <data name="cmd_legend_showSymbology" xml:space="preserve">
+    <value>سمبل‌گذاری</value>
+  </data>
+  <data name="cmd_legend_toggleLayerLabel" xml:space="preserve">
+    <value>نمایش برچسب عوارض</value>
+  </data>
+  <data name="cmd_legend_zoomToExtent" xml:space="preserve">
+    <value>محدودهٔ لایه</value>
+  </data>
   <data name="draw_addPointText" xml:space="preserve">
     <value>افزودن نقطه</value>
   </data>
@@ -206,6 +270,10 @@
   </data>
   <data name="srs_webMercatorTitle" xml:space="preserve">
     <value>وب مرکاتور</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+    <comment>Drawing Layer download google, bing, etc images</comment>
   </data>
   <data name="symbology_fillLabel" xml:space="preserve">
     <value>رنگ سطح</value>
@@ -305,6 +373,24 @@
   </data>
   <data name="ui_clear" xml:space="preserve">
     <value>پاک کردن</value>
+  </data>
+  <data name="ui_drawingLegend_addGeoJson" xml:space="preserve">
+    <value>بارگذاری عارضه ژئوجی‌سان</value>
+  </data>
+  <data name="ui_drawingLegend_addLatLongTxt" xml:space="preserve">
+    <value>بارگذاری از فایل</value>
+  </data>
+  <data name="ui_drawingLegend_addShapefile" xml:space="preserve">
+    <value>بارگذاری عارضه شیپ‌فایل</value>
+  </data>
+  <data name="ui_drawingLegend_moveDown" xml:space="preserve">
+    <value>پایین</value>
+  </data>
+  <data name="ui_drawingLegend_moveUp" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="ui_drawingLegend_removeAll" xml:space="preserve">
+    <value>حذف تمام عوارض ترسیمی</value>
   </data>
   <data name="ui_drawings" xml:space="preserve">
     <value>عوارض ترسیمی</value>

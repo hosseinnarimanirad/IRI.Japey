@@ -8,6 +8,26 @@ namespace IRI.Maptor.Jab.Common.Localization;
 
 public enum LocalizationResourceKeys
 {
+    cmd_legend_boundary,
+    cmd_legend_breakIntoGeometries,
+    cmd_legend_breakIntoPoints,
+    cmd_legend_clearSelected,
+    cmd_legend_convexHull,
+    cmd_legend_downloadRegionImages,
+    cmd_legend_duplicateFeature,
+    cmd_legend_edit,
+    cmd_legend_envelope,
+    cmd_legend_exportAsGeoJson,
+    cmd_legend_exportAsPng,
+    cmd_legend_exportAsShapefile,
+    cmd_legend_exteriorRing,
+    cmd_legend_removeLayer,
+    cmd_legend_selectByDrawing,
+    cmd_legend_showAttributes,
+    cmd_legend_showSymbology,
+    cmd_legend_toggleLayerLabel,
+    cmd_legend_zoomToExtent,
+
     draw_addPointText,
     draw_cancelDrawingText,
     draw_finishDrawingPartText,
@@ -88,6 +108,13 @@ public enum LocalizationResourceKeys
     ui_layers,
     ui_measureArea,
     ui_measureLength,
+
+    ui_drawingLegend_removeAll,
+    ui_drawingLegend_addGeoJson,
+    ui_drawingLegend_addShapefile,
+    ui_drawingLegend_addLatLongTxt,
+    ui_drawingLegend_moveDown,
+    ui_drawingLegend_moveUp
 }
 
 //public static class LocalizationResourceKeys

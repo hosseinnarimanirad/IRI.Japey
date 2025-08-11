@@ -2,19 +2,33 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Runtime.CompilerServices;
+using IRI.Maptor.Jab.Common.Localization;
+using IRI.Maptor.Jab.Common;
+using System;
 
 namespace IRI.Maptor.Jab.Controls.View;
 
 /// <summary>
 /// Interaction logic for MapDrawingLegendView.xaml
 /// </summary>
-public partial class MapDrawingLegendView : UserControl, INotifyPropertyChanged
+public partial class MapDrawingLegendView : NotifiableUserControl, IDisposable
 {
     public MapDrawingLegendView()
     {
         InitializeComponent();
+
+        LocalizationManager.Instance.LanguageChanged += Instance_LanguageChanged;
     }
 
+    private void Instance_LanguageChanged()
+    {
+        RaisePropertyChanged(nameof(RemoveAllDrawingItemsLabel));
+        RaisePropertyChanged(nameof(AddGeoJsonToDrawingItemsLabel));
+        RaisePropertyChanged(nameof(AddLongLatTxtToDrawingItemsLabel));
+        RaisePropertyChanged(nameof(AddShapefileToDrawingItemsLabel));
+        RaisePropertyChanged(nameof(MoveDrawingItemDownLabel));
+        RaisePropertyChanged(nameof(MoveDrawingItemUpLabel));
+    }
 
     public string GroupName
     {
@@ -62,4 +76,40 @@ public partial class MapDrawingLegendView : UserControl, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+
+
+    public string RemoveAllDrawingItemsLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_removeAll.ToString()];
+    public string AddGeoJsonToDrawingItemsLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_addGeoJson.ToString()];
+    public string AddLongLatTxtToDrawingItemsLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_addLatLongTxt.ToString()];
+    public string AddShapefileToDrawingItemsLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_addShapefile.ToString()];
+    public string MoveDrawingItemDownLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_moveDown.ToString()];
+    public string MoveDrawingItemUpLabel => LocalizationManager.Instance[LocalizationResourceKeys.ui_drawingLegend_moveUp.ToString()];
+
+    #region IDispose
+
+    private bool _disposed = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources
+                LocalizationManager.Instance.LanguageChanged -= Instance_LanguageChanged;
+            }
+
+            // Dispose unmanaged resources here if any
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    #endregion
 }

@@ -1415,9 +1415,9 @@ public abstract class MapPresenter : BasePresenter
                 drawingItemCommands = new List<Func<DrawingItemLayer, ILegendCommand>>()
                 {
                    layer => LegendCommand.CreateZoomToExtentCommand(this, layer),
-                   layer => DrawingItemLegendCommands.CreateRemoveDrawingItemLayer(this, layer),
-                   layer => DrawingItemLegendCommands.CreateEditDrawingItemLayer(this, layer),
-                   layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsShapefile(this, layer),
+                   layer => LegendCommand.CreateRemoveDrawingItemLayer(this, layer),
+                   layer => LegendCommand.CreateEditDrawingItemLayer(this, layer),
+                   layer => LegendCommand.CreateExportDrawingItemLayerAsShapefile(this, layer),
                    //layer => DrawingItemLegendCommands.CreateExportDrawingItemLayerAsGeoJson(this,layer),
                    layer => LegendToggleCommand.CreateToggleLayerLabelCommand(this, layer/*, layer.Labels*/)
                 };
@@ -1927,7 +1927,7 @@ public abstract class MapPresenter : BasePresenter
                 {
                     var commands = new List<ILegendCommand>();
 
-                    foreach (var item in DrawingItemLegendCommands.GetDefaultTextLayerCommands())
+                    foreach (var item in LegendCommand.GetDefaultTextLayerCommands())
                     {
                         commands.Add(item(this, drawingItemLayer));
                     }
