@@ -66,9 +66,9 @@ jobs:
 
     - name: Publish to NuGet
       run: |
-        dotnet nuget push ./nupkgs/*.nupkg \
-          --source ${{ env.NUGET_SOURCE }} \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
+        dotnet nuget push ./nupkgs/*.nupkg `
+          --source ${{ env.NUGET_SOURCE }} `
+          --api-key ${{ secrets.NUGET_API_KEY }} `
           --skip-duplicate
 
     - name: Create GitHub Release
