@@ -1,4 +1,4 @@
-name: NuGet Package Publisher (Pre-release)
+name: Publish develop NuGet Package
 
 on:
   push:
@@ -71,7 +71,7 @@ jobs:
 
     - name: Publish Pre-release to NuGet
       run: |
-        dotnet nuget push ./nupkgs/*.nupkg \
-          --source ${{ env.NUGET_SOURCE }} \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
-          --skip-duplicate
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+        }
