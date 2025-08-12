@@ -57,10 +57,12 @@ jobs:
 
     - name: Pack
       run: |
+        $output = "${{ github.workspace }}/nupkgs"
+        New-Item -ItemType Directory -Force -Path $output | Out-Null
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
-            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet pack $_.FullName --configuration Release --no-build --output $output
           }
         }
 
