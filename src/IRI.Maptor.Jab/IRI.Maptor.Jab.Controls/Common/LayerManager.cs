@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using IRI.Maptor.Jab.Common;
-using Microsoft.SqlServer.Types;
-using System.Windows;
-using IRI.Maptor.Sta.Spatial.Primitives;
-using System.Collections.ObjectModel;
-using IRI.Maptor.Jab.Common.Model;
-using IRI.Maptor.Jab.Common.TileServices;
 using System.Diagnostics;
-using IRI.Maptor.Sta.Common.Primitives;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+using IRI.Maptor.Jab.Common;
+using IRI.Maptor.Jab.Common.Model;
 using IRI.Maptor.Jab.Common.Enums;
+using IRI.Maptor.Sta.Common.Primitives;
 
 namespace IRI.Maptor.Jab.Controls;
 
