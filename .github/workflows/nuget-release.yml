@@ -1,9 +1,9 @@
-name: NuGet Package Publisher
+name: NuGet Package Publisher (Stable)
 
 on:
   push:
     branches: [ master ]
-    
+
 env:
   DOTNET_VERSION: '8.0.x'
   PROJECT_PREFIXES: 'IRI.Maptor.Sta IRI.Maptor.Ket IRI.Maptor.Jab IRI.Maptor.Bas'
@@ -16,24 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        path: '.' 
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-
-    - name: Cache dependencies
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.dotnet
-          ~/.nuget/packages
-        key: ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-${{ hashFiles('**/Directory.Build.props') }}-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-dotnet-${{ env.DOTNET_VERSION }}-
 
     - name: Restore dependencies
       run: |
@@ -73,25 +60,23 @@ jobs:
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
-            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs             
+            dotnet pack $_.FullName --configuration Release --no-build --output ./nupkgs
           }
         }
 
     - name: Publish to NuGet
-      if: github.ref == 'refs/heads/master'
       run: |
-        $apiKey = "${{ secrets.NUGET_API_KEY }}"
-        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
-          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
-        } 
+        dotnet nuget push ./nupkgs/*.nupkg \
+          --source ${{ env.NUGET_SOURCE }} \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate
 
     - name: Create GitHub Release
-      if: github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
       with:
         name: "Maptor Release"
         tag_name: "v${{ github.run_number }}"
         body: |
-          📦 NuGet packages for this release:
+          📦 Stable NuGet packages for this release:
           ${{ env.PROJECT_PREFIXES }}
         files: ./nupkgs/*.nupkg
