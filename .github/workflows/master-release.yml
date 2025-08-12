@@ -1,4 +1,4 @@
-name: NuGet Package Publisher (Stable)
+name: Publish master to NuGet
 
 on:
   push:
@@ -68,10 +68,10 @@ jobs:
 
     - name: Publish to NuGet
       run: |
-        dotnet nuget push ./nupkgs/*.nupkg `
-          --source ${{ env.NUGET_SOURCE }} `
-          --api-key ${{ secrets.NUGET_API_KEY }} `
-          --skip-duplicate
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+        } 
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
