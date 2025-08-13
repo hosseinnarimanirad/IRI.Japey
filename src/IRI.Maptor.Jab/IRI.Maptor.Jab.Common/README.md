@@ -8,15 +8,15 @@ A WPF-first utility library that underpins the **Maptor** ecosystem. It provides
 
 ## ✨ Highlights
  
-  ✅**MVVM infrastructure:** `Notifier`, `ViewModelBase`, and `RelayCommand` cut down on boilerplate.
-  ✅**Dialog abstraction:** `IDialogService` + dialog view-models (e.g., `ChangePasswordDialogViewModel`).
-  ✅**Converters & Behaviors:** Dozens of ready-to-use WPF converters and a few behaviors/animations.
-  ✅**Cartography primitives:** `VisualParameters`, symbolizers, color scales, and render strategies.
-  ✅**Layers:** `ILayer` + concrete layers such as `FeatureLayer`, `RasterLayer`, `GridLayer`, `GroupLayer`, etc.
-  ✅**Tile services:** `TileMapProvider` + `TileMapProviderFactory` for Google/Bing/OSM/etc. URL generation.
-  ✅**Map markers:** A set of WPF `UserControl`s (image/shape/label markers) to annotate maps.
-  ✅**Localization:** `LocalizationManager` and resource-key patterns used across presenters and services.
-  ✅**Office helpers:** Minimal Excel/Word helpers using OpenXML.
+  ✅**MVVM infrastructure:** `Notifier`, `ViewModelBase`, and `RelayCommand` cut down on boilerplate.  
+  ✅**Dialog abstraction:** `IDialogService` + dialog view-models (e.g., `ChangePasswordDialogViewModel`).  
+  ✅**Converters & Behaviors:** Dozens of ready-to-use WPF converters and a few behaviors/animations.  
+  ✅**Cartography primitives:** `VisualParameters`, symbolizers, color scales, and render strategies.  
+  ✅**Layers:** `ILayer` + concrete layers such as `FeatureLayer`, `RasterLayer`, `GridLayer`, `GroupLayer`, etc.  
+  ✅**Tile services:** `TileMapProvider` + `TileMapProviderFactory` for Google/Bing/OSM/etc. URL generation.  
+  ✅**Map markers:** A set of WPF `UserControl`s (image/shape/label markers) to annotate maps.  
+  ✅**Localization:** `LocalizationManager` and resource-key patterns used across presenters and services.  
+  ✅**Office helpers:** Minimal Excel/Word helpers using OpenXML.  
 
 ---
  
