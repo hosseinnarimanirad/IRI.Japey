@@ -64,27 +64,27 @@ public static class Utilities
     //    LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial110.dll");
     //}
 
-    //Add support to new version
-    public static void LoadNativeAssembliesv12(string rootApplicationPath)
-    {
-        var nativeBinaryPath = Environment.Is64BitProcess
-            ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
-            : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
+    ////Add support to new version
+    //public static void LoadNativeAssembliesv12(string rootApplicationPath)
+    //{
+    //    var nativeBinaryPath = Environment.Is64BitProcess
+    //        ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
+    //        : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
 
-        LoadNativeAssembly(nativeBinaryPath, "msvcr100.dll");
-        LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial120.dll");
-    }
+    //    LoadNativeAssembly(nativeBinaryPath, "msvcr100.dll");
+    //    LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial120.dll");
+    //}
 
-    public static void LoadNativeAssembliesv13(string rootApplicationPath)
-    {
-        var nativeBinaryPath = Environment.Is64BitProcess
-            ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
-            : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
+    //public static void LoadNativeAssembliesv13(string rootApplicationPath)
+    //{
+    //    var nativeBinaryPath = Environment.Is64BitProcess
+    //        ? Path.Combine(rootApplicationPath, @"SqlServerTypes\x64\")
+    //        : Path.Combine(rootApplicationPath, @"SqlServerTypes\x86\");
 
-        //LoadNativeAssembly(nativeBinaryPath, "msvcr100.dll");
-        LoadNativeAssembly(nativeBinaryPath, "msvcr120.dll");
-        LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial130.dll");
-    }
+    //    //LoadNativeAssembly(nativeBinaryPath, "msvcr100.dll");
+    //    LoadNativeAssembly(nativeBinaryPath, "msvcr120.dll");
+    //    LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial130.dll");
+    //}
 
     public static void LoadNativeAssembliesv14(string rootApplicationPath)
     {

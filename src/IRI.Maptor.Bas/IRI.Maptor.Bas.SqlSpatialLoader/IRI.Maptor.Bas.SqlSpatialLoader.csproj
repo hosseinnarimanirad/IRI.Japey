@@ -1,86 +1,58 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Hossein Narimani Rad</Authors>
+    <Description>Provides SqlSpatial native DLL loading for Microsoft.SqlServer.Types.</Description>
+    <PackageId>IRI.Maptor.Bas.SqlSpatialLoader</PackageId>    
+    <PackageTags>SQL Server;Spatial;SqlGeometry;SqlGeography;Loader</PackageTags>
+    <RepositoryUrl>https://github.com/your-repo/Maptor</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/your-repo/Maptor</PackageProjectUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
   </PropertyGroup>
-
+ 
+  <!-- Reference official managed package -->
   <ItemGroup>
-    <None Remove="SqlServerTypes\x64\msvcr100.dll" />
-    <None Remove="SqlServerTypes\x64\msvcr110.dll" />
-    <None Remove="SqlServerTypes\x64\msvcr120.dll" />
-    <None Remove="SqlServerTypes\x64\SqlServerSpatial110.dll" />
-    <None Remove="SqlServerTypes\x64\SqlServerSpatial120.dll" />
-    <None Remove="SqlServerTypes\x64\SqlServerSpatial130.dll" />
-    <None Remove="SqlServerTypes\x64\SqlServerSpatial140.dll" />
-    <None Remove="SqlServerTypes\x86\msvcr100.dll" />
-    <None Remove="SqlServerTypes\x86\msvcr110.dll" />
-    <None Remove="SqlServerTypes\x86\msvcr120.dll" />
-    <None Remove="SqlServerTypes\x86\SqlServerSpatial110.dll" />
-    <None Remove="SqlServerTypes\x86\SqlServerSpatial120.dll" />
-    <None Remove="SqlServerTypes\x86\SqlServerSpatial130.dll" />
-    <None Remove="SqlServerTypes\x86\SqlServerSpatial140.dll" />
+    <PackageReference Include="Microsoft.SqlServer.Types" PrivateAssets="all" />
   </ItemGroup>
 
+
+
+  <!-- Pack native binaries under runtimes/win-*/native -->
   <ItemGroup>
-    <Content Include="SqlServerTypes\x64\msvcr100.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\msvcr110.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial110.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial130.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr100.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr110.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial110.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial130.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <!-- x64 -->
+    <None Include="SqlServerTypes\x64\SqlServerSpatial140.dll"
+          Pack="true"
+          PackagePath="runtimes/win-x64/native"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="SqlServerTypes\x64\msvcr120.dll"
+          Pack="true"
+          PackagePath="runtimes/win-x64/native"
+          CopyToOutputDirectory="PreserveNewest" />
+
+    <!-- x86 -->
+    <None Include="SqlServerTypes\x86\SqlServerSpatial140.dll"
+          Pack="true"
+          PackagePath="runtimes/win-x86/native"
+          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="SqlServerTypes\x86\msvcr120.dll"
+          Pack="true"
+          PackagePath="runtimes/win-x86/native"
+          CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- Pack buildTransitive props -->
   <ItemGroup>
-    <None Update="Deploy\MicrosoftSqlServerTypes\v11\Microsoft.SqlServer.Types.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Deploy\MicrosoftSqlServerTypes\v12\Microsoft.SqlServer.Types.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Deploy\MicrosoftSqlServerTypes\v13\Microsoft.SqlServer.Types.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="buildTransitive\IRI.Maptor.Bas.SqlSpatialLoader.props"
+          Pack="true"
+          PackagePath="buildTransitive"
+          CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>
