@@ -34,8 +34,25 @@ Use one of the following:
 
 > **Requires Windows** (WPF). .NET 8 SDK recommended.
 
+--- 
+
+## 📂 Folder Map
+
+- **Abstractions** – `IDialogService`, `IMapMarker`.
+- **Assets** – Converters, commands, brushes, animations, fonts, images; plus `IRI.*.xaml` resource dictionaries.
+- **Cartography** – Color scales, symbolizers, renderers (GDI, WriteableBitmap, DrawingVisual), helpers.
+- **Common** – Small cross-cutting code (enums, etc.).
+- **Extensions** – Extension methods (colors, geometry, pens, points, rectangles…).
+- **Helpers** – Utilities for images, printing, raster handling, legends, simplification…
+- **Layers** – `ILayer`, `BaseLayer`, and concrete layers (feature, grid, raster, tile-service, etc.).
+- **Localization** – Keys and the localization manager glue.
+- **Model** – Visual, label, map, security models; table commands; recursive collections; etc.
+- **OfficeFormats** – Minimal Excel/Word helpers via OpenXML.
+- **Presenters** – Base presenter and map/legend/symbology/coordinate-panel presenters + dialog VMs.
+- **TileServices** – Provider factory, URL building, cache flags, and type enums.
+- **View** – WPF map-markers and options controls.
+
 ---
- 
 
 ## 💻 Bring the resources into your app
 
