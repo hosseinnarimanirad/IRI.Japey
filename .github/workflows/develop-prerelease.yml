@@ -22,6 +22,14 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
+    - name: Get Base Version
+      id: get_version
+      shell: pwsh
+      run: |
+        $baseVersion = ([xml](Get-Content "Directory.Build.props")).Project.PropertyGroup.Version
+        if (-not $baseVersion) { $baseVersion = "1.0.0" }
+        echo "baseVersion=$baseVersion" >> $env:GITHUB_OUTPUT
+
     - name: Restore dependencies
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
@@ -45,23 +53,16 @@ jobs:
               --verbosity minimal
           }
         }
-        
+
     - name: Pack (Pre-release)
       run: |
+        $baseVersion = "${{ steps.get_version.outputs.baseVersion }}"
+        $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
+        Write-Host "Using pre-release version: $prereleaseVersion"
+
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            # Extract base version from <Version> in csproj (or fallback)
-            $xml = [xml](Get-Content $_.FullName)
-            $versionNode = $xml.Project.PropertyGroup.Version
-            if (-not $versionNode) {
-              Write-Host "No <Version> found in $($_.Name), using 1.0.0"
-              $baseVersion = "1.0.0"
-            } else {
-              $baseVersion = $versionNode
-            }
-            $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
-            Write-Host "Packing $($_.Name) with version $prereleaseVersion"
             dotnet pack $_.FullName `
               --configuration Release `
               --no-build `
