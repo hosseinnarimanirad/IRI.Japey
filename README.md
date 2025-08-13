@@ -29,7 +29,7 @@ Maptor /
 ├── IRI.Sta/                     # Core spatial data structures & algorithms
 ├── IRI.Ket/                     # Utilities (data sources, file I/O)
 ├── IRI.Jab/                     # WPF components (MapViewer, dialogs, etc.)
-├── IRI.Tst/                    # Unit tests
+├── IRI.Tst/                     # Unit tests
 └── Examples/                    # Usage samples
 ```
 
@@ -37,47 +37,46 @@ Maptor /
 
 ## 📦 NuGet Packages
 
-Maptor consists of multiple modular packages. Install only what you need:
-
-
-### 📦 NuGet Packages
-
-Maptor is modular. Install only what you need:  
-👉 [Browse all packages on NuGet.org](https://www.nuget.org/profiles/narimanirad)
-
+Maptor consists of multiple modular packages. 
+ 
+👉 [Browse all packages on NuGet.org](https://www.nuget.org/packages?q=IRI.Maptor)
+ 	 
 | Package | Description | Version |
 |---------|-------------|---------|
-| [IRI.Maptor.Core](https://www.nuget.org/packages/IRI.Maptor.Core) | Core GIS functionality: geometries, projections, spatial operations | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Core.svg?style=flat-square) |
-| [IRI.Maptor.Ket.WebApiPersistence](https://www.nuget.org/packages/IRI.Maptor.Ket.WebApiPersistence) | Persistence layer for ASP.NET Core Web API | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.WebApiPersistence.svg?style=flat-square) |
-| [IRI.Maptor.Ket.SqlServerPersistence](https://www.nuget.org/packages/IRI.Maptor.Ket.SqlServerPersistence) | SQL Server integration for spatial persistence | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.SqlServerPersistence.svg?style=flat-square) |
-| [IRI.Maptor.Ket.SqlServerSpatialExtension](https://www.nuget.org/packages/IRI.Maptor.Ket.SqlServerSpatialExtension) | Adds SQL Server spatial data extensions | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.SqlServerSpatialExtension.svg?style=flat-square) |
-| [IRI.Maptor.UI](https://www.nuget.org/packages/IRI.Maptor.UI) | WPF map viewer for desktop apps | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.UI.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Spatial](https://www.nuget.org/packages/IRI.Maptor.Sta.Spatial) | Core spatial functionalities (GeoJSON, analysis, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Spatial.svg?style=flat-square) |
+| [IRI.Maptor.Sta.ShapefileFormat](https://www.nuget.org/packages/IRI.Maptor.Sta.ShapefileFormat) | Read/Write shapefile (shp, shx, dbf, prj, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.ShapefileFormat.svg?style=flat-square) |
+| [IRI.Maptor.Sta.SpatialReferenceSystem](https://www.nuget.org/packages/IRI.Maptor.Sta.SpatialReferenceSystem) | Coordinate system transformations (UTM, Mercator, Geodetic, Lambert, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.SpatialReferenceSystem.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Ogc](https://www.nuget.org/packages/IRI.Maptor.Sta.Ogc) | OGC standard implementations (GML, WKB, WKT, KML, SLD, WMS, WFS, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Ogc.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Graph](https://www.nuget.org/packages/IRI.Maptor.Sta.Graph) | Graph Algorithms (BFS, DFS, Minimum spanning tree, Dijkstra, MinCut, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Graph.svg?style=flat-square) |
+| [IRI.Maptor.Jab.Controls](https://www.nuget.org/packages/IRI.Maptor.Jab.Controls) | WPF Map user controls (map, map panel, map coordinate system, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Jab.Controls.svg?style=flat-square) |
 
 <details>
 <summary>▶ Show more packages</summary>
-
+ 
 | Package | Description | Version |
 |---------|-------------|---------|
-| [IRI.Maptor.Ket.Graph](https://www.nuget.org/packages/IRI.Maptor.Ket.Graph) | Graph algorithms (Dijkstra, Floyd-Warshall, etc.) | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.Graph.svg?style=flat-square) |
-| [IRI.Maptor.Ket.FileFormats](https://www.nuget.org/packages/IRI.Maptor.Ket.FileFormats) | Read/write GeoJSON, WKT, Shapefile | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.FileFormats.svg?style=flat-square) |
-| [IRI.Maptor.Ket.Raster](https://www.nuget.org/packages/IRI.Maptor.Ket.Raster) | Raster data handling | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.Raster.svg?style=flat-square) |
-| [IRI.Maptor.Ket.Gml](https://www.nuget.org/packages/IRI.Maptor.Ket.Gml) | GML and OGC standard support | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.Gml.svg?style=flat-square) |
-| [IRI.Maptor.Ket.WfsClient](https://www.nuget.org/packages/IRI.Maptor.Ket.WfsClient) | WFS client integration | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.WfsClient.svg?style=flat-square) |
-| [IRI.Maptor.Ket.WmsClient](https://www.nuget.org/packages/IRI.Maptor.Ket.WmsClient) | WMS client integration | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.WmsClient.svg?style=flat-square) |
-| [IRI.Maptor.Sta.Common](https://www.nuget.org/packages/IRI.Maptor.Sta.Common) | Common utilities for statistical analysis | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Common.svg?style=flat-square) |
-| [IRI.Maptor.Sta.Spatial](https://www.nuget.org/packages/IRI.Maptor.Sta.Spatial) | Spatial statistical functions | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Spatial.svg?style=flat-square) |
-| [IRI.Maptor.Sta.Graph](https://www.nuget.org/packages/IRI.Maptor.Sta.Graph) | Graph-based statistical analysis | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Graph.svg?style=flat-square) |
+| [IRI.Maptor.Bas.SqlSpatialLoader](https://www.nuget.org/packages/IRI.Maptor.Bas.SqlSpatialLoader) | .NET dependency of Maptor | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Bas.SqlSpatialLoader.svg?style=flat-square) |
+| [IRI.Maptor.Jab.Common](https://www.nuget.org/packages/IRI.Maptor.Jab.Common) | Basic UI models, rendering methods etc. | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Jab.Common.svg?style=flat-square) |
+| [IRI.Maptor.Ket.GdiPlus](https://www.nuget.org/packages/IRI.Maptor.Ket.GdiPlus) | Raster data handling, Worldfile, PCA, raster calculation | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.GdiPlus.svg?style=flat-square) |
+| [IRI.Maptor.Ket.PersonalGdbPersistence](https://www.nuget.org/packages/IRI.Maptor.Ket.PersonalGdbPersistence) | Read/Write Personal GDB files | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.PersonalGdbPersistence.svg?style=flat-square) |
+| [IRI.Maptor.Ket.PostgreSqlPersistence](https://www.nuget.org/packages/IRI.Maptor.Ket.PostgreSqlPersistence) | Read/Write PostgreSQL | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.PostgreSqlPersistence.svg?style=flat-square) |
+| [IRI.Maptor.Ket.SqlServerPersistence](https://www.nuget.org/packages/IRI.Maptor.Ket.SqlServerPersistence) | Read/Write SQL Server spatial | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.SqlServerPersistence.svg?style=flat-square) |
+| [IRI.Maptor.Ket.SqlServerSpatialExtension](https://www.nuget.org/packages/IRI.Maptor.Ket.SqlServerSpatialExtension) | Work with SqlGeometry & SqlGeography | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Ket.SqlServerSpatialExtension.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Common](https://www.nuget.org/packages/IRI.Maptor.Sta.Common) | Base functionalities | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Common.svg?style=flat-square) |
+| [IRI.Maptor.Sta.GsmGprs](https://www.nuget.org/packages/IRI.Maptor.Sta.GsmGprs) | SMS encoding in GSM | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.GsmGprs.svg?style=flat-square) |
+| [IRI.Maptor.Sta.MachineLearning](https://www.nuget.org/packages/IRI.Maptor.Sta.MachineLearning) | Clustering, Apriori, Logistic Regression | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.MachineLearning.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Persistence](https://www.nuget.org/packages/IRI.Maptor.Sta.Persistence) | Base classes for persistence layers, MemoryDataSource, GeoJsonDataSource, etc. | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Persistence.svg?style=flat-square) |
+| [IRI.Maptor.Sta.Security](https://www.nuget.org/packages/IRI.Maptor.Sta.Security) | Encryption, hashing, etc. | ![NuGet](https://img.shields.io/nuget/v/IRI.Maptor.Sta.Security.svg?style=flat-square) |
 
-</details>
-
+</details>     
+  	  
 ---
   
 **Installation Example via NuGet CLI:**
 ```bash
 dotnet add package IRI.Maptor.Sta.Common
-dotnet add package IRI.Maptor.Ket.SqlServerPersistence
+dotnet add package IRI.Maptor.Jab.Controls
 ```
-
 
 ---
 
