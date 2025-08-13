@@ -77,7 +77,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPersistence\IRI.Maptor.Ket.GdiPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPlus\IRI.Maptor.Ket.GdiPlus.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerPersistence\IRI.Maptor.Ket.SqlServerPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj" />
