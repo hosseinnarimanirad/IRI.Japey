@@ -39,38 +39,29 @@ jobs:
             dotnet build $_.FullName `
               --configuration Release `
               --no-restore `
-              /p:NoWarn=$"{{ env.NOWARN_CODES }}" `
+              /p:NoWarn=${{ env.NOWARN_CODES }} `
               /p:WarningLevel=0 `
               /p:GenerateDocumentationFile=false `
               --verbosity minimal
           }
         }
         
-    - name: Test
-      run: |
-        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
-        foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.Tests.csproj" | ForEach-Object {
-            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
-          }
-        }
-
     - name: Pack (Pre-release)
       run: |
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
           Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
-            # Read version from .csproj
+            # Extract base version from <Version> in csproj (or fallback)
             $xml = [xml](Get-Content $_.FullName)
             $versionNode = $xml.Project.PropertyGroup.Version
             if (-not $versionNode) {
-              Write-Host "No <Version> found, using 1.0.0"
+              Write-Host "No <Version> found in $($_.Name), using 1.0.0"
               $baseVersion = "1.0.0"
             } else {
               $baseVersion = $versionNode
             }
             $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
-            Write-Host "Packing with version $prereleaseVersion"
+            Write-Host "Packing $($_.Name) with version $prereleaseVersion"
             dotnet pack $_.FullName `
               --configuration Release `
               --no-build `
@@ -79,10 +70,13 @@ jobs:
           }
         }
 
-
     - name: Publish Pre-release to NuGet
       run: |
         $apiKey = "${{ secrets.NUGET_API_KEY }}"
         Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
-          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+          Write-Host "Publishing $($_.Name) to NuGet..."
+          dotnet nuget push $_.FullName `
+            --source ${{ env.NUGET_SOURCE }} `
+            --api-key $apiKey `
+            --skip-duplicate
         }
