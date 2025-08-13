@@ -1,48 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-//using System.Windows;
+using System.Diagnostics;
+using System.Windows.Media;
 using System.Windows.Input;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+//using System.Windows;
+using System.Windows.Media.Imaging;
+using WpfPoint = System.Windows.Point;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
-using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Maptor.Sta.Common.Model;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Services;
-using IRI.Maptor.Sta.Persistence.DataSources;
-using IRI.Maptor.Sta.Persistence.RasterDataSources;
-using IRI.Maptor.Jab.Common.Model;
-using IRI.Maptor.Jab.Common.Model.Map;
-using IRI.Maptor.Jab.Common.TileServices;
-using IRI.Maptor.Jab.Common.Assets.Commands;
-using IRI.Maptor.Jab.Common.Helpers;
-using IRI.Maptor.Jab.Common.Model.Common;
-using IRI.Maptor.Jab.Common.Model.Spatialable;
-using IRI.Maptor.Jab.Common.Presenters;
-using IRI.Maptor.Jab.Common.Model.Legend;
-
-using WpfPoint = System.Windows.Point;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using IRI.Maptor.Jab.Common.View.MapMarkers;
 using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Jab.Common.Enums;
-using IRI.Maptor.Ket.GdiPersistence;
-using IRI.Maptor.Sta.Persistence.Abstractions;
-using IRI.Maptor.Extensions;
+using IRI.Maptor.Sta.Persistence.DataSources;
+using IRI.Maptor.Sta.Persistence.RasterDataSources;
+using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 
-namespace IRI.Maptor.Jab.Common.Presenter.Map;
+using IRI.Maptor.Ket.GdiPersistence;
+
+using IRI.Maptor.Jab.Common.Enums;
+using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Helpers;
+using IRI.Maptor.Jab.Common.Models.Map;
+using IRI.Maptor.Jab.Common.TileServices;
+using IRI.Maptor.Jab.Common.Assets.Commands;
+using IRI.Maptor.Jab.Common.View.MapMarkers;
+using IRI.Maptor.Jab.Common.Models.Spatialable;
+using IRI.Maptor.Jab.Common.Models.Legend;
+using IRI.Maptor.Jab.Common.Events;
+
+
+namespace IRI.Maptor.Jab.Common.Presenters;
 
 public abstract class MapPresenter : BasePresenter
 {
@@ -55,7 +52,7 @@ public abstract class MapPresenter : BasePresenter
         set
         {
             _proxy = value;
-            value.FireProxyChanged = p => this.SetProxy(p.GetProxy());
+            value.FireProxyChanged = p => SetProxy(p.GetProxy());
             RaisePropertyChanged();
         }
     }
@@ -117,7 +114,7 @@ public abstract class MapPresenter : BasePresenter
             _baseMapOpacity = value;
             RaisePropertyChanged();
 
-            foreach (var layer in this.Layers.Where(i => i.Type == LayerType.BaseMap))
+            foreach (var layer in Layers.Where(i => i.Type == LayerType.BaseMap))
             {
                 layer.VisualParameters.Opacity = value;
             }
@@ -150,17 +147,17 @@ public abstract class MapPresenter : BasePresenter
             {
                 _currentEditingLayer.RequestSelectedLocatableChanged = (l) =>
                 {
-                    this.UpdateCurrentEditingPoint(new Point(l.X, l.Y));
+                    UpdateCurrentEditingPoint(new Point(l.X, l.Y));
                 };
 
                 _currentEditingLayer.RequestZoomToPoint = (p) =>
                 {
-                    this.Zoom(WebMercatorUtility.GetGoogleMapScale(14), p);
+                    Zoom(WebMercatorUtility.GetGoogleMapScale(14), p);
                 };
 
                 _currentEditingLayer.RequestZoomToGeometry = g =>
                 {
-                    this.ZoomToExtent(g.GetBoundingBox(), isExactExtent: false, isNewExtent: true);
+                    ZoomToExtent(g.GetBoundingBox(), isExactExtent: false, isNewExtent: true);
                 };
             }
 
@@ -292,7 +289,7 @@ public abstract class MapPresenter : BasePresenter
 
     public ILayer GetSelectedLayerInToc()
     {
-        return this.Layers.SingleOrDefault(l => l.IsSelectedInToc);
+        return Layers.SingleOrDefault(l => l.IsSelectedInToc);
     }
 
     private ObservableCollection<DrawingItemLayer> _drawingItems = new ObservableCollection<DrawingItemLayer>();
@@ -430,11 +427,11 @@ public abstract class MapPresenter : BasePresenter
         if (provider.FullName == SelectedMapProvider?.FullName)
             return;
 
-        if (!this.MapProviders.Contains(provider))
+        if (!MapProviders.Contains(provider))
             throw new NotImplementedException("MapPresenter > SetTileBaseMap");
         //this.MapProviders.Add(provider);
 
-        this.SelectedMapProvider = provider;
+        SelectedMapProvider = provider;
 
         //await SetTileService(provider, opacity, MapSettings.GetLocalFileName);
     }
@@ -463,7 +460,7 @@ public abstract class MapPresenter : BasePresenter
             _isConnected = value;
             RaisePropertyChanged();
 
-            this.RequestSetConnectedState?.Invoke(value);
+            RequestSetConnectedState?.Invoke(value);
         }
     }
 
@@ -485,17 +482,17 @@ public abstract class MapPresenter : BasePresenter
             switch (_mapStatus)
             {
                 case MapStatus.Drawing:
-                    this.IsDrawMode = true;
+                    IsDrawMode = true;
                     break;
                 case MapStatus.Editing:
-                    this.IsEditMode = true;
+                    IsEditMode = true;
                     break;
                 //case MapStatus.Measuring:
                 //    this.IsMeasureMode = true;
                 //    break;
                 case MapStatus.Idle:
-                    this.IsDrawMode = false;
-                    this.IsEditMode = false;
+                    IsDrawMode = false;
+                    IsEditMode = false;
                     break;
                 default:
                     break;
@@ -527,7 +524,7 @@ public abstract class MapPresenter : BasePresenter
         set
         {
             //SetIsBusy(value);
-            this._isBusy = value;
+            _isBusy = value;
             RaisePropertyChanged();
         }
     }
@@ -544,7 +541,7 @@ public abstract class MapPresenter : BasePresenter
     {
         get
         {
-            return this.RequestMapScale?.Invoke() ?? 1;
+            return RequestMapScale?.Invoke() ?? 1;
         }
     }
 
@@ -552,7 +549,7 @@ public abstract class MapPresenter : BasePresenter
     {
         get
         {
-            var scale = this.RequestCurrentPointScale?.Invoke() ?? 1;
+            var scale = RequestCurrentPointScale?.Invoke() ?? 1;
 
             return Math.Round(1.0 / scale, 2);
         }
@@ -562,18 +559,18 @@ public abstract class MapPresenter : BasePresenter
     {
         get
         {
-            return this.RequestCurrentPointGroundResolution?.Invoke() ?? 1;
+            return RequestCurrentPointGroundResolution?.Invoke() ?? 1;
         }
     }
 
-    public int CurrentZoomLevel { get { return this.RequestCurrentZoomLevel?.Invoke() ?? 1; } }
+    public int CurrentZoomLevel { get { return RequestCurrentZoomLevel?.Invoke() ?? 1; } }
 
 
     public BoundingBox CurrentExtent
     {
         get
         {
-            return this.RequestCurrentExtent?.Invoke() ?? BoundingBoxes.Mercator_Iran;
+            return RequestCurrentExtent?.Invoke() ?? BoundingBoxes.Mercator_Iran;
         }
     }
 
@@ -632,7 +629,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (value)
             {
-                this.Pan();
+                Pan();
             }
 
             RaisePropertyChanged();
@@ -647,7 +644,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (value)
             {
-                this.EnableRectangleZoomIn();
+                EnableRectangleZoomIn();
             }
 
             RaisePropertyChanged();
@@ -662,7 +659,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (value)
             {
-                this.EnableZoomOut();
+                EnableZoomOut();
             }
 
             RaisePropertyChanged();
@@ -681,7 +678,7 @@ public abstract class MapPresenter : BasePresenter
 
     public bool PreviousExtentEnabled => CurrentExtentIndex < Extents.Count - 1;
 
-    public int ExtentHistoryLength => this.Extents.Count;
+    public int ExtentHistoryLength => Extents.Count;
 
     private int _currentExtentIndex = 0;
     public int CurrentExtentIndex
@@ -730,13 +727,13 @@ public abstract class MapPresenter : BasePresenter
             RaisePropertyChanged(nameof(CanMoveDrawingItemUp));
         };
 
-        this.MapProviders = TileMapProviderFactory.GetDefault();
+        MapProviders = TileMapProviderFactory.GetDefault();
 
-        this.MapPanel = new MapPanelPresenter();
+        MapPanel = new MapPanelPresenter();
 
-        this.MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
+        MapPanel.CurrentEditingPoint = new NotifiablePoint(0, 0, param =>
           {
-              if (this.CurrentEditingLayer == null)
+              if (CurrentEditingLayer == null)
               {
                   Debug.WriteLine($"Exception at map presenter. current editing layer is null!");
                   return;
@@ -745,11 +742,11 @@ public abstract class MapPresenter : BasePresenter
               if (MapPanel.CurrentWebMercatorEditingPoint.IsNaN())
                   return;
 
-              this.CurrentEditingLayer.ChangeCurrentEditingPoint(this.MapPanel.CurrentWebMercatorEditingPoint);
+              CurrentEditingLayer.ChangeCurrentEditingPoint(MapPanel.CurrentWebMercatorEditingPoint);
 
           });
 
-        this.CoordinatePanel = new CoordinatePanelPresenter();
+        CoordinatePanel = new CoordinatePanelPresenter();
     }
 
 
@@ -867,7 +864,7 @@ public abstract class MapPresenter : BasePresenter
     public Action<Point> RequestFlashPoint;
 
 
-    public Func<List<Geometry<Point>>, VisualParameters, string, System.Windows.Media.Geometry, Task> RequestSelectGeometries;
+    public Func<List<Geometry<Point>>, VisualParameters, string, Geometry, Task> RequestSelectGeometries;
 
     public Func<List<Geometry<Point>>, string, VisualParameters, Task> RequestAddGeometries;
 
@@ -888,7 +885,7 @@ public abstract class MapPresenter : BasePresenter
 
     //public Action<string> RequestRemoveLayer;
 
-    public Action<string, List<Point>, System.Windows.Media.Geometry, bool, VisualParameters> RequestAddPolyBezier;
+    public Action<string, List<Point>, Geometry, bool, VisualParameters> RequestAddPolyBezier;
 
     public Func<DrawMode, EditableFeatureLayerOptions, bool, Task<Response<Geometry<Point>>>> RequestGetDrawingAsync;
 
@@ -921,7 +918,7 @@ public abstract class MapPresenter : BasePresenter
 
     public Func<Geometry<Point>, EditableFeatureLayerOptions, Task<Response<Geometry<Point>>>> RequestEdit;
 
-    public Func<System.Windows.Media.Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
+    public Func<Geometry, VisualParameters, Task<Response<PolyBezierLayer>>> RequestGetBezier;
 
 
     public Func<Point, ObservableCollection<FeatureSet<Point>>> RequestIdentify;
@@ -932,9 +929,9 @@ public abstract class MapPresenter : BasePresenter
 
     //public Func<Func<IPoint, IPoint>> RequestGetToScreenMap;
 
-    public Func<System.Windows.Media.Matrix> RequestGetMapToScreenMatrix;
+    public Func<Matrix> RequestGetMapToScreenMatrix;
 
-    public Func<System.Windows.Media.Matrix?> RequestGetScreenToMapMatrix;
+    public Func<Matrix?> RequestGetScreenToMapMatrix;
 
     public Func<double, double> RequestToScreenMap;
 
@@ -979,14 +976,14 @@ public abstract class MapPresenter : BasePresenter
 
     public void RemoveAllTileServices()
     {
-        this.Clear(l => l.Type == LayerType.BaseMap, true, true);
+        Clear(l => l.Type == LayerType.BaseMap, true, true);
 
-        this.RefreshBaseMaps();
+        RefreshBaseMaps();
     }
 
     public void RefreshBaseMaps()
     {
-        this.RequestRefreshBaseMaps?.Invoke();
+        RequestRefreshBaseMaps?.Invoke();
     }
 
     public void AddProvider(TileMapProvider mapProvider)
@@ -995,7 +992,7 @@ public abstract class MapPresenter : BasePresenter
 
         if (!MapProviders.Any(m => m == mapProvider))
         {
-            this.MapProviders.Add(mapProvider);
+            MapProviders.Add(mapProvider);
 
             //this.MapProviders.Add(nameInUpper, t =>
             //{
@@ -1008,7 +1005,7 @@ public abstract class MapPresenter : BasePresenter
 
     public void RemoveAllProviders()
     {
-        this.MapProviders = new List<TileMapProvider>();
+        MapProviders = new List<TileMapProvider>();
 
         RemoveAllTileServices();
     }
@@ -1037,7 +1034,7 @@ public abstract class MapPresenter : BasePresenter
             await CheckInternetAccess();
         }
 
-        this.RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName, opacity);
+        RequestSetTileService?.Invoke(baseMap, MapSettings.IsBaseMapCacheEnabled, MapSettings.BaseMapCacheDirectory, !IsConnected, getLocalFileName, opacity);
     }
 
     //public async Task SetTileService(string provider, TileType tileType, Func<TileInfo, string> getFileName = null)
@@ -1089,7 +1086,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 var extent = BoundingBox.GetMergedBoundingBox(features.Select(f => f.TheGeometry.GetBoundingBox()));
 
-                this.ZoomToExtent(extent, false, true, callback);
+                ZoomToExtent(extent, false, true, callback);
             };
 
             selectedLayer.RequestRemove = () => { RemoveSelectedLayer(selectedLayer);/*this.SelectedLayers.Remove(selectedLayer);*/ };
@@ -1119,7 +1116,7 @@ public abstract class MapPresenter : BasePresenter
             //    l.Save();
             //};
 
-            this.SelectedLayers.Add(selectedLayer);
+            SelectedLayers.Add(selectedLayer);
 
             CurrentLayer = selectedLayer;
 
@@ -1146,13 +1143,13 @@ public abstract class MapPresenter : BasePresenter
         if (layer is null)
             return;
 
-        var selectedLayer = this.SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
+        var selectedLayer = SelectedLayers.SingleOrDefault(sl => sl.Id == layer.LayerId);
 
         layer.NumberOfSelectedFeatures = 0;
 
         if (selectedLayer != null)
         {
-            this.SelectedLayers.Remove(selectedLayer);
+            SelectedLayers.Remove(selectedLayer);
 
             ClearLayer("__$selection", true);
             ClearLayer("__$highlight", true);
@@ -1170,7 +1167,7 @@ public abstract class MapPresenter : BasePresenter
 
         if (selectedLayer != null)
         {
-            this.SelectedLayers.Remove(selectedLayer);
+            SelectedLayers.Remove(selectedLayer);
 
             ClearLayer("__$selection", true);
             ClearLayer("__$highlight", true);
@@ -1179,11 +1176,11 @@ public abstract class MapPresenter : BasePresenter
 
     public void RemoveSelectedLayers(Predicate<ILayer> layersToBeRemoved)
     {
-        for (int i = this.SelectedLayers.Count - 1; i >= 0; i--)
+        for (int i = SelectedLayers.Count - 1; i >= 0; i--)
         {
-            if (layersToBeRemoved(this.SelectedLayers[i].AssociatedLayer))
+            if (layersToBeRemoved(SelectedLayers[i].AssociatedLayer))
             {
-                RemoveSelectedLayer(this.SelectedLayers[i].AssociatedLayer);
+                RemoveSelectedLayer(SelectedLayers[i].AssociatedLayer);
             }
         }
     }
@@ -1215,7 +1212,7 @@ public abstract class MapPresenter : BasePresenter
 
         if (enumerable?.Count() < 10 && enumerable.First().TheGeometry.Type == GeometryType.Point)
         {
-            FlashPoints(enumerable.Select(e => (Point)e.TheGeometry.AsPoint()).ToList());
+            FlashPoints(enumerable.Select(e => e.TheGeometry.AsPoint()).ToList());
         }
         else
         {
@@ -1250,7 +1247,7 @@ public abstract class MapPresenter : BasePresenter
         await SelectGeometriesAsync(new List<Geometry<Point>>() { geometry });
     }
 
-    public async Task SelectGeometryAsync(Geometry<Point> geometry, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
+    public async Task SelectGeometryAsync(Geometry<Point> geometry, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
     {
         await SelectGeometriesAsync(new List<Geometry<Point>>() { geometry }, visualParameters, layerName, pointSymbol);
     }
@@ -1258,23 +1255,23 @@ public abstract class MapPresenter : BasePresenter
     public async Task SelectGeometriesAsync(List<Geometry<Point>> geometries)
     {
         //await this.SelectGeometries(geometries, new VisualParameters(new System.Windows.Media.SolidColorBrush(Aqua), new System.Windows.Media.SolidColorBrush(Aqua), 2, .5));
-        await this.SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection(), null);
+        await SelectGeometriesAsync(geometries, VisualParameters.GetDefaultForSelection(), null);
     }
 
-    public async Task SelectGeometriesAsync(List<Geometry<Point>> geometries, VisualParameters visualParameters, string layerName, System.Windows.Media.Geometry pointSymbol = null)
+    public async Task SelectGeometriesAsync(List<Geometry<Point>> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
     {
-        await this.RequestSelectGeometries?.Invoke(geometries, visualParameters, layerName, pointSymbol);
+        await RequestSelectGeometries?.Invoke(geometries, visualParameters, layerName, pointSymbol);
     }
 
 
     public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
     {
-        this.RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
+        RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
     }
 
     public async Task DrawGeometriesAsync(List<Geometry<Point>> geometry, string name, VisualParameters parameters)
     {
-        await this.RequestAddGeometries?.Invoke(geometry, name, parameters);
+        await RequestAddGeometries?.Invoke(geometry, name, parameters);
     }
 
     public async Task DrawGeometryAsync(Geometry<Point> geometry, string name, VisualParameters parameters)
@@ -1285,12 +1282,12 @@ public abstract class MapPresenter : BasePresenter
 
     public void FlashPoints(List<Point> points)
     {
-        this.RequestFlashPoints?.Invoke(points);
+        RequestFlashPoints?.Invoke(points);
     }
 
     public void FlashPoint(Point point)
     {
-        this.RequestFlashPoint?.Invoke(point);
+        RequestFlashPoint?.Invoke(point);
     }
 
 
@@ -1327,13 +1324,13 @@ public abstract class MapPresenter : BasePresenter
         if (string.IsNullOrWhiteSpace(searchTest))
             return;
 
-        var result = this.Search(searchTest);
+        var result = Search(searchTest);
 
-        this.SelectedLayers = new ObservableCollection<SelectedLayer>();
+        SelectedLayers = new ObservableCollection<SelectedLayer>();
 
         foreach (var item in result)
         {
-            var layer = this.FindLayer(item.LayerId);
+            var layer = FindLayer(item.LayerId);
 
             if (layer == null)
                 continue;
@@ -1346,7 +1343,7 @@ public abstract class MapPresenter : BasePresenter
                 Features = new ObservableCollection<Feature<Point>>(item.Features)
             };
 
-            this.AddSelectedLayer(newLayer);
+            AddSelectedLayer(newLayer);
         }
 
         RemoveMapOptions();
@@ -1388,7 +1385,7 @@ public abstract class MapPresenter : BasePresenter
             if (SelectedDrawingItem == null)
                 return false;
 
-            return SelectedDrawingItem.IsSelectedInToc && this.DrawingItems.IndexOf(SelectedDrawingItem) > 0;
+            return SelectedDrawingItem.IsSelectedInToc && DrawingItems.IndexOf(SelectedDrawingItem) > 0;
         }
     }
 
@@ -1399,7 +1396,7 @@ public abstract class MapPresenter : BasePresenter
             if (SelectedDrawingItem == null)
                 return false;
 
-            return SelectedDrawingItem.IsSelectedInToc && this.DrawingItems.IndexOf(SelectedDrawingItem) < this.DrawingItems.Count - 1;
+            return SelectedDrawingItem.IsSelectedInToc && DrawingItems.IndexOf(SelectedDrawingItem) < DrawingItems.Count - 1;
         }
     }
 
@@ -1439,10 +1436,10 @@ public abstract class MapPresenter : BasePresenter
 
     private async Task DrawAsync(DrawMode mode)
     {
-        this.IsPanMode = true;
+        IsPanMode = true;
         //ResetMode(mode);
 
-        var drawingResult = await this.GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
+        var drawingResult = await GetDrawingAsync(mode, MapSettings.DrawingOptions, true);
 
         if (!drawingResult.HasNotNullResult())
         {
@@ -1480,35 +1477,35 @@ public abstract class MapPresenter : BasePresenter
 
     public void AddDrawingItem(DrawingItemLayer item)
     {
-        this.DrawingItems.Add(item);
+        DrawingItems.Add(item);
 
         //this.AddLayer(item.AssociatedLayer);
-        this.AddLayer(item);
+        AddLayer(item);
     }
 
     public void InsertDrawingItem(int index, DrawingItemLayer item)
     {
         if (DrawingItems.Count < index)
         {
-            this.DrawingItems.Add(item);
+            DrawingItems.Add(item);
         }
         else
         {
-            this.DrawingItems.Insert(index, item);
+            DrawingItems.Insert(index, item);
         }
 
         //this.AddLayer(item.AssociatedLayer);
-        this.AddLayer(item);
+        AddLayer(item);
     }
 
     public void RemoveDrawingItem(DrawingItemLayer item)
     {
-        this.DrawingItems.Remove(item);
+        DrawingItems.Remove(item);
 
         //this.RemoveLayer(item.AssociatedLayer);
-        this.ClearLayer(item, true);
+        ClearLayer(item, true);
 
-        this.ClearLayer(item.HighlightGeometryKey.ToString(), true, true);
+        ClearLayer(item.HighlightGeometryKey.ToString(), true, true);
     }
 
     public void RemoveAllDrawingItems()
@@ -1534,11 +1531,11 @@ public abstract class MapPresenter : BasePresenter
         {
             if (shapeItem.IsSelectedInToc)
             {
-                this.SelectedDrawingItem = shapeItem;
+                SelectedDrawingItem = shapeItem;
             }
             else if (SelectedDrawingItem == shapeItem)
             {
-                this.SelectedDrawingItem = null;
+                SelectedDrawingItem = null;
             }
         };
 
@@ -1546,7 +1543,7 @@ public abstract class MapPresenter : BasePresenter
 
         shapeItem.Labels = new LabelParameters(ScaleInterval.All, 13, shapeItem.VisualParameters.Stroke, new FontFamily("Times New Roman"), i => i.GetCentroidPlus());
 
-        this.IsPanMode = true;
+        IsPanMode = true;
 
         return shapeItem;
     }
@@ -1562,7 +1559,7 @@ public abstract class MapPresenter : BasePresenter
 
         var index = DrawingItems.IndexOf(SelectedDrawingItem);
 
-        var otherLayer = this.DrawingItems[index + 1];
+        var otherLayer = DrawingItems[index + 1];
 
         ReorderDrawingItems(SelectedDrawingItem, otherLayer);
     }
@@ -1581,7 +1578,7 @@ public abstract class MapPresenter : BasePresenter
 
         var index = DrawingItems.IndexOf(SelectedDrawingItem);
 
-        var otherLayer = this.DrawingItems[index - 1];
+        var otherLayer = DrawingItems[index - 1];
 
         ReorderDrawingItems(SelectedDrawingItem, otherLayer);
     }
@@ -1589,9 +1586,9 @@ public abstract class MapPresenter : BasePresenter
     public void ReorderDrawingItems(DrawingItemLayer first, DrawingItemLayer second)
     {
 
-        var newFirstIndex = this.DrawingItems.IndexOf(second);
+        var newFirstIndex = DrawingItems.IndexOf(second);
 
-        var newSecondIndex = this.DrawingItems.IndexOf(first);
+        var newSecondIndex = DrawingItems.IndexOf(first);
 
         var tempZIndex = first.ZIndex;
 
@@ -1599,9 +1596,9 @@ public abstract class MapPresenter : BasePresenter
 
         second.ZIndex = tempZIndex;
 
-        this.RemoveDrawingItem(first);
+        RemoveDrawingItem(first);
 
-        this.RemoveDrawingItem(second);
+        RemoveDrawingItem(second);
 
         var newFirstLayer = MakeShapeItem(first.Feature, first.LayerName, first.VisualParameters, first.Id/*, first.DataSource*/);
 
@@ -1609,18 +1606,18 @@ public abstract class MapPresenter : BasePresenter
 
         if (first.ZIndex < second.ZIndex)
         {
-            this.InsertDrawingItem(newFirstIndex, newFirstLayer);
+            InsertDrawingItem(newFirstIndex, newFirstLayer);
 
-            this.InsertDrawingItem(newSecondIndex, newSecondLayer);
+            InsertDrawingItem(newSecondIndex, newSecondLayer);
             //this.InsertDrawingItem(first.ZIndex, first);
 
             //this.InsertDrawingItem(second.ZIndex, second);
         }
         else
         {
-            this.InsertDrawingItem(newSecondIndex, newSecondLayer);
+            InsertDrawingItem(newSecondIndex, newSecondLayer);
 
-            this.InsertDrawingItem(newFirstIndex, newFirstLayer);
+            InsertDrawingItem(newFirstIndex, newFirstLayer);
 
             //this.InsertDrawingItem(second.ZIndex, second);
 
@@ -1659,30 +1656,30 @@ public abstract class MapPresenter : BasePresenter
 
     public async void SetProxy(System.Net.WebProxy proxy)
     {
-        this.RequestSetProxy?.Invoke(proxy);
+        RequestSetProxy?.Invoke(proxy);
 
         await CheckInternetAccess();
     }
 
     public void SetMapCursorSet1()
     {
-        var zoomInCursor = new System.Windows.Input.Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Maptor.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyPlusRightHanded.cur", UriKind.Relative)).Stream, false);
-        this.SetDefaultCursor(IRI.Maptor.Jab.Common.Model.MapAction.ZoomInRectangle, zoomInCursor);
-        this.SetDefaultCursor(IRI.Maptor.Jab.Common.Model.MapAction.ZoomIn, zoomInCursor);
+        var zoomInCursor = new Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Maptor.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyPlusRightHanded.cur", UriKind.Relative)).Stream, false);
+        SetDefaultCursor(MapAction.ZoomInRectangle, zoomInCursor);
+        SetDefaultCursor(MapAction.ZoomIn, zoomInCursor);
 
-        var zoomOutCursor = new System.Windows.Input.Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Maptor.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyMinusRightHanded.cur", UriKind.Relative)).Stream, false);
-        this.SetDefaultCursor(IRI.Maptor.Jab.Common.Model.MapAction.ZoomOutRectangle, zoomOutCursor);
-        this.SetDefaultCursor(IRI.Maptor.Jab.Common.Model.MapAction.ZoomOut, zoomOutCursor);
+        var zoomOutCursor = new Cursor(System.Windows.Application.GetResourceStream(new Uri("/IRI.Maptor.Jab.Common;component/Assets/Cursors/MapCursorSet1/MagnifyMinusRightHanded.cur", UriKind.Relative)).Stream, false);
+        SetDefaultCursor(MapAction.ZoomOutRectangle, zoomOutCursor);
+        SetDefaultCursor(MapAction.ZoomOut, zoomOutCursor);
     }
 
     public void SetDefaultCursor(MapAction action, Cursor cursor)
     {
-        this.RequestSetDefaultCursor?.Invoke(action, cursor);
+        RequestSetDefaultCursor?.Invoke(action, cursor);
     }
 
     public void SetCursor(Cursor cursor)
     {
-        this.RequestSetCursor?.Invoke(cursor);
+        RequestSetCursor?.Invoke(cursor);
     }
 
     public async Task CheckInternetAccess()
@@ -1692,17 +1689,17 @@ public abstract class MapPresenter : BasePresenter
             return;
         }
 
-        var proxy = this.RequestGetProxy?.Invoke();
+        var proxy = RequestGetProxy?.Invoke();
 
-        this.IsConnected = await IRI.Maptor.Sta.Common.Helpers.NetHelper.IsConnectedToInternet(proxy);
+        IsConnected = await NetHelper.IsConnectedToInternet(proxy);
     }
 
 
     public void ClearLayer(ILayer layer, bool remove = true, bool forceRemove = false)
     {
-        this.RequestClearLayer?.Invoke(layer, remove);
+        RequestClearLayer?.Invoke(layer, remove);
 
-        this.RemoveSelectedLayers(l => l.LayerId == layer.LayerId);
+        RemoveSelectedLayers(l => l.LayerId == layer.LayerId);
     }
 
     public void ClearLayer(LayerType type, bool remove, bool forceRemove = false)
@@ -1719,23 +1716,23 @@ public abstract class MapPresenter : BasePresenter
 
     public void ClearAll()
     {
-        this.Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
+        Clear(new Predicate<ILayer>(l => l.CanUserDelete == true), true);
 
-        this.DrawingItems.Clear();
+        DrawingItems.Clear();
     }
 
 
     private void Clear(Predicate<ILayer> layersToBeRemoved, bool remove, bool forceRemove = false)
     {
-        this.RequestClearLayerByCriteria?.Invoke(layersToBeRemoved, remove, forceRemove);
+        RequestClearLayerByCriteria?.Invoke(layersToBeRemoved, remove, forceRemove);
 
-        this.RemoveSelectedLayers(layersToBeRemoved);
+        RemoveSelectedLayers(layersToBeRemoved);
     }
 
     //1397.08.17: potentionally error prone, do not consider removing SelectedLayers associated with the input criteria
     public void Clear(Predicate<LayerTag> criteria, bool remove, bool forceRemove = false)
     {
-        this.RequestClearLayerByTag?.Invoke(criteria, remove, forceRemove);
+        RequestClearLayerByTag?.Invoke(criteria, remove, forceRemove);
     }
 
     //public void RemoveLayer(string layerName)
@@ -1751,19 +1748,19 @@ public abstract class MapPresenter : BasePresenter
 
     public void FireMapStatusChanged(MapStatus status)
     {
-        this.MapStatus = status;
+        MapStatus = status;
     }
 
     public void FireMapActionChanged(MapAction action)
     {
-        this.MapAction = action;
+        MapAction = action;
     }
 
     public void FireMapExtentChanged(BoundingBox currentExtent, bool isNewExtent)
     {
-        this.RaisePropertyChanged(nameof(CurrentExtent));
+        RaisePropertyChanged(nameof(CurrentExtent));
 
-        this.OnMapExtentChanged?.Invoke(null, EventArgs.Empty);
+        OnMapExtentChanged?.Invoke(null, EventArgs.Empty);
 
         if (!isNewExtent)
             return;
@@ -1773,37 +1770,37 @@ public abstract class MapPresenter : BasePresenter
         if (CurrentExtentIndex > 0)
         {
             // remove all newer extents
-            this.Extents.RemoveRange(0, this.CurrentExtentIndex);
+            Extents.RemoveRange(0, CurrentExtentIndex);
         }
 
-        this.Extents.Insert(0, currentExtent);
+        Extents.Insert(0, currentExtent);
 
-        this.CurrentExtentIndex = 0;
+        CurrentExtentIndex = 0;
 
-        if (this.ExtentHistoryLength > 5)
-            this.Extents.RemoveAt(lastExtentIndex);
+        if (ExtentHistoryLength > 5)
+            Extents.RemoveAt(lastExtentIndex);
     }
 
     public void FireMouseMove(WpfPoint currentPoint)
     {
-        this.CurrentPoint = new Point(currentPoint.X, currentPoint.Y);
+        CurrentPoint = new Point(currentPoint.X, currentPoint.Y);
 
         RaisePropertyChanged(nameof(CurrentPointInverseMapScale));
         RaisePropertyChanged(nameof(CurrentPointGroundResolution));
 
-        this.OnMouseMove?.Invoke(this, currentPoint);
+        OnMouseMove?.Invoke(this, currentPoint);
     }
 
     public void FireMapMouseUp(WpfPoint currentPoint)
     {
-        this.OnMapMouseUp?.Invoke(this, currentPoint);
+        OnMapMouseUp?.Invoke(this, currentPoint);
     }
 
     public void FireZoomChanged(double mapScale)
     {
-        this.RaisePropertyChanged(nameof(this.CurrentZoomLevel));
+        RaisePropertyChanged(nameof(CurrentZoomLevel));
 
-        this.OnZoomChanged?.Invoke(this, mapScale);
+        OnZoomChanged?.Invoke(this, mapScale);
 
         RaisePropertyChanged(nameof(InverseMapScale));
     }
@@ -1820,11 +1817,11 @@ public abstract class MapPresenter : BasePresenter
 
         Response<Geometry<Point>> result = null;
 
-        options = options ?? this.MapSettings.EditingOptions;
+        options = options ?? MapSettings.EditingOptions;
 
-        this.MapPanel.Options = options;
+        MapPanel.Options = options;
 
-        if (this.RequestEdit != null)
+        if (RequestEdit != null)
         {
             result = await RequestEdit(geometry, options);
         }
@@ -1849,7 +1846,7 @@ public abstract class MapPresenter : BasePresenter
         //options = options ?? this.MapSettings.EditingOptions;
         //this.MapPanel.Options = options;
 
-        var type = points.Count == 1 ? GeometryType.Point : (isClosed ? GeometryType.Polygon : GeometryType.LineString);
+        var type = points.Count == 1 ? GeometryType.Point : isClosed ? GeometryType.Polygon : GeometryType.LineString;
 
         Geometry<Point> geometry = new Geometry<Point>(points/*.ToArray()*/, type, srid);
 
@@ -1860,18 +1857,18 @@ public abstract class MapPresenter : BasePresenter
     {
         //this.IsEditMode = false;
 
-        this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
+        RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
-        this.OnCancelEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        OnCancelEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
     }
 
     protected void FinishEdit()
     {
         //this.IsEditMode = false;
 
-        this.RequestFinishEdit?.Invoke(); //this is called in MapViewer
+        RequestFinishEdit?.Invoke(); //this is called in MapViewer
 
-        this.OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        OnFinishEdit?.Invoke(null, EventArgs.Empty); //this is called in the apps
     }
 
     #endregion
@@ -1882,29 +1879,29 @@ public abstract class MapPresenter : BasePresenter
 
     public void RefreshLayerVisibility(ILayer layer)
     {
-        this.RequestRefreshLayerVisibility?.Invoke(layer);
+        RequestRefreshLayerVisibility?.Invoke(layer);
     }
 
     public void AddLayer(SpecialPointLayer layer)
     {
-        this.RequestAddSpecialPointLayer?.Invoke(layer);
+        RequestAddSpecialPointLayer?.Invoke(layer);
     }
 
     public void SetLayer(ILayer layer)
     {
         TrySetCommands(layer);
 
-        this.RequestSetLayer?.Invoke(layer);
+        RequestSetLayer?.Invoke(layer);
     }
 
     public void UnSetLayer(ILayer layer)
     {
-        this.RequestRemoveLayer?.Invoke(layer);
+        RequestRemoveLayer?.Invoke(layer);
     }
 
     public void RegisterLayerWidthMap(VectorLayer layer)
     {
-        layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+        layer.RequestChangeSymbology = l => RequestShowSymbologyView?.Invoke(l);
     }
 
     protected void TrySetCommands(ILayer layer)
@@ -1964,7 +1961,7 @@ public abstract class MapPresenter : BasePresenter
 
             if ((layer as VectorLayer).RequestChangeSymbology == null)
             {
-                (layer as VectorLayer).RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+                (layer as VectorLayer).RequestChangeSymbology = l => RequestShowSymbologyView?.Invoke(l);
             }
         }
         else if (layer.Type == LayerType.Raster || layer.Type == LayerType.ImagePyramid)
@@ -2024,7 +2021,7 @@ public abstract class MapPresenter : BasePresenter
 
         if (layer.RequestChangeSymbology == null)
         {
-            layer.RequestChangeSymbology = l => this.RequestShowSymbologyView?.Invoke(l);
+            layer.RequestChangeSymbology = l => RequestShowSymbologyView?.Invoke(l);
         }
     }
 
@@ -2033,20 +2030,20 @@ public abstract class MapPresenter : BasePresenter
     {
         TrySetCommands(layer);
 
-        this.RequestAddLayer?.Invoke(layer);
+        RequestAddLayer?.Invoke(layer);
     }
 
     public void AddLayer<T>(ILayer layer) where T : class, IGeometryAware<Point>
     {
         TrySetCommands(layer);
 
-        this.RequestAddLayer?.Invoke(layer);
+        RequestAddLayer?.Invoke(layer);
     }
 
 
     public void RemoveLayer(string layerName)
     {
-        this.RequestRemoveLayerByName?.Invoke(layerName);
+        RequestRemoveLayerByName?.Invoke(layerName);
     }
 
 
@@ -2058,12 +2055,12 @@ public abstract class MapPresenter : BasePresenter
     /// <returns></returns>
     public Geometry<Point> TransformScreenGeometryToWebMercatorGeometry(Geometry<Point> screenGeometry)
     {
-        return this.RequestTransformScreenGeometryToWebMercatorGeometry?.Invoke(screenGeometry);
+        return RequestTransformScreenGeometryToWebMercatorGeometry?.Invoke(screenGeometry);
     }
 
     public ILayer FindLayer(Guid layerId)
     {
-        var result = GetAllLayers(this.Layers).SingleOrDefault(l => l.LayerId == layerId);
+        var result = GetAllLayers(Layers).SingleOrDefault(l => l.LayerId == layerId);
 
         return result;
     }
@@ -2087,17 +2084,17 @@ public abstract class MapPresenter : BasePresenter
     //*****************************************PolyBezier************************************************************
     #region PolyBezier
 
-    public void AddPolyBezierLayer(string name, List<Point> bezierPoints, System.Windows.Media.Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
+    public void AddPolyBezierLayer(string name, List<Point> bezierPoints, Geometry symbol, VisualParameters decorationVisuals, bool showSymbolOnly)
     {
-        this.RequestAddPolyBezier?.Invoke(name, bezierPoints, symbol, showSymbolOnly, decorationVisuals);
+        RequestAddPolyBezier?.Invoke(name, bezierPoints, symbol, showSymbolOnly, decorationVisuals);
     }
 
     public void RemovePolyBezierLayers()
     {
-        this.RequestRemovePolyBezierLayers?.Invoke();
+        RequestRemovePolyBezierLayers?.Invoke();
     }
 
-    protected Task<Response<PolyBezierLayer>> GetBezier(System.Windows.Media.Geometry symbol, VisualParameters decorationVisual)
+    protected Task<Response<PolyBezierLayer>> GetBezier(Geometry symbol, VisualParameters decorationVisual)
     {
         if (RequestGetBezier != null)
         {
@@ -2117,37 +2114,37 @@ public abstract class MapPresenter : BasePresenter
 
     public void ZoomAndCenterToGoogleZoomLevel(int zoomLevel, Point centerMapPoint, Action callback = null, bool withAnimation = true)
     {
-        this.RequestZoomAndCenterToGoogleZoomLevel?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
+        RequestZoomAndCenterToGoogleZoomLevel?.Invoke(zoomLevel, centerMapPoint, callback, withAnimation);
     }
 
     public void EnableRectangleZoomIn()
     {
-        this.RequestEnableRectangleZoom?.Invoke();
+        RequestEnableRectangleZoom?.Invoke();
     }
 
     public void EnableZoomOut()
     {
-        this.RequestEnableZoomOut?.Invoke();
+        RequestEnableZoomOut?.Invoke();
     }
 
     public void GoToIranExtent()
     {
-        this.RequestIranExtent?.Invoke();
+        RequestIranExtent?.Invoke();
     }
 
     public void FullExtent()
     {
-        this.RequestFullExtent?.Invoke();
+        RequestFullExtent?.Invoke();
     }
 
     public void Zoom(double mapScale)
     {
-        this.RequestZoomToScale?.Invoke(mapScale);
+        RequestZoomToScale?.Invoke(mapScale);
     }
 
     public void Zoom(double mapScale, Point center)
     {
-        this.RequestZoomToPoint?.Invoke(center, mapScale);
+        RequestZoomToPoint?.Invoke(center, mapScale);
     }
 
     //public void ZoomToGoogleZoomLevel(int googleZoomLevel)
@@ -2162,12 +2159,12 @@ public abstract class MapPresenter : BasePresenter
 
     public void ZoomToExtent(BoundingBox boundingBox, bool isExactExtent, bool isNewExtent, Action callback = null)
     {
-        this.RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, isNewExtent, callback);
+        RequestZoomToExtent?.Invoke(boundingBox, isExactExtent, isNewExtent, callback);
     }
 
     public void Zoom(Geometry<Point> geometry)
     {
-        this.RequestZoomToFeature?.Invoke(geometry);
+        RequestZoomToFeature?.Invoke(geometry);
     }
 
     #endregion
@@ -2178,19 +2175,19 @@ public abstract class MapPresenter : BasePresenter
 
     public void Pan()
     {
-        this.RequestPan?.Invoke();
+        RequestPan?.Invoke();
     }
 
     public void PanTo(Point point, Action callback)
     {
-        this.RequestPanTo?.Invoke(point, callback);
+        RequestPanTo?.Invoke(point, callback);
     }
 
     public void PanToGeographicPoint(Point point, Action callback = null)
     {
         var webMercatorPoint = MapProjects.GeodeticWgs84ToWebMercator(point);
 
-        this.PanTo(webMercatorPoint, callback);
+        PanTo(webMercatorPoint, callback);
     }
 
     #endregion
@@ -2203,11 +2200,11 @@ public abstract class MapPresenter : BasePresenter
     {
         //this.IsDrawMode = true;
 
-        options = options ?? this.MapSettings.DrawingOptions;
+        options = options ?? MapSettings.DrawingOptions;
 
-        this.MapPanel.Options = options;
+        MapPanel.Options = options;
 
-        var result = await this.RequestGetDrawingAsync?.Invoke(mode, options, display);
+        var result = await RequestGetDrawingAsync?.Invoke(mode, options, display);
 
         //this.IsDrawMode = false;
 
@@ -2217,30 +2214,30 @@ public abstract class MapPresenter : BasePresenter
 
     protected void CancelNewDrawing()
     {
-        this.RequestCancelNewDrawing?.Invoke(); //this is called in MapViewer
+        RequestCancelNewDrawing?.Invoke(); //this is called in MapViewer
 
-        this.OnCancelNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        OnCancelNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
     }
 
     private void FinishNewDrawing()
     {
-        this.RequestFinishNewDrawing?.Invoke(); //this is called in MapViewer
+        RequestFinishNewDrawing?.Invoke(); //this is called in MapViewer
 
-        this.OnFinishNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        OnFinishNewDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
     }
 
     private void FinishDrawingPart()
     {
-        this.RequestFinishDrawingPart?.Invoke();
+        RequestFinishDrawingPart?.Invoke();
     }
 
     protected void DeleteDrawing()
     {
         //this.IsEditMode = false;
 
-        this.RequestCancelEdit?.Invoke(); //this is called in MapViewer
+        RequestCancelEdit?.Invoke(); //this is called in MapViewer
 
-        this.OnDeleteDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
+        OnDeleteDrawing?.Invoke(null, EventArgs.Empty); //this is called in the apps
     }
 
     private void AddPointToNewDrawing()
@@ -2248,7 +2245,7 @@ public abstract class MapPresenter : BasePresenter
         if (MapPanel.CurrentWebMercatorEditingPoint.IsNaN())
             return;
 
-        this.RequestAddPointToNewDrawing?.Invoke(this.MapPanel.CurrentWebMercatorEditingPoint);
+        RequestAddPointToNewDrawing?.Invoke(MapPanel.CurrentWebMercatorEditingPoint);
     }
 
     #endregion
@@ -2259,17 +2256,17 @@ public abstract class MapPresenter : BasePresenter
 
     protected void RegisterRightClickMapOptions(System.Windows.FrameworkElement view, ILocateable dataContext)
     {
-        this.RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<System.Windows.FrameworkElement>(view, dataContext));
+        RequestRegisterMapOptions?.Invoke(new MapOptionsEventArgs<System.Windows.FrameworkElement>(view, dataContext));
     }
 
     protected void UnregisterRightClickMapOptions()
     {
-        this.RequestUnregisterMapOptions?.Invoke();
+        RequestUnregisterMapOptions?.Invoke();
     }
 
     protected void RemoveMapOptions()
     {
-        this.RequestRemoveMapOptions?.Invoke();
+        RequestRemoveMapOptions?.Invoke();
     }
 
 
@@ -2285,9 +2282,9 @@ public abstract class MapPresenter : BasePresenter
         //this.IsMeasureMode = true;
         try
         {
-            this.MapPanel.Options = MapSettings.DrawingMeasureOptions;
+            MapPanel.Options = MapSettings.DrawingMeasureOptions;
 
-            var result = await this.RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
+            var result = await RequestMeasure?.Invoke(mode, MapSettings.DrawingMeasureOptions, MapSettings.EditingMeasureOptions, action);
 
             //this.IsMeasureMode = false;
 
@@ -2305,7 +2302,7 @@ public abstract class MapPresenter : BasePresenter
     {
         //this.IsMeasureMode = false;
 
-        this.RequestCancelMeasure?.Invoke();
+        RequestCancelMeasure?.Invoke();
     }
 
     #endregion
@@ -2317,7 +2314,7 @@ public abstract class MapPresenter : BasePresenter
     {
         try
         {
-            var response = await this.GetPoint();
+            var response = await GetPoint();
 
             if (!response.HasNotNullResult())
                 return;
@@ -2350,13 +2347,13 @@ public abstract class MapPresenter : BasePresenter
 
     public void Print()
     {
-        this.RequestPrint?.Invoke();
+        RequestPrint?.Invoke();
     }
 
     public async Task ClipAndExportMapAsPngAsync(object owner)
     {
         // select a rectangle 
-        var polygon = await this.GetDrawingAsync(DrawMode.Polygon);
+        var polygon = await GetDrawingAsync(DrawMode.Polygon);
 
         if (polygon.IsNullOrEmpty())
             return;
@@ -2368,7 +2365,7 @@ public abstract class MapPresenter : BasePresenter
 
     public async Task ExportMapAsPngAsync(object owner)
     {
-        var boundingBos = this.PrintArea.IsNaN() ? this.CurrentExtent : this.PrintArea;
+        var boundingBos = PrintArea.IsNaN() ? CurrentExtent : PrintArea;
 
         await ExportMapAsPngAsync(owner, boundingBos);
     }
@@ -2390,7 +2387,7 @@ public abstract class MapPresenter : BasePresenter
 
         var visuals = await RequestGetLayersAsDrawingVisual(boundingBox, width, height);
 
-        IRI.Maptor.Jab.Common.Helpers.ImageUtility.MergeAndSave(fileName, visuals, width, height, new TiffBitmapEncoder());
+        ImageUtility.MergeAndSave(fileName, visuals, width, height, new TiffBitmapEncoder());
 
         //RenderTargetBitmap image = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
         //foreach (var drawingVisual in visuals)
@@ -2410,19 +2407,19 @@ public abstract class MapPresenter : BasePresenter
     public async Task SetPrintAreaAsync()
     {
         // select a rectangle 
-        var polygon = await this.GetDrawingAsync(DrawMode.Polygon);
+        var polygon = await GetDrawingAsync(DrawMode.Polygon);
 
         if (polygon.IsNullOrEmpty())
             return;
 
         var boundingBox = polygon.Result.GetBoundingBox();
 
-        this.PrintArea = boundingBox;
+        PrintArea = boundingBox;
     }
 
     public void Refresh(bool isNewExtent)
     {
-        this.RequestRefresh?.Invoke(isNewExtent);
+        RequestRefresh?.Invoke(isNewExtent);
     }
 
 
@@ -2434,13 +2431,13 @@ public abstract class MapPresenter : BasePresenter
 
     public virtual async Task AddShapefile(object owner, int? maxSizeInKB)
     {
-        this.IsBusy = true;
+        IsBusy = true;
 
-        var fileName = await this.DialogService.ShowOpenFileDialogAsync("shapefile|*.shp", owner);
+        var fileName = await DialogService.ShowOpenFileDialogAsync("shapefile|*.shp", owner);
 
         if (!File.Exists(fileName))
         {
-            this.IsBusy = false;
+            IsBusy = false;
 
             return;
         }
@@ -2469,7 +2466,7 @@ public abstract class MapPresenter : BasePresenter
                 RenderingApproach.Default,
                 RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-            this.AddLayer<Feature<Point>>(vectorLayer);
+            AddLayer<Feature<Point>>(vectorLayer);
         }
         catch (Exception ex)
         {
@@ -2477,19 +2474,19 @@ public abstract class MapPresenter : BasePresenter
         }
         finally
         {
-            this.IsBusy = false;
+            IsBusy = false;
         }
     }
 
     public virtual async Task AddWebMercatorWorldfile(object owner)
     {
-        this.IsBusy = true;
+        IsBusy = true;
 
-        var fileName = await this.DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
+        var fileName = await DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
 
         if (!File.Exists(fileName))
         {
-            this.IsBusy = false;
+            IsBusy = false;
 
             return;
         }
@@ -2499,13 +2496,13 @@ public abstract class MapPresenter : BasePresenter
 
     public virtual async Task AddWorldfile(object owner)
     {
-        this.IsBusy = true;
+        IsBusy = true;
 
-        var fileName = await this.DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
+        var fileName = await DialogService.ShowOpenFileDialogAsync("Worldfile|*.bmp;*.jpg;*.jpeg;*.png;*.tif;*.tiff", null);
 
         if (!File.Exists(fileName))
         {
-            this.IsBusy = false;
+            IsBusy = false;
 
             return;
         }
@@ -2535,7 +2532,7 @@ public abstract class MapPresenter : BasePresenter
 
             //this.SetLayer(rasterLayer);
 
-            this.AddLayer(rasterLayer);
+            AddLayer(rasterLayer);
 
             //this.Refresh();
 
@@ -2546,7 +2543,7 @@ public abstract class MapPresenter : BasePresenter
         }
         finally
         {
-            this.IsBusy = false;
+            IsBusy = false;
         }
 
     }
@@ -2555,26 +2552,26 @@ public abstract class MapPresenter : BasePresenter
     {
         try
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
-            var fileName = await this.DialogService.ShowOpenFileDialogAsync("Image Pyramid file|*.pyrmd", owner);
+            var fileName = await DialogService.ShowOpenFileDialogAsync("Image Pyramid file|*.pyrmd", owner);
 
             if (!File.Exists(fileName))
             {
-                this.IsBusy = false;
+                IsBusy = false;
 
                 return;
             }
 
             var rasterLayer = new RasterLayer(new ZippedImagePyramidDataSource(fileName),
-                System.IO.Path.GetFileNameWithoutExtension(fileName),
+                Path.GetFileNameWithoutExtension(fileName),
                 ScaleInterval.All,
                 false,
                 true,
                 System.Windows.Visibility.Visible,
                 1);
 
-            this.AddLayer(rasterLayer);
+            AddLayer(rasterLayer);
         }
         catch (Exception ex)
         {
@@ -2596,13 +2593,13 @@ public abstract class MapPresenter : BasePresenter
     {
         try
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
-            var fileName = await this.DialogService.ShowOpenFileDialogAsync("CSV file (*.csv)|*.csv|Text file (*.txt)|*.txt", owner);
+            var fileName = await DialogService.ShowOpenFileDialogAsync("CSV file (*.csv)|*.csv|Text file (*.txt)|*.txt", owner);
 
             if (!File.Exists(fileName))
             {
-                this.IsBusy = false;
+                IsBusy = false;
 
                 return;
             }
@@ -2641,13 +2638,13 @@ public abstract class MapPresenter : BasePresenter
     {
         try
         {
-            this.IsBusy = true;
+            IsBusy = true;
 
-            var fileName = await this.DialogService.ShowOpenFileDialogAsync("TSV file (*.tsv)|*.tsv|Text file (*.txt)|*.txt", owner);
+            var fileName = await DialogService.ShowOpenFileDialogAsync("TSV file (*.tsv)|*.tsv|Text file (*.txt)|*.txt", owner);
 
             if (!File.Exists(fileName))
             {
-                this.IsBusy = false;
+                IsBusy = false;
 
                 return;
             }
@@ -2696,7 +2693,7 @@ public abstract class MapPresenter : BasePresenter
                 RenderingApproach.Default,
                 RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-            this.AddLayer<Feature<Point>>(vectorLayer);
+            AddLayer<Feature<Point>>(vectorLayer);
         }
         catch (Exception ex)
         {
@@ -2704,7 +2701,7 @@ public abstract class MapPresenter : BasePresenter
         }
         finally
         {
-            this.IsBusy = false;
+            IsBusy = false;
         }
     }
 
@@ -2753,7 +2750,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 _clearAllCommand = new RelayCommand(param =>
                 {
-                    this.RequestClearAll?.Invoke();
+                    RequestClearAll?.Invoke();
                 });
             }
 
@@ -2768,7 +2765,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_rectangleZoomCommand == null)
             {
-                _rectangleZoomCommand = new RelayCommand(param => this.EnableRectangleZoomIn());
+                _rectangleZoomCommand = new RelayCommand(param => EnableRectangleZoomIn());
             }
 
             return _rectangleZoomCommand;
@@ -2782,7 +2779,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_zoomOutCommand == null)
             {
-                _zoomOutCommand = new RelayCommand(param => this.EnableZoomOut());
+                _zoomOutCommand = new RelayCommand(param => EnableZoomOut());
             }
 
             return _zoomOutCommand;
@@ -2796,7 +2793,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_panCommand == null)
             {
-                _panCommand = new RelayCommand(param => this.Pan());
+                _panCommand = new RelayCommand(param => Pan());
             }
 
             return _panCommand;
@@ -2813,7 +2810,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 _previousExtentCommand = new RelayCommand(param =>
                 {
-                    this.GoToPreviousExtent();
+                    GoToPreviousExtent();
                 });
             }
 
@@ -2831,7 +2828,7 @@ public abstract class MapPresenter : BasePresenter
             {
                 _nextExtentCommand = new RelayCommand(param =>
                 {
-                    this.GoToNextExtent();
+                    GoToNextExtent();
                 });
             }
 
@@ -2948,14 +2945,15 @@ public abstract class MapPresenter : BasePresenter
                         //TileType tileType = (TileType)Enum.Parse(typeof(TileType), args[1]);
 
                         //this.ProviderTypeFullName = provider;
-                        var provider = this.MapProviders.FirstOrDefault(m => m.FullName.EqualsIgnoreCase(param?.ToString()));
+                        var provider = MapProviders.FirstOrDefault(m => m.FullName.EqualsIgnoreCase(param?.ToString()));
 
-                        /*await*/ this.SetTileBaseMap(provider/*, BaseMapOpacity*/);
+                        /*await*/
+                        SetTileBaseMap(provider/*, BaseMapOpacity*/);
 
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine("exception at ChangeBaseMapCommand: " + ex);
+                        Debug.WriteLine("exception at ChangeBaseMapCommand: " + ex);
                     }
                 });
             }
@@ -2980,7 +2978,7 @@ public abstract class MapPresenter : BasePresenter
                 {
                     //this.MapSettings.DrawingMeasureOptions.IsEdgeLabelVisible = param == null ? true : (bool)param;
 
-                    await this.Measure(DrawMode.Polyline);
+                    await Measure(DrawMode.Polyline);
                 });
             }
 
@@ -3014,7 +3012,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_cancelMeasureCommand == null)
             {
-                _cancelMeasureCommand = new RelayCommand(param => this.CancelMeasure());
+                _cancelMeasureCommand = new RelayCommand(param => CancelMeasure());
             }
 
             return _cancelMeasureCommand;
@@ -3033,7 +3031,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_addTextCommand == null)
             {
-                _addTextCommand = new RelayCommand(async param => await this.AddText());
+                _addTextCommand = new RelayCommand(async param => await AddText());
             }
 
             return _addTextCommand;
@@ -3101,7 +3099,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_cancelNewDrawingCommand == null)
             {
-                _cancelNewDrawingCommand = new RelayCommand(param => this.CancelNewDrawing());
+                _cancelNewDrawingCommand = new RelayCommand(param => CancelNewDrawing());
             }
             return _cancelNewDrawingCommand;
         }
@@ -3114,7 +3112,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_finishDrawingPartCommand == null)
             {
-                _finishDrawingPartCommand = new RelayCommand(param => this.FinishDrawingPart());
+                _finishDrawingPartCommand = new RelayCommand(param => FinishDrawingPart());
             }
             return _finishDrawingPartCommand;
         }
@@ -3127,7 +3125,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_finishNewDrawingCommand == null)
             {
-                _finishNewDrawingCommand = new RelayCommand(param => this.FinishNewDrawing());
+                _finishNewDrawingCommand = new RelayCommand(param => FinishNewDrawing());
             }
             return _finishNewDrawingCommand;
         }
@@ -3140,7 +3138,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_cancelEditDrawingCommand == null)
             {
-                _cancelEditDrawingCommand = new RelayCommand(param => this.CancelEdit());
+                _cancelEditDrawingCommand = new RelayCommand(param => CancelEdit());
             }
             return _cancelEditDrawingCommand;
         }
@@ -3153,7 +3151,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_deleteDrawingCommand == null)
             {
-                _deleteDrawingCommand = new RelayCommand(param => this.DeleteDrawing());
+                _deleteDrawingCommand = new RelayCommand(param => DeleteDrawing());
             }
             return _deleteDrawingCommand;
         }
@@ -3168,7 +3166,7 @@ public abstract class MapPresenter : BasePresenter
 
             if (_finishEditDrawingCommand == null)
             {
-                _finishEditDrawingCommand = new RelayCommand(param => this.FinishEdit());
+                _finishEditDrawingCommand = new RelayCommand(param => FinishEdit());
             }
             return _finishEditDrawingCommand;
         }
@@ -3185,7 +3183,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_printCommand == null)
             {
-                _printCommand = new RelayCommand(param => this.Print());
+                _printCommand = new RelayCommand(param => Print());
             }
 
             return _printCommand;
@@ -3199,7 +3197,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_clipAndExportMapAsPngCommand == null)
             {
-                _clipAndExportMapAsPngCommand = new RelayCommand(async param => await this.ClipAndExportMapAsPngAsync(param));
+                _clipAndExportMapAsPngCommand = new RelayCommand(async param => await ClipAndExportMapAsPngAsync(param));
             }
 
             return _clipAndExportMapAsPngCommand;
@@ -3213,7 +3211,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_exportMapAsPngCommand == null)
             {
-                _exportMapAsPngCommand = new RelayCommand(async param => await this.ExportMapAsPngAsync(param));
+                _exportMapAsPngCommand = new RelayCommand(async param => await ExportMapAsPngAsync(param));
             }
 
             return _exportMapAsPngCommand;
@@ -3227,7 +3225,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_setPrintAreaCommand == null)
             {
-                _setPrintAreaCommand = new RelayCommand(async param => { await this.SetPrintAreaAsync(); });
+                _setPrintAreaCommand = new RelayCommand(async param => { await SetPrintAreaAsync(); });
             }
 
             return _setPrintAreaCommand;
@@ -3246,7 +3244,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_searchByAttributeCommand == null)
             {
-                _searchByAttributeCommand = new RelayCommand(param => this.SearchByAttribute(param?.ToString()));
+                _searchByAttributeCommand = new RelayCommand(param => SearchByAttribute(param?.ToString()));
             }
 
             return _searchByAttributeCommand;
@@ -3260,7 +3258,7 @@ public abstract class MapPresenter : BasePresenter
         {
             if (_goToCommand == null)
             {
-                _goToCommand = new RelayCommand(param => this.RequestShowGoToView?.Invoke(this.CurrentExtent.Center));
+                _goToCommand = new RelayCommand(param => RequestShowGoToView?.Invoke(CurrentExtent.Center));
             }
 
             return _goToCommand;

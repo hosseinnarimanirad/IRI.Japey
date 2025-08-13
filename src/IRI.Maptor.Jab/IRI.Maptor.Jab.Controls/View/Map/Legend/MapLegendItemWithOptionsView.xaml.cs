@@ -1,5 +1,5 @@
 ﻿using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Model.Legend;
+using IRI.Maptor.Jab.Common.Models.Legend;
 using System;
 using System.Collections.Generic;
 using System.Windows;

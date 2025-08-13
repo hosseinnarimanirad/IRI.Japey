@@ -14,6 +14,7 @@ using System.Linq;
 using System.Windows;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Jab.Common.Models;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering;
 

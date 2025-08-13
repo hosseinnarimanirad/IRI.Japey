@@ -1,6 +1,5 @@
 ﻿using IRI.Maptor.Jab.Common.Assets.Commands;
-using IRI.Maptor.Jab.Common.Presenter.Map;
-using IRI.Maptor.Jab.Common.ViewModel.Dialogs;
+using IRI.Maptor.Jab.Common.Presenters;
 using System;
 using System.Collections.Generic;
 using System.Linq;

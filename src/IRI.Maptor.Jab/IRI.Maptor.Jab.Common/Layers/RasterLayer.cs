@@ -8,7 +8,7 @@ using System.Windows.Shapes;
 using System.Threading.Tasks;
 
 using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Ket.SqlServerPersistence;
 using IRI.Maptor.Sta.SpatialReferenceSystem;

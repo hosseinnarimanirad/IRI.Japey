@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Common.Enums;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Spatial.Primitives;

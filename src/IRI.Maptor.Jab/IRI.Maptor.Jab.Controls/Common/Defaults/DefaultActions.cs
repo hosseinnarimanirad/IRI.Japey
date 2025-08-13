@@ -1,5 +1,5 @@
 ﻿using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Presenter.Map;
+using IRI.Maptor.Jab.Common.Presenters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +37,7 @@ public static class DefaultActions
     {
         var view = new IRI.Maptor.Jab.Controls.View.Symbology.SymbologyView();
 
-        var presenter = new IRI.Maptor.Jab.Common.Presenters.Symbology.SymbologyPresenter();
+        var presenter = new SymbologyPresenter();
 
         //if (layer is DrawingItemLayer)
         //{ 

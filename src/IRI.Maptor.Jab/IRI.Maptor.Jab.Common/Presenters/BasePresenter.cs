@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Security.Principal;
 using System.Windows;
+using System.Security.Principal;
+
 using IRI.Maptor.Jab.Common.Abstractions;
 using IRI.Maptor.Jab.Common.Localization;
+
 using static IRI.Maptor.Jab.Common.Localization.LocalizationResourceKeys;
 
-namespace IRI.Maptor.Jab.Common.Presenter;
+namespace IRI.Maptor.Jab.Common.Presenters;
 
 //TO DO: consider replacing Action methods with "IDialogService" 
 public class BasePresenter : Notifier
@@ -31,13 +33,13 @@ public class BasePresenter : Notifier
         {
             System.Threading.Thread.CurrentPrincipal = value;
 
-            this.UserName = value.Identity.Name;
+            UserName = value.Identity.Name;
 
             RaisePropertyChanged(nameof(UserName));
 
             RaisePropertyChanged();
 
-            this.UserChanged?.Invoke(this, this.UserName);
+            UserChanged?.Invoke(this, UserName);
         }
     }
 
@@ -125,7 +127,7 @@ public class BasePresenter : Notifier
             return;
         }
 
-        this.DialogService = presenter.DialogService;
+        DialogService = presenter.DialogService;
 
         //this.RequestOpenFile = arg => presenter.RequestOpenFile(arg);
         //this.RequestSaveFile = arg => presenter.RequestSaveFile(arg);

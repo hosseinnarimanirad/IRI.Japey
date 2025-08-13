@@ -7,7 +7,7 @@ using System.Windows.Data;
 using System.Threading.Tasks;
 
 using IRI.Maptor.Sta.Common.Model;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Jab.Common.TileServices;

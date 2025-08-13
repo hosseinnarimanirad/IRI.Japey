@@ -56,13 +56,11 @@
     <None Remove="Assets\Images\Flags\fa.png" />
     <None Remove="Assets\Images\imageNotFound.jpg" />
     <None Remove="Assets\Images\Logos\google.png" />
-    <None Remove="Deploy\Stateless.dll" />
     <None Remove="Properties\Resources.resx~RF2341c1.TMP" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\Images\Logos\google.png" />
-    <Content Include="Deploy\Stateless.dll" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,13 +1,11 @@
-﻿using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Sta.Spatial.Primitives;
-using System;
+﻿using System;
 using System.Windows.Media;
-using WpfPoint = System.Windows.Point;
-using IRI.Maptor.Sta.Common.Primitives;
+
+using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Sta.Spatial.Helpers;
+using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
-using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Extensions;
 

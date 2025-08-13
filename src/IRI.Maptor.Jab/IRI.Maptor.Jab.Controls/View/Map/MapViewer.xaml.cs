@@ -26,9 +26,9 @@ using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Persistence.DataSources;
 using IRI.Maptor.Jab.Controls.Model;
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.TileServices;
-using IRI.Maptor.Jab.Common.Model.Spatialable;
+using IRI.Maptor.Jab.Common.Models.Spatialable;
 
 using sb = IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Persistence.RasterDataSources;
@@ -43,6 +43,8 @@ using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Jab.Common.Presenters;
+using IRI.Maptor.Jab.Common.Events;
 
 //using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 
@@ -474,11 +476,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
 
 
-    Jab.Common.Presenter.Map.MapPresenter _presenter;
+    MapPresenter _presenter;
 
     #endregion
 
-    public async Task Register(Jab.Common.Presenter.Map.MapPresenter presenter,
+    public async Task Register(MapPresenter presenter,
                                 sb.BoundingBox? initialView = null,
                                 List<IrProvince93>? provinces = null)
     {
@@ -4232,7 +4234,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     private FrameworkElement GetRightClickOptionsForDraw()
     {
-        var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
+        var presenter = new MapOptionsPresenter(
         rightToolTip: "تکمیل",
         leftToolTip: "لغو",
         middleToolTip: "تکمیل تکه‌جاری",
