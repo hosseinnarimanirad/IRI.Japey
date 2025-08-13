@@ -57,17 +57,28 @@ jobs:
 
     - name: Pack (Pre-release)
       run: |
-        $versionSuffix = "alpha.${{ github.run_number }}"
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
         foreach ($prefix in $prefixes) {
-          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            # Read version from .csproj
+            $xml = [xml](Get-Content $_.FullName)
+            $versionNode = $xml.Project.PropertyGroup.Version
+            if (-not $versionNode) {
+              Write-Host "No <Version> found, using 1.0.0"
+              $baseVersion = "1.0.0"
+            } else {
+              $baseVersion = $versionNode
+            }
+            $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
+            Write-Host "Packing with version $prereleaseVersion"
             dotnet pack $_.FullName `
               --configuration Release `
               --no-build `
-              /p:VersionSuffix=$versionSuffix `
+              /p:PackageVersion=$prereleaseVersion `
               --output ./nupkgs
           }
         }
+
 
     - name: Publish Pre-release to NuGet
       run: |
