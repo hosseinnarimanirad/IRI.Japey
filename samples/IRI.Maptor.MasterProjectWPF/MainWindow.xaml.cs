@@ -23,7 +23,7 @@ public partial class MainWindow : Window
 
     private void loaded_l(object sender, RoutedEventArgs e)
     {
-        SqlServerTypes.Utilities.LoadNativeAssembliesv14(AppDomain.CurrentDomain.BaseDirectory);
+        //SqlServerTypes.Utilities.LoadNativeAssembliesv14(AppDomain.CurrentDomain.BaseDirectory);
 
         var polygon = SqlGeometry.Parse(new SqlString("POLYGON( (0 0 9, 30 0 9, 30 30 9, 0 30 9, 0 0 9) )"));
         var temp = polygon.AsGml();

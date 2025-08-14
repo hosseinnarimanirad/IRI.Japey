@@ -8,7 +8,7 @@ public class EsriJson_AsWktTest
 {
     public EsriJson_AsWktTest()
     {
-        SqlServerTypes.Utilities.LoadNativeAssembliesv14();
+        //SqlServerTypes.Utilities.LoadNativeAssembliesv14();
     }
 
     [Fact]

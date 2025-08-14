@@ -17,7 +17,7 @@ public class SpatialUtilityTest
 {
     public SpatialUtilityTest()
     {
-        SqlServerTypes.Utilities.LoadNativeAssembliesv14();
+        //SqlServerTypes.Utilities.LoadNativeAssembliesv14();
     }
 
     [Theory]

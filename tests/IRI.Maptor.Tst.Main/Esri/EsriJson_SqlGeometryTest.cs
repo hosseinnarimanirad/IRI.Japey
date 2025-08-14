@@ -9,7 +9,7 @@ public class EsriJson_SqlGeometryTest
 {
     public EsriJson_SqlGeometryTest()
     {
-        SqlServerTypes.Utilities.LoadNativeAssembliesv14();
+        //SqlServerTypes.Utilities.LoadNativeAssembliesv14();
     }
 
 
