@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -76,7 +76,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPlus\IRI.Maptor.Ket.GdiPlus.csproj" />
-    <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerPersistence\IRI.Maptor.Ket.SqlServerPersistence.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.MachineLearning\IRI.Maptor.Sta.MachineLearning.csproj" />
@@ -85,16 +84,7 @@
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.ShapefileFormat\IRI.Maptor.Sta.ShapefileFormat.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.SpatialReferenceSystem\IRI.Maptor.Sta.SpatialReferenceSystem.csproj" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <Reference Include="Microsoft.SqlServer.Types">
-      <HintPath>..\..\..\deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
-    </Reference>
-  </ItemGroup>-->
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SqlServer.Types"/>
-  </ItemGroup>
-
+ 
 
   <ItemGroup>
     <Resource Include="Assets\Cursors\MapCursorSet1\MagnifyMinusRightHanded.cur" />

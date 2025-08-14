@@ -1036,7 +1036,7 @@ public class EditableFeatureLayer : BaseLayer
 
     public string LengthLabel
     {
-        get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetLength(MapProjects.WebMercatorToGeodeticWgs84)); }
+        get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.CalculateGroundLength(MapProjects.WebMercatorToGeodeticWgs84)); }
     }
 
     public Path GetPath(Transform transform)

@@ -8,7 +8,7 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Maptor.Extensions;
+using IRI.Maptor.Sta.Common.Helpers;
 
 namespace IRI.Maptor.Sta.Spatial.Primitives;
 
@@ -972,7 +972,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
-
+     
 
     #region Simplification Measures
     // ref: McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
@@ -1833,6 +1833,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #endregion
 
+
     #region Static Create
 
     //public static readonly Geometry EmptyPoint = new Geometry(new IPoint[0], GeometryType.Point);
@@ -2114,9 +2115,10 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
     #region Area
 
+    public double EuclideanArea => CalculateUnsignedEuclideanArea();
 
     // https://www.mathopenref.com/coordpolygonarea.html
-    public double CalculateUnsignedEuclideanArea()
+    private double CalculateUnsignedEuclideanArea()
     {
         if (this.IsNullOrEmpty())
             return 0;
@@ -2134,7 +2136,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
                 return 0;
 
             case GeometryType.Polygon:
-                return CalculateUnsignedEuclideanAreaForPolygon(this);
+                return this.CalculateUnsignedEuclideanAreaForPolygon();
 
             case GeometryType.MultiPolygon:
                 return Geometries.Sum(g => g.CalculateUnsignedEuclideanArea());
@@ -2155,40 +2157,33 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     //تشکیل شده. بنابر این بزرگ‌ترین مساحت متعلق به رینگ بزرگ 
     //و باقی همه حفره‌ها هستن
     //این الگوریتم اگه چندضلعی معتبر نباشه درست جواب نمی‌ده
-    private static double CalculateUnsignedEuclideanAreaForPolygon<T>(Geometry<T> geometry) where T : IPoint, new()
+    private double CalculateUnsignedEuclideanAreaForPolygon()
     {
-        if (geometry == null || geometry.Geometries.Count == 0)
-        {
+        if (this.Geometries is null || this.Geometries.Count == 0)
             return 0;
-        }
 
-        List<double> areas = new List<double>();
+        double outerArea = 0;
+        double holesArea = 0;
 
-        int maxAreaIndex = 0;
-
-        double maxArea = 0;
-
-        for (int i = 0; i < geometry.Geometries.Count; i++)
+        for (int i = 0; i < this.Geometries.Count; i++)
         {
-            var area = SpatialUtility.GetUnsignedRingArea(geometry.Geometries[i].GetAllPoints());
+            var area = SpatialUtility.GetUnsignedRingArea(this.Geometries[i].GetAllPoints());
 
-            if (area > maxArea)
+            // If this ring is bigger than current outer, swap
+            if (area > outerArea)
             {
-                maxArea = area;
-                maxAreaIndex = i;
+                holesArea += outerArea; // previous outer becomes hole
+                outerArea = area;
             }
-
-            areas.Add(area);
+            else
+            {
+                holesArea += area; // this is a hole
+            }
         }
 
-        areas.RemoveAt(maxAreaIndex);
-
-        ////مساحت رینگ اصلی دو مرتبه حساب شده
-        ////تا از خودش داخل ارایه کم شود
-        //return 2 * outerRingArea - areas.Sum();
-
-        return maxArea - areas.Sum();
+        return Math.Max(0, outerArea - holesArea);
     }
+
 
     ////1399.06.11
     ////در این جا فرض شده که نقطه اخر چند حلقه تکرار 
@@ -2216,7 +2211,32 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     //    return Math.Abs(area / 2.0);
     //}
 
+
     #endregion
+
+    public IPoint? GetMeanOrLastPoint()
+    {
+        switch (this.Type)
+        {
+            case GeometryType.LineString:
+            case GeometryType.MultiLineString:
+                return this.GetLastPoint();
+
+            case GeometryType.Polygon:
+            case GeometryType.MultiPolygon:
+                return this.GetMeanPoint();
+
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException();
+        }
+
+    }
 
 
     #region Length
@@ -2270,6 +2290,73 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         if (isRing)
         {
             result += SpatialUtility.GetEuclideanDistance(this.Points[this.Points.Count - 1], this.Points[0]);
+        }
+
+        return result;
+    }
+
+    public double CalculateGroundLength(Func<T, T> toWgs84Geodetic)
+    {
+        //try
+        //{
+        //    return geometry.AsSqlGeometry().Project(toWgs84Geodetic, SridHelper.GeodeticWGS84).MakeValid().STLength().Value;
+        //}
+        //catch (Exception)
+        //{
+        //    return double.NaN;
+        //}
+        ////return GetArea(geometry.Transform(toWgs84Geodetic, 0));
+        if (this.IsNotValidOrEmpty())
+            return 0;
+
+        var geodeticGeometry = this.Transform(toWgs84Geodetic, SridHelper.GeodeticWGS84);
+
+        //1399.07.17
+        //if (this.Points == null && this.Geometries == null)
+        //    return 0;
+
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+                return 0;
+
+            case GeometryType.LineString:
+                return CalculateGroundLengthForLineStringOrRing(false, toWgs84Geodetic);
+
+            case GeometryType.Polygon:
+                return Geometries.Sum(g => g.CalculateGroundLengthForLineStringOrRing(true, toWgs84Geodetic));
+
+            case GeometryType.MultiLineString:
+            case GeometryType.MultiPolygon:
+                return Geometries.Sum(g => g.CalculateGroundLength(toWgs84Geodetic));
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry.cs > CalculateEuclideanLength");
+        }
+    }
+
+    private double CalculateGroundLengthForLineStringOrRing(bool isRing, Func<T, T> toWgs84Geodetic)
+    {
+        if (this.Points == null || this.Points.Count < 2)
+            return 0;
+
+        double result = 0;
+
+        var wgs84Pionts = this.Points.Select(toWgs84Geodetic).ToList();
+
+        for (int i = 0; i < wgs84Pionts.Count - 1; i++)
+        {
+            result += SpatialUtility.VincentyDistance(wgs84Pionts[i], wgs84Pionts[i + 1]);
+        }
+
+        if (isRing)
+        {
+            result += SpatialUtility.VincentyDistance(wgs84Pionts[this.Points.Count - 1], wgs84Pionts[0]);
         }
 
         return result;

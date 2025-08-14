@@ -507,7 +507,7 @@ public class LegendCommand : Notifier, ILegendCommand
                 if (string.IsNullOrWhiteSpace(file))
                     return;
 
-                var esriShape = layer.Geometry.AsSqlGeometry().AsEsriShape();
+                var esriShape = layer.Geometry.AsEsriShape();
 
                 IRI.Maptor.Sta.ShapefileFormat.Shapefile.Save(file, new List<IEsriShape>() { esriShape }, true, true);
             }
@@ -770,10 +770,12 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var pointCollection = IRI.Maptor.Ket.SqlServerSpatialExtension.SqlSpatialUtility.MakePointCollection(layer.Geometry.GetAllPoints());
+                //var pointCollection = IRI.Maptor.Ket.SqlServerSpatialExtension.SqlSpatialUtility.MakePointCollection(layer.Geometry.GetAllPoints());
+                //map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.LayerName} Points");
 
-                map.AddDrawingItem(pointCollection.AsGeometry(), $"{layer.LayerName} Points");
+                var pointCollection = Geometry<Point>.Create(layer.Geometry.GetAllPoints(), GeometryType.MultiPoint, layer.Geometry.Srid);
 
+                map.AddDrawingItem(pointCollection, $"{layer.LayerName} Points");
             }
             catch (Exception ex)
             {
