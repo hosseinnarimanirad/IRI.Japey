@@ -1,0 +1,84 @@
+name: Publish master to NuGet
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_PREFIXES: 'IRI.Maptor.Sta IRI.Maptor.Ket IRI.Maptor.Jab IRI.Maptor.Bas'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+  NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603'  
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
+          }
+        }
+
+    - name: Build
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet build $_.FullName `
+              --configuration Release `
+              --no-restore `
+              /p:NoWarn=$"{{ env.NOWARN_CODES }}" `
+              /p:WarningLevel=0 `
+              /p:GenerateDocumentationFile=false `
+              --verbosity minimal
+          }
+        }
+        
+    - name: Test
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.Tests.csproj" | ForEach-Object {
+            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
+          }
+        }
+
+    - name: Pack
+      run: |
+        $output = "${{ github.workspace }}/nupkgs"
+        New-Item -ItemType Directory -Force -Path $output | Out-Null
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet pack $_.FullName --configuration Release --no-build --output $output
+          }
+        }
+
+    - name: Publish to NuGet
+      run: |
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+        } 
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: "Maptor Release"
+        tag_name: "v${{ github.run_number }}"
+        body: |
+          📦 Stable NuGet packages for this release:
+          ${{ env.PROJECT_PREFIXES }}
+        files: ./nupkgs/*.nupkg

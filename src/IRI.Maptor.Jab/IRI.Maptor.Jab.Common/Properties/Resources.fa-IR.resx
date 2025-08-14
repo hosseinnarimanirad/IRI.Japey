@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cmd_legend_boundary" xml:space="preserve">
+    <value>مرز</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoGeometries" xml:space="preserve">
+    <value>تفکیک به هندسه</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoPoints" xml:space="preserve">
+    <value>تفکیک به نقاط</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_clearSelected" xml:space="preserve">
+    <value>پاک کردن عوارض انتخابی</value>
+  </data>
+  <data name="cmd_legend_convexHull" xml:space="preserve">
+    <value>پوش محدب</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_downloadRegionImages" xml:space="preserve">
+    <value>دانلود تصاویر محدوده</value>
+  </data>
+  <data name="cmd_legend_duplicateFeature" xml:space="preserve">
+    <value>ایجاد کپی از عارضه</value>
+    <comment>drawing layer - create a clone from the feature</comment>
+  </data>
+  <data name="cmd_legend_edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="cmd_legend_envelope" xml:space="preserve">
+    <value>مستطیل دربرگیرنده</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_exportAsGeoJson" xml:space="preserve">
+    <value>خروجی در قالب GeoJson</value>
+  </data>
+  <data name="cmd_legend_exportAsPng" xml:space="preserve">
+    <value>خروجی عکسی</value>
+  </data>
+  <data name="cmd_legend_exportAsShapefile" xml:space="preserve">
+    <value>خروجی در قالب شیپ‌فایل</value>
+  </data>
+  <data name="cmd_legend_exteriorRing" xml:space="preserve">
+    <value>حلقه خارجی</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_removeLayer" xml:space="preserve">
+    <value>حذف لایه</value>
+  </data>
+  <data name="cmd_legend_selectByDrawing" xml:space="preserve">
+    <value>انتخاب عوارض محدودهٔ ترسیم</value>
+  </data>
+  <data name="cmd_legend_showAttributes" xml:space="preserve">
+    <value>اطلاعات توصیفی</value>
+  </data>
+  <data name="cmd_legend_showSymbology" xml:space="preserve">
+    <value>سمبل‌گذاری</value>
+  </data>
+  <data name="cmd_legend_toggleLayerLabel" xml:space="preserve">
+    <value>نمایش برچسب عوارض</value>
+  </data>
+  <data name="cmd_legend_zoomToExtent" xml:space="preserve">
+    <value>محدودهٔ لایه</value>
+  </data>
+  <data name="draw_addPointText" xml:space="preserve">
+    <value>افزودن نقطه</value>
+  </data>
+  <data name="draw_cancelDrawingText" xml:space="preserve">
+    <value>لغو ترسیم</value>
+  </data>
+  <data name="draw_finishDrawingPartText" xml:space="preserve">
+    <value>تکمیل بخش</value>
+  </data>
+  <data name="draw_finishDrawingText" xml:space="preserve">
+    <value>پایان ترسیم</value>
+  </data>
+  <data name="draw_newDrawingText" xml:space="preserve">
+    <value>برای اتمام ترسیم روی نقطهٔ آخر مجدد کلیک کنید.</value>
+  </data>
+  <data name="goto_dialogTitle" xml:space="preserve">
+    <value>بروبه مختصات</value>
+  </data>
+  <data name="mapPanel_currentPoint" xml:space="preserve">
+    <value>نقطه جاری</value>
+  </data>
+  <data name="mapPanel_multiPart" xml:space="preserve">
+    <value>عوارض چندتکه‌ای</value>
+  </data>
+  <data name="mapPanel_srs" xml:space="preserve">
+    <value>سیستم مرجع مکانی</value>
+  </data>
+  <data name="map_pan" xml:space="preserve">
+    <value>جابجایی</value>
+  </data>
+  <data name="map_zoomTo" xml:space="preserve">
+    <value>بزرگ‌نمایی</value>
+  </data>
+  <data name="srs_ceaSubTitle" xml:space="preserve">
+    <value>ceaSubTitle</value>
+  </data>
+  <data name="srs_ceaTitle" xml:space="preserve">
+    <value>سیستم تصویر Cylindrical Equal Area</value>
+  </data>
+  <data name="srs_defaultLatitude" xml:space="preserve">
+    <value>عرض جغرافیایی:</value>
+  </data>
+  <data name="srs_defaultLongitude" xml:space="preserve">
+    <value>طول جغرافیایی:</value>
+  </data>
+  <data name="srs_defaultX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="srs_defaultY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="srs_geodeticDmsSubTitle" xml:space="preserve">
+    <value>ژئودتیک</value>
+  </data>
+  <data name="srs_geodeticDmsTitle" xml:space="preserve">
+    <value>سیستم مختصات ژئودتیک، WGS84 (درجه، دقیقه، ثانیه)</value>
+  </data>
+  <data name="srs_geodeticSubTitle" xml:space="preserve">
+    <value>ژئودتیک</value>
+  </data>
+  <data name="srs_geodeticTitle" xml:space="preserve">
+    <value>سیستم مختصات ژئودتیک، WGS84 (اعشار درجه)</value>
+  </data>
+  <data name="srs_mercatorSubTitle" xml:space="preserve">
+    <value>Mercator</value>
+  </data>
+  <data name="srs_mercatorTitle" xml:space="preserve">
+    <value>سیستم تصویر Mercator</value>
+  </data>
+  <data name="srs_tmSubTitle" xml:space="preserve">
+    <value>Transeverse Mercator</value>
+  </data>
+  <data name="srs_tmTitle" xml:space="preserve">
+    <value>سیستم تصویر Transeverse Mercator</value>
+  </data>
+  <data name="srs_utmSubTitle" xml:space="preserve">
+    <value>UTM</value>
+  </data>
+  <data name="srs_utmTitle" xml:space="preserve">
+    <value>سیستم تصویر UTM</value>
+  </data>
+  <data name="srs_utmZone" xml:space="preserve">
+    <value>ناحیه</value>
+  </data>
+  <data name="srs_webMercatorSubTitle" xml:space="preserve">
+    <value>وب مرکاتور</value>
+  </data>
+  <data name="srs_webMercatorTitle" xml:space="preserve">
+    <value>وب مرکاتور</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+    <comment>Drawing Layer download google, bing, etc images</comment>
+  </data>
+  <data name="symbology_fillLabel" xml:space="preserve">
+    <value>رنگ سطح</value>
+  </data>
+  <data name="symbology_strokeLabel" xml:space="preserve">
+    <value>رنگ مرز</value>
+  </data>
+  <data name="symbology_strokeWidthLabel" xml:space="preserve">
+    <value>ضخامت مرز</value>
+  </data>
+  <data name="symbology_title" xml:space="preserve">
+    <value>سمبل لایه</value>
+  </data>
+  <data name="tile_mapType_BlackWhite" xml:space="preserve">
+    <value>سیاه‌سفید</value>
+  </data>
+  <data name="tile_mapType_CleanGrey" xml:space="preserve">
+    <value>خاکستری</value>
+  </data>
+  <data name="tile_mapType_Comic" xml:space="preserve">
+    <value>فانتزی</value>
+  </data>
+  <data name="tile_mapType_Dark" xml:space="preserve">
+    <value>تیره</value>
+  </data>
+  <data name="tile_mapType_HikeBike" xml:space="preserve">
+    <value>طبیعت‌گردی</value>
+  </data>
+  <data name="tile_mapType_Hybrid" xml:space="preserve">
+    <value>ترکیبی</value>
+  </data>
+  <data name="tile_mapType_Light" xml:space="preserve">
+    <value>روشن</value>
+  </data>
+  <data name="tile_mapType_MapyTourist" xml:space="preserve">
+    <value>توریست</value>
+  </data>
+  <data name="tile_mapType_MapyWinter" xml:space="preserve">
+    <value>زمستان</value>
+  </data>
+  <data name="tile_mapType_Nature" xml:space="preserve">
+    <value>طبیعت</value>
+  </data>
+  <data name="tile_mapType_NeutralBlue" xml:space="preserve">
+    <value>آبی</value>
+  </data>
+  <data name="tile_mapType_RoadMap" xml:space="preserve">
+    <value>راه</value>
+  </data>
+  <data name="tile_mapType_Satellite" xml:space="preserve">
+    <value>ماهواره</value>
+  </data>
+  <data name="tile_mapType_Street" xml:space="preserve">
+    <value>راه</value>
+  </data>
+  <data name="tile_mapType_Terrain" xml:space="preserve">
+    <value>توپو</value>
+  </data>
+  <data name="tile_mapType_Topo" xml:space="preserve">
+    <value>توپو</value>
+  </data>
+  <data name="tile_mapType_Traffic" xml:space="preserve">
+    <value>ترافیک</value>
+  </data>
+  <data name="tile_mapType_Watercolor" xml:space="preserve">
+    <value>آبرنگ</value>
+  </data>
+  <data name="tile_provider_bing" xml:space="preserve">
+    <value>بینگ</value>
+  </data>
+  <data name="tile_provider_carto" xml:space="preserve">
+    <value>کارتو</value>
+  </data>
+  <data name="tile_provider_google" xml:space="preserve">
+    <value>گوگل</value>
+  </data>
+  <data name="tile_provider_mapbox" xml:space="preserve">
+    <value>مپ‌باکس</value>
+  </data>
+  <data name="tile_provider_nokia" xml:space="preserve">
+    <value>نوکیا</value>
+  </data>
+  <data name="tile_provider_osm" xml:space="preserve">
+    <value>OSM</value>
+  </data>
+  <data name="tile_provider_waze" xml:space="preserve">
+    <value>ویز</value>
+  </data>
+  <data name="tile_provider_yandex" xml:space="preserve">
+    <value>یاندکس</value>
+  </data>
+  <data name="ui_addShapefile" xml:space="preserve">
+    <value>افزودن شیپ‌فایل</value>
+  </data>
+  <data name="ui_baseMaps" xml:space="preserve">
+    <value>نقشه‌های پایه</value>
+  </data>
+  <data name="ui_clear" xml:space="preserve">
+    <value>پاک کردن</value>
+  </data>
+  <data name="ui_drawingLegend_addGeoJson" xml:space="preserve">
+    <value>بارگذاری عارضه ژئوجی‌سان</value>
+  </data>
+  <data name="ui_drawingLegend_addLatLongTxt" xml:space="preserve">
+    <value>بارگذاری از فایل</value>
+  </data>
+  <data name="ui_drawingLegend_addShapefile" xml:space="preserve">
+    <value>بارگذاری عارضه شیپ‌فایل</value>
+  </data>
+  <data name="ui_drawingLegend_moveDown" xml:space="preserve">
+    <value>پایین</value>
+  </data>
+  <data name="ui_drawingLegend_moveUp" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="ui_drawingLegend_removeAll" xml:space="preserve">
+    <value>حذف تمام عوارض ترسیمی</value>
+  </data>
+  <data name="ui_drawings" xml:space="preserve">
+    <value>عوارض ترسیمی</value>
+  </data>
+  <data name="ui_drawPoint" xml:space="preserve">
+    <value>ترسیم نقطه</value>
+  </data>
+  <data name="ui_drawPolygon" xml:space="preserve">
+    <value>ترسیم چندضلعی</value>
+  </data>
+  <data name="ui_drawPolyline" xml:space="preserve">
+    <value>ترسیم خط</value>
+  </data>
+  <data name="ui_fullExtent" xml:space="preserve">
+    <value>نمای کل</value>
+  </data>
+  <data name="ui_goTo" xml:space="preserve">
+    <value>برو به...</value>
+  </data>
+  <data name="ui_layers" xml:space="preserve">
+    <value>لایه‌ها</value>
+  </data>
+  <data name="ui_measureArea" xml:space="preserve">
+    <value>محاسبه مساحت</value>
+  </data>
+  <data name="ui_measureLength" xml:space="preserve">
+    <value>محاسبه فاصله</value>
+  </data>
+</root>

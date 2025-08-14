@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks" />
+    <PackageReference Include="Fluent.Ribbon" /> 
+    <PackageReference Include="Telerik.UI.for.Wpf.60.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IRI.Maptor.Jab\IRI.Maptor.Jab.Common\IRI.Maptor.Jab.Common.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Jab\IRI.Maptor.Jab.Controls\IRI.Maptor.Jab.Controls.csproj" /> 
+    <ProjectReference Include="..\..\src\IRI.Maptor.Bas\IRI.Maptor.Bas.SqlSpatialLoader\IRI.Maptor.Bas.SqlSpatialLoader.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Ket\IRI.Maptor.Ket.PersonalGdbPersistence\IRI.Maptor.Ket.PersonalGdbPersistence.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Ket\IRI.Maptor.Ket.WindowsBase\IRI.Maptor.Ket.WindowsBase.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Sta\IRI.Maptor.Sta.MachineLearning\IRI.Maptor.Sta.MachineLearning.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Sta\IRI.Maptor.Sta.ShapefileFormat\IRI.Maptor.Sta.ShapefileFormat.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Sta\IRI.Maptor.Sta.SpatialReferenceSystem\IRI.Maptor.Sta.SpatialReferenceSystem.csproj" />
+    <ProjectReference Include="..\..\src\IRI.Maptor.Sta\IRI.Maptor.Sta.Spatial\IRI.Maptor.Sta.Spatial.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.SqlServer.Types">
+      <HintPath>..\..\deploy\MicrosoftSqlServerTypes\v14\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

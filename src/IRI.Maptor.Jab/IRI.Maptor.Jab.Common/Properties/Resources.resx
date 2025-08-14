@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cmd_legend_boundary" xml:space="preserve">
+    <value>Boundary</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoGeometries" xml:space="preserve">
+    <value>Break Into Geometries</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_breakIntoPoints" xml:space="preserve">
+    <value>Break Into Points</value>
+    <comment>drawing layer </comment>
+  </data>
+  <data name="cmd_legend_clearSelected" xml:space="preserve">
+    <value>Clear Selected Features</value>
+  </data>
+  <data name="cmd_legend_convexHull" xml:space="preserve">
+    <value>Convex Hull</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_downloadRegionImages" xml:space="preserve">
+    <value>Download images</value>
+    <comment>Drawing Layer download google, bing, etc images</comment>
+  </data>
+  <data name="cmd_legend_duplicateFeature" xml:space="preserve">
+    <value>Duplicate</value>
+    <comment>drawing layer - create a clone from the feature</comment>
+  </data>
+  <data name="cmd_legend_edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="cmd_legend_envelope" xml:space="preserve">
+    <value>Envelope</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_exportAsGeoJson" xml:space="preserve">
+    <value>Export as GeoJson</value>
+  </data>
+  <data name="cmd_legend_exportAsPng" xml:space="preserve">
+    <value>Export as png</value>
+  </data>
+  <data name="cmd_legend_exportAsShapefile" xml:space="preserve">
+    <value>Export as Shapefile</value>
+  </data>
+  <data name="cmd_legend_exteriorRing" xml:space="preserve">
+    <value>Exterior Ring</value>
+    <comment>drawing layer</comment>
+  </data>
+  <data name="cmd_legend_removeLayer" xml:space="preserve">
+    <value>Remove Layer</value>
+  </data>
+  <data name="cmd_legend_selectByDrawing" xml:space="preserve">
+    <value>Select by Drawing</value>
+  </data>
+  <data name="cmd_legend_showAttributes" xml:space="preserve">
+    <value>Show Attributes</value>
+  </data>
+  <data name="cmd_legend_showSymbology" xml:space="preserve">
+    <value>Show Symbology</value>
+  </data>
+  <data name="cmd_legend_toggleLayerLabel" xml:space="preserve">
+    <value>Toggle Layer Label</value>
+  </data>
+  <data name="cmd_legend_zoomToExtent" xml:space="preserve">
+    <value>Zoom To Extent</value>
+  </data>
+  <data name="draw_addPointText" xml:space="preserve">
+    <value>Add Point</value>
+  </data>
+  <data name="draw_cancelDrawingText" xml:space="preserve">
+    <value>Cancel Drawing</value>
+  </data>
+  <data name="draw_finishDrawingPartText" xml:space="preserve">
+    <value>Finish Drawing Part</value>
+  </data>
+  <data name="draw_finishDrawingText" xml:space="preserve">
+    <value>Finish Drawing</value>
+  </data>
+  <data name="draw_newDrawingText" xml:space="preserve">
+    <value>Click on the last point to finish drawing.</value>
+  </data>
+  <data name="goto_dialogTitle" xml:space="preserve">
+    <value>Go To</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="imageNotFound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\Images\imageNotFound.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapPanel_currentPoint" xml:space="preserve">
+    <value>Current Point</value>
+  </data>
+  <data name="mapPanel_multiPart" xml:space="preserve">
+    <value>Multi part</value>
+  </data>
+  <data name="mapPanel_srs" xml:space="preserve">
+    <value>Spatial Reference System</value>
+  </data>
+  <data name="map_pan" xml:space="preserve">
+    <value>Pan</value>
+  </data>
+  <data name="map_zoomTo" xml:space="preserve">
+    <value>Zoom To</value>
+  </data>
+  <data name="srs_ceaSubTitle" xml:space="preserve">
+    <value>Cylindrical Equal Area</value>
+  </data>
+  <data name="srs_ceaTitle" xml:space="preserve">
+    <value>Cylindrical Equal Area</value>
+  </data>
+  <data name="srs_defaultLatitude" xml:space="preserve">
+    <value>Latitude:</value>
+  </data>
+  <data name="srs_defaultLongitude" xml:space="preserve">
+    <value>Longitude:</value>
+  </data>
+  <data name="srs_defaultX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="srs_defaultY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="srs_geodeticDmsSubTitle" xml:space="preserve">
+    <value>Geodetic, WGS84</value>
+  </data>
+  <data name="srs_geodeticDmsTitle" xml:space="preserve">
+    <value>Geodetic, WGS84 (dms)</value>
+  </data>
+  <data name="srs_geodeticSubTitle" xml:space="preserve">
+    <value>Geodetic, WGS84</value>
+  </data>
+  <data name="srs_geodeticTitle" xml:space="preserve">
+    <value>Geodetic, WGS84 (decimal degree)</value>
+  </data>
+  <data name="srs_mercatorSubTitle" xml:space="preserve">
+    <value>Mercator</value>
+  </data>
+  <data name="srs_mercatorTitle" xml:space="preserve">
+    <value>Mercator</value>
+  </data>
+  <data name="srs_tmSubTitle" xml:space="preserve">
+    <value>Transeverse Mercator</value>
+  </data>
+  <data name="srs_tmTitle" xml:space="preserve">
+    <value>Transeverse Mercator</value>
+  </data>
+  <data name="srs_utmSubTitle" xml:space="preserve">
+    <value>UTM</value>
+  </data>
+  <data name="srs_utmTitle" xml:space="preserve">
+    <value>Universal Transeverse Mercator (UTM)</value>
+  </data>
+  <data name="srs_utmZone" xml:space="preserve">
+    <value>Zone</value>
+  </data>
+  <data name="srs_webMercatorSubTitle" xml:space="preserve">
+    <value>Web Mercator</value>
+  </data>
+  <data name="srs_webMercatorTitle" xml:space="preserve">
+    <value>Web Mercator</value>
+  </data>
+  <data name="symbology_fillLabel" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="symbology_strokeLabel" xml:space="preserve">
+    <value>Stroke</value>
+  </data>
+  <data name="symbology_strokeWidthLabel" xml:space="preserve">
+    <value>Stroke width</value>
+  </data>
+  <data name="symbology_title" xml:space="preserve">
+    <value>Layer Symbology</value>
+  </data>
+  <data name="tile_mapType_BlackWhite" xml:space="preserve">
+    <value>BlackWhite</value>
+    <comment>GoogleBlackWhite</comment>
+  </data>
+  <data name="tile_mapType_CleanGrey" xml:space="preserve">
+    <value>CleanGrey</value>
+    <comment>GoogleCleanGrey</comment>
+  </data>
+  <data name="tile_mapType_Comic" xml:space="preserve">
+    <value>Comic</value>
+    <comment>MapboxComic</comment>
+  </data>
+  <data name="tile_mapType_Dark" xml:space="preserve">
+    <value>Dark</value>
+    <comment>CartoDark</comment>
+  </data>
+  <data name="tile_mapType_HikeBike" xml:space="preserve">
+    <value>HikeBike</value>
+    <comment>OsmHikeBike</comment>
+  </data>
+  <data name="tile_mapType_Hybrid" xml:space="preserve">
+    <value>Hybrid</value>
+    <comment>GoogleHybrid, BingHybrid</comment>
+  </data>
+  <data name="tile_mapType_Light" xml:space="preserve">
+    <value>Light</value>
+    <comment>GoogleLight, CartoLight</comment>
+  </data>
+  <data name="tile_mapType_MapyTourist" xml:space="preserve">
+    <value>MapyTourist</value>
+    <comment>MapyTourist</comment>
+  </data>
+  <data name="tile_mapType_MapyWinter" xml:space="preserve">
+    <value>MapyWinter</value>
+    <comment>MapyWinter</comment>
+  </data>
+  <data name="tile_mapType_Nature" xml:space="preserve">
+    <value>Nature</value>
+    <comment>GoogleNature</comment>
+  </data>
+  <data name="tile_mapType_NeutralBlue" xml:space="preserve">
+    <value>NeutralBlue</value>
+    <comment>GoogleNeutralBlue</comment>
+  </data>
+  <data name="tile_mapType_RoadMap" xml:space="preserve">
+    <value>RoadMap</value>
+    <comment>GoogleRoadMap</comment>
+  </data>
+  <data name="tile_mapType_Satellite" xml:space="preserve">
+    <value>Satellite</value>
+    <comment>GoogleSatellite, BingSatellite, MapboxSatellite</comment>
+  </data>
+  <data name="tile_mapType_Street" xml:space="preserve">
+    <value>Street</value>
+    <comment>BingStreet, OpenStreetMap, WazeStreet</comment>
+  </data>
+  <data name="tile_mapType_Terrain" xml:space="preserve">
+    <value>Terrain</value>
+    <comment>GoogleTerrain</comment>
+  </data>
+  <data name="tile_mapType_Topo" xml:space="preserve">
+    <value>Topo</value>
+    <comment>OpenTopoMap</comment>
+  </data>
+  <data name="tile_mapType_Traffic" xml:space="preserve">
+    <value>Traffic</value>
+    <comment>GoogleTraffic</comment>
+  </data>
+  <data name="tile_mapType_Watercolor" xml:space="preserve">
+    <value>Watercolor</value>
+    <comment>StamenWatercolor</comment>
+  </data>
+  <data name="tile_provider_bing" xml:space="preserve">
+    <value>BING</value>
+  </data>
+  <data name="tile_provider_carto" xml:space="preserve">
+    <value>CARTO</value>
+  </data>
+  <data name="tile_provider_google" xml:space="preserve">
+    <value>GOOGLE</value>
+  </data>
+  <data name="tile_provider_mapbox" xml:space="preserve">
+    <value>MAPBOX</value>
+  </data>
+  <data name="tile_provider_nokia" xml:space="preserve">
+    <value>NOKIA</value>
+  </data>
+  <data name="tile_provider_osm" xml:space="preserve">
+    <value>OPENSTREETMAP</value>
+  </data>
+  <data name="tile_provider_waze" xml:space="preserve">
+    <value>WAZE</value>
+  </data>
+  <data name="tile_provider_yandex" xml:space="preserve">
+    <value>YANDEX</value>
+  </data>
+  <data name="ui_addShapefile" xml:space="preserve">
+    <value>Add Shapefile</value>
+  </data>
+  <data name="ui_baseMaps" xml:space="preserve">
+    <value>Base Maps</value>
+  </data>
+  <data name="ui_clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="ui_drawingLegend_addGeoJson" xml:space="preserve">
+    <value>Add GeoJson</value>
+  </data>
+  <data name="ui_drawingLegend_addLatLongTxt" xml:space="preserve">
+    <value>Add Lat/Long Text</value>
+  </data>
+  <data name="ui_drawingLegend_addShapefile" xml:space="preserve">
+    <value>Add Shapefile</value>
+  </data>
+  <data name="ui_drawingLegend_moveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="ui_drawingLegend_moveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="ui_drawingLegend_removeAll" xml:space="preserve">
+    <value>Remove All</value>
+  </data>
+  <data name="ui_drawings" xml:space="preserve">
+    <value>Drawings</value>
+  </data>
+  <data name="ui_drawPoint" xml:space="preserve">
+    <value>Draw Point</value>
+  </data>
+  <data name="ui_drawPolygon" xml:space="preserve">
+    <value>Draw Polygon</value>
+  </data>
+  <data name="ui_drawPolyline" xml:space="preserve">
+    <value>Draw Polyline</value>
+  </data>
+  <data name="ui_fullExtent" xml:space="preserve">
+    <value>Full Extent</value>
+  </data>
+  <data name="ui_goTo" xml:space="preserve">
+    <value>Go To</value>
+  </data>
+  <data name="ui_layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="ui_measureArea" xml:space="preserve">
+    <value>Measure Area</value>
+  </data>
+  <data name="ui_measureLength" xml:space="preserve">
+    <value>Measure Length</value>
+  </data>
+  <data name="whiteImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\Images\whiteImage.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>

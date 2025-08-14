@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Azmayeshgah", "Azmayeshgah", "{E5F5079F-EF2B-4A9B-B00F-44AA61F07339}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E5F5079F-EF2B-4A9B-B00F-44AA61F07339}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basteha", "Basteha", "{0A2262EF-2A66-4CC1-A245-C1AE166CA614}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{0A2262EF-2A66-4CC1-A245-C1AE166CA614}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KetabkhaneStandard", "KetabkhaneStandard", "{8D95B70E-B943-4D24-A90A-A811CD0E7497}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8D95B70E-B943-4D24-A90A-A811CD0E7497}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76C519B4-F1A8-4FA2-9D40-0D72F90B4754}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,69 +18,75 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		images\package-icon.png = images\package-icon.png
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Common", "IRI.Maptor.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj", "{1ED088E6-1806-4D77-9143-2221DCBCF8F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Common", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj", "{1ED088E6-1806-4D77-9143-2221DCBCF8F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Taghche", "Taghche", "{B5AE1C6D-C747-476A-B892-FF58DF006254}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B5AE1C6D-C747-476A-B892-FF58DF006254}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Ogc", "IRI.Maptor.Sta\IRI.Maptor.Sta.Ogc\IRI.Maptor.Sta.Ogc.csproj", "{BE942544-C359-4A3A-A249-930A55AB801F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Ogc", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Ogc\IRI.Maptor.Sta.Ogc.csproj", "{BE942544-C359-4A3A-A249-930A55AB801F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tst.Main", "IRI.Maptor.Tst\IRI.Maptor.Tst.Main\IRI.Maptor.Tst.Main.csproj", "{80C31A04-8542-4484-AE8A-78F67243AF2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tst.Main", "tests\IRI.Maptor.Tst.Main\IRI.Maptor.Tst.Main.csproj", "{80C31A04-8542-4484-AE8A-78F67243AF2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.MachineLearning", "IRI.Maptor.Sta\IRI.Maptor.Sta.MachineLearning\IRI.Maptor.Sta.MachineLearning.csproj", "{DDA5CADB-6BEF-4AE1-80A3-3FDDB150B05B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.MachineLearning", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.MachineLearning\IRI.Maptor.Sta.MachineLearning.csproj", "{DDA5CADB-6BEF-4AE1-80A3-3FDDB150B05B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.ShapefileFormat", "IRI.Maptor.Sta\IRI.Maptor.Sta.ShapefileFormat\IRI.Maptor.Sta.ShapefileFormat.csproj", "{6F59FFD4-C888-4B6F-9D2C-94396693D84E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.ShapefileFormat", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.ShapefileFormat\IRI.Maptor.Sta.ShapefileFormat.csproj", "{6F59FFD4-C888-4B6F-9D2C-94396693D84E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ketabkhane", "Ketabkhane", "{A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.WindowsBase", "IRI.Maptor.Ket\IRI.Maptor.Ket.WindowsBase\IRI.Maptor.Ket.WindowsBase.csproj", "{1523DACD-D0FA-4E7A-AF98-15E45F65E0B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.WindowsBase", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.WindowsBase\IRI.Maptor.Ket.WindowsBase.csproj", "{1523DACD-D0FA-4E7A-AF98-15E45F65E0B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.SqlServerSpatialExtension", "IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj", "{4900C16A-8C31-4655-B3E8-0DED527D2132}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.SqlServerSpatialExtension", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj", "{4900C16A-8C31-4655-B3E8-0DED527D2132}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JabeAbzar", "JabeAbzar", "{3464F76F-DC20-484F-8420-6E0B9DD8E031}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.MasterProjectWPF", "samples\IRI.Maptor.MasterProjectWPF\IRI.Maptor.MasterProjectWPF.csproj", "{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.Common", "IRI.Maptor.Jab\IRI.Maptor.Jab.Common\IRI.Maptor.Jab.Common.csproj", "{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI.WPF", "UI.WPF", "{3464F76F-DC20-484F-8420-6E0B9DD8E031}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.Controls", "IRI.Maptor.Jab\IRI.Maptor.Jab.Controls\IRI.Maptor.Jab.Controls.csproj", "{AB880A8C-BFC6-444F-83DD-978EB2BAF89B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.Common", "src\IRI.Maptor.Jab\IRI.Maptor.Jab.Common\IRI.Maptor.Jab.Common.csproj", "{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.MultiSelectItem", "IRI.Maptor.Jab\IRI.Maptor.Jab.MultiSelectItem\IRI.Maptor.Jab.MultiSelectItem.csproj", "{3858C9DE-FEAF-4AA5-977A-0CA256B0E0FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.Controls", "src\IRI.Maptor.Jab\IRI.Maptor.Jab.Controls\IRI.Maptor.Jab.Controls.csproj", "{AB880A8C-BFC6-444F-83DD-978EB2BAF89B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Bas.SqlSpatialLoader", "IRI.Maptor.Bas\IRI.Maptor.Bas.SqlSpatialLoader\IRI.Maptor.Bas.SqlSpatialLoader.csproj", "{1AD8AF42-A544-4EE6-B8BA-E4D1A16F1CB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.MultiSelectItem", "src\IRI.Maptor.Jab\IRI.Maptor.Jab.MultiSelectItem\IRI.Maptor.Jab.MultiSelectItem.csproj", "{3858C9DE-FEAF-4AA5-977A-0CA256B0E0FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tag.SampleWpfApp", "IRI.Maptor.Tag\IRI.Maptor.Tag.SampleWpfApp\IRI.Maptor.Tag.SampleWpfApp.csproj", "{7004D483-0FA3-475A-BB99-327B747E7084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Bas.SqlSpatialLoader", "src\IRI.Maptor.Bas\IRI.Maptor.Bas.SqlSpatialLoader\IRI.Maptor.Bas.SqlSpatialLoader.csproj", "{1AD8AF42-A544-4EE6-B8BA-E4D1A16F1CB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Article.Sfc", "IRI.Maptor.Tag\IRI.Maptor.Article.Sfc\IRI.Maptor.Article.Sfc.csproj", "{ABB3E4C9-9952-486D-AE45-9AA76013AA43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tag.SampleWpfApp", "samples\IRI.Maptor.Tag.SampleWpfApp\IRI.Maptor.Tag.SampleWpfApp.csproj", "{7004D483-0FA3-475A-BB99-327B747E7084}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.Sfc", "research\IRI.Maptor.Res.Sfc\IRI.Maptor.Res.Sfc.csproj", "{ABB3E4C9-9952-486D-AE45-9AA76013AA43}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.TrajectoryCompression", "research\IRI.Maptor.Res.TrajectoryCompression\IRI.Maptor.Res.TrajectoryCompression.csproj", "{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{5FFC5712-E99B-4F5A-8E1F-F038505042E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.SqlServerPersistence", "IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerPersistence\IRI.Maptor.Ket.SqlServerPersistence.csproj", "{80C4F9EA-23F8-4F92-BA22-98BE7540B883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.SqlServerPersistence", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerPersistence\IRI.Maptor.Ket.SqlServerPersistence.csproj", "{80C4F9EA-23F8-4F92-BA22-98BE7540B883}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.PersonalGdbPersistence", "IRI.Maptor.Ket\IRI.Maptor.Ket.PersonalGdbPersistence\IRI.Maptor.Ket.PersonalGdbPersistence.csproj", "{7257CD96-7FD0-4E4A-A7A0-2474A6464B90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.PersonalGdbPersistence", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.PersonalGdbPersistence\IRI.Maptor.Ket.PersonalGdbPersistence.csproj", "{7257CD96-7FD0-4E4A-A7A0-2474A6464B90}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.PostgreSqlPersistence", "IRI.Maptor.Ket\IRI.Maptor.Ket.PostgreSqlPersistence\IRI.Maptor.Ket.PostgreSqlPersistence.csproj", "{470D51EC-1DEC-418B-A169-2D72E8721E12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.PostgreSqlPersistence", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.PostgreSqlPersistence\IRI.Maptor.Ket.PostgreSqlPersistence.csproj", "{470D51EC-1DEC-418B-A169-2D72E8721E12}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.GdiPersistence", "IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPersistence\IRI.Maptor.Ket.GdiPersistence.csproj", "{05B84A19-BED7-4870-ADDF-879091B5206E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.GdiPersistence", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPersistence\IRI.Maptor.Ket.GdiPersistence.csproj", "{05B84A19-BED7-4870-ADDF-879091B5206E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.WebApiPersistence", "IRI.Maptor.Ket\IRI.Maptor.Ket.WebApiPersistence\IRI.Maptor.Ket.WebApiPersistence.csproj", "{99979E6E-D7E0-451C-88AA-ACC0251C93CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.WebApiPersistence", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.WebApiPersistence\IRI.Maptor.Ket.WebApiPersistence.csproj", "{99979E6E-D7E0-451C-88AA-ACC0251C93CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.GdiPlus", "IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPlus\IRI.Maptor.Ket.GdiPlus.csproj", "{17E1F199-A4DB-4C1B-81EE-98EEF1AA6994}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Ket.GdiPlus", "src\IRI.Maptor.Ket\IRI.Maptor.Ket.GdiPlus\IRI.Maptor.Ket.GdiPlus.csproj", "{17E1F199-A4DB-4C1B-81EE-98EEF1AA6994}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.GsmGprs", "IRI.Maptor.Sta\IRI.Maptor.Sta.GsmGprs\IRI.Maptor.Sta.GsmGprs.csproj", "{70207D4B-EE52-43D6-B693-D9023926A981}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.GsmGprs", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.GsmGprs\IRI.Maptor.Sta.GsmGprs.csproj", "{70207D4B-EE52-43D6-B693-D9023926A981}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Article04.FastSimplification", "IRI.Maptor.Tag\IRI.Maptor.Article04.FastSimplification\IRI.Maptor.Article04.FastSimplification.csproj", "{97D4AB96-AA2B-442E-B433-9699A6123787}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Res.FastSimplification", "research\IRI.Maptor.Res.FastSimplification\IRI.Maptor.Res.FastSimplification.csproj", "{97D4AB96-AA2B-442E-B433-9699A6123787}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.SpatialReferenceSystem", "IRI.Maptor.Sta\IRI.Maptor.Sta.SpatialReferenceSystem\IRI.Maptor.Sta.SpatialReferenceSystem.csproj", "{A4D96303-6C3E-453C-8CE9-1A3D771AE9F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.SpatialReferenceSystem", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.SpatialReferenceSystem\IRI.Maptor.Sta.SpatialReferenceSystem.csproj", "{A4D96303-6C3E-453C-8CE9-1A3D771AE9F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Spatial", "IRI.Maptor.Sta\IRI.Maptor.Sta.Spatial\IRI.Maptor.Sta.Spatial.csproj", "{9C6B567A-B17B-4AF9-BFE4-8150C84313A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Spatial", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Spatial\IRI.Maptor.Sta.Spatial.csproj", "{9C6B567A-B17B-4AF9-BFE4-8150C84313A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Graph", "IRI.Maptor.Sta\IRI.Maptor.Sta.Graph\IRI.Maptor.Sta.Graph.csproj", "{7ADD954B-79C6-4EDE-8C7B-73C706A33912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Graph", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Graph\IRI.Maptor.Sta.Graph.csproj", "{7ADD954B-79C6-4EDE-8C7B-73C706A33912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Security", "IRI.Maptor.Sta\IRI.Maptor.Sta.Security\IRI.Maptor.Sta.Security.csproj", "{5A148633-9D6E-4886-8D2B-202D3B6FA8F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Security", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Security\IRI.Maptor.Sta.Security.csproj", "{5A148633-9D6E-4886-8D2B-202D3B6FA8F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Persistence", "IRI.Maptor.Sta\IRI.Maptor.Sta.Persistence\IRI.Maptor.Sta.Persistence.csproj", "{78415C93-67A8-4A0A-97ED-2A255347AA08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Sta.Persistence", "src\IRI.Maptor.Sta\IRI.Maptor.Sta.Persistence\IRI.Maptor.Sta.Persistence.csproj", "{78415C93-67A8-4A0A-97ED-2A255347AA08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tag.SampleCodes", "IRI.Maptor.Tag\IRI.Maptor.Tag.SampleCodes\IRI.Maptor.Tag.SampleCodes.csproj", "{3573CFC1-F295-42F1-B3E0-1D328C2C2AC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Tag.SampleCodes", "samples\IRI.Maptor.Tag.SampleCodes\IRI.Maptor.Tag.SampleCodes.csproj", "{3573CFC1-F295-42F1-B3E0-1D328C2C2AC2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.IranRepo", "IRI.Maptor.Jab\IRI.Maptor.Jab.IranRepo\IRI.Maptor.Jab.IranRepo.csproj", "{85669669-DDD3-4C60-89CC-FC95A6BBEFF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRI.Maptor.Jab.IranRepo", "src\IRI.Maptor.Jab\IRI.Maptor.Jab.IranRepo\IRI.Maptor.Jab.IranRepo.csproj", "{85669669-DDD3-4C60-89CC-FC95A6BBEFF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Research", "Research", "{D14E917F-45A0-4E0C-BCF5-31DC3C7D2B5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -146,6 +152,14 @@ Global
 		{4900C16A-8C31-4655-B3E8-0DED527D2132}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4900C16A-8C31-4655-B3E8-0DED527D2132}.Release|x86.ActiveCfg = Release|Any CPU
 		{4900C16A-8C31-4655-B3E8-0DED527D2132}.Release|x86.Build.0 = Release|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Debug|x86.Build.0 = Debug|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A}.Release|x86.Build.0 = Release|Any CPU
 		{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -194,6 +208,14 @@ Global
 		{ABB3E4C9-9952-486D-AE45-9AA76013AA43}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABB3E4C9-9952-486D-AE45-9AA76013AA43}.Release|x86.ActiveCfg = Release|Any CPU
 		{ABB3E4C9-9952-486D-AE45-9AA76013AA43}.Release|x86.Build.0 = Release|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Debug|x86.Build.0 = Debug|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4}.Release|x86.Build.0 = Release|Any CPU
 		{80C4F9EA-23F8-4F92-BA22-98BE7540B883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80C4F9EA-23F8-4F92-BA22-98BE7540B883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80C4F9EA-23F8-4F92-BA22-98BE7540B883}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -326,12 +348,14 @@ Global
 		{6F59FFD4-C888-4B6F-9D2C-94396693D84E} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
 		{1523DACD-D0FA-4E7A-AF98-15E45F65E0B0} = {A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}
 		{4900C16A-8C31-4655-B3E8-0DED527D2132} = {A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}
+		{DE0F41C0-84BA-4D03-AF7F-9E325B14919A} = {B5AE1C6D-C747-476A-B892-FF58DF006254}
 		{2CE9A8E7-BA53-410B-A2B8-7D285CBDFFC1} = {3464F76F-DC20-484F-8420-6E0B9DD8E031}
 		{AB880A8C-BFC6-444F-83DD-978EB2BAF89B} = {3464F76F-DC20-484F-8420-6E0B9DD8E031}
 		{3858C9DE-FEAF-4AA5-977A-0CA256B0E0FE} = {3464F76F-DC20-484F-8420-6E0B9DD8E031}
 		{1AD8AF42-A544-4EE6-B8BA-E4D1A16F1CB7} = {0A2262EF-2A66-4CC1-A245-C1AE166CA614}
 		{7004D483-0FA3-475A-BB99-327B747E7084} = {B5AE1C6D-C747-476A-B892-FF58DF006254}
-		{ABB3E4C9-9952-486D-AE45-9AA76013AA43} = {B5AE1C6D-C747-476A-B892-FF58DF006254}
+		{ABB3E4C9-9952-486D-AE45-9AA76013AA43} = {D14E917F-45A0-4E0C-BCF5-31DC3C7D2B5B}
+		{A12AA661-6B13-447A-8EE2-D011FF3A9CF4} = {D14E917F-45A0-4E0C-BCF5-31DC3C7D2B5B}
 		{5FFC5712-E99B-4F5A-8E1F-F038505042E2} = {A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}
 		{80C4F9EA-23F8-4F92-BA22-98BE7540B883} = {5FFC5712-E99B-4F5A-8E1F-F038505042E2}
 		{7257CD96-7FD0-4E4A-A7A0-2474A6464B90} = {5FFC5712-E99B-4F5A-8E1F-F038505042E2}
@@ -340,7 +364,7 @@ Global
 		{99979E6E-D7E0-451C-88AA-ACC0251C93CF} = {5FFC5712-E99B-4F5A-8E1F-F038505042E2}
 		{17E1F199-A4DB-4C1B-81EE-98EEF1AA6994} = {A839D3E5-8157-4EF6-8EB1-FA4E87A92CDA}
 		{70207D4B-EE52-43D6-B693-D9023926A981} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
-		{97D4AB96-AA2B-442E-B433-9699A6123787} = {B5AE1C6D-C747-476A-B892-FF58DF006254}
+		{97D4AB96-AA2B-442E-B433-9699A6123787} = {D14E917F-45A0-4E0C-BCF5-31DC3C7D2B5B}
 		{A4D96303-6C3E-453C-8CE9-1A3D771AE9F9} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
 		{9C6B567A-B17B-4AF9-BFE4-8150C84313A5} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}
 		{7ADD954B-79C6-4EDE-8C7B-73C706A33912} = {8D95B70E-B943-4D24-A90A-A811CD0E7497}

@@ -1,0 +1,77 @@
+name: Publish develop NuGet Package
+
+on:
+  push:
+    branches: [ develop ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_PREFIXES: 'IRI.Maptor.Sta IRI.Maptor.Ket IRI.Maptor.Jab IRI.Maptor.Bas'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+  NOWARN_CODES: 'CS1591;CS1573;CS0618;NU5104;CS8600;CS0414;CS8601;CS8603'
+
+jobs:
+  build-and-publish-prerelease:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet restore $_.FullName
+          }
+        }
+
+    - name: Build
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {
+            dotnet build $_.FullName `
+              --configuration Release `
+              --no-restore `
+              /p:NoWarn=$"{{ env.NOWARN_CODES }}" `
+              /p:WarningLevel=0 `
+              /p:GenerateDocumentationFile=false `
+              --verbosity minimal
+          }
+        }
+        
+    - name: Test
+      run: |
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.Tests.csproj" | ForEach-Object {
+            dotnet test $_.FullName --configuration Release --no-build --verbosity normal
+          }
+        }
+
+    - name: Pack (Pre-release)
+      run: |
+        $versionSuffix = "alpha.${{ github.run_number }}"
+        $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')
+        foreach ($prefix in $prefixes) {
+          Get-ChildItem -Path ./src -Recurse -Filter "${prefix}*.csproj" | ForEach-Object {                        
+            dotnet pack $_.FullName `
+              --configuration Release `
+              --no-build `
+              /p:VersionSuffix=$versionSuffix `
+              --output ./nupkgs
+          }
+        }
+
+    - name: Publish Pre-release to NuGet
+      run: |
+        $apiKey = "${{ secrets.NUGET_API_KEY }}"
+        Get-ChildItem -Path ./nupkgs -Filter *.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source ${{ env.NUGET_SOURCE }} --api-key $apiKey --skip-duplicate
+        }

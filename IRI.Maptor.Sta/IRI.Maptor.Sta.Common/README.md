@@ -1,1 +1,0 @@
-﻿A .NET standard library containing primitive data structures and types

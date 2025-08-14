@@ -6,6 +6,7 @@
     <GlobalPackageReference Include="MinVer" Version="4.3.0" PrivateAssets="all" />
   </ItemGroup>-->
   <ItemGroup>
+    <PackageVersion Include="DataGridExtensions" Version="2.6.0" />
     <PackageVersion Include="DocumentFormat.OpenXml" Version="2.18.0" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
