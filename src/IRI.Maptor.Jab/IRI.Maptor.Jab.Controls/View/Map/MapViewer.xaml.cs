@@ -42,7 +42,6 @@ using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
-using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Jab.Common.Events;
 
