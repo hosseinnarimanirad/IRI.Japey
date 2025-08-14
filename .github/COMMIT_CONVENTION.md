@@ -1,19 +1,20 @@
+# ✅ Commit Message Conventions for Maptor Repository
 
-# Commit Message Conventions for Maptor Repository
-
-This repository follows the **Conventional Commits** standard to maintain consistent, descriptive, and automation-friendly commit messages.
+This repository follows the **[Conventional Commits](https://www.conventionalcommits.org/)** standard to maintain consistent, descriptive, and automation-friendly commit messages.
 
 ---
 
 ## ✅ Format
+
 ```
 <type>(<scope>): <summary>
 ```
-- **type** → The nature of the change (see allowed types below)
-- **scope** → The specific project or module affected
-- **summary** → A short description in **imperative mood** (max 72 characters)
 
-Example:
+- **type** → Nature of the change (see allowed types below)
+- **scope** → Specific project/module affected (**optional** if not applicable)
+- **summary** → Short description in **imperative mood**, starting with **lowercase**, max **72 characters**
+
+**Example:**
 ```
 refactor(jab-common): rename namespaces for consistency
 ```
@@ -22,38 +23,43 @@ refactor(jab-common): rename namespaces for consistency
 
 ## ✅ Allowed Types
 
-| Type       | Description                                                                |
-|------------|----------------------------------------------------------------------------|
-| **feat**   | A new feature                                                             |
-| **fix**    | A bug fix                                                                 |
-| **docs**   | Documentation only                                                        |
-| **style**  | Code style changes (whitespace, formatting), no logic impact              |
-| **refactor** | Code restructuring without changing functionality                       |
-| **perf**   | Performance improvements                                                  |
-| **test**   | Adding or updating tests                                                  |
-| **chore**  | Maintenance tasks (build, tooling, dependencies)                          |
-| **build**  | Changes to the build system or external dependencies                      |
-| **ci**     | Continuous integration or deployment configuration changes                |
+| Type         | Icon | Description                                                                |
+|--------------|------|----------------------------------------------------------------------------|
+| **feat**     | ✨   | A new feature                                                             |
+| **fix**      | 🐛   | A bug fix                                                                 |
+| **docs**     | 📝   | Documentation only                                                        |
+| **style**    | 🎨   | Code style changes (whitespace, formatting), no logic impact              |
+| **refactor** | ♻️    | Code restructuring without changing functionality                         |
+| **perf**     | ⚡    | Performance improvements                                                  |
+| **test**     | ✅    | Adding or updating tests                                                  |
+| **chore**    | 🔧    | Maintenance tasks (build, tooling, dependencies)                          |
+| **build**    | 🏗️    | Changes to the build system or external dependencies                      |
+| **ci**       | 🤖    | Continuous integration or deployment configuration changes                |
 
 ---
 
 ## ✅ Scopes
 
-Use the **module/project name** or **feature area** as scope:
+Use the **module/project name** or **feature area** as scope.  
+If no specific module applies, omit the scope:
 
-- `jab-common` → **IRI.Maptor.Jab.Common**
-- `tile-services` → Tile provider system
-- `layers` → FeatureLayer, RasterLayer, GridLayer
-- `cartography`
-- `localization`
-- `presenters`
-- `office-formats`
-- `helpers`
+**Examples of scopes:**
+```
+jab-common
+tile-services
+layers
+cartography
+localization
+presenters
+office-formats
+helpers
+```
 
-Examples:
+**Example commits:**
 ```
 feat(tile-services): add Google Hybrid provider
 fix(layers): resolve crash when adding empty feature set
+chore: update .editorconfig
 ```
 
 ---
@@ -96,22 +102,40 @@ test(helpers): add unit tests for color blending helper
 
 If a commit **introduces a breaking change**, include a footer with `BREAKING CHANGE:` followed by details.
 
-Example:
+**Example:**
 ```
 refactor(layers): remove obsolete RenderAsync method
 
-BREAKING CHANGE: RenderAsync is replaced by RenderAsyncEx. Update all usages.
+BREAKING CHANGE: RenderAsync is replaced by RenderAsyncEx.
+Update all usages in the layer rendering pipeline.
 ```
 
 ---
 
-## ✅ Best Practices
+## ✅ Best Practices (with examples)
 
-✔ Use **imperative mood** in summary (e.g., “add”, not “added”)  
-✔ Keep the summary under **72 characters**  
-✔ Always specify **scope** where applicable  
-✔ Add a **body** if needed to explain context  
-✔ Reference issues in the footer using `Closes #<issue-number>`  
+✔ **Use imperative mood**  
+✅ `fix(layers): add null check for feature set`  
+❌ `fixed null check for feature set`  
+
+✔ **Start summary in lowercase (unless proper noun)**  
+✅ `docs(readme): update usage section`  
+❌ `docs(readme): Update usage section`  
+
+✔ **Keep summary under 72 characters**  
+✅ `perf(tile-services): improve caching for faster tile loading`  
+
+✔ **Add a body when needed (what and why, not how)**  
+```
+fix(layers): prevent null reference when loading empty dataset
+
+The issue occurred when FeatureSet was null. Added null-check and early return.
+
+Closes #123
+```
+
+✔ **Reference issues in the footer**  
+✅ `Closes #45` or `Fixes #78`
 
 ---
 
@@ -123,4 +147,4 @@ BREAKING CHANGE: RenderAsync is replaced by RenderAsyncEx. Update all usages.
 
 ---
 
-Happy committing! 🚀
+✅ **Happy committing!** 🚀
