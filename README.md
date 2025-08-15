@@ -1,7 +1,7 @@
 besmellah
 
 # 🌍 Maptor Spatial Library
-**A .NET Library for Spatial Data Processing and Geospatial Analysis**  
+**A .NET Library for Spatial Data Modeling, Transfer, Processing, and Visualization**  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/hosseinnarimanirad/IRI.Japey/blob/master/LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/hosseinnarimanirad/Maptor/master-release.yml)](https://github.com/hosseinnarimanirad/Maptor/actions)

@@ -140,6 +140,7 @@ var mstPrim = prim.GetMinimumSpanningTree();
 | DFS               | Depth-First Search traversal              |
 | Dijkstra          | Single-source shortest path (non-negative weights) |
 | FloydWarshall     | AllPairs shortest path (handles negative weights) |
+| Kruskal           | Minimum Spanning Tree                    |  
 | Prim              | Minimum Spanning Tree                    |  
 | SCC               | Strongly Connected Components            |
 
