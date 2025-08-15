@@ -1,5 +1,4 @@
 ﻿using System;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Model;
 

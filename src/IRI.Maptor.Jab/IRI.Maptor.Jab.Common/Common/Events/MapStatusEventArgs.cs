@@ -1,5 +1,4 @@
 ﻿using System;
-using IRI.Maptor.Jab.Common.Models;
 
 namespace IRI.Maptor.Jab.Common.Events;
 

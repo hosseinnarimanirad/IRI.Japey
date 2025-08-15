@@ -2,7 +2,6 @@
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Primitives;

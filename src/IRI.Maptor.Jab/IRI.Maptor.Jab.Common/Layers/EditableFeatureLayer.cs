@@ -18,7 +18,6 @@ using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 using LineSegment = System.Windows.Media.LineSegment;
 using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Sta.Spatial.Analysis;

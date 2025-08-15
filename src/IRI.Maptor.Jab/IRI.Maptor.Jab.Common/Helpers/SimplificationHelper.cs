@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Models;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Ket.GdiPlus.Helpers;
 using IRI.Maptor.Sta.MachineLearning;
 using IRI.Maptor.Sta.Spatial.Helpers;

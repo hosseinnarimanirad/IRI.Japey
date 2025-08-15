@@ -3,7 +3,6 @@ using IRI.Maptor.Sta.Persistence.DataSources;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Common.Models;
-using IRI.Maptor.Jab.Common.Enums;
 
 namespace IRI.Maptor.Jab.IranRepo;
 

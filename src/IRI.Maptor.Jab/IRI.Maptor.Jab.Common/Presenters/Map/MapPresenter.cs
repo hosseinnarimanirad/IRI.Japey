@@ -26,8 +26,6 @@ using IRI.Maptor.Sta.Persistence.RasterDataSources;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 
 using IRI.Maptor.Ket.GdiPersistence;
-
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Jab.Common.Models.Map;

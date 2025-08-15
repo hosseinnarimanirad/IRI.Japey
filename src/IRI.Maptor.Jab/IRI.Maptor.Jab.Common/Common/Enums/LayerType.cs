@@ -1,6 +1,6 @@
-﻿using System; 
+﻿using System;
 
-namespace IRI.Maptor.Jab.Common.Models;
+namespace IRI.Maptor.Jab.Common;
 
 [Flags]
 public enum LayerType

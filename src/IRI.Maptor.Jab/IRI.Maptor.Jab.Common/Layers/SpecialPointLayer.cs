@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Common.Primitives;

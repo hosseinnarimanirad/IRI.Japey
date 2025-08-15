@@ -15,7 +15,6 @@ using IRI.Maptor.Jab.Common.View.MapMarkers;
 using LineSegment = System.Windows.Media.LineSegment;
 using WpfPoint = System.Windows.Point;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Jab.Common.Presenters;

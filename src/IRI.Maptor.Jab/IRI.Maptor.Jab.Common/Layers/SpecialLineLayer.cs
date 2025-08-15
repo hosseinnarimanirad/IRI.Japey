@@ -5,9 +5,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;

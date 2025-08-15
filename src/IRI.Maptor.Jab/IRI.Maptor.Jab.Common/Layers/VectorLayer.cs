@@ -19,7 +19,6 @@ using IRI.Maptor.Sta.Persistence.DataSources;
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;

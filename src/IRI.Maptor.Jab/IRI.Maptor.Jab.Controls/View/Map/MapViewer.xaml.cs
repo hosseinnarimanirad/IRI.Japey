@@ -38,7 +38,6 @@ using IRI.Maptor.Sta.Spatial.Model;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;

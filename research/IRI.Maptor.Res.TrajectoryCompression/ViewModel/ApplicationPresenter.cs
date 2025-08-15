@@ -8,7 +8,6 @@ using IRI.Maptor.Sta.MachineLearning;
 using IRI.Maptor.Sta.Spatial.Analysis;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Jab.Common.Enums;
 
 
 

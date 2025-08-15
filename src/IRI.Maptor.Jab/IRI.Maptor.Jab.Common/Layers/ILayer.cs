@@ -7,7 +7,6 @@ using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Jab.Common.Assets.Commands;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Jab.Common.Events;
 
 namespace IRI.Maptor.Jab.Common;

@@ -2,7 +2,6 @@
 using System.Windows.Data;
 
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Localization;
 
 namespace IRI.Maptor.Jab.Controls.View;

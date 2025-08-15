@@ -3,8 +3,7 @@ using System.Windows.Data;
 using System.Windows.Controls;
 
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Models;
- 
+
 namespace IRI.Maptor.Jab.Controls.View;
 
 /// <summary>

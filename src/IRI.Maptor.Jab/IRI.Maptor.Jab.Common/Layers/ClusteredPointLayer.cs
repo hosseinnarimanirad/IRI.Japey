@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using IRI.Maptor.Jab.Common.Models;
-using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Ket.GdiPersistence;
 using IRI.Maptor.Sta.Common.Primitives;
 
