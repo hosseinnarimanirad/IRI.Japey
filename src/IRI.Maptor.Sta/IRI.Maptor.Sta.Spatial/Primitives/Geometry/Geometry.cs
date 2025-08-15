@@ -1811,6 +1811,11 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return this.Transform(point => MapProjects.GeodeticWgs84ToWebMercator(point), SridHelper.WebMercator);
     }
 
+    public Geometry<T> WebMercatorToGeodeticWgs84()
+    {
+        return this.Transform(p => MapProjects.WebMercatorToGeodeticWgs84(p), SridHelper.GeodeticWGS84);
+    }
+
     public Geometry<T> GeodeticToCylindricalEqualArea()
     {
         return this.Transform(point => MapProjects.GeodeticToCylindricalEqualArea<T>(point, Ellipsoids.WGS84), SridHelper.CylindricalEqualArea);

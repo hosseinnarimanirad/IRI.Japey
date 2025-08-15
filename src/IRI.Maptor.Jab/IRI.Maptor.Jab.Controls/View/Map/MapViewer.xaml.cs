@@ -44,6 +44,7 @@ using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Cartography.Rendering;
 using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Jab.Common.Events;
+using IRI.Maptor.Sta.Spatial.Analysis;
 
 //using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 
@@ -4342,6 +4343,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     }
 
+    // todo: validation on geometry
     public async Task<Response<Geometry<sb.Point>>> GetDrawingAsync(DrawMode mode, EditableFeatureLayerOptions options = null, bool display = false, bool makeValid = true)
     {
         try
@@ -4358,7 +4360,8 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             if (result.HasNotNullResult())
             {
-                return ResponseFactory.Create(result.Result.AsSqlGeometry().MakeValid().AsGeometry());
+                // todo: validation on geometry
+                return ResponseFactory.Create(result.Result/*.AsSqlGeometry().MakeValid().AsGeometry()*/);
             }
             else
             {
@@ -5061,7 +5064,8 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     Guid _measureId;
 
-    //private async Task<sb.Geometry> Measure(DrawMode mode, bool isEdgeLabelVisible, Action action, Guid guid)
+
+    // todo: validation on geometry
     private async Task<Response<Geometry<sb.Point>>> Measure(DrawMode mode, EditableFeatureLayerOptions drawingOptions, EditableFeatureLayerOptions editingOptions, Action action, Guid guid)
     {
         this._measureCancellationToken = new CancellationTokenSource();
@@ -5103,11 +5107,14 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
                 geo.InsertLastPoint(p.AsPoint());
 
-                var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeodeticWgs84().MakeValid();
+                // todo: validation on geometry
+                //var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeodeticWgs84().MakeValid();
+                //var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
+                //marker.ToolTip = mode == DrawMode.Polygon ? geoAsGeodetic.STArea().Value : geoAsGeodetic.STLength().Value;
+                 
+                var measureValue = SpatialUtility.GetMeasureLabel(geo, MapProjects.WebMercatorToGeodeticWgs84);
 
-                var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
-
-                marker.ToolTip = mode == DrawMode.Polygon ? geoAsGeodetic.STArea().Value : geoAsGeodetic.STLength().Value;
+                marker.ToolTip = SpatialUtility.GetMeasure(geo, MapProjects.WebMercatorToGeodeticWgs84);
 
                 marker.LabelValue = measureValue;
 
