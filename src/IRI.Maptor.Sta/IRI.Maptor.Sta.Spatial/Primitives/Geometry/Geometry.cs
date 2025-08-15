@@ -2054,7 +2054,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
             return new Geometry<T>(rings, GeometryType.Polygon, srid);
         }
 
-        var orderedRings = rings.Select(p => (area: p.CalculateUnsignedEuclideanArea(), geo: p)).OrderByDescending(i => i.area).ToList();
+        var orderedRings = rings.Select(p => (area: p.EuclideanArea, geo: p)).OrderByDescending(i => i.area).ToList();
 
         var masterPolygons = new List<Geometry<T>>();
 
