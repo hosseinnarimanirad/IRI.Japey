@@ -1,6 +1,6 @@
 ﻿using System;
 using IRI.Maptor.Jab.Common.Enums;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 
 namespace IRI.Maptor.Jab.Common.Layers;

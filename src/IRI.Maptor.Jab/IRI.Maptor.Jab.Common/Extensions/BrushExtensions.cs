@@ -1,5 +1,4 @@
-﻿using IRI.Maptor.Extensions;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace IRI.Maptor.Extensions;
 

@@ -4,7 +4,7 @@ using System.Windows.Input;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Presenter;
+using IRI.Maptor.Jab.Common.Presenters;
 
 namespace IRI.Maptor.Jab.Controls.View;
 

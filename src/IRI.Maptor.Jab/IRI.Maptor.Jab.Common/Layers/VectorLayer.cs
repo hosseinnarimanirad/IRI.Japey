@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Spatial.Primitives;
@@ -1122,7 +1122,7 @@ public class VectorLayer : BaseLayer
 
         Image image = Helpers.ImageUtility.Create(width, height, drawingVisual);
 
-        image.Tag = new Model.LayerTag(-1) { Layer = this, IsTiled = false };
+        image.Tag = new LayerTag(-1) { Layer = this, IsTiled = false };
 
         this.BindWithFrameworkElement(image);
 

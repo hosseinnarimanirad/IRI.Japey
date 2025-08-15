@@ -6,7 +6,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
@@ -17,6 +17,8 @@ using WpfPoint = System.Windows.Point;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Jab.Common.Events;
+using IRI.Maptor.Jab.Common.Presenters;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -263,7 +265,7 @@ public class PolyBezierLayer : BaseLayer
     {
         var mainLocateable = sender as Locateable;
 
-        var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
+        var presenter = new MapOptionsPresenter(
             rightToolTip: string.Empty,
             leftToolTip: string.Empty,
             middleToolTip: string.Empty,
@@ -504,7 +506,7 @@ public class PolyBezierLayer : BaseLayer
 
     private void _mainPath_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var presenter = new Jab.Common.Presenters.MapOptions.MapOptionsPresenter(
+        var presenter = new MapOptionsPresenter(
             rightToolTip: string.Empty,
             leftToolTip: string.Empty,
             middleToolTip: string.Empty,

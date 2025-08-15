@@ -1,6 +1,6 @@
-﻿using System; 
+﻿using System;
 
-namespace IRI.Maptor.Jab.Common;
+namespace IRI.Maptor.Jab.Common.Events;
 
 public class ZoomEventArgs : EventArgs
 {
@@ -10,8 +10,8 @@ public class ZoomEventArgs : EventArgs
 
     public ZoomEventArgs(double zoomLevel, double mapScale)
     {
-        this.ZoomLevel = zoomLevel;
+        ZoomLevel = zoomLevel;
 
-        this.MapScale = mapScale;
+        MapScale = mapScale;
     }
 }

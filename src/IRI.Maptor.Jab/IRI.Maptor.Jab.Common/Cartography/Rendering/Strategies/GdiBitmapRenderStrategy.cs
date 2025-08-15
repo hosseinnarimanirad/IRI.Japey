@@ -15,6 +15,7 @@ using IRI.Maptor.Jab.Common.Helpers;
 using System.Windows.Media.Imaging;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Jab.Common.Models;
 
 
 namespace IRI.Maptor.Jab.Common.Cartography.Rendering;

@@ -1,14 +1,14 @@
 ﻿using System.Windows.Media;
 
 using IRI.Maptor.Jab.Common;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Cartography;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Jab.Common.Model.Legend;
-using IRI.Maptor.Jab.Common.Presenter.Map;
+using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Presenters;
 
 namespace IRI.Maptor.Jab.IranRepo;
 

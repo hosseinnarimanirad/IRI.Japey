@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IRI.Maptor.Jab.Controls" x:Name="root"
-             xmlns:model="clr-namespace:IRI.Maptor.Jab.Common.Model.Legend;assembly=IRI.Maptor.Jab.Common"
+             xmlns:model="clr-namespace:IRI.Maptor.Jab.Common.Models.Legend;assembly=IRI.Maptor.Jab.Common"
              xmlns:my="clr-namespace:IRI.Maptor.Jab.Controls.Assets.Converters"
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
              FontFamily="{StaticResource iranSans}">

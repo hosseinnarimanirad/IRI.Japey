@@ -3,16 +3,16 @@
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Jab.Common.Enums;
-using IRI.Maptor.Jab.Common.Model;
+using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.MapIndexes;
-using IRI.Maptor.Jab.Common.Model.Legend;
-using IRI.Maptor.Jab.Common.Presenter.Map;
+using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Persistence.DataSources;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
+using IRI.Maptor.Jab.Common.Presenters;
 
 namespace IRI.Maptor.Jab.IranRepo;
 
