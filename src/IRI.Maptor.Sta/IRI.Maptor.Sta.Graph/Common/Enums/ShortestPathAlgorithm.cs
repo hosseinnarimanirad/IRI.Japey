@@ -1,7 +1,5 @@
-﻿// BESMELLAHE RAHMANE RAHIM
-// ALLAHOMMA AJJEL LE-VALIYEK AL-FARAJ
- 
-namespace IRI.Maptor.Sta.Graph.Common.Enums;
+﻿
+namespace IRI.Maptor.Sta.Graph;
 
 public enum ShortestPathAlgorithm
 {

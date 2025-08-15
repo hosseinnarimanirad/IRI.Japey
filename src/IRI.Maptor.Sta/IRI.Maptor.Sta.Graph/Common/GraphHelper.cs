@@ -3,13 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using IRI.Maptor.Sta.Graph.Common.Enums;
 
 namespace IRI.Maptor.Sta.Graph;
 
 
-public static class Graph
-{ 
+public static class GraphHelper
+{
     public static List<List<TNode>> GetStronglyConnectedComponents<TNode, TWeight>(AdjacencyList<TNode, TWeight> graph)
            where TWeight : IComparable
     {
