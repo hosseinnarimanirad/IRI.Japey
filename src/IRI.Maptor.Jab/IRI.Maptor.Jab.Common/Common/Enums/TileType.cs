@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IRI.Maptor.Jab.Common.TileServices;
+namespace IRI.Maptor.Jab.Common;
 
-internal enum TileType
+public enum TileType
 {
     Satellite,
     RoadMap,
