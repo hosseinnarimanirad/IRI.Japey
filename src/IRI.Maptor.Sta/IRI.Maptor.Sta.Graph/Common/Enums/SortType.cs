@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IRI.Maptor.Sta.Graph;
+namespace IRI.Maptor.Sta.Graph.Common.Enums;
 
-public enum NodeStatus : byte
+
+public enum SortType
 {
-    White,
-    Gray,
-    Black
+    BasedOnDiscoverTime,
+    BasedOnFinishTime
 }
