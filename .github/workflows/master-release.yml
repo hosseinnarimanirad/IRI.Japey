@@ -76,7 +76,7 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        name: "Maptor Release"
+        name: "Maptor v${{ github.run_number }}"
         tag_name: "v${{ github.run_number }}"
         body: |
           📦 Stable NuGet packages for this release:
