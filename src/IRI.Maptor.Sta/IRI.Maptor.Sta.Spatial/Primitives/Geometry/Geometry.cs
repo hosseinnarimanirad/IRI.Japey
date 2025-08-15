@@ -8,7 +8,6 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
-using IRI.Maptor.Sta.Common.Helpers;
 
 namespace IRI.Maptor.Sta.Spatial.Primitives;
 
@@ -972,7 +971,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     }
 
     #endregion
-     
+
 
     #region Simplification Measures
     // ref: McMaster, R. B. (1986). A statistical analysis of mathematical measures for linear simplification. The American Cartographer, 13(2), 103-116.
@@ -1203,25 +1202,25 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return new Geometry<T>(null, this.Type, false, this.Srid);
     }
 
-    public Geometry<TPoint> NeutralizeGenericPoint<TPoint>() where TPoint : IPoint, new()
+    public Geometry<T> NeutralizeGenericPoint()
     {
         if (this.Points != null)
         {
-            List<TPoint> points = new List<TPoint>(this.Points.Count);
+            List<T> points = new List<T>(this.Points.Count);
 
             for (int i = 0; i < this.Points.Count; i++)
             {
-                points.Add(new TPoint() { X = this.Points[i].X, Y = this.Points[i].Y });
+                points.Add(new T() { X = this.Points[i].X, Y = this.Points[i].Y });
             }
 
-            return Geometry<TPoint>.Create(points, this.Type, this.Srid);
+            return Geometry<T>.Create(points, this.Type, this.Srid);
         }
         if (this.Geometries != null)
         {
-            return new Geometry<TPoint>(this.Geometries.Select(g => g.NeutralizeGenericPoint<TPoint>()).ToList(), this.Type, this.Srid);
+            return new Geometry<T>(this.Geometries.Select(g => g.NeutralizeGenericPoint()).ToList(), this.Type, this.Srid);
         }
 
-        return new Geometry<TPoint>(null, this.Type, false, this.Srid);
+        return new Geometry<T>(null, this.Type, false, this.Srid);
     }
 
     //This method can better using Array.Resize()
@@ -1685,6 +1684,85 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
         return new T() { X = this.Points[0].X, Y = this.Points[0].Y };
     }
 
+    public Geometry<T>? GetExteriorRing()
+    {
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+            case GeometryType.LineString:
+            case GeometryType.MultiPoint:
+            case GeometryType.MultiLineString:
+                return null;
+
+            case GeometryType.Polygon:
+                return this.Geometries[0];
+
+            case GeometryType.MultiPolygon:
+                return CreatePolygonOrMultiPolygon(this.Geometries.Select(g => g.GetExteriorRing())
+                                                                    .Where(g => g is not null)
+                                                                    .Select(g => g!)
+                                                                    .ToList(), this.Srid);
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > GetExteriorRing");
+        }
+    }
+
+    public Geometry<T>? GetEnvelope()
+    {
+        return this.GetBoundingBox().AsGeometry<T>(Srid);
+    }
+
+    public Geometry<T>? GetConvexHull()
+    {
+        var points = this.GetAllPoints();
+        var xList = points.Select(p => p.X).ToList();
+        var yList = points.Select(p => p.Y).ToList();
+        var result = ComputationalGeometry.CreateConvexHull(new PointCollection(xList, yList));
+
+        return Create(result.Select(r => new T() { X = r.X, Y = r.Y }).ToList(), GeometryType.Polygon, this.Srid);
+    }
+
+    public Geometry<T> GetBoundary()
+    {
+        switch (this.Type)
+        {
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+                return Empty;
+
+            case GeometryType.LineString:
+                if (this.NumberOfPoints < 2)
+                    throw new NotImplementedException("Geometry > GetBoundary > linestring at least has two points");
+
+                if (this.Points[0].Equals(this.Points[NumberOfPoints - 1]))
+                    return Empty;
+
+                return Create([this.Points[0], this.Points[NumberOfPoints - 1]], GeometryType.MultiPoint, this.Srid);
+
+            case GeometryType.Polygon:
+                var points = this.GetExteriorRing().GetAllPoints();
+                return Create(points, GeometryType.LineString, this.Srid);
+
+            case GeometryType.MultiLineString:
+                return Create(this.Geometries.SelectMany<Geometry<T>, T>(g => [g.Points[0], g.Points[NumberOfPoints - 1]]).ToList(), GeometryType.MultiPoint, this.Srid);
+
+            case GeometryType.MultiPolygon:
+                return new Geometry<T>(this.Geometries.Select(g => g.GetBoundary()).ToList(), GeometryType.MultiPolygon, this.Srid);
+
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException("Geometry > GetBoundary > not supported type!");
+        }
+    }
+
     #endregion
 
 
@@ -1891,24 +1969,24 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
     public static Geometry<T> Create(List<T> points, GeometryType type, int srid = 0)
     {
         if (points == null)
-        {
             CreateEmpty(type, srid);
-        }
 
         switch (type)
         {
             case GeometryType.Point:
-                return new Geometry<T>(points, GeometryType.Point, srid);
+                return new Geometry<T>(points!, GeometryType.Point, srid);
             //return CreatePointOrLineString(points, srid); //do not use this method: what if making a new Geometry LineString with first point
 
             case GeometryType.LineString:
-                return new Geometry<T>(points, GeometryType.LineString, srid);
+                return new Geometry<T>(points!, GeometryType.LineString, srid);
             //return CreatePointOrLineString(points, srid);
 
             case GeometryType.Polygon:
-                return new Geometry<T>(new Geometry<T>(points, GeometryType.LineString, srid), GeometryType.Polygon, srid);
+                return new Geometry<T>(new Geometry<T>(points!, GeometryType.LineString, srid), GeometryType.Polygon, srid);
 
             case GeometryType.MultiPoint:
+                return new Geometry<T>(points.Select(p => Geometry<T>.Create(p.X, p.Y, srid)).ToList(), GeometryType.MultiPoint, srid);
+
             case GeometryType.MultiLineString:
             case GeometryType.MultiPolygon:
             case GeometryType.GeometryCollection:
@@ -1959,7 +2037,7 @@ public class Geometry<T> : IGeometry where T : IPoint, new()
 
 
 
-    public static Geometry<T> CreatePolygonOrMultiPolygon<T>(List<Geometry<T>> rings, int srid) where T : IPoint, new()
+    public static Geometry<T> CreatePolygonOrMultiPolygon(List<Geometry<T>> rings, int srid)
     {
         if (rings.IsNullOrEmpty())
         {

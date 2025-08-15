@@ -21,6 +21,7 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Jab.Common.Enums;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Presenters;
+using IRI.Maptor.Sta.Spatial.Analysis;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -595,9 +596,9 @@ public class EditableFeatureLayer : BaseLayer
             //leftSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.CustomShapes.xY,
             //middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
 
-            rightSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.PageCopy,
-            leftSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.AxisXy,
-            middleSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Delete);
+            rightSymbol: MahApps.Metro.IconPacks.PackIconModernKind.PageCopy,
+            leftSymbol: MahApps.Metro.IconPacks.PackIconModernKind.AxisXy,
+            middleSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Delete);
 
         presenter.RightCommandAction = i =>
         {
@@ -676,9 +677,9 @@ public class EditableFeatureLayer : BaseLayer
             //rightSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarCheck,
             //middleSymbol: IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarDelete);
 
-            leftSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Close,
-            rightSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Check,
-            middleSymbol:  MahApps.Metro.IconPacks.PackIconModernKind.Delete);
+            leftSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Close,
+            rightSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Check,
+            middleSymbol: MahApps.Metro.IconPacks.PackIconModernKind.Delete);
 
         presenter.RightCommandAction = i =>
         {
@@ -1002,7 +1003,7 @@ public class EditableFeatureLayer : BaseLayer
 
         var edge = new LineSegment<Point>(first, second);
 
-        var element = new View.MapMarkers.RectangleLabelMarker(edge.GetLengthLabel(toGeodeticWgs84));
+        var element = new View.MapMarkers.RectangleLabelMarker(SpatialUtility.GetLengthLabel(edge, toGeodeticWgs84));
 
         //var offset = _screenToMap(15);
 
@@ -1021,17 +1022,17 @@ public class EditableFeatureLayer : BaseLayer
 
     public double MeasureValue
     {
-        get { return _webMercatorGeometry.GetMeasure(MapProjects.WebMercatorToGeodeticWgs84); }
+        get { return SpatialUtility.GetMeasure(_webMercatorGeometry, MapProjects.WebMercatorToGeodeticWgs84); }
     }
 
     public string MeasureLabel
     {
-        get { return _webMercatorGeometry.GetMeasureLabel(MapProjects.WebMercatorToGeodeticWgs84); }
+        get { return SpatialUtility.GetMeasureLabel(_webMercatorGeometry, MapProjects.WebMercatorToGeodeticWgs84); }
     }
 
     public string AreaLabel
     {
-        get { return UnitHelper.GetAreaLabel(_webMercatorGeometry.GetTrueArea(MapProjects.WebMercatorToGeodeticWgs84)); }
+        get { return UnitHelper.GetAreaLabel(SpatialUtility.CalculateGroundArea(_webMercatorGeometry, MapProjects.WebMercatorToGeodeticWgs84)); }
     }
 
     public string LengthLabel

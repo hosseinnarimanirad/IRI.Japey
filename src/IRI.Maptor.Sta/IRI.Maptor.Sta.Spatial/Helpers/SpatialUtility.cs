@@ -6,6 +6,7 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using System.Globalization;
+using IRI.Maptor.Sta.Common.Helpers;
 
 namespace IRI.Maptor.Sta.Spatial.Analysis;
 
@@ -118,10 +119,15 @@ public static class SpatialUtility
 
     #region True Area
 
+    public static double CalculateGroundArea(Geometry<Point> geometry, Func<Point, Point> toWgs84Geodetic)
+    {
+        return CalculateGroundArea(geometry.Transform(toWgs84Geodetic, SridHelper.GeodeticWGS84));
+    }
+
     public static double CalculateGroundArea<T>(Geometry<T> geography) where T : IPoint, new()
     {
         var newGeo = geography.Project(new CylindricalEqualArea());
-          
+
         return newGeo.EuclideanArea;
     }
 
@@ -543,6 +549,7 @@ public static class SpatialUtility
 
     #endregion
 
+
     #region Primitive Area
 
     //1399.06.11
@@ -620,6 +627,79 @@ public static class SpatialUtility
 
     #endregion
 
+    #region Measure
+
+    public static double GetMeasure(Geometry<Point> geometry, Func<Point, Point> toWgs84Geodetic)
+    {
+        switch (geometry.Type)
+        {
+            case GeometryType.LineString:
+            case GeometryType.MultiLineString:
+                return geometry.CalculateGroundLength(toWgs84Geodetic);
+
+            case GeometryType.Polygon:
+            case GeometryType.MultiPolygon:
+                return CalculateGroundArea(geometry.Transform(toWgs84Geodetic, SridHelper.GeodeticWGS84));
+
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    public static string GetMeasureLabel(Geometry<Point> geometry, Func<Point, Point> toWgs84Geodetic)
+    {
+        switch (geometry.Type)
+        {
+            case GeometryType.LineString:
+            case GeometryType.MultiLineString:
+                return UnitHelper.GetLengthLabel(geometry.CalculateGroundLength(toWgs84Geodetic));
+
+            case GeometryType.Polygon:
+            case GeometryType.MultiPolygon:
+                var area = CalculateGroundArea(geometry.Transform(toWgs84Geodetic, SridHelper.GeodeticWGS84));
+                return UnitHelper.GetAreaLabel(area);
+
+            case GeometryType.Point:
+            case GeometryType.MultiPoint:
+            case GeometryType.GeometryCollection:
+            case GeometryType.CircularString:
+            case GeometryType.CompoundCurve:
+            case GeometryType.CurvePolygon:
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+    #endregion
+
+    #region LineSegment
+
+    public static double CalculateLength<T>(LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
+    {
+        var start = toGeodeticWgs84Func(line.Start);
+
+        var end = toGeodeticWgs84Func(line.End);
+         
+        return VincentyDistance(start, end);
+
+        //var geodeticLine = SqlSpatialUtility.MakeGeography(new List<T>() { start, end }, false);
+        //return geodeticLine.STLength().Value;
+    }
+
+    public static string GetLengthLabel<T>(LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
+    {
+        var length = CalculateLength(line, toGeodeticWgs84Func);
+
+        return UnitHelper.GetLengthLabel(length);
+    }
+
+    #endregion
 
     #region Angle
     public static double GetSignedInnerAngle<T>(T firstPoint, T middlePoint, T lastPoint, AngleMode mode = AngleMode.Radian) where T : IPoint

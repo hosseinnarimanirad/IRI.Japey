@@ -6,8 +6,7 @@ using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
-using IRI.Maptor.Ket.SqlServerSpatialExtension;
-using IRI.Maptor.Sta.Ogc.SLD;
+using IRI.Maptor.Ket.SqlServerSpatialExtension; 
 
 namespace IRI.Maptor.Extensions;
 
@@ -27,52 +26,6 @@ public static class GeometryExtensions
             return double.NaN;
         }
         //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
-    }
-
-    public static double GetMeasure(this Geometry<Point> geometry, Func<Point, Point> toWgs84Geodetic)
-    {
-        switch (geometry.Type)
-        {
-            case GeometryType.LineString:
-            case GeometryType.MultiLineString:
-                return geometry.CalculateGroundLength(toWgs84Geodetic);
-
-            case GeometryType.Polygon:
-            case GeometryType.MultiPolygon:
-                return geometry.GetTrueArea(toWgs84Geodetic);
-
-            case GeometryType.Point:
-            case GeometryType.MultiPoint:
-            case GeometryType.GeometryCollection:
-            case GeometryType.CircularString:
-            case GeometryType.CompoundCurve:
-            case GeometryType.CurvePolygon:
-            default:
-                throw new NotImplementedException();
-        }
-    }
-
-    public static string GetMeasureLabel(this Geometry<Point> geometry, Func<Point, Point> toWgs84Geodetic)
-    {
-        switch (geometry.Type)
-        {
-            case GeometryType.LineString:
-            case GeometryType.MultiLineString:
-                return UnitHelper.GetLengthLabel(geometry.CalculateGroundLength(toWgs84Geodetic));
-
-            case GeometryType.Polygon:
-            case GeometryType.MultiPolygon:
-                return UnitHelper.GetAreaLabel(geometry.GetTrueArea(toWgs84Geodetic));
-
-            case GeometryType.Point:
-            case GeometryType.MultiPoint:
-            case GeometryType.GeometryCollection:
-            case GeometryType.CircularString:
-            case GeometryType.CompoundCurve:
-            case GeometryType.CurvePolygon:
-            default:
-                throw new NotImplementedException();
-        }
     }
 
 
@@ -601,27 +554,27 @@ public static class GeometryExtensions
     #endregion
 
 
-    #region LineSegment
+    //#region LineSegment
 
-    public static double CalculateLength<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
-    {
-        var start = toGeodeticWgs84Func(line.Start);
+    //public static double CalculateLength<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
+    //{
+    //    var start = toGeodeticWgs84Func(line.Start);
 
-        var end = toGeodeticWgs84Func(line.End);
+    //    var end = toGeodeticWgs84Func(line.End);
 
-        var geodeticLine = SqlSpatialUtility.MakeGeography(new List<T>() { start, end }, false);
+    //    var geodeticLine = SqlSpatialUtility.MakeGeography(new List<T>() { start, end }, false);
 
-        return geodeticLine.STLength().Value;
-    }
+    //    return geodeticLine.STLength().Value;
+    //}
 
-    public static string GetLengthLabel<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
-    {
-        var length = line.CalculateLength(toGeodeticWgs84Func);
+    //public static string GetLengthLabel<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
+    //{
+    //    var length = line.CalculateLength(toGeodeticWgs84Func);
 
-        return UnitHelper.GetLengthLabel(length);
-    }
+    //    return UnitHelper.GetLengthLabel(length);
+    //}
 
-    #endregion
+    //#endregion
 
 
 }

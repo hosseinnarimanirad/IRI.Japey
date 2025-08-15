@@ -92,7 +92,7 @@ public class LegendCommand : Notifier, ILegendCommand
 
     public ILayer Layer { get; set; }
 
-   
+
     private LegendCommand()
     {
         Localization.LocalizationManager.Instance.LanguageChanged += Instance_LanguageChanged;
@@ -625,9 +625,16 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();
+                //var geometry = layer.Geometry.AsSqlGeometry().STExteriorRing();               
 
-                map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
+                //map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ExteriorRing");
+
+                var geometry = layer.Geometry.GetExteriorRing();
+
+                if (geometry is null)
+                    return;
+
+                map.AddDrawingItem(geometry, $"{layer.LayerName}-ExteriorRing");
             }
             catch (Exception ex)
             {
@@ -653,9 +660,15 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var geometry = layer.Geometry.AsSqlGeometry().STEnvelope();
+                //var geometry = layer.Geometry.AsSqlGeometry().STEnvelope();
+                //map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Envelope");
 
-                map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Envelope");
+                var geometry = layer.Geometry.GetEnvelope();
+
+                if (geometry is null)
+                    return;
+
+                map.AddDrawingItem(geometry, $"{layer.LayerName}-Envelope");
             }
             catch (Exception ex)
             {
@@ -681,9 +694,14 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var geometry = layer.Geometry.AsSqlGeometry().STConvexHull();
+                //var geometry = layer.Geometry.AsSqlGeometry().STConvexHull(); 
+                //map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ConvexHull");
+                var geometry = layer.Geometry.GetConvexHull();
 
-                map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-ConvexHull");
+                if (geometry is null)
+                    return;
+
+                map.AddDrawingItem(geometry, $"{layer.LayerName}-ConvexHull");
             }
             catch (Exception ex)
             {
@@ -709,9 +727,11 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var geometry = layer.Geometry.AsSqlGeometry().STBoundary();
+                //var geometry = layer.Geometry.AsSqlGeometry().STBoundary();
+                //map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Boundary");
 
-                map.AddDrawingItem(geometry.AsGeometry(), $"{layer.LayerName}-Boundary");
+                var geometry = layer.Geometry.GetBoundary();
+                map.AddDrawingItem(geometry, $"{layer.LayerName}-Boundary");
             }
             catch (Exception ex)
             {
@@ -737,13 +757,14 @@ public class LegendCommand : Notifier, ILegendCommand
         {
             try
             {
-                var geometries = layer.Geometry.AsSqlGeometry().GetGeometries();
+                //var geometries = layer.Geometry.AsSqlGeometry().GetGeometries();
+                var geometries = layer.Geometry.Split(clone: true);
 
                 var counter = 0;
 
                 foreach (var geo in geometries)
                 {
-                    map.AddDrawingItem(geo.AsGeometry(), $"{layer.LayerName} Geometry #{counter++}");
+                    map.AddDrawingItem(geo/*.AsGeometry()*/, $"{layer.LayerName} Geometry #{counter++}");
                 }
             }
             catch (Exception ex)
