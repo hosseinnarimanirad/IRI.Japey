@@ -188,7 +188,7 @@ public class TileServiceLayer : BaseLayer
 
             var byteImage = await client.DownloadDataTaskAsync(url);
 
-            if (IRI.Maptor.Jab.Common.Helpers.ImageUtility.ToImage(byteImage) == null)
+            if (IRI.Maptor.Jab.Common.Helpers.ImageUtility.CreateBitmapImage(byteImage) == null)
                 return GetNotFoundImage(tile);
 
             return new GeoReferencedImage(byteImage, tile.GeodeticExtent);
@@ -244,7 +244,7 @@ public class TileServiceLayer : BaseLayer
 
             var byteImage = await response.Content.ReadAsByteArrayAsync();
 
-            if (IRI.Maptor.Jab.Common.Helpers.ImageUtility.ToImage(byteImage) == null)
+            if (IRI.Maptor.Jab.Common.Helpers.ImageUtility.CreateBitmapImage(byteImage) == null)
                 return GetNotFoundImage(tile);
 
             return new GeoReferencedImage(byteImage, tile.GeodeticExtent);

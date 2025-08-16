@@ -492,7 +492,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestPrint = this.Print;
 
-        presenter.RequestGetLayersAsDrawingVisual = this.GetAsDrawingVisual;
+        presenter.RequestGetAsDrawingVisual = this.GetAsDrawingVisual;
         //presenter.RequestPrintAsPngAsync = this.PrintAsPngAsync;
 
         presenter.RequestGetProxy = () => this.Proxy;
@@ -1200,21 +1200,21 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                   Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
               );
         }
-        else if (layer is FeatureLayer)
-        {
-            Action action = () =>
-            {
-                AddFeatureLayer(layer as FeatureLayer);
-            };
+        //else if (layer is FeatureLayer)
+        //{
+        //    Action action = () =>
+        //    {
+        //        AddFeatureLayer(layer as FeatureLayer);
+        //    };
 
-            var extent = this.CurrentExtent;
+        //    var extent = this.CurrentExtent;
 
-            Task.Run(() =>
-                this.jobs.Add(new Job(
-                    new LayerTag(mapScale) { LayerType = LayerType.FeatureLayer, BoundingBox = extent },
-                    Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
-                 );
-        }
+        //    Task.Run(() =>
+        //        this.jobs.Add(new Job(
+        //            new LayerTag(mapScale) { LayerType = LayerType.FeatureLayer, BoundingBox = extent },
+        //            Dispatcher.BeginInvoke(action, DispatcherPriority.Background, null)))
+        //         );
+        //}
         else if (layer.Type.HasFlag(LayerType.Complex) || layer.Type.HasFlag(LayerType.MoveableItem))
         {
             SpecialPointLayer? specialPointLayer = null;
@@ -1324,76 +1324,62 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await this.AddNonTiledLayer(layer);
     }
 
-    private void AddFeatureLayer(FeatureLayer featureLayer)
-    {
-        try
-        {
-            var extent = this.CurrentExtent;
+    //private void AddFeatureLayer(FeatureLayer featureLayer)
+    //{
+    //    try
+    //    {
+    //        var extent = this.CurrentExtent;
 
-            var mapScale = this.MapScale;
+    //        var mapScale = this.MapScale;
 
-            //consider if layer was Labeled
-            var features = featureLayer.DataSource.GetAsFeatureSet(extent.AsGeometry<sb.Point>(SridHelper.WebMercator));
+    //        //consider if layer was Labeled
+    //        var features = featureLayer.DataSource.GetAsFeatureSet(extent.AsGeometry<sb.Point>(SridHelper.WebMercator));
 
-            if (this.MapScale != mapScale || this.CurrentExtent != extent)
-                return;
+    //        if (this.MapScale != mapScale || this.CurrentExtent != extent)
+    //            return;
 
-            var area = ParseToRectangleGeometry(extent);
+    //        var area = ParseToRectangleGeometry(extent);
 
-            Path? path;
+    //        Path? path;
 
 
-            Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
+    //        Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
 
-            var transferedFeatures = features.Features.Select(f => new Feature<sb.Point>(f.TheGeometry.Transform(transform, f.TheGeometry.Srid), f.Attributes)).ToList();
+    //        var transferedFeatures = features.Features.Select(f => new Feature<sb.Point>(f.TheGeometry.Transform(transform, f.TheGeometry.Srid), f.Attributes)).ToList();
 
-            switch (featureLayer.ToRasterTechnique)
-            {
-                case RasterizationApproach.GdiPlus:
-                    path = featureLayer.AsBitmapUsingGdiPlus(transferedFeatures,
-                                                                null,
-                                                                mapScale,
-                                                                //extent,
-                                                                this.mapView.ActualWidth,
-                                                                this.mapView.ActualHeight,
-                                                                //this.MapToScreen,
-                                                                area);
-                    break;
-                //case RasterizationApproach.OpenTk:
-                //    path = featureLayer.AsBitmapUsingOpenTK(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                //    break;
-                //case RasterizationApproach.DrawingVisual:
-                //    path = featureLayer.AsDrawingVisual(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                //    break;
-                //case RasterizationApproach.WriteableBitmap:
-                //    path = featureLayer.AsBitmapUsingWriteableBitmap(geoLabledPairs.Geometries, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-                //    break;
-                //case RasterizationApproach.StreamGeometry:
-                //    path = featureLayer.AsShape(geoLabledPairs.Geometries, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight,
-                //        this.viewTransform,
-                //        this.panTransformForPoints,
-                //        this.MapToScreen);
-                //    break;
-                case RasterizationApproach.None:
-                default:
-                    throw new NotImplementedException();
-            }
+    //        switch (featureLayer.ToRasterTechnique)
+    //        {
+    //            case RasterizationApproach.GdiPlus:
+    //                path = featureLayer.AsBitmapUsingGdiPlus(transferedFeatures,
+    //                                                            null,
+    //                                                            mapScale,
+    //                                                            //extent,
+    //                                                            this.mapView.ActualWidth,
+    //                                                            this.mapView.ActualHeight,
+    //                                                            //this.MapToScreen,
+    //                                                            area);
+    //                break;
+                
+    //            case RasterizationApproach.None:
+    //            default:
+    //                throw new NotImplementedException();
+    //        }
 
-            if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
-                return;
+    //        if (path == null || this.MapScale != mapScale || this.CurrentExtent != extent)
+    //            return;
 
-            if (featureLayer.IsValid)
-            {
-                this.mapView.Children.Add(path);
+    //        if (featureLayer.IsValid)
+    //        {
+    //            this.mapView.Children.Add(path);
 
-                Canvas.SetZIndex(path, featureLayer.ZIndex);
-            }
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-    }
+    //            Canvas.SetZIndex(path, featureLayer.ZIndex);
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw;
+    //    }
+    //}
 
     #endregion
 
@@ -1694,7 +1680,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             try
             {
-                fill = new ImageBrush(IRI.Maptor.Jab.Common.Helpers.ImageUtility.ToImage(geoImage.Image));
+                fill = new ImageBrush(IRI.Maptor.Jab.Common.Helpers.ImageUtility.CreateBitmapImage(geoImage.Image));
             }
             catch (Exception ex)
             {
@@ -1779,10 +1765,10 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                     {
                         await AddTileServiceLayerAsync(/*item as TileServiceLayer*/ tileServiceLayer, tile);
                     }
-                    else if (item is FeatureLayer)
-                    {
+                    //else if (item is FeatureLayer)
+                    //{
 
-                    }
+                    //}
                     else
                     {
                         //return;
@@ -2863,7 +2849,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                     visuals.Add(drawingLayer.AsDrawingVisual(boundingBox, width, height, this.MapScale));
                     break;
 
-                case FeatureLayer featureLayer:
+                //case FeatureLayer featureLayer:
                 default:
                     break;
             }

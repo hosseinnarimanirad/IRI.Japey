@@ -6,6 +6,8 @@ using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using System.Linq;
 
 namespace IRI.Maptor.Extensions;
 
@@ -112,8 +114,10 @@ public static class GeometryExtensions
 
         Brush brush = visualParameters.Fill;
 
-        DrawingVisual drawingVisual = new DrawingVisualRenderStrategy([new Jab.Common.Cartography.Symbologies.SimpleSymbolizer(visualParameters)])
-                                            .ParseGeometry([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], /*mapToScreen,*/ pen, brush, visualParameters.PointSymbol);
+        var drawingVisuals = new DrawingVisualRenderStrategy([new SimpleSymbolizer(visualParameters)])
+                                            .AsDrawingVisual([geometry.Transform(mapToScreen, geometry.Srid).AsFeature()], 0);
+
+        var drawingVisual = drawingVisuals.First();
 
         drawingVisual.Opacity = visualParameters.Opacity;
 

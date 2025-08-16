@@ -32,14 +32,13 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         if (bitmap is null)
             return null;
 
-        BitmapImage image = ImageUtility.AsBitmapImage(bitmap, Drawing.Imaging.ImageFormat.Png);
+        BitmapImage image = ImageUtility.CreateBitmapImage(bitmap, Drawing.Imaging.ImageFormat.Png);
 
         bitmap.Dispose();
 
         image.Freeze();
 
         return new ImageBrush(image);
-
     }
 
     public Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double mapScale, double imageWidth, double imageHeight)
@@ -67,7 +66,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
                     case SimpleSymbolizer simpleSymbolizer:
 
-                        ParseSqlGeometry(
+                        Render(
                             graphics,
                             filteredFeatures,
                             simpleSymbolizer.Param.GetGdiPlusPen(),
@@ -94,8 +93,11 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
         return image;
     }
-     
-    private void ParseSqlGeometry(Drawing.Graphics graphics, List<Feature<Point>> features, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+
+
+    #region Private Methods
+
+    private void Render(Drawing.Graphics graphics, List<Feature<Point>> features, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (features.IsNullOrEmpty())
             return;
@@ -105,38 +107,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             AddGeometry(graphics, item.TheGeometry, pen, brush, pointSymbol);
         }
     }
-
-    internal Drawing.Bitmap ParseSqlGeometry(
-      List<Feature<Point>> features,
-      double width,
-      double height,
-      Func<Feature<Point>, VisualParameters> symbologyRule)
-    {
-        var result = new Drawing.Bitmap((int)width, (int)height);
-
-        Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
-
-        if (features != null)
-        {
-            foreach (var item in features)
-            {
-                if (item.TheGeometry is null)
-                    continue;
-
-                var symbology = symbologyRule(item);
-
-                var pen = symbology.GetGdiPlusPen(symbology.Opacity);
-
-                var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
-
-                AddGeometry(graphics, item.TheGeometry, pen, brush, symbology.PointSymbol);
-            }
-        }
-
-        return result;
-    }
-
-
+     
     private int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
@@ -368,4 +339,28 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         brush.Dispose();
     }
 
+    //internal Drawing.Bitmap ParseSqlGeometry(
+    //  List<Feature<Point>> features,
+    //  double width,
+    //  double height,
+    //  Func<Feature<Point>, VisualParameters> symbologyRule)
+    //{
+    //    var result = new Drawing.Bitmap((int)width, (int)height);
+    //    Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
+    //    if (features != null)
+    //    {
+    //        foreach (var item in features)
+    //        {
+    //            if (item.TheGeometry is null)
+    //                continue;
+    //            var symbology = symbologyRule(item);
+    //            var pen = symbology.GetGdiPlusPen(symbology.Opacity);
+    //            var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
+    //            AddGeometry(graphics, item.TheGeometry, pen, brush, symbology.PointSymbol);
+    //        }
+    //    }
+    //    return result;
+    //}
+
+    #endregion
 }

@@ -169,7 +169,7 @@ public class RasterLayer : BaseLayer
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
                 RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.ToImage(item.Image), this.VisualParameters.Opacity,
+                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Image), this.VisualParameters.Opacity,
                         boundingBox, this.Type == LayerType.BaseMap, this.Type == LayerType.ImagePyramid);
 
                 result.Add(layer);
@@ -186,7 +186,7 @@ public class RasterLayer : BaseLayer
                 var boundingBox = item.GeodeticWgs84BoundingBox.Transform(MapProjects.GeodeticWgs84ToWebMercator);
 
                 RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.ToImage(item.Image), this.VisualParameters.Opacity,
+                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Image), this.VisualParameters.Opacity,
                         boundingBox, this.Type == LayerType.BaseMap, this.Type == LayerType.ImagePyramid);
 
                 result.Add(layer);
@@ -208,7 +208,7 @@ public class RasterLayer : BaseLayer
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
                 RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.ToImage(item.Item2.Image), this.VisualParameters.Opacity,
+                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Item2.Image), this.VisualParameters.Opacity,
                         boundingBox, true);
 
                 result.Add(layer);
@@ -234,7 +234,7 @@ public class RasterLayer : BaseLayer
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
                 RasterLayer layer = new RasterLayer(this,
-                                            this.LayerName, Helpers.ImageUtility.ToImage(geo.Image),
+                                            this.LayerName, Helpers.ImageUtility.CreateBitmapImage(geo.Image),
                                             this.VisualParameters.Opacity, boundingBox, false);
 
                 result.Add(layer);

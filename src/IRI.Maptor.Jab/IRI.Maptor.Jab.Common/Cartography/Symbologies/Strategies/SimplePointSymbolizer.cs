@@ -1,8 +1,6 @@
 ﻿using System; 
 using System.Windows.Media;
-
-using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Sta.Spatial.Primitives;
+ 
 
 namespace IRI.Maptor.Jab.Common.Cartography.Symbologies;
 

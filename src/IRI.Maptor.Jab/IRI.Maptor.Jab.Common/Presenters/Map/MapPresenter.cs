@@ -752,7 +752,7 @@ public abstract class MapPresenter : BasePresenter
 
     public Action RequestPrint;
 
-    public Func<BoundingBox, int, int, Task<List<DrawingVisual>>> RequestGetLayersAsDrawingVisual;
+    public Func<BoundingBox, int, int, Task<List<DrawingVisual>>> RequestGetAsDrawingVisual;
 
     public Action<System.Net.WebProxy> RequestSetProxy;
 
@@ -2370,7 +2370,7 @@ public abstract class MapPresenter : BasePresenter
 
     protected async Task ExportMapAsPngAsync(object owner, BoundingBox boundingBox)
     {
-        if (RequestGetLayersAsDrawingVisual is null)
+        if (RequestGetAsDrawingVisual is null)
             return;
 
         var fileName = await DialogService.ShowSaveFileDialogAsync("*.png|*.png", owner);
@@ -2383,7 +2383,7 @@ public abstract class MapPresenter : BasePresenter
         var width = (int)RequestToScreenMap(boundingBox.Width);
         var height = (int)RequestToScreenMap(boundingBox.Height);
 
-        var visuals = await RequestGetLayersAsDrawingVisual(boundingBox, width, height);
+        var visuals = await RequestGetAsDrawingVisual(boundingBox, width, height);
 
         ImageUtility.MergeAndSave(fileName, visuals, width, height, new TiffBitmapEncoder());
 

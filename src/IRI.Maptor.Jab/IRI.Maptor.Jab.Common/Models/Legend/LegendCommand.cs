@@ -311,7 +311,7 @@ public class LegendCommand : Notifier, ILegendCommand
                 if (string.IsNullOrWhiteSpace(fileName))
                     return;
 
-                layer.SaveAsPng(fileName, map.CurrentExtent, map.ActualWidth, map.ActualHeight, map.MapScale);
+                await layer.SaveAsPng(fileName, map.CurrentExtent, map.ActualWidth, map.ActualHeight, map.MapScale);
             }
             catch (Exception ex)
             {
@@ -576,29 +576,11 @@ public class LegendCommand : Notifier, ILegendCommand
 
                 var currentScreenSize = WebMercatorUtility.ToScreenSize(map.CurrentZoomLevel, groundBoundingBox);
 
-                var scale = WebMercatorUtility.GetGoogleMapScale(map.CurrentZoomLevel);
+                var mapScale = WebMercatorUtility.GetGoogleMapScale(map.CurrentZoomLevel);
 
-                //var drawingVisual = await layer.AsDrawingVisual(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
-
-                //var image = Helpers.ImageUtility.Render(drawingVisual, currentScreenSize.Width, currentScreenSize.Height);
-                var image = await layer.AsRenderTargetBitmap(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
-
-                IRI.Maptor.Jab.Common.Helpers.ImageUtility.Save(fileName, image/* drawingVisual, currentScreenSize.Width, currentScreenSize.Height*/);
-
-                //RenderTargetBitmap image = new RenderTargetBitmap(currentScreenSize.Width, currentScreenSize.Height, 96, 96, PixelFormats.Pbgra32);
-
-                //image.Render(drawingVisual);
-
-                //var frame = BitmapFrame.Create(image);
-
-                //PngBitmapEncoder pngImage = new PngBitmapEncoder();
-
-                //pngImage.Frames.Add(frame);
-
-                //using (System.IO.Stream stream = System.IO.File.Create(fileName))
-                //{
-                //    pngImage.Save(stream);
-                //}
+                //var image = await layer.AsRenderTargetBitmap(groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, scale);
+                //IRI.Maptor.Jab.Common.Helpers.ImageUtility.Save(fileName, image);
+                await layer.SaveAsPng(fileName, groundBoundingBox, currentScreenSize.Width, currentScreenSize.Height, mapScale);
             }
             catch (Exception ex)
             {

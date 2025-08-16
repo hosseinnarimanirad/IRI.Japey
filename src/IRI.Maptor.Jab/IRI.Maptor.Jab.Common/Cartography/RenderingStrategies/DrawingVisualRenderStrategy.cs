@@ -110,7 +110,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         return result;
     }
 
-    public DrawingVisual ParseGeometry(List<Feature<Point>> features, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
+    private DrawingVisual ParseGeometry(List<Feature<Point>> features, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
     {
         DrawingVisual result = new DrawingVisual();
 
@@ -146,6 +146,8 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
         return result;
     }
+
+    #region Private Methods
 
     private void AddGeometry(DrawingContext context, Geometry<Point> geometry, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
     {
@@ -284,7 +286,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         }
     }
 
-    public DrawingVisual? DrawLabels(List<Feature<Point>> features, LabelParameters labels)
+    private DrawingVisual? DrawLabels(List<Feature<Point>> features, LabelParameters labels)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -344,4 +346,5 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         return drawingVisual;
     }
 
+    #endregion
 }

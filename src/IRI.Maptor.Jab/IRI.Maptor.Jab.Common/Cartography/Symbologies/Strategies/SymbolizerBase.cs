@@ -22,7 +22,7 @@ public abstract class SymbolizerBase : Notifier, ISymbolizer
      
     public bool IsInScaleRange(double scale)
     {
-        return scale > (MinScaleDenominator ?? 0) &&
-                scale < (MaxScaleDenominator ?? double.MaxValue);
+        return scale >= (MinScaleDenominator ?? 0) &&
+                scale <= (MaxScaleDenominator ?? double.MaxValue);
     }
 }

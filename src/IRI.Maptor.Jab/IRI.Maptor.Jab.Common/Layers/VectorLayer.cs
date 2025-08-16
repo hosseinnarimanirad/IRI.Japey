@@ -124,7 +124,7 @@ public class VectorLayer : BaseLayer
         this.ToRasterTechnique = toRasterTechnique;
 
         this.Type = type;
-         
+
         if (dataSource.GeometryType.AsLayerType() is not null)
         {
             this.Type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
@@ -133,7 +133,7 @@ public class VectorLayer : BaseLayer
         {
             this.Type = type;
         }
-         
+
         this.Extent = dataSource.WebMercatorExtent;
 
         this.LayerName = layerName;
@@ -183,9 +183,9 @@ public class VectorLayer : BaseLayer
     {
         return $"{Enum.GetName(this.Type)} - {this.DataSource.ToString()}";
     }
-      
+
     public void BindWithFrameworkElement(FrameworkElement element)
-    { 
+    {
         Binding binding4 = new Binding() { Source = this, Path = new PropertyPath("VisualParameters.Visibility"), Mode = BindingMode.TwoWay };
         element.SetBinding(Path.VisibilityProperty, binding4);
 
@@ -202,10 +202,10 @@ public class VectorLayer : BaseLayer
         return new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
     }
 
-    public async Task<List<Feature<Point>>> GetRenderReadyFeatures(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
-    { 
+    public async Task<List<Feature<Point>>> GetRenderReadyFeatures(BoundingBox mapExtent, double mapScale, double screenWidth, double screenHeight)
+    {
         var feature = await this.DataSource.GetAsFeatureSetAsync(mapScale, mapExtent);
-         
+
         if (feature is null || feature.HasNoGeometry())
             return new List<Feature<Point>>();
 
@@ -213,7 +213,7 @@ public class VectorLayer : BaseLayer
         //double yScale = imageHeight / mapExtent.Height;
         //double scale = xScale > yScale ? yScale : xScale;
         //Func<Point, Point> mapToScreen = new Func<Point, Point>(p => new Point((p.X - mapExtent.XMin) * scale, -(p.Y - mapExtent.YMax) * scale));
-        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, imageWidth, imageHeight);
+        var mapToScreen = CreateMapToScreenMapFunc(mapExtent, screenWidth, screenHeight);
 
         return feature.Transform(mapToScreen).Features;
     }
@@ -221,11 +221,14 @@ public class VectorLayer : BaseLayer
 
     #region Raster Save And Export Methods
 
-    public async Task<System.Drawing.Bitmap?> AsGdiBitmapAsync(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public async Task<System.Drawing.Bitmap?> AsGdiBitmapAsync(BoundingBox mapExtent, double mapScale, double screenWidth, double screenHeight)
     {
-        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
+        var features = await GetRenderReadyFeatures(mapExtent, mapScale, screenWidth, screenHeight);
 
-        return new GdiBitmapRenderStrategy(Symbolizers).AsGdiBitmap(features, mapScale, imageWidth, imageHeight);
+        if (features.IsNullOrEmpty())
+            return null;
+
+        return new GdiBitmapRenderStrategy(Symbolizers).AsGdiBitmap(features, mapScale, screenWidth, screenHeight);
     }
 
 
@@ -254,7 +257,7 @@ public class VectorLayer : BaseLayer
 
             foreach (var tile in googleTiles)
             {
-                var image = await AsGdiBitmapAsync(tile.WebMercatorExtent, 256, 256, scale);
+                var image = await AsGdiBitmapAsync(tile.WebMercatorExtent, scale, 256, 256);
 
                 if (image is null)
                     continue;
@@ -264,14 +267,12 @@ public class VectorLayer : BaseLayer
         }
     }
 
-    public async void SaveAsPng(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
+    public async Task SaveAsPng(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
         switch (this.ToRasterTechnique)
         {
-
             case RasterizationApproach.StreamGeometry:
             case RasterizationApproach.DrawingVisual:
-                //SaveAsPngDrawingVisual(fileName, mapExtent, imageWidth, imageHeight, mapScale);
                 var renderTargetBitmap = await AsRenderTargetBitmap(mapExtent, imageWidth, imageHeight, mapScale);
 
                 if (renderTargetBitmap is null)
@@ -286,8 +287,7 @@ public class VectorLayer : BaseLayer
             case RasterizationApproach.GdiPlus:
             case RasterizationApproach.None:
             default:
-                //SaveAsPngGdiPlus(fileName, mapExtent, imageWidth, imageHeight, mapScale);
-                var image = await AsGdiBitmapAsync(mapExtent, imageWidth, imageHeight, mapScale);
+                var image = await AsGdiBitmapAsync(mapExtent, mapScale, imageWidth, imageHeight);
 
                 if (image is null)
                     return;
@@ -301,20 +301,22 @@ public class VectorLayer : BaseLayer
 
     public async Task<List<DrawingVisual>> AsDrawingVisual(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
-        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
+        var features = await GetRenderReadyFeatures(mapExtent, mapScale, imageWidth, imageHeight);
+
+        if (features.IsNullOrEmpty())
+            return [];
 
         return new DrawingVisualRenderStrategy(Symbolizers).AsDrawingVisual(features, mapScale);
     }
 
-
     public async Task<RenderTargetBitmap?> AsRenderTargetBitmap(BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
-        var features = await GetRenderReadyFeatures(mapExtent, imageWidth, imageHeight, mapScale);
-
-        if (features.IsNullOrEmpty())
-            return null;
-
-        var drawingVisuals = new DrawingVisualRenderStrategy(Symbolizers).AsDrawingVisual(features, mapScale);
+        //var features = await GetRenderReadyFeatures(mapExtent, mapScale, imageWidth, imageHeight);
+        //if (features.IsNullOrEmpty())
+        //    return null;
+        //var drawingVisuals = new DrawingVisualRenderStrategy(Symbolizers).AsDrawingVisual(features, mapScale);
+        
+        var drawingVisuals = await AsDrawingVisual(mapExtent, imageWidth, imageHeight, mapScale);
 
         if (drawingVisuals.IsNullOrEmpty())
             return null;
@@ -346,31 +348,14 @@ public class VectorLayer : BaseLayer
 
     #region GetGeometry & GetFeature Methods
 
-    public FeatureSet<Point>? GetFeatures()
-    {
-        return GetFeatures(null);
-    }
+    public FeatureSet<Point>? GetFeatures() => GetFeatures(null);
 
-    public List<Field>? GetFields()
-    {
-        return DataSource?.Fields;
-    }
+    public List<Field>? GetFields() => DataSource?.Fields;
 
-    public FeatureSet<Point>? GetFeatures(Geometry<Point>? geometry)
-    {
-        return DataSource.GetAsFeatureSet(geometry);
-
-        ////if (DataSource as VectorDataSource<TGeometryAware> != null)
-        ////{
-        ////    //return (DataSource as VectorDataSource<TGeometryAware>)!.GetGeometryAwares(geometry);
-        ////    return (DataSource as VectorDataSource<TGeometryAware>)!.GetAsFeatureSet(geometry);
-        ////}
-
-        //return null;
-    }
+    public FeatureSet<Point>? GetFeatures(Geometry<Point>? geometry) => DataSource.GetAsFeatureSet(geometry);
 
     #endregion
-     
+
 
     private Image? DrawLabels(List<Feature<Point>> features, double width, double height)
     {
