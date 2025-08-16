@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Media;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Helpers;
+using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Cartography.Helpers;
 
 using Drawing = System.Drawing;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
-using IRI.Maptor.Jab.Common.Cartography.Symbologies;
-using System.Windows.Media;
-using IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
-using IRI.Maptor.Jab.Common.Helpers;
-using System.Windows.Media.Imaging;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Models;
 
-
-namespace IRI.Maptor.Jab.Common.Cartography.Rendering;
+namespace IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 public class GdiBitmapRenderStrategy : RenderStrategy
 {
@@ -35,7 +32,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         if (bitmap is null)
             return null;
 
-        BitmapImage image = ImageUtility.AsBitmapImage(bitmap, System.Drawing.Imaging.ImageFormat.Png);
+        BitmapImage image = ImageUtility.AsBitmapImage(bitmap, Drawing.Imaging.ImageFormat.Png);
 
         bitmap.Dispose();
 
@@ -45,7 +42,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
     }
 
-    public System.Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double imageWidth, double imageHeight, double mapScale)
+    public Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double imageWidth, double imageHeight, double mapScale)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -55,7 +52,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         using (Drawing.Graphics graphics = Drawing.Graphics.FromImage(image))
         {
             foreach (var symbolizer in _symbolizers)
-            { 
+            {
                 // check scale
                 if (!symbolizer.IsInScaleRange(mapScale))
                     continue;
@@ -88,7 +85,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
                     case LabelSymbolizer labelSymbolizer:
                         if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
                         {
-                             DrawLabels(filteredFeatures, graphics, /*mapToScreen, */labelSymbolizer.Labels);
+                            DrawLabels(filteredFeatures, graphics, /*mapToScreen, */labelSymbolizer.Labels);
                         }
                         break;
 
@@ -98,7 +95,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
             }
         }
-         
+
         return image;
     }
 

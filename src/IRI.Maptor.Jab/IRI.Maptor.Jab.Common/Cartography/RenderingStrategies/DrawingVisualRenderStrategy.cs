@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Helpers;
+using IRI.Maptor.Jab.Common.Cartography.Helpers;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 using WpfPoint = System.Windows.Point;
-using IRI.Maptor.Jab.Common.Cartography.Symbologies;
-using IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
-using IRI.Maptor.Jab.Common.Helpers;
-using System.Linq;
-using System.Windows;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
-using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Models;
 
-namespace IRI.Maptor.Jab.Common.Cartography.Rendering;
+namespace IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 public class DrawingVisualRenderStrategy : RenderStrategy
 {
@@ -95,7 +94,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
                     if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true /*&& feature.IsLabeled()*/)
                     {
-                        var renderedLabels = this.DrawLabels(filteredFeatures, labelSymbolizer.Labels/*, image*//*, mapToScreen*/);
+                        var renderedLabels = DrawLabels(filteredFeatures, labelSymbolizer.Labels/*, image*//*, mapToScreen*/);
 
                         if (renderedLabels is not null)
                         {
@@ -189,7 +188,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
                                         labels.Foreground,
                                         pixelsPerDip: 96);
 
-                WpfPoint location = /*mapToScreen*/(mapCoordinates[i]);
+                WpfPoint location = /*mapToScreen*/mapCoordinates[i];
 
                 var temp = new WpfPoint(location.X - formattedText.Width * 1.5, location.Y - formattedText.Height / 2.0);
 
@@ -378,7 +377,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         }
         else if (pointSymbol?.ImagePointSymbol != null)
         {
-            context.DrawImage(pointSymbol.ImagePointSymbol, new System.Windows.Rect(location.X, location.Y, symbolWidth, symbolHeight));
+            context.DrawImage(pointSymbol.ImagePointSymbol, new Rect(location.X, location.Y, symbolWidth, symbolHeight));
         }
         else
         {

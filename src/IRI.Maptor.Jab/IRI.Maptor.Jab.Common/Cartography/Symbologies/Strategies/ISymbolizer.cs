@@ -1,8 +1,7 @@
-﻿using System; 
+﻿using System;
 
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Jab.Common.Cartography.Common;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Symbologies;
 

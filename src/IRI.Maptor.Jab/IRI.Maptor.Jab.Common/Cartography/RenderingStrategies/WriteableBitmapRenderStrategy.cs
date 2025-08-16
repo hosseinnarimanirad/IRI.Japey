@@ -1,18 +1,17 @@
-﻿using IRI.Maptor.Extensions;
-using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Sta.Spatial.Primitives;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using IRI.Maptor.Jab.Common.Cartography.Symbologies;
-using IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
+
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Jab.Common.Cartography.Helpers;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 
-namespace IRI.Maptor.Jab.Common.Cartography.Rendering;
+namespace IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 public class WriteableBitmapRenderStrategy : RenderStrategy
 {
@@ -27,7 +26,7 @@ public class WriteableBitmapRenderStrategy : RenderStrategy
         if (features.IsNullOrEmpty())
             return null;
 
-        WriteableBitmap image = null;
+        WriteableBitmap? image = null;
 
         foreach (var symbolizer in _symbolizers)
         {
@@ -66,10 +65,12 @@ public class WriteableBitmapRenderStrategy : RenderStrategy
             }
         }
 
+        if (image is null)
+            return null;
+        
         image.Freeze();
 
         return new ImageBrush(image);
-
     }
 
 

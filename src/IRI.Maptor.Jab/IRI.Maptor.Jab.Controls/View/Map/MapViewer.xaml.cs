@@ -40,10 +40,10 @@ using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
-using IRI.Maptor.Jab.Common.Cartography.Rendering;
 using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Sta.Spatial.Analysis;
+using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 //using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
 
@@ -1573,7 +1573,27 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             var renderingStrategy = RenderStrategyContext.Create(layer);
 
             var imageBrush = renderingStrategy.Render(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight);
+             
+            //ImageBrush brush;
 
+            //switch (layer.ToRasterTechnique)
+            //{
+            //    case RasterizationApproach.GdiPlus:
+            //        brush = Approach1(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
+            //        break;
+            //    case RasterizationApproach.DrawingVisual:
+            //        brush = Approach2(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
+            //        break;
+            //    case RasterizationApproach.WriteableBitmap:
+            //        brush = Approach3(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
+            //        break;
+            //    case RasterizationApproach.StreamGeometry:
+            //        brush = Approach4(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
+            //        break;
+            //    case RasterizationApproach.None:                    
+            //    default:
+            //        break;
+            //}
 
             //switch (layer.ToRasterTechnique)
             //{

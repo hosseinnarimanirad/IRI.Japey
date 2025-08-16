@@ -6,15 +6,15 @@ using System.Windows.Media.Imaging;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 
-using drawing = System.Drawing;
+using Drawing = System.Drawing;
 
-namespace IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
+namespace IRI.Maptor.Jab.Common.Cartography.Helpers;
 
 public class GeometryHelper
 {
     static int pointSize = 4;
 
-    internal static void Transform(drawing.Graphics graphics, Geometry<Point> original, Point location, drawing.Pen pen, drawing.Brush brush)
+    internal static void Transform(Drawing.Graphics graphics, Geometry<Point> original, Point location, Drawing.Pen pen, Drawing.Brush brush)
     {
         if (original.Geometries != null)
         {
@@ -41,7 +41,7 @@ public class GeometryHelper
         }
     }
 
-    private static void AddLineString(drawing.Graphics graphics, Geometry<Point> original, Point location, drawing.Pen pen, drawing.Brush brush)
+    private static void AddLineString(Drawing.Graphics graphics, Geometry<Point> original, Point location, Drawing.Pen pen, Drawing.Brush brush)
     {
         if (original.NumberOfPoints < 1)
             return;
@@ -101,7 +101,7 @@ public class GeometryHelper
     }
 
 
-    internal static void Transform(drawing.Graphics graphics, Geometry original, Point location, drawing.Pen pen, drawing.Brush brush)
+    internal static void Transform(Drawing.Graphics graphics, Geometry original, Point location, Drawing.Pen pen, Drawing.Brush brush)
     {
         var geometry = original.GetFlattenedPathGeometry();
 
@@ -109,13 +109,13 @@ public class GeometryHelper
         {
             System.Windows.Point firstLocalPoint = ((PolyLineSegment)figure.Segments[0]).Points[0];
 
-            var firstPoint = new drawing.PointF((float)(firstLocalPoint.X + location.X), (float)(firstLocalPoint.Y + location.Y));
+            var firstPoint = new Drawing.PointF((float)(firstLocalPoint.X + location.X), (float)(firstLocalPoint.Y + location.Y));
 
             foreach (var segment in figure.Segments)
             {
                 if (segment is PolyLineSegment)
                 {
-                    var points = ((PolyLineSegment)segment).Points.Select(i => new drawing.PointF((float)(i.X + location.X), (float)(i.Y + location.Y))).ToList();
+                    var points = ((PolyLineSegment)segment).Points.Select(i => new Drawing.PointF((float)(i.X + location.X), (float)(i.Y + location.Y))).ToList();
 
                     points.Add(firstPoint);
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Jab.Common.Cartography.Common;
 using System.Windows.Media;
 using System.Collections.Generic;
 

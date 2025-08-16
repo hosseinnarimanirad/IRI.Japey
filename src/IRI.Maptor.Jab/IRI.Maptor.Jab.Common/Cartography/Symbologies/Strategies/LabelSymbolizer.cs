@@ -1,5 +1,4 @@
-﻿using IRI.Maptor.Jab.Common.Cartography.Common;
-using IRI.Maptor.Jab.Common.Models;
+﻿using IRI.Maptor.Jab.Common.Models;
 using System;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Symbologies;

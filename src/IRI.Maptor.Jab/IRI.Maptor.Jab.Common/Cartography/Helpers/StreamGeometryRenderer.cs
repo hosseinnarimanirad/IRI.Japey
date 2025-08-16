@@ -7,13 +7,10 @@ using System.Collections.Generic;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-
-using WpfPoint = System.Windows.Point;
-using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Extensions;
+using WpfPoint = System.Windows.Point;
 
-namespace IRI.Maptor.Jab.Common.Cartography.Rendering.Helpers;
+namespace IRI.Maptor.Jab.Common.Cartography.Helpers;
 
 public static class StreamGeometryRenderer
 {
