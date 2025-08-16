@@ -79,6 +79,7 @@
     <!--<ProjectReference Include="..\..\IRI.Maptor.Ket\IRI.Maptor.Ket.SqlServerSpatialExtension\IRI.Maptor.Ket.SqlServerSpatialExtension.csproj" />-->
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.Common\IRI.Maptor.Sta.Common.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.MachineLearning\IRI.Maptor.Sta.MachineLearning.csproj" />
+    <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.Ogc\IRI.Maptor.Sta.Ogc.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.Persistence\IRI.Maptor.Sta.Persistence.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.Security\IRI.Maptor.Sta.Security.csproj" />
     <ProjectReference Include="..\..\IRI.Maptor.Sta\IRI.Maptor.Sta.ShapefileFormat\IRI.Maptor.Sta.ShapefileFormat.csproj" />

@@ -110,6 +110,9 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         return result;
     }
 
+
+    #region Private Methods
+
     private DrawingVisual ParseGeometry(List<Feature<Point>> features, Pen? pen, Brush? brush, SimplePointSymbolizer? pointSymbol)
     {
         DrawingVisual result = new DrawingVisual();
@@ -146,8 +149,6 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
         return result;
     }
-
-    #region Private Methods
 
     private void AddGeometry(DrawingContext context, Geometry<Point> geometry, Brush? brush, Pen? pen, SimplePointSymbolizer? pointSymbol)
     {
