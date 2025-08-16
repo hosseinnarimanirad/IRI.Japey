@@ -1,13 +1,11 @@
 ﻿using IRI.Maptor.Jab.Common.Models;
-using System;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 public class LabelSymbolizer : SymbolizerBase
 {
     public override SymbologyType Type =>  SymbologyType.Label;
-
-    
+     
     private LabelParameters _labels;
 
     public LabelParameters Labels
@@ -25,10 +23,5 @@ public class LabelSymbolizer : SymbolizerBase
     public LabelSymbolizer(LabelParameters labels)
     {
         _labels = labels;
-    }
-
-    //public override VisualParameters Get( )
-    //{
-    //    throw new NotImplementedException();
-    //}
+    } 
 }

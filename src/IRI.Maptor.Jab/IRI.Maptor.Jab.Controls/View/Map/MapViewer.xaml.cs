@@ -1028,7 +1028,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new SimplePointSymbolizer() { GeometryPointSymbol = pointSymbol }, isLabeled ? parameters : null);
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, isLabeled ? parameters : null);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
@@ -1042,7 +1042,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             throw new NotImplementedException();
         }
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new SimplePointSymbolizer() { GeometryPointSymbol = pointSymbol }, parameters);
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, parameters);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
@@ -1493,28 +1493,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         var renderingStrategy = RenderStrategyContext.Create(layer);
 
         var imageBrush = renderingStrategy.Render(features, mapScale, tileScreenWidth, tileScreenHeight);
-
-        //switch (layer.ToRasterTechnique)
-        //{
-        //    case RasterizationApproach.DrawingVisual:
-        //        imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*,*/ /*o => _vt.Transform(o),*/ /*totalExtent*/);
-        //        break;
-        //    case RasterizationApproach.GdiPlus:
-        //        imageBrush = layer.RenderUsingGdiPlus(features, mapScale, /*tile, */tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
-        //        break;
-        //    case RasterizationApproach.WriteableBitmap:
-        //        imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, /*tile,*/ tileScreenWidth, tileScreenHeight/*, area*//*, o => _vt.Transform(o), totalExtent*/);
-        //        break;
-        //    //case RasterizationApproach.OpenTk:
-        //    //    pathImage = layer.AsTileUsinOpenTK(geoLabelPair.Geometries, geoLabelPair.Labels, mapScale, tile, tileScreenWidth, tileScreenHeight, area, o => _vt.Transform(o), extent);
-        //    //    break;
-        //    case RasterizationApproach.StreamGeometry:
-        //    //pathImage = layer.AsTileUsingStreamGeometry(geoLabelPair.Geometries, mapScale, tile, tileScreenWidth, tileScreenHeight, area, viewTransform, extent, this.panTransformForPoints);
-        //    case RasterizationApproach.None:
-        //    default:
-        //        throw new NotImplementedException();
-        //}
-
+         
         if (tile.ZoomLevel != this.CurrentZoomLevel)//|| MapScale != mapScale)
         {
             Debug.Print($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
@@ -1562,9 +1541,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 return;
 
             var area = ParseToRectangleGeometry(extent);
-
-            //ImageBrush? imageBrush = null;
-
+             
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
 
             var features = feature.Transform(transform).Features;
@@ -1573,55 +1550,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             var renderingStrategy = RenderStrategyContext.Create(layer);
 
             var imageBrush = renderingStrategy.Render(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight);
-             
-            //ImageBrush brush;
-
-            //switch (layer.ToRasterTechnique)
-            //{
-            //    case RasterizationApproach.GdiPlus:
-            //        brush = Approach1(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
-            //        break;
-            //    case RasterizationApproach.DrawingVisual:
-            //        brush = Approach2(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
-            //        break;
-            //    case RasterizationApproach.WriteableBitmap:
-            //        brush = Approach3(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
-            //        break;
-            //    case RasterizationApproach.StreamGeometry:
-            //        brush = Approach4(feature, MapScale, this.mapView.ActualWidth, this.mapView.ActualHeight, ...);
-            //        break;
-            //    case RasterizationApproach.None:                    
-            //    default:
-            //        break;
-            //}
-
-            //switch (layer.ToRasterTechnique)
-            //{
-            //    case RasterizationApproach.GdiPlus:
-            //        imageBrush = layer.RenderUsingGdiPlus(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen area*/);
-            //        break;
-
-            //    //case RasterizationApproach.OpenTk:
-            //    //    path = layer.AsBitmapUsingOpenTK(geometires, geoLabledPairs.Labels, mapScale, extent, this.mapView.ActualWidth, this.mapView.ActualHeight, this.MapToScreen, area);
-            //    //    break;
-
-            //    case RasterizationApproach.DrawingVisual:
-            //        imageBrush = layer.RenderUsingDrawingVisual(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
-            //        break;
-
-            //    case RasterizationApproach.WriteableBitmap:
-            //        imageBrush = layer.RenderUsingWriteableBitmap(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight/*, this.MapToScreen, area*/);
-            //        break;
-
-            //    //case RasterizationApproach.StreamGeometry:
-            //    //    imageBrush = layer.AsShape(feature.Features, this.viewTransform, this.panTransformForPoints/*, this.MapToScreen*/);
-            //    //    break;
-
-            //    case RasterizationApproach.None:
-            //    default:
-            //        throw new NotImplementedException();
-            //}
-
+              
             if (imageBrush is null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
 
@@ -2868,7 +2797,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new SimplePointSymbolizer() { GeometryPointSymbol = pointSymbol });
+            new SimplePointSymbolizer() { GeometrySymbol = pointSymbol });
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
 
@@ -2890,7 +2819,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             RenderingApproach.Default,
             RasterizationApproach.DrawingVisual,
             ScaleInterval.All,
-            new SimplePointSymbolizer() { GeometryPointSymbol = pointSymbol })
+            new SimplePointSymbolizer() { GeometrySymbol = pointSymbol })
         {
             ZIndex = int.MaxValue
         };

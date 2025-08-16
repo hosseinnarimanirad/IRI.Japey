@@ -12,8 +12,8 @@ using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Persistence.DataSources;
 
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
-using IRI.Maptor.Jab.Common.Cartography.Rendering;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -88,8 +88,7 @@ public class FeatureLayer : BaseLayer
         var image = new GdiBitmapRenderStrategy(this.Symbolizers).ParseSqlGeometry(
             features,
             width,
-            height,
-            //mapToScreen,
+            height, 
             this.SymbologyRule);
 
 

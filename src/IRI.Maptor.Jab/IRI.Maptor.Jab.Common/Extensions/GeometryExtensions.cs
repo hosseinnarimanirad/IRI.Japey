@@ -5,7 +5,7 @@ using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Jab.Common.Cartography.Rendering;
+using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 namespace IRI.Maptor.Extensions;
 

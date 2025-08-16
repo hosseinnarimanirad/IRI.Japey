@@ -27,7 +27,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
     public override ImageBrush? Render(List<Feature<Point>> features, double mapScale, double screenWidth, double screenHeight)
     {
-        var bitmap = AsGdiBitmap(features, screenWidth, screenHeight, mapScale);
+        var bitmap = AsGdiBitmap(features, mapScale, screenWidth, screenHeight);
 
         if (bitmap is null)
             return null;
@@ -42,7 +42,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
     }
 
-    public Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double imageWidth, double imageHeight, double mapScale)
+    public Drawing.Bitmap? AsGdiBitmap(List<Feature<Point>> features, double mapScale, double imageWidth, double imageHeight)
     {
         if (features.IsNullOrEmpty())
             return null;
@@ -70,9 +70,6 @@ public class GdiBitmapRenderStrategy : RenderStrategy
                         ParseSqlGeometry(
                             graphics,
                             filteredFeatures,
-                            imageWidth,
-                            imageHeight,
-                            //mapToScreen,
                             simpleSymbolizer.Param.GetGdiPlusPen(),
                             simpleSymbolizer.Param.Fill.AsGdiBrush(),
                             simpleSymbolizer.Param.PointSymbol);
@@ -85,114 +82,62 @@ public class GdiBitmapRenderStrategy : RenderStrategy
                     case LabelSymbolizer labelSymbolizer:
                         if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
                         {
-                            DrawLabels(filteredFeatures, graphics, /*mapToScreen, */labelSymbolizer.Labels);
+                            DrawLabels(filteredFeatures, graphics, labelSymbolizer.Labels);
                         }
                         break;
 
                     default:
                         break;
                 }
-
             }
         }
 
         return image;
     }
-
-
-    public void WriteToImage(Drawing.Bitmap image, List<Feature<Point>> features, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+     
+    private void ParseSqlGeometry(Drawing.Graphics graphics, List<Feature<Point>> features, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (features.IsNullOrEmpty())
             return;
 
-        Drawing.Graphics graphics = Drawing.Graphics.FromImage(image);
-
-        int p = 0;
-
         foreach (var item in features)
         {
-            p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
+            AddGeometry(graphics, item.TheGeometry, pen, brush, pointSymbol);
         }
     }
-
-    public void ParseSqlGeometry(Drawing.Graphics graphics, List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
-    {
-        //var result = new Drawing.Bitmap((int)width, (int)height);
-
-        if (features.IsNullOrEmpty())
-            return /*result*/;
-
-        //Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
-
-        int p = 0;
-
-        foreach (var item in features)
-        {
-            p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
-        }
-
-        return /*result*/;
-    }
-
-    //public Drawing.Bitmap ParseSqlGeometry(List<Feature<Point>> features, double width, double height, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
-    //{
-    //    var result = new Drawing.Bitmap((int)width, (int)height);
-
-    //    if (features.IsNullOrEmpty())
-    //        return result;
-
-    //    Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
-
-    //    int p = 0;
-
-    //    foreach (var item in features)
-    //    {
-    //        p += AddGeometry(graphics, item.TheGeometry, /*transform,*/ pen, brush, pointSymbol);
-    //    }
-
-    //    return result;
-    //}
 
     internal Drawing.Bitmap ParseSqlGeometry(
       List<Feature<Point>> features,
       double width,
       double height,
-      //Func<WpfPoint, WpfPoint> mapToScreen,
       Func<Feature<Point>, VisualParameters> symbologyRule)
     {
         var result = new Drawing.Bitmap((int)width, (int)height);
 
         Drawing.Graphics graphics = Drawing.Graphics.FromImage(result);
 
-        int p = 0;
-
         if (features != null)
         {
             foreach (var item in features)
             {
+                if (item.TheGeometry is null)
+                    continue;
+
                 var symbology = symbologyRule(item);
 
                 var pen = symbology.GetGdiPlusPen(symbology.Opacity);
 
                 var brush = symbology.GetGdiPlusFillBrush(symbology.Opacity);
 
-                WriteToImage(graphics, item.TheGeometry, /*mapToScreen,*/ pen, brush, symbology.PointSymbol);
+                AddGeometry(graphics, item.TheGeometry, pen, brush, symbology.PointSymbol);
             }
         }
 
         return result;
     }
 
-    internal void WriteToImage(Drawing.Graphics graphics, Geometry<Point> geometry, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
-    {
-        if (geometry != null)
-        {
-            AddGeometry(graphics, geometry, /*transform,*/ pen, brush, pointSymbol);
-        }
-    }
 
-
-    private int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    private int AddGeometry(Drawing.Graphics graphics, Geometry<Point> geometry, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         if (geometry.IsNotValidOrEmpty())
             return 1;
@@ -200,31 +145,31 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         switch (geometry.Type)
         {
             case GeometryType.Point:
-                AddPoint(graphics, geometry, /*transform,*/ pen, brush, pointSymbol);//, pointSymbol, symbol);
+                AddPoint(graphics, geometry, pen, brush, pointSymbol);
                 break;
 
             case GeometryType.LineString:
-                AddLineString(graphics, geometry, /*transform,*/ pen, brush);
+                AddLineString(graphics, geometry, pen, brush);
                 break;
 
             case GeometryType.Polygon:
-                AddPolygon(graphics, geometry, /*transform,*/ pen, brush);
+                AddPolygon(graphics, geometry, pen, brush);
                 break;
 
             case GeometryType.MultiPoint:
-                AddMultiPoint(graphics, geometry, /*transform,*/ pen, brush, pointSymbol);//, pointSymbol, symbol);
+                AddMultiPoint(graphics, geometry, pen, brush, pointSymbol);
                 break;
 
             case GeometryType.MultiLineString:
-                AddMultiLineString(graphics, geometry, /*transform,*/ pen, brush);
+                AddMultiLineString(graphics, geometry, pen, brush);
                 break;
 
             case GeometryType.MultiPolygon:
-                AddMultiPolygon(graphics, geometry, /*transform,*/ pen, brush);
+                AddMultiPolygon(graphics, geometry, pen, brush);
                 break;
 
             case GeometryType.GeometryCollection:
-                AddGeometryCollection(graphics, geometry, /*transform,*/ pen, brush, pointSymbol);
+                AddGeometryCollection(graphics, geometry, pen, brush, pointSymbol);
                 break;
 
             case GeometryType.CircularString:
@@ -236,19 +181,17 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         return 0;
     }
 
-    private void AddPoint(Drawing.Graphics graphics, Geometry<Point> point, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    private void AddPoint(Drawing.Graphics graphics, Geometry<Point> point, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
-        var parsedPoint = /*transform*/point.AsWpfPoint().AsPoint();
+        var parsedPoint = point.AsWpfPoint().AsPoint();
 
-        if (pointSymbol?.GeometryPointSymbol != null)
+        if (pointSymbol?.GeometrySymbol != null)
         {
-            GeometryHelper.Transform(graphics, pointSymbol.GeometryPointSymbol, parsedPoint, pen, brush);
+            GeometryHelper.Transform(graphics, pointSymbol.GeometrySymbol, parsedPoint, pen, brush);
         }
-        else if (pointSymbol?.ImagePointSymbolGdiPlus != null)
+        else if (pointSymbol?.ImageSymbolGdiPlus != null)
         {
-            //96.09.21
-            //graphics.DrawImage(pointSymbol.ImagePointSymbol, new drawing.RectangleF((float)parsedPoint.X - _symbolOffset, (float)parsedPoint.Y - _symbolOffset, _symbolSize, _symbolSize));
-            graphics.DrawImage(pointSymbol.ImagePointSymbolGdiPlus, new Drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
+            graphics.DrawImage(pointSymbol.ImageSymbolGdiPlus, new Drawing.RectangleF((float)(parsedPoint.X - pointSymbol.SymbolWidth / 2.0), (float)(parsedPoint.Y - pointSymbol.SymbolHeight), (float)pointSymbol.SymbolWidth, (float)pointSymbol.SymbolHeight));
         }
         else
         {
@@ -263,7 +206,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         }
     }
 
-    private void AddMultiPoint(Drawing.Graphics graphics, Geometry<Point> multiPoint, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
+    private void AddMultiPoint(Drawing.Graphics graphics, Geometry<Point> multiPoint, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)//, ImageSource pointSymbol, Geometry symbol)
     {
         int numberOfPoints = multiPoint.NumberOfGeometries;
 
@@ -274,20 +217,19 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             if (point.IsNotValidOrEmpty())
                 continue;
 
-            AddPoint(graphics, point, /*transform,*/ pen, brush, pointSymbol);
+            AddPoint(graphics, point, pen, brush, pointSymbol);
         }
     }
 
-    private void AddLineString(Drawing.Graphics graphics, Geometry<Point> lineString, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush)
+    private void AddLineString(Drawing.Graphics graphics, Geometry<Point> lineString, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = lineString.NumberOfPoints;
 
         Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
-        //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
-            var parsedPoint = /*transform*/lineString.Points[i].AsWpfPoint();
+            var parsedPoint = lineString.Points[i].AsWpfPoint();
 
             points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
@@ -295,7 +237,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         graphics.DrawLines(pen, points);
     }
 
-    private void AddMultiLineString(Drawing.Graphics graphics, Geometry<Point> multiLineString, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush)
+    private void AddMultiLineString(Drawing.Graphics graphics, Geometry<Point> multiLineString, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfLineStrings = multiLineString.NumberOfGeometries;
 
@@ -306,20 +248,19 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             if (lineString.IsNotValidOrEmpty())
                 continue;
 
-            AddLineString(graphics, lineString, /*transform,*/ pen, brush);
+            AddLineString(graphics, lineString, pen, brush);
         }
     }
 
-    private void AddPolygonRing(Drawing.Graphics graphics, Geometry<Point> ring, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush)
+    private void AddPolygonRing(Drawing.Graphics graphics, Geometry<Point> ring, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPoints = ring.NumberOfPoints;
 
         Drawing.PointF[] points = new Drawing.PointF[numberOfPoints];
 
-        //STPointN(index): index is between 1 and number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
-            var parsedPoint = /*transform*/ring.Points[i].AsWpfPoint();
+            var parsedPoint = ring.Points[i].AsWpfPoint();
 
             points[i] = new Drawing.PointF((float)parsedPoint.X, (float)parsedPoint.Y);
         }
@@ -335,32 +276,19 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         }
     }
 
-    private void AddPolygon(Drawing.Graphics graphics, Geometry<Point> polygon, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush)
+    private void AddPolygon(Drawing.Graphics graphics, Geometry<Point> polygon, Drawing.Pen pen, Drawing.Brush brush)
     {
-        //var exteriorRing = polygon.STExteriorRing();
+        int numberOfRings = polygon.NumberOfGeometries;
 
-        //AddPolygonRing(graphics, exteriorRing, /*transform,*/ pen, brush);
-
-        //int numberOfInteriorRings = polygon.STNumInteriorRing().Value;
-
-        //for (int i = 0; i < numberOfInteriorRings; i++)
-        //{
-        //    var ring = polygon.STInteriorRingN(i + 1);
-
-        //    AddPolygonRing(graphics, ring, /*transform,*/ pen, brush);
-        //}
-
-        int numberOfInteriorRings = polygon.NumberOfGeometries;
-
-        for (int i = 0; i < numberOfInteriorRings; i++)
+        for (int i = 0; i < numberOfRings; i++)
         {
             var ring = polygon.Geometries[i];
 
-            AddPolygonRing(graphics, ring, /*transform,*/ pen, brush);
+            AddPolygonRing(graphics, ring, pen, brush);
         }
     }
 
-    private void AddMultiPolygon(Drawing.Graphics graphics, Geometry<Point> multiPolygon, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush)
+    private void AddMultiPolygon(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Drawing.Pen pen, Drawing.Brush brush)
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -371,11 +299,11 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             if (polygon.IsNotValidOrEmpty())
                 continue;
 
-            AddPolygon(graphics, polygon, /*transform,*/ pen, brush);
+            AddPolygon(graphics, polygon, pen, brush);
         }
     }
 
-    private void AddGeometryCollection(Drawing.Graphics graphics, Geometry<Point> multiPolygon, /*Func<WpfPoint, WpfPoint> transform,*/ Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
+    private void AddGeometryCollection(Drawing.Graphics graphics, Geometry<Point> multiPolygon, Drawing.Pen pen, Drawing.Brush brush, SimplePointSymbolizer pointSymbol)
     {
         int numberOfPolygons = multiPolygon.NumberOfGeometries;
 
@@ -386,25 +314,19 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             if (polygon.IsNotValidOrEmpty())
                 continue;
 
-            AddGeometry(graphics, polygon, /*transform,*/ pen, brush, pointSymbol);
+            AddGeometry(graphics, polygon, pen, brush, pointSymbol);
         }
     }
 
-    //Labeling
-    public void DrawLabels(List<Feature<Point>> features, Drawing.Graphics graphic, /*Func<WpfPoint, WpfPoint> mapToScreen,*/ LabelParameters labelParameters)
+    private void DrawLabels(List<Feature<Point>> features, Drawing.Graphics graphic, LabelParameters labelParameters)
     {
         if (features.IsNullOrEmpty())
             return;
 
-        var mapCoordinates = features.ConvertAll(
-                  (g) =>
-                  {
-                      return labelParameters.PositionFunc(g.TheGeometry).AsWpfPoint();
-                  }).ToList();
+        var mapCoordinates = features.ConvertAll(g => labelParameters.PositionFunc(g.TheGeometry).AsWpfPoint())
+                                        .ToList();
 
         var font = new Drawing.Font(labelParameters.FontFamily.FamilyNames.First().Value, labelParameters.FontSize, Drawing.FontStyle.Bold);
-
-        //var graphic = Drawing.Graphics.FromImage(image);
 
         graphic.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
@@ -425,7 +347,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 
         for (int i = 0; i < features.Count; i++)
         {
-            var location = /*mapToScreen*/mapCoordinates[i];
+            var location = mapCoordinates[i];
 
             var stringSize = graphic.MeasureString(features[i].Label, font);
 
@@ -438,8 +360,6 @@ public class GdiBitmapRenderStrategy : RenderStrategy
             graphic.FillRectangle(_labelBackground, rectangleF);
 
             graphic.DrawString(features[i].Label, font, brush, locationF, format);
-
-            //graphic.DrawString(labels[i], font, brush, (float)(location.X - stringSize.Width / 2.0), (float)(location.Y - stringSize.Height / 2.0), format);
         }
 
         graphic.Flush();

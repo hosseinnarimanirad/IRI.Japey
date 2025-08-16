@@ -1,10 +1,7 @@
-﻿using IRI.Maptor.Sta.Common.Primitives;
+﻿using System; 
+
+using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
@@ -22,11 +19,7 @@ public abstract class SymbolizerBase : Notifier, ISymbolizer
         get => _filter;
         protected set => _filter = value;
     }
-
-    public virtual Predicate<double> ScalePredicate => s => true;
-
-    //public abstract VisualParameters Get( );
-
+     
     public bool IsInScaleRange(double scale)
     {
         return scale > (MinScaleDenominator ?? 0) &&
