@@ -1,12 +1,13 @@
-﻿using IRI.Maptor.Sta.Metrics;
+﻿using System.Globalization;
+
+using IRI.Maptor.Sta.Metrics;
 using IRI.Maptor.Sta.Common.Enums;
+using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
-using System.Globalization;
-using IRI.Maptor.Sta.Common.Helpers;
+using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Maptor.Sta.Spatial.Analysis;
 

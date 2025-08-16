@@ -1,10 +1,8 @@
-﻿// besmellahe rahmane rahim
-// Allahomma ajjel le-valiyek al-faraj
+﻿// BESMELLAHE RAHMANE RAHIM
+// ALLAHOMMA AJJEL LE-VALIYEK AL-FARAJ
 
-
-using System;
-using IRI.Maptor.Sta.Mathematics;
-using IRI.Maptor.Sta.Spatial.Primitives;
+ 
+using IRI.Maptor.Sta.Mathematics; 
 using IRI.Maptor.Sta.DataStructures;
 using IRI.Maptor.Sta.DataStructures.CustomStructures;
 using IRI.Maptor.Sta.Common.Primitives;

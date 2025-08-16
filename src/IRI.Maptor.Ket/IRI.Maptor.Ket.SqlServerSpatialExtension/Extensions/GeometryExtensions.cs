@@ -2,11 +2,9 @@
 using Microsoft.SqlServer.Types;
 
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Sta.Common.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
-using IRI.Maptor.Ket.SqlServerSpatialExtension; 
 
 namespace IRI.Maptor.Extensions;
 
@@ -27,18 +25,9 @@ public static class GeometryExtensions
         }
         //return GetArea(geometry.Transform(toWgs84Geodetic, 0));
     }
-
-
+     
     #region SqlGeometry
-
-    //public static SqlFeature AsSqlFeature<T>(this Geometry<T> geometry) where T : IPoint, new()
-    //{
-    //    return new SqlFeature()
-    //    {
-    //        TheSqlGeometry = geometry.AsSqlGeometry(),
-    //        Attributes = new System.Collections.Generic.Dictionary<string, object>()
-    //    };
-    //}
+     
 
     //ERROR PRONE: NaN and Infinity points are not supported
     public static SqlGeometry AsSqlGeometry<T>(this T point, int srid = 0) where T : IPoint, new()
@@ -497,7 +486,7 @@ public static class GeometryExtensions
         {
             if (geometry.IsNullOrEmpty())
             {
-                Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeometry(builder, item.Type);
+                Ket.SqlServerSpatialExtension.Helpers.SqlSpatialHelper.AddEmptySqlGeography(builder, item.Type);
             }
 
             switch (item.Type)
@@ -552,29 +541,5 @@ public static class GeometryExtensions
     }
 
     #endregion
-
-
-    //#region LineSegment
-
-    //public static double CalculateLength<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
-    //{
-    //    var start = toGeodeticWgs84Func(line.Start);
-
-    //    var end = toGeodeticWgs84Func(line.End);
-
-    //    var geodeticLine = SqlSpatialUtility.MakeGeography(new List<T>() { start, end }, false);
-
-    //    return geodeticLine.STLength().Value;
-    //}
-
-    //public static string GetLengthLabel<T>(this LineSegment<T> line, Func<T, T> toGeodeticWgs84Func) where T : IPoint, new()
-    //{
-    //    var length = line.CalculateLength(toGeodeticWgs84Func);
-
-    //    return UnitHelper.GetLengthLabel(length);
-    //}
-
-    //#endregion
-
 
 }

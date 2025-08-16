@@ -1,5 +1,8 @@
-﻿// besmellahe rahmane rahim
-// Allahomma ajjel le-valiyek al-faraj
+﻿// BESMELLAHE RAHMANE RAHIM
+// ALLAHOMMA AJJEL LE-VALIYEK AL-FARAJ
+
+using System;
+using System.Collections.Generic;
 
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Common.Enums;

@@ -1,7 +1,7 @@
 ﻿using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Analysis.SFC;
 
-namespace IRI.Maptor.Sta.Spatial.DataStructures;
+namespace IRI.Maptor.Sta.Spatial.AdvancedStructures;
 
 public class SFCRTree
 {

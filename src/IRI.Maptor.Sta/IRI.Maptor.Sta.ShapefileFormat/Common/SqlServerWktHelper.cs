@@ -1,24 +1,25 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using IRI.Maptor.Sta.ShapefileFormat.EsriType;
 using IRI.Maptor.Sta.Spatial.Primitives.Esri;
 
 namespace IRI.Maptor.Sta.ShapefileFormat;
 
-internal static class SqlServerWktMapFunctions
+internal static class SqlServerWktHelper
 {
     internal static string SinglePointElementToWkt(EsriPoint point)
     {
-        return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17}", point.X, point.Y);
+        return string.Format(CultureInfo.InvariantCulture, "{0:G17} {1:G17}", point.X, point.Y);
     }
 
     internal static string PointMElementToWkt(EsriPoint point, double measure)
     {
-        return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} NULL {2:G17}", point.X, point.Y, measure);
+        return string.Format(CultureInfo.InvariantCulture, "{0:G17} {1:G17} NULL {2:G17}", point.X, point.Y, measure);
     }
 
     internal static string PointZElementToWkt(EsriPoint point, double zValue, double measure)
     {
-        return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3}", point.X, point.Y, zValue, measure == EsriConstants.NoDataValue ? "NULL" : measure.ToString("G17"));
+        return string.Format(CultureInfo.InvariantCulture, "{0:G17} {1:G17} {2:G17} {3}", point.X, point.Y, zValue, measure == EsriConstants.NoDataValue ? "NULL" : measure.ToString("G17"));
     }
 
     internal static string PointGroupElementToWkt(EsriPoint[] points)

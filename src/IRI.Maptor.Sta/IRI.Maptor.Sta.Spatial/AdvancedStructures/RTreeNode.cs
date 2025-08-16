@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IRI.Maptor.Sta.Spatial.DataStructures;
+namespace IRI.Maptor.Sta.Spatial.AdvancedStructures;
 
 public class RTreeNode
 {

@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" />
-    <PackageReference Include="MahApps.Metro.IconPacks" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Modern" />
   </ItemGroup>
   
   <!--<ItemGroup>

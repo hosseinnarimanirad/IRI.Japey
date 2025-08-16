@@ -1,63 +1,53 @@
 ﻿// besmellahe rahmane rahim
 // Allahomma ajjel le-valiyek al-faraj
 
+using System;
 using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Sta.Common.Primitives;
 
 namespace IRI.Maptor.Sta.Spatial.DigitalTerrainModeling;
 
 [Serializable]
 public struct AttributedPoint : IPoint
 {
-    private double m_X, m_Y, m_Value;
+    private double _x, _y, _value;
 
     private readonly int code;
 
     public double X
     {
-        get { return m_X; }
+        get { return _x; }
 
-        set { m_X = value; }
+        set { _x = value; }
     }
 
     public double Y
     {
-        get { return m_Y; }
+        get { return _y; }
 
-        set { m_Y = value; }
+        set { _y = value; }
     }
 
     public double Value
     {
-        get { return m_Value; }
+        get { return _value; }
 
-        set { m_Value = value; }
+        set { _value = value; }
     }
-
+     
     public AttributedPoint(double x, double y, double value)
-        : this(x, y, value, -1) { }
-
-    public AttributedPoint(double x, double y, double value, int code)
     {
-        m_X = x;
+        _x = x;
 
-        m_Y = y;
+        _y = y;
 
-        m_Value = value;
-
-        this.code = code;
+        _value = value;         
     }
 
     public override string ToString()
     {
         return string.Format("Coordinate: X:{0}, Y:{1}; Attribute:{2}", X, Y, Value);
     }
-
-    public override int GetHashCode()
-    {
-        return code;
-    }
-
+     
     public override bool Equals(object obj)
     {
         if (obj.GetType() == typeof(AttributedPoint))
