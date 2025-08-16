@@ -28,10 +28,10 @@ Built for **.NET 8+**, it provides a comprehensive set of tools for **geometry o
 
 ```
 Maptor /
-├── IRI.Sta/                     # Core spatial data structures & algorithms
-├── IRI.Ket/                     # Utilities (data sources, file I/O)
-├── IRI.Jab/                     # WPF components (MapViewer, dialogs, etc.)
-├── IRI.Tst/                     # Unit tests
+├── IRI.Maptor.Sta/                     # Core spatial data structures & algorithms
+├── IRI.Maptor.Ket/                     # Utilities (data sources, file I/O)
+├── IRI.Maptor.Jab/                     # WPF components (MapViewer, dialogs, etc.)
+├── IRI.Maptor.Tst/                     # Unit tests
 └── Examples/                    # Usage samples
 ```
 
