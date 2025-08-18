@@ -32,14 +32,10 @@ public partial class MainWindow : Window
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         //TestSld(@"C:\Users\Hossein\Downloads\point_pointasgraphic.sld");
-        var t1 = new TileInfo(1338158, 837168, 21);
-        var t2 = new TileInfo(1338158, 837169, 21);
-         
+        TestSld(@"C:\Users\Hossein\Downloads\line_attributebasedline.sld");
 
-        var result1_1 = t1.WebMercatorExtent;
-        var result1_2 = t2.WebMercatorExtent;
 
-        
+
     }
 
 

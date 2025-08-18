@@ -19,7 +19,7 @@ public partial class VisualParameters
     }
 
     public static VisualParameters GetFill(string? hexFill, double opacity = 1)
-    {            
+    {
         return new VisualParameters(new SolidColorBrush(ColorHelper.ToWpfColor(hexFill)), null, 0, opacity);
     }
 
@@ -31,6 +31,15 @@ public partial class VisualParameters
     public static VisualParameters Get(Color fill, Color stroke, double strokeThickness, double opacity = 1)
     {
         return new VisualParameters(new SolidColorBrush(fill), new SolidColorBrush(stroke), strokeThickness, opacity);
+    }
+
+    public static VisualParameters Get(string? hexFill, string? hexStroke, double strokeThickness, double fillOpacity = 1, double strokeOpacity = 1)
+    {
+        var fill = ColorHelper.ToWpfColor(hexFill, fillOpacity);
+
+        var stroke = ColorHelper.ToWpfColor(hexStroke, strokeOpacity);
+
+        return new VisualParameters(new SolidColorBrush(fill), new SolidColorBrush(stroke), strokeThickness, 1);
     }
 
 
@@ -106,7 +115,7 @@ public partial class VisualParameters
 
 
     public static SolidColorBrush DefaultRoutingLineStrokeThin = new SolidColorBrush(new Color() { R = 32, G = 108, B = 213, A = 255 });//#256FD7
-    
+
     public static SolidColorBrush DefaultRoutingLineThick = new SolidColorBrush(new Color() { R = 102, G = 157, B = 246, A = 255 });//#256FD7
 
     public static DashStyle GetDefaultDashStyleForMeasurements()

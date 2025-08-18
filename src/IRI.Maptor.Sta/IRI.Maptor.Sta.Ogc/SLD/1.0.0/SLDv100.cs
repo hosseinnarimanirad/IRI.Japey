@@ -1,7 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+
+using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Sta.Ogc.SLD;
 
@@ -338,35 +340,11 @@ public class Geometry
     public string PropertyName { get; set; }
 }
 
-public class Stroke
-{
-    [XmlElement("GraphicFill")]
-    public GraphicFill GraphicFill { get; set; }
 
-    [XmlElement("GraphicStroke")]
-    public GraphicStroke GraphicStroke { get; set; }
 
-    [XmlElement("CssParameter")]
-    public List<CssParameter> CssParameters { get; set; } = new();
-}
 
-public class Fill
-{
-    [XmlElement("GraphicFill")]
-    public GraphicFill GraphicFill { get; set; }
 
-    [XmlElement("CssParameter")]
-    public List<CssParameter> CssParameters { get; set; } = new();
-}
 
-public class CssParameter
-{
-    [XmlAttribute("name")]
-    public string Name { get; set; }
-
-    [XmlText]
-    public string Value { get; set; }
-}
 
 public enum WellKnownMark
 {
@@ -444,11 +422,7 @@ public class ParameterValueType
 }
 
 // Text symbolizer supporting classes
-public class Font
-{
-    [XmlElement("CssParameter")]
-    public List<CssParameter> CssParameters { get; set; } = new();
-}
+
 
 public class LabelPlacement
 {

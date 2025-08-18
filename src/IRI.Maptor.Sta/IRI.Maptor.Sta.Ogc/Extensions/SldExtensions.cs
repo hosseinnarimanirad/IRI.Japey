@@ -1,136 +1,133 @@
-﻿using IRI.Maptor.Sta.Metrics;
-using IRI.Maptor.Sta.Ogc.SLD;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SldHelper = IRI.Maptor.Sta.Ogc.SLD.SldHelper;
+﻿//using IRI.Maptor.Sta.Metrics;
+//using IRI.Maptor.Sta.Ogc.SLD;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using SldHelper = IRI.Maptor.Sta.Ogc.SLD.SldHelper;
 
-namespace IRI.Maptor.Extensions;
+//namespace IRI.Maptor.Extensions;
 
-public static class SldExtensions
-{
-    private const double _defaultFontSize = 10;
-    private const double _defaultFillOpacity = 1;
-    private const double _defaultStrokeWidth = 1;
-    private const double _defaultStrokeDashOffset = 0;
+//public static class SldExtensions
+//{
+//    private static string? GetValue(this List<CssParameter> parameters, string key)
+//    {
+//        if (parameters.IsNullOrEmpty())
+//            return null;
 
-    private static string? GetValue(this List<CssParameter> parameters, string key)
-    {
-        if (parameters.IsNullOrEmpty())
-            return null;
+//        return parameters.FirstOrDefault(p => p.Name.EqualsIgnoreCase(key))?.Value ?? null;
+//    }
 
-        return parameters.FirstOrDefault(p => p.Name.EqualsIgnoreCase(key))?.Value ?? null;
-    }
+//    public static CssParameter GetParameter(string key)=>
 
-    #region Font
+//    #region Font
 
-    public static string? GetFontFamily(this Font font)
-    {
-        return font.CssParameters.GetValue(SldHelper.CssParameter_FontFamily);
-    }
+//    public static string? GetFontFamily(this Font font)
+//    {
+//        return font.CssParameters.GetValue(SldHelper.CssParameter_FontFamily);
+//    }
 
-    public static double GetFontSize(this Font font)
-    {
-        double result;
+//    public static double GetFontSize(this Font font)
+//    {
+//        double result;
 
-        if (!double.TryParse(font.CssParameters.GetValue(SldHelper.CssParameter_FontSize), out result))
-            result = _defaultFontSize;
+//        if (!double.TryParse(font.CssParameters.GetValue(SldHelper.CssParameter_FontSize), out result))
+//            result = _defaultFontSize;
 
-        return result;
-    }
+//        return result;
+//    }
 
-    public static string? GetFontStyle(this Font font)
-    {
-        return font.CssParameters.GetValue(SldHelper.CssParameter_FontStyle);
-    }
+//    public static string? GetFontStyle(this Font font)
+//    {
+//        return font.CssParameters.GetValue(SldHelper.CssParameter_FontStyle);
+//    }
 
-    public static string? GetFontWeight(this Font font)
-    {
-        return font.CssParameters.GetValue(SldHelper.CssParameter_FontWeight);
-    }
+//    public static string? GetFontWeight(this Font font)
+//    {
+//        return font.CssParameters.GetValue(SldHelper.CssParameter_FontWeight);
+//    }
 
-    #endregion
+//    #endregion
 
 
-    #region Fill
+//    #region Fill
 
-    public static string? GetFill(this Fill fill)
-    {
-        return fill.CssParameters.GetValue(SldHelper.CssParameter_Fill);
-    }
+//    public static string? GetFill(this Fill fill)
+//    {
+//        return fill.CssParameters.GetValue(SldHelper.CssParameter_Fill);
+//    }
 
-    public static double GetFillOpacity(this Fill fill)
-    {
-        double result;
+//    public static double GetFillOpacity(this Fill fill)
+//    {
+//        double result;
 
-        if (!double.TryParse(fill.CssParameters.GetValue(SldHelper.CssParameter_FillOpacity), out result))
-            result = _defaultFillOpacity;
+//        if (!double.TryParse(fill.CssParameters.GetValue(SldHelper.CssParameter_FillOpacity), out result))
+//            result = _defaultFillOpacity;
 
-        return result;
-    }
+//        return result;
+//    }
 
-    #endregion
-
-
-    #region Stroke
+//    #endregion
 
 
-    public static string? GetStroke(this Stroke stoke)
-    {
-        return stoke.CssParameters.GetValue(SldHelper.CssParameter_Stroke);
-    }
+//    #region Stroke
 
-    public static double GetStrokeWidth(this Stroke stoke)
-    {
-        double result;
 
-        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeWidth), out result))
-            result = _defaultStrokeWidth;
+//    public static string? GetStroke(this Stroke stoke)
+//    {
+//        return stoke.CssParameters.GetValue(SldHelper.CssParameter_Stroke);
+//    }
 
-        return result;
-    }
+//    public static double GetStrokeWidth(this Stroke stoke)
+//    {
+//        double result;
 
-    public static double GetStrokeOpacity(this Stroke stoke)
-    {
-        double result;
+//        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeWidth), out result))
+//            result = _defaultStrokeWidth;
 
-        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeOpacity), out result))
-            result = _defaultFillOpacity;
+//        return result;
+//    }
 
-        return result;
-    }
+//    public static double GetStrokeOpacity(this Stroke stoke)
+//    {
+//        double result;
 
-    public static string? GetStrokeLinejoin(this Stroke stoke)
-    {
-        return stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeLinejoin);
-    }
+//        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeOpacity), out result))
+//            result = _defaultFillOpacity;
 
-    public static string? GetStrokeLineCap(this Stroke stoke)
-    {
-        return stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeLineCap);
-    }
+//        return result;
+//    }
 
-    public static int[]? GetStrokeStrokeDashArray(this Stroke stoke)
-    {
-        var dashArray = stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeDashArray);
+//    public static string? GetStrokeLinejoin(this Stroke stoke)
+//    {
+//        return stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeLineJoin);
+//    }
 
-        if (dashArray.IsNullOrEmpty())
-            return null;
+//    public static string? GetStrokeLineCap(this Stroke stoke)
+//    {
+//        return stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeLineCap);
+//    }
 
-        return dashArray.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-    }
+//    public static double[]? GetStrokeStrokeDashArray(this Stroke stoke)
+//    {
+//        var dashArray = stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeDashArray);
 
-    public static double GetStrokeDashOffset(this Stroke stoke)
-    {
-        double result;
+//        if (dashArray.IsNullOrEmpty())
+//            return null;
 
-        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeDashOffset), out result))
-            result = _defaultStrokeDashOffset;
+//        return dashArray.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(double.Parse).ToArray();
+//    }
 
-        return result;
-    }
+//    public static double GetStrokeDashOffset(this Stroke stoke)
+//    {
+//        double result;
+
+//        if (!double.TryParse(stoke.CssParameters.GetValue(SldHelper.CssParameter_StrokeDashOffset), out result))
+//            result = _defaultStrokeDashOffset;
+
+//        return result;
+//    }
      
-    #endregion
+//    #endregion
 
-}
+//}

@@ -18,14 +18,16 @@ public static class SldHelper
     public const string CssParameter_Stroke = "stroke";
 
     /// <summary>
-    /// Specifies the width of the line in pixels. Default is 1.
+    /// Specifies the width of the line in pixels. 
+    /// Default is 1.
     /// </summary>
     public const string CssParameter_StrokeWidth = "stroke-width";
 
     /// <summary>
     /// Specifies the opacity (transparency) of the line. 
     /// The value is a number are between 0 (completely transparent) 
-    /// and 1 (completely opaque). Default is 1.
+    /// and 1 (completely opaque). 
+    /// Default is 1.
     /// </summary>
     public const string CssParameter_StrokeOpacity = "stroke-opacity";
 
@@ -34,7 +36,7 @@ public static class SldHelper
     /// Possible values are mitre (sharp corner), round (rounded corner), 
     /// and bevel (diagonal corner). Default is mitre.
     /// </summary>
-    public const string CssParameter_StrokeLinejoin = "stroke-linejoin";
+    public const string CssParameter_StrokeLineJoin = "stroke-linejoin";
 
     /// <summary>
     /// Determines how lines are rendered at their ends. Possible values 

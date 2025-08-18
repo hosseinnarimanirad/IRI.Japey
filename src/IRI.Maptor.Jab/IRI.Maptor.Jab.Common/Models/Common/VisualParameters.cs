@@ -5,9 +5,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 using IRI.Maptor.Extensions;
+using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
-using IRI.Maptor.Jab.Common.Events;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -112,16 +112,15 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         DependencyProperty.Register(nameof(Order), typeof(int), typeof(VisualParameters));
 
 
-    // ************************************* DashType *********************************************
-    public DoubleCollection DashType
-    {
-        get { return (DoubleCollection)GetValue(DashTypeProperty); }
-        set { SetValue(DashTypeProperty, value); }
-    }
+    //// ************************************* DashType *********************************************
+    //public DoubleCollection DashType
+    //{
+    //    get { return (DoubleCollection)GetValue(DashTypeProperty); }
+    //    set { SetValue(DashTypeProperty, value); }
+    //}
 
-    // Using a DependencyProperty as the backing store for DashType.  This enables animation, styling, binding, etc...
-    public static readonly DependencyProperty DashTypeProperty =
-        DependencyProperty.Register(nameof(DashType), typeof(DoubleCollection), typeof(VisualParameters));
+    //public static readonly DependencyProperty DashTypeProperty =
+    //    DependencyProperty.Register(nameof(DashType), typeof(DoubleCollection), typeof(VisualParameters));
 
 
     // ************************************* DashStyle *********************************************
@@ -131,12 +130,12 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         set { SetValue(DashStyleProperty, value); }
     }
 
-    // Using a DependencyProperty as the backing store for DashStyle.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty DashStyleProperty =
         DependencyProperty.Register(nameof(DashStyle), typeof(DashStyle), typeof(VisualParameters), new PropertyMetadata(null));
 
 
-
+    public PenLineCap PenLineCap { get; set; }
+    public PenLineJoin PenLineJoin { get; set; }
 
     // ************************************* IsInScaleRange *******************************************
     public bool IsInScaleRange
@@ -195,13 +194,7 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
 
         //this.DashType = dashType;
     }
-
-    //public VisualParameters(Color fill, Color? stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
-    //    : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity, visibility)
-    //{
-
-    //}
-
+     
     public VisualParameters(Color fill, Color? stroke = null, double strokeThickness = 1, double opacity = 1)
         : this(new SolidColorBrush(fill), stroke.HasValue ? new SolidColorBrush(stroke.Value) : null, strokeThickness, opacity)
     {
@@ -229,7 +222,7 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
 
         if (result != null)
             result.LineJoin = PenLineJoin.Round;
-
+        
         return result;
     }
 

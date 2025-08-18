@@ -5,11 +5,58 @@ using System.Linq;
 using IRI.Maptor.Jab.Common;
 using IRI.Maptor.Sta.Ogc.SLD;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Helpers;
+using System.Windows.Media;
 
 namespace IRI.Maptor.Extensions;
 
 public static class SldExtensions
 {
+    public static System.Windows.Media.PenLineJoin Parse(this Sld_StrokeLineJoin sld_StrokeLineJoin)
+    {
+        return sld_StrokeLineJoin switch
+        {
+            Sld_StrokeLineJoin.Bevel => System.Windows.Media.PenLineJoin.Bevel,
+            Sld_StrokeLineJoin.Mitre => System.Windows.Media.PenLineJoin.Miter,
+            Sld_StrokeLineJoin.Round => System.Windows.Media.PenLineJoin.Round,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    public static System.Windows.Media.PenLineCap Parse(this Sld_StrokeLineCap sld_StrokeLineCap)
+    {
+        return sld_StrokeLineCap switch
+        {
+            Sld_StrokeLineCap.Butt => System.Windows.Media.PenLineCap.Flat,
+            Sld_StrokeLineCap.Square => System.Windows.Media.PenLineCap.Square,
+            Sld_StrokeLineCap.Round => System.Windows.Media.PenLineCap.Round,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    public static System.Windows.FontStyle Parse(this Sld_FontStyle sld_FontStyle)
+    {
+        return sld_FontStyle switch
+        {
+            Sld_FontStyle.Normal => System.Windows.FontStyles.Normal,
+            Sld_FontStyle.Italic => System.Windows.FontStyles.Italic,
+            Sld_FontStyle.Oblique => System.Windows.FontStyles.Oblique,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    public static System.Windows.FontWeight Parse(this Sld_FontWeight sld_FontWeight)
+    {
+        return sld_FontWeight switch
+        {
+            Sld_FontWeight.Normal => System.Windows.FontWeights.Normal,
+            Sld_FontWeight.Bold => System.Windows.FontWeights.Bold,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+
     public static List<ISymbolizer> ParseToSymbolizers(this StyledLayerDescriptor sld)
     {
         var result = new List<ISymbolizer>();
@@ -60,7 +107,7 @@ public static class SldExtensions
         return result;
     }
 
-    public static ISymbolizer ParseSymbolizer(Symbolizer symbolizer)
+    private static ISymbolizer ParseSymbolizer(Symbolizer symbolizer)
     {
         switch (symbolizer)
         {
@@ -81,21 +128,71 @@ public static class SldExtensions
         }
     }
 
-    public static ISymbolizer Parse(LineSymbolizer lineSymbolizer)
+    private static ISymbolizer Parse(LineSymbolizer lineSymbolizer)
     {
-        var cssParameters = lineSymbolizer.Stroke.CssParameters;
+        var stoke = lineSymbolizer.Stroke.StrokeValue;
+        var strokeThickness = lineSymbolizer.Stroke.StrokeThicknessValue;
+        var strokeOpacity = lineSymbolizer.Stroke.StrokeOpacityValue;
+        var strokeLineJoin = lineSymbolizer.Stroke.StrokeLineJoinValue;
+        var strokeLineCap = lineSymbolizer.Stroke.StrokeLineCapValue;
+        var strokeDashArray = lineSymbolizer.Stroke.StrokeDashArrayValue;
+        var strokeDashOffset = lineSymbolizer.Stroke.StrokeDashOffsetValue;
 
-        var stoke = lineSymbolizer.Stroke.GetStroke();
-        var strokeThickness = lineSymbolizer.Stroke.GetStrokeWidth();
-        var strokeOpacity = lineSymbolizer.Stroke.GetStrokeOpacity();
+        var visualParameters = VisualParameters.GetStroke(stoke, strokeThickness, strokeOpacity);
 
-        return new SimpleSymbolizer(VisualParameters.GetStroke(stoke, strokeThickness, strokeOpacity));
+        visualParameters.PenLineJoin = strokeLineJoin.Parse();
+        visualParameters.PenLineCap = strokeLineCap.Parse();
+
+        if (strokeDashArray is not null)
+            visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
+
+        return new SimpleSymbolizer(visualParameters);
     }
 
-    public static ISymbolizer Parse(PolygonSymbolizer polygonSymbolizer) { return null; }
+    private static ISymbolizer Parse(PolygonSymbolizer polygonSymbolizer)
+    {
+        var stoke = polygonSymbolizer.Stroke.StrokeValue;
+        var strokeThickness = polygonSymbolizer.Stroke.StrokeThicknessValue;
+        var strokeOpacity = polygonSymbolizer.Stroke.StrokeOpacityValue;
+        var strokeLineJoin = polygonSymbolizer.Stroke.StrokeLineJoinValue;
+        var strokeLineCap = polygonSymbolizer.Stroke.StrokeLineCapValue;
+        var strokeDashArray = polygonSymbolizer.Stroke.StrokeDashArrayValue;
+        var strokeDashOffset = polygonSymbolizer.Stroke.StrokeDashOffsetValue;
+
+        var fill = polygonSymbolizer.Fill.FillValue;
+        var fillOpacity = polygonSymbolizer.Fill.FillOpacityValue;
+
+        // todo: applu
+        var visualParameters = VisualParameters.Get(fill, stoke, strokeThickness, fillOpacity, strokeOpacity);
+
+        visualParameters.PenLineJoin = strokeLineJoin.Parse();
+        visualParameters.PenLineCap = strokeLineCap.Parse();
+
+        if (strokeDashArray is not null)
+            visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
+
+        return new SimpleSymbolizer(visualParameters);
+    }
 
     public static ISymbolizer Parse(PointSymbolizer pointSymbolizer) { return null; }
 
-    public static ISymbolizer Parse(TextSymbolizer textSymbolizer) { return null; }
+    public static ISymbolizer Parse(TextSymbolizer textSymbolizer)
+    {
+        var fontFamilyValue = textSymbolizer.Font.FontFamilyValue;
+        var fontSize = (int)textSymbolizer.Font.FontSizeValue;
+        var fontWeight = textSymbolizer.Font.FontWeightValue;
+        var fontStyle = textSymbolizer.Font.FontStyleValue;
+
+        var fill = textSymbolizer.Fill.FillValue;
+        var fillOpacity = textSymbolizer.Fill.FillOpacityValue;
+
+        var fillColor = ColorHelper.ToWpfColor(fill, fillOpacity);
+
+        var fontFamily = new FontFamily(fontFamilyValue);
+ 
+        var labelParameters = new LabelParameters(ScaleInterval.All, fontSize, new SolidColorBrush(fillColor), fontFamily, p => p) { };
+
+        return new LabelSymbolizer(labelParameters);
+    }
 
 }

@@ -1,23 +1,30 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using IRI.Maptor.Sta.Common.Helpers;
 
 namespace IRI.Maptor.Jab.Common.Helpers;
 
 public static class ColorHelper
 {
-    public static Color ToWpfColor(string? hexColor)
+    public static Color ToWpfColor(string? hexColor, double opacity = 1.0)
     {
         if (string.IsNullOrEmpty(hexColor))
-        {
             return Colors.Transparent;
-        }
 
         if (!hexColor.StartsWith("#"))
         {
             hexColor = $"#{hexColor}";
         }
 
-        return (Color)ColorConverter.ConvertFromString(hexColor);
+        var result = (Color)ColorConverter.ConvertFromString(hexColor);
+         
+        // Clamp opacity between 0 and 1
+        opacity = Math.Clamp(opacity, 0.0, 1.0);
+
+        // Apply opacity to the alpha channel
+        result.A = (byte)(opacity * 255);
+
+        return result;
     }
 
     public static System.Drawing.Color ToGdiColor(string hexColor)
@@ -39,7 +46,7 @@ public static class ColorHelper
     {
         //1395.10.20: returns color name for system defined colors!
         //return System.Drawing.ColorTranslator.ToHtml(color); 
-        return $"#{color.A.ToString("X2")}{color.R.ToString("X2") }{color.G.ToString("X2")}{color.B.ToString("X2")}";
+        return $"#{color.A.ToString("X2")}{color.R.ToString("X2")}{color.G.ToString("X2")}{color.B.ToString("X2")}";
     }
 
     public static Color GetRandomWpfColor()
