@@ -751,15 +751,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             return this.DrawGeometriesAsync(geometries, layerName, visualParameters);
         };
 
-        presenter.RequestDrawGeometryLablePairs = (gl, n, p, lp) =>
-        {
-            return DrawGeometryLablePairsAsync(gl, n, p, lp);
-        };
+        presenter.RequestDrawGeometryLablePairs = DrawGeometryLablePairsAsync;
 
-        presenter.RequestSelectGeometries = (geometries, visualParameters, layerName, symbol) =>
-        {
-            return SelectGeometriesAsync(geometries, visualParameters, layerName, symbol);
-        };
+        presenter.RequestSelectGeometries = SelectGeometriesAsync;
 
         //presenter.RequestClearLayerByType = (type, remove) => { this.ClearLayer(type, remove); };
 
@@ -767,13 +761,13 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         presenter.RequestClearLayer = (layer, remove) => { this.ClearLayer(layer, remove); };
 
-        presenter.RequestClearLayerByCriteria = (predicate, remove, forceRemove) => { this.Clear(predicate, remove, forceRemove); };
+        presenter.RequestClearLayerByCriteria = this.Clear;
 
-        presenter.RequestClearLayerByTag = (predicate, remove, forceRemove) => { this.Clear(predicate, remove, forceRemove); };
+        presenter.RequestClearLayerByTag = this.Clear;
 
-        presenter.RequestPan = () => { this.Pan(); };
+        presenter.RequestPan = this.Pan;
 
-        presenter.RequestZoomToFeature = feature => { this.ZoomToFeature(feature); };
+        presenter.RequestZoomToFeature = this.ZoomToFeature;
 
         presenter.RequestIdentify = point => new ObservableCollection<FeatureSet<sb.Point>>(this.GetFeatures(point));
 

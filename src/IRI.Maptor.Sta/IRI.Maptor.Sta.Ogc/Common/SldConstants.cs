@@ -1,4 +1,4 @@
-﻿using IRI.Maptor.Sta.Ogc.SLD; 
+﻿using IRI.Maptor.Sta.Ogc.SLD;
 
 namespace IRI.Maptor.Sta.Ogc;
 
@@ -20,4 +20,8 @@ public class SldConstants
 
     public const string DefaultFill = "#808080";
     public const double DefaultFillOpacity = 1;
+
+
+    public const double DefaultGraphicOpacity = 1;
+    public const double DefaultGraphicRotation = 0;
 }

@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
+using System.Xml.Linq;
 
 namespace IRI.Maptor.Sta.Ogc.SLD;
 
@@ -364,6 +365,11 @@ public class Graphic
     [XmlElement("Opacity")]
     public double? Opacity { get; set; }
 
+    /// <summary>
+    /// Specifies the size of the symbol, in pixels. When used with an 
+    /// image file, this specifies the height of the image, with the width 
+    /// being scaled accordingly. if omitted the native symbol size is used.
+    /// </summary>
     [XmlElement("Size")]
     public int? Size { get; set; }
 
@@ -409,7 +415,21 @@ public class Mark
     [XmlElement("Stroke")]
     public Stroke Stroke { get; set; }
 
-    public void SetWellKnownName(WellKnownMark mark) => WellKnownName = mark.ToString();
+    //public void SetWellKnownName(WellKnownMark mark) => WellKnownName = mark.ToString();
+
+
+    [XmlIgnore]
+    public WellKnownMark? WellKnownNameValue
+    {
+        get => Enum.TryParse<WellKnownMark>(WellKnownName, true, out var result) ? result : WellKnownMark.square;
+        set
+        {
+            if (value.HasValue)
+            {
+                WellKnownName = value.Value.ToString().ToLowerInvariant();
+            }
+        }
+    }
 }
 
 public class ParameterValueType

@@ -12,9 +12,7 @@ public static class ColorHelper
             return Colors.Transparent;
 
         if (!hexColor.StartsWith("#"))
-        {
             hexColor = $"#{hexColor}";
-        }
 
         var result = (Color)ColorConverter.ConvertFromString(hexColor);
          
@@ -22,31 +20,36 @@ public static class ColorHelper
         opacity = Math.Clamp(opacity, 0.0, 1.0);
 
         // Apply opacity to the alpha channel
-        result.A = (byte)(opacity * 255);
+        result.A = (byte)Math.Round(result.A * opacity);
 
         return result;
     }
 
-    public static System.Drawing.Color ToGdiColor(string hexColor)
+    public static System.Drawing.Color ToGdiColor(string hexColor, double opacity = 1.0)
     {
         if (string.IsNullOrEmpty(hexColor))
-        {
             return System.Drawing.Color.Transparent;
-        }
 
         if (!hexColor.StartsWith("#"))
-        {
             hexColor = $"#{hexColor}";
-        }
 
-        return System.Drawing.ColorTranslator.FromHtml(hexColor);
+        var color = System.Drawing.ColorTranslator.FromHtml(hexColor);
+
+        // Clamp opacity between 0.0 and 1.0
+        opacity = Math.Clamp(opacity, 0.0, 1.0);
+
+        // Scale existing alpha by opacity
+        byte alpha = (byte)Math.Round(color.A * opacity);
+
+        return System.Drawing.Color.FromArgb(alpha, color.R, color.G, color.B);
     }
 
     public static string ToHexString(System.Drawing.Color color)
     {
         //1395.10.20: returns color name for system defined colors!
         //return System.Drawing.ColorTranslator.ToHtml(color); 
-        return $"#{color.A.ToString("X2")}{color.R.ToString("X2")}{color.G.ToString("X2")}{color.B.ToString("X2")}";
+
+        return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
     }
 
     public static Color GetRandomWpfColor()

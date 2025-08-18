@@ -8,6 +8,8 @@ using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Jab.Common.Helpers;
 using System.Windows.Media;
+using IRI.Maptor.Sta.Ogc;
+using MahApps.Metro.IconPacks;
 
 namespace IRI.Maptor.Extensions;
 
@@ -56,6 +58,18 @@ public static class SldExtensions
         };
     }
 
+    public static System.Windows.Media.Geometry? Parse(this WellKnownMark wellKnownMark)
+    {
+        return wellKnownMark switch
+        {
+            WellKnownMark.x => System.Windows.Media.Geometry.Parse(new PackIconModern() { Kind = PackIconModernKind.AxisXLetter }.Data),
+            WellKnownMark.circle => System.Windows.Media.Geometry.Parse(new PackIconModern() { Kind = PackIconModernKind.LocationCircle }.Data),
+            WellKnownMark.star => System.Windows.Media.Geometry.Parse(new PackIconModern() { Kind = PackIconModernKind.Star }.Data),
+            WellKnownMark.triangle => System.Windows.Media.Geometry.Parse("M192 704h640l-320-448z"),
+            WellKnownMark.square => System.Windows.Media.Geometry.Parse("M10,14V10H14V14H10Z"),
+            _ => null
+        };
+    }
 
     public static List<ISymbolizer> ParseToSymbolizers(this StyledLayerDescriptor sld)
     {
@@ -130,51 +144,92 @@ public static class SldExtensions
 
     private static ISymbolizer Parse(LineSymbolizer lineSymbolizer)
     {
-        var stoke = lineSymbolizer.Stroke.StrokeValue;
-        var strokeThickness = lineSymbolizer.Stroke.StrokeThicknessValue;
-        var strokeOpacity = lineSymbolizer.Stroke.StrokeOpacityValue;
-        var strokeLineJoin = lineSymbolizer.Stroke.StrokeLineJoinValue;
-        var strokeLineCap = lineSymbolizer.Stroke.StrokeLineCapValue;
-        var strokeDashArray = lineSymbolizer.Stroke.StrokeDashArrayValue;
-        var strokeDashOffset = lineSymbolizer.Stroke.StrokeDashOffsetValue;
+        var visualParameters = VisualParameters.CreateNew();
 
-        var visualParameters = VisualParameters.GetStroke(stoke, strokeThickness, strokeOpacity);
+        visualParameters.Build(lineSymbolizer.Stroke);
 
-        visualParameters.PenLineJoin = strokeLineJoin.Parse();
-        visualParameters.PenLineCap = strokeLineCap.Parse();
+        //var stroke = lineSymbolizer.Stroke.StrokeValue;
+        //var strokeThickness = lineSymbolizer.Stroke.StrokeThicknessValue;
+        //var strokeOpacity = lineSymbolizer.Stroke.StrokeOpacityValue;
+        //var strokeLineJoin = lineSymbolizer.Stroke.StrokeLineJoinValue;
+        //var strokeLineCap = lineSymbolizer.Stroke.StrokeLineCapValue;
+        //var strokeDashArray = lineSymbolizer.Stroke.StrokeDashArrayValue;
+        //var strokeDashOffset = lineSymbolizer.Stroke.StrokeDashOffsetValue;
 
-        if (strokeDashArray is not null)
-            visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
+        //var visualParameters = VisualParameters.GetStroke(stroke, strokeThickness, strokeOpacity);
+
+        //visualParameters.PenLineJoin = strokeLineJoin.Parse();
+        //visualParameters.PenLineCap = strokeLineCap.Parse();
+
+        //if (strokeDashArray is not null)
+        //    visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
 
         return new SimpleSymbolizer(visualParameters);
     }
 
     private static ISymbolizer Parse(PolygonSymbolizer polygonSymbolizer)
     {
-        var stoke = polygonSymbolizer.Stroke.StrokeValue;
-        var strokeThickness = polygonSymbolizer.Stroke.StrokeThicknessValue;
-        var strokeOpacity = polygonSymbolizer.Stroke.StrokeOpacityValue;
-        var strokeLineJoin = polygonSymbolizer.Stroke.StrokeLineJoinValue;
-        var strokeLineCap = polygonSymbolizer.Stroke.StrokeLineCapValue;
-        var strokeDashArray = polygonSymbolizer.Stroke.StrokeDashArrayValue;
-        var strokeDashOffset = polygonSymbolizer.Stroke.StrokeDashOffsetValue;
+        var visualParameters = VisualParameters.CreateNew();
 
-        var fill = polygonSymbolizer.Fill.FillValue;
-        var fillOpacity = polygonSymbolizer.Fill.FillOpacityValue;
+        visualParameters.Build(polygonSymbolizer.Stroke);
 
-        // todo: applu
-        var visualParameters = VisualParameters.Get(fill, stoke, strokeThickness, fillOpacity, strokeOpacity);
+        //var stroke = polygonSymbolizer.Stroke.StrokeValue;
+        //var strokeThickness = polygonSymbolizer.Stroke.StrokeThicknessValue;
+        //var strokeOpacity = polygonSymbolizer.Stroke.StrokeOpacityValue;
+        //var strokeLineJoin = polygonSymbolizer.Stroke.StrokeLineJoinValue;
+        //var strokeLineCap = polygonSymbolizer.Stroke.StrokeLineCapValue;
+        //var strokeDashArray = polygonSymbolizer.Stroke.StrokeDashArrayValue;
+        //var strokeDashOffset = polygonSymbolizer.Stroke.StrokeDashOffsetValue;
 
-        visualParameters.PenLineJoin = strokeLineJoin.Parse();
-        visualParameters.PenLineCap = strokeLineCap.Parse();
+        //var fill = polygonSymbolizer.Fill.FillValue;
+        //var fillOpacity = polygonSymbolizer.Fill.FillOpacityValue;
 
-        if (strokeDashArray is not null)
-            visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
+        visualParameters.Build(polygonSymbolizer.Fill);
+
+        // todo:  
+        //var visualParameters = VisualParameters.Get(fill, stroke, strokeThickness, fillOpacity, strokeOpacity);
+
+        //visualParameters.PenLineJoin = strokeLineJoin.Parse();
+        //visualParameters.PenLineCap = strokeLineCap.Parse();
+
+        //if (strokeDashArray is not null)
+        //    visualParameters.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
 
         return new SimpleSymbolizer(visualParameters);
     }
 
-    public static ISymbolizer Parse(PointSymbolizer pointSymbolizer) { return null; }
+    public static ISymbolizer Parse(PointSymbolizer pointSymbolizer)
+    {
+        var visualParameters = VisualParameters.CreateNew();
+
+        if (pointSymbolizer.Graphic is null)
+            return new SimpleSymbolizer(visualParameters);
+
+        if (pointSymbolizer.Graphic.Marks.IsNullOrEmpty())
+            return new SimpleSymbolizer(visualParameters);
+
+        // todo
+        var opacity = pointSymbolizer.Graphic.Opacity ?? SldConstants.DefaultGraphicOpacity;
+        var size = pointSymbolizer.Graphic.Size ?? 16;
+
+        // todo
+        var rotation = pointSymbolizer.Graphic.Rotation ?? SldConstants.DefaultGraphicRotation;
+
+        var mark = pointSymbolizer.Graphic.Marks.FirstOrDefault();
+
+        if (mark is null)
+            return new SimpleSymbolizer(visualParameters);
+
+        visualParameters.Build(mark.Stroke);
+        visualParameters.Build(mark.Fill);
+
+        System.Windows.Media.Geometry? geometry = mark.WellKnownNameValue?.Parse();
+
+        if (geometry is not null)
+            visualParameters.PointSymbol = new SimplePointSymbolizer(size) { GeometrySymbol = geometry };
+
+        return new SimpleSymbolizer(visualParameters);
+    }
 
     public static ISymbolizer Parse(TextSymbolizer textSymbolizer)
     {
@@ -189,7 +244,26 @@ public static class SldExtensions
         var fillColor = ColorHelper.ToWpfColor(fill, fillOpacity);
 
         var fontFamily = new FontFamily(fontFamilyValue);
- 
+
+        if (textSymbolizer.LabelPlacement?.PointPlacement != null)
+        {
+            // todo
+        }
+
+        if (textSymbolizer.LabelPlacement?.LinePlacement != null)
+        {
+            // todo
+        }
+
+        // A halo creates a colored background around the label text,
+        // which improves readability in low contrast situations.
+        // Within the <Halo> element there are two sub-elements which
+        // control the appearance of the halo: Radius, Fill
+        if (textSymbolizer.Halo != null)
+        {
+            // todo
+        }
+
         var labelParameters = new LabelParameters(ScaleInterval.All, fontSize, new SolidColorBrush(fillColor), fontFamily, p => p) { };
 
         return new LabelSymbolizer(labelParameters);

@@ -8,6 +8,8 @@ using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using System.Linq;
+using IRI.Maptor.Sta.Ogc.SLD;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -255,7 +257,7 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         return new VisualParameters(opacity);
     }
 
-    public static VisualParameters CreateNew(double opacity = 1, double strokeThickness = 1, bool withoutFill = false)
+    public static VisualParameters CreateNew(double opacity , double strokeThickness = 1, bool withoutFill = false)
     {
         Brush fill = null;
 
@@ -275,6 +277,43 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
     protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    #endregion
+
+
+    #region Builders
+
+    public void Build(Sta.Ogc.SLD.Stroke stroke)
+    {
+        var strokeValue = stroke.StrokeValue;
+        var strokeThickness = stroke.StrokeThicknessValue;
+        var strokeOpacity = stroke.StrokeOpacityValue;
+        var strokeLineJoin = stroke.StrokeLineJoinValue;
+        var strokeLineCap = stroke.StrokeLineCapValue;
+        var strokeDashArray = stroke.StrokeDashArrayValue;
+        var strokeDashOffset = stroke.StrokeDashOffsetValue;
+
+        this.Stroke = BrushHelper.CreateBrush(strokeValue, strokeOpacity);
+        this.StrokeThickness = strokeThickness;
+
+        this.PenLineJoin = strokeLineJoin.Parse();
+        this.PenLineCap = strokeLineCap.Parse();
+
+        if (strokeDashArray is not null)
+            this.DashStyle = new System.Windows.Media.DashStyle(strokeDashArray.ToList(), strokeDashOffset);
+
+        return;
+    }
+
+    public void Build(Sta.Ogc.SLD.Fill fill)
+    {
+
+        var fillValue = fill.FillValue;
+        var fillOpacity = fill.FillOpacityValue;
+
+        this.Fill = BrushHelper.CreateBrush(fillValue, fillOpacity);
+
     }
 
     #endregion

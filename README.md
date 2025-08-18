@@ -41,7 +41,6 @@ Maptor /
 
 Maptor consists of multiple modular packages. 
  
-👉 [Browse all packages on NuGet.org](https://www.nuget.org/packages?q=IRI.Maptor)
  	 
 | Package | Description | Version |
 |---------|-------------|---------|
@@ -72,6 +71,9 @@ Maptor consists of multiple modular packages.
 
 </details>     
   	  
+      
+👉 [Browse all packages on NuGet.org](https://www.nuget.org/packages?q=IRI.Maptor)
+
 ---
   
 **Installation Example via NuGet CLI:**
