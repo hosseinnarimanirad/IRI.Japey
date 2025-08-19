@@ -1,22 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-using IRI.Maptor.Extensions;
-using System.Xml.Linq;
-
 namespace IRI.Maptor.Sta.Ogc.SLD;
+ 
 
-public static class SldNamespaces
-{
-    public const string SLD = "http://www.opengis.net/sld";
-    public const string OGC = "http://www.opengis.net/ogc";
-    public const string XLINK = "http://www.w3.org/1999/xlink";
-    public const string XSI = "http://www.w3.org/2001/XMLSchema-instance";
-}
-
-// Main SLD classes
 [XmlRoot("StyledLayerDescriptor", Namespace = SldNamespaces.SLD, IsNullable = false)]
 public class StyledLayerDescriptor
 {
@@ -135,7 +123,7 @@ public class FeatureTypeConstraint
     public string FeatureTypeName { get; set; }
 
     [XmlElement("Filter", Namespace = SldNamespaces.OGC)]
-    public FilterType Filter { get; set; }
+    public Filter Filter { get; set; }
 
     [XmlElement("Extent")]
     public List<Extent> Extents { get; set; } = new();
@@ -192,43 +180,7 @@ public class FeatureTypeStyle
     public List<Rule> Rules { get; set; } = new();
 }
 
-public class Rule
-{
-    [XmlElement("Name")]
-    public string Name { get; set; }
 
-    [XmlElement("Title")]
-    public string Title { get; set; }
-
-    [XmlElement("Abstract")]
-    public string Abstract { get; set; }
-
-    [XmlElement("LegendGraphic")]
-    public LegendGraphic LegendGraphic { get; set; }
-
-    [XmlElement("Filter", Namespace = SldNamespaces.OGC)]
-    public FilterType Filter { get; set; }
-
-    [XmlElement("ElseFilter")]
-    public ElseFilter ElseFilter { get; set; }
-
-    [XmlElement("MinScaleDenominator")]
-    public double? MinScaleDenominator { get; set; }
-
-    [XmlElement("MaxScaleDenominator")]
-    public double? MaxScaleDenominator { get; set; }
-
-    // Polymorphic list of symbolizers (including Raster)
-    [XmlElement("LineSymbolizer", Type = typeof(LineSymbolizer))]
-    [XmlElement("PolygonSymbolizer", Type = typeof(PolygonSymbolizer))]
-    [XmlElement("PointSymbolizer", Type = typeof(PointSymbolizer))]
-    [XmlElement("TextSymbolizer", Type = typeof(TextSymbolizer))]
-    [XmlElement("RasterSymbolizer", Type = typeof(RasterSymbolizer))]
-    public List<Symbolizer> Symbolizers { get; set; } = new();
-
-    public bool ShouldSerializeMinScaleDenominator() => MinScaleDenominator.HasValue;
-    public bool ShouldSerializeMaxScaleDenominator() => MaxScaleDenominator.HasValue;
-}
 
 public class LegendGraphic
 {
@@ -402,35 +354,7 @@ public class ExternalGraphic
     public string Format { get; set; }
 }
 
-public class Mark
-{
-    // Keep WellKnownName as string for maximal compatibility;
-    // an overload helper is provided to set using enum.
-    [XmlElement("WellKnownName")]
-    public string WellKnownName { get; set; }
 
-    [XmlElement("Fill")]
-    public Fill Fill { get; set; }
-
-    [XmlElement("Stroke")]
-    public Stroke Stroke { get; set; }
-
-    //public void SetWellKnownName(WellKnownMark mark) => WellKnownName = mark.ToString();
-
-
-    [XmlIgnore]
-    public WellKnownMark? WellKnownNameValue
-    {
-        get => Enum.TryParse<WellKnownMark>(WellKnownName, true, out var result) ? result : WellKnownMark.square;
-        set
-        {
-            if (value.HasValue)
-            {
-                WellKnownName = value.Value.ToString().ToLowerInvariant();
-            }
-        }
-    }
-}
 
 public class ParameterValueType
 {
@@ -609,85 +533,85 @@ public class ImageOutline
     public PolygonSymbolizer PolygonSymbolizer { get; set; }
 }
 
-// OGC Filter types (expanded scaffolding)
-public class FilterType
-{
-    [XmlElement("PropertyIsEqualTo", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsEqualTo { get; set; }
+//// OGC Filter types (expanded scaffolding)
+//public class FilterType
+//{
+//    [XmlElement("PropertyIsEqualTo", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsEqualTo { get; set; }
 
-    [XmlElement("PropertyIsLessThan", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsLessThan { get; set; }
+//    [XmlElement("PropertyIsLessThan", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsLessThan { get; set; }
 
-    [XmlElement("PropertyIsNotEqualTo", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsNotEqualTo { get; set; }
+//    [XmlElement("PropertyIsNotEqualTo", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsNotEqualTo { get; set; }
 
-    [XmlElement("PropertyIsLessThanOrEqualTo", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsLessThanOrEqualTo { get; set; }
+//    [XmlElement("PropertyIsLessThanOrEqualTo", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsLessThanOrEqualTo { get; set; }
 
-    [XmlElement("PropertyIsGreaterThan", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsGreaterThan { get; set; }
+//    [XmlElement("PropertyIsGreaterThan", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsGreaterThan { get; set; }
 
-    [XmlElement("PropertyIsGreaterThanOrEqualTo", Namespace = SldNamespaces.OGC)]
-    public PropertyFilterBase PropertyIsGreaterThanOrEqualTo { get; set; }
+//    [XmlElement("PropertyIsGreaterThanOrEqualTo", Namespace = SldNamespaces.OGC)]
+//    public PropertyFilterBase PropertyIsGreaterThanOrEqualTo { get; set; }
 
-    // Additional common filters
-    [XmlElement("PropertyIsLike", Namespace = SldNamespaces.OGC)]
-    public PropertyIsLikeFilter PropertyIsLike { get; set; }
+//    // Additional common filters
+//    [XmlElement("PropertyIsLike", Namespace = SldNamespaces.OGC)]
+//    public PropertyIsLikeFilter PropertyIsLike { get; set; }
 
-    [XmlElement("PropertyIsNull", Namespace = SldNamespaces.OGC)]
-    public PropertyIsNullFilter PropertyIsNull { get; set; }
+//    [XmlElement("PropertyIsNull", Namespace = SldNamespaces.OGC)]
+//    public PropertyIsNullFilter PropertyIsNull { get; set; }
 
-    [XmlElement("PropertyIsBetween", Namespace = SldNamespaces.OGC)]
-    public PropertyIsBetweenFilter PropertyIsBetween { get; set; }
-}
+//    [XmlElement("PropertyIsBetween", Namespace = SldNamespaces.OGC)]
+//    public PropertyIsBetweenFilter PropertyIsBetween { get; set; }
+//}
 
-public class PropertyFilterBase
-{
-    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
-    public string PropertyName { get; set; }
+//public class PropertyFilterBase
+//{
+//    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
+//    public string PropertyName { get; set; }
 
-    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
-    public string Literal { get; set; }
-}
+//    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
+//    public string Literal { get; set; }
+//}
 
-public class PropertyIsLikeFilter
-{
-    [XmlAttribute("wildCard")]
-    public string WildCard { get; set; } = "*";
+//public class PropertyIsLikeFilter
+//{
+//    [XmlAttribute("wildCard")]
+//    public string WildCard { get; set; } = "*";
 
-    [XmlAttribute("singleChar")]
-    public string SingleChar { get; set; } = "?";
+//    [XmlAttribute("singleChar")]
+//    public string SingleChar { get; set; } = "?";
 
-    [XmlAttribute("escape")]
-    public string Escape { get; set; } = "\\";
+//    [XmlAttribute("escape")]
+//    public string Escape { get; set; } = "\\";
 
-    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
-    public string PropertyName { get; set; }
+//    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
+//    public string PropertyName { get; set; }
 
-    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
-    public string Literal { get; set; }
-}
+//    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
+//    public string Literal { get; set; }
+//}
 
-public class PropertyIsNullFilter
-{
-    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
-    public string PropertyName { get; set; }
-}
+//public class PropertyIsNullFilter
+//{
+//    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
+//    public string PropertyName { get; set; }
+//}
 
-public class PropertyIsBetweenFilter
-{
-    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
-    public string PropertyName { get; set; }
+//public class PropertyIsBetweenFilter
+//{
+//    [XmlElement("PropertyName", Namespace = SldNamespaces.OGC)]
+//    public string PropertyName { get; set; }
 
-    [XmlElement("LowerBoundary", Namespace = SldNamespaces.OGC)]
-    public BoundaryValue LowerBoundary { get; set; }
+//    [XmlElement("LowerBoundary", Namespace = SldNamespaces.OGC)]
+//    public BoundaryValue LowerBoundary { get; set; }
 
-    [XmlElement("UpperBoundary", Namespace = SldNamespaces.OGC)]
-    public BoundaryValue UpperBoundary { get; set; }
-}
+//    [XmlElement("UpperBoundary", Namespace = SldNamespaces.OGC)]
+//    public BoundaryValue UpperBoundary { get; set; }
+//}
 
-public class BoundaryValue
-{
-    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
-    public string Literal { get; set; }
-}
+//public class BoundaryValue
+//{
+//    [XmlElement("Literal", Namespace = SldNamespaces.OGC)]
+//    public string Literal { get; set; }
+//}

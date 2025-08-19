@@ -10,6 +10,8 @@ using IRI.Maptor.Jab.Common.Helpers;
 using System.Windows.Media;
 using IRI.Maptor.Sta.Ogc;
 using MahApps.Metro.IconPacks;
+using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Sta.Common.Primitives;
 
 namespace IRI.Maptor.Extensions;
 
@@ -113,6 +115,7 @@ public static class SldExtensions
 
                 symbolizer.MaxScaleDenominator = rule.MaxScaleDenominator;
                 symbolizer.MinScaleDenominator = rule.MinScaleDenominator;
+                //symbolizer.IsFilterPassed = ParseFilter(rule.Filter);
 
                 result.Add(symbolizer);
             }
@@ -269,4 +272,9 @@ public static class SldExtensions
         return new LabelSymbolizer(labelParameters);
     }
 
+
+    public static Func<Feature<Point>, bool> ParseFilter(Filter filter)
+    {
+        return null;
+    }
 }
