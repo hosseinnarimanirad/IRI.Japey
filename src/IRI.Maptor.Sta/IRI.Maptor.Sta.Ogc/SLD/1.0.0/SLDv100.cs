@@ -123,7 +123,7 @@ public class FeatureTypeConstraint
     public string FeatureTypeName { get; set; }
 
     [XmlElement("Filter", Namespace = SldNamespaces.OGC)]
-    public Filter Filter { get; set; }
+    public OgcFilter Filter { get; set; }
 
     [XmlElement("Extent")]
     public List<Extent> Extents { get; set; } = new();

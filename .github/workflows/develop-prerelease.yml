@@ -57,7 +57,8 @@ jobs:
     - name: Pack (Pre-release)
       run: |
         $baseVersion = "${{ steps.get_version.outputs.baseVersion }}"
-        $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
+        # $prereleaseVersion = "$baseVersion-alpha.${{ github.run_number }}"
+        $prereleaseVersion = "$baseVersion-alpha"
         Write-Host "Using pre-release version: $prereleaseVersion"
 
         $prefixes = "${{ env.PROJECT_PREFIXES }}".Split(' ')

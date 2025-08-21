@@ -19,7 +19,7 @@ public class Rule
     public LegendGraphic LegendGraphic { get; set; }
 
     [XmlElement("Filter", Namespace = SldNamespaces.OGC)]
-    public Filter Filter { get; set; }
+    public OgcFilter Filter { get; set; }
 
     [XmlElement("ElseFilter")]
     public ElseFilter ElseFilter { get; set; }

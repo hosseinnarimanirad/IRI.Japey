@@ -273,8 +273,41 @@ public static class SldExtensions
     }
 
 
-    public static Func<Feature<Point>, bool> ParseFilter(Filter filter)
+    public static Func<Feature<Point>, bool> ParseFilter(OgcFilter filter)
     {
+        string? propertyName;
+        double? literal;
+
+        switch (filter.Predicate)
+        {
+            case OgcPropertyIsLessThan ogcPropertyIsLessThan:
+                propertyName = ogcPropertyIsLessThan.GetPropertyName();
+                literal = ogcPropertyIsLessThan.GetLiteral();
+
+                return
+                    new Func<Feature<Point>, bool>(f =>
+                {
+                    if (literal is null || propertyName is null || !f.Attributes.ContainsKey(propertyName)) return false;
+
+                    return double.TryParse(f.Attributes[propertyName].ToString(), out var value) ? value < literal : false;
+                });
+
+            case OgcPropertyIsGreaterThan ogcPropertyIsGreaterThan:
+                propertyName = ogcPropertyIsGreaterThan.GetPropertyName();
+                literal = ogcPropertyIsGreaterThan.GetLiteral();
+
+                return
+                    new Func<Feature<Point>, bool>(f =>
+                    {
+                        if (literal is null || propertyName is null || !f.Attributes.ContainsKey(propertyName)) return false;
+
+                        return double.TryParse(f.Attributes[propertyName].ToString(), out var value) ? value > literal : false;
+                    });
+
+            default:
+                break;
+        }
+
         return null;
     }
 }
