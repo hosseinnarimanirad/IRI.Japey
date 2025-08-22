@@ -17,7 +17,7 @@ public abstract class SymbolizerBase : Notifier, ISymbolizer
     public virtual Func<Feature<Point>, bool> IsFilterPassed
     {
         get => _filter;
-        protected set => _filter = value;
+        set => _filter = value;
     }
      
     public bool IsInScaleRange(double scale)

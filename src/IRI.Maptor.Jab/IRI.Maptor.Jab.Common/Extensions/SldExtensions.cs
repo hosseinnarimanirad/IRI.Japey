@@ -17,7 +17,7 @@ namespace IRI.Maptor.Extensions;
 
 public static class SldExtensions
 {
-    public static System.Windows.Media.PenLineJoin Parse(this Sld_StrokeLineJoin sld_StrokeLineJoin)
+    private static System.Windows.Media.PenLineJoin Parse(this Sld_StrokeLineJoin sld_StrokeLineJoin)
     {
         return sld_StrokeLineJoin switch
         {
@@ -28,7 +28,7 @@ public static class SldExtensions
         };
     }
 
-    public static System.Windows.Media.PenLineCap Parse(this Sld_StrokeLineCap sld_StrokeLineCap)
+    private static System.Windows.Media.PenLineCap Parse(this Sld_StrokeLineCap sld_StrokeLineCap)
     {
         return sld_StrokeLineCap switch
         {
@@ -39,7 +39,7 @@ public static class SldExtensions
         };
     }
 
-    public static System.Windows.FontStyle Parse(this Sld_FontStyle sld_FontStyle)
+    private static System.Windows.FontStyle Parse(this Sld_FontStyle sld_FontStyle)
     {
         return sld_FontStyle switch
         {
@@ -50,7 +50,7 @@ public static class SldExtensions
         };
     }
 
-    public static System.Windows.FontWeight Parse(this Sld_FontWeight sld_FontWeight)
+    private static System.Windows.FontWeight Parse(this Sld_FontWeight sld_FontWeight)
     {
         return sld_FontWeight switch
         {
@@ -60,7 +60,7 @@ public static class SldExtensions
         };
     }
 
-    public static System.Windows.Media.Geometry? Parse(this WellKnownMark wellKnownMark)
+    private static System.Windows.Media.Geometry? Parse(this WellKnownMark wellKnownMark)
     {
         return wellKnownMark switch
         {
@@ -115,7 +115,9 @@ public static class SldExtensions
 
                 symbolizer.MaxScaleDenominator = rule.MaxScaleDenominator;
                 symbolizer.MinScaleDenominator = rule.MinScaleDenominator;
-                //symbolizer.IsFilterPassed = ParseFilter(rule.Filter);
+  
+
+                symbolizer.IsFilterPassed = rule.Filter.ParseFilter();
 
                 result.Add(symbolizer);
             }
@@ -273,41 +275,4 @@ public static class SldExtensions
     }
 
 
-    public static Func<Feature<Point>, bool> ParseFilter(OgcFilter filter)
-    {
-        string? propertyName;
-        double? literal;
-
-        switch (filter.Predicate)
-        {
-            case OgcPropertyIsLessThan ogcPropertyIsLessThan:
-                propertyName = ogcPropertyIsLessThan.GetPropertyName();
-                literal = ogcPropertyIsLessThan.GetLiteral();
-
-                return
-                    new Func<Feature<Point>, bool>(f =>
-                {
-                    if (literal is null || propertyName is null || !f.Attributes.ContainsKey(propertyName)) return false;
-
-                    return double.TryParse(f.Attributes[propertyName].ToString(), out var value) ? value < literal : false;
-                });
-
-            case OgcPropertyIsGreaterThan ogcPropertyIsGreaterThan:
-                propertyName = ogcPropertyIsGreaterThan.GetPropertyName();
-                literal = ogcPropertyIsGreaterThan.GetLiteral();
-
-                return
-                    new Func<Feature<Point>, bool>(f =>
-                    {
-                        if (literal is null || propertyName is null || !f.Attributes.ContainsKey(propertyName)) return false;
-
-                        return double.TryParse(f.Attributes[propertyName].ToString(), out var value) ? value > literal : false;
-                    });
-
-            default:
-                break;
-        }
-
-        return null;
-    }
 }

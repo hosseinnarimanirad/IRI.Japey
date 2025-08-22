@@ -13,7 +13,7 @@ public interface ISymbolizer
 
     double? MaxScaleDenominator { get; set; }
      
-    Func<Feature<Point>, bool> IsFilterPassed { get; }
+    Func<Feature<Point>, bool> IsFilterPassed { get; set; }
 
     bool IsInScaleRange(double scale); 
 }

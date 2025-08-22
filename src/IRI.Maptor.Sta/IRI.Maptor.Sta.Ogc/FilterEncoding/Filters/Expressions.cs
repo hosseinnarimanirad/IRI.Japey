@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace IRI.Maptor.Sta.Ogc;
- 
+
 
 [XmlInclude(typeof(OgcLiteral))]
 [XmlInclude(typeof(OgcPropertyName))]
@@ -21,6 +21,11 @@ public class OgcLiteral : OgcExpression
     public string Value { get; set; }
 
     public override string ToString() => Value;
+
+    public double? GetDoubleValue()
+    {
+        return double.TryParse(Value, out double value) ? value : null;
+    }
 }
 
 public class OgcPropertyName : OgcExpression
@@ -92,4 +97,4 @@ public class ResourceId
 
     [XmlIgnore]
     public bool EndDateSpecified { get; set; }
-} 
+}
