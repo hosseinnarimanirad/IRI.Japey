@@ -17,7 +17,7 @@ namespace IRI.Maptor.Extensions;
 
 public static class SldExtensions
 {
-    private static System.Windows.Media.PenLineJoin Parse(this Sld_StrokeLineJoin sld_StrokeLineJoin)
+    public static System.Windows.Media.PenLineJoin Parse(this Sld_StrokeLineJoin sld_StrokeLineJoin)
     {
         return sld_StrokeLineJoin switch
         {
@@ -28,7 +28,7 @@ public static class SldExtensions
         };
     }
 
-    private static System.Windows.Media.PenLineCap Parse(this Sld_StrokeLineCap sld_StrokeLineCap)
+    public static System.Windows.Media.PenLineCap Parse(this Sld_StrokeLineCap sld_StrokeLineCap)
     {
         return sld_StrokeLineCap switch
         {
@@ -39,7 +39,7 @@ public static class SldExtensions
         };
     }
 
-    private static System.Windows.FontStyle Parse(this Sld_FontStyle sld_FontStyle)
+    public static System.Windows.FontStyle Parse(this Sld_FontStyle sld_FontStyle)
     {
         return sld_FontStyle switch
         {
@@ -50,7 +50,7 @@ public static class SldExtensions
         };
     }
 
-    private static System.Windows.FontWeight Parse(this Sld_FontWeight sld_FontWeight)
+    public static System.Windows.FontWeight Parse(this Sld_FontWeight sld_FontWeight)
     {
         return sld_FontWeight switch
         {
@@ -60,7 +60,7 @@ public static class SldExtensions
         };
     }
 
-    private static System.Windows.Media.Geometry? Parse(this WellKnownMark wellKnownMark)
+    public static System.Windows.Media.Geometry? Parse(this WellKnownMark wellKnownMark)
     {
         return wellKnownMark switch
         {
