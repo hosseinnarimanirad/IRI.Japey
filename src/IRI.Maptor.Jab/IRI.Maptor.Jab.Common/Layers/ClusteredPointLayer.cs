@@ -65,31 +65,21 @@ public class ClusteredPointLayer : BaseLayer
         }
 
         return new SpecialPointLayer(LayerName, locatables);
-    } 
+    }
 
     public override BoundingBox Extent
     {
-        get
-        {
-            return _source.WebMercatorExtent;
-        }
-        protected set
-        {
-            throw new NotImplementedException(); 
-        }
+        get => _source.WebMercatorExtent;
+        protected set => throw new NotImplementedException();
     }
 
-    public override RenderingApproach Rendering
-    {
-        get { return RenderingApproach.Default; }
-        protected set { }
-    }
-      
-    public override LayerType Type
-    {
-        get { return LayerType.Complex; }
-        protected set { _ = value; }            
-    } 
+    //public override RenderingApproach Rendering
+    //{
+    //    get { return RenderingApproach.Default; }
+    //    protected set { }
+    //}
+
+    public override LayerType Type => LayerType.Complex;
 
     public event EventHandler OnRequestMouseDownHandle;
 }

@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
-using IRI.Maptor.Sta.Common.Primitives;
-//using IRI.Maptor.Ket.SqlServerPersistence;
-using IRI.Maptor.Sta.SpatialReferenceSystem;
-using IRI.Maptor.Sta.Persistence.RasterDataSources;
 using IRI.Maptor.Ket.GdiPersistence;
+using IRI.Maptor.Sta.Common.Primitives; 
+using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Persistence.Abstractions;
+using IRI.Maptor.Sta.Persistence.RasterDataSources;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -71,11 +70,11 @@ public class RasterLayer : BaseLayer
     public override LayerType Type
     {
         get { return _type; }
-        protected set
-        {
-            _type = value;
-            RaisePropertyChanged();
-        }
+        //protected set
+        //{
+        //    _type = value;
+        //    RaisePropertyChanged();
+        //}
     }
 
     //public int ZIndex { get; set; }
@@ -104,7 +103,7 @@ public class RasterLayer : BaseLayer
         }
     }
 
-    public override RenderingApproach Rendering { get; protected set; }
+    //public override RenderingApproach Rendering { get; protected set; }
 
     //public RasterizationApproach ToRasterTechnique { get { return RasterizationApproach.None; } }
 
@@ -269,7 +268,7 @@ public class RasterLayer : BaseLayer
 
     }
 
-    public RasterLayer(RasterLayer parent, string name, BitmapImage image, double opacity, BoundingBox boundingBox, bool isBaseMap, bool isPyramid = false, RenderingApproach rendering = RenderingApproach.Default)
+    public RasterLayer(RasterLayer parent, string name, BitmapImage image, double opacity, BoundingBox boundingBox, bool isBaseMap, bool isPyramid = false/*, RenderingApproach rendering = RenderingApproach.Default*/)
     {
         this.LayerId = Guid.NewGuid();
 
@@ -277,7 +276,7 @@ public class RasterLayer : BaseLayer
 
         this._type = isBaseMap ? LayerType.BaseMap : (isPyramid ? LayerType.ImagePyramid : LayerType.Raster);
 
-        this.Rendering = rendering;
+        //this.Rendering = rendering;
 
         this.LayerName = name;
 

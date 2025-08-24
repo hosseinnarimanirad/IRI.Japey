@@ -64,32 +64,27 @@ public class TileServiceLayer : BaseLayer
 
         this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
 
-        this.VisualParameters.Opacity = opacity;    
+        this.VisualParameters.Opacity = opacity;
 
         this._mapProvider = mapProvider;
     }
 
     public override BoundingBox Extent
     {
-        get
-        {
-            throw new NotImplementedException();
-        }
-        protected set { }
+        get => throw new NotImplementedException();
+        protected set => throw new NotImplementedException();
     }
 
 
     public override RenderingApproach Rendering
     {
         get { return RenderingApproach.Tiled; }
-        protected set { }
+        //protected set { }
     }
 
-    public override LayerType Type
-    {
-        get { return LayerType.BaseMap; }
-        protected set { }
-    }
+
+    public override LayerType Type => LayerType.BaseMap;
+     
 
     private FrameworkElement frameworkElement;
 

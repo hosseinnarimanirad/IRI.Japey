@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Helpers;
 using IRI.Maptor.Sta.Common.Primitives;
@@ -18,10 +19,10 @@ using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Persistence.DataSources;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 using WpfPoint = System.Windows.Point;
 using Point = IRI.Maptor.Sta.Common.Primitives.Point;
-using IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -32,7 +33,6 @@ public class VectorLayer : BaseLayer
     public IVectorDataSource DataSource { get; protected set; }
 
     private FrameworkElement _element;
-
     public FrameworkElement Element
     {
         get { return this._element; }
@@ -47,34 +47,55 @@ public class VectorLayer : BaseLayer
         }
     }
 
-    private LayerType _type;
-
+    protected LayerType _type;
     public override LayerType Type
     {
         get { return _type; }
-        protected set
-        {
-            _type = value;
-            RaisePropertyChanged();
-        }
+        //protected set
+        //{
+        //    _type = value;
+        //    RaisePropertyChanged();
+        //}
     }
 
 
-    private BoundingBox _extent;
+    //private BoundingBox _extent;
+    //public override BoundingBox Extent
+    //{
+    //    get { return _extent; }
+    //    protected set
+    //    {
+    //        _extent = value;
+    //        RaisePropertyChanged();
+    //    }
+    //}
 
-    public override BoundingBox Extent
+    private RenderingApproach _rendering = RenderingApproach.Default;
+    public override RenderingApproach Rendering { get => _rendering;/* private set;*/ }
+
+    protected RasterizationApproach _rasterizationApproach = RasterizationApproach.DrawingVisual;
+    public override RasterizationApproach ToRasterTechnique { get => _rasterizationApproach; /*protected set;*/ }
+
+
+    private int _numberOfSelectedFeatures;
+    public int NumberOfSelectedFeatures
     {
-        get { return _extent; }
-        protected set
+        get { return _numberOfSelectedFeatures; }
+        set
         {
-            _extent = value;
+            _numberOfSelectedFeatures = value;
             RaisePropertyChanged();
+            RaisePropertyChanged(nameof(HasSelectedFeatures));
+
+            this.OnSelectedFeaturesChanged?.Invoke(this, new CustomEventArgs<VectorLayer>(this));
         }
     }
 
-    public override RenderingApproach Rendering { get; protected set; }
+    public bool HasSelectedFeatures
+    {
+        get { return NumberOfSelectedFeatures > 0; }
+    }
 
-    public override RasterizationApproach ToRasterTechnique { get; protected set; }
 
     //public bool IsValid { get; set; }
 
@@ -106,32 +127,96 @@ public class VectorLayer : BaseLayer
     }
 
     public VectorLayer(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
-        RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbolizer pointSymbol = null, LabelParameters labeling = null)
+        RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbolizer? pointSymbol = null, LabelParameters? labeling = null)
     {
         Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
     }
 
-    private void Initialize(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
-                                RasterizationApproach toRasterTechnique, ScaleInterval visibleRange,
-                                SimplePointSymbolizer pointSymbol, LabelParameters labeling)
+    public VectorLayer(string layerName, IVectorDataSource dataSource, List<ISymbolizer> symbolizers, LayerType type, RenderingApproach rendering,
+        RasterizationApproach toRasterTechnique)
     {
         this.LayerId = Guid.NewGuid();
 
         this.DataSource = dataSource;
 
-        this.Rendering = rendering;
+        this._rendering = rendering;
 
-        this.ToRasterTechnique = toRasterTechnique;
+        this._rasterizationApproach = toRasterTechnique;
 
-        this.Type = type;
+        this._type = type;
 
         if (dataSource.GeometryType.AsLayerType() is not null)
         {
-            this.Type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
+            this._type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
         }
         else
         {
-            this.Type = type;
+            this._type = type;
+        }
+
+        this.Extent = dataSource.WebMercatorExtent;
+
+        this.LayerName = layerName;
+
+        //this.VisualParameters = parameters;
+
+        this.Symbolizers.AddRange(symbolizers);
+
+        var simpleSymbolizer = symbolizers.FirstOrDefault(s => s is SimpleSymbolizer);
+
+        if (simpleSymbolizer is not null)
+            this.VisualParameters = (simpleSymbolizer as SimpleSymbolizer)!.Param;
+
+        var labelSymbolizer = (symbolizers.FirstOrDefault(s => s is LabelSymbolizer) as LabelSymbolizer);
+
+        if (labelSymbolizer is not null)
+            this.Labels = (labelSymbolizer as LabelSymbolizer).Labels;
+
+        this.VisibleRange = ScaleInterval.All;
+
+        //this.Labels = labeling;
+
+        //Check for missing visibleRange
+        //if (this.Labels != null)
+        //{
+        //    if (this.Labels.VisibleRange == null)
+        //    {
+        //        this.Labels.VisibleRange = visibleRange;
+        //    }
+
+        //    this.Symbolizers.Add(new LabelSymbolizer(labeling));
+        //}
+
+        //this.VisibleRange = (visibleRange == null) ? ScaleInterval.All : visibleRange;
+    }
+
+    private void Initialize(string layerName,
+                            IVectorDataSource dataSource,
+                            VisualParameters parameters,
+                            LayerType type,
+                            RenderingApproach rendering,
+                            RasterizationApproach toRasterTechnique,
+                            ScaleInterval visibleRange,
+                            SimplePointSymbolizer? pointSymbol,
+                            LabelParameters? labeling)
+    {
+        this.LayerId = Guid.NewGuid();
+
+        this.DataSource = dataSource;
+
+        this._rendering = rendering;
+
+        this._rasterizationApproach = toRasterTechnique;
+
+        this._type = type;
+
+        if (dataSource.GeometryType.AsLayerType() is not null)
+        {
+            this._type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
+        }
+        else
+        {
+            this._type = type;
         }
 
         this.Extent = dataSource.WebMercatorExtent;
@@ -177,11 +262,14 @@ public class VectorLayer : BaseLayer
         this.VisibleRange = (visibleRange == null) ? ScaleInterval.All : visibleRange;
     }
 
+
+
+
     #endregion
 
     public override string ToString()
     {
-        return $"{Enum.GetName(this.Type)} - {this.DataSource.ToString()}";
+        return $"{Enum.GetName(this.Type)} - {this.DataSource?.ToString()}";
     }
 
     public void BindWithFrameworkElement(FrameworkElement element)
@@ -315,7 +403,7 @@ public class VectorLayer : BaseLayer
         //if (features.IsNullOrEmpty())
         //    return null;
         //var drawingVisuals = new DrawingVisualRenderStrategy(Symbolizers).AsDrawingVisual(features, mapScale);
-        
+
         var drawingVisuals = await AsDrawingVisual(mapExtent, imageWidth, imageHeight, mapScale);
 
         if (drawingVisuals.IsNullOrEmpty())
@@ -504,4 +592,10 @@ public class VectorLayer : BaseLayer
 
         return bitmap;
     }
+
+    #region Events
+
+    public event EventHandler<CustomEventArgs<VectorLayer>> OnSelectedFeaturesChanged;
+
+    #endregion
 }

@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Sta.Common.Abstrations; 
 using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Sta.Persistence.DataSources;
 
 using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
-using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Sta.Persistence.Abstractions;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -64,8 +63,8 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
     {
         this.Id = id;
         this.LayerName = layerName;
-        this.Rendering = RenderingApproach.Default;
-        this.ToRasterTechnique = rasterizationApproach;
+        //this.Rendering = RenderingApproach.Default;
+        this._rasterizationApproach = rasterizationApproach;
         this.ZIndex = int.MaxValue;
         this.HighlightGeometryKey = Guid.NewGuid();
     }
@@ -155,7 +154,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
             ((geometryType == GeometryType.LineString || geometryType == GeometryType.MultiLineString) ? LayerType.Polyline :
             (geometryType == GeometryType.Polygon || geometryType == GeometryType.MultiPolygon) ? LayerType.Polygon : LayerType.None);
 
-        result.Type = LayerType.Drawing | featureType;
+        result._type = LayerType.Drawing | featureType;
 
         result.Commands = new List<ILegendCommand>();
 
@@ -188,7 +187,7 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
 
             VisualParameters = VisualParameters.GetDefaultForDrawingItems(),
 
-            Type = LayerType.MoveableItem,
+            _type = LayerType.MoveableItem,
         };
 
         result.SpecialPointLayer = new SpecialPointLayer(layerName, locateables, .8, null, LayerType.MoveableItem) { ParentLayerId = result.LayerId };

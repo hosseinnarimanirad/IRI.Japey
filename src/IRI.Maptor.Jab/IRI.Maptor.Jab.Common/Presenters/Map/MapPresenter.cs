@@ -1136,7 +1136,7 @@ public abstract class MapPresenter : BasePresenter
         }
     }
 
-    public void RemoveSelectedLayer(ILayer layer)
+    public void RemoveSelectedLayer(VectorLayer layer)
     {
         if (layer is null)
             return;
@@ -1328,12 +1328,12 @@ public abstract class MapPresenter : BasePresenter
 
         foreach (var item in result)
         {
-            var layer = FindLayer(item.LayerId);
+            var layer = FindLayer(item.LayerId) as VectorLayer;
 
-            if (layer == null)
+            if (layer is null)
                 continue;
 
-            var fields = (layer as VectorLayer)?.GetFields();
+            var fields = layer.GetFields();
 
             var newLayer = new SelectedLayer/*<Feature<Point>>*/(layer, fields)
             {

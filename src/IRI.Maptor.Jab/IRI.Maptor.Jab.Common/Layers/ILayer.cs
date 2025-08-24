@@ -52,7 +52,7 @@ public interface ILayer
 
     bool CanUserDelete { get; }
 
-    int NumberOfSelectedFeatures { get; set; }
+    //int NumberOfSelectedFeatures { get; set; }
 
     List<ILegendCommand> Commands { get; set; }
 

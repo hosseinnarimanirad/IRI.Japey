@@ -108,42 +108,19 @@ public class EditableFeatureLayer : BaseLayer
 
     public override BoundingBox Extent
     {
-        get
-        {
-            return _webMercatorGeometry.GetBoundingBox();
-        }
+        get => _webMercatorGeometry.GetBoundingBox();
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
+        protected set => throw new NotImplementedException();
     }
 
-    public override RenderingApproach Rendering
-    {
-        get
-        {
-            return RenderingApproach.Default;
-        }
+    //public override RenderingApproach Rendering
+    //{
+    //    get => RenderingApproach.Default;
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    protected set => throw new NotImplementedException();
+    //}
 
-    public override LayerType Type
-    {
-        get
-        {
-            return LayerType.EditableItem;
-        }
-
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    public override LayerType Type => LayerType.EditableItem;
 
     private WpfPoint ToScreen(WpfPoint point)
     {

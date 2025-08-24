@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System; 
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +15,7 @@ public class SelectedLayer/*<TGeometryAware> */: Notifier/*, ISelectedLayer *//*
 {
     public Guid Id { get { return AssociatedLayer?.LayerId ?? Guid.Empty; } }
 
-    public ILayer AssociatedLayer { get; set; }
+    public VectorLayer AssociatedLayer { get; set; }
 
     public string LayerName { get { return AssociatedLayer?.LayerName; } }
 
@@ -74,7 +73,7 @@ public class SelectedLayer/*<TGeometryAware> */: Notifier/*, ISelectedLayer *//*
     //}
 
 
-    public SelectedLayer(ILayer layer, List<Field>? fields)
+    public SelectedLayer(VectorLayer layer, List<Field>? fields)
     {
         //this.Id = id;
 

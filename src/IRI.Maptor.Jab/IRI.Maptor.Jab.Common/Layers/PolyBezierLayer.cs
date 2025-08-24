@@ -7,17 +7,16 @@ using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
+using IRI.Maptor.Jab.Common.Events;
 using IRI.Maptor.Jab.Common.Helpers;
+using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Jab.Common.View.MapMarkers;
 
 using LineSegment = System.Windows.Media.LineSegment;
 using WpfPoint = System.Windows.Point;
-using IRI.Maptor.Sta.Common.Abstrations;
-using IRI.Maptor.Extensions;
-using IRI.Maptor.Jab.Common.Events;
-using IRI.Maptor.Jab.Common.Presenters;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -27,44 +26,21 @@ public class PolyBezierLayer : BaseLayer
 
     #region ILayerMembers
 
-    public override LayerType Type
-    {
-        get
-        {
-            return LayerType.EditableItem;
-        }
-
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    public override LayerType Type => LayerType.EditableItem;
 
     public override BoundingBox Extent
     {
-        get
-        {
-            return BoundingBox.CalculateBoundingBox(mercatorPolyline);
-        }
+        get => BoundingBox.CalculateBoundingBox(mercatorPolyline);
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
+        protected set => throw new NotImplementedException();
     }
 
-    public override RenderingApproach Rendering
-    {
-        get
-        {
-            return RenderingApproach.Default;
-        }
+    //public override RenderingApproach Rendering
+    //{
+    //    get => RenderingApproach.Default;
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    protected set => throw new NotImplementedException();
+    //}
 
     #endregion
 

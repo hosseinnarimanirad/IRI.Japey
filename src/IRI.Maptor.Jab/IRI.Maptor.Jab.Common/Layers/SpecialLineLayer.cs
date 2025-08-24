@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
-using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -14,46 +13,29 @@ public class SpecialLineLayer : BaseLayer
 {
     #region BaseLayer Members
 
-    private BoundingBox _extent;
+    //private BoundingBox _extent;
 
-    public override BoundingBox Extent
-    {
-        get
-        {
-            return _extent;
-        }
+    //public override BoundingBox Extent
+    //{
+    //    get
+    //    {
+    //        return _extent;
+    //    }
 
-        protected set
-        {
-            this._extent = value;
-        }
-    }
+    //    protected set
+    //    {
+    //        this._extent = value;
+    //    }
+    //}
 
-    public override RenderingApproach Rendering
-    {
-        get
-        {
-            return RenderingApproach.Default;
-        }
+    //public override RenderingApproach Rendering
+    //{
+    //    get => RenderingApproach.Default;
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    protected set => throw new NotImplementedException();
+    //}
 
-    public override LayerType Type
-    {
-        get
-        {
-            return LayerType.Complex;
-        }
-
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    public override LayerType Type => LayerType.Complex;
 
     #endregion
 
@@ -151,7 +133,7 @@ public class SpecialLineLayer : BaseLayer
             System.Windows.Point location, direction;
 
             pathGeometry.GetPointAtFractionLength(fraction, out location, out direction);
-             
+
             if (!screenLimit.Intersects(new Point(location.X, location.Y)))
                 continue;
 

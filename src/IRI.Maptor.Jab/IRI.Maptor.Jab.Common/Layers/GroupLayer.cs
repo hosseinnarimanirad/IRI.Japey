@@ -6,11 +6,11 @@ namespace IRI.Maptor.Jab.Common;
 
 public class GroupLayer : BaseLayer
 {
-    public override LayerType Type { get => LayerType.GroupLayer; protected set => throw new NotImplementedException(); }
+    public override LayerType Type => LayerType.GroupLayer;
 
     public override BoundingBox Extent { get => BoundingBox.NaN; protected set => throw new NotImplementedException(); }
 
-    public override RenderingApproach Rendering { get => RenderingApproach.Default; protected set => throw new NotImplementedException(); }
+    //public override RenderingApproach Rendering { get => RenderingApproach.Default; protected set => throw new NotImplementedException(); }
 
     public GroupLayer(string title)
     {

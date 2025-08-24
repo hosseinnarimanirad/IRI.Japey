@@ -41,7 +41,7 @@ public partial class MainWindow : Window
 
     private void TestSld(string fileName)
     {
-        var sld = XmlHelper.Deserialize<StyledLayerDescriptor>(fileName);
+        var sld = XmlHelper.DeserializeFromFile<StyledLayerDescriptor>(fileName);
 
         string modifiedPath = Path.Combine(
                             Path.GetDirectoryName(fileName),

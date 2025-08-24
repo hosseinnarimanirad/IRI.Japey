@@ -8,11 +8,11 @@ namespace IRI.Maptor.Jab.Common;
 
 public class GridLayer : BaseLayer
 {
-    public override LayerType Type { get; protected set; } = LayerType.VectorLayer;
+    public override LayerType Type => LayerType.VectorLayer;
 
-    public override BoundingBox Extent { get; protected set; }
+    //public override BoundingBox Extent { get; protected set; }
 
-    public override RenderingApproach Rendering { get; protected set; }
+    //public override RenderingApproach Rendering { get; protected set; }
 
     public GridDataSource DataSource { get; set; }
 

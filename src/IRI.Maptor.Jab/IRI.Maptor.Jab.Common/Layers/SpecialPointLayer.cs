@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+
 using IRI.Maptor.Jab.Common.Models;
-using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Sta.Common.Primitives;
+using IRI.Maptor.Sta.Common.Abstrations;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -28,24 +29,19 @@ public class SpecialPointLayer : BaseLayer
         {
             if (this.Items.Count < 1)
             {
-                return new BoundingBox(double.NaN, double.NaN, double.NaN, double.NaN);
+                return BoundingBox.NaN;
             }
 
             return BoundingBox.CalculateBoundingBox(this.Items.Select(i => new Point(i.X, i.Y)));
         }
-        protected set
-        {
-            throw new NotImplementedException();
-            //_extent = value;
-            //OnPropertyChanged("Extent");
-        }
+        protected set => throw new NotImplementedException();
     }
 
-    public override RenderingApproach Rendering
-    {
-        get { return RenderingApproach.Default; }
-        protected set { }
-    }
+    //public override RenderingApproach Rendering
+    //{
+    //    get { return RenderingApproach.Default; }
+    //    protected set { }
+    //}
 
     private bool _insertTop;
 
@@ -72,21 +68,21 @@ public class SpecialPointLayer : BaseLayer
     {
         get { return _type; }
 
-        protected set
-        {
-            if (value.HasFlag(LayerType.Complex) ||
-                value.HasFlag(LayerType.RightClickOption) ||
-                value.HasFlag(LayerType.GridAndGraticule) ||
-                value.HasFlag(LayerType.MoveableItem) ||
-                value.HasFlag(LayerType.EditableItem))
-            {
-                this._type = value;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
+        //protected set
+        //{
+        //    if (value.HasFlag(LayerType.Complex) ||
+        //        value.HasFlag(LayerType.RightClickOption) ||
+        //        value.HasFlag(LayerType.GridAndGraticule) ||
+        //        value.HasFlag(LayerType.MoveableItem) ||
+        //        value.HasFlag(LayerType.EditableItem))
+        //    {
+        //        this._type = value;
+        //    }
+        //    else
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
     }
 
     //public int ZIndex { get; set; }
@@ -172,7 +168,14 @@ public class SpecialPointLayer : BaseLayer
     {
         this.LayerId = Guid.NewGuid();
 
-        this.Type = type;
+        if (type.HasFlag(LayerType.Complex) ||
+            type.HasFlag(LayerType.RightClickOption) ||
+            type.HasFlag(LayerType.GridAndGraticule) ||
+            type.HasFlag(LayerType.MoveableItem) ||
+            type.HasFlag(LayerType.EditableItem))
+            this._type = type;
+        else
+            throw new NotImplementedException();
 
         this.LayerName = name;
 
@@ -339,7 +342,7 @@ public class SpecialPointLayer : BaseLayer
         var next = current - 1 >= 0 ? current - 1 : Items.Count - 1;
 
         SelectLocatable(next);
-    } 
+    }
 
     public Action<Locateable> RequestSelectedLocatableChanged;
 }

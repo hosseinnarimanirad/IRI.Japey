@@ -1,57 +1,35 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Collections.Generic;
+
+using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Extensions;
 
 namespace IRI.Maptor.Jab.Common;
 
 public class DrawingLayer : BaseLayer
 {
     DrawMode _mode;
-     
-    EditableFeatureLayer _editableFeatureLayer;
-     
-    public override LayerType Type
-    {
-        get
-        {
-            return LayerType.EditableItem;
-        }
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    EditableFeatureLayer _editableFeatureLayer;
+
+    public override LayerType Type => LayerType.EditableItem;
 
     public override BoundingBox Extent
     {
-        get
-        {
-            return this._editableFeatureLayer.Extent;
-        }
+        get => _editableFeatureLayer.Extent;
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
+        protected set => throw new NotImplementedException();
     }
 
-    public override RenderingApproach Rendering
-    {
-        get
-        {
-            return RenderingApproach.Default;
-        }
+    //public override RenderingApproach Rendering
+    //{
+    //    get => RenderingApproach.Default;
 
-        protected set
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    protected set => throw new NotImplementedException();
+    //}
 
     public DrawingLayer(DrawMode mode, Transform toScreen, Func<double, double> screenToMap, Point startMercatorPoint, EditableFeatureLayerOptions options)
     {

@@ -980,6 +980,9 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     public void SetTileService(TileMapProvider mapProvider, bool isCachEnabled = false, string cacheDirectory = null, bool isOffline = false, Func<TileInfo, string>? getFileName = null, double opacity = 1)
     {
+        if (mapProvider is null)
+            return;
+        
         var layer = new TileServiceLayer(mapProvider, opacity, getFileName) { VisibleRange = ScaleInterval.All };
 
         if (isCachEnabled && IOHelper.TryCreateDirectory(cacheDirectory))

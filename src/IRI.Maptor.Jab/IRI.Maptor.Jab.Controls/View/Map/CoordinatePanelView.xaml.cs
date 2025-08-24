@@ -50,6 +50,9 @@ public partial class CoordinatePanelView : NotifiableUserControl
     /// <param name="mercatorY"></param>
     public void SetCoordinates(Point geodeticPoint)
     {
+        if (Presenter is null)
+            return;
+         
         Presenter.SelectedItem?.Update(geodeticPoint.AsPoint());
     }
 

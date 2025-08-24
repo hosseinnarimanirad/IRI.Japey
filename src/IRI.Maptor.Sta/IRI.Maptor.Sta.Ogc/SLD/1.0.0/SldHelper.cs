@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IRI.Maptor.Sta.Common.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -108,4 +109,19 @@ public static class SldHelper
     public const string CssParameter_FontSize = "font-size";
 
     #endregion
+
+    public static StyledLayerDescriptor? Parse(string? xmlSld)
+    {
+        if (string.IsNullOrWhiteSpace(xmlSld))
+            return null;
+
+        try
+        {
+            return XmlHelper.DeserializeFromXmlString<StyledLayerDescriptor>(xmlSld);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 }
