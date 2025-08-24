@@ -1463,7 +1463,7 @@ public abstract class MapPresenter : BasePresenter
 
         var feature = new Feature<Point>(drawing, featureName);
 
-        var shapeItem = MakeShapeItem(feature, featureName, visualParameters, id/*, source*/);
+        var shapeItem = CreateDrawingItemLayer(feature, featureName, visualParameters, id/*, source*/);
 
         if (shapeItem != null)
         {
@@ -1514,7 +1514,7 @@ public abstract class MapPresenter : BasePresenter
         }
     }
 
-    protected DrawingItemLayer MakeShapeItem(
+    protected DrawingItemLayer CreateDrawingItemLayer(
         Feature<Point> drawing,
         string name,
         VisualParameters? visualParameters = null,
@@ -1523,27 +1523,25 @@ public abstract class MapPresenter : BasePresenter
     {
         //var feature = new Feature<Point>(drawing, name);
 
-        var shapeItem = DrawingItemLayer.Create(name, drawing, visualParameters, id/*, source*/);
+        var drawingItemLayer = DrawingItemLayer.Create(name, drawing, visualParameters, id/*, source*/);
 
-        shapeItem.OnIsSelectedInTocChanged += (sender, e) =>
+        drawingItemLayer.OnIsSelectedInTocChanged += (sender, e) =>
         {
-            if (shapeItem.IsSelectedInToc)
+            if (drawingItemLayer.IsSelectedInToc)
             {
-                SelectedDrawingItem = shapeItem;
+                SelectedDrawingItem = drawingItemLayer;
             }
-            else if (SelectedDrawingItem == shapeItem)
+            else if (SelectedDrawingItem == drawingItemLayer)
             {
                 SelectedDrawingItem = null;
             }
         };
 
-        TrySetCommandsForDrawingItemLayer(shapeItem);
-
-        shapeItem.Labels = new LabelParameters(ScaleInterval.All, 13, shapeItem.VisualParameters.Stroke, new FontFamily("Times New Roman"), i => i.GetCentroidPlus());
+        TrySetCommandsForDrawingItemLayer(drawingItemLayer);
 
         IsPanMode = true;
 
-        return shapeItem;
+        return drawingItemLayer;
     }
 
     public void MoveDrawingItemDown()
@@ -1598,9 +1596,9 @@ public abstract class MapPresenter : BasePresenter
 
         RemoveDrawingItem(second);
 
-        var newFirstLayer = MakeShapeItem(first.Feature, first.LayerName, first.VisualParameters, first.Id/*, first.DataSource*/);
+        var newFirstLayer = CreateDrawingItemLayer(first.Feature, first.LayerName, first.VisualParameters, first.Id/*, first.DataSource*/);
 
-        var newSecondLayer = MakeShapeItem(second.Feature, second.LayerName, second.VisualParameters, second.Id/*, second.DataSource*/);
+        var newSecondLayer = CreateDrawingItemLayer(second.Feature, second.LayerName, second.VisualParameters, second.Id/*, second.DataSource*/);
 
         if (first.ZIndex < second.ZIndex)
         {

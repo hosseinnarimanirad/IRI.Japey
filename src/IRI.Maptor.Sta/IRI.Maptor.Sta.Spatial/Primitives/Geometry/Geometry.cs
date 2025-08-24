@@ -373,6 +373,8 @@ public class Geometry<T> /*: IGeometry */where T : IPoint, new()
         return Geometry<T>.CreatePointOrLineString(new List<T>() { centroidPoint }, this.Srid);
     }
 
+    public T GetCentroidPlusPoint() => GetCentroidPlus().AsPoint();
+
     public bool Contains(T point)
     {
         switch (this.Type)

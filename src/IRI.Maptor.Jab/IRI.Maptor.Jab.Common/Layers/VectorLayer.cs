@@ -450,12 +450,7 @@ public class VectorLayer : BaseLayer
         if (features.IsNullOrEmpty())
             return null;
 
-        List<WpfPoint> mapCoordinates = features.ConvertAll<WpfPoint>(
-                  (g) =>
-                  {
-                      var point = this.Labels.PositionFunc(g.TheGeometry);
-                      return new WpfPoint(point.Points[0].X, point.Points[0].Y);
-                  }).ToList();
+        List<WpfPoint> mapCoordinates = features.ConvertAll((g) => this.Labels.PositionFunc(g.TheGeometry).AsWpfPoint()).ToList();
 
         DrawingVisual drawingVisual = new DrawingVisual();
 
@@ -500,11 +495,7 @@ public class VectorLayer : BaseLayer
         if (features.IsNullOrEmpty())
             return;
 
-        var mapCoordinates = features.ConvertAll(
-                  (g) =>
-                  {
-                      return this.Labels.PositionFunc(g.TheGeometry).AsPoint();
-                  }).ToList();
+        var mapCoordinates = features.ConvertAll((g) => Labels.PositionFunc(g.TheGeometry)).ToList();
 
         var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
 
@@ -556,11 +547,7 @@ public class VectorLayer : BaseLayer
         if (labels.IsNullOrEmpty())
             return null;
 
-        var mapCoordinates = positions.ConvertAll(
-                  (g) =>
-                  {
-                      return this.Labels.PositionFunc(g).AsPoint();
-                  }).ToList();
+        var mapCoordinates = positions.ConvertAll((g) => this.Labels.PositionFunc(g)).ToList();
 
         var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
 

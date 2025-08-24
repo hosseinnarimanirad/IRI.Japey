@@ -33,9 +33,9 @@ public interface ILayer
 
     LabelParameters Labels { get; set; }
 
-    bool IsValid { get; set; }
+    //bool IsValid { get; set; }
 
-    void Invalidate();
+    //void Invalidate();
 
     bool IsSelectedInToc { get; set; }
 

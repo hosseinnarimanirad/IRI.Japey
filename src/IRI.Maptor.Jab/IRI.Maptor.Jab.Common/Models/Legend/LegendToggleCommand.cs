@@ -140,7 +140,7 @@ public class LegendToggleCommand : Notifier, ILegendCommand
         //layer.Labels = labels;
 
         result.Command = new RelayCommand(param =>
-        {
+         {
             if (layer == null)
                 return;
 

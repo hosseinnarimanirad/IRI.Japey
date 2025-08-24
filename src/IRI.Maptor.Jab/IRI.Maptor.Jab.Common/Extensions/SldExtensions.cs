@@ -269,7 +269,7 @@ public static class SldExtensions
             // todo
         }
 
-        var labelParameters = new LabelParameters(ScaleInterval.All, fontSize, new SolidColorBrush(fillColor), fontFamily, p => p) { };
+        var labelParameters = new LabelParameters(ScaleInterval.All, fontSize, new SolidColorBrush(fillColor), fontFamily, p => p.AsPoint()) { };
 
         return new LabelSymbolizer(labelParameters);
     }

@@ -112,11 +112,11 @@ public class LabelParameters : Notifier
         return VisibleRange.IsInRange(inverseMapScale) && IsOn;
     }
 
-    public Func<Geometry<Point>, Geometry<Point>> PositionFunc { get; set; }
+    public Func<Geometry<Point>, Point> PositionFunc { get; set; }
 
-    public LabelParameters(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<Geometry<Point>, Geometry<Point>> positionFunc)
+    public LabelParameters(ScaleInterval? visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<Geometry<Point>, Point> positionFunc)
     {
-        VisibleRange = visibleRange;
+        VisibleRange = visibleRange ?? ScaleInterval.All;
 
         FontSize = fontSize;
 
@@ -127,7 +127,7 @@ public class LabelParameters : Notifier
         PositionFunc = positionFunc;
     }
 
-    public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<Geometry<Point>, Geometry<Point>> positionFunc)
+    public LabelParameters(ScaleInterval visibleRange, int fontSize, Color foreground, FontFamily fontFamily, Func<Geometry<Point>, Point> positionFunc)
         : this(visibleRange, fontSize, new SolidColorBrush(foreground), fontFamily, positionFunc)
     {
 

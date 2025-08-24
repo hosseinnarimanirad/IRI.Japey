@@ -982,7 +982,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     {
         if (mapProvider is null)
             return;
-        
+
         var layer = new TileServiceLayer(mapProvider, opacity, getFileName) { VisibleRange = ScaleInterval.All };
 
         if (isCachEnabled && IOHelper.TryCreateDirectory(cacheDirectory))
@@ -1021,7 +1021,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
     public void SetVectorLayer(
         ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
-        bool isLabeled = false, Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
+        bool isLabeled = false, Func<Geometry<sb.Point>, sb.Point> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
     {
         LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
 
@@ -1356,7 +1356,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     //                                                            //this.MapToScreen,
     //                                                            area);
     //                break;
-                
+
     //            case RasterizationApproach.None:
     //            default:
     //                throw new NotImplementedException();
@@ -1476,7 +1476,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         var renderingStrategy = RenderStrategyContext.Create(layer);
 
         var imageBrush = renderingStrategy.Render(features, mapScale, tileScreenWidth, tileScreenHeight);
-         
+
         if (tile.ZoomLevel != this.CurrentZoomLevel)//|| MapScale != mapScale)
         {
             Debug.Print($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddTiledLayerAsync Layer escaped! ZoomLevel Conflict 3 {layer.LayerName} - {tile.ToShortString()} expected zoomLevel:{this.CurrentZoomLevel}");
@@ -1524,7 +1524,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 return;
 
             var area = ParseToRectangleGeometry(extent);
-             
+
             Func<sb.Point, sb.Point> transform = p => this.MapToScreen(p.AsWpfPoint()).AsPoint();
 
             var features = feature.Transform(transform).Features;
@@ -1533,25 +1533,25 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             var renderingStrategy = RenderStrategyContext.Create(layer);
 
             var imageBrush = renderingStrategy.Render(features, mapScale, this.mapView.ActualWidth, this.mapView.ActualHeight);
-              
+
             if (imageBrush is null || this.MapScale != mapScale || this.CurrentExtent != extent)
                 return;
 
-            if (layer.IsValid)
+            //if (layer.IsValid)
+            //{
+            Path path = new Path()
             {
-                Path path = new Path()
-                {
-                    Data = area,
-                    Tag = new LayerTag(mapScale) { Layer = layer, IsTiled = false, IsDrawn = true, IsNew = true },
-                    Fill = imageBrush
-                };
+                Data = area,
+                Tag = new LayerTag(mapScale) { Layer = layer, IsTiled = false, IsDrawn = true, IsNew = true },
+                Fill = imageBrush
+            };
 
-                layer.Element = path;
+            layer.Element = path;
 
-                this.mapView.Children.Add(path);
+            this.mapView.Children.Add(path);
 
-                Canvas.SetZIndex(path, layer.ZIndex);
-            }
+            Canvas.SetZIndex(path, layer.ZIndex);
+            //}
 
             //Debug.WriteLine($"MapViewer; {DateTime.Now.ToLongTimeString()}; AddNonTiledLayer finished LayerName: {layer.LayerName}");
         }
@@ -2692,12 +2692,12 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         List<Geometry<sb.Point>> geometries,
         string layerName,
         VisualParameters visualElements,
-        List<object> labels = null,
-        Func<Geometry<sb.Point>, Geometry<sb.Point>> positionFunc = null,
+        List<object>? labels = null,
+        Func<Geometry<sb.Point>, sb.Point>? positionFunc = null,
         int fontSize = 0,
-        Brush labelBackground = null,
-        FontFamily font = null,
-        RasterizationApproach rasterizationApproach = RasterizationApproach.GdiPlus)
+        Brush? labelBackground = null,
+        FontFamily? font = null,
+        RasterizationApproach? rasterizationApproach = RasterizationApproach.GdiPlus)
     {
         if (geometries == null || geometries.Count < 1)
             return;
@@ -5042,7 +5042,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 //var geoAsGeodetic = geo.AsSqlGeometry().WebMercatorToGeodeticWgs84().MakeValid();
                 //var measureValue = mode == DrawMode.Polygon ? UnitHelper.GetAreaLabel(geoAsGeodetic.STArea().Value) : UnitHelper.GetLengthLabel(geoAsGeodetic.STLength().Value);
                 //marker.ToolTip = mode == DrawMode.Polygon ? geoAsGeodetic.STArea().Value : geoAsGeodetic.STLength().Value;
-                 
+
                 var measureValue = SpatialUtility.GetMeasureLabel(geo, MapProjects.WebMercatorToGeodeticWgs84);
 
                 marker.ToolTip = SpatialUtility.GetMeasure(geo, MapProjects.WebMercatorToGeodeticWgs84);

@@ -24,7 +24,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA10024", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA10024", 1), fontFamily, i => i.AsPoint()));
 
         if (leveling1 != null)
         {
@@ -38,7 +38,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFE51400", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFE51400", 1), fontFamily, i => i.AsPoint()));
 
         if (leveling2 != null)
         {
@@ -51,7 +51,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(6),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFFA6900", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFFA6900", 1), fontFamily, i => i.AsPoint()));
 
         if (leveling3 != null)
         {
@@ -65,7 +65,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint()));
 
         if (geodesy1 != null)
         {
@@ -78,7 +78,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint()));
 
         if (geodesy2 != null)
         {
@@ -91,7 +91,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFAA00FF", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFAA00FF", 1), fontFamily, i => i.AsPoint()));
 
         if (gravity != null)
         {
@@ -104,7 +104,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA4C401", 1), fontFamily, i => i));
+        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA4C401", 1), fontFamily, i => i.AsPoint()));
 
         if (geodynamic != null)
         {

@@ -292,12 +292,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         if (features.IsNullOrEmpty())
             return null;
 
-        var mapCoordinates = features.ConvertAll(
-                  (g) =>
-                  {
-                      var point = labels.PositionFunc(g.TheGeometry);
-                      return new WpfPoint(point.Points[0].X, point.Points[0].Y);
-                  }).ToList();
+        var mapCoordinates = features.ConvertAll((g) => labels.PositionFunc(g.TheGeometry).AsWpfPoint()).ToList();
 
         DrawingVisual drawingVisual = new DrawingVisual();
 

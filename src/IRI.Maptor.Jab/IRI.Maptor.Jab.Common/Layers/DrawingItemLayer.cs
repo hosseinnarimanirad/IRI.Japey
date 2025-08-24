@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
-using IRI.Maptor.Sta.Common.Abstrations; 
+using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Sta.Persistence.DataSources;
 
 using Geometry = IRI.Maptor.Sta.Spatial.Primitives.Geometry<IRI.Maptor.Sta.Common.Primitives.Point>;
+using IRI.Maptor.Jab.Common.Models;
 
 namespace IRI.Maptor.Jab.Common;
 
@@ -136,7 +137,10 @@ public class DrawingItemLayer : VectorLayer, IIdentifiable
 
         result.VisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
 
-        result.Symbolizers = [new Cartography.Symbologies.SimpleSymbolizer(result.VisualParameters)];
+        result.Labels = new LabelParameters(ScaleInterval.All, 13, result.VisualParameters.Stroke, new System.Windows.Media.FontFamily("Times New Roman"), i => i.GetCentroidPlusPoint());
+
+        result.Symbolizers = [new Cartography.Symbologies.SimpleSymbolizer(result.VisualParameters),
+                                new Cartography.Symbologies.LabelSymbolizer(result.Labels)];
 
         //result.OriginalSource = source;
 

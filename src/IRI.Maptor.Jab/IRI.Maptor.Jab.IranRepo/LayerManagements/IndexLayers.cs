@@ -37,7 +37,7 @@ public static class IndexLayers
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 5, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
-        var index250kLabels = new LabelParameters(ScaleInterval.Create(7), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
+        var index250kLabels = new LabelParameters(ScaleInterval.Create(7), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlusPoint()) { IsRtl = false };
 
         return new VectorLayer("اندکس ۲۵۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.DrawingVisual, ScaleInterval.Create(4))
         {
@@ -56,7 +56,7 @@ public static class IndexLayers
 
         VisualParameters parameters = new VisualParameters(null, "#FFEA4333", 3, .9) { Visibility = System.Windows.Visibility.Collapsed };
 
-        var index100kLabels = new LabelParameters(ScaleInterval.Create(9), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlus()) { IsRtl = false };
+        var index100kLabels = new LabelParameters(ScaleInterval.Create(9), 12, parameters.Stroke, fontFamily, i => i.GetCentroidPlusPoint()) { IsRtl = false };
 
         return new VectorLayer("اندکس ۱۰۰ هزار", source, parameters, LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.Create(5))
         {
@@ -165,7 +165,7 @@ public static class IndexLayers
 
         UtmGridDataSource source = UtmGridDataSource.Create(UtmIndexType.Ncc2kBlock, utmZone);
 
-        var label = new LabelParameters(ScaleInterval.Create(8), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()/*?.STCentroid()*/) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(8), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()/*?.STCentroid()*/) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -197,7 +197,7 @@ public static class IndexLayers
 
         UtmGridDataSource source = UtmGridDataSource.Create(UtmIndexType.Ncc2kSheet, utmZone);
 
-        var label = new LabelParameters(ScaleInterval.Create(11), 13, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(11), 13, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -229,7 +229,7 @@ public static class IndexLayers
 
         UtmGridDataSource source = UtmGridDataSource.Create(UtmIndexType.Ncc1k, utmZone);
 
-        var label = new LabelParameters(ScaleInterval.Create(14), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(14), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -261,7 +261,7 @@ public static class IndexLayers
 
         UtmGridDataSource source = UtmGridDataSource.Create(UtmIndexType.Ncc500, utmZone);
 
-        var label = new LabelParameters(ScaleInterval.Create(15), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(15), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -300,7 +300,7 @@ public static class IndexLayers
 
         GridDataSource source50k = GridDataSource.Create(GeodeticIndexType.Ncc50k);
 
-        var label = new LabelParameters(ScaleInterval.Create(9), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(9), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 2, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -332,7 +332,7 @@ public static class IndexLayers
 
         GridDataSource source25k = GridDataSource.Create(GeodeticIndexType.Ncc25k);
 
-        var label = new LabelParameters(ScaleInterval.Create(10, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(10, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 1, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -362,7 +362,7 @@ public static class IndexLayers
     {
         var fontFamily = new FontFamily("Times New Roman");
 
-        var label = new LabelParameters(ScaleInterval.Create(11, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(11, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 1, .8) { Visibility = System.Windows.Visibility.Collapsed };
 
@@ -392,7 +392,7 @@ public static class IndexLayers
     {
         var fontFamily = new FontFamily("Times New Roman");
 
-        var label = new LabelParameters(ScaleInterval.Create(12, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlus()) { IsRtl = false };
+        var label = new LabelParameters(ScaleInterval.Create(12, 19), 14, Brushes.Red, fontFamily, i => i?.GetCentroidPlusPoint()) { IsRtl = false };
 
         VisualParameters parameters = new VisualParameters(null, "#88EA4333", 1, .8) { Visibility = System.Windows.Visibility.Collapsed };
 

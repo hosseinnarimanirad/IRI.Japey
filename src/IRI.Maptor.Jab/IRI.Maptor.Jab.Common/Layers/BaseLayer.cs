@@ -17,23 +17,22 @@ public abstract class BaseLayer : Notifier, ILayer
     public BaseLayer()
     {
         this.LayerId = Guid.NewGuid();
+        
+        this.ParentLayerId = Guid.Empty;
 
         this.VisibleRange = ScaleInterval.All;
 
         this.VisualParameters = VisualParameters.CreateNew(1);
 
-        this.ParentLayerId = Guid.Empty;
     }
 
+    #region Layer Id
+
+    /// <summary>
+    /// Id of layer in datasource or api response
+    /// to manage sublayers
+    /// </summary>
     public int AuxilaryId { get; set; }
-
-    public abstract LayerType Type { get; /*protected set;*/ }
-
-    public virtual BoundingBox Extent { get; protected set; }
-
-    public virtual RenderingApproach Rendering { get => RenderingApproach.Default; /*protected set { } */}
-
-    public virtual RasterizationApproach ToRasterTechnique { get => RasterizationApproach.None;/* protected set { }*/ }
 
     public Guid LayerId { get; protected set; }
 
@@ -52,6 +51,16 @@ public abstract class BaseLayer : Notifier, ILayer
         }
     }
 
+    #endregion
+
+    public abstract LayerType Type { get; /*protected set;*/ }
+
+    public virtual BoundingBox Extent { get; protected set; }
+
+    public virtual RenderingApproach Rendering { get => RenderingApproach.Default; /*protected set { } */}
+
+    public virtual RasterizationApproach ToRasterTechnique { get => RasterizationApproach.None;/* protected set { }*/ }
+
     private bool _isGroupLayer;
     public bool IsGroupLayer
     {
@@ -66,12 +75,14 @@ public abstract class BaseLayer : Notifier, ILayer
 
     public ObservableCollection<ILayer> SubLayers { get; set; }
 
-    public bool IsValid { get; set; } = true;
+    //public bool IsValid { get; set; } = true;
 
     public int ZIndex { get; set; }
 
     // use for identify tool
     public bool IsSearchable { get; set; } = false;
+
+    #region Toc
 
     private bool _isSelectedInToc;
     public bool IsSelectedInToc
@@ -148,6 +159,8 @@ public abstract class BaseLayer : Notifier, ILayer
         }
     }
 
+    #endregion
+
     private ScaleInterval _visibleRange;
     public ScaleInterval VisibleRange
     {
@@ -193,7 +206,7 @@ public abstract class BaseLayer : Notifier, ILayer
 
     #region Methods
 
-    public virtual void Invalidate() => IsValid = false;
+    //public virtual void Invalidate() => IsValid = false;
 
     public void TurnOff()
     {
