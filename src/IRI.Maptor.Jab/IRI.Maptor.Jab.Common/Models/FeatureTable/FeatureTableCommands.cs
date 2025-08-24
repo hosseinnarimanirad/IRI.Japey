@@ -58,7 +58,7 @@ public static class FeatureTableCommands
         return result;
     }
 
-    private static void TryFlashPoint(MapPresenter map, IEnumerable<IGeometryAware<Point>> point)
+    private static void TryFlashPoint(MapPresenter map, IEnumerable<Feature<Point>> point)
     {
         if (point?.Count() == 1 && point.First().TheGeometry.Type == GeometryType.Point)
         {

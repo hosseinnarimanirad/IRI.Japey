@@ -1183,7 +1183,7 @@ public abstract class MapPresenter : BasePresenter
         }
     }
 
-    private async void ShowSelectedFeatures(IEnumerable<IGeometryAware<Point>> enumerable)
+    private async void ShowSelectedFeatures(IEnumerable<Feature<Point>> enumerable)
     {
         ClearLayer("__$selection", true);
         ClearLayer("__$highlight", true);
@@ -1197,7 +1197,7 @@ public abstract class MapPresenter : BasePresenter
 
     }
 
-    private async void ShowHighlightedFeatures(IEnumerable<IGeometryAware<Point>> enumerable)
+    private async void ShowHighlightedFeatures(IEnumerable<Feature<Point>> enumerable)
     {
         ClearLayer("__$highlight", true);
 
@@ -1218,7 +1218,7 @@ public abstract class MapPresenter : BasePresenter
         }
     }
 
-    public void FlashHighlightedFeatures(IGeometryAware<Point> geometry)
+    public void FlashHighlightedFeatures(Feature<Point> geometry)
     {
         var point = geometry?.TheGeometry?.AsPoint();
 
@@ -2030,14 +2030,7 @@ public abstract class MapPresenter : BasePresenter
 
         RequestAddLayer?.Invoke(layer);
     }
-
-    public void AddLayer<T>(ILayer layer) where T : class, IGeometryAware<Point>
-    {
-        TrySetCommands(layer);
-
-        RequestAddLayer?.Invoke(layer);
-    }
-
+     
 
     public void RemoveLayer(string layerName)
     {
@@ -2464,7 +2457,7 @@ public abstract class MapPresenter : BasePresenter
                 RenderingApproach.Default,
                 RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-            AddLayer<Feature<Point>>(vectorLayer);
+            AddLayer/*<Feature<Point>>*/(vectorLayer);
         }
         catch (Exception ex)
         {
@@ -2691,7 +2684,7 @@ public abstract class MapPresenter : BasePresenter
                 RenderingApproach.Default,
                 RasterizationApproach.GdiPlus, ScaleInterval.All);
 
-            AddLayer<Feature<Point>>(vectorLayer);
+            AddLayer/*<Feature<Point>>*/(vectorLayer);
         }
         catch (Exception ex)
         {
