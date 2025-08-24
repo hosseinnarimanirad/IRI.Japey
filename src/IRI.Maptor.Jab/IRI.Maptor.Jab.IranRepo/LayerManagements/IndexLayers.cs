@@ -105,14 +105,14 @@ public static class IndexLayers
 
         //var fontFamily = new FontFamily("Times New Roman");
 
-        index250k.Commands = GetCommands<Index250k>(map, index250k/*, index250kLabels*/);
+        index250k.Commands = GetCommands/*<Index250k>*/(map, index250k/*, index250kLabels*/);
 
         //100k
         var index100k = IndexLayers.GetIndex100kLayer();
 
         //var index100kLegend = new MapLegendItemWithOptionsModel(index100k);
 
-        index100k.Commands = GetCommands<Index100k>(map, index100k/*, index100kLabels*/);
+        index100k.Commands = GetCommands/*<Index100k>*/(map, index100k/*, index100kLabels*/);
 
         return new List<ILayer>() { index250k, index100k };
 
@@ -186,7 +186,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
+        layer.Commands = GetCommands/*<UtmSheet>*/(map, layer/*, label*/);
 
         return layer;
     }
@@ -218,7 +218,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
+        layer.Commands = GetCommands/*<UtmSheet>*/(map, layer/*, label*/);
 
         return layer;
     }
@@ -250,7 +250,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
+        layer.Commands = GetCommands/*<UtmSheet>*/(map, layer/*, label*/);
 
         return layer;
     }
@@ -282,7 +282,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer.Commands = GetCommands<UtmSheet>(map, layer/*, label*/);
+        layer.Commands = GetCommands/*<UtmSheet>*/(map, layer/*, label*/);
 
         return layer;
     }
@@ -321,7 +321,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer50k.Commands = GetCommands<GeodeticSheet>(map, layer50k/*, label*/);
+        layer50k.Commands = GetCommands/*<GeodeticSheet>*/(map, layer50k/*, label*/);
 
         return layer50k;
     }
@@ -353,7 +353,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer25k.Commands = GetCommands<GeodeticSheet>(map, layer25k/*, label*/);
+        layer25k.Commands = GetCommands/*<GeodeticSheet>*/(map, layer25k/*, label*/);
 
         return layer25k;
     }
@@ -383,7 +383,7 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer10k.Commands = GetCommands<GeodeticSheet>(map, layer10k/*, label*/);
+        layer10k.Commands = GetCommands/*<GeodeticSheet>*/(map, layer10k/*, label*/);
 
         return layer10k;
     }
@@ -413,14 +413,14 @@ public static class IndexLayers
                 Labels = label
             };
 
-        layer5k.Commands = GetCommands<GeodeticSheet>(map, layer5k/*, label*/);
+        layer5k.Commands = GetCommands/*<GeodeticSheet>*/(map, layer5k/*, label*/);
 
         return layer5k;
     }
 
 
-    private static List<ILegendCommand> GetCommands<T>(MapPresenter map, VectorLayer layer/*, LabelParameters label*/)
-        where T : class, IGeometryAware<Point>
+    private static List<ILegendCommand> GetCommands/*<T>*/(MapPresenter map, VectorLayer layer/*, LabelParameters label*/)
+        //where T : class, IGeometryAware<Point>
     {
         return new List<ILegendCommand>()
         {

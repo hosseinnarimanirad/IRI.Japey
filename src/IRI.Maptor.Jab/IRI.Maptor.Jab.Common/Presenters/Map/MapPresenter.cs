@@ -265,7 +265,7 @@ public abstract class MapPresenter : BasePresenter
     //                LegendCommand.CreateClearSelected(this, (VectorLayer) layer),
     //                LegendCommand.CreateRemoveLayer(this, layer),
 
-    private List<Func<MapPresenter, IFeatureTableCommand>> _defaultVectorLayerFeatureTableCommands = FeatureTableCommands.GetDefaultVectorLayerCommands<Feature<Point>>();
+    private List<Func<MapPresenter, IFeatureTableCommand>> _defaultVectorLayerFeatureTableCommands = FeatureTableCommands.GetDefaultVectorLayerCommands/*<Feature<Point>>*/();
     public List<Func<MapPresenter, IFeatureTableCommand>> DefaultVectorLayerFeatureTableCommands
     {
         get { return _defaultVectorLayerFeatureTableCommands; }

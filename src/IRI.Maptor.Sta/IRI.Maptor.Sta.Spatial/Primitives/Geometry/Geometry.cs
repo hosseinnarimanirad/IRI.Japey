@@ -11,7 +11,7 @@ using IRI.Maptor.Sta.SpatialReferenceSystem.MapProjections;
 
 namespace IRI.Maptor.Sta.Spatial.Primitives;
 
-public class Geometry<T> : IGeometry where T : IPoint, new()
+public class Geometry<T> /*: IGeometry */where T : IPoint, new()
 {
     static readonly T? NullPoint = default;
 

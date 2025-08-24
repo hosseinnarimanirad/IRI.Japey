@@ -93,16 +93,18 @@ public static class FeatureTableCommands
 
             foreach (var item in features)
             {
-                if (item is Feature<Point> feature)
-                {
-                    rows.Add(feature.Attributes);
-                }
+                rows.Add(item.Attributes);
 
-                // todo: consider solving the general case
-                else if (item is IGeometryAware<Point> geometryAware)
-                {
-                    rows.Add(new Dictionary<string, object>() { { "Id", item.Id } });
-                }
+                //if (item is Feature<Point> feature)
+                //{
+                //rows.Add(feature.Attributes);
+                //}
+
+                //// todo: consider solving the general case
+                //else if (item is IGeometryAware<Point> geometryAware)
+                //{
+                //    rows.Add(new Dictionary<string, object>() { { "Id", item.Id } });
+                //}
             }
 
             //گرفتن مسیر فایل
@@ -178,7 +180,7 @@ public static class FeatureTableCommands
 
 
 
-    internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands<T>() where T : class, IGeometryAware<Point>
+    internal static List<Func<MapPresenter, IFeatureTableCommand>> GetDefaultVectorLayerCommands/*<T>*/() //where T : class, IGeometryAware<Point>
     {
         return new List<Func<MapPresenter, IFeatureTableCommand>>()
         {
