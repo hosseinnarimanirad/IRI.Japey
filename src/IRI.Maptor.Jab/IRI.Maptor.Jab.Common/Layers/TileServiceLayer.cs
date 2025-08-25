@@ -62,39 +62,35 @@ public class TileServiceLayer : BaseLayer
 
         this._cache = new TileCacheAddress(mapProvider.ProviderEn, mapProvider.MapTypeEn, getFileName);
 
-        this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
+        //this.VisualParameters = new VisualParameters(System.Windows.Media.Colors.Transparent);
 
-        this.VisualParameters.Opacity = opacity;
+        this.Opacity = opacity;
 
         this._mapProvider = mapProvider;
     }
 
     public override BoundingBox Extent
     {
-        get => throw new NotImplementedException();
+        get => BoundingBox.NaN;
         protected set => throw new NotImplementedException();
     }
 
 
-    public override RenderingApproach Rendering
-    {
-        get { return RenderingApproach.Tiled; }
-        //protected set { }
-    }
+    public override RenderMode RenderMode => RenderMode.Tiled;
 
 
     public override LayerType Type => LayerType.BaseMap;
      
 
-    private FrameworkElement frameworkElement;
+    private FrameworkElement? _frameworkElement;
 
-    public FrameworkElement Element
+    public FrameworkElement? Element
     {
-        get { return this.frameworkElement; }
+        get { return this._frameworkElement; }
 
         set
         {
-            this.frameworkElement = value;
+            this._frameworkElement = value;
 
             this.BindWithFrameworkElement(value);
 
@@ -188,7 +184,7 @@ public class TileServiceLayer : BaseLayer
 
             return new GeoReferencedImage(byteImage, tile.GeodeticExtent);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return GetNotFoundImage(tile);
         }
@@ -244,7 +240,7 @@ public class TileServiceLayer : BaseLayer
 
             return new GeoReferencedImage(byteImage, tile.GeodeticExtent);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return GetNotFoundImage(tile);
         }

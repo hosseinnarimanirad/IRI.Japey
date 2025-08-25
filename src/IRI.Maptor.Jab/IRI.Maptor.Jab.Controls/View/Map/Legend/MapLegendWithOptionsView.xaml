@@ -40,7 +40,7 @@
                              GroupName="{Binding ElementName=root, Path=GroupName}"
                              HorizontalAlignment="Stretch" 
                              DataContext="{Binding }" 
-                             IsEnabled="{Binding VisualParameters.IsInScaleRange}" 
+                             IsEnabled="{Binding IsInScaleRange}" 
                              IsChecked="{Binding IsSelectedInToc, Mode=TwoWay}">
                     <RadioButton.InputBindings>
                         <MouseBinding Gesture="LeftDoubleClick" Command="{Binding ToggleExpandCommand}"/>
@@ -59,7 +59,6 @@
             <TreeView.Resources>
                 <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    
                 </Style>
             </TreeView.Resources>
             <!--<TreeView.ItemContainerStyle>

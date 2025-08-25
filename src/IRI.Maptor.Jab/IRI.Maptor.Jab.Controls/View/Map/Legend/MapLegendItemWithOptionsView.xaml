@@ -9,7 +9,7 @@
              xmlns:mahApp="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
              FontFamily="{StaticResource iranSans}">
      
-    <Grid IsEnabled="{Binding ElementName=root, Path=Symbology.IsInScaleRange}">
+    <Grid IsEnabled="{Binding ElementName=root, Path=IsInScaleRange}">
         <Grid.Resources>
             <Style  TargetType="{x:Type Button}" x:Key="circleButton">
                 <Setter Property="Margin" Value="4"/>

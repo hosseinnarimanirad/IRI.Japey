@@ -24,7 +24,7 @@ public class GroupLayer : BaseLayer
 
         this.ShowInToc = true;
 
-        this.VisualParameters.Visibility = System.Windows.Visibility.Collapsed;
+        this.Visibility = System.Windows.Visibility.Collapsed;
     }
 
     public void AddSubLayer(ILayer layer)

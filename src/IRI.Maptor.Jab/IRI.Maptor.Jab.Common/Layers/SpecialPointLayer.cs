@@ -11,11 +11,12 @@ namespace IRI.Maptor.Jab.Common;
 
 public class SpecialPointLayer : BaseLayer
 {
-    private ObservableCollection<Locateable> _items;
+    public Action<System.Collections.Specialized.NotifyCollectionChangedEventArgs> HandleCollectionChanged;
 
+    private ObservableCollection<Locateable> _items;
     public ObservableCollection<Locateable> Items
     {
-        get { return _items; }
+        get => _items;
         set
         {
             _items = value;
@@ -25,146 +26,32 @@ public class SpecialPointLayer : BaseLayer
 
     public override BoundingBox Extent
     {
-        get
-        {
-            if (this.Items.Count < 1)
-            {
-                return BoundingBox.NaN;
-            }
-
-            return BoundingBox.CalculateBoundingBox(this.Items.Select(i => new Point(i.X, i.Y)));
-        }
+        get => (Items.Count < 1) ? BoundingBox.NaN : BoundingBox.CalculateBoundingBox(Items.Select(i => new Point(i.X, i.Y)));
         protected set => throw new NotImplementedException();
     }
-
-    //public override RenderingApproach Rendering
-    //{
-    //    get { return RenderingApproach.Default; }
-    //    protected set { }
-    //}
-
-    private bool _insertTop;
+     
+    private bool _alwaysTop;
 
     public bool AlwaysTop
     {
-        get { return _insertTop; }
+        get => _alwaysTop;
         set
         {
-            _insertTop = value;
+            _alwaysTop = value;
             RaisePropertyChanged();
         }
     }
-
-
-    //public RasterizationApproach ToRasterTechnique { get { return RasterizationApproach.None; } }
-
-    //public bool IsValid { get; set; }
-
-    //public void Invalidate() => IsValid = false;
-
+     
     private LayerType _type;
-
-    public override LayerType Type
-    {
-        get { return _type; }
-
-        //protected set
-        //{
-        //    if (value.HasFlag(LayerType.Complex) ||
-        //        value.HasFlag(LayerType.RightClickOption) ||
-        //        value.HasFlag(LayerType.GridAndGraticule) ||
-        //        value.HasFlag(LayerType.MoveableItem) ||
-        //        value.HasFlag(LayerType.EditableItem))
-        //    {
-        //        this._type = value;
-        //    }
-        //    else
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
-    }
-
-    //public int ZIndex { get; set; }
-
-    //private FrameworkElement visualElement;
-
-    //public FrameworkElement Element
-    //{
-    //    get { return this.visualElement; }
-
-    //    set
-    //    {
-    //        this.visualElement = value;
-
-    //        BindWithFrameworkElement(value);
-
-    //        OnPropertyChanged("Element");
-    //    }
-    //}
-
-    //public bool IsLabeled(double mapScale)
-    //{
-    //    return this.Labels != null && this.Labels.IsLabeled(1.0 / mapScale);
-    //}
-
-    //private LabelParameters _labels;
-
-    //public LabelParameters Labels
-    //{
-    //    get { return _labels; }
-    //    set
-    //    {
-    //        _labels = value;
-    //        OnPropertyChanged("Labels");
-    //    }
-    //}
-
-    //public Func<SqlGeometry, SqlGeometry> PositionFunc { get; set; }
-
-    //private VisualParameters _visualParameters;
-
-    //public VisualParameters VisualParameters
-    //{
-    //    get { return _visualParameters; }
-    //    set
-    //    {
-    //        _visualParameters = value;
-    //        OnPropertyChanged("VisualParameters");
-    //    }
-    //}
-
-    //private Geometry _pointSymbol;
-
-    //public Geometry PointSymbol
-    //{
-    //    get { return _pointSymbol; }
-    //    set
-    //    {
-    //        _pointSymbol = value;
-    //        OnPropertyChanged("PointSymbol");
-    //    }
-    //}
-
-    //private ImageSource _imageSymbol;
-
-    //public ImageSource ImageSymbol
-    //{
-    //    get { return _imageSymbol; }
-    //    set
-    //    {
-    //        _imageSymbol = value;
-    //        OnPropertyChanged("Symbol");
-    //    }
-    //}
-
-    public SpecialPointLayer(string name, Locateable item, double opacity = 1, ScaleInterval visibleRange = null, LayerType type = LayerType.Complex)
+    public override LayerType Type => _type;
+     
+    public SpecialPointLayer(string name, Locateable item, double opacity = 1, ScaleInterval? visibleRange = null, LayerType type = LayerType.Complex)
         : this(name, new List<Locateable>() { item }, opacity, visibleRange, type)
     {
 
     }
 
-    public SpecialPointLayer(string name, IEnumerable<Locateable> items, double opacity = 1, ScaleInterval visibleRange = null, LayerType type = LayerType.Complex)
+    public SpecialPointLayer(string name, IEnumerable<Locateable> items, double opacity = 1, ScaleInterval? visibleRange = null, LayerType type = LayerType.Complex)
     {
         this.LayerId = Guid.NewGuid();
 
@@ -195,7 +82,7 @@ public class SpecialPointLayer : BaseLayer
             VisibleRange = visibleRange;
         }
 
-        this.VisualParameters = new VisualParameters(null, null, 0, opacity, System.Windows.Visibility.Visible);
+        //this.VisualParameters = new VisualParameters(null, null, 0, opacity, System.Windows.Visibility.Visible);
 
         if (items == null)
         {
@@ -216,8 +103,6 @@ public class SpecialPointLayer : BaseLayer
 
         HandleCollectionChanged(e);
     }
-
-    public Action<System.Collections.Specialized.NotifyCollectionChangedEventArgs> HandleCollectionChanged;
 
     public Locateable Get(System.Windows.FrameworkElement element)
     {

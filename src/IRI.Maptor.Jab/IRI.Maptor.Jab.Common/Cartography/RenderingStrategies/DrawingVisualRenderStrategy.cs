@@ -26,7 +26,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
     private readonly Pen _defaultPen = new Pen(Brushes.Black, 1);
     private readonly Brush _defaultBrush = Brushes.Gray;
 
-    public DrawingVisualRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    public DrawingVisualRenderStrategy(IEnumerable<ISymbolizer> symbolizer) : base(symbolizer)
     {
     }
 
@@ -90,9 +90,9 @@ public class DrawingVisualRenderStrategy : RenderStrategy
 
                 case LabelSymbolizer labelSymbolizer:
 
-                    if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
+                    if (labelSymbolizer.Param?.IsLabeled(1.0 / mapScale) == true)
                     {
-                        var renderedLabels = DrawLabels(filteredFeatures, labelSymbolizer.Labels);
+                        var renderedLabels = DrawLabels(filteredFeatures, labelSymbolizer.Param);
 
                         if (renderedLabels is not null)
                         {
@@ -287,7 +287,7 @@ public class DrawingVisualRenderStrategy : RenderStrategy
         }
     }
 
-    private DrawingVisual? DrawLabels(List<Feature<Point>> features, LabelParameters labels)
+    private DrawingVisual? DrawLabels(List<Feature<Point>> features, VisualParameters labels)
     {
         if (features.IsNullOrEmpty())
             return null;

@@ -62,7 +62,7 @@ public class LegendItem : Notifier
             _isChecked = value;
             RaisePropertyChanged();
 
-            this.OnVisibilityChanged.SafeInvoke(this, new CustomEventArgs<bool>(value));
+            this.OnVisibilityChanged?.Invoke(this, new CustomEventArgs<bool>(value));
         }
     }
 
@@ -232,7 +232,7 @@ public class LegendItem : Notifier
         {
             if (_selectByDrawingCommand == null)
             {
-                _selectByDrawingCommand = new RelayCommand(param => this.OnRequestForSelectByDrawing.SafeInvoke(this, new LegendItemEventArgs(this)));
+                _selectByDrawingCommand = new RelayCommand(param => this.OnRequestForSelectByDrawing?.Invoke(this, new LegendItemEventArgs(this)));
             }
 
             return _selectByDrawingCommand;
@@ -248,7 +248,7 @@ public class LegendItem : Notifier
         {
             if (_showAllCommand == null)
             {
-                _showAllCommand = new RelayCommand(param => this.OnRequestShowAll.SafeInvoke(this, new LegendItemEventArgs(this)));
+                _showAllCommand = new RelayCommand(param => this.OnRequestShowAll?.Invoke(this, new LegendItemEventArgs(this)));
             }
 
             return _showAllCommand;

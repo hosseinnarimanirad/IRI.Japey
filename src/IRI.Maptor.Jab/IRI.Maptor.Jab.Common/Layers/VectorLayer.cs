@@ -26,7 +26,7 @@ using Point = IRI.Maptor.Sta.Common.Primitives.Point;
 
 namespace IRI.Maptor.Jab.Common;
 
-public class VectorLayer : BaseLayer
+public class VectorLayer : SymbolizableLayer
 {
     #region Properties, Fields
 
@@ -70,11 +70,11 @@ public class VectorLayer : BaseLayer
     //    }
     //}
 
-    private RenderingApproach _rendering = RenderingApproach.Default;
-    public override RenderingApproach Rendering { get => _rendering;/* private set;*/ }
+    private RenderMode _rendering = RenderMode.Default;
+    public override RenderMode RenderMode { get => _rendering;/* private set;*/ }
 
-    protected RasterizationApproach _rasterizationApproach = RasterizationApproach.DrawingVisual;
-    public override RasterizationApproach ToRasterTechnique { get => _rasterizationApproach; /*protected set;*/ }
+    protected RasterizationMethod _rasterizationApproach = RasterizationMethod.DrawingVisual;
+    public override RasterizationMethod RasterizationMethod { get => _rasterizationApproach; /*protected set;*/ }
 
 
     private int _numberOfSelectedFeatures;
@@ -103,8 +103,6 @@ public class VectorLayer : BaseLayer
 
     public TileManager TileManager = new TileManager();
 
-    public List<ISymbolizer> Symbolizers { get; protected set; } = new List<ISymbolizer>();
-
     #endregion
 
     #region Constructors
@@ -113,27 +111,72 @@ public class VectorLayer : BaseLayer
     {
     }
 
-    public VectorLayer(string name, List<Geometry<Point>> features, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
-        : this(name, features, new VisualParameters(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, 1, Visibility.Visible), type, rendering, toRasterTechnique)
+    public VectorLayer(string layerName,
+                        List<Geometry<Point>> features,
+                        LayerType type,
+                        RenderMode renderMode,
+                        RasterizationMethod rasterizationMethod)
+        : this(layerName, features, new VisualParameters(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, 1, Visibility.Visible), type, renderMode, rasterizationMethod)
     {
     }
 
-    public VectorLayer(string layerName, List<Geometry<Point>> features, VisualParameters parameters, LayerType type, RenderingApproach rendering, RasterizationApproach toRasterTechnique)
+    public VectorLayer(string layerName,
+                        List<Geometry<Point>> features,
+                        VisualParameters parameters,
+                        LayerType type,
+                        RenderMode renderMode,
+                        RasterizationMethod rasterizationMethod)
     {
-        if (features == null || features.Count == 0)
+        if (features.IsNullOrEmpty())
             throw new NotImplementedException();
 
-        Initialize(layerName, new MemoryDataSource(features), parameters, type, rendering, toRasterTechnique, ScaleInterval.All, null, null);
+        var dataSource = new MemoryDataSource(features);
+
+        List<ISymbolizer> symbolizers = [new SimpleSymbolizer(parameters)];
+
+        Initialize(layerName, dataSource, symbolizers, type, renderMode, rasterizationMethod, ScaleInterval.All);
     }
 
-    public VectorLayer(string layerName, IVectorDataSource dataSource, VisualParameters parameters, LayerType type, RenderingApproach rendering,
-        RasterizationApproach toRasterTechnique, ScaleInterval visibleRange, SimplePointSymbolizer? pointSymbol = null, LabelParameters? labeling = null)
+    public VectorLayer(string layerName,
+                        IVectorDataSource dataSource,
+                        VisualParameters parameters,
+                        LayerType type,
+                        RenderMode renderMode,
+                        RasterizationMethod rasterizationMethod,
+                        ScaleInterval visibleRange,
+                        //SimplePointSymbolizer? pointSymbol = null,
+                        VisualParameters? labeling = null)
     {
-        Initialize(layerName, dataSource, parameters, type, rendering, toRasterTechnique, visibleRange, pointSymbol, labeling);
+        List<ISymbolizer> symbolizers = [new SimpleSymbolizer(parameters)];
+
+        if (labeling is not null)
+            symbolizers.Add(new LabelSymbolizer(labeling));
+
+        Initialize(layerName, dataSource, symbolizers, type, renderMode, rasterizationMethod, visibleRange/*, pointSymbol, labeling*/);
     }
 
-    public VectorLayer(string layerName, IVectorDataSource dataSource, List<ISymbolizer> symbolizers, LayerType type, RenderingApproach rendering,
-        RasterizationApproach toRasterTechnique)
+    public VectorLayer(string layerName,
+                      IVectorDataSource dataSource,
+                      List<ISymbolizer> symbolizers,
+                      LayerType type,
+                      RenderMode renderMode,
+                      RasterizationMethod rasterizationMethod,
+                      ScaleInterval visibleRange,
+                      VisualParameters? labeling = null)
+    {
+       
+        Initialize(layerName, dataSource, symbolizers, type, renderMode, rasterizationMethod, visibleRange);
+    }
+
+    private void Initialize(string layerName,
+                            IVectorDataSource dataSource,
+                            List<ISymbolizer> symbolizers,
+                            LayerType type,
+                            RenderMode rendering,
+                            RasterizationMethod toRasterTechnique,
+                            ScaleInterval visibleRange)//,
+                                                       //SimplePointSymbolizer? pointSymbol,
+                                                       //VisualParameters? labeling)
     {
         this.LayerId = Guid.NewGuid();
 
@@ -160,71 +203,6 @@ public class VectorLayer : BaseLayer
 
         //this.VisualParameters = parameters;
 
-        this.Symbolizers.AddRange(symbolizers);
-
-        var simpleSymbolizer = symbolizers.FirstOrDefault(s => s is SimpleSymbolizer);
-
-        if (simpleSymbolizer is not null)
-            this.VisualParameters = (simpleSymbolizer as SimpleSymbolizer)!.Param;
-
-        var labelSymbolizer = (symbolizers.FirstOrDefault(s => s is LabelSymbolizer) as LabelSymbolizer);
-
-        if (labelSymbolizer is not null)
-            this.Labels = (labelSymbolizer as LabelSymbolizer).Labels;
-
-        this.VisibleRange = ScaleInterval.All;
-
-        //this.Labels = labeling;
-
-        //Check for missing visibleRange
-        //if (this.Labels != null)
-        //{
-        //    if (this.Labels.VisibleRange == null)
-        //    {
-        //        this.Labels.VisibleRange = visibleRange;
-        //    }
-
-        //    this.Symbolizers.Add(new LabelSymbolizer(labeling));
-        //}
-
-        //this.VisibleRange = (visibleRange == null) ? ScaleInterval.All : visibleRange;
-    }
-
-    private void Initialize(string layerName,
-                            IVectorDataSource dataSource,
-                            VisualParameters parameters,
-                            LayerType type,
-                            RenderingApproach rendering,
-                            RasterizationApproach toRasterTechnique,
-                            ScaleInterval visibleRange,
-                            SimplePointSymbolizer? pointSymbol,
-                            LabelParameters? labeling)
-    {
-        this.LayerId = Guid.NewGuid();
-
-        this.DataSource = dataSource;
-
-        this._rendering = rendering;
-
-        this._rasterizationApproach = toRasterTechnique;
-
-        this._type = type;
-
-        if (dataSource.GeometryType.AsLayerType() is not null)
-        {
-            this._type = type | dataSource.GeometryType.AsLayerType().Value; /*GetGeometryType(geometries.FirstOrDefault(g => g != null))*/;
-        }
-        else
-        {
-            this._type = type;
-        }
-
-        this.Extent = dataSource.WebMercatorExtent;
-
-        this.LayerName = layerName;
-
-        this.VisualParameters = parameters;
-
         //this.PointSymbol = pointSymbol ?? new SimplePointSymbol() { SymbolWidth = 4, SymbolHeight = 4 };
 
         //if (layerName == "مدار" || layerName == "تکه مسیر خط")
@@ -240,24 +218,28 @@ public class VectorLayer : BaseLayer
         //    this.Symbolizers.Add(new SimpleSymbolizer(f => f.Attributes["denomi_vol"].ToString() == "400", p1));
         //    this.Symbolizers.Add(new SimpleSymbolizer(f => f.Attributes["denomi_vol"].ToString() == "230", p2));
         //    this.Symbolizers.Add(new SimpleSymbolizer(f => f.Attributes["denomi_vol"].ToString() == "63", p3));
-        //}
-        //else
-        //{
-        this.Symbolizers.Add(new SimpleSymbolizer(parameters));
-        //}
+        //} 
+        //this.Symbolizers.Add(new SimpleSymbolizer(parameters));
+        
+        //this.Symbolizers.AddRange(symbolizers);
 
-        this.Labels = labeling;
-
-        //Check for missing visibleRange
-        if (this.Labels != null)
+        foreach (var item in symbolizers)
         {
-            if (this.Labels.VisibleRange == null)
-            {
-                this.Labels.VisibleRange = visibleRange;
-            }
-
-            this.Symbolizers.Add(new LabelSymbolizer(labeling));
+            this.SetSymbolizer(item);
         }
+
+        //this.Labels = labeling;
+
+        ////Check for missing visibleRange
+        //if (this.Labels != null)
+        //{
+        //    if (this.Labels.VisibleRange == null)
+        //    {
+        //        this.Labels.VisibleRange = visibleRange;
+        //    }
+
+        //    this.Symbolizers.Add(new LabelSymbolizer(labeling));
+        //}
 
         this.VisibleRange = (visibleRange == null) ? ScaleInterval.All : visibleRange;
     }
@@ -357,10 +339,10 @@ public class VectorLayer : BaseLayer
 
     public async Task SaveAsPng(string fileName, BoundingBox mapExtent, double imageWidth, double imageHeight, double mapScale)
     {
-        switch (this.ToRasterTechnique)
+        switch (this.RasterizationMethod)
         {
-            case RasterizationApproach.StreamGeometry:
-            case RasterizationApproach.DrawingVisual:
+            case RasterizationMethod.StreamGeometry:
+            case RasterizationMethod.DrawingVisual:
                 var renderTargetBitmap = await AsRenderTargetBitmap(mapExtent, imageWidth, imageHeight, mapScale);
 
                 if (renderTargetBitmap is null)
@@ -370,10 +352,10 @@ public class VectorLayer : BaseLayer
 
                 break;
 
-            case RasterizationApproach.WriteableBitmap:
+            case RasterizationMethod.WriteableBitmap:
             //case RasterizationApproach.OpenTk:
-            case RasterizationApproach.GdiPlus:
-            case RasterizationApproach.None:
+            case RasterizationMethod.GdiPlus:
+            case RasterizationMethod.None:
             default:
                 var image = await AsGdiBitmapAsync(mapExtent, mapScale, imageWidth, imageHeight);
 
@@ -445,140 +427,140 @@ public class VectorLayer : BaseLayer
     #endregion
 
 
-    private Image? DrawLabels(List<Feature<Point>> features, double width, double height)
-    {
-        if (features.IsNullOrEmpty())
-            return null;
+    //private Image? DrawLabels(List<Feature<Point>> features, double width, double height)
+    //{
+    //    if (features.IsNullOrEmpty())
+    //        return null;
 
-        List<WpfPoint> mapCoordinates = features.ConvertAll((g) => this.Labels.PositionFunc(g.TheGeometry).AsWpfPoint()).ToList();
+    //    List<WpfPoint> mapCoordinates = features.ConvertAll((g) => this.Labels.PositionFunc(g.TheGeometry).AsWpfPoint()).ToList();
 
-        DrawingVisual drawingVisual = new DrawingVisual();
+    //    DrawingVisual drawingVisual = new DrawingVisual();
 
-        using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-        {
-            var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+    //    using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+    //    {
+    //        var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
 
-            var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+    //        var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
-            var culture = System.Globalization.CultureInfo.CurrentCulture;
+    //        var culture = System.Globalization.CultureInfo.CurrentCulture;
 
-            var backgroundBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+    //        var backgroundBrush = new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
 
-            for (int i = 0; i < features.Count; i++)
-            {
-                var label = features[i].Label;
+    //        for (int i = 0; i < features.Count; i++)
+    //        {
+    //            var label = features[i].Label;
 
-                if (string.IsNullOrEmpty(label))
-                    continue;
+    //            if (string.IsNullOrEmpty(label))
+    //                continue;
 
-                FormattedText formattedText =
-                    new FormattedText(label, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
+    //            FormattedText formattedText =
+    //                new FormattedText(label, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
 
-                WpfPoint location = /*mapToScreen*/(mapCoordinates[i]);
+    //            WpfPoint location = /*mapToScreen*/(mapCoordinates[i]);
 
-                drawingContext.DrawRectangle(backgroundBrush, null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
-                drawingContext.DrawText(formattedText, new WpfPoint(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
-            }
-        }
+    //            drawingContext.DrawRectangle(backgroundBrush, null, new Rect(location, new Size(formattedText.Width, formattedText.Height)));
+    //            drawingContext.DrawText(formattedText, new WpfPoint(location.X - formattedText.Width / 2.0, location.Y - formattedText.Height / 2.0));
+    //        }
+    //    }
 
-        Image image = Helpers.ImageUtility.Create(width, height, drawingVisual);
+    //    Image image = Helpers.ImageUtility.Create(width, height, drawingVisual);
 
-        image.Tag = new LayerTag(-1) { Layer = this, IsTiled = false };
+    //    image.Tag = new LayerTag(-1) { Layer = this, IsTiled = false };
 
-        this.BindWithFrameworkElement(image);
+    //    this.BindWithFrameworkElement(image);
 
-        return image;
-    }
+    //    return image;
+    //}
 
-    private void DrawLabels(List<Feature<Point>> features, System.Drawing.Bitmap image)
-    {
-        if (features.IsNullOrEmpty())
-            return;
+    //private void DrawLabels(List<Feature<Point>> features, System.Drawing.Bitmap image)
+    //{
+    //    if (features.IsNullOrEmpty())
+    //        return;
 
-        var mapCoordinates = features.ConvertAll((g) => Labels.PositionFunc(g.TheGeometry)).ToList();
+    //    var mapCoordinates = features.ConvertAll((g) => Labels.PositionFunc(g.TheGeometry)).ToList();
 
-        var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
+    //    var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
 
-        var graphic = System.Drawing.Graphics.FromImage(image);
+    //    var graphic = System.Drawing.Graphics.FromImage(image);
 
-        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+    //    graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+    //    graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-        graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+    //    graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-        graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+    //    graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
-        var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+    //    var typeface = new Typeface(this.Labels.FontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
 
-        var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+    //    var flowDirection = this.Labels.IsRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
-        var culture = System.Globalization.CultureInfo.CurrentCulture;
+    //    var culture = System.Globalization.CultureInfo.CurrentCulture;
 
-        var backgroundBrush = BrushHelper.CreateGdiBrush(System.Drawing.Color.FromArgb(50, 255, 255, 255), 1);
+    //    var backgroundBrush = BrushHelper.CreateGdiBrush(System.Drawing.Color.FromArgb(50, 255, 255, 255), 1);
 
-        for (int i = 0; i < features.Count; i++)
-        {
-            var label = features[i].Label;
+    //    for (int i = 0; i < features.Count; i++)
+    //    {
+    //        var label = features[i].Label;
 
-            if (string.IsNullOrEmpty(label))
-                continue;
+    //        if (string.IsNullOrEmpty(label))
+    //            continue;
 
-            FormattedText formattedText =
-            new FormattedText(label, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
+    //        FormattedText formattedText =
+    //        new FormattedText(label, culture, flowDirection, typeface, this.Labels.FontSize, this.Labels.Foreground, 96);
 
-            var location = /*mapToScreen*/(mapCoordinates[i]);
+    //        var location = /*mapToScreen*/(mapCoordinates[i]);
 
-            graphic.FillRectangle(backgroundBrush, (int)location.X, (int)location.Y, (int)formattedText.Width, (int)formattedText.Height);
+    //        graphic.FillRectangle(backgroundBrush, (int)location.X, (int)location.Y, (int)formattedText.Width, (int)formattedText.Height);
 
-            graphic.DrawString(label, font, Labels.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
-        }
+    //        graphic.DrawString(label, font, Labels.Foreground.AsGdiBrush(), (float)location.X, (float)location.Y);
+    //    }
 
-        graphic.Flush();
-    }
+    //    graphic.Flush();
+    //}
 
-    private System.Drawing.Bitmap? DrawLabel(int width, int height, List<string> labels, List<Geometry<Point>> positions)
-    {
-        System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
+    //private System.Drawing.Bitmap? DrawLabel(int width, int height, List<string> labels, List<Geometry<Point>> positions)
+    //{
+    //    System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(width, height);
 
-        if (labels.Count != positions.Count)
-            return null;
+    //    if (labels.Count != positions.Count)
+    //        return null;
 
-        if (labels.IsNullOrEmpty())
-            return null;
+    //    if (labels.IsNullOrEmpty())
+    //        return null;
 
-        var mapCoordinates = positions.ConvertAll((g) => this.Labels.PositionFunc(g)).ToList();
+    //    var mapCoordinates = positions.ConvertAll((g) => this.Labels.PositionFunc(g)).ToList();
 
-        var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
+    //    var font = new System.Drawing.Font(this.Labels.FontFamily.FamilyNames.First().Value, this.Labels.FontSize);
 
-        var graphic = System.Drawing.Graphics.FromImage(bitmap);
+    //    var graphic = System.Drawing.Graphics.FromImage(bitmap);
 
-        graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+    //    graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-        graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+    //    graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
 
-        graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+    //    graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-        graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+    //    graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
 
-        var foreground = Labels.Foreground.AsGdiBrush();
+    //    var foreground = Labels.Foreground.AsGdiBrush();
 
-        for (int i = 0; i < labels.Count; i++)
-        {
-            var label = labels[i];
+    //    for (int i = 0; i < labels.Count; i++)
+    //    {
+    //        var label = labels[i];
 
-            if (string.IsNullOrEmpty(label))
-                continue;
+    //        if (string.IsNullOrEmpty(label))
+    //            continue;
 
-            var location = /*transform*/(mapCoordinates[i]);
+    //        var location = /*transform*/(mapCoordinates[i]);
 
-            graphic.DrawString(label, font, foreground, (float)location.X, (float)location.Y);
-        }
+    //        graphic.DrawString(label, font, foreground, (float)location.X, (float)location.Y);
+    //    }
 
-        graphic.Flush();
+    //    graphic.Flush();
 
-        return bitmap;
-    }
+    //    return bitmap;
+    //}
 
     #region Events
 

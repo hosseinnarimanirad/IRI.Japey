@@ -106,7 +106,7 @@ public partial class FullNavigationView : UserControl, INotifyPropertyChanged
     {
         this.ZoomLevel = this.zoom.Value;
 
-        this.OnZoomChanged?.Invoke(sender, new ZoomEventArgs(e.NewValue, double.NaN));
+        this.OnZoomChanged?.Invoke(sender, ZoomEventArgs.EmptyArg);
     }
 
     private void PanMap(double xOffset, double yOffset)

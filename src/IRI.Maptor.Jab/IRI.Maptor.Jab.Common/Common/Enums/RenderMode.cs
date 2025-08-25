@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace IRI.Maptor.Jab.Common;
 
-public enum RasterizationApproach
+public enum RenderMode
 {
-    GdiPlus,
-    //OpenTk,
-    DrawingVisual,
-    WriteableBitmap,
-    StreamGeometry,
-    None
+    //Render the entire extent at once
+    Default,
+    //Tile the extent and render each tile separatedly
+    Tiled
 }

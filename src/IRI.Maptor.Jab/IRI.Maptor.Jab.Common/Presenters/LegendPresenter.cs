@@ -73,12 +73,12 @@ public class LegendPresenter : Notifier
 
     private void Item_OnRequestShowAll(object sender, LegendItemEventArgs e)
     {
-        OnRequestShowAll.SafeInvoke(this, e);
+        OnRequestShowAll?.Invoke(this, e);
     }
 
     private void RequestForSelectByDrawing(object sender, LegendItemEventArgs e)
     {
-        OnRequestSelectByDrawing.SafeInvoke(this, e);
+        OnRequestSelectByDrawing?.Invoke(this, e);
     }
 
 

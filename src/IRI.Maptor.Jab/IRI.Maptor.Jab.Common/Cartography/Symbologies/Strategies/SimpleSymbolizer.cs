@@ -9,17 +9,17 @@ public class SimpleSymbolizer : SymbolizerBase
 {
     public override SymbologyType Type { get => SymbologyType.Single; }
 
-    private VisualParameters _param;
+    //private VisualParameters _param;
 
-    public VisualParameters Param
-    {
-        get { return _param; }
-        set
-        {
-            _param = value;
-            RaisePropertyChanged();
-        }
-    }
+    //public VisualParameters Param
+    //{
+    //    get { return _param; }
+    //    set
+    //    {
+    //        _param = value;
+    //        RaisePropertyChanged();
+    //    }
+    //}
 
     public SimpleSymbolizer(VisualParameters visualParameters)
     {

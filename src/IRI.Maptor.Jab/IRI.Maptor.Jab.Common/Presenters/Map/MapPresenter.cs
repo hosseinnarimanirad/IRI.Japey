@@ -35,6 +35,7 @@ using IRI.Maptor.Jab.Common.View.MapMarkers;
 using IRI.Maptor.Jab.Common.Models.Spatialable;
 using IRI.Maptor.Jab.Common.Models.Legend;
 using IRI.Maptor.Jab.Common.Events;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 
 namespace IRI.Maptor.Jab.Common.Presenters;
@@ -114,7 +115,7 @@ public abstract class MapPresenter : BasePresenter
 
             foreach (var layer in Layers.Where(i => i.Type == LayerType.BaseMap))
             {
-                layer.VisualParameters.Opacity = value;
+                layer./*VisualParameters.*/Opacity = value;
             }
         }
     }
@@ -866,7 +867,7 @@ public abstract class MapPresenter : BasePresenter
 
     public Func<List<Geometry<Point>>, string, VisualParameters, Task> RequestAddGeometries;
 
-    public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
+    //public Func<GeometryLabelPairs, string, VisualParameters, LabelParameters, Task> RequestDrawGeometryLablePairs;
 
     public Action<SpecialPointLayer> RequestAddSpecialPointLayer;
 
@@ -1233,6 +1234,9 @@ public abstract class MapPresenter : BasePresenter
     {
         var highlightGeo = layer.Geometry;
 
+        if (highlightGeo is null)
+            return;
+
         var visualParameters = VisualParameters.GetDefaultForSelection();
 
         //visualParameters.Visibility = layer.VisualParameters.Visibility;
@@ -1262,10 +1266,10 @@ public abstract class MapPresenter : BasePresenter
     }
 
 
-    public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
-    {
-        RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
-    }
+    //public void DrawGeometryLablePairs(GeometryLabelPairs geometries, string name, VisualParameters parameters, LabelParameters labelParameters)
+    //{
+    //    RequestDrawGeometryLablePairs?.Invoke(geometries, name, parameters, labelParameters);
+    //}
 
     public async Task DrawGeometriesAsync(List<Geometry<Point>> geometry, string name, VisualParameters parameters)
     {
@@ -1452,9 +1456,7 @@ public abstract class MapPresenter : BasePresenter
     public void AddDrawingItem(
         Geometry<Point> drawing,
         string? name = null,
-        VisualParameters? visualParameters = null,
-        int id = int.MinValue)//,
-                              //VectorDataSource?/*<Feature<Point>>*/ source = null)
+        VisualParameters? visualParameters = null)
     {
         if (drawing.IsNullOrEmpty())
             return;
@@ -1463,7 +1465,13 @@ public abstract class MapPresenter : BasePresenter
 
         var feature = new Feature<Point>(drawing, featureName);
 
-        var shapeItem = CreateDrawingItemLayer(feature, featureName, visualParameters, id/*, source*/);
+        var simpleVisualParameters = visualParameters ?? VisualParameters.GetDefaultForDrawingItems();
+
+        var labelParameters = VisualParameters.GetDefaultForDrawingItemLabels(simpleVisualParameters.Stroke);
+
+        List<ISymbolizer> symbolizers = [new SimpleSymbolizer(simpleVisualParameters), new LabelSymbolizer(labelParameters)];
+
+        var shapeItem = CreateDrawingItemLayer(feature, featureName, symbolizers/*, id*//*, source*/);
 
         if (shapeItem != null)
         {
@@ -1517,13 +1525,10 @@ public abstract class MapPresenter : BasePresenter
     protected DrawingItemLayer CreateDrawingItemLayer(
         Feature<Point> drawing,
         string name,
-        VisualParameters? visualParameters = null,
-        int id = int.MinValue)//,
-                              //IVectorDataSource?/*<Feature<Point>>*/ source = null)
+        //VisualParameters? visualParameters = null)
+        IEnumerable<ISymbolizer> symbolizers)
     {
-        //var feature = new Feature<Point>(drawing, name);
-
-        var drawingItemLayer = DrawingItemLayer.Create(name, drawing, visualParameters, id/*, source*/);
+        var drawingItemLayer = DrawingItemLayer.Create(name, drawing, symbolizers/*, id*//*, source*/);
 
         drawingItemLayer.OnIsSelectedInTocChanged += (sender, e) =>
         {
@@ -1581,7 +1586,6 @@ public abstract class MapPresenter : BasePresenter
 
     public void ReorderDrawingItems(DrawingItemLayer first, DrawingItemLayer second)
     {
-
         var newFirstIndex = DrawingItems.IndexOf(second);
 
         var newSecondIndex = DrawingItems.IndexOf(first);
@@ -1596,32 +1600,22 @@ public abstract class MapPresenter : BasePresenter
 
         RemoveDrawingItem(second);
 
-        var newFirstLayer = CreateDrawingItemLayer(first.Feature, first.LayerName, first.VisualParameters, first.Id/*, first.DataSource*/);
+        var newFirstLayer = CreateDrawingItemLayer(first.Feature, first.LayerName, first.Symbolizers);
 
-        var newSecondLayer = CreateDrawingItemLayer(second.Feature, second.LayerName, second.VisualParameters, second.Id/*, second.DataSource*/);
+        var newSecondLayer = CreateDrawingItemLayer(second.Feature, second.LayerName, second.Symbolizers);
 
         if (first.ZIndex < second.ZIndex)
         {
             InsertDrawingItem(newFirstIndex, newFirstLayer);
 
             InsertDrawingItem(newSecondIndex, newSecondLayer);
-            //this.InsertDrawingItem(first.ZIndex, first);
-
-            //this.InsertDrawingItem(second.ZIndex, second);
         }
         else
         {
             InsertDrawingItem(newSecondIndex, newSecondLayer);
 
             InsertDrawingItem(newFirstIndex, newFirstLayer);
-
-            //this.InsertDrawingItem(second.ZIndex, second);
-
-            //this.InsertDrawingItem(first.ZIndex, first);
         }
-
-        //RaisePropertyChanged(nameof(CanMoveDrawingItemDown));
-        //RaisePropertyChanged(nameof(CanMoveDrawingItemUp));
     }
 
     #endregion
@@ -2028,7 +2022,7 @@ public abstract class MapPresenter : BasePresenter
 
         RequestAddLayer?.Invoke(layer);
     }
-     
+
 
     public void RemoveLayer(string layerName)
     {
@@ -2452,8 +2446,8 @@ public abstract class MapPresenter : BasePresenter
             var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(fileName), dataSource,
                 new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
                 LayerType.VectorLayer,
-                RenderingApproach.Default,
-                RasterizationApproach.GdiPlus, ScaleInterval.All);
+                RenderMode.Default,
+                RasterizationMethod.GdiPlus, ScaleInterval.All);
 
             AddLayer/*<Feature<Point>>*/(vectorLayer);
         }
@@ -2603,7 +2597,7 @@ public abstract class MapPresenter : BasePresenter
             //var dataSource = GeoJsonSource<SqlFeature>.CreateFromFile(fileName, f => f);
             var dataSource = new MemoryDataSource(features/*, f => f.Label*//*, null*/);
 
-            AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
+            AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderMode.Default, RasterizationMethod.GdiPlus, ScaleInterval.All));
 
         }
         catch (Exception ex)
@@ -2649,7 +2643,7 @@ public abstract class MapPresenter : BasePresenter
             var dataSource = new MemoryDataSource(
                 features/*,f => f.Label,null*/);
 
-            AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderingApproach.Default, RasterizationApproach.GdiPlus, ScaleInterval.All));
+            AddLayer(new VectorLayer("", dataSource, VisualParameters.CreateNew(0.9), LayerType.VectorLayer, RenderMode.Default, RasterizationMethod.GdiPlus, ScaleInterval.All));
 
         }
         catch (Exception ex)
@@ -2679,8 +2673,8 @@ public abstract class MapPresenter : BasePresenter
             var vectorLayer = new VectorLayer(Path.GetFileNameWithoutExtension(geoJsonFeatureSetFileName), dataSource,
                 new VisualParameters(null, BrushHelper.PickBrush(), 3, 1),
                 LayerType.VectorLayer,
-                RenderingApproach.Default,
-                RasterizationApproach.GdiPlus, ScaleInterval.All);
+                RenderMode.Default,
+                RasterizationMethod.GdiPlus, ScaleInterval.All);
 
             AddLayer/*<Feature<Point>>*/(vectorLayer);
         }
@@ -3311,7 +3305,7 @@ public abstract class MapPresenter : BasePresenter
                         return;
                     }
 
-                    AddDrawingItem(features.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
+                    AddDrawingItem(features.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName)/*, null, int.MinValue*//*, dataSource*/);
                 });
             }
 
@@ -3348,7 +3342,7 @@ public abstract class MapPresenter : BasePresenter
 
                     //var geometries = dataSource.GetAsFeatureSet()?.Features;
 
-                    AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
+                    AddDrawingItem(geometry, Path.GetFileNameWithoutExtension(fileName)/*, null, int.MinValue*//*, dataSource*/);
                 });
             }
 
@@ -3386,7 +3380,7 @@ public abstract class MapPresenter : BasePresenter
                         return;
                     }
 
-                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName), null, int.MinValue/*, dataSource*/);
+                    AddDrawingItem(geometries.First().TheGeometry, Path.GetFileNameWithoutExtension(fileName)/*, null, int.MinValue*//*, dataSource*/);
                 });
             }
 

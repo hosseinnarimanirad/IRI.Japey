@@ -97,6 +97,17 @@ public partial class MapLegendItemWithOptionsView : UserControl
 
     #endregion
 
+    private bool _isInScaleRange;
+
+    public bool IsInScaleRange
+    {
+        get { return _isInScaleRange; }
+        set
+        {
+            _isInScaleRange = value;
+            //RaisePropertyChanged();
+        }
+    }
 
 
 

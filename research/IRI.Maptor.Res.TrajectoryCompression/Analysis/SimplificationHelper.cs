@@ -604,8 +604,8 @@ public static class SimplificationHelper
                                             new List<Geometry<Point>>() { geometry },
                                             VisualParameters.Get(Colors.Transparent, color, strokeThickness, opacity),
                                             LayerType.VectorLayer,
-                                            RenderingApproach.Default,
-                                            RasterizationApproach.DrawingVisual);
+                                            RenderMode.Default,
+                                            RasterizationMethod.DrawingVisual);
 
         var currentScreenSize = WebMercatorUtility.ToScreenSize(level, groundBoundingBox);
 

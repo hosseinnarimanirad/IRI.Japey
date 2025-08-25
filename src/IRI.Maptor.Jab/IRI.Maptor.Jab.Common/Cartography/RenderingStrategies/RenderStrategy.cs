@@ -9,9 +9,9 @@ namespace IRI.Maptor.Jab.Common.Cartography.RenderingStrategies;
 
 public abstract class RenderStrategy
 {
-    protected readonly List<ISymbolizer> _symbolizers;
+    protected readonly IEnumerable<ISymbolizer> _symbolizers;
 
-    public RenderStrategy(List<ISymbolizer> symbolizer)
+    public RenderStrategy(IEnumerable<ISymbolizer> symbolizer)
     {
         _symbolizers = symbolizer;
     }

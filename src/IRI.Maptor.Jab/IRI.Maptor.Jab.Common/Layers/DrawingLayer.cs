@@ -6,10 +6,11 @@ using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Maptor.Jab.Common;
 
-public class DrawingLayer : BaseLayer
+public class DrawingLayer : SymbolizableLayer
 {
     DrawMode _mode;
 
@@ -58,7 +59,8 @@ public class DrawingLayer : BaseLayer
 
         this._editableFeatureLayer = new EditableFeatureLayer("edit", new List<Point>() { startMercatorPoint }, toScreen, screenToMap, type, options) { ZIndex = int.MaxValue };
 
-        this._editableFeatureLayer.OnRequestFinishDrawing += (sender, e) => { this.OnRequestFinishDrawing.SafeInvoke(this); };
+        // todo: consider this line why not just assigning OnRequestFinishDrawing 
+        _editableFeatureLayer.OnRequestFinishDrawing += (sender, e) => OnRequestFinishDrawing?.Invoke(this, EventArgs.Empty);
 
         this._editableFeatureLayer.RequestFinishEditing = g =>
         {
@@ -69,8 +71,10 @@ public class DrawingLayer : BaseLayer
 
         this.VisibleRange = ScaleInterval.All;
 
-        this.VisualParameters = new VisualParameters(mode == DrawMode.Polygon ? new SolidColorBrush(Colors.YellowGreen) : null, new SolidColorBrush(Colors.Blue), 3, 1);
-
+        //this.VisualParameters = new VisualParameters(mode == DrawMode.Polygon ? new SolidColorBrush(Colors.YellowGreen) : null, new SolidColorBrush(Colors.Blue), 3, 1);
+        var param = new VisualParameters(mode == DrawMode.Polygon ? new SolidColorBrush(Colors.YellowGreen) : null, new SolidColorBrush(Colors.Blue), 3, 1);
+        
+        this.SetSymbolizer(new SimpleSymbolizer(param));
     }
 
     public Action<Geometry<Point>> RequestFinishEditing;
@@ -126,7 +130,7 @@ public class DrawingLayer : BaseLayer
         if (geometry == null)
             return null;
 
-        return geometry.AsDrawingVisual(this.VisualParameters, imageWidth, imageHeight, mapExtent);
+        return geometry.AsDrawingVisual(this.GetMainOrDefaultSymbology()/*this.VisualParameters*/, imageWidth, imageHeight, mapExtent);
 
         //double xScale = imageWidth / mapExtent.Width;
         //double yScale = imageHeight / mapExtent.Height;

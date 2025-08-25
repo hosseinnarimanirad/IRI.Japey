@@ -207,8 +207,8 @@ public class ApplicationPresenter : MapApplicationPresenter
                                                       new List<Geometry<Point>>() { lineString },
                                                       VisualParameters.Get(System.Windows.Media.Colors.AliceBlue, System.Windows.Media.Colors.Red, 0.9),
                                                       LayerType.VectorLayer,
-                                                      RenderingApproach.Default,
-                                                      RasterizationApproach.GdiPlus);
+                                                      RenderMode.Default,
+                                                      RasterizationMethod.GdiPlus);
 
                     if (!this.Layers.Any(l => l.LayerName == "original"))
                     {
@@ -227,8 +227,8 @@ public class ApplicationPresenter : MapApplicationPresenter
                                                       new List<Geometry<Point>>() { visvalingam }.ToList(),
                                                       VisualParameters.Get(System.Windows.Media.Colors.AliceBlue, System.Windows.Media.Colors.Blue, 0.9),
                                                       LayerType.VectorLayer,
-                                                      RenderingApproach.Default,
-                                                      RasterizationApproach.GdiPlus);
+                                                      RenderMode.Default,
+                                                      RasterizationMethod.GdiPlus);
                     this.AddLayer(simplifiedLayer);
 
                     var douglasPeucker = lineString.Simplify(SimplificationType.RamerDouglasPeucker, parameters);
@@ -236,8 +236,8 @@ public class ApplicationPresenter : MapApplicationPresenter
                                                       new List<Geometry<Point>>() { douglasPeucker }.ToList(),
                                                       VisualParameters.Get(System.Windows.Media.Colors.AliceBlue, System.Windows.Media.Colors.Green, 0.9),
                                                       LayerType.VectorLayer,
-                                                      RenderingApproach.Default,
-                                                      RasterizationApproach.GdiPlus);
+                                                      RenderMode.Default,
+                                                      RasterizationMethod.GdiPlus);
                     this.AddLayer(douglasPeuckerLayer);
 
                     var cumulativeArea = lineString.Simplify(SimplificationType.CumulativeTriangleRoutine, parameters);
@@ -245,8 +245,8 @@ public class ApplicationPresenter : MapApplicationPresenter
                                                       new List<Geometry<Point>>() { cumulativeArea }.ToList(),
                                                       VisualParameters.Get(System.Windows.Media.Colors.AliceBlue, System.Windows.Media.Colors.Black, 0.9),
                                                       LayerType.VectorLayer,
-                                                      RenderingApproach.Default,
-                                                      RasterizationApproach.GdiPlus);
+                                                      RenderMode.Default,
+                                                      RasterizationMethod.GdiPlus);
                      
                     this.AddLayer(cumulativeAreaLayer);
                 });

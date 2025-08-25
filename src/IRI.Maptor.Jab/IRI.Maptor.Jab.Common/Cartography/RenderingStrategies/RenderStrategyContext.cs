@@ -9,14 +9,14 @@ public static class RenderStrategyContext
         if (layer == null)
             throw new ArgumentNullException(nameof(layer));
 
-        return layer.ToRasterTechnique switch
+        return layer.RasterizationMethod switch
         {
-            RasterizationApproach.DrawingVisual => new DrawingVisualRenderStrategy(layer.Symbolizers),
-            RasterizationApproach.WriteableBitmap => new WriteableBitmapRenderStrategy(layer.Symbolizers),
-            RasterizationApproach.GdiPlus => new GdiBitmapRenderStrategy(layer.Symbolizers),
+            RasterizationMethod.DrawingVisual => new DrawingVisualRenderStrategy(layer.Symbolizers),
+            RasterizationMethod.WriteableBitmap => new WriteableBitmapRenderStrategy(layer.Symbolizers),
+            RasterizationMethod.GdiPlus => new GdiBitmapRenderStrategy(layer.Symbolizers),
 
-            RasterizationApproach.StreamGeometry or
-            RasterizationApproach.None or
+            RasterizationMethod.StreamGeometry or
+            RasterizationMethod.None or
             _ => throw new NotImplementedException(),
         };
     }

@@ -751,7 +751,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             return this.DrawGeometriesAsync(geometries, layerName, visualParameters);
         };
 
-        presenter.RequestDrawGeometryLablePairs = DrawGeometryLablePairsAsync;
+        //presenter.RequestDrawGeometryLablePairs = DrawGeometryLablePairsAsync;
 
         presenter.RequestSelectGeometries = SelectGeometriesAsync;
 
@@ -934,7 +934,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         if (mouseDownHandler != null)
         {
-            layer.OnRequestMouseDownHandle += (sender, e) => mouseDownHandler(sender);
+            layer.OnMouseDown += (sender, e) => mouseDownHandler(sender);
         }
 
         layer.LayerName = layerName;
@@ -946,7 +946,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         this.AddComplexLayer(layer.GetLayer(MapScale), true);
     }
 
-    public void SetRasterLayer(ScaleInterval scaleInterval, IDataSource dataSource, string layerName, double opacity, bool isBaseMap = false, bool isPyramid = false, RenderingApproach rendering = RenderingApproach.Default)
+    public void SetRasterLayer(ScaleInterval scaleInterval, IDataSource dataSource, string layerName, double opacity, bool isBaseMap = false, bool isPyramid = false, RenderMode rendering = RenderMode.Default)
     {
         if (dataSource == null)
         {
@@ -1020,29 +1020,44 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     }
 
     public void SetVectorLayer(
-        ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements, RenderingApproach rendering = RenderingApproach.Default,
-        bool isLabeled = false, Func<Geometry<sb.Point>, sb.Point> positionFunc = null, int fontSize = 0, Geometry pointSymbol = null)
+        ScaleInterval scaleInterval,
+        IVectorDataSource dataSource,
+        string layerName,
+        VisualParameters visualElements,
+        RenderMode renderMode = RenderMode.Default,
+        Func<Geometry<sb.Point>, sb.Point>? positionFunc = null,
+        int fontSize = 0,
+        Geometry? pointSymbol = null)
     {
-        LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
+        //LabelParameters parameters = new LabelParameters(null, fontSize, new SolidColorBrush(Colors.Black), new FontFamily("irannastaliq"), positionFunc);
+        var foreground = new SolidColorBrush(Colors.Black);
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, RasterizationApproach.DrawingVisual, scaleInterval, new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, isLabeled ? parameters : null);
+        VisualParameters labelParameters = VisualParameters.CreateLabel(ScaleInterval.All, fontSize, foreground, new FontFamily(), positionFunc ?? (g => g.GetCentroidPlusPoint()), isRtl: false);
+
+        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, renderMode, RasterizationMethod.DrawingVisual, scaleInterval, labelParameters /*new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, isLabeled ? parameters : null*/);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
     }
 
-    public void SetVectorLayer(
-            ScaleInterval scaleInterval, IVectorDataSource dataSource, string layerName, VisualParameters visualElements,
-            LabelParameters parameters, RenderingApproach rendering = RenderingApproach.Default, Geometry pointSymbol = null, RasterizationApproach toRasterApproach = RasterizationApproach.GdiPlus)
-    {
-        if (toRasterApproach == RasterizationApproach.StreamGeometry && rendering == RenderingApproach.Tiled)
-        {
-            throw new NotImplementedException();
-        }
+    //public void SetVectorLayer(
+    //        ScaleInterval scaleInterval, 
+    //        IVectorDataSource dataSource, 
+    //        string layerName, 
+    //        VisualParameters visualElements,
+    //        //LabelParameters parameters, 
+    //        RenderMode rendering = RenderMode.Default, 
+    //        Geometry pointSymbol = null, 
+    //        RasterizationMethod toRasterApproach = RasterizationMethod.GdiPlus)
+    //{
+    //    if (toRasterApproach == RasterizationMethod.StreamGeometry && rendering == RenderMode.Tiled)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
 
-        var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, parameters);
+    //    var layer = new VectorLayer(layerName, dataSource, visualElements, LayerType.VectorLayer, rendering, toRasterApproach, scaleInterval, new SimplePointSymbolizer() { GeometrySymbol = pointSymbol }, parameters);
 
-        this._layerManager.Add(layer, 1.0 / _mapScale);
-    }
+    //    this._layerManager.Add(layer, 1.0 / _mapScale);
+    //}
 
     public void SetLayer(ILayer layer)
     {
@@ -1145,7 +1160,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         if (!layer.CanRenderLayer(mapScale))
             return;
 
-        if (layer.Rendering == RenderingApproach.Tiled)
+        if (layer.RenderMode == RenderMode.Tiled)
             return;
 
         if (layer is ClusteredPointLayer)
@@ -1265,7 +1280,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         }
         else if (!layer.Type.HasFlag(LayerType.Label))
         {
-            if (layer.Rendering == RenderingApproach.Default)
+            if (layer.RenderMode == RenderMode.Default)
             {
                 var extent = this.CurrentExtent;
 
@@ -1315,8 +1330,8 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         var lines = gridLayer.GetLines(extent);
 
         VectorLayer layer = new VectorLayer("temp grid", lines, LayerType.VectorLayer,
-            RenderingApproach.Default,
-            RasterizationApproach.DrawingVisual);
+            RenderMode.Default,
+            RasterizationMethod.DrawingVisual);
 
         await this.AddNonTiledLayer(layer);
     }
@@ -1724,11 +1739,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             return;
 
         // 1401.12.05
-        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderMode.Tiled).ToList();
 
         foreach (var tile in tiles)
         {
-            RefreshTiles(infos, tile, layer => layer.Rendering == RenderingApproach.Tiled && layer.Type == LayerType.BaseMap);
+            RefreshTiles(infos, tile, layer => layer.RenderMode == RenderMode.Tiled && layer.Type == LayerType.BaseMap);
         }
     }
 
@@ -1746,7 +1761,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
                 if (this.CurrentTileInfos == null || !this.CurrentTileInfos.Contains(tile))
                     return;
 
-                if (item.Rendering != RenderingApproach.Tiled)
+                if (item.RenderMode != RenderMode.Tiled)
                     continue;
 
                 //Do not draw if criteria not satisfied
@@ -1796,7 +1811,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         //Clear current layer
         this.ClearLayer(layer, remove: false, forceRemove: false);
 
-        if (layer.Rendering == RenderingApproach.Tiled)
+        if (layer.RenderMode == RenderMode.Tiled)
         {
             AddTiledLayer(layer as VectorLayer);
         }
@@ -1827,7 +1842,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         var mapScale = this.MapScale;
 
-        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / mapScale, RenderingApproach.Default);
+        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / mapScale, RenderMode.Default);
 
         Debug.WriteLine($"MapViewer {DateTime.Now.ToLongTimeString()}; Refresh-UpdateAndGetLayers finished");
 
@@ -1843,7 +1858,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             if (MapScale != mapScale)
                 return;
 
-            if (item.Rendering == RenderingApproach.Tiled)
+            if (item.RenderMode == RenderMode.Tiled)
                 continue;
 
             AddLayer(item);
@@ -1924,7 +1939,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         if (this.mapView.Children.Contains(element))
             return;
 
-        element.Opacity = specialPointLayer.VisualParameters.Opacity;
+        element.Opacity = specialPointLayer.Opacity;
 
         var height = double.IsNaN(element.Height) ? element.ActualHeight : element.Height;
         var width = double.IsNaN(element.Width) ? element.ActualWidth : element.Width;
@@ -2132,7 +2147,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     }
 
     //POTENTIALLY ERROR PROUNE; What if the Element has no scaletransform
-    private void Item_OnPositionChanged(object sender, EventArgs e)
+    private void Item_OnPositionChanged(object? sender, EventArgs e)
     {
         var item = sender as Locateable;
 
@@ -2691,36 +2706,36 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
     public async Task DrawGeometriesAsync(
         List<Geometry<sb.Point>> geometries,
         string layerName,
-        VisualParameters visualElements,
-        List<object>? labels = null,
-        Func<Geometry<sb.Point>, sb.Point>? positionFunc = null,
-        int fontSize = 0,
-        Brush? labelBackground = null,
-        FontFamily? font = null,
-        RasterizationApproach? rasterizationApproach = RasterizationApproach.GdiPlus)
+        VisualParameters visualElements)
+    //List<object>? labels = null,
+    //Func<Geometry<sb.Point>, sb.Point>? positionFunc = null,
+    //int fontSize = 0,
+    //Brush? labelBackground = null,
+    //FontFamily? font = null,
+    //RasterizationMethod? rasterizationApproach = RasterizationMethod.GdiPlus)
     {
-        if (geometries == null || geometries.Count < 1)
+        if (geometries.IsNullOrEmpty())
             return;
 
-        LabelParameters parameters = null;
+        //LabelParameters parameters = null;
 
-        if (labels != null && positionFunc != null)
-        {
-            parameters = new LabelParameters(null, fontSize, labelBackground, new FontFamily("tahoma"), positionFunc);
-        }
+        //if (labels != null && positionFunc != null)
+        //{
+        //    parameters = new LabelParameters(null, fontSize, labelBackground, new FontFamily("tahoma"), positionFunc);
+        //}
 
         IVectorDataSource source;
 
-        if (labels == null)
-        {
-            source = new MemoryDataSource(geometries);
-        }
-        else
-        {
-            var features = geometries.Zip(labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList();
+        //if (labels == null)
+        //{
+        source = new MemoryDataSource(geometries);
+        //}
+        //else
+        //{
+        //    var features = geometries.Zip(labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList();
 
-            source = new MemoryDataSource(features/*, f => f.Label, null*/);
-        }
+        //    source = new MemoryDataSource(features/*, f => f.Label, null*/);
+        //}
 
 
         var layer = new VectorLayer(
@@ -2729,11 +2744,11 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             source,
             visualElements,
             LayerType.Drawing,
-            RenderingApproach.Default,
-            RasterizationApproach.DrawingVisual,
-            ScaleInterval.All,
-            pointSymbol: null,
-            labeling: parameters);
+            RenderMode.Default,
+            RasterizationMethod.DrawingVisual,
+            ScaleInterval.All);
+        //pointSymbol: null,
+        //labeling: parameters);
 
         this._layerManager.Add(layer, 1.0 / _mapScale);
 
@@ -2741,68 +2756,70 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         await AddNonTiledLayer(layer);
     }
 
-    public async Task DrawGeometryLablePairsAsync(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
-    {
-        if (geometries == null)
-            return;
+    //public async Task DrawGeometryLablePairsAsync(GeometryLabelPairs geometries, string layerName, VisualParameters parameters, LabelParameters labelParameters)
+    //{
+    //    if (geometries == null)
+    //        return;
 
-        var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList()/*, f => f.Label, null*/);
+    //    var source = new MemoryDataSource(geometries.Geometries.Zip(geometries.Labels, (g, l) => new Feature<sb.Point>(g, l.ToString())).ToList()/*, f => f.Label, null*/);
 
-        var layer = new VectorLayer(
-            layerName,
-            //new MemoryDataSource<string>(geometries.Geometries, geometries.Labels, i => i?.ToString()),
-            source,
-            parameters,
-            LayerType.Drawing,
-            RenderingApproach.Default,
-            RasterizationApproach.DrawingVisual,
-            ScaleInterval.All,
-            pointSymbol: null,
-            labeling: labelParameters);
+    //    var layer = new VectorLayer(
+    //        layerName,
+    //        //new MemoryDataSource<string>(geometries.Geometries, geometries.Labels, i => i?.ToString()),
+    //        source,
+    //        parameters,
+    //        LayerType.Drawing,
+    //        RenderMode.Default,
+    //        RasterizationMethod.DrawingVisual,
+    //        ScaleInterval.All,
+    //        pointSymbol: null,
+    //        labeling: labelParameters);
 
-        this._layerManager.Add(layer, 1.0 / _mapScale);
+    //    this._layerManager.Add(layer, 1.0 / _mapScale);
 
-        //AddTiledLayer(layer);
-        await AddNonTiledLayer(layer);
-    }
+    //    //AddTiledLayer(layer);
+    //    await AddNonTiledLayer(layer);
+    //}
 
-    public async Task DrawGeometries(List<Geometry<sb.Point>> geometries, string layerName,
-                                    VisualParameters visualParameters, Geometry pointSymbol)
-    {
-        if (geometries == null || geometries.Count < 1)
-            return;
+    //public async Task DrawGeometries(List<Geometry<sb.Point>> geometries, string layerName,
+    //                                VisualParameters visualParameters, Geometry pointSymbol)
+    //{
+    //    if (geometries == null || geometries.Count < 1)
+    //        return;
 
-        var layer = new VectorLayer(
-            layerName,
-            new MemoryDataSource(geometries),
-            visualParameters,
-            LayerType.Drawing,
-            RenderingApproach.Default,
-            RasterizationApproach.DrawingVisual,
-            ScaleInterval.All,
-            new SimplePointSymbolizer() { GeometrySymbol = pointSymbol });
+    //    var layer = new VectorLayer(
+    //        layerName,
+    //        new MemoryDataSource(geometries),
+    //        visualParameters,
+    //        LayerType.Drawing,
+    //        RenderMode.Default,
+    //        RasterizationMethod.DrawingVisual,
+    //        ScaleInterval.All,
+    //        new SimplePointSymbolizer() { GeometrySymbol = pointSymbol });
 
-        this._layerManager.Add(layer, 1.0 / _mapScale);
+    //    this._layerManager.Add(layer, 1.0 / _mapScale);
 
-        await AddNonTiledLayer(layer);
-    }
+    //    await AddNonTiledLayer(layer);
+    //}
 
-    public async Task SelectGeometriesAsync(List<Geometry<sb.Point>> geometries, VisualParameters visualParameters, string layerName, Geometry pointSymbol = null)
+    public async Task SelectGeometriesAsync(List<Geometry<sb.Point>> geometries, VisualParameters visualParameters, string? layerName, Geometry? pointSymbol = null)
     {
         ClearLayer(LayerType.Selection, true);
 
-        if (geometries == null || geometries.Count < 1)
+        if (geometries.IsNullOrEmpty())
             return;
 
+        layerName = string.IsNullOrWhiteSpace(layerName) ? Guid.NewGuid().ToString() : layerName;
+
         var layer = new VectorLayer(
-            string.IsNullOrWhiteSpace(layerName) ? Guid.NewGuid().ToString() : layerName,
+            layerName,
             new MemoryDataSource(geometries),
             visualParameters,
             LayerType.Selection,
-            RenderingApproach.Default,
-            RasterizationApproach.DrawingVisual,
-            ScaleInterval.All,
-            new SimplePointSymbolizer() { GeometrySymbol = pointSymbol })
+            RenderMode.Default,
+            RasterizationMethod.DrawingVisual,
+            ScaleInterval.All)
+        //new SimplePointSymbolizer() { GeometrySymbol = pointSymbol })
         {
             ZIndex = int.MaxValue
         };
@@ -2833,7 +2850,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         foreach (var item in layers)
         {
-            if (item.VisualParameters.Visibility != Visibility.Visible)
+            if (item.Visibility != Visibility.Visible)
                 continue;
 
             switch (item)
@@ -3022,7 +3039,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
         //Debug.Print($"ExtentManager_OnTilesAdded: {string.Join(" # ", e.Arg.Select(i => i.ToShortString()))}");
 
         // 1401.12.05
-        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderingApproach.Tiled).ToList();
+        IEnumerable<ILayer> infos = this._layerManager.UpdateAndGetLayers(1.0 / MapScale, RenderMode.Tiled).ToList();
 
         foreach (var item in e.Arg)
         {
@@ -3583,7 +3600,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
             this._theScreenScale = scale * baseScaleX;
 
-            this.OnZoomChanged.SafeInvoke(null, null);
+            this.OnZoomChanged?.Invoke(null, ZoomEventArgs.EmptyArg);
 
             Refresh(isNewExtent);
 
@@ -3617,7 +3634,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
 
         this._theScreenScale = scale * baseScaleX;
 
-        this.OnZoomChanged.SafeInvoke(null, null);
+        this.OnZoomChanged?.Invoke(null, ZoomEventArgs.EmptyArg);
 
         Refresh(isNewExtent: true);
     }
@@ -4594,7 +4611,7 @@ public partial class MapViewer : UserControl, INotifyPropertyChanged
             if (!layer.IsSearchable)
                 continue;
 
-            if (layer.VisualParameters.Visibility != Visibility.Visible)
+            if (layer.Visibility != Visibility.Visible)
                 continue;
 
             var features = layer.DataSource.GetAsFeatureSet(geometryBoundary);

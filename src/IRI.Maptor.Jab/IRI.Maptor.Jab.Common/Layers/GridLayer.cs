@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IRI.Maptor.Jab.Common;
 
-public class GridLayer : BaseLayer
+public class GridLayer : SymbolizableLayer
 {
     public override LayerType Type => LayerType.VectorLayer;
 

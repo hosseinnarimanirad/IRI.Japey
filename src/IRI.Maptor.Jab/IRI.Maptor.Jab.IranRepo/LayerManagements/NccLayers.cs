@@ -24,7 +24,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA10024", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA10024", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (leveling1 != null)
         {
@@ -32,13 +32,13 @@ public static class NccLayers
             leveling1.Commands = GetCommands<NccPoint>(map, leveling1/*, leveling1Labels*/);
         }
 
-         
+
         var leveling2 = NccRepository.GetLayer("leveling2", "ترازیابی درجه ۲", new VisualParameters("#88E51400", "#FFE51400", 1, .9)
         {
             PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFE51400", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFE51400", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (leveling2 != null)
         {
@@ -51,7 +51,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(6),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFFA6900", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFFA6900", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (leveling3 != null)
         {
@@ -65,7 +65,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (geodesy1 != null)
         {
@@ -78,7 +78,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(8),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FF1CA1E2", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (geodesy2 != null)
         {
@@ -91,7 +91,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFAA00FF", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFAA00FF", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (gravity != null)
         {
@@ -104,7 +104,7 @@ public static class NccLayers
             PointSymbol = new SimplePointSymbolizer(10),
             Visibility = System.Windows.Visibility.Collapsed
         },
-        new LabelParameters(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA4C401", 1), fontFamily, i => i.AsPoint()));
+        VisualParameters.CreateLabel(ScaleInterval.Create(10), 11, BrushHelper.CreateBrush("#FFA4C401", 1), fontFamily, i => i.AsPoint(), isRtl: false));
 
         if (geodynamic != null)
         {
@@ -112,7 +112,9 @@ public static class NccLayers
             geodynamic.Commands = GetCommands<NccPoint>(map, geodynamic/*, geodynamicLabels*/);
         }
 
-        return new List<ILayer>() { leveling1, leveling2, leveling3, geodesy1, geodesy2, gravity, geodynamic }?.Where(l => l != null).ToList();
+        return new List<ILayer>() { leveling1, leveling2, leveling3, geodesy1, geodesy2, gravity, geodynamic }
+                    ?.Where(l => l != null)
+                    ?.ToList() ?? [];
     }
 
     private static List<ILegendCommand> GetCommands<T>(MapPresenter map, VectorLayer layer/*, LabelParameters label*/)

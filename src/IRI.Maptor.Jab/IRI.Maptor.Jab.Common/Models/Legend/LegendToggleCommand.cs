@@ -106,18 +106,19 @@ public class LegendToggleCommand : Notifier, ILegendCommand
         RaisePropertyChanged(nameof(ToolTip));
     }
 
-    public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, ILayer layer/*, LabelParameters labels*/)
+    public static LegendToggleCommand CreateToggleLayerLabelCommand(MapPresenter map, SymbolizableLayer layer/*, LabelParameters labels*/)
     {
-        LegendToggleCommand result = new LegendToggleCommand();
+        LegendToggleCommand result = new LegendToggleCommand
+        {
+            PathMarkup = new PackIconModern() { Kind = PackIconModernKind.TextSerif }.Data,// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
+            NotCheckedPathMarkup = IRI.Maptor.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone,
+            ToolTipResourceKey = LocalizationResourceKeys.cmd_legend_toggleLayerLabel.ToString(),
+            Layer = layer,
+            //IsSelected = layer.Labels?.IsOn == true
+            IsSelected = layer.GetDefaultLabelParams()?.IsOn == true
+        };
 
-        result.PathMarkup = new PackIconModern() { Kind = PackIconModernKind.TextSerif }.Data;// IRI.Maptor.Jab.Common.Assets.ShapeStrings.Appbar.appbarTextSerif;
-        result.NotCheckedPathMarkup = IRI.Maptor.Jab.Common.Assets.ShapeStrings.AppbarExtension.appbarTextSerifNone;
-        //result.ToolTip = "نمایش برچسب عوارض";
-        result.ToolTipResourceKey = LocalizationResourceKeys.cmd_legend_toggleLayerLabel.ToString();
-        result.Layer = layer;
-        result.IsSelected = layer.Labels?.IsOn == true;
-
-        EventHandler<CustomEventArgs<LabelParameters>> labels_IsInScaleRangeChanged = (sender, e) =>
+        EventHandler<CustomEventArgs<VisualParameters>> labels_IsInScaleRangeChanged = (sender, e) =>
         {
             if (e.Arg != null)
             {
@@ -125,7 +126,7 @@ public class LegendToggleCommand : Notifier, ILegendCommand
             }
         };
 
-        EventHandler<CustomEventArgs<LabelParameters>> layer_OnLabelChanged = (sender, e) =>
+        EventHandler<CustomEventArgs<VisualParameters>> layer_OnLabelChanged = (sender, e) =>
         {
             if (e.Arg != null)
             {
@@ -141,24 +142,18 @@ public class LegendToggleCommand : Notifier, ILegendCommand
 
         result.Command = new RelayCommand(param =>
          {
-            if (layer == null)
-                return;
+             if (layer is null)
+                 return;
+                 
+             var label = layer.GetDefaultLabelParams();
 
-            if (result.IsSelected)
-            {
-                result.Layer.Labels.IsOn = true;
+             if (label is null)
+                 return;
+              
+             label.IsOn = result.IsSelected;
 
-                //map.Refresh();
-            }
-            else
-            {
-                result.Layer.Labels.IsOn = false;
-
-                //map.Refresh();
-            }
-
-            map.RefreshLayerVisibility(result.Layer);
-        });
+             map.RefreshLayerVisibility(result.Layer);
+         });
 
         return result;
     }

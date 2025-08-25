@@ -14,7 +14,6 @@ using IRI.Maptor.Sta.Spatial.Analysis;
 using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Sta.Spatial.GeoJsonFormat;
-using IRI.Maptor.Extensions;
 
 
 namespace IRI.Maptor.Jab.Common.Helpers;
@@ -27,10 +26,10 @@ public static class SimplificationHelper
                                             geometries,
                                             VisualParameters.GetStroke(Colors.Blue, 1),
                                             LayerType.VectorLayer,
-                                            RenderingApproach.Default,
-                                            RasterizationApproach.DrawingVisual);
+                                            RenderMode.Default,
+                                            RasterizationMethod.DrawingVisual);
 
-        vectorLayer.VisualParameters.Visibility = System.Windows.Visibility.Hidden;
+        vectorLayer.Visibility = System.Windows.Visibility.Hidden;
 
         return vectorLayer;
     }

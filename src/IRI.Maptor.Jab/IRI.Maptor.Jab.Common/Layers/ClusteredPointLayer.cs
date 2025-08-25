@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Ket.GdiPersistence;
 using IRI.Maptor.Sta.Common.Primitives;
@@ -9,38 +10,30 @@ namespace IRI.Maptor.Jab.Common;
 
 public class ClusteredPointLayer : BaseLayer
 {
-    ClusteredGeoTaggedImageSource _source;
+    public event EventHandler? OnMouseDown;
 
-    //System.Windows.Media.ImageSource imageSymbol;
+    public override BoundingBox Extent
+    {
+        get => _source?.WebMercatorExtent ?? BoundingBox.NaN;
+        protected set => throw new NotImplementedException();
+    }
 
-    //System.Windows.Media.Geometry shapeSymbol;
+    public override LayerType Type => LayerType.Complex;
 
-    Func<string, System.Windows.FrameworkElement> _viewMaker;
+    ClusteredGeoTaggedImageSource? _source;
+
+    Func<string, System.Windows.FrameworkElement>? _viewMaker;
 
     private ClusteredPointLayer()
     {
 
     }
-
-
-    public static ClusteredPointLayer Create(string imageDirectory, Func<string, System.Windows.FrameworkElement> viewMaker)
+     
+    public SpecialPointLayer? GetLayer(double scale)
     {
-        ClusteredPointLayer result = new ClusteredPointLayer();
+        if (_source is null || _viewMaker is null)
+            return null;
 
-        result.LayerId = Guid.NewGuid();
-
-        //result.imageSymbol = symbol;
-        result._viewMaker = viewMaker;
-
-        result.VisualParameters = new VisualParameters(null, null, 0, 1);
-
-        result._source = ClusteredGeoTaggedImageSource.Create(imageDirectory);
-
-        return result;
-    }
-
-    public SpecialPointLayer GetLayer(double scale)
-    {
         var images = _source.Get(scale);
 
         var locatables = new List<Locateable>();
@@ -55,11 +48,9 @@ public class ClusteredPointLayer : BaseLayer
 
             locatable.Y = imageGroup.Center.WebMercatorLocation.Y;
 
-            //locatable.Element = new Common.View.MapMarkers.CountableImageMarker(imageSymbol, imageGroup.Frequency.ToString());
-
             locatable.Element = _viewMaker(imageGroup.Frequency.ToString());
 
-            locatable.OnRequestHandleMouseDown += (sender, e) => { this.OnRequestMouseDownHandle.SafeInvoke(imageGroup); };
+            locatable.OnRequestHandleMouseDown += (sender, e) => OnMouseDown?.Invoke(imageGroup, e: EventArgs.Empty);
 
             locatables.Add(locatable);
         }
@@ -67,19 +58,21 @@ public class ClusteredPointLayer : BaseLayer
         return new SpecialPointLayer(LayerName, locatables);
     }
 
-    public override BoundingBox Extent
+
+    public static ClusteredPointLayer Create(string imageDirectory, Func<string, System.Windows.FrameworkElement> viewMaker)
     {
-        get => _source.WebMercatorExtent;
-        protected set => throw new NotImplementedException();
+        ClusteredPointLayer result = new ClusteredPointLayer();
+
+        result.LayerId = Guid.NewGuid();
+
+        //result.imageSymbol = symbol;
+        result._viewMaker = viewMaker;
+
+        //result.VisualParameters = new VisualParameters(null, null, 0, 1);
+
+        result._source = ClusteredGeoTaggedImageSource.Create(imageDirectory);
+
+        return result;
     }
 
-    //public override RenderingApproach Rendering
-    //{
-    //    get { return RenderingApproach.Default; }
-    //    protected set { }
-    //}
-
-    public override LayerType Type => LayerType.Complex;
-
-    public event EventHandler OnRequestMouseDownHandle;
 }

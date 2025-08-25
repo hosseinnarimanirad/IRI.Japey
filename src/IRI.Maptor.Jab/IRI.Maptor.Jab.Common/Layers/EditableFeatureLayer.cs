@@ -21,10 +21,11 @@ using IRI.Maptor.Sta.Common.Abstrations;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Presenters;
 using IRI.Maptor.Sta.Spatial.Analysis;
+using IRI.Maptor.Jab.Common.Cartography.Symbologies;
 
 namespace IRI.Maptor.Jab.Common;
 
-public class EditableFeatureLayer : BaseLayer
+public class EditableFeatureLayer : SymbolizableLayer
 {
     //static readonly Brush _stroke = BrushHelper.FromHex("#FF1CA1E2");
     //static readonly Brush _fill = BrushHelper.FromHex("#661CA1E2");
@@ -151,11 +152,7 @@ public class EditableFeatureLayer : BaseLayer
         //this._isNewDrawingMode = isNewDrawing;
         this.Options = options ?? EditableFeatureLayerOptions.CreateDefault();
 
-        this.Options.RequestHandleIsEdgeLabelVisibleChanged = () =>
-        {
-            //what if editable feature layer was already removed from map?
-            UpdateEdgeLables();
-        };
+        this.Options.RequestHandleIsEdgeLabelVisibleChanged = UpdateEdgeLables;
 
         this.LayerName = name;
 
@@ -167,10 +164,11 @@ public class EditableFeatureLayer : BaseLayer
 
         this._screenToMap = screenToMap;
 
-        this.VisibleRange = ScaleInterval.All;
+        VisibleRange = ScaleInterval.All;
 
         //this.VisualParameters = new VisualParameters(_mercatorGeometry.IsRingBase() ? _fill : null, _stroke, 3, 1);
-        this.VisualParameters = Options.Visual;
+        //this.VisualParameters = Options.Visual;
+        this.SetSymbolizer(new SimpleSymbolizer(Options.Visual));
 
 
         this._feature = GetDefaultEditingPath();
@@ -504,7 +502,7 @@ public class EditableFeatureLayer : BaseLayer
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    this.OnRequestFinishDrawing.SafeInvoke(this);
+                    this.OnRequestFinishDrawing?.Invoke(this, EventArgs.Empty);
 
                     e.Handled = true;
                 }

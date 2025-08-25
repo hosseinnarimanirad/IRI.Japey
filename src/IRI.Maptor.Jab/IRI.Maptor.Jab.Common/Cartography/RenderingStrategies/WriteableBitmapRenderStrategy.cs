@@ -17,7 +17,7 @@ public class WriteableBitmapRenderStrategy : RenderStrategy
 {
     int pointSize = 4;
 
-    public WriteableBitmapRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    public WriteableBitmapRenderStrategy(IEnumerable<ISymbolizer> symbolizer) : base(symbolizer)
     {
     }
 
@@ -54,7 +54,7 @@ public class WriteableBitmapRenderStrategy : RenderStrategy
                     break;
 
                 case LabelSymbolizer labelSymbolizer:
-                    if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
+                    if (labelSymbolizer.Param?.IsLabeled(1.0 / mapScale) == true)
                     {
                         //this.DrawLabel(labels, geometries, image, transform);
                     }

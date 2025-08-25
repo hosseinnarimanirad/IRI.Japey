@@ -13,6 +13,20 @@ public abstract class SymbolizerBase : Notifier, ISymbolizer
 
     public double? MaxScaleDenominator { get; set; }
 
+
+    private VisualParameters? _param;
+    public VisualParameters? Param
+    {
+        get { return _param; }
+        set
+        {
+            _param = value;
+            RaisePropertyChanged();
+
+            //this.OnLabelChanged?.Invoke(this, new CustomEventArgs<LabelParameters>(value));
+        }
+    }
+
     private Func<Feature<Point>, bool> _filter = f => true;
     public virtual Func<Feature<Point>, bool> IsFilterPassed
     {

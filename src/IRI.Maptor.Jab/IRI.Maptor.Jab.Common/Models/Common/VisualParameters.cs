@@ -7,15 +7,18 @@ using System.Runtime.CompilerServices;
 
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Events;
-using IRI.Maptor.Jab.Common.Helpers; 
+using IRI.Maptor.Jab.Common.Helpers;
 using IRI.Maptor.Sta.Spatial.Primitives;
 using IRI.Maptor.Jab.Common.Cartography.Symbologies;
+using IRI.Maptor.Jab.Common.Models;
+
+using Sb = IRI.Maptor.Sta.Common.Primitives;
 
 namespace IRI.Maptor.Jab.Common;
 
 public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
 {
-    private event EventHandler<CustomEventArgs<Visibility>> _onVisibilityChanged;
+    private event EventHandler<CustomEventArgs<Visibility>>? _onVisibilityChanged;
 
     public event EventHandler<CustomEventArgs<Visibility>> OnVisibilityChanged
     {
@@ -23,13 +26,11 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         add
         {
             if (this._onVisibilityChanged == null)
-            {
                 this._onVisibilityChanged += value;
-            }
         }
     }
 
-    public event EventHandler<CustomEventArgs<VisualParameters>> OnChanged;
+    public event EventHandler<CustomEventArgs<VisualParameters>>? OnChanged;
 
     // ************************************* Fill *********************************************
     public Brush Fill
@@ -53,17 +54,6 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         DependencyProperty.Register(nameof(Stroke), typeof(Brush), typeof(VisualParameters), new PropertyMetadata(null));
 
 
-    // ************************************* Opacity********************************************
-    public double Opacity
-    {
-        get { return (double)GetValue(OpacityProperty); }
-        set { SetValue(OpacityProperty, value); }
-    }
-
-    public static readonly DependencyProperty OpacityProperty =
-        DependencyProperty.Register(nameof(Opacity), typeof(double), typeof(VisualParameters));
-
-
     // ************************************* StrokeThickness ********************************************
     public double StrokeThickness
     {
@@ -73,6 +63,17 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
 
     public static readonly DependencyProperty StrokeThicknessProperty =
         DependencyProperty.Register(nameof(StrokeThickness), typeof(double), typeof(VisualParameters));
+
+
+    // ************************************* Opacity********************************************
+    public double Opacity
+    {
+        get { return (double)GetValue(OpacityProperty); }
+        set { SetValue(OpacityProperty, value); }
+    }
+
+    public static readonly DependencyProperty OpacityProperty =
+        DependencyProperty.Register(nameof(Opacity), typeof(double), typeof(VisualParameters));
 
 
     // ************************************* Visibility *********************************************
@@ -90,6 +91,9 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
                                     {
                                         var obj = dp as VisualParameters;
 
+                                        if (obj is null)
+                                            return;
+
                                         var newVisibility = (Visibility)dpE.NewValue;
 
                                         var oldVisibility = (Visibility)dpE.OldValue;
@@ -97,7 +101,7 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
                                         if (newVisibility == oldVisibility) { }
                                         else
                                         {
-                                            obj._onVisibilityChanged.SafeInvoke(obj, new CustomEventArgs<Visibility>(newVisibility));
+                                            obj._onVisibilityChanged?.Invoke(obj, new CustomEventArgs<Visibility>(newVisibility));
                                         }
                                     })));
 
@@ -158,10 +162,124 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
             if (newIsInScaleRange != oldIsInScaleRange)
             {
                 obj.OnChanged?.Invoke(obj, new CustomEventArgs<VisualParameters>(obj));
+
+
+                obj.OnIsInScaleRangeChanged?.Invoke(obj, new CustomEventArgs<VisualParameters>(obj));
             }
         })));
 
 
+
+    private ScaleInterval _visibleRange;
+    public ScaleInterval VisibleRange
+    {
+        get { return _visibleRange; }
+        set
+        {
+            _visibleRange = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    #region Labeling
+
+    public event EventHandler<CustomEventArgs<VisualParameters>> OnIsInScaleRangeChanged;
+
+    public event EventHandler<CustomEventArgs<VisualParameters>> OnIsOnChanged;
+
+
+    private int _fontSize;
+    public int FontSize
+    {
+        get { return _fontSize; }
+        set
+        {
+            _fontSize = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    private Brush _foreground;
+    public Brush Foreground
+    {
+        get { return _foreground; }
+        set
+        {
+            _foreground = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    private FontFamily _fontFamily;
+    public FontFamily FontFamily
+    {
+        get { return _fontFamily; }
+        set
+        {
+            _fontFamily = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    //private bool _isInScaleRange = true;
+    //public bool IsInScaleRange
+    //{
+    //    get
+    //    {
+    //        return _isInScaleRange;
+    //    }
+    //    set
+    //    {
+    //        if (_isInScaleRange == value)
+    //        {
+    //            return;
+    //        }
+
+    //        _isInScaleRange = value;
+    //        RaisePropertyChanged();
+    //        OnIsInScaleRangeChanged?.Invoke(this, new CustomEventArgs<LabelParameters>(this));
+    //    }
+    //}
+
+
+    private bool _isRtl = true;
+    public bool IsRtl
+    {
+        get { return _isRtl; }
+        set
+        {
+            _isRtl = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    private bool _isOn;
+    public bool IsOn
+    {
+        get { return _isOn; }
+        set
+        {
+            _isOn = value;
+            RaisePropertyChanged();
+            OnIsOnChanged?.Invoke(this, new CustomEventArgs<VisualParameters>(this));
+        }
+    }
+
+
+    public bool IsLabeled(double inverseMapScale)
+    {
+        return VisibleRange.IsInRange(inverseMapScale) && IsOn;
+    }
+
+    public Func<Geometry<Sb.Point>, Sb.Point> PositionFunc { get; set; }
+
+
+    #endregion
 
 
     // ************************************* PointSymbol ********************************************
@@ -177,14 +295,18 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
         }
     }
 
+    private VisualParameters()
+    {
+
+    }
 
     private VisualParameters(double opacity) : this(BrushHelper.PickBrush(), BrushHelper.PickBrush(), 1, opacity)
     {
     }
 
-    public VisualParameters(Brush fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
+    public VisualParameters(Brush? fill, Brush stroke, double strokeThickness, double opacity, Visibility visibility = Visibility.Visible)
     {
-        this.Fill = fill;
+        this.Fill = fill ?? Brushes.Transparent;
 
         this.Stroke = stroke;
 
@@ -247,28 +369,6 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
     }
 
 
-    /// <summary>
-    /// Returns a random VisualParameters
-    /// </summary>
-    /// <param name="opacity"></param>
-    /// <returns></returns>
-    public static VisualParameters CreateNew(double opacity = 1)
-    {
-        return new VisualParameters(opacity);
-    }
-
-    public static VisualParameters CreateNew(double opacity, double strokeThickness = 1, bool withoutFill = false)
-    {
-        Brush fill = null;
-
-        if (!withoutFill)
-        {
-            fill = BrushHelper.PickGoodBrush();
-        }
-
-        return new VisualParameters(fill, BrushHelper.PickBrush(), strokeThickness, opacity);
-    }
-
 
     #region INotifyPropertyChanged
 
@@ -319,6 +419,41 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
     #endregion
 
     #region Static 
+
+    /// <summary>
+    /// Returns a random VisualParameters
+    /// </summary>
+    /// <param name="opacity"></param>
+    /// <returns></returns>
+    public static VisualParameters CreateNew(double opacity = 1)
+    {
+        return new VisualParameters(opacity);
+    }
+
+    public static VisualParameters CreateNew(double opacity, double strokeThickness = 1, bool withoutFill = false)
+    {
+        Brush? fill = null;
+
+        if (!withoutFill)
+        {
+            fill = BrushHelper.PickGoodBrush();
+        }
+
+        return new VisualParameters(fill, BrushHelper.PickBrush(), strokeThickness, opacity);
+    }
+
+    public static VisualParameters CreateLabel(ScaleInterval visibleRange, int fontSize, Brush foreground, FontFamily fontFamily, Func<Geometry<Sb.Point>, Sb.Point> positionFunc, bool isRtl)
+    {
+        return new VisualParameters()
+        {
+            VisibleRange = visibleRange,
+            FontSize = fontSize,
+            Foreground = foreground,
+            FontFamily = fontFamily,
+            PositionFunc = positionFunc,
+            IsRtl = isRtl,
+        };//
+    }
 
     public static VisualParameters GetFill(Color fill, double opacity = 1)
     {
@@ -452,6 +587,18 @@ public partial class VisualParameters : DependencyObject, INotifyPropertyChanged
     public static VisualParameters GetDefaultForDrawingItems()
     {
         return new VisualParameters(null, BrushHelper.PickGoodBrush(), 2, 1);
+    }
+
+    public static VisualParameters GetDefaultForDrawingItemLabels(Brush foreground)
+    {
+        return new VisualParameters()
+        {
+            VisibleRange = ScaleInterval.All,
+            FontSize = 13,
+            Foreground = foreground,
+            FontFamily = new FontFamily("Times New Roman"),
+            PositionFunc = i => i.GetCentroidPlusPoint()
+        };//
     }
 
     #endregion

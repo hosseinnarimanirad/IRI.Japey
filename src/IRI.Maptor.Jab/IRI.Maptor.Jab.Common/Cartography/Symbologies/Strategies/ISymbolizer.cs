@@ -15,5 +15,7 @@ public interface ISymbolizer
      
     Func<Feature<Point>, bool> IsFilterPassed { get; set; }
 
-    bool IsInScaleRange(double scale); 
+    bool IsInScaleRange(double scale);
+
+    VisualParameters? Param { get; set; }
 }

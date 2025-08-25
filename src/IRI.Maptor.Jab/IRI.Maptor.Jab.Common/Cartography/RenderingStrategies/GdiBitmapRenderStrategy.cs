@@ -21,7 +21,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
 {
     static readonly Drawing.SolidBrush _labelBackground = new Drawing.SolidBrush(Drawing.Color.FromArgb(150, 255, 255, 255));
 
-    public GdiBitmapRenderStrategy(List<ISymbolizer> symbolizer) : base(symbolizer)
+    public GdiBitmapRenderStrategy(IEnumerable<ISymbolizer> symbolizer) : base(symbolizer)
     {
     }
 
@@ -79,9 +79,9 @@ public class GdiBitmapRenderStrategy : RenderStrategy
                         break;
 
                     case LabelSymbolizer labelSymbolizer:
-                        if (labelSymbolizer.Labels?.IsLabeled(1.0 / mapScale) == true)
+                        if (labelSymbolizer.Param?.IsLabeled(1.0 / mapScale) == true)
                         {
-                            DrawLabels(filteredFeatures, graphics, labelSymbolizer.Labels);
+                            DrawLabels(filteredFeatures, graphics, labelSymbolizer.Param);
                         }
                         break;
 
@@ -289,7 +289,7 @@ public class GdiBitmapRenderStrategy : RenderStrategy
         }
     }
 
-    private void DrawLabels(List<Feature<Point>> features, Drawing.Graphics graphic, LabelParameters labelParameters)
+    private void DrawLabels(List<Feature<Point>> features, Drawing.Graphics graphic, VisualParameters labelParameters)
     {
         if (features.IsNullOrEmpty())
             return;

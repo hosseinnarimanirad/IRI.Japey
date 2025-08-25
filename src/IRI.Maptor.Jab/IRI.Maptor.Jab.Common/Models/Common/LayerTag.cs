@@ -18,7 +18,7 @@ public class LayerTag
 
     public bool IsTiled
     {
-        get { return this.Layer != null ? this.Layer.Rendering == RenderingApproach.Tiled : isTiled; }
+        get { return this.Layer != null ? this.Layer.RenderMode == RenderMode.Tiled : isTiled; }
         set { this.isTiled = value; }
     }
 

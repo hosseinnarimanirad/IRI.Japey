@@ -45,7 +45,7 @@ public class Locateable : Notifier
 
             this._location.X = value;
 
-            this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
+            this.OnPositionChanged?.Invoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
         }
     }
 
@@ -68,7 +68,7 @@ public class Locateable : Notifier
 
             this._location.Y = value;
 
-            this.OnPositionChanged.SafeInvoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
+            this.OnPositionChanged?.Invoke(this, new ChangeEventArgs<WpfPoint>(oldValue, new WpfPoint(_x, _y)));
         }
     }
 
@@ -104,7 +104,7 @@ public class Locateable : Notifier
             this._element.MouseDown += Element_MouseDown;
         }
     }
-     
+
 
     public Locateable(AncherFunctionHandler? ancherFunction = null)
     {
@@ -175,7 +175,7 @@ public class Locateable : Notifier
         //    this.Popup.IsOpen = !this.Popup.IsOpen;
         //}
 
-        this.OnRequestHandleMouseDown?.SafeInvoke(null);
+        this.OnRequestHandleMouseDown?.Invoke(null, EventArgs.Empty);
     }
 
     public void Select()

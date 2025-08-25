@@ -48,10 +48,10 @@ public static class GeneralHelper
                                             geometries,
                                             VisualParameters.GetStroke(Colors.Blue, 1),
                                             LayerType.VectorLayer,
-                                            RenderingApproach.Default,
-                                            RasterizationApproach.DrawingVisual);
+                                            RenderMode.Default,
+                                            RasterizationMethod.DrawingVisual);
 
-        vectorLayer.VisualParameters.Visibility = Visibility.Hidden;
+        vectorLayer.Visibility = Visibility.Hidden;
          
         return vectorLayer;
     }

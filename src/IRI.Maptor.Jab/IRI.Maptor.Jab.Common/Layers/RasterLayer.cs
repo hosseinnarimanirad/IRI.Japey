@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using IRI.Maptor.Extensions;
 using IRI.Maptor.Jab.Common.Models;
 using IRI.Maptor.Ket.GdiPersistence;
-using IRI.Maptor.Sta.Common.Primitives; 
+using IRI.Maptor.Sta.Common.Primitives;
 using IRI.Maptor.Sta.SpatialReferenceSystem;
 using IRI.Maptor.Sta.Persistence.Abstractions;
 using IRI.Maptor.Sta.Persistence.RasterDataSources;
@@ -21,22 +21,9 @@ public class RasterLayer : BaseLayer
 {
     RasterLayer _parent;
 
-    //private ScaleInterval _visibleRange;
-
-    //public ScaleInterval VisibleRange
-    //{
-    //    get { return _visibleRange; }
-    //    set
-    //    {
-    //        _visibleRange = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
     public IDataSource DataSource { get; private set; }
 
     private FrameworkElement frameworkElement;
-
     public FrameworkElement Element
     {
         get { return this.frameworkElement; }
@@ -51,22 +38,7 @@ public class RasterLayer : BaseLayer
         }
     }
 
-    //public Guid Id { get; private set; }
-
-    //private string _layerName;
-
-    //public string LayerName
-    //{
-    //    get { return _layerName; }
-    //    set
-    //    {
-    //        _layerName = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
     private LayerType _type;
-
     public override LayerType Type
     {
         get { return _type; }
@@ -77,22 +49,7 @@ public class RasterLayer : BaseLayer
         //}
     }
 
-    //public int ZIndex { get; set; }
-
-    //private VisualParameters _visualParameters;
-
-    //public VisualParameters VisualParameters
-    //{
-    //    get { return _visualParameters; }
-    //    set
-    //    {
-    //        _visualParameters = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
     private BoundingBox _extent;
-
     public override BoundingBox Extent
     {
         get { return _extent; }
@@ -102,15 +59,6 @@ public class RasterLayer : BaseLayer
             RaisePropertyChanged();
         }
     }
-
-    //public override RenderingApproach Rendering { get; protected set; }
-
-    //public RasterizationApproach ToRasterTechnique { get { return RasterizationApproach.None; } }
-
-
-    //public bool IsValid { get; set; }
-
-    //public void Invalidate() => IsValid = false;
 
     public BitmapImage Image { get; set; }
 
@@ -143,23 +91,22 @@ public class RasterLayer : BaseLayer
         //    element.SetBinding(Path.OpacityProperty, binding5);
         //}
         else
-        {
             throw new NotImplementedException();
-        }
     }
 
     private async Task<List<RasterLayer>> GetRasterLayer(BoundingBox region, double mapScale, double unitDistance)
     {
         List<RasterLayer> result = new List<RasterLayer>();
 
-        if (this.DataSource.GetType() == typeof(OfflineGoogleMapDataSource/*<object>*/))
+        if (DataSource is OfflineGoogleMapDataSource offlineGoogleMapDataSource)
         {
-            var googleDataSource = this.DataSource as OfflineGoogleMapDataSource/*<object>*/;
-
-            var tiles = googleDataSource.GetTiles(region.Transform(MapProjects.WebMercatorToGeodeticWgs84), mapScale);
+            var tiles = offlineGoogleMapDataSource.GetTiles(region.Transform(MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
             foreach (var item in tiles)
             {
+                if (item.Image is null)
+                    continue;
+
                 var boundingBox = item.GeodeticWgs84BoundingBox.Transform(MapProjects.GeodeticWgs84ToWebMercator);
 
                 //94.12.16
@@ -167,74 +114,86 @@ public class RasterLayer : BaseLayer
 
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
-                RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Image), this.VisualParameters.Opacity,
-                        boundingBox, this.Type == LayerType.BaseMap, this.Type == LayerType.ImagePyramid);
+                var image = Helpers.ImageUtility.CreateBitmapImage(item.Image);
+
+                if (image is null)
+                    continue;
+
+                RasterLayer layer = new RasterLayer(this, LayerName, image, Opacity, boundingBox, Type == LayerType.BaseMap, this.Type == LayerType.ImagePyramid);
 
                 result.Add(layer);
             }
         }
-        else if (this.DataSource.GetType() == typeof(ZippedImagePyramidDataSource))
+        else if (DataSource is ZippedImagePyramidDataSource zippedImagePyramidDataSource)
         {
-            var pyramidDataSource = this.DataSource as ZippedImagePyramidDataSource;
-
-            var tiles = pyramidDataSource.GetTiles(region.Transform(MapProjects.WebMercatorToGeodeticWgs84), mapScale);
+            var tiles = zippedImagePyramidDataSource.GetTiles(region.Transform(MapProjects.WebMercatorToGeodeticWgs84), mapScale);
 
             foreach (var item in tiles)
             {
+                if (item.Image is null)
+                    continue;
+
                 var boundingBox = item.GeodeticWgs84BoundingBox.Transform(MapProjects.GeodeticWgs84ToWebMercator);
 
-                RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Image), this.VisualParameters.Opacity,
-                        boundingBox, this.Type == LayerType.BaseMap, this.Type == LayerType.ImagePyramid);
+                var image = Helpers.ImageUtility.CreateBitmapImage(item.Image);
+
+                if (image is null)
+                    continue;
+
+                RasterLayer layer = new RasterLayer(this, LayerName, image, Opacity, boundingBox, Type == LayerType.BaseMap, Type == LayerType.ImagePyramid);
 
                 result.Add(layer);
             }
         }
-        else if (this.DataSource.GetType() == typeof(OnlineGoogleMapDataSource/*<object>*/))
+        else if (DataSource is OnlineGoogleMapDataSource onlineGoogleMapDataSource)
         {
-            var googleDataSource = this.DataSource as OnlineGoogleMapDataSource/*<object>*/;
-
-            var tiles = await googleDataSource.GetTiles(region, mapScale);
+            var tiles = await onlineGoogleMapDataSource.GetTiles(region, mapScale);
 
             foreach (var item in tiles)
             {
                 var boundingBox = item.Item2.GeodeticWgs84BoundingBox.Transform(MapProjects.GeodeticWgs84ToWebMercator);
 
+                if (item.Item2.Image is null)
+                    continue;
+
                 //94.12.16
                 //int width = (int)(boundingBox.Width * mapScale / unitDistance);
 
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
-                RasterLayer layer =
-                    new RasterLayer(this, this.LayerName, Helpers.ImageUtility.CreateBitmapImage(item.Item2.Image), this.VisualParameters.Opacity,
-                        boundingBox, true);
+                var image = Helpers.ImageUtility.CreateBitmapImage(item.Item2.Image);
+
+                if (image is null)
+                    continue;
+
+                RasterLayer layer = new RasterLayer(this, this.LayerName, image, this.Opacity, boundingBox, true);
 
                 result.Add(layer);
             }
 
         }
-        else if (this.DataSource.GetType() == typeof(GeoRasterFileDataSource))
+        else if (DataSource is GeoRasterFileDataSource geoRasterFileDataSource)
         {
-            //95.01.18
-            //var geodeticBoundingBox = region.Transform(i => IRI.Maptor.Sta.SpatialReferenceSystem.Projection.MercatorToGeodetic(i));
-
-            //var geo = (this.DataSource as GeoRasterFileDataSource).Get(geodeticBoundingBox);
-
-            var geo = (this.DataSource as GeoRasterFileDataSource).Get(region);
+            var geo = geoRasterFileDataSource.Get(region);
 
             if (geo != null)
             {
                 var boundingBox = geo.GeodeticWgs84BoundingBox.Transform(MapProjects.GeodeticWgs84ToWebMercator);
+
+                if (geo.Image is null)
+                    return [];
 
                 //94.12.16
                 //int width = (int)(boundingBox.Width * mapScale / unitDistance);
 
                 //int height = (int)(boundingBox.Height * mapScale / unitDistance);
 
-                RasterLayer layer = new RasterLayer(this,
-                                            this.LayerName, Helpers.ImageUtility.CreateBitmapImage(geo.Image),
-                                            this.VisualParameters.Opacity, boundingBox, false);
+                var image = Helpers.ImageUtility.CreateBitmapImage(geo.Image);
+
+                if (image is null)
+                    return [];
+
+                RasterLayer layer = new RasterLayer(this, this.LayerName, image, Opacity, boundingBox, false);
 
                 result.Add(layer);
             }
@@ -275,9 +234,7 @@ public class RasterLayer : BaseLayer
         this._parent = parent;
 
         this._type = isBaseMap ? LayerType.BaseMap : (isPyramid ? LayerType.ImagePyramid : LayerType.Raster);
-
-        //this.Rendering = rendering;
-
+         
         this.LayerName = name;
 
         this._extent = boundingBox;
@@ -287,7 +244,7 @@ public class RasterLayer : BaseLayer
         //this.VisualParameters = new VisualParameters(new ImageBrush(image), isBaseMap ? null : Brushes.Black, isBaseMap ? 0 : 1, opacity);
     }
 
-    public RasterLayer(IDataSource dataSource, string layerName, ScaleInterval visibleRange, bool isBaseMap, bool isPyramid, Visibility visibility, double opacity, RenderingApproach rendering = RenderingApproach.Default)
+    public RasterLayer(IDataSource dataSource, string layerName, ScaleInterval visibleRange, bool isBaseMap, bool isPyramid, Visibility visibility, double opacity, RenderMode rendering = RenderMode.Default)
     {
         this.LayerId = Guid.NewGuid();
 
@@ -308,7 +265,8 @@ public class RasterLayer : BaseLayer
         this.VisibleRange = visibleRange;
 
         //this.VisualParameters = new VisualParameters(null, isBaseMap ? null : Brushes.Black, isBaseMap ? 0 : 1, opacity);
-        this.VisualParameters = new VisualParameters(null, null, 0, opacity, visibility);
+        //this.VisualParameters = new VisualParameters(null, null, 0, opacity, visibility);
+        this.Opacity = opacity;
     }
 
 
@@ -341,5 +299,5 @@ public class RasterLayer : BaseLayer
         }
 
         return result;
-    } 
+    }
 }
